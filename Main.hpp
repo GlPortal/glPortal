@@ -13,6 +13,8 @@
 void update(int);
 void draw();
 void resize(int, int);
+GLuint createTexture(const char *filename);
+void loadTextures();
 void setup(int *, char **);
 void mouse_moved(int, int);
 void key_down(unsigned char, int, int);
@@ -21,6 +23,7 @@ void key_up(unsigned char, int , int);
 int width, height;
 int mousex, mousey;
 bool keystates[256];
+GLuint textures[2];
 
 Player player;
 Map map;
