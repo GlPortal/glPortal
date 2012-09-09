@@ -9,7 +9,7 @@ void update(int value) {
 	float mousedx = (float)(width/2-mousex);  // Mouse distance from center of screen
 	float mousedy = (float)(height/2-mousey);
 
-	player.update(CONST_DT, keystates, mousedx, mousedy);
+	player.update(CONST_DT, keystates, mousedx, mousedy, map);
 
 	glutWarpPointer(width/2, height/2);
 	glutPostRedisplay();
@@ -20,6 +20,7 @@ void draw() {
 	glLoadIdentity();
 
 	player.setView();
+
 	map.draw(textures);
 
 	glutSwapBuffers();
@@ -78,14 +79,18 @@ void loadTextures() {
 }
 
 void setup(int *argc, char **argv) {
+	// Initialize GLUT window
 	glutInit(argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	glutCreateWindow("glPortal");
 	glutSetCursor(GLUT_CURSOR_NONE);
+	resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
+	// Reset keystates
 	for(int i = 0; i < 256; i++) keystates[i] = false;
 
+	// Setup callback functions
 	glutDisplayFunc(draw);
 	glutReshapeFunc(resize);
 	glutTimerFunc(FRAMETIME, update, 1);
@@ -94,18 +99,27 @@ void setup(int *argc, char **argv) {
 	glutPassiveMotionFunc(mouse_moved);
 	glutWarpPointer(width/2, height/2);
 
+	// Enable textures
 	glEnable(GL_TEXTURE_2D);
+	// Enable depth testing
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+	// Enable back face culling
 	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK); // Cull back faces
+	glCullFace(GL_BACK);
+	// Enable lighting
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	// Set ambient and diffuse lighting
+	GLfloat light_SpecAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_SpecAndAmb);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_SpecAndAmb);
 
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-	resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
+	// Load textures from files
 	loadTextures();
 
-	player.create(0, 1.8, 0);
+	player.create(2.5, 1, 5);
+	map.load("maps/test.map");
 }
 
 int main(int argc, char **argv) {

@@ -7,13 +7,18 @@
 
 class Map {
 public:
-	Map();
+	void load(const char *filename);
 	void draw(GLuint *textures);
+	bool collidesWithWall(Box &bbox);
 
 protected:
 	void drawBox(std::vector<Box>::iterator it);
+	std::vector<Box> *getWalls();
+	std::vector<Box> *getAcid();
+
 	std::vector<Box> walls;
 	std::vector<Box> acid;
+	GLfloat lightpos[4];
 };
 
 #endif
