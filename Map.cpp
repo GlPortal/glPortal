@@ -1,5 +1,4 @@
 #include "Map.hpp"
-#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -38,7 +37,6 @@ void Map::load(const char *filename) {
 					for(int i = 0; i < 3; i++) {
 						ss >> temp;
 						lightpos[i] = (GLfloat)atof(temp.c_str());
-						std::cout << lightpos[i] << " ";
 					}
 					lightpos[3] = 1.f; // Set as positioned light
 					break;

@@ -18,9 +18,33 @@ void update(int value) {
 void draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+	glDisable(GL_STENCIL_TEST);
 
 	player.setView();
 
+	map.draw(textures);
+
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_NEVER, 1, 0xFF);
+	glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
+	glStencilMask(0xFF);
+	glClear(GL_STENCIL_BUFFER_BIT);
+
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_QUADS);
+	glVertex3f(2.5, 0, 0.01);
+	glVertex3f(2.5, 2.5, 0.01);
+	glVertex3f(1, 2.5, 0.01);
+	glVertex3f(1, 0, 0.01);
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glStencilMask(0x00);
+	glStencilFunc(GL_EQUAL, 1, 0xFF);
+
+	glRotatef(180,0,1,0);
+	glTranslatef(-5,-5,-5);
 	map.draw(textures);
 
 	glutSwapBuffers();
@@ -81,7 +105,7 @@ void loadTextures() {
 void setup(int *argc, char **argv) {
 	// Initialize GLUT window
 	glutInit(argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL);
 	glutInitWindowSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	glutCreateWindow("glPortal");
 	glutSetCursor(GLUT_CURSOR_NONE);
