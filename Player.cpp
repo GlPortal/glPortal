@@ -1,7 +1,6 @@
 #include <math.h>
 #include <GL/glut.h>
 #include "Player.hpp"
-#include <iostream>
 
 #define RADDEG 57.29577951308232088 // 180/PI
 #define PLAYER_MOVESPEED 8.0
@@ -13,6 +12,12 @@ Player::Player() {
 	x = y = z = 0.f;
 	xrot = yrot = 0.f;
 	onGround = false;
+
+	portals[0].set(2,1.25,0,PD_FRONT);
+	//portals[1].set(2,1.25,0,PD_FRONT);
+	//portals[1].set(0,1.25,5,PD_RIGHT);
+	//portals[1].set(2,1.25,10,PD_BACK);
+	portals[1].set(15,1.25,5,PD_LEFT);
 }
 
 void Player::create(float _x, float _y, float _z) {
@@ -29,7 +34,7 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 
 	// Restrict rotation in x-axis
 	if(xrot < -1.5f) xrot = -1.5f;
-	if(xrot > 1.5f)  xrot =  1.5f;
+	if(xrot >  1.5f) xrot =  1.5f;
 
 	// Reset x and z speed
 	xspeed = zspeed = 0.f;
@@ -54,7 +59,7 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 		xspeed += cos(yrot)*PLAYER_MOVESPEED;
 		zspeed -= sin(yrot)*PLAYER_MOVESPEED;
 	}
-
+	// Jump is space is pressed and player is standing on ground
 	if(keystates[' '] && onGround) {
 		yspeed = JUMPPOWER;
 	}
@@ -89,4 +94,8 @@ void Player::setView() {
 	glRotatef(-xrot*RADDEG, 1,0,0);
 	glRotatef(-yrot*RADDEG, 0,1,0);
 	glTranslatef(-x, -(y+1.7f), -z);
+}
+
+bool Player::portalsActive() {
+	return (portals[0].active && portals[1].active);
 }

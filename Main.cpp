@@ -16,38 +16,53 @@ void update(int value) {
 }
 
 void draw() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-	glDisable(GL_STENCIL_TEST);
 
 	player.setView();
 
 	map.draw(textures);
-
-	glEnable(GL_STENCIL_TEST);
-	glStencilFunc(GL_NEVER, 1, 0xFF);
-	glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
-	glStencilMask(0xFF);
-	glClear(GL_STENCIL_BUFFER_BIT);
-
-	glDisable(GL_TEXTURE_2D);
-	glBegin(GL_QUADS);
-	glVertex3f(2.5, 0, 0.01);
-	glVertex3f(2.5, 2.5, 0.01);
-	glVertex3f(1, 2.5, 0.01);
-	glVertex3f(1, 0, 0.01);
-	glEnd();
-	glEnable(GL_TEXTURE_2D);
-
-	glClear(GL_DEPTH_BUFFER_BIT);
-	glStencilMask(0x00);
-	glStencilFunc(GL_EQUAL, 1, 0xFF);
-
-	glRotatef(180,0,1,0);
-	glTranslatef(-5,-5,-5);
-	map.draw(textures);
+	drawPortals();
 
 	glutSwapBuffers();
+}
+
+void drawPortals() {
+	if(player.portalsActive()) {
+		glPushMatrix();
+		glEnable(GL_STENCIL_TEST);
+		glStencilFunc(GL_NEVER, 1, 0xFF);
+		glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
+		glStencilMask(0xFF);
+		glClear(GL_STENCIL_BUFFER_BIT);
+
+		Portal *portals = player.getPortals();
+		portals[0].drawStencil();
+
+		glTranslatef(player.getX(), player.getY(), player.getZ()); // Move to orego
+		glTranslatef(-portals[0].x, -portals[0].y, -portals[0].z); // Move to first portal
+		portals[0].rotateFromDir(); // Rotate
+		glTranslatef(portals[0].x-player.getX(),
+				     portals[0].y-player.getY(),
+					 portals[0].z-player.getZ());
+		portals[1].rotateToDir();
+		glTranslatef(portals[0].x-portals[1].x, 
+				     portals[0].y-portals[1].y,
+					 portals[0].z-portals[1].z);
+		// Hvis [2] er PD_RIGHT: glTranslatef(-2,0,2);
+		// Hvis [2] =  PD_LEFT:  glTranslatef(-2,0,2);
+		glTranslatef(-2,0,-2);
+
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glStencilMask(0x00);
+		glStencilFunc(GL_EQUAL, 1, 0xFF);
+
+		map.draw(textures);
+
+		glDisable(GL_STENCIL_TEST);
+		glPopMatrix();
+	}
 }
 
 void mouse_moved(int x, int y) { mousex = x; mousey = y; }
