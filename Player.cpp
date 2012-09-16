@@ -3,10 +3,10 @@
 #include "Player.hpp"
 
 #define RADDEG 57.29577951308232088 // 180/PI
-#define PLAYER_MOVESPEED 8.0
+#define PLAYER_MOVESPEED 6.0
 #define GRAVITY 16.0
 #define MAXSPEED 12.0
-#define JUMPPOWER 6.0
+#define JUMPPOWER 7.0
 
 Player::Player() {
 	x = y = z = 0.f;
@@ -14,10 +14,10 @@ Player::Player() {
 	onGround = false;
 
 	portals[0].set(2,1.25,0,PD_FRONT);
-	//portals[1].set(2,1.25,0,PD_FRONT);
-	//portals[1].set(0,1.25,5,PD_RIGHT);
 	//portals[1].set(2,1.25,10,PD_BACK);
-	portals[1].set(15,1.25,5,PD_LEFT);
+	//portals[1].set(2,1.25,0,PD_FRONT);
+	portals[1].set(0,1.25,5,PD_RIGHT);
+	//portals[1].set(15,1.25,5,PD_LEFT);
 }
 
 void Player::create(float _x, float _y, float _z) {
