@@ -13,11 +13,12 @@ Player::Player() {
 	xrot = yrot = 0.f;
 	onGround = false;
 
-	portals[0].set(2,1.25,0,PD_FRONT);
-	portals[1].set(2,1.25,10,PD_BACK);
+	portals[0].set(0.75,1.25,0,PD_FRONT);
+	//portals[1].set(2,1.25,10,PD_BACK);
 	//portals[1].set(2,1.25,0,PD_FRONT);
 	//portals[1].set(0,1.25,5,PD_RIGHT);
 	//portals[1].set(15,1.25,5,PD_LEFT);
+	portals[1].set(0,1.25,0.75,PD_RIGHT);
 }
 
 void Player::create(float _x, float _y, float _z) {

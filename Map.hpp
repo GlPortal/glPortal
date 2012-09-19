@@ -12,6 +12,7 @@ class Map {
 public:
 	void load(const char *filename);
 	void draw(GLuint *textures);
+	void drawFromPortal(GLuint *textures, Portal& portal);
 	bool collidesWithWall(Box &bbox);
 
 protected:

@@ -22,13 +22,15 @@ void draw() {
 
 	player.setView();
 
-	map.draw(textures);
 	drawPortals();
+	map.draw(textures);
 
 	glutSwapBuffers();
 }
 
 void drawPortals() {
+	Portal *portals = player.getPortals();
+
 	if(player.portalsActive()) {
 		for(int i = 0; i < 2; i++) {
 			int src = i;		// Source portal index
@@ -41,16 +43,11 @@ void drawPortals() {
 			glStencilMask(0xFF);
 			glClear(GL_STENCIL_BUFFER_BIT);
 
-			Portal *portals = player.getPortals();
 			portals[src].drawStencil();
 
 			float dx = player.getX()-portals[src].x;
 			float dy = player.getY()-portals[src].y;
 			float dz = player.getZ()-portals[src].z;
-
-			float tx = portals[src].x - portals[dst].x;
-			float ty = portals[src].y - portals[dst].y;
-			float tz = portals[src].z - portals[dst].z;
 
 			glClear(GL_DEPTH_BUFFER_BIT);
 			glStencilMask(0x00);
@@ -62,12 +59,18 @@ void drawPortals() {
 			portals[dst].rotateToDir();
 			glTranslatef(-portals[dst].x, -portals[dst].y, -portals[dst].z);
 
-			map.draw(textures);
+			map.drawFromPortal(textures, portals[dst]);
 
 			glDisable(GL_STENCIL_TEST);
 			glPopMatrix();
 		}
 	}
+
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	portals[0].drawStencil();
+	portals[1].drawStencil();
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 }
 
 void mouse_moved(int x, int y) { mousex = x; mousey = y; }
@@ -147,7 +150,7 @@ void setup(int *argc, char **argv) {
 	glEnable(GL_TEXTURE_2D);
 	// Enable depth testing
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
+	glDepthFunc(GL_LESS);
 	// Enable back face culling
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
