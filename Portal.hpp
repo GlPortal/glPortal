@@ -47,11 +47,30 @@ public:
 		glTranslatef(x,y,z);
 		rotateFromDir();
 
-		glBegin(GL_QUADS);
-		glVertex3f(-0.75,-1.25,0.001);
-		glVertex3f( 0.75,-1.25,0.001);
-		glVertex3f( 0.75, 1.25,0.001);
-		glVertex3f(-0.75, 1.25,0.001);
+		glBegin(GL_TRIANGLE_FAN);
+		glVertex3f( 0.00, 0.00, 0.001);
+
+		glVertex3f( 0.00, 1.25, 0.001);
+		glVertex3f(-0.29, 1.15, 0.001);
+		glVertex3f(-0.53, 0.88, 0.001);
+		glVertex3f(-0.69, 0.48, 0.001);
+
+		glVertex3f(-0.75, 0.00, 0.001);
+		glVertex3f(-0.69,-0.48, 0.001);
+		glVertex3f(-0.53,-0.88, 0.001);
+		glVertex3f(-0.29,-1.15, 0.001);
+
+		glVertex3f( 0.00,-1.25, 0.001);
+		glVertex3f( 0.29,-1.15, 0.001);
+		glVertex3f( 0.53,-0.88, 0.001);
+		glVertex3f( 0.69,-0.48, 0.001);
+
+		glVertex3f( 0.75, 0.00, 0.001);
+		glVertex3f( 0.69, 0.48, 0.001);
+		glVertex3f( 0.53, 0.88, 0.001);
+		glVertex3f( 0.29, 1.15, 0.001);
+
+		glVertex3f( 0.00, 1.25, 0.001);
 		glEnd();
 
 		glPopMatrix();
