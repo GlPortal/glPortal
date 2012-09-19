@@ -29,13 +29,13 @@ public:
 
 	void rotateFromDir() {
 		switch(dir) {
-			case PD_RIGHT:
+			case PD_LEFT:
 				glRotatef(-90.f, 0,1,0);
 				break;
 			case PD_BACK:
 				glRotatef(180.f, 0,1,0);
 				break;
-			case PD_LEFT:
+			case PD_RIGHT:
 				glRotatef(90.f, 0,1,0);
 				break;
 		}
@@ -48,10 +48,10 @@ public:
 		rotateFromDir();
 
 		glBegin(GL_QUADS);
-		glVertex3f(-0.75,-1.25,0);
-		glVertex3f( 0.75,-1.25,0);
-		glVertex3f( 0.75, 1.25,0);
-		glVertex3f(-0.75, 1.25,0);
+		glVertex3f(-0.75,-1.25,0.001);
+		glVertex3f( 0.75,-1.25,0.001);
+		glVertex3f( 0.75, 1.25,0.001);
+		glVertex3f(-0.75, 1.25,0.001);
 		glEnd();
 
 		glPopMatrix();

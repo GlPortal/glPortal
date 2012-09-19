@@ -68,6 +68,38 @@ void Map::draw(GLuint *textures) {
 	glEnd();
 }
 
+void Map::drawFromPortal(GLuint *textures, Portal& portal) {
+	// Update light position
+	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+	// Draw walls
+	std::vector<Box>::iterator it;
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	glBegin(GL_QUADS);
+	for(it = walls.begin(); it < walls.end(); it++) {
+		if(portal.dir == PD_FRONT && it->z2 > portal.z) {
+			drawBox(it);
+		}
+		else if(portal.dir == PD_BACK && it->z1 < portal.z) {
+			drawBox(it);
+		}
+		else if(portal.dir == PD_RIGHT && it->x2 > portal.x) {
+			drawBox(it);
+		}
+		else if(portal.dir == PD_LEFT && it->x1 < portal.x) {
+			drawBox(it);
+		}
+	}
+	glEnd();
+
+	// Draw acid waste
+	glBindTexture(GL_TEXTURE_2D, textures[1]);
+	glBegin(GL_QUADS);
+	for(it = acid.begin(); it < acid.end(); it++) {
+		drawBox(it);
+	}
+	glEnd();
+}
+
 void Map::drawBox(std::vector<Box>::iterator it) {
 	float dx = (it->x2 - it->x1)*0.5f;
 	float dy = (it->y2 - it->y1)*0.5f;
