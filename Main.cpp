@@ -16,7 +16,7 @@ void update(int value) {
 }
 
 void draw() {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -31,6 +31,9 @@ void draw() {
 void drawPortals() {
 	if(player.portalsActive()) {
 		for(int i = 0; i < 2; i++) {
+			int src = i;		// Source portal index
+			int dst = (i+1)%2;  // Destination portal index
+
 			glPushMatrix();
 			glEnable(GL_STENCIL_TEST);
 			glStencilFunc(GL_NEVER, 1, 0xFF);
@@ -39,27 +42,25 @@ void drawPortals() {
 			glClear(GL_STENCIL_BUFFER_BIT);
 
 			Portal *portals = player.getPortals();
-			portals[i].drawStencil();
+			portals[src].drawStencil();
 
-			glTranslatef(player.getX(), player.getY(), player.getZ()); // Move to orego
-			glTranslatef(-portals[i].x, -portals[i].y, -portals[i].z); // Move to first portal
-			glTranslatef(portals[i].x-player.getX(),
-						 portals[i].y-player.getY(),
-						 portals[i].z-player.getZ());
-			portals[i].rotateFromDir(); // Rotate
-			portals[(i+1)%2].rotateToDir();
-			glTranslatef(portals[i].x-portals[(i+1)%2].x, 
-						 portals[i].y-portals[(i+1)%2].y,
-						 portals[i].z-portals[(i+1)%2].z);
-			glTranslatef(-2,0,2);
-			// Hvis [2] er PD_RIGHT: glTranslatef(-2,0,2);
-			// Hvis [2] er PD_LEFT:  glTranslatef(-2,0,2);
-			// Intet hvis [2] PD_BACK
-			// Hvis [2] = PD_FRONT:  glTranslatef(-4,0,0);
+			float dx = player.getX()-portals[src].x;
+			float dy = player.getY()-portals[src].y;
+			float dz = player.getZ()-portals[src].z;
+
+			float tx = portals[src].x - portals[dst].x;
+			float ty = portals[src].y - portals[dst].y;
+			float tz = portals[src].z - portals[dst].z;
 
 			glClear(GL_DEPTH_BUFFER_BIT);
 			glStencilMask(0x00);
 			glStencilFunc(GL_EQUAL, 1, 0xFF);
+
+			glTranslatef(-dx,-dy,-dz);
+			glTranslatef(player.getX(), player.getY(), player.getZ());
+			portals[src].rotateFromDir();
+			portals[dst].rotateToDir();
+			glTranslatef(-portals[dst].x, -portals[dst].y, -portals[dst].z);
 
 			map.draw(textures);
 
