@@ -1,7 +1,6 @@
 #ifndef __PLAYER_HPP
 #define __PLAYER_HPP
 
-class Map; // Forward declare Map due to circular dependency
 #include "Map.hpp"
 #include "Portal.hpp"
 

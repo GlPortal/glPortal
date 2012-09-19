@@ -4,9 +4,7 @@
 #include <vector>
 #include <GL/glut.h>
 #include "Box.hpp"
-class Player; // Forward declare Player due to circular dependency
 #include "Portal.hpp"
-#include "Player.hpp"
 
 class Map {
 public:
