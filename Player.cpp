@@ -14,9 +14,9 @@ Player::Player() {
 	onGround = false;
 
 	portals[0].set(2,1.25,0,PD_FRONT);
-	//portals[1].set(2,1.25,10,PD_BACK);
+	portals[1].set(2,1.25,10,PD_BACK);
 	//portals[1].set(2,1.25,0,PD_FRONT);
-	portals[1].set(0,1.25,5,PD_RIGHT);
+	//portals[1].set(0,1.25,5,PD_RIGHT);
 	//portals[1].set(15,1.25,5,PD_LEFT);
 }
 
