@@ -76,6 +76,10 @@ public:
 		glPopMatrix();
 	}
 
+	void drawOutline(GLuint *textures) {
+
+	}
+
 	float x,y,z;
 	PORTAL_DIR dir;
 	bool active;

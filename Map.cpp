@@ -22,7 +22,15 @@ void Map::load(const char *filename) {
 						ss >> temp;
 						values[i] = (float)atof(temp.c_str());
 					}
-					walls.push_back(Box(values));
+					walls.push_back(Box(values, BT_WALL));
+					break;
+				// Tiles definition
+				case 't':
+					for(int i = 0; i < 6; i++) {
+						ss >> temp;
+						values[i] = (float)atof(temp.c_str());
+					}
+					walls.push_back(Box(values, BT_TILES));
 					break;
 				// Acid pool definition
 				case 'a':
@@ -30,7 +38,7 @@ void Map::load(const char *filename) {
 						ss >> temp;
 						values[i] = (float)atof(temp.c_str());
 					}
-					acid.push_back(Box(values));
+					acid.push_back(Box(values, BT_ACID));
 					break;
 				// Light position
 				case 'l':
@@ -50,22 +58,24 @@ void Map::load(const char *filename) {
 void Map::draw(GLuint *textures) {
 	// Update light position
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+
 	// Draw walls
+	BOX_TYPE current_type = BT_NONE;
 	std::vector<Box>::iterator it;
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	glBegin(GL_QUADS);
+
 	for(it = walls.begin(); it < walls.end(); it++) {
+		if(it->type != current_type) {
+			current_type = it->type;
+			glBindTexture(GL_TEXTURE_2D, textures[it->type]);
+		}
 		drawBox(it);
 	}
-	glEnd();
 
 	// Draw acid waste
-	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	glBegin(GL_QUADS);
+	glBindTexture(GL_TEXTURE_2D, textures[BT_ACID]);
 	for(it = acid.begin(); it < acid.end(); it++) {
 		drawBox(it);
 	}
-	glEnd();
 }
 
 void Map::drawFromPortal(GLuint *textures, Portal& portal) {
@@ -73,31 +83,32 @@ void Map::drawFromPortal(GLuint *textures, Portal& portal) {
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 	// Draw walls
 	std::vector<Box>::iterator it;
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	glBegin(GL_QUADS);
+	BOX_TYPE current_type = BT_NONE;
+
 	for(it = walls.begin(); it < walls.end(); it++) {
-		if(portal.dir == PD_FRONT && it->z2 > portal.z) {
-			drawBox(it);
-		}
-		else if(portal.dir == PD_BACK && it->z1 < portal.z) {
-			drawBox(it);
-		}
-		else if(portal.dir == PD_RIGHT && it->x2 > portal.x) {
-			drawBox(it);
-		}
-		else if(portal.dir == PD_LEFT && it->x1 < portal.x) {
+		// Horribly slow bounds check
+		if(portal.dir == PD_FRONT && it->z2 > portal.z
+		|| portal.dir == PD_BACK  && it->z1 < portal.z
+		|| portal.dir == PD_RIGHT && it->x2 > portal.x
+		|| portal.dir == PD_LEFT  && it->x1 < portal.x) {
+			if(it->type != current_type) {
+				current_type = it->type;
+				glBindTexture(GL_TEXTURE_2D, textures[it->type]);
+			}
 			drawBox(it);
 		}
 	}
-	glEnd();
 
 	// Draw acid waste
-	glBindTexture(GL_TEXTURE_2D, textures[1]);
-	glBegin(GL_QUADS);
+	glBindTexture(GL_TEXTURE_2D, textures[BT_ACID]);
 	for(it = acid.begin(); it < acid.end(); it++) {
-		drawBox(it);
+		if(portal.dir == PD_FRONT && it->z2 > portal.z
+		|| portal.dir == PD_BACK && it->z1 < portal.z
+		|| portal.dir == PD_RIGHT && it->x2 > portal.x
+		|| portal.dir == PD_LEFT && it->x1 < portal.x) {
+			drawBox(it);
+		}
 	}
-	glEnd();
 }
 
 void Map::drawBox(std::vector<Box>::iterator it) {
@@ -105,6 +116,7 @@ void Map::drawBox(std::vector<Box>::iterator it) {
 	float dy = (it->y2 - it->y1)*0.5f;
 	float dz = (it->z2 - it->z1)*0.5f;
 
+	glBegin(GL_QUADS);
 	// Top
 	glNormal3f(0,1,0);
 	glTexCoord2f(0.f, 0.f); glVertex3f(it->x1, it->y2, it->z1);
@@ -146,6 +158,8 @@ void Map::drawBox(std::vector<Box>::iterator it) {
 	glTexCoord2f( dy, 0.f); glVertex3f(it->x2, it->y2, it->z1);
 	glTexCoord2f( dy,  dz); glVertex3f(it->x2, it->y2, it->z2);
 	glTexCoord2f(0.f,  dz); glVertex3f(it->x2, it->y1, it->z2);
+
+	glEnd();
 }
 
 bool Map::collidesWithWall(Box &bbox) {

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "stb_image.c"
 #include "Main.hpp"
+#include "Box.hpp"
 
 void update(int value) {
 	glutTimerFunc(FRAMETIME, update, 1);
@@ -124,8 +125,9 @@ GLuint createTexture(const char *filename) {
 }
 
 void loadTextures() {
-	textures[0] = createTexture("data/wall.png");
-	textures[1] = createTexture("data/toxic.png");
+	textures[BT_WALL]  = createTexture("data/wall2.png");
+	textures[BT_TILES] = createTexture("data/tiles.png");
+	textures[BT_ACID]  = createTexture("data/toxic.png");
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
