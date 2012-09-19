@@ -16,7 +16,6 @@ void update(int value) {
 }
 
 void draw() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -30,6 +29,7 @@ void draw() {
 
 void drawPortals() {
 	Portal *portals = player.getPortals();
+	glEnable(GL_STENCIL_TEST);
 
 	if(player.portalsActive()) {
 		for(int i = 0; i < 2; i++) {
@@ -37,7 +37,6 @@ void drawPortals() {
 			int dst = (i+1)%2;  // Destination portal index
 
 			glPushMatrix();
-			glEnable(GL_STENCIL_TEST);
 			glStencilFunc(GL_NEVER, 1, 0xFF);
 			glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
 			glStencilMask(0xFF);
@@ -61,10 +60,10 @@ void drawPortals() {
 
 			map.drawFromPortal(textures, portals[dst]);
 
-			glDisable(GL_STENCIL_TEST);
 			glPopMatrix();
 		}
 	}
+	glDisable(GL_STENCIL_TEST);
 
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -73,11 +72,18 @@ void drawPortals() {
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 }
 
-void mouse_moved(int x, int y) { mousex = x; mousey = y; }
+void mouse_moved(int x, int y) {
+	mousex = x;
+	mousey = y;
+}
 
-void key_down(unsigned char key, int x, int y) { keystates[key] = true; }
+void key_down(unsigned char key, int x, int y) {
+	keystates[key] = true;
+}
 
-void key_up(unsigned char key, int x, int y) { keystates[key] = false; }
+void key_up(unsigned char key, int x, int y) {
+	keystates[key] = false;
+}
 
 void resize(int w, int h) {
 	// Setup viewport
