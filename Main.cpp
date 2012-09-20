@@ -5,15 +5,16 @@
 #include "Box.hpp"
 
 void update(int value) {
+	if(!paused) {
+		float mousedx = (float)(width/2-mousex);  // Mouse distance from center of screen
+		float mousedy = (float)(height/2-mousey);
+
+		player.update(CONST_DT, keystates, mousedx, mousedy, map);
+
+		glutWarpPointer(width/2, height/2);
+		glutPostRedisplay();
+	}
 	glutTimerFunc(FRAMETIME, update, 1);
-
-	float mousedx = (float)(width/2-mousex);  // Mouse distance from center of screen
-	float mousedy = (float)(height/2-mousey);
-
-	player.update(CONST_DT, keystates, mousedx, mousedy, map);
-
-	glutWarpPointer(width/2, height/2);
-	glutPostRedisplay();
 }
 
 void draw() {
@@ -24,6 +25,11 @@ void draw() {
 
 	drawPortals();
 	map.draw(textures);
+
+	glEnable(GL_BLEND);
+	player.getPortals()[0].drawOutline(PC_BLUE, textures);
+	player.getPortals()[1].drawOutline(PC_RED,  textures);
+	glDisable(GL_BLEND);
 
 	glutSwapBuffers();
 }
@@ -80,6 +86,7 @@ void mouse_moved(int x, int y) {
 
 void key_down(unsigned char key, int x, int y) {
 	keystates[key] = true;
+	if(key == 27) paused = !paused;
 }
 
 void key_up(unsigned char key, int x, int y) {
@@ -115,6 +122,9 @@ GLuint createTexture(const char *filename) {
 
 	stbi_image_free(data);
 
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 	// Print any errors
 	GLenum error = glGetError();
 	while(error != GL_NO_ERROR) {
@@ -129,8 +139,8 @@ void loadTextures() {
 	textures[BT_TILES] = createTexture("data/tiles.png");
 	textures[BT_ACID]  = createTexture("data/toxic.png");
 
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	textures[3] = createTexture("data/blueportal.png");
+	textures[4] = createTexture("data/orangeportal.png");
 }
 
 void setup(int *argc, char **argv) {
@@ -169,10 +179,13 @@ void setup(int *argc, char **argv) {
 	GLfloat light_SpecAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_SpecAndAmb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_SpecAndAmb);
+	// Set blending function for portals
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Load textures from files
 	loadTextures();
 
+	paused = false;
 	player.create(2.5, 1, 5);
 	map.load("maps/test.map");
 }
