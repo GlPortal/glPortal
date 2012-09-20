@@ -23,8 +23,9 @@ void key_up(unsigned char, int , int);
 
 int width, height;
 int mousex, mousey;
+GLuint textures[5];
 bool keystates[256];
-GLuint textures[4];
+bool paused;
 
 Player player;
 Map map;

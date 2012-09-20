@@ -2,6 +2,7 @@
 #define __PORTAL_HPP
 
 enum PORTAL_DIR { PD_RIGHT, PD_FRONT, PD_LEFT, PD_BACK, PD_NONE };
+enum PORTAL_COLOR { PC_BLUE, PC_RED };
 
 class Portal {
 public:
@@ -76,8 +77,24 @@ public:
 		glPopMatrix();
 	}
 
-	void drawOutline(GLuint *textures) {
+	void drawOutline(PORTAL_COLOR color, GLuint *textures) {
+		glPushMatrix();
 
+		glTranslatef(x,y,z);
+		rotateFromDir();
+
+		if(color == PC_BLUE) glBindTexture(GL_TEXTURE_2D, textures[3]);
+		else glBindTexture(GL_TEXTURE_2D, textures[4]);
+
+		glBegin(GL_QUADS);
+		glNormal3f(0,0,1);
+		glTexCoord2f(0,0); glVertex3f(-1.40, 1.35, 0.002);
+		glTexCoord2f(0,1); glVertex3f(-1.40,-1.35, 0.002);
+		glTexCoord2f(1,1); glVertex3f( 1.40,-1.35, 0.002);
+		glTexCoord2f(1,0); glVertex3f( 1.40, 1.35, 0.002);
+		glEnd();
+
+		glPopMatrix();
 	}
 
 	float x,y,z;
