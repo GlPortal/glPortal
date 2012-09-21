@@ -21,24 +21,45 @@ void draw() {
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
+	// Draw scene
 	player.setView();
-
+	glEnable(GL_LIGHTING);
 	drawPortals();
 	map.draw(textures);
+	glDisable(GL_LIGHTING);
 
+	player.drawPortalOutlines(textures);
+
+	// Draw crosshair
+	glBindTexture(GL_TEXTURE_2D, textures[5]);
+	glLoadIdentity();
+
+	// Switch to orthographic 2D projection
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0,width,height,0);
 	glEnable(GL_BLEND);
-	player.getPortals()[0].drawOutline(PC_BLUE, textures);
-	player.getPortals()[1].drawOutline(PC_RED,  textures);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0,0); glVertex3f(width/2-16, height/2-16, 0);
+		glTexCoord2f(0,1); glVertex3f(width/2-16, height/2+16, 0);
+		glTexCoord2f(1,1); glVertex3f(width/2+16, height/2+16, 0);
+		glTexCoord2f(1,0); glVertex3f(width/2+16, height/2-16, 0);
+	glEnd();
 	glDisable(GL_BLEND);
 
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+
+	// Swap buffers
 	glutSwapBuffers();
 }
 
 void drawPortals() {
-	Portal *portals = player.getPortals();
-	glEnable(GL_STENCIL_TEST);
-
 	if(player.portalsActive()) {
+
+		Portal *portals = player.getPortals();
+		glEnable(GL_STENCIL_TEST);
 		for(int i = 0; i < 2; i++) {
 			int src = i;		// Source portal index
 			int dst = (i+1)%2;  // Destination portal index
@@ -69,14 +90,13 @@ void drawPortals() {
 
 			glPopMatrix();
 		}
-	}
-	glDisable(GL_STENCIL_TEST);
+		glDisable(GL_STENCIL_TEST);
 
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	portals[0].drawStencil();
-	portals[1].drawStencil();
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+		glClear(GL_DEPTH_BUFFER_BIT);
+		player.drawPortalStencils();
+		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	}
 }
 
 void mouse_moved(int x, int y) {
@@ -141,6 +161,7 @@ void loadTextures() {
 
 	textures[3] = createTexture("data/blueportal.png");
 	textures[4] = createTexture("data/orangeportal.png");
+	textures[5] = createTexture("data/crosshair.png");
 }
 
 void setup(int *argc, char **argv) {

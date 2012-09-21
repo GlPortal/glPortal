@@ -2,7 +2,6 @@
 #include <GL/glut.h>
 #include "Player.hpp"
 
-#define RADDEG 57.29577951308232088 // 180/PI
 #define PLAYER_MOVESPEED 6.0
 #define GRAVITY 16.0
 #define MAXSPEED 12.0
@@ -18,7 +17,7 @@ Player::Player() {
 	//portals[1].set(2,1.25,0,PD_FRONT);
 	//portals[1].set(0,1.25,5,PD_RIGHT);
 	//portals[1].set(15,1.25,5,PD_LEFT);
-	portals[1].set(0,1.45,1.75,PD_RIGHT);
+	//portals[1].set(0,2.45,1.75,PD_RIGHT);
 }
 
 void Player::create(float _x, float _y, float _z) {
@@ -99,4 +98,16 @@ void Player::setView() {
 
 bool Player::portalsActive() {
 	return (portals[0].active && portals[1].active);
+}
+
+void Player::drawPortalStencils() {
+	if(portals[0].active) portals[0].drawStencil();
+	if(portals[1].active) portals[1].drawStencil();
+}
+
+void Player::drawPortalOutlines(GLuint *textures) {
+	glEnable(GL_BLEND);
+	if(portals[0].active) portals[0].drawOutline(PC_BLUE,   textures);
+	if(portals[1].active) portals[1].drawOutline(PC_ORANGE, textures);
+	glDisable(GL_BLEND);
 }

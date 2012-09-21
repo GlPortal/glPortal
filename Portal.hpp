@@ -2,7 +2,7 @@
 #define __PORTAL_HPP
 
 enum PORTAL_DIR { PD_RIGHT, PD_FRONT, PD_LEFT, PD_BACK, PD_NONE };
-enum PORTAL_COLOR { PC_BLUE, PC_RED };
+enum PORTAL_COLOR { PC_BLUE, PC_ORANGE };
 
 class Portal {
 public:
