@@ -86,7 +86,7 @@ void Map::drawFromPortal(GLuint *textures, Portal& portal) {
 	BOX_TYPE current_type = BT_NONE;
 
 	for(it = walls.begin(); it < walls.end(); it++) {
-		// Horribly slow bounds check
+		// Horribly slow bounds check, but smaller code
 		if(portal.dir == PD_FRONT && it->z2 > portal.z
 		|| portal.dir == PD_BACK  && it->z1 < portal.z
 		|| portal.dir == PD_RIGHT && it->x2 > portal.x

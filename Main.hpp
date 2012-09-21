@@ -23,7 +23,7 @@ void key_up(unsigned char, int , int);
 
 int width, height;
 int mousex, mousey;
-GLuint textures[5];
+GLuint textures[6];
 bool keystates[256];
 bool paused;
 
