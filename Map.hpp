@@ -12,6 +12,7 @@ public:
 	void draw(GLuint *textures);
 	void drawFromPortal(GLuint *textures, Portal& portal);
 	bool collidesWithWall(Box &bbox);
+	bool pointInWall(float x, float y, float z, Box *box);
 
 protected:
 	void drawBox(std::vector<Box>::iterator it);

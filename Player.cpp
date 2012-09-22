@@ -1,7 +1,9 @@
 #include <math.h>
+#include <stdio.h>
 #include <GL/glut.h>
 #include "Player.hpp"
 
+#define RADDEG 57.29577951308232088 // 180/PI
 #define PLAYER_MOVESPEED 6.0
 #define GRAVITY 16.0
 #define MAXSPEED 12.0
@@ -13,11 +15,7 @@ Player::Player() {
 	onGround = false;
 
 	portals[0].set(1.75,1.45,0,PD_FRONT);
-	//portals[1].set(2,1.25,10,PD_BACK);
-	//portals[1].set(2,1.25,0,PD_FRONT);
-	//portals[1].set(0,1.25,5,PD_RIGHT);
-	//portals[1].set(15,1.25,5,PD_LEFT);
-	//portals[1].set(0,2.45,1.75,PD_RIGHT);
+	portals[1].set(0,2.45,1.75,PD_RIGHT);
 }
 
 void Player::create(float _x, float _y, float _z) {
@@ -88,6 +86,34 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 		}
 		yspeed = 0.f;
 	}
+
+	// Update shots
+	for(int i = 0; i < 2; i++) {
+		if(shots[i].active) shots[i].update(dt);
+
+		Box sbox;
+		if(map.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
+			shots[i].placePortal(sbox, portals[i]);
+		}
+	}
+}
+
+void Player::mousePressed(int button) {
+	switch(button) {
+		case GLUT_LEFT_BUTTON:
+			// Shoot blue portal
+			shots[0].shoot(0,x,y,z,xrot,yrot);
+			break;
+		case GLUT_RIGHT_BUTTON:
+			// Shoot orange portal
+			shots[1].shoot(1,x,y,z,xrot,yrot);
+			break;
+		case GLUT_MIDDLE_BUTTON:
+			// Disable both portals
+			portals[0].active = false;
+			portals[1].active = false;
+			break;
+	}
 }
 
 void Player::setView() {
@@ -110,4 +136,9 @@ void Player::drawPortalOutlines(GLuint *textures) {
 	if(portals[0].active) portals[0].drawOutline(PC_BLUE,   textures);
 	if(portals[1].active) portals[1].drawOutline(PC_ORANGE, textures);
 	glDisable(GL_BLEND);
+}
+
+void Player::drawShots(GLuint *textures) {
+	if(shots[0].active) shots[0].draw(textures, xrot, yrot);
+	if(shots[1].active) shots[1].draw(textures, xrot, yrot);
 }
