@@ -6,16 +6,13 @@
 #define RADDEG 57.29577951308232088 // 180/PI
 #define PLAYER_MOVESPEED 6.0
 #define GRAVITY 16.0
-#define MAXSPEED 12.0
+#define MAXSPEED 10.0
 #define JUMPPOWER 7.0
 
 Player::Player() {
 	x = y = z = 0.f;
 	xrot = yrot = 0.f;
 	onGround = false;
-
-	portals[0].set(1.75,1.45,0,PD_FRONT);
-	portals[1].set(0,2.45,1.75,PD_RIGHT);
 }
 
 void Player::create(float _x, float _y, float _z) {
@@ -40,42 +37,51 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 	yspeed -= GRAVITY*dt;
 	if(yspeed < -MAXSPEED) yspeed = -MAXSPEED;
 
-	// Move player
+	// Move forward
 	if(keystates['w']) {
 		zspeed -= cos(yrot)*PLAYER_MOVESPEED;
 		xspeed -= sin(yrot)*PLAYER_MOVESPEED;
 	}
+	// Move backward
 	if(keystates['s']) {
 		zspeed += cos(yrot)*PLAYER_MOVESPEED;
 		xspeed += sin(yrot)*PLAYER_MOVESPEED;
 	}
+	// Strafe left
 	if(keystates['a']) {
 		xspeed -= cos(yrot)*PLAYER_MOVESPEED;
 		zspeed += sin(yrot)*PLAYER_MOVESPEED;
 	}
+	// Strafe right
 	if(keystates['d']) {
 		xspeed += cos(yrot)*PLAYER_MOVESPEED;
 		zspeed -= sin(yrot)*PLAYER_MOVESPEED;
 	}
-	// Jump is space is pressed and player is standing on ground
+	// Jump if space is pressed and player is standing on ground
 	if(keystates[' '] && onGround) {
 		yspeed = JUMPPOWER;
+	}
+	// Disable portals if R is held
+	if(keystates['r']) {
+		portals[0].disable();
+		portals[1].disable();
 	}
 
 	float newx = x + xspeed*dt;
 	float newy = y + yspeed*dt;
 	float newz = z + zspeed*dt;
 
+	// Check for collision in x-axis
 	Box xbox(newx-0.5, y, z-0.5, newx+0.5, y+1.8, z+0.5);
 	if(map.collidesWithWall(xbox) == false) {
 		x = newx;
 	}
-
+	// Check for collision in y-axis
 	Box zbox(x-0.5, y, newz-0.5, x+0.5, y+1.8, newz+0.5);
 	if(map.collidesWithWall(zbox) == false) {
 		z = newz;
 	}
-
+	// Check for collision in z-axis
 	Box ybox(x-0.5, newy, z-0.5, x+0.5, newy+1.8, z+0.5);
 	onGround = false;
 	if(map.collidesWithWall(ybox) == false) {
@@ -89,11 +95,16 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 
 	// Update shots
 	for(int i = 0; i < 2; i++) {
-		if(shots[i].active) shots[i].update(dt);
+		if(shots[i].active) {
+			shots[i].update(dt);
 
-		Box sbox;
-		if(map.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
-			shots[i].placePortal(sbox, portals[i]);
+			Box sbox;
+			if(map.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
+				if(sbox.type == BT_WALL) {
+					shots[i].placePortal(sbox, portals[i]);
+				}
+				shots[i].active = false;
+			}
 		}
 	}
 }
@@ -110,8 +121,8 @@ void Player::mousePressed(int button) {
 			break;
 		case GLUT_MIDDLE_BUTTON:
 			// Disable both portals
-			portals[0].active = false;
-			portals[1].active = false;
+			portals[0].disable();
+			portals[1].disable();
 			break;
 	}
 }
