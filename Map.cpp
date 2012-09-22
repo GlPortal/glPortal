@@ -71,22 +71,28 @@ void Map::draw(GLuint *textures) {
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
 	// Draw walls
-	BOX_TYPE current_type = BT_NONE;
+	BOX_TYPE current_type = BT_WALL;
 	std::vector<Box>::iterator it;
 
+	glBegin(GL_QUADS);
 	for(it = walls.begin(); it < walls.end(); it++) {
 		if(it->type != current_type) {
+			glEnd();
 			current_type = it->type;
 			glBindTexture(GL_TEXTURE_2D, textures[it->type]);
+			glBegin(GL_QUADS);
 		}
 		drawBox(*it);
 	}
+	glEnd();
 
 	// Draw acid waste
 	glBindTexture(GL_TEXTURE_2D, textures[BT_ACID]);
+	glBegin(GL_QUADS);
 	for(it = acid.begin(); it < acid.end(); it++) {
 		drawBox(*it);
 	}
+	glEnd();
 }
 
 /**
@@ -100,8 +106,9 @@ void Map::drawFromPortal(GLuint *textures, Portal& portal) {
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 	// Draw walls
 	std::vector<Box>::iterator it;
-	BOX_TYPE current_type = BT_NONE;
+	BOX_TYPE current_type = BT_WALL;
 
+	glBegin(GL_QUADS);
 	for(it = walls.begin(); it < walls.end(); it++) {
 		// Horribly slow bounds check, but smaller code
 		if(portal.dir == PD_FRONT && it->z2 > portal.z
@@ -109,14 +116,18 @@ void Map::drawFromPortal(GLuint *textures, Portal& portal) {
 		|| portal.dir == PD_RIGHT && it->x2 > portal.x
 		|| portal.dir == PD_LEFT  && it->x1 < portal.x) {
 			if(it->type != current_type) {
+				glEnd();
 				current_type = it->type;
 				glBindTexture(GL_TEXTURE_2D, textures[it->type]);
+				glBegin(GL_QUADS);
 			}
 			drawBox(*it);
 		}
 	}
+	glEnd();
 
 	// Draw acid waste
+	glBegin(GL_QUADS);
 	glBindTexture(GL_TEXTURE_2D, textures[BT_ACID]);
 	for(it = acid.begin(); it < acid.end(); it++) {
 		if(portal.dir == PD_FRONT && it->z2 > portal.z
@@ -126,6 +137,7 @@ void Map::drawFromPortal(GLuint *textures, Portal& portal) {
 			drawBox(*it);
 		}
 	}
+	glEnd();
 }
 
 /**
@@ -136,7 +148,6 @@ void Map::drawBox(Box &b) {
 	float dy = (b.y2 - b.y1)*0.5f;
 	float dz = (b.z2 - b.z1)*0.5f;
 
-	glBegin(GL_QUADS);
 	// Top
 	glNormal3f(0,1,0);
 	glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y2, b.z1);
@@ -178,8 +189,6 @@ void Map::drawBox(Box &b) {
 	glTexCoord2f( dy, 0.f); glVertex3f(b.x2, b.y2, b.z1);
 	glTexCoord2f( dy,  dz); glVertex3f(b.x2, b.y2, b.z2);
 	glTexCoord2f(0.f,  dz); glVertex3f(b.x2, b.y1, b.z2);
-
-	glEnd();
 }
 
 /**
