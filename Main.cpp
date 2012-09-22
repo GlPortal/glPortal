@@ -66,6 +66,7 @@ void drawPortals() {
 			int dst = (i+1)%2;  // Destination portal index
 
 			glPushMatrix();
+			// Always write to stencil buffer
 			glStencilFunc(GL_NEVER, 1, 0xFF);
 			glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
 			glStencilMask(0xFF);
@@ -78,21 +79,25 @@ void drawPortals() {
 			float dz = player.getZ()-portals[src].z;
 
 			glClear(GL_DEPTH_BUFFER_BIT);
+			// Only pass stencil test if equal to 1
 			glStencilMask(0x00);
 			glStencilFunc(GL_EQUAL, 1, 0xFF);
 
+			// Move camera to portal view
 			glTranslatef(-dx,-dy,-dz);
 			glTranslatef(player.getX(), player.getY(), player.getZ());
 			portals[src].rotateFromDir();
 			portals[dst].rotateToDir();
 			glTranslatef(-portals[dst].x, -portals[dst].y, -portals[dst].z);
-
+			// Draw scene from portal view
 			map.drawFromPortal(textures, portals[dst]);
+			player.drawPortalOutlines(textures);
 
 			glPopMatrix();
 		}
 		glDisable(GL_STENCIL_TEST);
 
+		// Draw portal stencils so portals wont be drawn over
 		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 		glClear(GL_DEPTH_BUFFER_BIT);
 		player.drawPortalStencils();
@@ -141,9 +146,11 @@ GLuint createTexture(const char *filename) {
 	glGenTextures(1, &handle);
 	glBindTexture(GL_TEXTURE_2D, handle);
 
+	// Read bitmap data
 	int w, h, n;
 	unsigned char *data = stbi_load(filename, &w, &h, &n, 0);
 
+	// Create texture with mip maps
 	if(n == 3)
 		gluBuild2DMipmaps(GL_TEXTURE_2D, n, w, h, GL_RGB, GL_UNSIGNED_BYTE, data);
 	else if(n == 4)
@@ -151,6 +158,7 @@ GLuint createTexture(const char *filename) {
 
 	stbi_image_free(data);
 
+	// Repeat texture in s- and t-axis
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
@@ -164,7 +172,7 @@ GLuint createTexture(const char *filename) {
 }
 
 void loadTextures() {
-	textures[BT_WALL]  = createTexture("data/wall2.png");
+	textures[BT_WALL]  = createTexture("data/wall.png");
 	textures[BT_TILES] = createTexture("data/tiles.png");
 	textures[BT_ACID]  = createTexture("data/toxic.png");
 

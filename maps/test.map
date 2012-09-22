@@ -1,27 +1,26 @@
 ! Left and right ground
 t 0 0 0 5 -5 10
-t 10 0 0 15 -5 10
+t 15 0 0 20 -5 10
+
+t 15 4 0 20 5 10
 
 ! Outer walls
+! Left wall
 w -1 0 0 0 8 10
-w 15 0 0 16 8 10
-w   0 -5 0 7.5 8 -1
-w 7.5 -5 0  15 8 -1
-w   0 -5 10 7.5 8 11
-w 7.5 -5 10  15 8 11
+! Right wall
+w 20 0 0 21 8 10
+
+w 0 -5  0 20 8 -1
+w 0 -5 10 20 8 11
 
 ! Ceiling
-t   0 8 0 7.5 9 5
-t 7.5 8 0  15 9 5
-t   0 8 5 7.5 9 10
-t 7.5 8 5  15 9 10
+t 0 8 0 20 9 10
 
 !Box for testing
-t 4 0 0 5 1 1
-t 10 0 9 11 1 10
+t 9 -5 4 11 0 6
 
 ! Acid pit in center
-a 5 -1 0 10 -5 10
+a 5 -1 0 15 -5 10
 
 ! Light in center of map
 l 7.5 6 5
