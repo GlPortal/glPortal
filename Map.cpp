@@ -170,6 +170,17 @@ bool Map::collidesWithWall(Box &bbox) {
 	return false;
 }
 
+bool Map::pointInWall(float x, float y, float z, Box *box) {
+	std::vector<Box>::iterator it;
+	for(it = walls.begin(); it < walls.end(); it++) {
+		if(it->collide(x,y,z)) {
+			*box = *it;
+			return true;
+		}
+	}
+	return false;
+}
+
 std::vector<Box>* Map::getWalls() {
 	return &walls;
 }

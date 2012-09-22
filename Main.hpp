@@ -18,12 +18,13 @@ GLuint createTexture(const char *filename);
 void loadTextures();
 void setup(int *, char **);
 void mouse_moved(int, int);
+void mouse_pressed(int, int, int, int);
 void key_down(unsigned char, int, int);
 void key_up(unsigned char, int , int);
 
 int width, height;
 int mousex, mousey;
-GLuint textures[6];
+GLuint textures[7];
 bool keystates[256];
 bool paused;
 

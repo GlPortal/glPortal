@@ -29,6 +29,7 @@ void draw() {
 	glDisable(GL_LIGHTING);
 
 	player.drawPortalOutlines(textures);
+	player.drawShots(textures);
 
 	// Draw crosshair
 	glBindTexture(GL_TEXTURE_2D, textures[5]);
@@ -41,10 +42,10 @@ void draw() {
 	gluOrtho2D(0,width,height,0);
 	glEnable(GL_BLEND);
 	glBegin(GL_QUADS);
-		glTexCoord2f(0,0); glVertex3f(width/2-16, height/2-16, 0);
-		glTexCoord2f(0,1); glVertex3f(width/2-16, height/2+16, 0);
-		glTexCoord2f(1,1); glVertex3f(width/2+16, height/2+16, 0);
-		glTexCoord2f(1,0); glVertex3f(width/2+16, height/2-16, 0);
+		glTexCoord2f(0,0); glVertex3f(width/2-16, height/2-12, 0);
+		glTexCoord2f(0,1); glVertex3f(width/2-16, height/2+20, 0);
+		glTexCoord2f(1,1); glVertex3f(width/2+16, height/2+20, 0);
+		glTexCoord2f(1,0); glVertex3f(width/2+16, height/2-12, 0);
 	glEnd();
 	glDisable(GL_BLEND);
 
@@ -102,6 +103,14 @@ void drawPortals() {
 void mouse_moved(int x, int y) {
 	mousex = x;
 	mousey = y;
+}
+
+void mouse_pressed(int button, int state, int x, int y) {
+	if(state == GLUT_DOWN) {
+		if(button == GLUT_LEFT_BUTTON || button == GLUT_RIGHT_BUTTON) {
+			player.mousePressed(button);
+		}
+	}
 }
 
 void key_down(unsigned char key, int x, int y) {
@@ -162,6 +171,7 @@ void loadTextures() {
 	textures[3] = createTexture("data/blueportal.png");
 	textures[4] = createTexture("data/orangeportal.png");
 	textures[5] = createTexture("data/crosshair.png");
+	textures[6] = createTexture("data/balls.png");
 }
 
 void setup(int *argc, char **argv) {
@@ -183,6 +193,7 @@ void setup(int *argc, char **argv) {
 	glutKeyboardFunc(key_down);
 	glutKeyboardUpFunc(key_up);
 	glutPassiveMotionFunc(mouse_moved);
+	glutMouseFunc(mouse_pressed);
 	glutWarpPointer(width/2, height/2);
 
 	// Enable textures

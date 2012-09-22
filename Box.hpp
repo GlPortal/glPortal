@@ -45,6 +45,13 @@ struct Box {
 		else
 			return true;
 	}
+
+	bool collide(float x, float y, float z) {
+		if(x > x1 && x < x2 && y > y1 && y < y2 && z > z1 && z < z2)
+			return true;
+		else
+			return false;
+	}
 };
 
 #endif
