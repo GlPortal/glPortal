@@ -3,30 +3,48 @@
 
 #include <math.h>
 
-enum PORTAL_DIR { PD_RIGHT, PD_FRONT, PD_LEFT, PD_BACK, PD_NONE };
-enum PORTAL_COLOR { PC_BLUE, PC_ORANGE };
+enum PORTAL_DIR { PD_RIGHT, PD_FRONT, PD_LEFT, PD_BACK, PD_NONE }; /**< Possible direction a portal can face */
+enum PORTAL_COLOR { PC_BLUE, PC_ORANGE }; /**< Colors a portal can have */
 
+/**
+ * Class for controlling and drawing portals
+ */
 class Portal {
 public:
 	float x,y,z;
-	PORTAL_DIR dir;
-	bool active;
+	PORTAL_DIR dir; /**< Direction portal is facing */
+	bool active;	/**< True if the portal is currently active */
 
 	Portal() : x(0), y(0), z(0), dir(PD_NONE), active(false) { }
 
-	void place(float _x, float _y, float _z, PORTAL_DIR _dir) {
-		x = floor(_x+0.5f);
-		y = floor(_y+0.5f)+0.25f;
-		z = floor(_z+0.5f);
+	/**
+	 * Places and activates the portal.
+	 * Coordinates will be rounded for better alignment with walls and floor.
+	 *
+	 * @param x New x-coordinate
+	 * @param y New y-coordinate
+	 * @param z New z-coordinate
+	 * @param dir New direction
+	 */
+	void place(float x, float y, float z, PORTAL_DIR dir) {
+		this->x = floor(x+0.5f);
+		this->y = floor(y+0.5f)+0.25f;
+		this->z = floor(z+0.5f);
 
-		dir = _dir;
+		this->dir = dir;
 		active = true;
 	}
 	
+	/**
+	 * Disables the portal
+	 */
 	void disable() {
 		active = false;
 	}
 
+	/**
+	 * Rotates current matrix to make matrix point in positive Z-direction.
+	 */
 	void rotateToDir() {
 		switch(dir) {
 			case PD_RIGHT:
@@ -41,6 +59,9 @@ public:
 		}
 	}
 
+	/**
+	 * Rotates current matrix to make Z-axis point in portal's direction.
+	 */
 	void rotateFromDir() {
 		switch(dir) {
 			case PD_LEFT:
@@ -55,6 +76,10 @@ public:
 		}
 	}
 
+	/**
+	 * Draws a round stencil in the portal.
+	 * Used for stencil buffer effects.
+	 */
 	void drawStencil() {
 		glPushMatrix();
 
@@ -90,6 +115,12 @@ public:
 		glPopMatrix();
 	}
 
+	/**
+	 * Draws the colored outline of a portal.
+	 *
+	 * @param color Color of the portal. Either PC_BLUE or PC_ORANGE
+	 * @param textures Array of texture handles
+	 */
 	void drawOutline(PORTAL_COLOR color, GLuint *textures) {
 		glPushMatrix();
 

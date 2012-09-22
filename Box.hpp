@@ -4,12 +4,17 @@
 #define MAX(x,y) (((x) > (y)) ? (x) : (y))
 #define MIN(x,y) (((x) < (y)) ? (x) : (y))
 
-enum BOX_TYPE { BT_WALL, BT_TILES, BT_ACID, BT_NONE };
+enum BOX_TYPE { BT_WALL, BT_TILES, BT_ACID, BT_NONE }; /**< Type of material the Box represents */
 
-struct Box {
+/**
+ * Class abstracting a box in space.
+ * Coordinates will be sorted such that x1 <= x2, y1 <=2 etc.
+ */
+class Box {
+public:
 	float x1,y1,z1;
 	float x2,y2,z2;
-	BOX_TYPE type;
+	BOX_TYPE type; /**< Material type of the box */
 
 	Box() : x1(0), y1(0), z1(0), x2(0), y2(0), z2(0), type(BT_NONE) {}
 
@@ -39,6 +44,12 @@ struct Box {
 		type = _type;
 	}
 	
+	/**
+	 * Checks whether this box collides with another
+	 *
+	 * @param b The Box to collide with
+	 * @return True if the boxes collide
+	 */
 	bool collide(Box &b) {
 		if(b.x1 > x2 || b.x2 < x1 ||b.y1 > y2 || b.y2 < y1 ||b.z1 > z2 || b.z2 < z1)
 			return false;
@@ -46,6 +57,14 @@ struct Box {
 			return true;
 	}
 
+	/**
+	 * Checks whether a point lies within the box
+	 *
+	 * @param x X-coordinate of the point
+	 * @param y Y-coordinate of the point
+	 * @param z Z-coordinate of the point
+	 * @return True if a collision occurs
+	 */
 	bool collide(float x, float y, float z) {
 		if(x > x1 && x < x2 && y > y1 && y < y2 && z > z1 && z < z2)
 			return true;

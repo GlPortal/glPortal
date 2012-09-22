@@ -4,13 +4,23 @@
 #define RADDEG 57.29577951308232088 // 180/PI
 #define SHOTSPEED 32.0
 
-void Shot::shoot(int _id, float _x, float _y, float _z, float xrot, float yrot) {
+/**
+ * Shoots the portal gun from a given point in a given direction.
+ *
+ * @param id ID of the portal. Either 0 or 1
+ * @param x X-coordinate to shoot from
+ * @param y Y-coordinate to shoot from
+ * @param z Z-coordinate to shoot from
+ * @param xrot Gun's rotation in X-axis
+ * @param yrot Gun's rotation in Y-axis
+ */
+void Shot::shoot(int id, float x, float y, float z, float xrot, float yrot) {
 	active = true;
 
-	id = _id;
-	x = _x;
-	y = _y+1.5f;
-	z = _z;
+	this->id = id;
+	this->x = x;
+	this->y = y+1.5f;
+	this->z = z;
 
 	// Approximation of actual vector
 	xspeed = -sin(yrot)*cos(xrot)*SHOTSPEED;
@@ -18,12 +28,24 @@ void Shot::shoot(int _id, float _x, float _y, float _z, float xrot, float yrot) 
 	zspeed = -cos(yrot)*cos(xrot)*SHOTSPEED;
 }
 
+/**
+ * Updates the shot position based on its velocity vector.
+ * 
+ * @param Time since last update in seconds
+ */
 void Shot::update(float dt) {
 	x += xspeed*dt;
 	y += yspeed*dt;
 	z += zspeed*dt;
 }
 
+/**
+ * Draws the shot as a billboard sprite
+ *
+ * @param Array of texture handles
+ * @param Camera's current rotation in X-axis
+ * @param Camera's current rotation in Y-axis
+ */
 void Shot::draw(GLuint *textures, float xrot, float yrot) {
 	glPushMatrix();
 	glTranslatef(x,y,z);
@@ -45,6 +67,12 @@ void Shot::draw(GLuint *textures, float xrot, float yrot) {
 	glPopMatrix();
 }
 
+/**
+ * Places a given portal on a given box from this shot.
+ *
+ * @param box The box to place a portal on
+ * @param portal The portal to place
+ */
 void Shot::placePortal(Box &box, Portal &portal) {
 	float dist[4];
 	int min;

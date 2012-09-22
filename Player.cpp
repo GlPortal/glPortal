@@ -15,13 +15,29 @@ Player::Player() {
 	onGround = false;
 }
 
-void Player::create(float _x, float _y, float _z) {
-	x = _x;
-	y = _y;
-	z = _z;
+/**
+ * Sets the position of the player
+ * @param x New X-coordinate
+ * @param y New Y-coordinate
+ * @param z New Z-coordinate
+ */
+void Player::create(float x, float y, float z) {
+	this->x = x;
+	this->y = y;
+	this->z = z;
 	onGround = false;
 }
 
+/**
+ * Updates the player movement vectors based on movement keys,
+ * and performs collision with walls and acid pools.
+ *
+ * @param dt Time in seconds passed since last update
+ * @param keystates Array of keyboard key states
+ * @param mousedx Movement since last update in horizontal axis
+ * @param mousedy Movement since last udpate in vertical axis
+ * @param Reference to the Map
+ */
 void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map &map) {
 	// Apply rotation of view
 	yrot += mousedx*0.0015f;
@@ -109,6 +125,10 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 	}
 }
 
+/**
+ * Called when a mouse button is pressed down
+ * @param Mouse button being pressed
+ */
 void Player::mousePressed(int button) {
 	switch(button) {
 		case GLUT_LEFT_BUTTON:
@@ -127,21 +147,38 @@ void Player::mousePressed(int button) {
 	}
 }
 
+/**
+ * Updates the view according to the player's
+ *
+ * Updates the current MODELVIEW matrix with the inverse
+ * translation and rotation of the player's
+ */
 void Player::setView() {
 	glRotatef(-xrot*RADDEG, 1,0,0);
 	glRotatef(-yrot*RADDEG, 0,1,0);
 	glTranslatef(-x, -(y+1.7f), -z);
 }
 
+/**
+ * Returns true if both portals are active
+ */
 bool Player::portalsActive() {
 	return (portals[0].active && portals[1].active);
 }
 
+/**
+ * Draws stencil meshes for both portals
+ */
 void Player::drawPortalStencils() {
-	if(portals[0].active) portals[0].drawStencil();
-	if(portals[1].active) portals[1].drawStencil();
+	portals[0].drawStencil();
+	portals[1].drawStencil();
 }
 
+/*
+ * Draws colored outlines for both portals
+ *
+ * @param textures Pointer to the array of texture handles
+ */
 void Player::drawPortalOutlines(GLuint *textures) {
 	glEnable(GL_BLEND);
 	if(portals[0].active) portals[0].drawOutline(PC_BLUE,   textures);
@@ -149,6 +186,11 @@ void Player::drawPortalOutlines(GLuint *textures) {
 	glDisable(GL_BLEND);
 }
 
+/**
+ * Draws both portal shots
+ *
+ * @param textures Pointer to the array of texture handles
+ */
 void Player::drawShots(GLuint *textures) {
 	if(shots[0].active) shots[0].draw(textures, xrot, yrot);
 	if(shots[1].active) shots[1].draw(textures, xrot, yrot);
