@@ -6,6 +6,11 @@
 #include "Box.hpp"
 #include "Portal.hpp"
 
+/**
+ * Class describing a single map.
+ * Contains data about walls and acid pools as well as lighting.
+ * Used for performing collision and drawing the current level.
+ */
 class Map {
 public:
 	void load(const char *filename);
@@ -15,13 +20,13 @@ public:
 	bool pointInWall(float x, float y, float z, Box *box);
 
 protected:
-	void drawBox(std::vector<Box>::iterator it);
+	void drawBox(Box &b);
 	std::vector<Box> *getWalls();
 	std::vector<Box> *getAcid();
 
-	std::vector<Box> walls;
-	std::vector<Box> acid;
-	GLfloat lightpos[4];
+	std::vector<Box> walls;	/**< Vector of all walls in the map */
+	std::vector<Box> acid;	/**< Vector of all acid pools in the map */
+	GLfloat lightpos[4];	/**< Position of the position light in the map */
 };
 
 #endif

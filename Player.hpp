@@ -5,6 +5,9 @@
 #include "Portal.hpp"
 #include "Shot.hpp"
 
+/**
+ * Class for controlling the player and camera view
+ */
 class Player {
 public:
 	Player();
@@ -25,8 +28,8 @@ public:
 protected:
 	float x,y,z; 		// Position
 	float xrot, yrot;	// Rotation in x- and y-axis
-	float xspeed, yspeed, zspeed;
-	bool onGround;
+	float xspeed, yspeed, zspeed; // Velocity in x-, y- and z-axis
+	bool onGround;		// True if player was standing on ground last frame
 	Portal portals[2];
 	Shot shots[2];
 };
