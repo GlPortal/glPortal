@@ -174,6 +174,7 @@ GLuint createTexture(const char *filename) {
 	GLenum error = glGetError();
 	while(error != GL_NO_ERROR) {
 		printf("Error: %d\n", error);
+		error = glGetError();
 	}
 
 	return handle;
