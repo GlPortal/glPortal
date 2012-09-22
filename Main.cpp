@@ -1,5 +1,13 @@
+/**
+ * @mainpage glPortal
+ * @author Simon Jonas Larsen - slars10
+ *
+ * \par Class diagram:
+ * \image html classdiagram.png "Class diagram"
+ */
+
 #include <GL/glut.h>
-#include <stdio.h>
+#include <cstdio>
 #include "stb_image.c"
 #include "Main.hpp"
 #include "Box.hpp"

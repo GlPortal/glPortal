@@ -1,7 +1,7 @@
 #ifndef __PORTAL_HPP
 #define __PORTAL_HPP
 
-#include <math.h>
+#include <cmath>
 
 enum PORTAL_DIR { PD_RIGHT, PD_FRONT, PD_LEFT, PD_BACK, PD_NONE }; /**< Possible direction a portal can face */
 enum PORTAL_COLOR { PC_BLUE, PC_ORANGE }; /**< Colors a portal can have */
@@ -27,9 +27,9 @@ public:
 	 * @param dir New direction
 	 */
 	void place(float x, float y, float z, PORTAL_DIR dir) {
-		this->x = floor(x+0.5f);
-		this->y = floor(y+0.5f)+0.25f;
-		this->z = floor(z+0.5f);
+		this->x = round(x);
+		this->y = round(y)+0.25f;
+		this->z = round(z);
 
 		this->dir = dir;
 		active = true;

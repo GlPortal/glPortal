@@ -27,7 +27,8 @@ public:
 
 protected:
 	float x,y,z; 		// Position
-	float xrot, yrot;	// Rotation in x- and y-axis
+	float xrot; /**< View rotation in X-axis */
+	float yrot;	/**< View rotation in Y-axis */
 	float xspeed, yspeed, zspeed; // Velocity in x-, y- and z-axis
 	bool onGround;		// True if player was standing on ground last frame
 	Portal portals[2];
