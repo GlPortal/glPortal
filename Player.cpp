@@ -181,10 +181,10 @@ void Player::drawPortalStencils() {
  *
  * @param textures Pointer to the array of texture handles
  */
-void Player::drawPortalOutlines(GLuint *textures) {
+void Player::drawPortalOutlines() {
 	glEnable(GL_BLEND);
-	if(portals[0].active) portals[0].drawOutline(PC_BLUE,   textures);
-	if(portals[1].active) portals[1].drawOutline(PC_ORANGE, textures);
+	if(portals[0].active) portals[0].drawOutline(PC_BLUE);
+	if(portals[1].active) portals[1].drawOutline(PC_ORANGE);
 	glDisable(GL_BLEND);
 }
 
@@ -193,7 +193,7 @@ void Player::drawPortalOutlines(GLuint *textures) {
  *
  * @param textures Pointer to the array of texture handles
  */
-void Player::drawShots(GLuint *textures) {
-	if(shots[0].active) shots[0].draw(textures, xrot, yrot);
-	if(shots[1].active) shots[1].draw(textures, xrot, yrot);
+void Player::drawShots() {
+	if(shots[0].active) shots[0].draw(xrot, yrot);
+	if(shots[1].active) shots[1].draw(xrot, yrot);
 }

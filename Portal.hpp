@@ -19,7 +19,7 @@ public:
 	void rotateToDir();
 	void rotateFromDir();
 	void drawStencil();
-	void drawOutline(PORTAL_COLOR color, GLuint *textures);
+	void drawOutline(PORTAL_COLOR color);
 
 	float x,y,z;
 	PORTAL_DIR dir; /**< Direction portal is facing */

@@ -14,8 +14,8 @@
 class Map {
 public:
 	void load(const char *filename);
-	void draw(GLuint *textures);
-	void drawFromPortal(GLuint *textures, Portal& portal);
+	void draw();
+	void drawFromPortal(Portal& portal);
 	bool collidesWithWall(Box &bbox);
 	bool pointInWall(float x, float y, float z, Box *box);
 
