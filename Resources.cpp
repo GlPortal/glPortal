@@ -2,14 +2,14 @@
 #include "stb_image.c"
 
 void Resources::loadTextures() {
-	textures[0]  = createTexture("data/wall.png");
-	textures[1] = createTexture("data/tiles.png");
-	textures[2]  = createTexture("data/toxic.png");
+	textures[TID_WALL]  = createTexture("data/wall.png");
+	textures[TID_TILES] = createTexture("data/tiles.png");
+	textures[TID_ACID]  = createTexture("data/toxic.png");
 
-	textures[3] = createTexture("data/blueportal.png");
-	textures[4] = createTexture("data/orangeportal.png");
-	textures[5] = createTexture("data/crosshair.png");
-	textures[6] = createTexture("data/balls.png");
+	textures[TID_BLUEPORTAL]   = createTexture("data/blueportal.png");
+	textures[TID_ORANGEPORTAL] = createTexture("data/orangeportal.png");
+	textures[TID_CROSSHAIR]    = createTexture("data/crosshair.png");
+	textures[TID_BALLS]        = createTexture("data/balls.png");
 }
 
 void Resources::bindTexture(int id) {

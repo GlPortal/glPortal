@@ -118,7 +118,7 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 
 			Box sbox;
 			if(map.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
-				if(sbox.type == BT_WALL) {
+				if(sbox.type == TID_WALL) {
 					portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z);
 				}
 				shots[i].active = false;

@@ -56,7 +56,7 @@ void Shot::draw(float xrot, float yrot) {
 	glRotatef(yrot*RADDEG, 0,1,0);
 	glRotatef(xrot*RADDEG, 1,0,0);
 
-	Resources::inst().bindTexture(6);
+	Resources::inst().bindTexture(TID_BALLS);
 	glEnable(GL_BLEND);
 	float xoffset = id*0.5f;
 	glBegin(GL_QUADS);
