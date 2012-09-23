@@ -170,9 +170,9 @@ void Portal::drawOutline(PORTAL_COLOR color) {
 
 	// Bind blue of orange portal texture
 	if(color == PC_BLUE)
-		Resources::inst().bindTexture(3);
+		Resources::inst().bindTexture(TID_BLUEPORTAL);
 	else
-		Resources::inst().bindTexture(4);
+		Resources::inst().bindTexture(TID_ORANGEPORTAL);
 
 	glBegin(GL_QUADS);
 	glNormal3f(0,0,1);

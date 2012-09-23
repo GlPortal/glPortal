@@ -3,6 +3,11 @@
 
 #include <GL/glut.h>
 
+enum TEXTURE_ID {TID_WALL, TID_TILES, TID_ACID, TID_BLUEPORTAL,TID_ORANGEPORTAL, TID_CROSSHAIR, TID_BALLS, TID_NONE};
+
+/**
+ * Singleton class for loading and binding textures.
+ */
 class Resources {
 public:
 	static Resources& inst() {
@@ -20,7 +25,7 @@ private:
 
 	GLuint createTexture(const char *filename);
 
-	GLuint textures[7];
+	GLuint textures[8];
 };
 
 #endif

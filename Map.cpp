@@ -28,7 +28,7 @@ void Map::load(const char *filename) {
 						ss >> temp;
 						values[i] = (float)atof(temp.c_str());
 					}
-					walls.push_back(Box(values, BT_WALL));
+					walls.push_back(Box(values, TID_WALL));
 					break;
 				// Tiles definition
 				case 't':
@@ -36,7 +36,7 @@ void Map::load(const char *filename) {
 						ss >> temp;
 						values[i] = (float)atof(temp.c_str());
 					}
-					walls.push_back(Box(values, BT_TILES));
+					walls.push_back(Box(values, TID_TILES));
 					break;
 				// Acid pool definition
 				case 'a':
@@ -44,7 +44,7 @@ void Map::load(const char *filename) {
 						ss >> temp;
 						values[i] = (float)atof(temp.c_str());
 					}
-					acid.push_back(Box(values, BT_ACID));
+					acid.push_back(Box(values, TID_ACID));
 					break;
 				// Light position
 				case 'l':
@@ -72,7 +72,7 @@ void Map::draw() {
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
 	// Draw walls
-	BOX_TYPE current_type = BT_NONE;
+	TEXTURE_ID current_type = TID_NONE;
 	std::vector<Box>::iterator it;
 
 	glBegin(GL_QUADS);
@@ -88,7 +88,7 @@ void Map::draw() {
 	glEnd();
 
 	// Draw acid waste
-	Resources::inst().bindTexture(BT_ACID);
+	Resources::inst().bindTexture(TID_ACID);
 	glBegin(GL_QUADS);
 	for(it = acid.begin(); it < acid.end(); it++) {
 		drawBox(*it);
@@ -107,7 +107,7 @@ void Map::drawFromPortal(Portal& portal) {
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 	// Draw walls
 	std::vector<Box>::iterator it;
-	BOX_TYPE current_type = BT_NONE;
+	TEXTURE_ID current_type = TID_NONE;
 
 	glBegin(GL_QUADS);
 	for(it = walls.begin(); it < walls.end(); it++) {
@@ -128,7 +128,7 @@ void Map::drawFromPortal(Portal& portal) {
 	glEnd();
 
 	// Draw acid waste
-	Resources::inst().bindTexture(BT_ACID);
+	Resources::inst().bindTexture(TID_ACID);
 	glBegin(GL_QUADS);
 	for(it = acid.begin(); it < acid.end(); it++) {
 		if(portal.dir == PD_FRONT && it->z2 > portal.z

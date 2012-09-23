@@ -40,7 +40,7 @@ void draw() {
 	player.drawShots();
 
 	// Draw crosshair
-	Resources::inst().bindTexture(5);
+	Resources::inst().bindTexture(TID_CROSSHAIR);
 	glLoadIdentity();
 
 	// Switch to orthographic 2D projection
