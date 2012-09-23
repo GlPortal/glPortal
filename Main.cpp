@@ -3,7 +3,7 @@
  * @author Simon Jonas Larsen - slars10
  *
  * \par Class diagram:
- * \image html classdiagram.png "Class diagram"
+ * \image html classdiagram.png
  */
 
 #include <GL/glut.h>

@@ -127,8 +127,8 @@ void Map::drawFromPortal(GLuint *textures, Portal& portal) {
 	glEnd();
 
 	// Draw acid waste
-	glBegin(GL_QUADS);
 	glBindTexture(GL_TEXTURE_2D, textures[BT_ACID]);
+	glBegin(GL_QUADS);
 	for(it = acid.begin(); it < acid.end(); it++) {
 		if(portal.dir == PD_FRONT && it->z2 > portal.z
 		|| portal.dir == PD_BACK && it->z1 < portal.z

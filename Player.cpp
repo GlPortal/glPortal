@@ -88,21 +88,23 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 	float newz = z + zspeed*dt;
 
 	// Check for collision in x-axis
-	Box xbox(newx-0.5, y, z-0.5, newx+0.5, y+1.8, z+0.5);
-	if(map.collidesWithWall(xbox) == false) {
+	Box bbox;
+	bbox.set(newx-0.5, y, z-0.5, newx+0.5, y+1.8, z+0.5);
+	if(map.collidesWithWall(bbox) == false) {
 		x = newx;
 	}
 	// Check for collision in y-axis
-	Box zbox(x-0.5, y, newz-0.5, x+0.5, y+1.8, newz+0.5);
-	if(map.collidesWithWall(zbox) == false) {
+	bbox.set(x-0.5, y, newz-0.5, x+0.5, y+1.8, newz+0.5);
+	if(map.collidesWithWall(bbox) == false) {
 		z = newz;
 	}
 	// Check for collision in z-axis
-	Box ybox(x-0.5, newy, z-0.5, x+0.5, newy+1.8, z+0.5);
+	bbox.set(x-0.5, newy, z-0.5, x+0.5, newy+1.8, z+0.5);
 	onGround = false;
-	if(map.collidesWithWall(ybox) == false) {
+	if(map.collidesWithWall(bbox) == false) {
 		y = newy;
 	} else {
+		// If player was falling it means must have hit the ground
 		if(yspeed < 0) {
 			onGround = true;
 		}
@@ -117,7 +119,7 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 			Box sbox;
 			if(map.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
 				if(sbox.type == BT_WALL) {
-					shots[i].placePortal(sbox, portals[i]);
+					portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z);
 				}
 				shots[i].active = false;
 			}

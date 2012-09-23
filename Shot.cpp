@@ -74,6 +74,7 @@ void Shot::draw(GLuint *textures, float xrot, float yrot) {
  * @param portal The portal to place
  */
 
+/*
 void Shot::placePortal(Box &box, Portal &portal) {
 	float dist[4];
 	int min;
@@ -118,6 +119,7 @@ void Shot::placePortal(Box &box, Portal &portal) {
 		if(box.x2 - box.x1 < 2.f) return;
 		// Clamp x-coordinate
 		x = fmax(x, box.x1+1.1f);
+		x = fmin(x, box.x2-1.1f);
 		
 		// Back face
 		if(min == 2) {
@@ -125,6 +127,7 @@ void Shot::placePortal(Box &box, Portal &portal) {
 		// Front Face
 		} else {
 			portal.place(x,y,box.z2, PD_FRONT);
-		}	x = fmin(x, box.x2-1.1f);
+		}
 	}
 }
+*/
