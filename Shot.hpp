@@ -3,7 +3,6 @@
 
 #include <GL/glut.h>
 #include "Box.hpp"
-#include "Portal.hpp"
 
 /**
  * Class representing a shot from the portal gun.
@@ -15,7 +14,6 @@ public:
 	void shoot(int _id, float _x, float _y, float _z, float xrot, float yrot);
 	void update(float dt);
 	void draw(GLuint *textures, float xrot, float yrot);
-	void placePortal(Box &box, Portal &portal);
 
 	bool active; /**< True if the portal is currently active */
 	int id;		 /**< ID of the portal. Either 0 or 1. */

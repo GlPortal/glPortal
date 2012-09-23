@@ -18,30 +18,28 @@ public:
 
 	Box() : x1(0), y1(0), z1(0), x2(0), y2(0), z2(0), type(BT_NONE) {}
 
-	Box(float _x1, float _y1, float _z1, float _x2, float _y2, float _z2, BOX_TYPE _type = BT_NONE) {
-		x1 = MIN(_x1, _x2);
-		x2 = MAX(_x1, _x2);
-
-		y1 = MIN(_y1, _y2);
-		y2 = MAX(_y1, _y2);
-
-		z1 = MIN(_z1, _z2);
-		z2 = MAX(_z1, _z2);
-
-		type = _type;
+	Box(float x1, float y1, float z1, float x2, float y2, float z2, BOX_TYPE type = BT_NONE) {
+		set(x1, y1, z1, x2, y2, z2, type);
 	}
 
-	Box(float *val, BOX_TYPE _type = BT_NONE) {
-		x1 = MIN(val[0], val[3]);
-		x2 = MAX(val[0], val[3]);
+	Box(float *val, BOX_TYPE type = BT_NONE) {
+		set(val[0], val[1], val[2], val[3], val[4], val[5], type);
+	}
 
-		y1 = MIN(val[1], val[4]);
-		y2 = MAX(val[1], val[4]);
+	/**
+	 * Sets the member value sorted such that x1 <= x2, y1 <= y2 and z1 <= z2.
+	 */
+	void set(float x1, float y1, float z1, float x2, float y2, float z2, BOX_TYPE type = BT_NONE) {
+		this->x1 = MIN(x1, x2);
+		this->x2 = MAX(x1, x2);
 
-		z1 = MIN(val[2], val[5]);
-		z2 = MAX(val[2], val[5]);
+		this->y1 = MIN(y1, y2);
+		this->y2 = MAX(y1, y2);
 
-		type = _type;
+		this->z1 = MIN(z1, z2);
+		this->z2 = MAX(z1, z2);
+
+		this->type = type;
 	}
 	
 	/**
