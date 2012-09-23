@@ -2,7 +2,8 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
+#include "Resources.hpp"
 
 /**
  * Loads map data from a .map file
@@ -66,12 +67,12 @@ void Map::load(const char *filename) {
  *
  * @param textures Array of texture handles
  */
-void Map::draw(GLuint *textures) {
+void Map::draw() {
 	// Update light position
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
 	// Draw walls
-	BOX_TYPE current_type = BT_WALL;
+	BOX_TYPE current_type = BT_NONE;
 	std::vector<Box>::iterator it;
 
 	glBegin(GL_QUADS);
@@ -79,7 +80,7 @@ void Map::draw(GLuint *textures) {
 		if(it->type != current_type) {
 			glEnd();
 			current_type = it->type;
-			glBindTexture(GL_TEXTURE_2D, textures[it->type]);
+			Resources::inst().bindTexture(it->type);
 			glBegin(GL_QUADS);
 		}
 		drawBox(*it);
@@ -87,7 +88,7 @@ void Map::draw(GLuint *textures) {
 	glEnd();
 
 	// Draw acid waste
-	glBindTexture(GL_TEXTURE_2D, textures[BT_ACID]);
+	Resources::inst().bindTexture(BT_ACID);
 	glBegin(GL_QUADS);
 	for(it = acid.begin(); it < acid.end(); it++) {
 		drawBox(*it);
@@ -101,12 +102,12 @@ void Map::draw(GLuint *textures) {
  * @param textures Array of texture handles
  * @param portal Portal currently viewing through
  */
-void Map::drawFromPortal(GLuint *textures, Portal& portal) {
+void Map::drawFromPortal(Portal& portal) {
 	// Update light position
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 	// Draw walls
 	std::vector<Box>::iterator it;
-	BOX_TYPE current_type = BT_WALL;
+	BOX_TYPE current_type = BT_NONE;
 
 	glBegin(GL_QUADS);
 	for(it = walls.begin(); it < walls.end(); it++) {
@@ -118,7 +119,7 @@ void Map::drawFromPortal(GLuint *textures, Portal& portal) {
 			if(it->type != current_type) {
 				glEnd();
 				current_type = it->type;
-				glBindTexture(GL_TEXTURE_2D, textures[it->type]);
+				Resources::inst().bindTexture(it->type);
 				glBegin(GL_QUADS);
 			}
 			drawBox(*it);
@@ -127,7 +128,7 @@ void Map::drawFromPortal(GLuint *textures, Portal& portal) {
 	glEnd();
 
 	// Draw acid waste
-	glBindTexture(GL_TEXTURE_2D, textures[BT_ACID]);
+	Resources::inst().bindTexture(BT_ACID);
 	glBegin(GL_QUADS);
 	for(it = acid.begin(); it < acid.end(); it++) {
 		if(portal.dir == PD_FRONT && it->z2 > portal.z

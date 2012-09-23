@@ -8,9 +8,9 @@
 
 #include <GL/glut.h>
 #include <cstdio>
-#include "stb_image.c"
 #include "Main.hpp"
 #include "Box.hpp"
+#include "Resources.hpp"
 
 void update(int value) {
 	if(!paused) {
@@ -33,14 +33,14 @@ void draw() {
 	player.setView();
 	glEnable(GL_LIGHTING);
 	drawPortals();
-	map.draw(textures);
+	map.draw();
 	glDisable(GL_LIGHTING);
 
-	player.drawPortalOutlines(textures);
-	player.drawShots(textures);
+	player.drawPortalOutlines();
+	player.drawShots();
 
 	// Draw crosshair
-	glBindTexture(GL_TEXTURE_2D, textures[5]);
+	Resources::inst().bindTexture(5);
 	glLoadIdentity();
 
 	// Switch to orthographic 2D projection
@@ -97,9 +97,10 @@ void drawPortals() {
 			portals[src].rotateFromDir();
 			portals[dst].rotateToDir();
 			glTranslatef(-portals[dst].x, -portals[dst].y, -portals[dst].z);
+
 			// Draw scene from portal view
-			map.drawFromPortal(textures, portals[dst]);
-			player.drawPortalOutlines(textures);
+			map.drawFromPortal(portals[dst]);
+			player.drawPortalOutlines();
 
 			glPopMatrix();
 		}
@@ -149,48 +150,6 @@ void resize(int w, int h) {
 	glMatrixMode(GL_MODELVIEW);
 }
 
-GLuint createTexture(const char *filename) {
-	GLuint handle;
-	glGenTextures(1, &handle);
-	glBindTexture(GL_TEXTURE_2D, handle);
-
-	// Read bitmap data
-	int w, h, n;
-	unsigned char *data = stbi_load(filename, &w, &h, &n, 0);
-
-	// Create texture with mip maps
-	if(n == 3)
-		gluBuild2DMipmaps(GL_TEXTURE_2D, n, w, h, GL_RGB, GL_UNSIGNED_BYTE, data);
-	else if(n == 4)
-		gluBuild2DMipmaps(GL_TEXTURE_2D, n, w, h, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-	stbi_image_free(data);
-
-	// Repeat texture in s- and t-axis
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	// Print any errors
-	GLenum error = glGetError();
-	while(error != GL_NO_ERROR) {
-		printf("Error: %d\n", error);
-		error = glGetError();
-	}
-
-	return handle;
-}
-
-void loadTextures() {
-	textures[BT_WALL]  = createTexture("data/wall.png");
-	textures[BT_TILES] = createTexture("data/tiles.png");
-	textures[BT_ACID]  = createTexture("data/toxic.png");
-
-	textures[3] = createTexture("data/blueportal.png");
-	textures[4] = createTexture("data/orangeportal.png");
-	textures[5] = createTexture("data/crosshair.png");
-	textures[6] = createTexture("data/balls.png");
-}
-
 void setup(int *argc, char **argv) {
 	// Initialize GLUT window
 	glutInit(argc, argv);
@@ -232,7 +191,7 @@ void setup(int *argc, char **argv) {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Load textures from files
-	loadTextures();
+	Resources::inst().loadTextures();
 
 	paused = false;
 	player.create(2.5, 1, 5);

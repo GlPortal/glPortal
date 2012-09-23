@@ -1,6 +1,7 @@
 #include <cmath>
 #include <GL/glut.h>
 #include "Portal.hpp"
+#include "Resources.hpp"
 
 /**
  * Places and activates the portal.
@@ -161,15 +162,17 @@ void Portal::drawStencil() {
  * @param color Color of the portal. Either PC_BLUE or PC_ORANGE
  * @param textures Array of texture handles
  */
-void Portal::drawOutline(PORTAL_COLOR color, GLuint *textures) {
+void Portal::drawOutline(PORTAL_COLOR color) {
 	glPushMatrix();
 
 	glTranslatef(x,y,z);
 	rotateFromDir();
 
 	// Bind blue of orange portal texture
-	if(color == PC_BLUE) glBindTexture(GL_TEXTURE_2D, textures[3]);
-	else glBindTexture(GL_TEXTURE_2D, textures[4]);
+	if(color == PC_BLUE)
+		Resources::inst().bindTexture(3);
+	else
+		Resources::inst().bindTexture(4);
 
 	glBegin(GL_QUADS);
 	glNormal3f(0,0,1);

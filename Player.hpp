@@ -17,8 +17,8 @@ public:
 	void setView();
 	bool portalsActive();
 	void drawPortalStencils();
-	void drawPortalOutlines(GLuint *textures);
-	void drawShots(GLuint *textures);
+	void drawPortalOutlines();
+	void drawShots();
 
 	float getX() { return x; }
 	float getY() { return y; }

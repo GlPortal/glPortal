@@ -13,7 +13,7 @@ public:
 
 	void shoot(int _id, float _x, float _y, float _z, float xrot, float yrot);
 	void update(float dt);
-	void draw(GLuint *textures, float xrot, float yrot);
+	void draw(float xrot, float yrot);
 
 	bool active; /**< True if the portal is currently active */
 	int id;		 /**< ID of the portal. Either 0 or 1. */
