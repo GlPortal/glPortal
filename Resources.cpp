@@ -1,6 +1,9 @@
 #include "Resources.hpp"
 #include "stb_image.c"
 
+/**
+ * Loads all textures from files.
+ */
 void Resources::loadTextures() {
 	textures[TID_WALL]  = createTexture("data/wall.png");
 	textures[TID_TILES] = createTexture("data/tiles.png");
@@ -12,10 +15,22 @@ void Resources::loadTextures() {
 	textures[TID_BALLS]        = createTexture("data/balls.png");
 }
 
-void Resources::bindTexture(int id) {
+/**
+ * Binds a texture.
+ *
+ * @param id TEXTURE_ID of the texture to bind
+ */
+void Resources::bindTexture(TEXTURE_ID id) {
 	glBindTexture(GL_TEXTURE_2D, textures[id]);
 }
 
+/**
+ * Loads a texture from disk and return a handle to it.
+ *
+ * @param filename Path to a texture image
+ *
+ * @return Handle of the created OpenGL texture
+ */
 GLuint Resources::createTexture(const char *filename) {
 	GLuint handle;
 	glGenTextures(1, &handle);

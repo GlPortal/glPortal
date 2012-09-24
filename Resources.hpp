@@ -16,10 +16,10 @@ public:
 	}
 
 	void loadTextures();
-	void bindTexture(int id);
+	void bindTexture(TEXTURE_ID id);
 
 private:
-	Resources() {}
+	Resources() { }
 	Resources(Resources const&);
 	void operator=(Resources const&);
 

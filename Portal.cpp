@@ -14,7 +14,7 @@
  */
 void Portal::place(float x, float y, float z, PORTAL_DIR dir) {
 	this->x = round(x);
-	this->y = round(y)+0.25f;
+	this->y = round(y-0.25f)+0.25f;
 	this->z = round(z);
 
 	this->dir = dir;
@@ -25,10 +25,10 @@ void Portal::place(float x, float y, float z, PORTAL_DIR dir) {
  * Places the portal on a box based on the shot's position
  * when the collision occured.
  *
- * \param box The box to place portal on
- * \param hitx X-coordinate of shot-box collision
- * \param hity Y-coordinate of shot-box collision
- * \param hitz Z-coordinate of shot-box collision
+ * @param box The box to place portal on
+ * @param hitx X-coordinate of shot-box collision
+ * @param hity Y-coordinate of shot-box collision
+ * @param hitz Z-coordinate of shot-box collision
  */
 void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz) {
 	float dist[4];
@@ -77,6 +77,62 @@ void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz) {
 }
 
 /**
+ * Checks wheter a box is inside the portal
+ *
+ * @param box Box to check collision with
+ *
+ * @return True if part of the box is contained in the portal
+ */
+bool Portal::inPortal(Box &box) {
+	if(!active) return false;
+
+	if(dir == PD_RIGHT || dir == PD_LEFT) {
+		if(box.z1 > z-0.75f && box.z2 < z+0.75f
+		&& box.x1 < x && box.x2 > x
+		&& box.y1 > y-1.25f && box.y2 < y+1.25f) {
+			return true;
+		}
+	} else if(dir == PD_FRONT || dir == PD_BACK) {
+		if(box.x1 > x-0.75f && box.x2 < x+0.75f
+		&& box.z1 < z && box.z2 > z
+		&& box.y1 > y-1.25f && box.y2 < y+1.25f) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Checks whether a point has passed through the portal
+ *
+ * @param r X-coordinate of the point to check
+ * @param s Y-coordinate of the point to check
+ * @param t Z-coordinate of the point to check
+ */
+bool Portal::throughPortal(float r, float s, float t) {
+	switch(dir) {
+		case PD_LEFT:
+			if(r > x && r < x+0.75f && s > y-1.25f && s < y+1.25f && t < z+0.75f && t > z-0.75f)
+				return true;
+			break;
+		case PD_RIGHT:
+			if(r < x && x > x-0.75f && s > y-1.25f && s < y+1.25f && t < z+0.75f && t > z-0.75f)
+				return true;
+			break;
+		case PD_FRONT:
+			if(t < z && t > z-0.75f && s > y-1.25f && s < y+1.25f && r < x+0.75f && r > x-0.75f)
+				return true;
+			break;
+		case PD_BACK:
+			if(t > z && t < z+0.75f && s > y-1.25f && s < y+1.25f && r < x+0.75f && r > x-0.75f)
+				return true;
+			break;
+	}
+	return false;
+}
+
+/**
  * Disables the portal
  */
 void Portal::disable() {
@@ -84,36 +140,36 @@ void Portal::disable() {
 }
 
 /**
- * Rotates current matrix to make matrix point in positive Z-direction.
- */
-void Portal::rotateToDir() {
-	switch(dir) {
-		case PD_RIGHT:
-			glRotatef(90.f, 0,1,0);
-			break;
-		case PD_FRONT:
-			glRotatef(180.f, 0,1,0);
-			break;
-		case PD_LEFT:
-			glRotatef(-90.f, 0,1,0);
-			break;
-	}
-}
-
-/**
  * Rotates current matrix to make Z-axis point in portal's direction.
  */
 void Portal::rotateFromDir() {
+	glRotatef(getFromRotation(), 0,1,0);
+}
+
+/**
+ * Rotates current matrix to make matrix point in positive Z-direction.
+ */
+void Portal::rotateToDir() {
+	glRotatef(getToRotation(), 0,1,0);
+}
+
+float Portal::getFromRotation() {
 	switch(dir) {
-		case PD_LEFT:
-			glRotatef(-90.f, 0,1,0);
-			break;
+		case PD_RIGHT: return  90.f;
+		case PD_BACK:  return 180.f;
+		case PD_LEFT:  return -90.f;
+		case PD_FRONT:
+		default:	   return 0.f;
+	}
+}
+
+float Portal::getToRotation() {
+	switch(dir) {
+		case PD_RIGHT: return  90.f;
+		case PD_FRONT: return 180.f;
+		case PD_LEFT:  return -90.f;
 		case PD_BACK:
-			glRotatef(180.f, 0,1,0);
-			break;
-		case PD_RIGHT:
-			glRotatef(90.f, 0,1,0);
-			break;
+		default:	   return 0.f;
 	}
 }
 
@@ -160,7 +216,6 @@ void Portal::drawStencil() {
  * Draws the colored outline of a portal.
  *
  * @param color Color of the portal. Either PC_BLUE or PC_ORANGE
- * @param textures Array of texture handles
  */
 void Portal::drawOutline(PORTAL_COLOR color) {
 	glPushMatrix();

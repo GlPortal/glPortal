@@ -15,9 +15,13 @@ public:
 
 	void place(float x, float y, float z, PORTAL_DIR dir);
 	void placeOnBox(Box &box, float hitx, float hity, float hitz);
+	bool inPortal(Box &box);
+	bool throughPortal(float r, float s, float t);
 	void disable();
-	void rotateToDir();
 	void rotateFromDir();
+	void rotateToDir();
+	float getFromRotation();
+	float getToRotation();
 	void drawStencil();
 	void drawOutline(PORTAL_COLOR color);
 

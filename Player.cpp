@@ -4,6 +4,7 @@
 #include "Player.hpp"
 
 #define RADDEG 57.29577951308232088 // 180/PI
+#define DEGRAD 0.017453292519943296 // PI/180
 #define PLAYER_MOVESPEED 6.0
 #define GRAVITY 16.0
 #define MAXSPEED 10.0
@@ -36,7 +37,7 @@ void Player::create(float x, float y, float z) {
  * @param keystates Array of keyboard key states
  * @param mousedx Movement since last update in horizontal axis
  * @param mousedy Movement since last udpate in vertical axis
- * @param Reference to the Map
+ * @param map Reference to the Map
  */
 void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map &map) {
 	// Apply rotation of view
@@ -53,6 +54,7 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 	yspeed -= GRAVITY*dt;
 	if(yspeed < -MAXSPEED) yspeed = -MAXSPEED;
 
+	// TODO: Include DT in movement!!!
 	// Move forward
 	if(keystates['w']) {
 		zspeed -= cos(yrot)*PLAYER_MOVESPEED;
@@ -90,18 +92,18 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 	// Check for collision in x-axis
 	Box bbox;
 	bbox.set(newx-0.5, y, z-0.5, newx+0.5, y+1.8, z+0.5);
-	if(map.collidesWithWall(bbox) == false) {
+	if(map.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
 		x = newx;
 	}
 	// Check for collision in y-axis
 	bbox.set(x-0.5, y, newz-0.5, x+0.5, y+1.8, newz+0.5);
-	if(map.collidesWithWall(bbox) == false) {
+	if(map.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
 		z = newz;
 	}
 	// Check for collision in z-axis
 	bbox.set(x-0.5, newy, z-0.5, x+0.5, newy+1.8, z+0.5);
 	onGround = false;
-	if(map.collidesWithWall(bbox) == false) {
+	if(map.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
 		y = newy;
 	} else {
 		// If player was falling it means must have hit the ground
@@ -109,6 +111,29 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 			onGround = true;
 		}
 		yspeed = 0.f;
+	}
+
+	// Check if player has entered a portal
+	if(portalsActive()) {
+		for(int i = 0; i < 2; i++) {
+			if(portals[i].throughPortal(x,y+0.9f,z)) {
+				// Calculate rotation between portals
+				float rotation = 0.f;
+				rotation += portals[i].getToRotation()*DEGRAD;
+				rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
+				yrot += rotation;
+				// Distance from portal to player
+				float xdist = x - portals[i].x;
+				float zdist = z - portals[i].z;
+				// Calculate this distance when rotated
+				float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
+				float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
+				// Move player to destination portal
+				x = portals[(i+1)%2].x + nxdist;
+				z = portals[(i+1)%2].z + nzdist;
+				y += portals[(i+1)%2].y - portals[i].y;
+			}
+		}
 	}
 
 	// Update shots
@@ -129,7 +154,7 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 
 /**
  * Called when a mouse button is pressed down
- * @param Mouse button being pressed
+ * @param button Mouse button being pressed
  */
 void Player::mousePressed(int button) {
 	switch(button) {
@@ -178,8 +203,6 @@ void Player::drawPortalStencils() {
 
 /*
  * Draws colored outlines for both portals
- *
- * @param textures Pointer to the array of texture handles
  */
 void Player::drawPortalOutlines() {
 	glEnable(GL_BLEND);
@@ -190,8 +213,6 @@ void Player::drawPortalOutlines() {
 
 /**
  * Draws both portal shots
- *
- * @param textures Pointer to the array of texture handles
  */
 void Player::drawShots() {
 	if(shots[0].active) shots[0].draw(xrot, yrot);
