@@ -1,6 +1,6 @@
 /**
- * @mainpage glPortal
- * @author Simon Jonas Larsen - slars10
+ * \mainpage glPortal
+ * \author Simon Jonas Larsen - slars10
  *
  * \par Class diagram:
  * \image html classdiagram.png
@@ -12,6 +12,17 @@
 #include "Box.hpp"
 #include "Resources.hpp"
 
+/**
+ * \addtogroup Main
+ * @{
+ * Functions for setting up OpenGL context and window,
+ * handling input and updating/drawing entities.
+ */
+
+/**
+ * Updates all game logic.
+ * @param value Value passed from glutTimerFunc. Not used.
+ */
 void update(int value) {
 	if(!paused) {
 		float mousedx = (float)(width/2-mousex);  // Mouse distance from center of screen
@@ -25,6 +36,9 @@ void update(int value) {
 	glutTimerFunc(FRAMETIME, update, 1);
 }
 
+/**
+ * Redraws the screen. Called by glutDisplayFunc().
+ */
 void draw() {
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -64,9 +78,11 @@ void draw() {
 	glutSwapBuffers();
 }
 
+/**
+ * Draws the inside of both portals as well as their oulines and stencils.
+ */
 void drawPortals() {
 	if(player.portalsActive()) {
-
 		Portal *portals = player.getPortals();
 		glEnable(GL_STENCIL_TEST);
 		for(int i = 0; i < 2; i++) {
@@ -142,7 +158,7 @@ void resize(int w, int h) {
 	// Setup projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, (GLdouble)w/(GLdouble)h, 0.1, 50.0);
+	gluPerspective(60.0, (GLdouble)w/(GLdouble)h, 0.05f, 50.f);
 
 	width = w;
 	height = h;
@@ -150,6 +166,13 @@ void resize(int w, int h) {
 	glMatrixMode(GL_MODELVIEW);
 }
 
+/**
+ * Sets up the OpenGL context.
+ * Loads texture, sets up callbacks and enables lighting, blending etc.
+ *
+ * @param argc Reference to argument count from main
+ * @param argv Arguments from main
+ */
 void setup(int *argc, char **argv) {
 	// Initialize GLUT window
 	glutInit(argc, argv);
@@ -197,6 +220,9 @@ void setup(int *argc, char **argv) {
 	player.create(2.5, 1, 5);
 	map.load("maps/test.map");
 }
+/**
+ * @}
+ */
 
 int main(int argc, char **argv) {
 	setup(&argc, argv);

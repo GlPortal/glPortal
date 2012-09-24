@@ -33,7 +33,7 @@ void Shot::shoot(int id, float x, float y, float z, float xrot, float yrot) {
 /**
  * Updates the shot position based on its velocity vector.
  * 
- * @param Time since last update in seconds
+ * @param dt Time since last update in seconds
  */
 void Shot::update(float dt) {
 	x += xspeed*dt;
@@ -44,9 +44,8 @@ void Shot::update(float dt) {
 /**
  * Draws the shot as a billboard sprite
  *
- * @param Array of texture handles
- * @param Camera's current rotation in X-axis
- * @param Camera's current rotation in Y-axis
+ * @param xrot Camera's current rotation in X-axis
+ * @param yrot Camera's current rotation in Y-axis
  */
 void Shot::draw(float xrot, float yrot) {
 	glPushMatrix();

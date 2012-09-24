@@ -63,9 +63,6 @@ void Map::load(const char *filename) {
 
 /**
  * Updates light position and draws all maps and acid in level
- *
- *
- * @param textures Array of texture handles
  */
 void Map::draw() {
 	// Update light position
@@ -99,7 +96,6 @@ void Map::draw() {
 /**
  * Draws only visible portion of map from a given portal
  *
- * @param textures Array of texture handles
  * @param portal Portal currently viewing through
  */
 void Map::drawFromPortal(Portal& portal) {
@@ -143,6 +139,8 @@ void Map::drawFromPortal(Portal& portal) {
 
 /**
  * Draws a box
+ *
+ * @param b Box to draw
  */
 void Map::drawBox(Box &b) {
 	float dx = (b.x2 - b.x1)*0.5f;
@@ -196,6 +194,7 @@ void Map::drawBox(Box &b) {
  * Checks whether a bounding box collides with any walls in map.
  *
  * @param bbox Bounding box for collision
+ *
  * @return True if the box collides
  */
 bool Map::collidesWithWall(Box &bbox) {
@@ -213,6 +212,7 @@ bool Map::collidesWithWall(Box &bbox) {
  * @param y Y-coordinate of the point to collide with
  * @param z Z-coordinate of the point to collide with
  * @param box Will point to box point collides with if a collion occurs.
+ *
  * @return True if a collision occurs.
  */
 bool Map::pointInWall(float x, float y, float z, Box *box) {
