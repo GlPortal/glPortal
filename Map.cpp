@@ -215,11 +215,13 @@ bool Map::collidesWithWall(Box &bbox) {
  *
  * @return True if a collision occurs.
  */
-bool Map::pointInWall(float x, float y, float z, Box *box) {
+bool Map::pointInWall(float x, float y, float z, Box *box = NULL) {
 	std::vector<Box>::iterator it;
 	for(it = walls.begin(); it < walls.end(); it++) {
 		if(it->collide(x,y,z)) {
-			*box = *it;
+			if(box != NULL) {
+				*box = *it;
+			}
 			return true;
 		}
 	}

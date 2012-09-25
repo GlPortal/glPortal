@@ -6,8 +6,6 @@
  * \image html classdiagram.png
  */
 
-#include <GL/glut.h>
-#include <cstdio>
 #include "Main.hpp"
 #include "Box.hpp"
 #include "Resources.hpp"
@@ -45,8 +43,8 @@ void draw() {
 
 	// Draw scene
 	player.setView();
-	glEnable(GL_LIGHTING);
 	drawPortals();
+	glEnable(GL_LIGHTING);
 	map.draw();
 	glDisable(GL_LIGHTING);
 
@@ -63,12 +61,14 @@ void draw() {
 	glLoadIdentity();
 	gluOrtho2D(0,width,height,0);
 	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0,0); glVertex3f(width/2-16, height/2-12, 0);
 		glTexCoord2f(0,1); glVertex3f(width/2-16, height/2+20, 0);
 		glTexCoord2f(1,1); glVertex3f(width/2+16, height/2+20, 0);
 		glTexCoord2f(1,0); glVertex3f(width/2+16, height/2-12, 0);
 	glEnd();
+	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 
 	glPopMatrix();
@@ -110,12 +110,14 @@ void drawPortals() {
 			// Move camera to portal view
 			glTranslatef(-dx,-dy,-dz);
 			glTranslatef(player.getX(), player.getY(), player.getZ());
-			portals[src].rotateFromDir();
-			portals[dst].rotateToDir();
+			glRotatef(portals[src].getFromRotation(), 0,1,0);
+			glRotatef(portals[dst].getToRotation(),   0,1,0);
 			glTranslatef(-portals[dst].x, -portals[dst].y, -portals[dst].z);
 
 			// Draw scene from portal view
+			glEnable(GL_LIGHTING);
 			map.drawFromPortal(portals[dst]);
+			glDisable(GL_LIGHTING);
 			player.drawPortalOutlines();
 
 			glPopMatrix();
@@ -130,28 +132,64 @@ void drawPortals() {
 	}
 }
 
+/**
+ * Called when mouse curses moves.
+ * Saves mouse position two variables mousex and mousey.
+ *
+ * @param x New X-coordinate
+ * @param y New Y-coordinate
+ */
 void mouse_moved(int x, int y) {
 	mousex = x;
 	mousey = y;
 }
 
+/**
+ * Called when a mouse button is pressed.
+ * Passes the call to the mousePressed callback in Player
+ *
+ * @param button The pressed mouse button
+ * @param x Cursor's X-coordinate when button was pressed
+ * @param y Cursor's Y-coordinate when button was pressed
+ */
 void mouse_pressed(int button, int state, int x, int y) {
 	if(state == GLUT_DOWN) {
-		if(button == GLUT_LEFT_BUTTON || button == GLUT_RIGHT_BUTTON) {
-			player.mousePressed(button);
-		}
+		player.mousePressed(button);
 	}
 }
 
+/**
+ * Called when a keyboard button is pressed down.
+ * Sets the buttons state to pressed in the keystates array.
+ *
+ * @param key ASCII value of the key
+ * @param x Cursor's X-coordinate when button was pressed
+ * @param y Cursor's Y-coordinate when button was pressed
+ */
 void key_down(unsigned char key, int x, int y) {
 	keystates[key] = true;
 	if(key == 27) paused = !paused;
 }
 
+/**
+ * Called when a keyboard button is pressed down.
+ * Sets the buttons state to not pressed in the keystates array.
+ *
+ * @param key ASCII value of the key
+ * @param x Cursor's X-coordinate when button was pressed
+ * @param y Cursor's Y-coordinate when button was pressed
+ */
 void key_up(unsigned char key, int x, int y) {
 	keystates[key] = false;
 }
 
+/**
+ * Called when the window is resized.
+ * Updates the OpenGL viewport and projection matrix.
+ *
+ * @param w New window width
+ * @param h New window height
+ */
 void resize(int w, int h) {
 	// Setup viewport
 	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
@@ -213,8 +251,11 @@ void setup(int *argc, char **argv) {
 	// Set blending function for portals
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	// Initialize GLEW
+	glewInit();
 	// Load textures from files
 	Resources::inst().loadTextures();
+	Resources::inst().compileShaders();
 
 	paused = false;
 	player.create(2.5, 1, 5);

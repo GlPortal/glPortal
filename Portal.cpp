@@ -12,13 +12,31 @@
  * @param z New z-coordinate
  * @param dir New direction
  */
-void Portal::place(float x, float y, float z, PORTAL_DIR dir) {
-	this->x = round(x);
-	this->y = round(y-0.25f)+0.25f;
-	this->z = round(z);
+void Portal::place(float x, float y, float z, PORTAL_DIR dir, Map& map) {
+	float nx, ny, nz; // New coordinates
+	nx = round(x);
+	ny = round(y-0.25f)+0.25f;
+	nz = round(z);
 
-	this->dir = dir;
-	active = true;
+	// Calculate in front of portal
+	Box bbox;
+	if(dir == PD_FRONT) {
+		bbox.set(nx-0.74f, ny-1.24f, nz+0.01f, nx+0.74f, ny+1.24f, nz+1.49f);
+	} else if (dir == PD_BACK) {
+		bbox.set(nx-0.74f, ny-1.24f, nz-1.49f, nx+0.74f, ny+1.24f, nz-0.01f);
+	} else if (dir == PD_RIGHT) {
+		bbox.set(nx+0.01f, ny-1.24f, nz-0.74f, nx+1.49f, ny+1.24f, nz+0.74f);
+	} else if (dir == PD_LEFT) {
+		bbox.set(nx-1.49f, ny-1.24f, nz-0.74f, nx-0.01f, ny+1.24f, nz+0.74f);
+	}
+	// Only place portal if nothing is in front of it
+	if(map.collidesWithWall(bbox) == false) {
+		this->x = nx;
+		this->y = ny;
+		this->z = nz;
+		this->dir = dir;
+		active = true;
+	}
 }
 
 /**
@@ -30,7 +48,7 @@ void Portal::place(float x, float y, float z, PORTAL_DIR dir) {
  * @param hity Y-coordinate of shot-box collision
  * @param hitz Z-coordinate of shot-box collision
  */
-void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz) {
+void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, Map& map) {
 	float dist[4];
 	int min;
 
@@ -55,10 +73,10 @@ void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz) {
 
 		// Left face
 		if(min == 0) {
-			place(box.x1, hity, hitz, PD_LEFT);
+			place(box.x1, hity, hitz, PD_LEFT, map);
 		// Right face
 		} else {
-			place(box.x2, hity, hitz, PD_RIGHT);
+			place(box.x2, hity, hitz, PD_RIGHT, map);
 		}
 
 	// Portal on the XY-plane
@@ -68,10 +86,10 @@ void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz) {
 
 		// Back face
 		if(min == 2) {
-			place(hitx, hity, box.z1, PD_BACK);
+			place(hitx, hity, box.z1, PD_BACK, map);
 		// Front Face
 		} else {
-			place(hitx, hity, box.z2, PD_FRONT);
+			place(hitx, hity, box.z2, PD_FRONT, map);
 		}
 	}
 }
@@ -113,19 +131,19 @@ bool Portal::inPortal(Box &box) {
 bool Portal::throughPortal(float r, float s, float t) {
 	switch(dir) {
 		case PD_LEFT:
-			if(r > x && r < x+0.75f && s > y-1.25f && s < y+1.25f && t < z+0.75f && t > z-0.75f)
+			if(r > x && r < x+0.2f && s > y-1.25f && s < y+1.25f && t < z+0.75f && t > z-0.75f)
 				return true;
 			break;
 		case PD_RIGHT:
-			if(r < x && x > x-0.75f && s > y-1.25f && s < y+1.25f && t < z+0.75f && t > z-0.75f)
+			if(r < x && x > x-0.2f && s > y-1.25f && s < y+1.25f && t < z+0.75f && t > z-0.75f)
 				return true;
 			break;
 		case PD_FRONT:
-			if(t < z && t > z-0.75f && s > y-1.25f && s < y+1.25f && r < x+0.75f && r > x-0.75f)
+			if(t < z && t > z-0.2f && s > y-1.25f && s < y+1.25f && r < x+0.75f && r > x-0.75f)
 				return true;
 			break;
 		case PD_BACK:
-			if(t > z && t < z+0.75f && s > y-1.25f && s < y+1.25f && r < x+0.75f && r > x-0.75f)
+			if(t > z && t < z+0.2f && s > y-1.25f && s < y+1.25f && r < x+0.75f && r > x-0.75f)
 				return true;
 			break;
 	}
@@ -140,19 +158,10 @@ void Portal::disable() {
 }
 
 /**
- * Rotates current matrix to make Z-axis point in portal's direction.
+ * Rotation from Z-axis to portal's view.
+ *
+ * @return Angle between Z-axis and portal's view in degrees.
  */
-void Portal::rotateFromDir() {
-	glRotatef(getFromRotation(), 0,1,0);
-}
-
-/**
- * Rotates current matrix to make matrix point in positive Z-direction.
- */
-void Portal::rotateToDir() {
-	glRotatef(getToRotation(), 0,1,0);
-}
-
 float Portal::getFromRotation() {
 	switch(dir) {
 		case PD_RIGHT: return  90.f;
@@ -163,6 +172,11 @@ float Portal::getFromRotation() {
 	}
 }
 
+/**
+ * Rotation from portal's view to Z-axis.
+ *
+ * @return Angle between portal's view and Z-axis in degrees.
+ */
 float Portal::getToRotation() {
 	switch(dir) {
 		case PD_RIGHT: return  90.f;
@@ -181,7 +195,7 @@ void Portal::drawStencil() {
 	glPushMatrix();
 
 	glTranslatef(x,y,z);
-	rotateFromDir();
+	glRotatef(getFromRotation(), 0,1,0);
 
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex3f( 0.00, 0.00, 0.001);
@@ -221,7 +235,7 @@ void Portal::drawOutline(PORTAL_COLOR color) {
 	glPushMatrix();
 
 	glTranslatef(x,y,z);
-	rotateFromDir();
+	glRotatef(getFromRotation(), 0,1,0);
 
 	// Bind blue of orange portal texture
 	if(color == PC_BLUE)
