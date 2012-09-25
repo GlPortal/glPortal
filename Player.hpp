@@ -20,13 +20,13 @@ public:
 	void drawPortalOutlines();
 	void drawShots();
 
-	float getX() { return x; }
-	float getY() { return y; }
-	float getZ() { return z; }
-	Portal *getPortals() { return portals; }
+	float getX() { return x; } /**< Get the X-coordinate of the Player */
+	float getY() { return y; } /**< Get the Y-coordinate of the Player */
+	float getZ() { return z; } /**< Get the Z-coordinate of the Player */
+	Portal *getPortals() { return portals; } /**< Gets the list of portals */
 
 protected:
-	float x,y,z; 		// Position
+	float x,y,z;  // Position
 	float xrot; /**< View rotation in X-axis */
 	float yrot;	/**< View rotation in Y-axis */
 	float xspeed, yspeed, zspeed; // Velocity in x-, y- and z-axis

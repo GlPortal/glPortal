@@ -136,7 +136,7 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 		}
 	}
 
-	// Update shots
+	// Update shots and check their collision with walls
 	for(int i = 0; i < 2; i++) {
 		if(shots[i].active) {
 			shots[i].update(dt);
@@ -144,7 +144,7 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 			Box sbox;
 			if(map.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
 				if(sbox.type == TID_WALL) {
-					portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z);
+					portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z, map);
 				}
 				shots[i].active = false;
 			}

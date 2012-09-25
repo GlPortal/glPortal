@@ -4,6 +4,7 @@
 #include <vector>
 #include <GL/glut.h>
 #include "Box.hpp"
+class Portal; // Forward declaration
 #include "Portal.hpp"
 
 /**

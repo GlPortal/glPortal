@@ -1,4 +1,6 @@
+#include <GL/glew.h>
 #include "Resources.hpp"
+#include <fstream>
 #include "stb_image.c"
 
 /**
@@ -22,6 +24,65 @@ void Resources::loadTextures() {
  */
 void Resources::bindTexture(TEXTURE_ID id) {
 	glBindTexture(GL_TEXTURE_2D, textures[id]);
+}
+
+/**
+ * Compiles all GLSL shaders
+ */
+void Resources::compileShaders() {
+	GLuint vert, frag; // Vertex and fragment shader handles
+
+	// Create handles for program and shaders
+	program = glCreateProgram();
+	vert = glCreateShader(GL_VERTEX_SHADER);
+	frag = glCreateShader(GL_FRAGMENT_SHADER);
+	// Read shaders from files
+	char *vs_source = readShader("data/shader.vert");
+	char *fs_source = readShader("data/shader.frag");
+	// Loader shader sources
+	glShaderSource(vert, 1, (const char**)&vs_source, NULL);
+	glShaderSource(frag, 1, (const char**)&fs_source, NULL);
+	// Compile shaders
+	glCompileShader(vert);
+	glCompileShader(frag);
+	// Attach shaders to program
+	glAttachShader(program, vert);
+	glAttachShader(program, frag);
+	// Link program
+	glLinkProgram(program);
+	glUseProgram(program);
+	
+	// Bind first texture to "texture" in fragment shader
+	GLuint param = glGetUniformLocation(program, "tex");
+	glUniform1i(param, 0);
+
+	// Free memory from shader files
+	delete[] vs_source;
+	delete[] fs_source;
+}
+
+/**
+ * Reads the entire contents of a shader into a char buffer.
+ * Data must be freed after use.
+ *
+ * @param filename Path to the shader to read
+ * @return Pointer to array of chars containing shader
+ */
+char* Resources::readShader(const char *filename) {
+	std::ifstream file;
+	char *buffer;
+	int length;
+
+	file.open(filename);
+	file.seekg(0, std::ios::end);
+	length = file.tellg();
+	file.seekg(0, std::ios::beg);
+	buffer = new char[length+1];
+	file.read(buffer, length);
+	buffer[length] = 0; // Null terminate to be safe
+	file.close();
+
+	return buffer;
 }
 
 /**
