@@ -72,6 +72,7 @@ void Map::draw() {
 	TEXTURE_ID current_type = TID_NONE;
 	std::vector<Box>::iterator it;
 
+	Resources::inst().enableProgram(PID_NMAP);
 	glBegin(GL_QUADS);
 	for(it = walls.begin(); it < walls.end(); it++) {
 		if(it->type != current_type) {
@@ -83,6 +84,7 @@ void Map::draw() {
 		drawBox(*it);
 	}
 	glEnd();
+	Resources::inst().disableProgram();
 
 	// Draw acid waste
 	Resources::inst().bindTexture(TID_ACID);
@@ -105,6 +107,7 @@ void Map::drawFromPortal(Portal& portal) {
 	std::vector<Box>::iterator it;
 	TEXTURE_ID current_type = TID_NONE;
 
+	Resources::inst().enableProgram(PID_NMAP);
 	glBegin(GL_QUADS);
 	for(it = walls.begin(); it < walls.end(); it++) {
 		// Horribly slow bounds check, but smaller code
@@ -122,6 +125,7 @@ void Map::drawFromPortal(Portal& portal) {
 		}
 	}
 	glEnd();
+	Resources::inst().disableProgram();
 
 	// Draw acid waste
 	Resources::inst().bindTexture(TID_ACID);
