@@ -149,6 +149,7 @@ void mouse_moved(int x, int y) {
  * Passes the call to the mousePressed callback in Player
  *
  * @param button The pressed mouse button
+ * @param state Mouse buttons stat (e.g. GLUT_DOWN)
  * @param x Cursor's X-coordinate when button was pressed
  * @param y Cursor's Y-coordinate when button was pressed
  */
@@ -196,7 +197,7 @@ void resize(int w, int h) {
 	// Setup projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, (GLdouble)w/(GLdouble)h, 0.05f, 50.f);
+	gluPerspective(60.0, (GLdouble)w/(GLdouble)h, 0.1f, 50.f);
 
 	width = w;
 	height = h;
@@ -219,6 +220,8 @@ void setup(int *argc, char **argv) {
 	glutCreateWindow("glPortal");
 	glutSetCursor(GLUT_CURSOR_NONE);
 	resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	// Initialize GLEW
+	glewInit();
 
 	// Reset keystates
 	for(int i = 0; i < 256; i++) keystates[i] = false;
@@ -245,17 +248,17 @@ void setup(int *argc, char **argv) {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	// Set ambient and diffuse lighting
-	GLfloat light_SpecAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_SpecAndAmb);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_SpecAndAmb);
+	GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_DiffAndAmb);
+
 	// Set blending function for portals
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// Initialize GLEW
-	glewInit();
 	// Load textures from files
 	Resources::inst().loadTextures();
 	Resources::inst().compileShaders();
+	Resources::inst().bindTexture(TID_TILES_NMAP, 1);
 
 	paused = false;
 	player.create(2.5, 1, 5);

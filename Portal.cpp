@@ -11,6 +11,7 @@
  * @param y New y-coordinate
  * @param z New z-coordinate
  * @param dir New direction
+ * @param map The current map
  */
 void Portal::place(float x, float y, float z, PORTAL_DIR dir, Map& map) {
 	float nx, ny, nz; // New coordinates
@@ -47,6 +48,7 @@ void Portal::place(float x, float y, float z, PORTAL_DIR dir, Map& map) {
  * @param hitx X-coordinate of shot-box collision
  * @param hity Y-coordinate of shot-box collision
  * @param hitz Z-coordinate of shot-box collision
+ * @param map The current map
  */
 void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, Map& map) {
 	float dist[4];
