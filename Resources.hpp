@@ -37,6 +37,8 @@ private:
 
 	GLuint createTexture(const char *filename);
 	char *readShader(const char *filename);
+	void printShaderLog(GLuint shader);
+	void printProgramLog(GLuint program);
 
 	GLuint textures[9]; /**< Handles for textures */
 	GLuint program;		/**< Handle for the shader program */
