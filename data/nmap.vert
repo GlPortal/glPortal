@@ -8,7 +8,7 @@ void main() {
 
 	vec3 n = normalize(gl_NormalMatrix * gl_Normal);
 	vec3 t = normalize(gl_NormalMatrix * gl_MultiTexCoord1.xyz);
-	vec3 b = cross(n, t);
+	vec3 b = cross(n, t) * gl_MultiTexCoord1.w;
 
 	tbnMatrix = mat3(t, b, n);
 

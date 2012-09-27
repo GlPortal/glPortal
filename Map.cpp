@@ -153,7 +153,7 @@ void Map::drawBox(Box &b) {
 
 	// Top
 	glNormal3f(0,1,0);
-	glMultiTexCoord3f(GL_TEXTURE1, 1,0,0);
+	glMultiTexCoord4f(GL_TEXTURE1, 1,0,0,-1);
 	glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y2, b.z1);
 	glTexCoord2f(0.f,  dz); glVertex3f(b.x1, b.y2, b.z2);
 	glTexCoord2f( dx,  dz); glVertex3f(b.x2, b.y2, b.z2);
@@ -161,7 +161,7 @@ void Map::drawBox(Box &b) {
 
 	// Bottom
 	glNormal3f(0,-1,0);
-	glMultiTexCoord3f(GL_TEXTURE1, 1,0,0);
+	glMultiTexCoord4f(GL_TEXTURE1, 1,0,0, -1);
 	glTexCoord2f( dx,  dz); glVertex3f(b.x2, b.y1, b.z1);
 	glTexCoord2f( dx, 0.f); glVertex3f(b.x2, b.y1, b.z2);
 	glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y1, b.z2);
@@ -169,7 +169,7 @@ void Map::drawBox(Box &b) {
 
 	// Front
 	glNormal3f(0,0,1);
-	glMultiTexCoord3f(GL_TEXTURE1, 1,0,0);
+	glMultiTexCoord4f(GL_TEXTURE1, 1,0,0,-1);
 	glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y2, b.z2);
 	glTexCoord2f(0.f,  dy); glVertex3f(b.x1, b.y1, b.z2);
 	glTexCoord2f( dx,  dy); glVertex3f(b.x2, b.y1, b.z2);
@@ -177,7 +177,7 @@ void Map::drawBox(Box &b) {
 
 	// Back
 	glNormal3f(0,0,-1);
-	glMultiTexCoord3f(GL_TEXTURE1, -1,0,0);
+	glMultiTexCoord4f(GL_TEXTURE1, -1,0,0, 1);
 	glTexCoord2f(0.f,  dy); glVertex3f(b.x2, b.y1, b.z1);
 	glTexCoord2f( dx,  dy); glVertex3f(b.x1, b.y1, b.z1);
 	glTexCoord2f( dx, 0.f); glVertex3f(b.x1, b.y2, b.z1);
@@ -185,7 +185,7 @@ void Map::drawBox(Box &b) {
 
 	// Left
 	glNormal3f(-1,0,0);
-	glMultiTexCoord3f(GL_TEXTURE1, 0,0,1);
+	glMultiTexCoord4f(GL_TEXTURE1, 0,0,1,-1);
 	glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y2, b.z1);
 	glTexCoord2f(0.f,  dy); glVertex3f(b.x1, b.y1, b.z1);
 	glTexCoord2f( dz,  dy); glVertex3f(b.x1, b.y1, b.z2);
@@ -193,7 +193,7 @@ void Map::drawBox(Box &b) {
 
 	// Right
 	glNormal3f(1,0,0);
-	glMultiTexCoord3f(GL_TEXTURE1, 0,0,-1);
+	glMultiTexCoord4f(GL_TEXTURE1, 0,0,-1,-1);
 	glTexCoord2f( dz, 0.f); glVertex3f(b.x2, b.y2, b.z1);
 	glTexCoord2f(0.f, 0.f); glVertex3f(b.x2, b.y2, b.z2);
 	glTexCoord2f(0.f,  dy); glVertex3f(b.x2, b.y1, b.z2);
