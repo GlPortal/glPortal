@@ -153,6 +153,7 @@ void Map::drawBox(Box &b) {
 
 	// Top
 	glNormal3f(0,1,0);
+	glMultiTexCoord3f(GL_TEXTURE1, 1,0,0);
 	glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y2, b.z1);
 	glTexCoord2f(0.f,  dz); glVertex3f(b.x1, b.y2, b.z2);
 	glTexCoord2f( dx,  dz); glVertex3f(b.x2, b.y2, b.z2);
@@ -160,38 +161,43 @@ void Map::drawBox(Box &b) {
 
 	// Bottom
 	glNormal3f(0,-1,0);
-	glTexCoord2f( dx, 0.f); glVertex3f(b.x2, b.y1, b.z1);
-	glTexCoord2f( dx,  dz); glVertex3f(b.x2, b.y1, b.z2);
-	glTexCoord2f(0.f,  dz); glVertex3f(b.x1, b.y1, b.z2);
-	glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y1, b.z1);
+	glMultiTexCoord3f(GL_TEXTURE1, 1,0,0);
+	glTexCoord2f( dx,  dz); glVertex3f(b.x2, b.y1, b.z1);
+	glTexCoord2f( dx, 0.f); glVertex3f(b.x2, b.y1, b.z2);
+	glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y1, b.z2);
+	glTexCoord2f(0.f,  dz); glVertex3f(b.x1, b.y1, b.z1);
 
 	// Front
 	glNormal3f(0,0,1);
-	glTexCoord2f( dx, 0.f); glVertex3f(b.x2, b.y1, b.z2);
-	glTexCoord2f( dx,  dy); glVertex3f(b.x2, b.y2, b.z2);
-	glTexCoord2f(0.f,  dy); glVertex3f(b.x1, b.y2, b.z2);
-	glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y1, b.z2);
+	glMultiTexCoord3f(GL_TEXTURE1, 1,0,0);
+	glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y2, b.z2);
+	glTexCoord2f(0.f,  dy); glVertex3f(b.x1, b.y1, b.z2);
+	glTexCoord2f( dx,  dy); glVertex3f(b.x2, b.y1, b.z2);
+	glTexCoord2f( dx, 0.f); glVertex3f(b.x2, b.y2, b.z2);
 
 	// Back
 	glNormal3f(0,0,-1);
-	glTexCoord2f(0.f, 0.f); glVertex3f(b.x2, b.y1, b.z1);
-	glTexCoord2f( dx, 0.f); glVertex3f(b.x1, b.y1, b.z1);
-	glTexCoord2f( dx,  dy); glVertex3f(b.x1, b.y2, b.z1);
-	glTexCoord2f(0.f,  dy); glVertex3f(b.x2, b.y2, b.z1);
+	glMultiTexCoord3f(GL_TEXTURE1, -1,0,0);
+	glTexCoord2f(0.f,  dy); glVertex3f(b.x2, b.y1, b.z1);
+	glTexCoord2f( dx,  dy); glVertex3f(b.x1, b.y1, b.z1);
+	glTexCoord2f( dx, 0.f); glVertex3f(b.x1, b.y2, b.z1);
+	glTexCoord2f(0.f, 0.f); glVertex3f(b.x2, b.y2, b.z1);
 
 	// Left
 	glNormal3f(-1,0,0);
-	glTexCoord2f(0.f,  dz); glVertex3f(b.x1, b.y1, b.z2);
-	glTexCoord2f( dy,  dz); glVertex3f(b.x1, b.y2, b.z2);
-	glTexCoord2f( dy, 0.f); glVertex3f(b.x1, b.y2, b.z1);
-	glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y1, b.z1);
+	glMultiTexCoord3f(GL_TEXTURE1, 0,0,1);
+	glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y2, b.z1);
+	glTexCoord2f(0.f,  dy); glVertex3f(b.x1, b.y1, b.z1);
+	glTexCoord2f( dz,  dy); glVertex3f(b.x1, b.y1, b.z2);
+	glTexCoord2f( dz, 0.f); glVertex3f(b.x1, b.y2, b.z2);
 
 	// Right
 	glNormal3f(1,0,0);
-	glTexCoord2f(0.f, 0.f); glVertex3f(b.x2, b.y1, b.z1);
-	glTexCoord2f( dy, 0.f); glVertex3f(b.x2, b.y2, b.z1);
-	glTexCoord2f( dy,  dz); glVertex3f(b.x2, b.y2, b.z2);
-	glTexCoord2f(0.f,  dz); glVertex3f(b.x2, b.y1, b.z2);
+	glMultiTexCoord3f(GL_TEXTURE1, 0,0,-1);
+	glTexCoord2f( dz, 0.f); glVertex3f(b.x2, b.y2, b.z1);
+	glTexCoord2f(0.f, 0.f); glVertex3f(b.x2, b.y2, b.z2);
+	glTexCoord2f(0.f,  dy); glVertex3f(b.x2, b.y1, b.z2);
+	glTexCoord2f( dz,  dy); glVertex3f(b.x2, b.y1, b.z1);
 }
 
 /**

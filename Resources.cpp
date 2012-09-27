@@ -26,13 +26,15 @@ void Resources::loadTextures() {
  * @param unit Texture unit to bind to (e.g. GL_TEXTUREunit)
  */
 void Resources::bindTexture(TEXTURE_ID id, int unit) {
-	glActiveTexture(GL_TEXTURE0 + unit);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textures[id]);
 
 	if(id == TID_WALL) {
-		bindTexture(TID_WALL_NMAP, 1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, textures[TID_WALL_NMAP]);
 	} else if(id == TID_TILES) {
-		bindTexture(TID_TILES_NMAP, 1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, textures[TID_TILES_NMAP]);
 	}
 }
 
@@ -54,23 +56,49 @@ void Resources::compileShaders() {
 	glShaderSource(frag, 1, (const char**)&fs_source, NULL);
 	// Compile shaders
 	glCompileShader(vert);
+	printShaderLog(vert);
 	glCompileShader(frag);
+	printShaderLog(frag);
 	// Attach shaders to program
 	glAttachShader(program, vert);
 	glAttachShader(program, frag);
 	// Link program
 	glLinkProgram(program);
-	
-	// Bind first texture unit to "texture" in fragment shader
-	GLuint param = glGetUniformLocation(program, "tex");
-	glUniform1i(param, 0);
-	// Bind second texture unit to "nmap" in fragment shader
-	param = glGetUniformLocation(program, "nmap");
-	glUniform1i(param, 1);
+	printProgramLog(program);
 
 	// Free memory from shader files
 	delete[] vs_source;
 	delete[] fs_source;
+}
+
+/**
+ * Prints the log output from a compiled shader if any.
+ *
+ * @param shader Handle of the shader
+ */
+void Resources::printShaderLog(GLuint shader) {
+	char buffer[512];
+	memset(buffer, 0, 512);
+	GLsizei length = 0;
+	glGetShaderInfoLog(shader, 512, &length, buffer);
+	if(length > 0) {
+		printf("%s\n", buffer);
+	}
+}
+
+/**
+ * Prints the log output from a linked program.
+ *
+ * @param program Handle of the program
+ */
+void Resources::printProgramLog(GLuint shader) {
+	char buffer[512];
+	memset(buffer, 0, 512);
+	GLsizei length = 0;
+	glGetProgramInfoLog(program, 512, &length, buffer);
+	if(length > 0) {
+		printf("%s\n", buffer);
+	}
 }
 
 /**
@@ -80,6 +108,12 @@ void Resources::compileShaders() {
  */
 void Resources::enableProgram(PROGRAM_ID pid) {
 	glUseProgram(program);
+	// Bind first texture unit to "texture" in fragment shader
+	GLuint paramTex = glGetUniformLocation(program, "tex");
+	glUniform1i(paramTex, 0);
+	// Bind second texture unit to "nmap" in fragment shader
+	GLuint paramNmap = glGetUniformLocation(program, "nmap");
+	glUniform1i(paramNmap, 1);
 }
 
 /**
