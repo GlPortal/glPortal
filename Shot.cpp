@@ -56,7 +56,6 @@ void Shot::draw(float xrot, float yrot) {
 	glRotatef(xrot*RADDEG, 1,0,0);
 
 	Resources::inst().bindTexture(TID_BALLS);
-	glEnable(GL_BLEND);
 	float xoffset = id*0.5f;
 	glBegin(GL_QUADS);
 		glTexCoord2f(xoffset+0.5f, 0); glVertex3f( 0.25, -0.25, 0);
@@ -64,6 +63,5 @@ void Shot::draw(float xrot, float yrot) {
 		glTexCoord2f(xoffset,      1); glVertex3f(-0.25,  0.25, 0);
 		glTexCoord2f(xoffset,      0); glVertex3f(-0.25, -0.25, 0);
 	glEnd();
-	glDisable(GL_BLEND);
 	glPopMatrix();
 }

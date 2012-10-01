@@ -54,6 +54,13 @@ void Map::load(const char *filename) {
 					}
 					lightpos[3] = 1.f; // Set as positioned light
 					break;
+				// Start position
+				case 's':
+					for(int i = 0; i < 3; i++) {
+						ss >> temp;
+						startpos[i] = (float)atof(temp.c_str());
+					}
+					break;
 			}
 		}
 	}
@@ -84,7 +91,6 @@ void Map::draw() {
 		drawBox(*it);
 	}
 	glEnd();
-	Resources::inst().disableProgram();
 
 	// Draw acid waste
 	Resources::inst().bindTexture(TID_ACID);
@@ -93,6 +99,7 @@ void Map::draw() {
 		drawBox(*it);
 	}
 	glEnd();
+	Resources::inst().disableProgram();
 }
 
 /**
@@ -125,7 +132,6 @@ void Map::drawFromPortal(Portal& portal) {
 		}
 	}
 	glEnd();
-	Resources::inst().disableProgram();
 
 	// Draw acid waste
 	Resources::inst().bindTexture(TID_ACID);
@@ -139,6 +145,7 @@ void Map::drawFromPortal(Portal& portal) {
 		}
 	}
 	glEnd();
+	Resources::inst().disableProgram();
 }
 
 /**
@@ -216,6 +223,21 @@ bool Map::collidesWithWall(Box &bbox) {
 }
 
 /**
+ * Checks whether a bounding box collides with any acid pool in map.
+ *
+ * @param bbox Bounding box for collision
+ *
+ * @return True if the box collides
+ */
+bool Map::collidesWithAcid(Box &bbox) {
+	std::vector<Box>::iterator it;
+	for(it = acid.begin(); it < acid.end(); it++) {
+		if(bbox.collide(*it)) return true;
+	}
+	return false;
+}
+
+/**
  * Checks whether a given point collides with a wall.
  *
  * @param x X-coordinate of the point to collide with
@@ -236,18 +258,4 @@ bool Map::pointInWall(float x, float y, float z, Box *box = NULL) {
 		}
 	}
 	return false;
-}
-
-/**
- * Returns the vector of walls
- */
-std::vector<Box>* Map::getWalls() {
-	return &walls;
-}
-
-/**
- * Returns the vector of acid pools
- */
-std::vector<Box> *Map::getAcid() {
-	return &acid;
 }

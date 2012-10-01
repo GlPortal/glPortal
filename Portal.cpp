@@ -247,10 +247,10 @@ void Portal::drawOutline(PORTAL_COLOR color) {
 
 	glBegin(GL_QUADS);
 	glNormal3f(0,0,1);
-	glTexCoord2f(0.207, 0); glVertex3f(-0.84, 1.35, 0.002);
-	glTexCoord2f(0.207, 1); glVertex3f(-0.84,-1.35, 0.002);
-	glTexCoord2f(0.793, 1); glVertex3f( 0.84,-1.35, 0.002);
-	glTexCoord2f(0.793, 0); glVertex3f( 0.84, 1.35, 0.002);
+		glTexCoord2f(0.207, 0); glVertex3f(-0.84, 1.35, 0.002);
+		glTexCoord2f(0.207, 1); glVertex3f(-0.84,-1.35, 0.002);
+		glTexCoord2f(0.793, 1); glVertex3f( 0.84,-1.35, 0.002);
+		glTexCoord2f(0.793, 0); glVertex3f( 0.84, 1.35, 0.002);
 	glEnd();
 
 	glPopMatrix();

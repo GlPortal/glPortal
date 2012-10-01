@@ -5,6 +5,8 @@
 #include "Portal.hpp"
 #include "Shot.hpp"
 
+enum PLAYER_STATE { PS_ALIVE, PS_DYING };
+
 /**
  * Class for controlling the player and camera view
  */
@@ -24,6 +26,7 @@ public:
 	float getY() { return y; } /**< Get the Y-coordinate of the Player */
 	float getZ() { return z; } /**< Get the Z-coordinate of the Player */
 	Portal *getPortals() { return portals; } /**< Gets the list of portals */
+	PLAYER_STATE getState() { return state; }
 
 protected:
 	float x,y,z;  // Position
@@ -31,6 +34,7 @@ protected:
 	float yrot;	/**< View rotation in Y-axis */
 	float xspeed, yspeed, zspeed; // Velocity in x-, y- and z-axis
 	bool onGround;		// True if player was standing on ground last frame
+	PLAYER_STATE state;
 	Portal portals[2];
 	Shot shots[2];
 };
