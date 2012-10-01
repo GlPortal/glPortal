@@ -18,8 +18,7 @@ static const char *texture_files[NUM_TEXTURES] = {
 	"data/wall.png", "data/wall_normalmap.png",
 	"data/tiles.png", "data/tiles_normalmap.png",
 	"data/acid.png", "data/acid_normalmap.png",
-	"data/blueportal.png",
-	"data/orangeportal.png",
+	"data/blueportal.png", "data/orangeportal.png",
 	"data/crosshair.png",
 	"data/balls.png",
 	"data/strings.png"

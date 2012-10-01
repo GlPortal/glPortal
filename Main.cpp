@@ -40,6 +40,9 @@ void update(int value) {
 	glutTimerFunc(FRAMETIME, update, 1);
 }
 
+/**
+ * Respawns the player after dying.
+ */
 void respawn() {
 	fade = 0.f;
 	player.create(map.getStartX(), map.getStartY(), map.getStartZ());
@@ -107,6 +110,7 @@ void drawOverlay() {
 		}
 		// Fade screen if player is dying
 		else if(player.getState() == PS_DYING) {
+			Resources::inst().bindTexture(TID_NONE);
 			glColor4f(0.f, 0.f, 0.f, fade);
 			glDisable(GL_TEXTURE_2D);
 			glBegin(GL_QUADS);
