@@ -25,13 +25,24 @@ void update(int value) {
 	if(!paused) {
 		float mousedx = (float)(width/2-mousex);  // Mouse distance from center of screen
 		float mousedy = (float)(height/2-mousey);
+		glutWarpPointer(width/2, height/2);
 
 		player.update(CONST_DT, keystates, mousedx, mousedy, map);
 
-		glutWarpPointer(width/2, height/2);
-		glutPostRedisplay();
+		if(player.getState() == PS_DYING) {
+			fade += 0.4f*CONST_DT;
+		}
 	}
+
+	// Redraw screen
+	glutPostRedisplay();
+	// Schedule new update
 	glutTimerFunc(FRAMETIME, update, 1);
+}
+
+void respawn() {
+	fade = 0.f;
+	player.create(map.getStartX(), map.getStartY(), map.getStartZ());
 }
 
 /**
@@ -44,38 +55,84 @@ void draw() {
 	// Draw scene
 	player.setView();
 	drawPortals();
-	glEnable(GL_LIGHTING);
 	map.draw();
-	glDisable(GL_LIGHTING);
 
 	player.drawPortalOutlines();
 	player.drawShots();
 
-	// Draw crosshair
-	Resources::inst().bindTexture(TID_CROSSHAIR);
-	glLoadIdentity();
+	// Draw 2D overlay
+	drawOverlay();
 
+	// Swap buffers
+	glutSwapBuffers();
+}
+
+/**
+ * Draws all 2D overlay related.
+ * Should be called after drawing all 3D.
+ */
+void drawOverlay() {
 	// Switch to orthographic 2D projection
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
 	gluOrtho2D(0,width,height,0);
-	glEnable(GL_BLEND);
-	glDisable(GL_DEPTH_TEST);
-	glBegin(GL_QUADS);
-		glTexCoord2f(0,0); glVertex3f(width/2-16, height/2-12, 0);
-		glTexCoord2f(0,1); glVertex3f(width/2-16, height/2+20, 0);
-		glTexCoord2f(1,1); glVertex3f(width/2+16, height/2+20, 0);
-		glTexCoord2f(1,0); glVertex3f(width/2+16, height/2-12, 0);
-	glEnd();
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
 
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glDepthMask(GL_FALSE);
+
+	if(paused) {
+		glColor4f(0.f, 0.f, 0.f, 0.5f);
+		glBegin(GL_QUADS);
+			glVertex2f(  0.f,    0.f);
+			glVertex2f(  0.f, height);
+			glVertex2f(width, height);
+			glVertex2f(width,    0.f);
+		glEnd();
+
+		glColor4f(1.f, 1.f, 1.f, 1.f);
+	}
+	else {
+		// Draw crosshair if player is alive
+		if(player.getState() == PS_ALIVE) {
+			Resources::inst().bindTexture(TID_CROSSHAIR);
+			glColor4f(1.f, 1.f, 1.f, 1.f);
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,0); glVertex2f(width/2-16, height/2-12);
+				glTexCoord2f(0,1); glVertex2f(width/2-16, height/2+20);
+				glTexCoord2f(1,1); glVertex2f(width/2+16, height/2+20);
+				glTexCoord2f(1,0); glVertex2f(width/2+16, height/2-12);
+			glEnd();
+		}
+		// Fade screen if player is dying
+		else if(player.getState() == PS_DYING) {
+			glColor4f(0.f, 0.f, 0.f, fade);
+			glDisable(GL_TEXTURE_2D);
+			glBegin(GL_QUADS);
+				glVertex2f(  0.f,    0.f);
+				glVertex2f(  0.f, height);
+				glVertex2f(width, height);
+				glVertex2f(width,    0.f);
+			glEnd();
+
+			glColor3f(1.f, 1.f, 1.f);
+			glEnable(GL_TEXTURE_2D);
+			Resources::inst().bindTexture(TID_STRINGS);
+			glBegin(GL_QUADS);
+				glTexCoord2f(0, 0.000f); glVertex2f(width/2-256, height/2-32);
+				glTexCoord2f(0, 0.125f); glVertex2f(width/2-256, height/2+32);
+				glTexCoord2f(1, 0.125f); glVertex2f(width/2+256, height/2+32);
+				glTexCoord2f(1, 0.000f); glVertex2f(width/2+256, height/2-32);
+			glEnd();
+		}
+	}
+
+	glDepthMask(GL_TRUE);
+	// Restore perspective projection matrix
+	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
-
-	// Swap buffers
-	glutSwapBuffers();
 }
 
 /**
@@ -98,15 +155,15 @@ void drawPortals() {
 
 			portals[src].drawStencil();
 
-			float dx = player.getX()-portals[src].x;
-			float dy = player.getY()-portals[src].y;
-			float dz = player.getZ()-portals[src].z;
-
 			glClear(GL_DEPTH_BUFFER_BIT);
 			// Only pass stencil test if equal to 1
 			glStencilMask(0x00);
 			glStencilFunc(GL_EQUAL, 1, 0xFF);
 
+			// Calculate distance from source portal to player
+			float dx = player.getX()-portals[src].x;
+			float dy = player.getY()-portals[src].y;
+			float dz = player.getZ()-portals[src].z;
 			// Move camera to portal view
 			glTranslatef(-dx,-dy,-dz);
 			glTranslatef(player.getX(), player.getY(), player.getZ());
@@ -115,9 +172,7 @@ void drawPortals() {
 			glTranslatef(-portals[dst].x, -portals[dst].y, -portals[dst].z);
 
 			// Draw scene from portal view
-			glEnable(GL_LIGHTING);
 			map.drawFromPortal(portals[dst]);
-			glDisable(GL_LIGHTING);
 			player.drawPortalOutlines();
 
 			glPopMatrix();
@@ -133,7 +188,7 @@ void drawPortals() {
 }
 
 /**
- * Called when mouse curses moves.
+ * Called when mouse cursor moves.
  * Saves mouse position two variables mousex and mousey.
  *
  * @param x New X-coordinate
@@ -169,7 +224,13 @@ void mouse_pressed(int button, int state, int x, int y) {
  */
 void key_down(unsigned char key, int x, int y) {
 	keystates[key] = true;
-	if(key == 27) paused = !paused;
+
+	if(key == 27) { // Escape key
+		paused = !paused;
+	}
+	else if(key == 13 && player.getState() == PS_DYING) {
+		respawn();
+	}
 }
 
 /**
@@ -245,7 +306,6 @@ void setup(int *argc, char **argv) {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	// Enable lighting
-	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	// Set ambient and diffuse lighting
 	GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
@@ -254,15 +314,15 @@ void setup(int *argc, char **argv) {
 
 	// Set blending function for portals
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 
 	// Load textures from files
 	Resources::inst().loadTextures();
 	Resources::inst().compileShaders();
-	Resources::inst().bindTexture(TID_TILES_NMAP, 1);
 
 	paused = false;
-	player.create(2.5, 1, 5);
 	map.load("maps/test.map");
+	respawn();
 }
 /**
  * @}

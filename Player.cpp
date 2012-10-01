@@ -11,9 +11,7 @@
 #define JUMPPOWER 7.0
 
 Player::Player() {
-	x = y = z = 0.f;
-	xrot = yrot = 0.f;
-	onGround = false;
+	create(0.f, 0.f, 0.f);
 }
 
 /**
@@ -26,7 +24,17 @@ void Player::create(float x, float y, float z) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
+
+	xrot = yrot = 0.f;
+	xspeed = yspeed = zspeed = 0.f;
 	onGround = false;
+	state = PS_ALIVE;
+
+	for(int i = 0; i < 2; i++) {
+		portals[i].disable();
+		shots[i].active = false;
+		
+	}
 }
 
 /**
@@ -40,99 +48,114 @@ void Player::create(float x, float y, float z) {
  * @param map Reference to the Map
  */
 void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map &map) {
-	// Apply rotation of view
+	// Apply mouse movement to view
 	yrot += mousedx*0.0015f;
 	xrot += mousedy*0.0015f;
 
-	// Restrict rotation in x-axis
+	// Restrict rotation in horizontal axis
 	if(xrot < -1.5f) xrot = -1.5f;
 	if(xrot >  1.5f) xrot =  1.5f;
 
-	// Reset x and z speed
-	xspeed = zspeed = 0.f;
-	// Apply gravity to yspeed
-	yspeed -= GRAVITY*dt;
-	if(yspeed < -MAXSPEED) yspeed = -MAXSPEED;
+	// If player is alive
+	if(state == PS_ALIVE) {
+		// Reset x and z speed
+		xspeed = zspeed = 0.f;
+		// Apply gravity to yspeed
+		yspeed -= GRAVITY*dt;
+		if(yspeed < -MAXSPEED) yspeed = -MAXSPEED;
 
-	// TODO: Include DT in movement!!!
-	// Move forward
-	if(keystates['w']) {
-		zspeed -= cos(yrot)*PLAYER_MOVESPEED;
-		xspeed -= sin(yrot)*PLAYER_MOVESPEED;
-	}
-	// Move backward
-	if(keystates['s']) {
-		zspeed += cos(yrot)*PLAYER_MOVESPEED;
-		xspeed += sin(yrot)*PLAYER_MOVESPEED;
-	}
-	// Strafe left
-	if(keystates['a']) {
-		xspeed -= cos(yrot)*PLAYER_MOVESPEED;
-		zspeed += sin(yrot)*PLAYER_MOVESPEED;
-	}
-	// Strafe right
-	if(keystates['d']) {
-		xspeed += cos(yrot)*PLAYER_MOVESPEED;
-		zspeed -= sin(yrot)*PLAYER_MOVESPEED;
-	}
-	// Jump if space is pressed and player is standing on ground
-	if(keystates[' '] && onGround) {
-		yspeed = JUMPPOWER;
-	}
-	// Disable portals if R is held
-	if(keystates['r']) {
-		portals[0].disable();
-		portals[1].disable();
-	}
-
-	float newx = x + xspeed*dt;
-	float newy = y + yspeed*dt;
-	float newz = z + zspeed*dt;
-
-	// Check for collision in x-axis
-	Box bbox;
-	bbox.set(newx-0.5, y, z-0.5, newx+0.5, y+1.8, z+0.5);
-	if(map.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
-		x = newx;
-	}
-	// Check for collision in y-axis
-	bbox.set(x-0.5, y, newz-0.5, x+0.5, y+1.8, newz+0.5);
-	if(map.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
-		z = newz;
-	}
-	// Check for collision in z-axis
-	bbox.set(x-0.5, newy, z-0.5, x+0.5, newy+1.8, z+0.5);
-	onGround = false;
-	if(map.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
-		y = newy;
-	} else {
-		// If player was falling it means must have hit the ground
-		if(yspeed < 0) {
-			onGround = true;
+		// Move forward
+		if(keystates['w']) {
+			zspeed -= cos(yrot)*PLAYER_MOVESPEED;
+			xspeed -= sin(yrot)*PLAYER_MOVESPEED;
 		}
-		yspeed = 0.f;
-	}
+		// Move backward
+		if(keystates['s']) {
+			zspeed += cos(yrot)*PLAYER_MOVESPEED;
+			xspeed += sin(yrot)*PLAYER_MOVESPEED;
+		}
+		// Strafe left
+		if(keystates['a']) {
+			xspeed -= cos(yrot)*PLAYER_MOVESPEED;
+			zspeed += sin(yrot)*PLAYER_MOVESPEED;
+		}
+		// Strafe right
+		if(keystates['d']) {
+			xspeed += cos(yrot)*PLAYER_MOVESPEED;
+			zspeed -= sin(yrot)*PLAYER_MOVESPEED;
+		}
+		// Jump if space is pressed and player is standing on ground
+		if(keystates[' '] && onGround) {
+			yspeed = JUMPPOWER;
+		}
+		// Disable portals if R is held
+		if(keystates['r']) {
+			portals[0].disable();
+			portals[1].disable();
+		}
 
-	// Check if player has entered a portal
-	if(portalsActive()) {
-		for(int i = 0; i < 2; i++) {
-			if(portals[i].throughPortal(x,y+0.9f,z)) {
-				// Calculate rotation between portals
-				float rotation = 0.f;
-				rotation += portals[i].getToRotation()*DEGRAD;
-				rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
-				yrot += rotation;
-				// Distance from portal to player
-				float xdist = x - portals[i].x;
-				float zdist = z - portals[i].z;
-				// Calculate this distance when rotated
-				float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
-				float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
-				// Move player to destination portal
-				x = portals[(i+1)%2].x + nxdist;
-				z = portals[(i+1)%2].z + nzdist;
-				y += portals[(i+1)%2].y - portals[i].y;
+		float newx = x + xspeed*dt;
+		float newy = y + yspeed*dt;
+		float newz = z + zspeed*dt;
+
+		// Check for collision in x-axis
+		Box bbox;
+		bbox.set(newx-0.5, y, z-0.5, newx+0.5, y+1.8, z+0.5);
+		if(map.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
+			x = newx;
+		}
+		// Check for collision in y-axis
+		bbox.set(x-0.5, y, newz-0.5, x+0.5, y+1.8, newz+0.5);
+		if(map.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
+			z = newz;
+		}
+		// Check for collision in z-axis
+		bbox.set(x-0.5, newy, z-0.5, x+0.5, newy+1.8, z+0.5);
+		onGround = false;
+		if(map.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
+			y = newy;
+		} else {
+			// If player was falling it means must have hit the ground
+			if(yspeed < 0) {
+				onGround = true;
 			}
+			yspeed = 0.f;
+		}
+
+		// Check if player has fallen into an acid pool
+		bbox.set(x-0.5, y, z-0.5, x+0.5, y+1.8, z+0.5);
+		if(map.collidesWithAcid(bbox) == true) {
+			state = PS_DYING;
+		}
+
+		// Check if player has entered a portal
+		if(portalsActive()) {
+			for(int i = 0; i < 2; i++) {
+				if(portals[i].throughPortal(x,y+0.9f,z)) {
+					// Calculate rotation between portals
+					float rotation = 0.f;
+					rotation += portals[i].getToRotation()*DEGRAD;
+					rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
+					yrot += rotation;
+					// Distance from portal to player
+					float xdist = x - portals[i].x;
+					float zdist = z - portals[i].z;
+					// Calculate this distance when rotated
+					float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
+					float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
+					// Move player to destination portal
+					x = portals[(i+1)%2].x + nxdist;
+					z = portals[(i+1)%2].z + nzdist;
+					y += portals[(i+1)%2].y - portals[i].y;
+				}
+			}
+		}
+	}
+	// If player is dying
+	else if(state == PS_DYING) {
+		y -= 0.85f*dt;
+		if(xrot < 1.5f) {
+			xrot += 0.4f*dt;
 		}
 	}
 
@@ -157,6 +180,8 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
  * @param button Mouse button being pressed
  */
 void Player::mousePressed(int button) {
+	if(state != PS_ALIVE) return;
+
 	switch(button) {
 		case GLUT_LEFT_BUTTON:
 			// Shoot blue portal
@@ -205,10 +230,8 @@ void Player::drawPortalStencils() {
  * Draws colored outlines for both portals
  */
 void Player::drawPortalOutlines() {
-	glEnable(GL_BLEND);
 	if(portals[0].active) portals[0].drawOutline(PC_BLUE);
 	if(portals[1].active) portals[1].drawOutline(PC_ORANGE);
-	glDisable(GL_BLEND);
 }
 
 /**

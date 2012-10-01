@@ -1,3 +1,6 @@
+! Start position
+s 2.5 1 5
+
 ! Left and right ground
 t 0 0 0 5 -5 10
 t 15 0 0 20 -5 10
@@ -10,6 +13,9 @@ w 20 0 0 21 8 10
 w 0 -5  0 20 8 -1
 w 0 -5 10 20 8 11
 
+! Floor in acid pit
+w 5 -6 0 15 -5 10
+
 ! Ceiling
 t 0 8 0 20 9 10
 
@@ -20,4 +26,4 @@ t 9 -5 4 11 0 6
 a 5 -1 0 15 -5 10
 
 ! Light in center of map
-l 7.5 6 5
+l 10 6 5
