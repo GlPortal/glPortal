@@ -16,7 +16,6 @@ void Resources::loadTextures() {
  * Binds a texture.
  *
  * @param id TEXTURE_ID of the texture to bind
- * @param unit Texture unit to bind to (e.g. GL_TEXTUREunit)
  */
 void Resources::bindTexture(TEXTURE_ID id) {
 	glActiveTexture(GL_TEXTURE0);

@@ -31,7 +31,7 @@ void Portal::place(float x, float y, float z, PORTAL_DIR dir, Map& map) {
 		bbox.set(nx-1.49f, ny-1.24f, nz-0.74f, nx-0.01f, ny+1.24f, nz+0.74f);
 	}
 	// Only place portal if nothing is in front of it
-	if(map.collidesWithWall(bbox) == false) {
+	if(map.collidesWithWall(bbox) == false && map.collidesWithAcid(bbox) == false) {
 		this->x = nx;
 		this->y = ny;
 		this->z = nz;
