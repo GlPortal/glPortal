@@ -83,18 +83,29 @@ void drawOverlay() {
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glDepthMask(GL_FALSE);
+	glDisable(GL_DEPTH_TEST);
 
+	// If game is paused
 	if(paused) {
+		// Add dark tint to screen
 		glColor4f(0.f, 0.f, 0.f, 0.5f);
+		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 			glVertex2f(  0.f,    0.f);
 			glVertex2f(  0.f, height);
 			glVertex2f(width, height);
 			glVertex2f(width,    0.f);
 		glEnd();
-
+		// Draw "Paused" message
+		glEnable(GL_TEXTURE_2D);
 		glColor4f(1.f, 1.f, 1.f, 1.f);
+		Resources::inst().bindTexture(TID_STRINGS);
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.00f, 0.125f); glVertex2f(width/2-64, height/2-32);
+			glTexCoord2f(0.00f, 0.250f); glVertex2f(width/2-64, height/2+32);
+			glTexCoord2f(0.25f, 0.250f); glVertex2f(width/2+64, height/2+32);
+			glTexCoord2f(0.25f, 0.125f); glVertex2f(width/2+64, height/2-32);
+		glEnd();
 	}
 	else {
 		// Draw crosshair if player is alive
@@ -110,7 +121,6 @@ void drawOverlay() {
 		}
 		// Fade screen if player is dying
 		else if(player.getState() == PS_DYING) {
-			Resources::inst().bindTexture(TID_NONE);
 			glColor4f(0.f, 0.f, 0.f, fade);
 			glDisable(GL_TEXTURE_2D);
 			glBegin(GL_QUADS);
@@ -119,9 +129,9 @@ void drawOverlay() {
 				glVertex2f(width, height);
 				glVertex2f(width,    0.f);
 			glEnd();
-
-			glColor3f(1.f, 1.f, 1.f);
 			glEnable(GL_TEXTURE_2D);
+			// Draw "Press enter to respawn" message
+			glColor3f(1.f, 1.f, 1.f);
 			Resources::inst().bindTexture(TID_STRINGS);
 			glBegin(GL_QUADS);
 				glTexCoord2f(0, 0.000f); glVertex2f(width/2-256, height/2-32);
@@ -132,7 +142,7 @@ void drawOverlay() {
 		}
 	}
 
-	glDepthMask(GL_TRUE);
+	glEnable(GL_DEPTH_TEST);
 	// Restore perspective projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
@@ -231,6 +241,7 @@ void key_down(unsigned char key, int x, int y) {
 
 	if(key == 27) { // Escape key
 		paused = !paused;
+		glutWarpPointer(width/2, height/2);
 	}
 	else if(key == 13 && player.getState() == PS_DYING) {
 		respawn();
@@ -323,6 +334,7 @@ void setup(int *argc, char **argv) {
 	// Load textures from files
 	Resources::inst().loadTextures();
 	Resources::inst().compileShaders();
+	Resources::inst().compileModels();
 
 	paused = false;
 	map.load("maps/test.map");

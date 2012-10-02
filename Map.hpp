@@ -26,11 +26,13 @@ public:
 
 protected:
 	void drawBox(Box &b);
+	void drawCake();
 
 	std::vector<Box> walls;	/**< Vector of all walls in the map */
 	std::vector<Box> acid;	/**< Vector of all acid pools in the map */
 	GLfloat lightpos[4];	/**< Position of the position light in the map */
 	float startpos[3];		/**< Position where the player spawns in the map */
+	float cakepos[3];		/**< Position of the cake in the map */
 };
 
 #endif

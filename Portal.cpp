@@ -198,32 +198,7 @@ void Portal::drawStencil() {
 
 	glTranslatef(x,y,z);
 	glRotatef(getFromRotation(), 0,1,0);
-
-	glBegin(GL_TRIANGLE_FAN);
-	glVertex3f( 0.00, 0.00, 0.001);
-
-	glVertex3f( 0.00, 1.25, 0.001);
-	glVertex3f(-0.29, 1.15, 0.001);
-	glVertex3f(-0.53, 0.88, 0.001);
-	glVertex3f(-0.69, 0.48, 0.001);
-
-	glVertex3f(-0.75, 0.00, 0.001);
-	glVertex3f(-0.69,-0.48, 0.001);
-	glVertex3f(-0.53,-0.88, 0.001);
-	glVertex3f(-0.29,-1.15, 0.001);
-
-	glVertex3f( 0.00,-1.25, 0.001);
-	glVertex3f( 0.29,-1.15, 0.001);
-	glVertex3f( 0.53,-0.88, 0.001);
-	glVertex3f( 0.69,-0.48, 0.001);
-
-	glVertex3f( 0.75, 0.00, 0.001);
-	glVertex3f( 0.69, 0.48, 0.001);
-	glVertex3f( 0.53, 0.88, 0.001);
-	glVertex3f( 0.29, 1.15, 0.001);
-
-	glVertex3f( 0.00, 1.25, 0.001);
-	glEnd();
+	Resources::inst().drawModel(MID_PORTAL_STENCIL);
 
 	glPopMatrix();
 }
@@ -245,13 +220,7 @@ void Portal::drawOutline(PORTAL_COLOR color) {
 	else
 		Resources::inst().bindTexture(TID_ORANGEPORTAL);
 
-	glBegin(GL_QUADS);
-	glNormal3f(0,0,1);
-		glTexCoord2f(0.207, 0); glVertex3f(-0.84, 1.35, 0.002);
-		glTexCoord2f(0.207, 1); glVertex3f(-0.84,-1.35, 0.002);
-		glTexCoord2f(0.793, 1); glVertex3f( 0.84,-1.35, 0.002);
-		glTexCoord2f(0.793, 0); glVertex3f( 0.84, 1.35, 0.002);
-	glEnd();
+	Resources::inst().drawModel(MID_PORTAL_OUTLINE);
 
 	glPopMatrix();
 }

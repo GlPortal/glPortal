@@ -18,9 +18,6 @@ void Resources::loadTextures() {
  * @param id TEXTURE_ID of the texture to bind
  */
 void Resources::bindTexture(TEXTURE_ID id) {
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textures[id]);
-
 	if(id == TID_WALL) {
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, textures[TID_WALL_NMAP]);
@@ -30,7 +27,13 @@ void Resources::bindTexture(TEXTURE_ID id) {
 	} else if(id == TID_ACID) {
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, textures[TID_ACID_NMAP]);
+	} else if(id == TID_CAKE) {
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, textures[TID_CAKE_NMAP]);
 	}
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textures[id]);
 }
 
 /**
@@ -181,4 +184,55 @@ GLuint Resources::createTexture(const char *filename) {
 	}
 
 	return handle;
+}
+
+void Resources::drawModel(MODEL_ID mid) {
+	glCallList(models[mid]);
+}
+
+void Resources::compileModels() {
+	GLuint lists = glGenLists(NUM_MODELS);
+	for(int i = 0; i < NUM_MODELS; i++) {
+		models[i] = lists+i;
+	}
+
+	// Compile portal stencil model
+	glNewList(models[MID_PORTAL_STENCIL], GL_COMPILE);
+		glBegin(GL_TRIANGLE_FAN);
+			glVertex3f( 0.00f, 0.00f, 0.001f);
+
+			glVertex3f( 0.00f, 1.25f, 0.001f);
+			glVertex3f(-0.29f, 1.15f, 0.001f);
+			glVertex3f(-0.53f, 0.88f, 0.001f);
+			glVertex3f(-0.69f, 0.48f, 0.001f);
+
+			glVertex3f(-0.75f, 0.00f, 0.001f);
+			glVertex3f(-0.69f,-0.48f, 0.001f);
+			glVertex3f(-0.53f,-0.88f, 0.001f);
+			glVertex3f(-0.29f,-1.15f, 0.001f);
+
+			glVertex3f( 0.00f,-1.25f, 0.001f);
+			glVertex3f( 0.29f,-1.15f, 0.001f);
+			glVertex3f( 0.53f,-0.88f, 0.001f);
+			glVertex3f( 0.69f,-0.48f, 0.001f);
+
+			glVertex3f( 0.75f, 0.00f, 0.001f);
+			glVertex3f( 0.69f, 0.48f, 0.001f);
+			glVertex3f( 0.53f, 0.88f, 0.001f);
+			glVertex3f( 0.29f, 1.15f, 0.001f);
+
+			glVertex3f( 0.00f, 1.25f, 0.001f);
+		glEnd();
+	glEndList();
+
+	// Compile portal outline
+	glNewList(models[MID_PORTAL_OUTLINE], GL_COMPILE);
+		glBegin(GL_QUADS);
+			glNormal3f(0,0,1);
+			glTexCoord2f(0.207, 0); glVertex3f(-0.84, 1.35, 0.002);
+			glTexCoord2f(0.207, 1); glVertex3f(-0.84,-1.35, 0.002);
+			glTexCoord2f(0.793, 1); glVertex3f( 0.84,-1.35, 0.002);
+			glTexCoord2f(0.793, 0); glVertex3f( 0.84, 1.35, 0.002);
+		glEnd();
+	glEndList();
 }

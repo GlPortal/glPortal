@@ -153,10 +153,8 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 	}
 	// If player is dying
 	else if(state == PS_DYING) {
-		y -= 0.85f*dt;
-		if(xrot < 1.5f) {
-			xrot += 0.4f*dt;
-		}
+		y -= 0.60f*dt;
+		
 	}
 
 	// Update shots and check their collision with walls
