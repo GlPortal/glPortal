@@ -1,6 +1,7 @@
 #version 120
 
 varying vec3 vertex, light;
+
 uniform sampler2D texture, nmap;
 
 void main() {
@@ -15,5 +16,5 @@ void main() {
 	vec4 ambient = gl_LightSource[0].ambient * gl_FrontMaterial.ambient;
 
 	// Added texture color to pixel
-	gl_FragColor = (ambient + diffuse) * texture2D(texture, gl_TexCoord[0].st);
+	gl_FragColor = (diffuse + ambient) * texture2D(texture, gl_TexCoord[0].st);
 }

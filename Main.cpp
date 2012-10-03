@@ -337,7 +337,7 @@ void setup(int *argc, char **argv) {
 	Resources::inst().compileModels();
 
 	paused = false;
-	map.load("maps/test.map");
+	map.load("maps/test2.map");
 	respawn();
 }
 /**

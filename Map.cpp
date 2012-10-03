@@ -107,10 +107,11 @@ void Map::draw() {
 	}
 	glEnd();
 
+	Resources::inst().disableProgram();
+
 	// Draw cake
 	drawCake();
 
-	Resources::inst().disableProgram();
 }
 
 /**
@@ -157,10 +158,10 @@ void Map::drawFromPortal(Portal& portal) {
 	}
 	glEnd();
 
+	Resources::inst().disableProgram();
+
 	// Draw cake
 	drawCake();
-
-	Resources::inst().disableProgram();
 }
 
 /**
@@ -226,29 +227,7 @@ void Map::drawCake() {
 	glPushMatrix();
 	glTranslatef(cakepos[0], cakepos[1], cakepos[2]);
 	Resources::inst().bindTexture(TID_CAKE);
-	glBegin(GL_QUADS);
-		// Front side
-		glTexCoord2f(0.000f, 0.00f); glVertex3f(-0.2f,  0.3f, 0.00f);
-		glTexCoord2f(0.000f, 0.25f); glVertex3f(-0.2f,  0.0f, 0.00f);
-		glTexCoord2f(0.375f, 0.25f); glVertex3f( 0.2f,  0.0f, 0.16f);
-		glTexCoord2f(0.375f, 0.00f); glVertex3f( 0.2f,  0.3f, 0.16f);
-		// Back side
-		glTexCoord2f(0.375f, 0.00f); glVertex3f( 0.2f,  0.3f,-0.16f);
-		glTexCoord2f(0.375f, 0.25f); glVertex3f( 0.2f,  0.0f,-0.16f);
-		glTexCoord2f(0.000f, 0.25f); glVertex3f(-0.2f,  0.0f, 0.00f);
-		glTexCoord2f(0.000f, 0.00f); glVertex3f(-0.2f,  0.3f, 0.00f);
-		// Outer side
-		glTexCoord2f(0.000f, 0.250f); glVertex3f( 0.2f,  0.3f, 0.16f);
-		glTexCoord2f(0.000f, 0.375f); glVertex3f( 0.2f,  0.0f, 0.16f);
-		glTexCoord2f(0.125f, 0.375f); glVertex3f( 0.2f,  0.0f,-0.16f);
-		glTexCoord2f(0.125f, 0.250f); glVertex3f( 0.2f,  0.3f,-0.16f);
-	glEnd();
-	glBegin(GL_TRIANGLES);
-		// Top side
-		glTexCoord2f(0.00f, 0.375f); glVertex3f(-0.2f,  0.3f, 0.00f);
-		glTexCoord2f(0.25f, 0.500f); glVertex3f( 0.2f,  0.3f, 0.16f);
-		glTexCoord2f(0.25f, 0.250f); glVertex3f( 0.2f,  0.3f,-0.16f);
-	glEnd();
+	Resources::inst().drawModel(MID_CAKE);
 	glPopMatrix();
 }
 

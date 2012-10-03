@@ -1,7 +1,6 @@
 #version 120
 
 varying vec3 vertex, light;
-varying mat3 tbnMatrix;
 
 void main() {
 	vertex = vec3(gl_ModelViewMatrix * gl_Vertex);
@@ -10,7 +9,7 @@ void main() {
 	vec3 t = normalize(gl_NormalMatrix * gl_MultiTexCoord1.xyz);
 	vec3 b = cross(n, t) * gl_MultiTexCoord1.w;
 	// Create matrix for change of basis
-	tbnMatrix = mat3(t, b, n);
+	mat3 tbnMatrix = mat3(t, b, n);
 	// Calculate vector from vertex to light position
 	light = normalize(gl_LightSource[0].position.xyz - vertex);
 	// Transform light vector to tangent space
