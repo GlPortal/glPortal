@@ -1,6 +1,6 @@
 #version 120
 
-varying vec3 vertex, light;
+varying vec3 light;
 
 uniform sampler2D texture, nmap;
 
@@ -12,6 +12,8 @@ void main() {
 
 	// Calculate diffuse term from dot product of normal and light vector
 	vec4 diffuse = max(dot(normal, lightN), 0.0) * (gl_LightSource[0].diffuse * gl_FrontMaterial.diffuse);
+	diffuse.a = 1.0;
+
 	// Calculate ambient term
 	vec4 ambient = gl_LightSource[0].ambient * gl_FrontMaterial.ambient;
 
