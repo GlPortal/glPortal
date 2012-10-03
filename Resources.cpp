@@ -27,9 +27,6 @@ void Resources::bindTexture(TEXTURE_ID id) {
 	} else if(id == TID_ACID) {
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, textures[TID_ACID_NMAP]);
-	} else if(id == TID_CAKE) {
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, textures[TID_CAKE_NMAP]);
 	}
 
 	glActiveTexture(GL_TEXTURE0);
@@ -129,6 +126,7 @@ void Resources::disableProgram() {
  * Data must be freed after use.
  *
  * @param filename Path to the shader to read
+ *
  * @return Pointer to array of chars containing shader
  */
 char* Resources::readShader(const char *filename) {
@@ -233,6 +231,33 @@ void Resources::compileModels() {
 			glTexCoord2f(0.207, 1); glVertex3f(-0.84,-1.35, 0.002);
 			glTexCoord2f(0.793, 1); glVertex3f( 0.84,-1.35, 0.002);
 			glTexCoord2f(0.793, 0); glVertex3f( 0.84, 1.35, 0.002);
+		glEnd();
+	glEndList();
+
+	// Compile cake model
+	glNewList(models[MID_CAKE], GL_COMPILE);
+		glBegin(GL_QUADS);
+			// Front side
+			glTexCoord2f(0.000f, 0.00f); glVertex3f(-0.2f,  0.3f, 0.00f);
+			glTexCoord2f(0.000f, 0.25f); glVertex3f(-0.2f,  0.0f, 0.00f);
+			glTexCoord2f(0.375f, 0.25f); glVertex3f( 0.2f,  0.0f, 0.16f);
+			glTexCoord2f(0.375f, 0.00f); glVertex3f( 0.2f,  0.3f, 0.16f);
+			// Back side
+			glTexCoord2f(0.375f, 0.00f); glVertex3f( 0.2f,  0.3f,-0.16f);
+			glTexCoord2f(0.375f, 0.25f); glVertex3f( 0.2f,  0.0f,-0.16f);
+			glTexCoord2f(0.000f, 0.25f); glVertex3f(-0.2f,  0.0f, 0.00f);
+			glTexCoord2f(0.000f, 0.00f); glVertex3f(-0.2f,  0.3f, 0.00f);
+			// Outer/right side
+			glTexCoord2f(0.000f, 0.250f); glVertex3f( 0.2f,  0.3f, 0.16f);
+			glTexCoord2f(0.000f, 0.375f); glVertex3f( 0.2f,  0.0f, 0.16f);
+			glTexCoord2f(0.125f, 0.375f); glVertex3f( 0.2f,  0.0f,-0.16f);
+			glTexCoord2f(0.125f, 0.250f); glVertex3f( 0.2f,  0.3f,-0.16f);
+		glEnd();
+		glBegin(GL_TRIANGLES);
+			// Top side
+			glTexCoord2f(0.00f, 0.375f); glVertex3f(-0.2f,  0.3f, 0.00f);
+			glTexCoord2f(0.25f, 0.500f); glVertex3f( 0.2f,  0.3f, 0.16f);
+			glTexCoord2f(0.25f, 0.250f); glVertex3f( 0.2f,  0.3f,-0.16f);
 		glEnd();
 	glEndList();
 }

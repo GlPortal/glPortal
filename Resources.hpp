@@ -4,30 +4,30 @@
 #include <GL/glut.h>
 
 #define NUM_SHADERS 2
-#define NUM_TEXTURES 13
-#define NUM_MODELS 2
+#define NUM_TEXTURES 12
+#define NUM_MODELS 3
 
 enum PROGRAM_ID { PID_PPL, PID_NMAP };
 
-static const char *vertex_shaders[2]   = {"data/shaders/ppl.vert", "data/shaders/nmap.vert"};
-static const char *fragment_shaders[2] = {"data/shaders/ppl.frag", "data/shaders/nmap.frag"};
+static const char *vertex_shaders[NUM_SHADERS]   = {"data/shaders/ppl.vert", "data/shaders/nmap.vert"};
+static const char *fragment_shaders[NUM_SHADERS] = {"data/shaders/ppl.frag", "data/shaders/nmap.frag"};
 
 enum TEXTURE_ID { TID_WALL, TID_WALL_NMAP, TID_TILES, TID_TILES_NMAP, TID_ACID, TID_ACID_NMAP,
-				  TID_CAKE, TID_CAKE_NMAP, TID_BLUEPORTAL, TID_ORANGEPORTAL,
+				  TID_CAKE, TID_BLUEPORTAL, TID_ORANGEPORTAL,
 				  TID_CROSSHAIR, TID_BALLS, TID_STRINGS, TID_NONE };
 
 static const char *texture_files[NUM_TEXTURES] = {
 	"data/wall.png", "data/wall_normalmap.png",
 	"data/tiles.png", "data/tiles_normalmap.png",
 	"data/acid.png", "data/acid_normalmap.png",
-	"data/cake.png", "data/cake_normalmap.png",
+	"data/cake.png",
 	"data/blueportal.png", "data/orangeportal.png",
 	"data/crosshair.png",
 	"data/balls.png",
 	"data/strings.png"
 };
 
-enum MODEL_ID { MID_PORTAL_STENCIL, MID_PORTAL_OUTLINE };
+enum MODEL_ID { MID_PORTAL_STENCIL, MID_PORTAL_OUTLINE, MID_CAKE };
 
 /**
  * Singleton class for loading and binding textures.
@@ -37,7 +37,7 @@ public:
 	/**
 	 * Returns reference to the singleton instance of Resources
 	 *
-	 * @return Instance of Resources
+	 * @return Instance of Resources object
 	 */
 	static Resources& inst() {
 		static Resources instance;

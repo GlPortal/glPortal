@@ -13,6 +13,7 @@
  * @param dir New direction
  * @param map The current map
  */
+#include <cstdio>
 void Portal::place(float x, float y, float z, PORTAL_DIR dir, Map& map) {
 	float nx, ny, nz; // New coordinates
 	nx = round(x);

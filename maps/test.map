@@ -1,7 +1,9 @@
 ! Start position
 s 2.5 1 5
 
+! CAKE
 c 17.5 6 5
+t 17 5 4.5 18 6 5.5
 
 ! Left and right ground
 t 0 0 0 5 -5 10
