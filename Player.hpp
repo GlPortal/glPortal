@@ -26,6 +26,7 @@ public:
 	float getY() { return y; } /**< Get the Y-coordinate of the Player */
 	float getZ() { return z; } /**< Get the Z-coordinate of the Player */
 	Portal *getPortals() { return portals; } /**< Gets the list of portals */
+	Shot *getShots() { return shots; }
 	PLAYER_STATE getState() { return state; }
 
 protected:

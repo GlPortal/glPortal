@@ -23,8 +23,10 @@
  */
 void update(int value) {
 	if(!paused) {
-		float mousedx = (float)(width/2-mousex);  // Mouse distance from center of screen
+		// Mouse distance from center of screen
+		float mousedx = (float)(width/2-mousex);
 		float mousedy = (float)(height/2-mousey);
+		// Warp pointer to center of screen
 		glutWarpPointer(width/2, height/2);
 
 		player.update(CONST_DT, keystates, mousedx, mousedy, map);
@@ -326,6 +328,8 @@ void setup(int *argc, char **argv) {
 	GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_DiffAndAmb);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_DiffAndAmb);
+	glLightfv(GL_LIGHT2, GL_DIFFUSE, light_DiffAndAmb);
 
 	// Set blending function for portals
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -337,7 +341,7 @@ void setup(int *argc, char **argv) {
 	Resources::inst().compileModels();
 
 	paused = false;
-	map.load("maps/test2.map");
+	map.load("maps/test3.map");
 	respawn();
 }
 /**
