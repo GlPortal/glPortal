@@ -5,7 +5,7 @@
 #include "Portal.hpp"
 #include "Shot.hpp"
 
-enum PLAYER_STATE { PS_ALIVE, PS_DYING };
+enum PLAYER_STATE { PS_ALIVE, PS_DYING, PS_WON };
 
 /**
  * Class for controlling the player and camera view

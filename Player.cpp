@@ -128,6 +128,11 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 			state = PS_DYING;
 		}
 
+		// Check if player has taken the cake
+		if(map.collidesWithCake(bbox) == true) {
+			state = PS_WON;
+		}
+
 		// Check if player has entered a portal
 		if(portalsActive()) {
 			for(int i = 0; i < 2; i++) {

@@ -31,7 +31,7 @@ void update(int value) {
 
 		player.update(CONST_DT, keystates, mousedx, mousedy, map);
 
-		if(player.getState() == PS_DYING) {
+		if(player.getState() != PS_ALIVE) {
 			fade += 0.4f*CONST_DT;
 		}
 	}
@@ -48,6 +48,14 @@ void update(int value) {
 void respawn() {
 	fade = 0.f;
 	player.create(map.getStartX(), map.getStartY(), map.getStartZ());
+}
+
+void nextLevel() {
+	current_level++;
+	char filename[] = "maps/testX.map";
+	filename[9] = '0'+current_level;
+	map.load(filename);
+	respawn();
 }
 
 /**
@@ -121,8 +129,8 @@ void drawOverlay() {
 				glTexCoord2f(1,0); glVertex2f(width/2+16, height/2-12);
 			glEnd();
 		}
-		// Fade screen if player is dying
-		else if(player.getState() == PS_DYING) {
+		// Fade screen if player has died or won
+		else if(player.getState() != PS_ALIVE) {
 			glColor4f(0.f, 0.f, 0.f, fade);
 			glDisable(GL_TEXTURE_2D);
 			glBegin(GL_QUADS);
@@ -132,15 +140,29 @@ void drawOverlay() {
 				glVertex2f(width,    0.f);
 			glEnd();
 			glEnable(GL_TEXTURE_2D);
-			// Draw "Press enter to respawn" message
 			glColor3f(1.f, 1.f, 1.f);
-			Resources::inst().bindTexture(TID_STRINGS);
-			glBegin(GL_QUADS);
-				glTexCoord2f(0, 0.000f); glVertex2f(width/2-256, height/2-32);
-				glTexCoord2f(0, 0.125f); glVertex2f(width/2-256, height/2+32);
-				glTexCoord2f(1, 0.125f); glVertex2f(width/2+256, height/2+32);
-				glTexCoord2f(1, 0.000f); glVertex2f(width/2+256, height/2-32);
-			glEnd();
+
+			// Draw "Press return to respawn" message if dead
+			if(player.getState() == PS_DYING) {
+				Resources::inst().bindTexture(TID_STRINGS);
+				glBegin(GL_QUADS);
+					glTexCoord2f(0, 0.000f); glVertex2f(width/2-256, height/2-32);
+					glTexCoord2f(0, 0.125f); glVertex2f(width/2-256, height/2+32);
+					glTexCoord2f(1, 0.125f); glVertex2f(width/2+256, height/2+32);
+					glTexCoord2f(1, 0.000f); glVertex2f(width/2+256, height/2-32);
+				glEnd();
+			}
+			else if(player.getState() == PS_WON) {
+				Resources::inst().bindTexture(TID_STRINGS);
+				glBegin(GL_QUADS);
+					glTexCoord2f(0, 0.25f); glVertex2f(width/2-256, height/2-64);
+					glTexCoord2f(0, 0.50f); glVertex2f(width/2-256, height/2+64);
+					glTexCoord2f(1, 0.50f); glVertex2f(width/2+256, height/2+64);
+					glTexCoord2f(1, 0.25f); glVertex2f(width/2+256, height/2-64);
+				glEnd();
+			}
+
+			// Draw "Press return to continue" message if won
 		}
 	}
 
@@ -245,8 +267,13 @@ void key_down(unsigned char key, int x, int y) {
 		paused = !paused;
 		glutWarpPointer(width/2, height/2);
 	}
-	else if(key == 13 && player.getState() == PS_DYING) {
-		respawn();
+	else if(key == 13) {
+		if(player.getState() == PS_DYING) {
+			respawn();
+		}
+		else if(player.getState() == PS_WON) {
+			nextLevel();
+		}
 	}
 }
 
@@ -328,8 +355,6 @@ void setup(int *argc, char **argv) {
 	GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_DiffAndAmb);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_DiffAndAmb);
-	glLightfv(GL_LIGHT2, GL_DIFFUSE, light_DiffAndAmb);
 
 	// Set blending function for portals
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -341,8 +366,8 @@ void setup(int *argc, char **argv) {
 	Resources::inst().compileModels();
 
 	paused = false;
-	map.load("maps/test3.map");
-	respawn();
+	current_level = 0;	
+	nextLevel();
 }
 /**
  * @}
