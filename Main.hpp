@@ -15,6 +15,7 @@
 
 void update(int);
 void respawn();
+void nextLevel();
 void draw();
 void drawOverlay();
 void drawPortals();
@@ -35,5 +36,6 @@ float fade;  		/**< Used for screen fading */
 
 Player player;
 Map map;
+int current_level;
 
 #endif

@@ -14,6 +14,10 @@ void Map::load(const char *filename) {
 	std::ifstream ifs(filename, std::ifstream::in);
 	std::string line, temp;
 
+	// Clear data
+	walls.clear();
+	acid.clear();
+
 	// Read map file line by line
 	while(ifs.good()) {
 		std::getline(ifs, line);
@@ -67,6 +71,8 @@ void Map::load(const char *filename) {
 						ss >> temp;
 						cakepos[i] = (float)atof(temp.c_str());
 					}
+					cakeBox.set(cakepos[0]-0.6f, cakepos[1]-0.6f, cakepos[2]-0.6f,
+							    cakepos[0]+0.6f, cakepos[1]+0.6f, cakepos[2]+0.6f);
 					break;
 			}
 		}
@@ -244,6 +250,17 @@ bool Map::collidesWithWall(Box &bbox) {
 		if(bbox.collide(*it)) return true;
 	}
 	return false;
+}
+
+/**
+ * Checks whether a bounding box collides with the cake.
+ *
+ * @param bbox Bounding box for collision
+ *
+ * @return True if the box collides
+ */
+bool Map::collidesWithCake(Box &bbox) {
+	return bbox.collide(cakeBox);
 }
 
 /**

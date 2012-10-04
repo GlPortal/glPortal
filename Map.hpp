@@ -19,6 +19,7 @@ public:
 	void drawFromPortal(Portal& portal);
 	bool collidesWithWall(Box &bbox);
 	bool collidesWithAcid(Box &bbox);
+	bool collidesWithCake(Box &bbox);
 	bool pointInWall(float x, float y, float z, Box *box);
 	float getStartX() { return startpos[0]; }
 	float getStartY() { return startpos[1]; }
@@ -33,6 +34,7 @@ protected:
 	GLfloat lightpos[4];	/**< Position of the position light in the map */
 	float startpos[3];		/**< Position where the player spawns in the map */
 	float cakepos[3];		/**< Position of the cake in the map */
+	Box cakeBox;			/**< Bounding box for collision with cake */
 };
 
 #endif
