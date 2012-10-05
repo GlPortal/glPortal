@@ -108,13 +108,8 @@ void drawPortals() {
 			glStencilMask(0x00);
 			glStencilFunc(GL_EQUAL, 1, 0xFF);
 
-			// Calculate distance from source portal to player
-			float dx = player.getX()-portals[src].x;
-			float dy = player.getY()-portals[src].y;
-			float dz = player.getZ()-portals[src].z;
 			// Move camera to portal view
-			glTranslatef(-dx,-dy,-dz);
-			glTranslatef(player.getX(), player.getY(), player.getZ());
+			glTranslatef(portals[src].x, portals[src].y, portals[src].z);
 			glRotatef(portals[src].getFromRotation(), 0,1,0);
 			glRotatef(portals[dst].getToRotation(),   0,1,0);
 			glTranslatef(-portals[dst].x, -portals[dst].y, -portals[dst].z);
