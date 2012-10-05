@@ -119,6 +119,8 @@ void Map::draw() {
 	// Draw cake
 	drawCake();
 
+	// Draw lamp
+	drawLamp();
 }
 
 /**
@@ -171,6 +173,9 @@ void Map::drawFromPortal(Portal& portal) {
 
 	// Draw cake
 	drawCake();
+
+	// Draw lamp
+	drawLamp();
 }
 
 /**
@@ -232,11 +237,31 @@ void Map::drawBox(Box &b) {
 	glTexCoord2f( dz,  dy); glVertex3f(b.x2, b.y1, b.z1);
 }
 
+/**
+ * Draws the cake model at cake position
+ */
 void Map::drawCake() {
 	glPushMatrix();
 	glTranslatef(cakepos[0], cakepos[1], cakepos[2]);
 	Resources::inst().bindTexture(TID_CAKE);
 	Resources::inst().drawModel(MID_CAKE);
+	glPopMatrix();
+}
+
+/**
+ * Draws the lamp model at light position
+ */
+void Map::drawLamp() {
+	glPushMatrix();
+	glTranslatef(lightpos[0], lightpos[1], lightpos[2]);
+	Box lightBox(-0.8f, 1.f, -0.2f, 0.8f, 0.95f, 0.2f);
+
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_QUADS);
+	drawBox(lightBox);
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+
 	glPopMatrix();
 }
 

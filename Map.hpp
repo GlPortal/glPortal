@@ -28,6 +28,7 @@ public:
 protected:
 	void drawBox(Box &b);
 	void drawCake();
+	void drawLamp();
 
 	std::vector<Box> walls;	/**< Vector of all walls in the map */
 	std::vector<Box> acid;	/**< Vector of all acid pools in the map */
