@@ -3,6 +3,20 @@
 #include <fstream>
 #include "stb_image.c"
 
+static const char *vertex_shaders[NUM_SHADERS]   = {"data/shaders/ppl.vert", "data/shaders/nmap.vert"};
+static const char *fragment_shaders[NUM_SHADERS] = {"data/shaders/ppl.frag", "data/shaders/nmap.frag"};
+
+static const char *texture_files[NUM_TEXTURES] = {
+	"data/wall.png", "data/wall_normalmap.png",
+	"data/tiles.png", "data/tiles_normalmap.png",
+	"data/acid.png", "data/acid_normalmap.png",
+	"data/cake.png",
+	"data/blueportal.png", "data/orangeportal.png",
+	"data/crosshair.png",
+	"data/balls.png",
+	"data/strings.png"
+};
+
 /**
  * Loads all textures from files.
  */
@@ -184,10 +198,18 @@ GLuint Resources::createTexture(const char *filename) {
 	return handle;
 }
 
+/**
+ * Draws a display list model
+ *
+ * @param mid MODEL_ID of the model to draw
+ */
 void Resources::drawModel(MODEL_ID mid) {
 	glCallList(models[mid]);
 }
 
+/**
+ * Compiles all display lists and populates the models array
+ */
 void Resources::compileModels() {
 	GLuint lists = glGenLists(NUM_MODELS);
 	for(int i = 0; i < NUM_MODELS; i++) {

@@ -169,6 +169,8 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 
 			Box sbox;
 			if(map.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
+				shots[i].update(-dt); // Reverse time to before collision
+				// Collision really should be interpolated instead
 				if(sbox.type == TID_WALL) {
 					portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z, map);
 				}
@@ -229,7 +231,7 @@ void Player::drawPortalStencils() {
 	portals[1].drawStencil();
 }
 
-/*
+/**
  * Draws colored outlines for both portals
  */
 void Player::drawPortalOutlines() {
