@@ -9,23 +9,9 @@
 
 enum PROGRAM_ID { PID_PPL, PID_NMAP };
 
-static const char *vertex_shaders[NUM_SHADERS]   = {"data/shaders/ppl.vert", "data/shaders/nmap.vert"};
-static const char *fragment_shaders[NUM_SHADERS] = {"data/shaders/ppl.frag", "data/shaders/nmap.frag"};
-
 enum TEXTURE_ID { TID_WALL, TID_WALL_NMAP, TID_TILES, TID_TILES_NMAP, TID_ACID, TID_ACID_NMAP,
 				  TID_CAKE, TID_BLUEPORTAL, TID_ORANGEPORTAL,
 				  TID_CROSSHAIR, TID_BALLS, TID_STRINGS, TID_NONE };
-
-static const char *texture_files[NUM_TEXTURES] = {
-	"data/wall.png", "data/wall_normalmap.png",
-	"data/tiles.png", "data/tiles_normalmap.png",
-	"data/acid.png", "data/acid_normalmap.png",
-	"data/cake.png",
-	"data/blueportal.png", "data/orangeportal.png",
-	"data/crosshair.png",
-	"data/balls.png",
-	"data/strings.png"
-};
 
 enum MODEL_ID { MID_PORTAL_STENCIL, MID_PORTAL_OUTLINE, MID_CAKE };
 

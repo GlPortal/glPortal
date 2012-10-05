@@ -88,15 +88,16 @@ void Map::draw() {
 	// Update light position
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
+	// Enable normal mapping
+	Resources::inst().enableProgram(PID_NMAP);
+
 	// Draw walls
 	TEXTURE_ID current_type = TID_NONE;
 	std::vector<Box>::iterator it;
-
-	Resources::inst().enableProgram(PID_NMAP);
 	glBegin(GL_QUADS);
 	for(it = walls.begin(); it < walls.end(); it++) {
 		if(it->type != current_type) {
-			glEnd();
+			glEnd(); // Batches boxes of same material
 			current_type = it->type;
 			Resources::inst().bindTexture(it->type);
 			glBegin(GL_QUADS);
@@ -128,11 +129,13 @@ void Map::draw() {
 void Map::drawFromPortal(Portal& portal) {
 	// Update light position
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+
+	// Enable normal mapping
+	Resources::inst().enableProgram(PID_NMAP);
+
 	// Draw walls
 	std::vector<Box>::iterator it;
 	TEXTURE_ID current_type = TID_NONE;
-
-	Resources::inst().enableProgram(PID_NMAP);
 	glBegin(GL_QUADS);
 	for(it = walls.begin(); it < walls.end(); it++) {
 		// Horribly slow bounds check, but smaller code

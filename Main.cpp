@@ -50,10 +50,13 @@ void respawn() {
 	player.create(map.getStartX(), map.getStartY(), map.getStartZ());
 }
 
+/**
+ * Loads the next level and respawns the player
+ */
 void nextLevel() {
 	current_level++;
 	char filename[] = "maps/testX.map";
-	filename[9] = '0'+current_level;
+	filename[9] = '0'+current_level; // Hackish but avoids using strings
 	map.load(filename);
 	respawn();
 }
