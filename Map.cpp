@@ -72,7 +72,7 @@ void Map::load(const char *filename) {
 						cakepos[i] = (float)atof(temp.c_str());
 					}
 					cakeBox.set(cakepos[0]-0.6f, cakepos[1]-0.6f, cakepos[2]-0.6f,
-							    cakepos[0]+0.6f, cakepos[1]+0.6f, cakepos[2]+0.6f);
+							    cakepos[0]+0.6f, cakepos[1]+0.2f, cakepos[2]+0.6f);
 					break;
 			}
 		}

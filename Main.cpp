@@ -81,6 +81,58 @@ void draw() {
 }
 
 /**
+ * Draws the inside of both portals as well as their oulines and stencils.
+ */
+void drawPortals() {
+	if(player.portalsActive()) {
+		Portal *portals = player.getPortals();
+		glEnable(GL_STENCIL_TEST);
+		for(int i = 0; i < 2; i++) {
+			int src = i;		// Source portal index
+			int dst = (i+1)%2;  // Destination portal index
+
+			glPushMatrix();
+			// Always write to stencil buffer
+			glStencilFunc(GL_NEVER, 1, 0xFF);
+			glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
+			glStencilMask(0xFF);
+			glClear(GL_STENCIL_BUFFER_BIT);
+
+			portals[src].drawStencil();
+
+			glClear(GL_DEPTH_BUFFER_BIT);
+			// Only pass stencil test if equal to 1
+			glStencilMask(0x00);
+			glStencilFunc(GL_EQUAL, 1, 0xFF);
+
+			// Calculate distance from source portal to player
+			float dx = player.getX()-portals[src].x;
+			float dy = player.getY()-portals[src].y;
+			float dz = player.getZ()-portals[src].z;
+			// Move camera to portal view
+			glTranslatef(-dx,-dy,-dz);
+			glTranslatef(player.getX(), player.getY(), player.getZ());
+			glRotatef(portals[src].getFromRotation(), 0,1,0);
+			glRotatef(portals[dst].getToRotation(),   0,1,0);
+			glTranslatef(-portals[dst].x, -portals[dst].y, -portals[dst].z);
+
+			// Draw scene from portal view
+			map.drawFromPortal(portals[dst]);
+			player.drawPortalOutlines();
+
+			glPopMatrix();
+		}
+		glDisable(GL_STENCIL_TEST);
+
+		// Draw portal stencils so portals wont be drawn over
+		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+		glClear(GL_DEPTH_BUFFER_BIT);
+		player.drawPortalStencils();
+		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	}
+}
+
+/**
  * Draws all 2D overlay related.
  * Should be called after drawing all 3D.
  */
@@ -152,6 +204,7 @@ void drawOverlay() {
 					glTexCoord2f(1, 0.000f); glVertex2f(width/2+256, height/2-32);
 				glEnd();
 			}
+			// Draw "Press return to continue" message if won
 			else if(player.getState() == PS_WON) {
 				Resources::inst().bindTexture(TID_STRINGS);
 				glBegin(GL_QUADS);
@@ -161,8 +214,6 @@ void drawOverlay() {
 					glTexCoord2f(1, 0.25f); glVertex2f(width/2+256, height/2-64);
 				glEnd();
 			}
-
-			// Draw "Press return to continue" message if won
 		}
 	}
 
@@ -171,58 +222,6 @@ void drawOverlay() {
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
-}
-
-/**
- * Draws the inside of both portals as well as their oulines and stencils.
- */
-void drawPortals() {
-	if(player.portalsActive()) {
-		Portal *portals = player.getPortals();
-		glEnable(GL_STENCIL_TEST);
-		for(int i = 0; i < 2; i++) {
-			int src = i;		// Source portal index
-			int dst = (i+1)%2;  // Destination portal index
-
-			glPushMatrix();
-			// Always write to stencil buffer
-			glStencilFunc(GL_NEVER, 1, 0xFF);
-			glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
-			glStencilMask(0xFF);
-			glClear(GL_STENCIL_BUFFER_BIT);
-
-			portals[src].drawStencil();
-
-			glClear(GL_DEPTH_BUFFER_BIT);
-			// Only pass stencil test if equal to 1
-			glStencilMask(0x00);
-			glStencilFunc(GL_EQUAL, 1, 0xFF);
-
-			// Calculate distance from source portal to player
-			float dx = player.getX()-portals[src].x;
-			float dy = player.getY()-portals[src].y;
-			float dz = player.getZ()-portals[src].z;
-			// Move camera to portal view
-			glTranslatef(-dx,-dy,-dz);
-			glTranslatef(player.getX(), player.getY(), player.getZ());
-			glRotatef(portals[src].getFromRotation(), 0,1,0);
-			glRotatef(portals[dst].getToRotation(),   0,1,0);
-			glTranslatef(-portals[dst].x, -portals[dst].y, -portals[dst].z);
-
-			// Draw scene from portal view
-			map.drawFromPortal(portals[dst]);
-			player.drawPortalOutlines();
-
-			glPopMatrix();
-		}
-		glDisable(GL_STENCIL_TEST);
-
-		// Draw portal stencils so portals wont be drawn over
-		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-		glClear(GL_DEPTH_BUFFER_BIT);
-		player.drawPortalStencils();
-		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	}
 }
 
 /**
