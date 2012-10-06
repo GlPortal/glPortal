@@ -10,11 +10,11 @@ void main() {
 	// Normalize light vector after interpolation
 	vec3 lightN = normalize(light);
 
-	// Calculate diffuse term from dot product of normal and light vector
-	vec4 diffuse = max(dot(normal, lightN), 0.0) * (gl_LightSource[0].diffuse * gl_FrontMaterial.diffuse);
-
 	// Calculate ambient term
 	vec4 ambient = gl_LightSource[0].ambient * gl_FrontMaterial.ambient;
+
+	// Calculate diffuse term from dot product of normal and light vector
+	vec4 diffuse = max(dot(normal, lightN), 0.0) * (gl_LightSource[0].diffuse * gl_FrontMaterial.diffuse);
 
 	// Added texture color to pixel
 	gl_FragColor = (diffuse + ambient) * texture2D(texture, gl_TexCoord[0].st);

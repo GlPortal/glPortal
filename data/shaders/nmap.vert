@@ -10,13 +10,15 @@ void main() {
 	vec3 b = cross(n, t) * gl_MultiTexCoord1.w;
 
 	// Create matrix for change of basis
-	mat3 tbnMatrix = mat3(t, b, n);
+	mat3 tbnMatrix = mat3(t.x, b.x, n.x,
+						  t.y, b.y, n.y,
+						  t.z, b.z, n.z);
 
 	// Calculate vector from vertex to light position
 	light = normalize(gl_LightSource[0].position.xyz - vertex);
 
 	// Transform light vector to tangent space
-	light = light * tbnMatrix; // Equivalent to transpose(tbnMatrix) * light
+	light = tbnMatrix * light;
 
 	gl_TexCoord[0] = gl_MultiTexCoord0;
 	gl_Position = ftransform();

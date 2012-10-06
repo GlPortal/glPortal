@@ -8,6 +8,7 @@ void main() {
 	// Calculate vector from vertex to light position
 	light = normalize(gl_LightSource[0].position.xyz - vertex);
 
+	// Transform normal
 	normal = gl_NormalMatrix * gl_Normal;
 
 	gl_TexCoord[0] = gl_MultiTexCoord0;
