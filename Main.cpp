@@ -264,13 +264,17 @@ void key_down(unsigned char key, int x, int y) {
 		paused = !paused;
 		glutWarpPointer(width/2, height/2);
 	}
-	else if(key == 13) {
+	else if(key == 13) { // Return key
 		if(player.getState() == PS_DYING) {
 			respawn();
 		}
 		else if(player.getState() == PS_WON) {
 			nextLevel();
 		}
+	}
+	else if(key >= '0' && key <= '9') {
+		current_level = key - '0' - 1;
+		nextLevel();
 	}
 }
 
