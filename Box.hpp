@@ -48,7 +48,7 @@ public:
 	 * @param b The Box to collide with
 	 * @return True if the boxes collide
 	 */
-	bool collide(Box &b) {
+	bool collide(const Box &b) {
 		if(b.x1 > x2 || b.x2 < x1 ||b.y1 > y2 || b.y2 < y1 ||b.z1 > z2 || b.z2 < z1)
 			return false;
 		else

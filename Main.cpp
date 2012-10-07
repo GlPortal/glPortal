@@ -1,9 +1,6 @@
 /**
  * \mainpage glPortal
  * \author Simon Jonas Larsen - slars10
- *
- * \par Class diagram:
- * \image html classdiagram.png
  */
 
 #include "Main.hpp"
@@ -24,8 +21,8 @@
 void update(int value) {
 	if(!paused) {
 		// Mouse distance from center of screen
-		float mousedx = (float)(width/2-mousex);
-		float mousedy = (float)(height/2-mousey);
+		float mousedx = static_cast<float>(width/2-mousex);
+		float mousedy = static_cast<float>(height/2-mousey);
 		// Warp pointer to center of screen
 		glutWarpPointer(width/2, height/2);
 
@@ -55,8 +52,8 @@ void respawn() {
  */
 void nextLevel() {
 	current_level++;
-	char filename[] = "maps/testX.map";
-	filename[9] = '0'+current_level; // Hackish but avoids using strings
+	char filename[] = "maps/X.map";
+	filename[5] = '0'+current_level; // Hackish but avoids using strings
 	map.load(filename);
 	respawn();
 }
@@ -65,7 +62,10 @@ void nextLevel() {
  * Redraws the screen. Called by glutDisplayFunc().
  */
 void draw() {
+	// Clear depth buffer but not color buffer.
+	// Every pixel is redraw every frame anyway.
 	glClear(GL_DEPTH_BUFFER_BIT);
+	// Load identity matrix
 	glLoadIdentity();
 
 	// Draw scene
@@ -166,8 +166,8 @@ void drawOverlay() {
 			glTexCoord2f(0.25f, 0.250f); glVertex2f(width/2+64, height/2+32);
 			glTexCoord2f(0.25f, 0.125f); glVertex2f(width/2+64, height/2-32);
 		glEnd();
-	}
-	else {
+	// If game is not paused
+	} else {
 		// Draw crosshair if player is alive
 		if(player.getState() == PS_ALIVE) {
 			Resources::inst().bindTexture(TID_CROSSHAIR);
@@ -276,7 +276,7 @@ void key_down(unsigned char key, int x, int y) {
 		nmap_enabled = !nmap_enabled; // Toggle normal mapping
 	}
 	else if(key >= '0' && key <= '9') {
-		current_level = key - '0' - 1;
+		current_level = key - '0' - 1; // Load levelX
 		nextLevel();
 	}
 }
@@ -366,8 +366,6 @@ void setup(int *argc, char **argv) {
 	// Enable back face culling
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	// Enable lighting
-	glEnable(GL_LIGHT0);
 	// Set ambient and diffuse lighting
 	GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
