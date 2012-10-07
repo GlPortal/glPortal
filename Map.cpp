@@ -4,6 +4,7 @@
 #include <string>
 #include <cstdlib>
 #include "Resources.hpp"
+#include "Portal.hpp"
 
 /**
  * Loads map data from a .map file
@@ -30,7 +31,7 @@ void Map::load(const char *filename) {
 				case 'w':
 					for(int i = 0; i < 6; i++) {
 						ss >> temp;
-						values[i] = (float)atof(temp.c_str());
+						values[i] = static_cast<float>(atof(temp.c_str()));
 					}
 					walls.push_back(Box(values, TID_WALL));
 					break;
@@ -38,7 +39,7 @@ void Map::load(const char *filename) {
 				case 't':
 					for(int i = 0; i < 6; i++) {
 						ss >> temp;
-						values[i] = (float)atof(temp.c_str());
+						values[i] = static_cast<float>(atof(temp.c_str()));
 					}
 					walls.push_back(Box(values, TID_TILES));
 					break;
@@ -46,7 +47,7 @@ void Map::load(const char *filename) {
 				case 'a':
 					for(int i = 0; i < 6; i++) {
 						ss >> temp;
-						values[i] = (float)atof(temp.c_str());
+						values[i] = static_cast<float>(atof(temp.c_str()));
 					}
 					acid.push_back(Box(values, TID_ACID));
 					break;
@@ -54,7 +55,7 @@ void Map::load(const char *filename) {
 				case 'l':
 					for(int i = 0; i < 3; i++) {
 						ss >> temp;
-						lightpos[i] = (GLfloat)atof(temp.c_str());
+						lightpos[i] = static_cast<GLfloat>(atof(temp.c_str()));
 					}
 					lightpos[3] = 1.f; // Set as positioned light
 					break;
@@ -62,14 +63,14 @@ void Map::load(const char *filename) {
 				case 's':
 					for(int i = 0; i < 3; i++) {
 						ss >> temp;
-						startpos[i] = (float)atof(temp.c_str());
+						startpos[i] = static_cast<float>(atof(temp.c_str()));
 					}
 					break;
 				// Cake/goal position
 				case 'c':
 					for(int i = 0; i < 3; i++) {
 						ss >> temp;
-						cakepos[i] = (float)atof(temp.c_str());
+						cakepos[i] = static_cast<float>(atof(temp.c_str()));
 					}
 					cakeBox.set(cakepos[0]-0.6f, cakepos[1]-0.6f, cakepos[2]-0.6f,
 							    cakepos[0]+0.6f, cakepos[1]+0.2f, cakepos[2]+0.6f);
@@ -131,7 +132,7 @@ void Map::draw(bool nmap) {
  * @param portal Portal currently viewing through
  * @param nmap True if normal mapping is enabled
  */
-void Map::drawFromPortal(Portal& portal, bool nmap) {
+void Map::drawFromPortal(const Portal& portal, bool nmap) {
 	// Update light position
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 

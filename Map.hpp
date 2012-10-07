@@ -5,7 +5,6 @@
 #include <GL/glut.h>
 #include "Box.hpp"
 class Portal; // Forward declaration
-#include "Portal.hpp"
 
 /**
  * Class describing a single map.
@@ -16,7 +15,7 @@ class Map {
 public:
 	void load(const char *filename);
 	void draw(bool nmap);
-	void drawFromPortal(Portal& portal, bool nmap);
+	void drawFromPortal(const Portal& portal, bool nmap);
 	bool collidesWithWall(Box &bbox);
 	bool collidesWithAcid(Box &bbox);
 	bool collidesWithCake(Box &bbox);
