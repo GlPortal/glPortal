@@ -71,7 +71,7 @@ void draw() {
 	// Draw scene
 	player.setView();
 	drawPortals();
-	map.draw();
+	map.draw(nmap_enabled);
 
 	player.drawPortalOutlines();
 	player.drawShots();
@@ -115,7 +115,7 @@ void drawPortals() {
 			glTranslatef(-portals[dst].x, -portals[dst].y, -portals[dst].z);
 
 			// Draw scene from portal view
-			map.drawFromPortal(portals[dst]);
+			map.drawFromPortal(portals[dst], nmap_enabled);
 			player.drawPortalOutlines();
 
 			glPopMatrix();
@@ -272,6 +272,9 @@ void key_down(unsigned char key, int x, int y) {
 			nextLevel();
 		}
 	}
+	else if(key == 'b') {
+		nmap_enabled = !nmap_enabled; // Toggle normal mapping
+	}
 	else if(key >= '0' && key <= '9') {
 		current_level = key - '0' - 1;
 		nextLevel();
@@ -367,6 +370,7 @@ void setup(int *argc, char **argv) {
 	Resources::inst().compileModels();
 
 	paused = false;
+	nmap_enabled = true;
 	current_level = 0;	
 	nextLevel();
 }

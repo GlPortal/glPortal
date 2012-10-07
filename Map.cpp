@@ -83,13 +83,15 @@ void Map::load(const char *filename) {
 
 /**
  * Updates light position and draws all maps and acid in level
+ *
+ * @param nmap True if normal mapping is enabled
  */
-void Map::draw() {
+void Map::draw(bool nmap) {
 	// Update light position
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
 	// Enable normal mapping
-	Resources::inst().enableProgram(PID_NMAP);
+	Resources::inst().enableProgram(nmap ? PID_NMAP : PID_PPL);
 
 	// Draw walls
 	TEXTURE_ID current_type = TID_NONE;
@@ -127,13 +129,14 @@ void Map::draw() {
  * Draws only visible portion of map from a given portal
  *
  * @param portal Portal currently viewing through
+ * @param nmap True if normal mapping is enabled
  */
-void Map::drawFromPortal(Portal& portal) {
+void Map::drawFromPortal(Portal& portal, bool nmap) {
 	// Update light position
 	glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
 	// Enable normal mapping
-	Resources::inst().enableProgram(PID_NMAP);
+	Resources::inst().enableProgram(nmap ? PID_NMAP : PID_PPL);
 
 	// Draw walls
 	std::vector<Box>::iterator it;

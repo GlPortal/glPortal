@@ -15,8 +15,8 @@ class Portal; // Forward declaration
 class Map {
 public:
 	void load(const char *filename);
-	void draw();
-	void drawFromPortal(Portal& portal);
+	void draw(bool nmap);
+	void drawFromPortal(Portal& portal, bool nmap);
 	bool collidesWithWall(Box &bbox);
 	bool collidesWithAcid(Box &bbox);
 	bool collidesWithCake(Box &bbox);
