@@ -32,6 +32,7 @@ int width, height;	/**< Screen width and height */
 int mousex, mousey; /**< Current mouse position */
 bool keystates[256];/**< State of all ASCII keyboard keys */
 bool paused;		/**< True if the game is currently paused */
+bool nmap_enabled;  /**< True if normal mapping is enabled */
 float fade;  		/**< Used for screen fading */
 
 Player player;
