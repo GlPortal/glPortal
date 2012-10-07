@@ -13,20 +13,23 @@
 #include "Player.hpp"
 #include "Map.hpp"
 
+// Main functions
 void update(int);
 void respawn();
 void nextLevel();
 void draw();
 void drawOverlay();
 void drawPortals();
-void resize(int, int);
 GLuint createTexture(const char *filename);
 void loadTextures();
 void setup(int *, char **);
+// Callback functions
 void mouse_moved(int, int);
 void mouse_pressed(int, int, int, int);
 void key_down(unsigned char, int, int);
 void key_up(unsigned char, int , int);
+void resize(int, int);
+void window_status(int state);
 
 int width, height;	/**< Screen width and height */
 int mousex, mousey; /**< Current mouse position */

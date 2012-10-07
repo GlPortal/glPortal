@@ -315,6 +315,18 @@ void resize(int w, int h) {
 }
 
 /**
+ * Called when the window changes status.
+ * Used for pausing game when losing focus.
+ *
+ * @param state Window's new state.
+ */
+void window_status(int state) {
+	if(state != GLUT_VISIBLE) {
+		paused = true;
+	}
+}
+
+/**
  * Sets up the OpenGL context.
  * Loads texture, sets up callbacks and enables lighting, blending etc.
  *
@@ -343,7 +355,8 @@ void setup(int *argc, char **argv) {
 	glutKeyboardUpFunc(key_up);
 	glutPassiveMotionFunc(mouse_moved);
 	glutMouseFunc(mouse_pressed);
-	glutWarpPointer(width/2, height/2);
+	glutWindowStatusFunc(window_status);
+	glutWarpPointer(width/2, height/2); // Center pointer
 
 	// Enable textures
 	glEnable(GL_TEXTURE_2D);
