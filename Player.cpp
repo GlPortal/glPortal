@@ -5,7 +5,7 @@
 
 #define RADDEG 57.29577951308232088 // 180/PI
 #define DEGRAD 0.017453292519943296 // PI/180
-#define PLAYER_MOVESPEED 6.0
+#define PLAYER_MOVESPEED 330
 #define GRAVITY 16.0
 #define MAXSPEED 10.0
 #define JUMPPOWER 7.0
@@ -66,23 +66,23 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map
 
 		// Move forward
 		if(keystates['w']) {
-			zspeed -= cos(yrot)*PLAYER_MOVESPEED;
-			xspeed -= sin(yrot)*PLAYER_MOVESPEED;
+			zspeed -= cos(yrot)*PLAYER_MOVESPEED*dt;
+			xspeed -= sin(yrot)*PLAYER_MOVESPEED*dt;
 		}
 		// Move backward
 		if(keystates['s']) {
-			zspeed += cos(yrot)*PLAYER_MOVESPEED;
-			xspeed += sin(yrot)*PLAYER_MOVESPEED;
+			zspeed += cos(yrot)*PLAYER_MOVESPEED*dt;
+			xspeed += sin(yrot)*PLAYER_MOVESPEED*dt;
 		}
 		// Strafe left
 		if(keystates['a']) {
-			xspeed -= cos(yrot)*PLAYER_MOVESPEED;
-			zspeed += sin(yrot)*PLAYER_MOVESPEED;
+			xspeed -= cos(yrot)*PLAYER_MOVESPEED*dt;
+			zspeed += sin(yrot)*PLAYER_MOVESPEED*dt;
 		}
 		// Strafe right
 		if(keystates['d']) {
-			xspeed += cos(yrot)*PLAYER_MOVESPEED;
-			zspeed -= sin(yrot)*PLAYER_MOVESPEED;
+			xspeed += cos(yrot)*PLAYER_MOVESPEED*dt;
+			zspeed -= sin(yrot)*PLAYER_MOVESPEED*dt;
 		}
 		// Jump if space is pressed and player is standing on ground
 		if(keystates[' '] && onGround) {
