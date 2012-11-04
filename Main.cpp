@@ -25,9 +25,9 @@ void update(int value) {
 		float mousedy = static_cast<float>(height/2-mousey);
 		// Warp pointer to center of screen
 		glutWarpPointer(width/2, height/2);
-
+		// Update player
 		player.update(CONST_DT, keystates, mousedx, mousedy, map);
-
+		// Fade screen if dead/has won
 		if(player.getState() != PS_ALIVE) {
 			fade += 0.4f*CONST_DT;
 		}
