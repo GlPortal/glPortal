@@ -1,7 +1,3 @@
 * About
 Original Software 2012 by Simon Larsen 
-* Tasks
-** TODO Create folder structure
-** TODO Refactor code
-*** TODO Player
-- [ ] Get move and collision detection out of update method.
+
