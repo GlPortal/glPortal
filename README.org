@@ -1,3 +1,6 @@
 * About
 Original Software 2012 by Simon Larsen 
 
+* Compile the source
+- cmake src
+- make
