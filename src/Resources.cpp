@@ -216,6 +216,11 @@ void Resources::compileModels() {
     models[i] = lists+i;
   }
 
+  compilePortalModel();
+  compileCakeModel();
+}
+
+void Resources::compilePortalModel() {
   // Compile portal stencil model
   glNewList(models[MID_PORTAL_STENCIL], GL_COMPILE);
   glBegin(GL_TRIANGLE_FAN);
@@ -255,7 +260,9 @@ void Resources::compileModels() {
   glTexCoord2f(0.793, 0); glVertex3f( 0.84, 1.35, 0.002);
   glEnd();
   glEndList();
+}
 
+void Resources::compileCakeModel() {
   // Compile cake model
   glNewList(models[MID_CAKE], GL_COMPILE);
   glBegin(GL_QUADS);
