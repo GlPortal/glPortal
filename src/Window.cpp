@@ -17,23 +17,14 @@ void Window::setup(int *argc, char **argv) {
 
 }
 
-/**
- * Called when the window is resized.
- * Updates the OpenGL viewport and projection matrix.
- *
- * @param w New window width
- * @param h New window height
- */
-void Window::setSize(int w, int h) {
-  // Setup viewport
-  glViewport(0, 0, (GLsizei)w, (GLsizei)h);
-  // Setup projection matrix
+void Window::setSize(int width, int height) {
+  glViewport(0, 0, (GLsizei)width, (GLsizei)height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(60.0, (GLdouble)w/(GLdouble)h, 0.1f, 50.f);
+  gluPerspective(60.0, (GLdouble)width/(GLdouble)height, 0.1f, 50.f);
 
-  this->width = w;
-  this->height = h;
+  this->width = width;
+  this->height = height;
 
   glMatrixMode(GL_MODELVIEW);
 }
