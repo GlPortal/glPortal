@@ -1,22 +1,16 @@
-/**
- * \mainpage glPortal
- * \author Simon Jonas Larsen - slars10
- */
-
 #include "Main.hpp"
 #include "Box.hpp"
 #include "Resources.hpp"
 
-/**
- * \addtogroup Main
- * @{
- * Functions for setting up OpenGL context and window,
- * handling input and updating/drawing entities.
- */
+int main(int argc, char **argv) {
+  setup(&argc, argv);
+  glutMainLoop();
+
+  return EXIT_SUCCESS;
+}
 
 /**
  * Updates all game logic.
- * @param value Value passed from glutTimerFunc. Not used.
  */
 void update(int value) {
   if(!paused) {
@@ -25,10 +19,10 @@ void update(int value) {
     float mouseDistanceFromCenterX = static_cast<float>(centerHorizontal-mousex);
     float mouseDistanceFromCenterY = static_cast<float>(centerVertical-mousey);
     glutWarpPointer(centerHorizontal, centerVertical);
-    player.update(CONST_DT, keystates, mouseDistanceFromCenterX, mouseDistanceFromCenterY, map);
+    player.update(FRAMETIME_SECONDS, keystates, mouseDistanceFromCenterX, mouseDistanceFromCenterY, map);
     // Fade screen if dead/has won
     if(player.getState() != PS_ALIVE) {
-      fade += 0.4f*CONST_DT;
+      fade += 0.4f*FRAMETIME_SECONDS;
     }
   }
 
@@ -384,13 +378,4 @@ void setup(int *argc, char **argv) {
   current_level = 0;	
   nextLevel();
 }
-/**
- * @}
- */
 
-int main(int argc, char **argv) {
-  setup(&argc, argv);
-  glutMainLoop();
-
-  return EXIT_SUCCESS;
-}
