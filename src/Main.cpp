@@ -20,13 +20,12 @@
  */
 void update(int value) {
   if(!paused) {
-    // Mouse distance from center of screen
-    float mousedx = static_cast<float>(width/2-mousex);
-    float mousedy = static_cast<float>(height/2-mousey);
-    // Warp pointer to center of screen
-    glutWarpPointer(width/2, height/2);
-    // Update player
-    player.update(CONST_DT, keystates, mousedx, mousedy, map);
+    int centerHorizontal = width/2;
+    int centerVertical   = height/2;
+    float mouseDistanceFromCenterX = static_cast<float>(centerHorizontal-mousex);
+    float mouseDistanceFromCenterY = static_cast<float>(centerVertical-mousey);
+    glutWarpPointer(centerHorizontal, centerVertical);
+    player.update(CONST_DT, keystates, mouseDistanceFromCenterX, mouseDistanceFromCenterY, map);
     // Fade screen if dead/has won
     if(player.getState() != PS_ALIVE) {
       fade += 0.4f*CONST_DT;
