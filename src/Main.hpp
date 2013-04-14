@@ -4,14 +4,14 @@
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 600
 #define FRAMETIME 17 // Delay between updates (FPS = 1/FRAMETIME)
-#define CONST_DT 0.017f // FRAMETIME in seconds. Used for updating game logic
-#define RADDEG 57.29577951308232088 // 180/PI
+#define FRAMETIME_SECONDS 0.017f // FRAMETIME in seconds. Used for updating game logic
 
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <GL/glext.h>
 #include "Player.hpp"
 #include "Map.hpp"
+#include "Window.hpp"
 
 // Main functions
 void update(int);
@@ -40,6 +40,7 @@ float fade;  		/**< Used for screen fading */
 
 Player player;
 Map map;
+Window window;
 int current_level;
 
 #endif
