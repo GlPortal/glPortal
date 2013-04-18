@@ -12,6 +12,7 @@
 #include <GL/glext.h>
 #include "Player.hpp"
 #include "Map.hpp"
+#include "Game.hpp"
 
 // Main functions
 void update(int);
@@ -31,15 +32,16 @@ void key_up(unsigned char, int , int);
 void resize(int, int);
 void window_status(int state);
 
-int width, height;	/**< Screen width and height */
-int mousex, mousey; /**< Current mouse position */
-bool keystates[256];/**< State of all ASCII keyboard keys */
-bool paused;		/**< True if the game is currently paused */
-bool nmap_enabled;  /**< True if normal mapping is enabled */
-float fade;  		/**< Used for screen fading */
+int width, height;	
+int mousex, mousey; 
+bool keystates[256];
+bool paused;	
+bool nmap_enabled;
+float fade;  	
 
 Player player;
 Map map;
+Game game;
 int current_level;
 
 #endif

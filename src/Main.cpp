@@ -31,17 +31,11 @@ void update(int value) {
   glutTimerFunc(FRAMETIME, update, 1);
 }
 
-/**
- * Respawns the player after dying.
- */
 void respawn() {
   fade = 0.f;
   player.create(map.getStartX(), map.getStartY(), map.getStartZ());
 }
 
-/**
- * Loads the next level and respawns the player
- */
 void nextLevel() {
   current_level++;
   char filename[] = "maps/X.map";
@@ -50,24 +44,23 @@ void nextLevel() {
   respawn();
 }
 
-/**
- * Redraws the screen. Called by glutDisplayFunc().
- */
 void draw() {
+  game.setPlayerMap(player, map);
+  game.draw();
   // Clear depth buffer but not color buffer.
   // Every pixel is redraw every frame anyway.
-  glClear(GL_DEPTH_BUFFER_BIT);
+  //glClear(GL_DEPTH_BUFFER_BIT);
   // Load identity matrix
-  glLoadIdentity();
+  //glLoadIdentity();
 
   // Draw scene
-  player.setView();
+  /*  player.setView();
   drawPortals();
   map.draw(nmap_enabled);
 
   player.drawPortalOutlines();
   player.drawShots();
-
+  */
   // Draw 2D overlay
   drawOverlay();
 
