@@ -47,20 +47,7 @@ void nextLevel() {
 void draw() {
   game.setPlayerMap(player, map);
   game.draw();
-  // Clear depth buffer but not color buffer.
-  // Every pixel is redraw every frame anyway.
-  //glClear(GL_DEPTH_BUFFER_BIT);
-  // Load identity matrix
-  //glLoadIdentity();
 
-  // Draw scene
-  /*  player.setView();
-  drawPortals();
-  map.draw(nmap_enabled);
-
-  player.drawPortalOutlines();
-  player.drawShots();
-  */
   // Draw 2D overlay
   drawOverlay();
 
