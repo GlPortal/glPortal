@@ -13,6 +13,7 @@ void Window::setup(int *argc, char **argv) {
   glutCreateWindow("glPortal");
   glutSetCursor(GLUT_CURSOR_NONE);
   setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+  glutFullScreen();
   glewInit();
 
 }
@@ -25,6 +26,7 @@ void Window::setSize(int width, int height) {
 
   this->width = width;
   this->height = height;
+
 
   glMatrixMode(GL_MODELVIEW);
 }
