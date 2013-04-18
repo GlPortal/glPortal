@@ -4,7 +4,7 @@
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 600
 #define FRAMETIME 17 // Delay between updates (FPS = 1/FRAMETIME)
-#define CONST_DT 0.017f // FRAMETIME in seconds. Used for updating game logic
+#define FRAMETIME_SECONDS 0.017f // FRAMETIME in seconds. Used for updating game logic
 #define RADDEG 57.29577951308232088 // 180/PI
 
 #include <GL/glew.h>
