@@ -1,8 +1,8 @@
 #ifndef __MAIN_HPP
 #define __MAIN_HPP
 
-#define DEFAULT_WIDTH 800
-#define DEFAULT_HEIGHT 600
+#define DEFAULT_WIDTH 1680
+#define DEFAULT_HEIGHT 1050
 #define FRAMETIME 17 // Delay between updates (FPS = 1/FRAMETIME)
 #define FRAMETIME_SECONDS 0.017f // FRAMETIME in seconds. Used for updating game logic
 #define RADDEG 57.29577951308232088 // 180/PI
@@ -20,6 +20,7 @@ void update(int);
 void respawn();
 void nextLevel();
 void draw();
+void registerCallbacks();
 void drawOverlay();
 void drawPortals();
 GLuint createTexture(const char *filename);

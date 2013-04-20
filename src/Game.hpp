@@ -1,8 +1,8 @@
 #ifndef __GAME_HPP
 #define __GAME_HPP
 
-#define DEFAULT_WIDTH 800
-#define DEFAULT_HEIGHT 600
+//#define DEFAULT_WIDTH 800
+//#define DEFAULT_HEIGHT 600
 #define FRAMETIME 17 // Delay between updates (FPS = 1/FRAMETIME)
 #define FRAMETIME_SECONDS 0.017f // FRAMETIME in seconds. Used for updating game logic
 
@@ -29,6 +29,7 @@ public:
   void setPlayerMap(Player player, Map map);
   void setHeightWidth(int height, int width);
   void setFade(float fade);
+  void setNmapEnabled(bool nmap_enabled);
   //Refactoring Methods End
 private:
   int width, height;

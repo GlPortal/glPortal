@@ -58,6 +58,10 @@ void Game::draw() {
   player.drawShots();
 }
 
+void Game::setNmapEnabled(bool nmap_enabled){
+  this->nmap_enabled = nmap_enabled;
+}
+
 /**
  * Draws the inside of both portals as well as their oulines and stencils.
  */

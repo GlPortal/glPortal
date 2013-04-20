@@ -1,8 +1,8 @@
 #ifndef __WINDOW_HPP
 #define __WINDOW_HPP
 
-#define DEFAULT_WIDTH 800
-#define DEFAULT_HEIGHT 600
+#define DEFAULT_WIDTH 1680
+#define DEFAULT_HEIGHT 1050
 
 #include <GL/glew.h>
 #include <GL/glut.h>
