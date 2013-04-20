@@ -22,9 +22,13 @@ public:
   void respawn();
   void nextLevel();
   void drawPortals();
-  void drawOverlay();
+  void drawOverlay(bool paused);
   void draw();
+  //Refactoring Methods
   void setPlayerMap(Player player, Map map);
+  void setHeightWidth(int height, int width);
+  void setFade(float fade);
+  //Refactoring Methods End
 private:
   int width, height;
   int mousex, mousey; 

@@ -46,106 +46,15 @@ void nextLevel() {
 
 void draw() {
   game.setPlayerMap(player, map);
+  game.setHeightWidth(height, width);
+  game.setFade(fade);
   game.draw();
 
   // Draw 2D overlay
-  drawOverlay();
-
+  game.drawOverlay(paused);
+ 
   // Swap buffers
   glutSwapBuffers();
-}
-
-
-/**
- * Draws all 2D overlay related.
- * Should be called after drawing all 3D.
- */
-void drawOverlay() {
-  // Switch to orthographic 2D projection
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-  glLoadIdentity();
-  gluOrtho2D(0,width,height,0);
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glDisable(GL_DEPTH_TEST);
-
-  // If game is paused
-  if(paused) {
-    // Add dark tint to screen
-    glColor4f(0.f, 0.f, 0.f, 0.5f);
-    glDisable(GL_TEXTURE_2D);
-    glBegin(GL_QUADS);
-    glVertex2f(  0.f,    0.f);
-    glVertex2f(  0.f, height);
-    glVertex2f(width, height);
-    glVertex2f(width,    0.f);
-    glEnd();
-    // Draw "Paused" message
-    glEnable(GL_TEXTURE_2D);
-    glColor4f(1.f, 1.f, 1.f, 1.f);
-    Resources::inst().bindTexture(TID_STRINGS);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.00f, 0.125f); glVertex2f(width/2-64, height/2-32);
-    glTexCoord2f(0.00f, 0.250f); glVertex2f(width/2-64, height/2+32);
-    glTexCoord2f(0.25f, 0.250f); glVertex2f(width/2+64, height/2+32);
-    glTexCoord2f(0.25f, 0.125f); glVertex2f(width/2+64, height/2-32);
-    glEnd();
-    // If game is not paused
-  } else {
-    // Draw crosshair if player is alive
-    if(player.getState() == PS_ALIVE) {
-      Resources::inst().bindTexture(TID_CROSSHAIR);
-      glColor4f(1.f, 1.f, 1.f, 1.f);
-      glBegin(GL_QUADS);
-      glTexCoord2f(0,0); glVertex2f(width/2-16, height/2-12);
-      glTexCoord2f(0,1); glVertex2f(width/2-16, height/2+20);
-      glTexCoord2f(1,1); glVertex2f(width/2+16, height/2+20);
-      glTexCoord2f(1,0); glVertex2f(width/2+16, height/2-12);
-      glEnd();
-    }
-    // Fade screen if player has died or won
-    else if(player.getState() != PS_ALIVE) {
-      glColor4f(0.f, 0.f, 0.f, fade);
-      glDisable(GL_TEXTURE_2D);
-      glBegin(GL_QUADS);
-      glVertex2f(  0.f,    0.f);
-      glVertex2f(  0.f, height);
-      glVertex2f(width, height);
-      glVertex2f(width,    0.f);
-      glEnd();
-      glEnable(GL_TEXTURE_2D);
-      glColor3f(1.f, 1.f, 1.f);
-
-      // Draw "Press return to respawn" message if dead
-      if(player.getState() == PS_DYING) {
-	Resources::inst().bindTexture(TID_STRINGS);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0, 0.000f); glVertex2f(width/2-256, height/2-32);
-	glTexCoord2f(0, 0.125f); glVertex2f(width/2-256, height/2+32);
-	glTexCoord2f(1, 0.125f); glVertex2f(width/2+256, height/2+32);
-	glTexCoord2f(1, 0.000f); glVertex2f(width/2+256, height/2-32);
-	glEnd();
-      }
-      // Draw "Press return to continue" message if won
-      else if(player.getState() == PS_WON) {
-	Resources::inst().bindTexture(TID_STRINGS);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0, 0.25f); glVertex2f(width/2-256, height/2-64);
-	glTexCoord2f(0, 0.50f); glVertex2f(width/2-256, height/2+64);
-	glTexCoord2f(1, 0.50f); glVertex2f(width/2+256, height/2+64);
-	glTexCoord2f(1, 0.25f); glVertex2f(width/2+256, height/2-64);
-	glEnd();
-      }
-    }
-  }
-
-  glEnable(GL_DEPTH_TEST);
-  // Restore perspective projection matrix
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
-  glMatrixMode(GL_MODELVIEW);
 }
 
 /**
