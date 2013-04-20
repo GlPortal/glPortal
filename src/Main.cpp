@@ -93,6 +93,7 @@ void draw() {
   game.setPlayerMap(player, map);
   game.setHeightWidth(height, width);
   game.setFade(fade);
+  game.setNmapEnabled(nmap_enabled);
   game.draw();
 
   // Draw 2D overlay
@@ -102,41 +103,19 @@ void draw() {
   glutSwapBuffers();
 }
 
-/**
- * Called when mouse cursor moves.
- * Saves mouse position two variables mousex and mousey.
- *
- * @param x New X-coordinate
- * @param y New Y-coordinate
- */
+
 void mouse_moved(int x, int y) {
   mousex = x;
   mousey = y;
 }
 
-/**
- * Called when a mouse button is pressed.
- * Passes the call to the mousePressed callback in Player
- *
- * @param button The pressed mouse button
- * @param state Mouse buttons stat (e.g. GLUT_DOWN)
- * @param x Cursor's X-coordinate when button was pressed
- * @param y Cursor's Y-coordinate when button was pressed
- */
+
 void mouse_pressed(int button, int state, int x, int y) {
   if(state == GLUT_DOWN) {
     player.mousePressed(button);
   }
 }
 
-/**
- * Called when a keyboard button is pressed down.
- * Sets the buttons state to pressed in the keystates array.
- *
- * @param key ASCII value of the key
- * @param x Cursor's X-coordinate when button was pressed
- * @param y Cursor's Y-coordinate when button was pressed
- */
 void key_down(unsigned char key, int x, int y) {
   keystates[key] = true;
 
@@ -164,25 +143,12 @@ void key_down(unsigned char key, int x, int y) {
   }
 }
 
-/**
- * Called when a keyboard button is pressed down.
- * Sets the buttons state to not pressed in the keystates array.
- *
- * @param key ASCII value of the key
- * @param x Cursor's X-coordinate when button was pressed
- * @param y Cursor's Y-coordinate when button was pressed
- */
+
 void key_up(unsigned char key, int x, int y) {
   keystates[key] = false;
 }
 
-/**
- * Called when the window is resized.
- * Updates the OpenGL viewport and projection matrix.
- *
- * @param w New window width
- * @param h New window height
- */
+
 void resize(int w, int h) {
   // Setup viewport
   glViewport(0, 0, (GLsizei)w, (GLsizei)h);
@@ -197,12 +163,6 @@ void resize(int w, int h) {
   glMatrixMode(GL_MODELVIEW);
 }
 
-/**
- * Called when the window changes status.
- * Used for pausing game when losing focus.
- *
- * @param state Window's new state.
- */
 void window_status(int state) {
   if(state != GLUT_VISIBLE) {
     paused = true;
