@@ -32,13 +32,7 @@ void update(int value) {
   glutTimerFunc(FRAMETIME, update, 1);
 }
 
-void setup(int *argc, char **argv) {
-  height = window.getHeight();
-  width = window.getWidth();
-
-  // Reset keystates
-  for(int i = 0; i < 256; i++) keystates[i] = false;
-
+void registerCallbacks(){
   // Setup callback functions
   glutDisplayFunc(draw);
   glutReshapeFunc(resize);
@@ -48,6 +42,16 @@ void setup(int *argc, char **argv) {
   glutPassiveMotionFunc(mouse_moved);
   glutMouseFunc(mouse_pressed);
   glutWindowStatusFunc(window_status);
+}
+
+void setup(int *argc, char **argv) {
+  height = window.getHeight();
+  width = window.getWidth();
+
+  // Reset keystates
+  for(int i = 0; i < 256; i++) keystates[i] = false;
+
+  registerCallbacks();
   glutWarpPointer(width/2, height/2); // Center pointer
 
   // Enable textures
