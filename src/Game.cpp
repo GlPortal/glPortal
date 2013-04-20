@@ -30,6 +30,18 @@ void Game::setPlayerMap(Player player, Map map){
   this->player = player;
 }
 
+// This method is here for refactoring purposes 
+// and can be removed once main is decluttered
+void Game::setHeightWidth(int height, int width){
+  this->width = width;
+  this->height = height;
+}
+
+
+void Game::setFade(float fade){
+  this->fade = fade;
+}
+
 void Game::draw() {
   // Clear depth buffer but not color buffer.
   // Every pixel is redraw every frame anyway.
@@ -97,7 +109,7 @@ void Game::drawPortals() {
  * Draws all 2D overlay related.
  * Should be called after drawing all 3D.
  */
-void Game::drawOverlay() {
+void Game::drawOverlay(bool paused) {
   // Switch to orthographic 2D projection
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
