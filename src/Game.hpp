@@ -24,6 +24,7 @@ public:
   void drawPortals();
   void drawOverlay(bool paused);
   void draw();
+  void loadTextures();
   //Refactoring Methods
   void setPlayerMap(Player player, Map map);
   void setHeightWidth(int height, int width);

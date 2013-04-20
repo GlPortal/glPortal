@@ -13,6 +13,7 @@
 #include "Player.hpp"
 #include "Map.hpp"
 #include "Game.hpp"
+#include "Window.hpp"
 
 // Main functions
 void update(int);
@@ -22,7 +23,6 @@ void draw();
 void drawOverlay();
 void drawPortals();
 GLuint createTexture(const char *filename);
-void loadTextures();
 void setup(int *, char **);
 // Callback functions
 void mouse_moved(int, int);
@@ -42,6 +42,7 @@ float fade;
 Player player;
 Map map;
 Game game;
+Window window;
 int current_level;
 
 #endif

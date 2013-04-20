@@ -105,6 +105,12 @@ void Game::drawPortals() {
   }
 }
 
+void Game::loadTextures(){
+  Resources::inst().loadTextures();
+  Resources::inst().compileShaders();
+  Resources::inst().compileModels();
+}
+
 /**
  * Draws all 2D overlay related.
  * Should be called after drawing all 3D.
