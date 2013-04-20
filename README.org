@@ -1,6 +1,11 @@
 * About
 Original Software 2012 by Simon Larsen 
 
+* What is happening with the code right now
+I am currently migrating methods from the cluttered main class.
+To get the methods to another class without breaking functionality
+I am writing helper methods to inject all dependencies from the main class into the game class. 
+These helper methods will be removed once all the code is properly migrated.
 * Compile the source
 - cmake src
 - make
