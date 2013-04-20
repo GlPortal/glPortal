@@ -11,9 +11,15 @@ void Window::setup(int *argc, char **argv) {
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL);
   glutInitWindowSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
   glutCreateWindow("glPortal");
+  /*if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE))
+	  glutEnterGameMode();
+	else {
+		printf("The select mode is not available\n");
+		exit(1);
+		} */
   glutSetCursor(GLUT_CURSOR_NONE);
   setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-  glutFullScreen();
+  //glutFullScreen();
   glewInit();
 
 }

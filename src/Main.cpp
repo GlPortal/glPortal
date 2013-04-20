@@ -5,6 +5,7 @@
 
 
 int main(int argc, char **argv) {
+  window.setup(&argc, argv);
   setup(&argc, argv);
   glutMainLoop();
 
@@ -30,6 +31,50 @@ void update(int value) {
   // Schedule new update
   glutTimerFunc(FRAMETIME, update, 1);
 }
+
+void setup(int *argc, char **argv) {
+  height = window.getHeight();
+  width = window.getWidth();
+
+  // Reset keystates
+  for(int i = 0; i < 256; i++) keystates[i] = false;
+
+  // Setup callback functions
+  glutDisplayFunc(draw);
+  glutReshapeFunc(resize);
+  glutTimerFunc(FRAMETIME, update, 1);
+  glutKeyboardFunc(key_down);
+  glutKeyboardUpFunc(key_up);
+  glutPassiveMotionFunc(mouse_moved);
+  glutMouseFunc(mouse_pressed);
+  glutWindowStatusFunc(window_status);
+  glutWarpPointer(width/2, height/2); // Center pointer
+
+  // Enable textures
+  glEnable(GL_TEXTURE_2D);
+  // Enable depth testing
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
+  // Enable back face culling
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+  // Set ambient and diffuse lighting
+  GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
+  glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_DiffAndAmb);
+
+  // Set blending function for portals
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glEnable(GL_BLEND);
+
+  game.loadTextures();
+
+  paused = false;
+  nmap_enabled = true;
+  current_level = 0;	
+  nextLevel();
+}
+
 
 void respawn() {
   fade = 0.f;
@@ -114,6 +159,9 @@ void key_down(unsigned char key, int x, int y) {
     current_level = key - '0' - 1; // Load levelX
     nextLevel();
   }
+  else if(key == 'q') {
+    exit(1);
+  }
 }
 
 /**
@@ -159,64 +207,4 @@ void window_status(int state) {
   if(state != GLUT_VISIBLE) {
     paused = true;
   }
-}
-
-/**
- * Sets up the OpenGL context.
- * Loads texture, sets up callbacks and enables lighting, blending etc.
- *
- * @param argc Reference to argument count from main
- * @param argv Arguments from main
- */
-void setup(int *argc, char **argv) {
-  // Initialize GLUT window
-  glutInit(argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL);
-  glutInitWindowSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-  glutCreateWindow("glPortal");
-  glutSetCursor(GLUT_CURSOR_NONE);
-  resize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-  // Initialize GLEW
-  glewInit();
-
-  // Reset keystates
-  for(int i = 0; i < 256; i++) keystates[i] = false;
-
-  // Setup callback functions
-  glutDisplayFunc(draw);
-  glutReshapeFunc(resize);
-  glutTimerFunc(FRAMETIME, update, 1);
-  glutKeyboardFunc(key_down);
-  glutKeyboardUpFunc(key_up);
-  glutPassiveMotionFunc(mouse_moved);
-  glutMouseFunc(mouse_pressed);
-  glutWindowStatusFunc(window_status);
-  glutWarpPointer(width/2, height/2); // Center pointer
-
-  // Enable textures
-  glEnable(GL_TEXTURE_2D);
-  // Enable depth testing
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
-  // Enable back face culling
-  glEnable(GL_CULL_FACE);
-  glCullFace(GL_BACK);
-  // Set ambient and diffuse lighting
-  GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
-  glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_DiffAndAmb);
-
-  // Set blending function for portals
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glEnable(GL_BLEND);
-
-  // Load textures from files
-  Resources::inst().loadTextures();
-  Resources::inst().compileShaders();
-  Resources::inst().compileModels();
-
-  paused = false;
-  nmap_enabled = true;
-  current_level = 0;	
-  nextLevel();
 }
