@@ -7,7 +7,7 @@ refactoring.
 If you need a clean start, GlPortal2 might be what you are looking 
 for. GlPortal2 tries to archive the same kind of game while sticking 
 to design principles and a more strict approach to producing clean
-code from the beginninh. You can find the repository of GlPortal2 at 
+code from the beginning. You can find the repository of GlPortal2 at 
 https://github.com/hhirsch/glPortal2/ .
 * Original Author
 Original Software 2012 by Simon Larsen. 
