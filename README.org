@@ -1,6 +1,18 @@
 * About
-Original Software 2012 by Simon Larsen 
-
+GlPortal is a nice little game inspired by Valves Portal and 
+originaly written by Simon Larsen. The source code needs a lot
+of cleaning up. 
+That is why GlPortal is an ideal candidate to practice code 
+refactoring.
+If you need a clean start, GlPortal2 might be what you are looking 
+for. GlPortal2 tries to archive the same kind of game while sticking 
+to design principles and a more strict approach to producing clean
+code from the beginninh. You can find the repository of GlPortal2 at 
+https://github.com/hhirsch/glPortal2/ .
+* Original Author
+Original Software 2012 by Simon Larsen. 
+* Contributors
+Henry Hirsch
 * What is happening with the code right now
 I am currently migrating methods from the cluttered main class.
 To get the methods to another class without breaking functionality
@@ -9,3 +21,10 @@ These helper methods will be removed once all the code is properly migrated.
 * Compile the source
 - cmake src
 - make
+* Join the team
+You can join the community at http://social.w3-net.de/groups/glportal/ 
+for questions and discussions about the development of the game.
+A makeshift Issue tracker can be found at 
+https://github.com/hhirsch/glPortal/issues .
+
+Please send me a pull request in github if you have changes.
