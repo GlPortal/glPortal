@@ -27,4 +27,4 @@ for questions and discussions about the development of the game.
 A makeshift Issue tracker can be found at 
 https://github.com/hhirsch/glPortal/issues .
 
-Please send me a pull request in github if you have changes.
+Please send me a pull request on github if you have changes.
