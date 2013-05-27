@@ -2,8 +2,6 @@
 #include "Box.hpp"
 #include "Resources.hpp"
 
-
-
 int main(int argc, char **argv) {
   window.setup(&argc, argv);
   setup(&argc, argv);
@@ -154,17 +152,7 @@ void key_up(unsigned char key, int x, int y) {
 
 
 void resize(int w, int h) {
-  // Setup viewport
-  glViewport(0, 0, (GLsizei)w, (GLsizei)h);
-  // Setup projection matrix
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  gluPerspective(60.0, (GLdouble)w/(GLdouble)h, 0.1f, 50.f);
-
-  width = w;
-  height = h;
-
-  glMatrixMode(GL_MODELVIEW);
+  window.setSize(w, h);
 }
 
 void window_status(int state) {
