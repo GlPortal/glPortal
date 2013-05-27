@@ -17,8 +17,8 @@ public:
 void setup(int *, char **);
 int getWidth();
 int getHeight();
-private:
 void setSize(int, int);
+private:
 int width, height;
 };
 
