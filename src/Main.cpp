@@ -52,14 +52,7 @@ void setup(int *argc, char **argv) {
   registerCallbacks();
   glutWarpPointer(width/2, height/2); // Center pointer
 
-  // Enable textures
-  glEnable(GL_TEXTURE_2D);
-  // Enable depth testing
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
-  // Enable back face culling
-  glEnable(GL_CULL_FACE);
-  glCullFace(GL_BACK);
+  window.enableGlFeatures();
   // Set ambient and diffuse lighting
   GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
   glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
@@ -76,7 +69,6 @@ void setup(int *argc, char **argv) {
   current_level = 0;	
   nextLevel();
 }
-
 
 void respawn() {
   fade = 0.f;

@@ -25,6 +25,17 @@ void Window::setup(int *argc, char **argv) {
 
 }
 
+void Window::enableGlFeatures(){
+  // Enable textures
+  glEnable(GL_TEXTURE_2D);
+  // Enable depth testing
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
+  // Enable back face culling
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+}
+
 void Window::setSize(int width, int height) {
   glViewport(0, 0, (GLsizei)width, (GLsizei)height);
   glMatrixMode(GL_PROJECTION);
