@@ -30,6 +30,9 @@ public:
   void setHeightWidth(int height, int width);
   void setFade(float fade);
   void setNmapEnabled(bool nmap_enabled);
+  void setKey(unsigned char key);
+  void unsetKey(unsigned char key);
+  void unsetFade();
   //Refactoring Methods End
 private:
   int width, height;
@@ -38,7 +41,6 @@ private:
   bool paused;	
   bool nmap_enabled; 
   float fade;  	
-
   Player player;
   Map map;
   Window window;
