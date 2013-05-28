@@ -119,6 +119,7 @@ void mouse_pressed(int button, int state, int x, int y) {
 }
 
 void key_down(unsigned char key, int x, int y) {
+  game.setKey(key);
   keystates[key] = true;
 
   if(key == 27) { // Escape key
@@ -147,6 +148,7 @@ void key_down(unsigned char key, int x, int y) {
 
 
 void key_up(unsigned char key, int x, int y) {
+  game.setKey(key);
   keystates[key] = false;
 }
 
