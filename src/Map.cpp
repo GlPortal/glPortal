@@ -12,7 +12,7 @@
  * @param filename Path to the .map file
  */
 void Map::load(const char *filename) {
-  std::ifstream ifs(filename, std::ifstream::in);
+  std::ifstream file(filename, std::ifstream::in);
   std::string line, temp;
 
   // Clear data
@@ -20,17 +20,17 @@ void Map::load(const char *filename) {
   acid.clear();
 
   // Read map file line by line
-  while(ifs.good()) {
-    std::getline(ifs, line);
-    std::stringstream ss(line);
+  while(file.good()) {
+    std::getline(file, line);
+    std::stringstream stringStream(line);
     if(line.length() > 0) {
-      ss >> temp;
+      stringStream >> temp;
       float values[6];
       switch(line[0]) {
 	// Wall definition
       case 'w':
 	for(int i = 0; i < 6; i++) {
-	  ss >> temp;
+	  stringStream >> temp;
 	  values[i] = static_cast<float>(atof(temp.c_str()));
 	}
 	walls.push_back(Box(values, TID_WALL));
@@ -38,7 +38,7 @@ void Map::load(const char *filename) {
 	// Tiles definition
       case 't':
 	for(int i = 0; i < 6; i++) {
-	  ss >> temp;
+	  stringStream >> temp;
 	  values[i] = static_cast<float>(atof(temp.c_str()));
 	}
 	walls.push_back(Box(values, TID_TILES));
@@ -46,7 +46,7 @@ void Map::load(const char *filename) {
 	// Acid pool definition
       case 'a':
 	for(int i = 0; i < 6; i++) {
-	  ss >> temp;
+	  stringStream >> temp;
 	  values[i] = static_cast<float>(atof(temp.c_str()));
 	}
 	acid.push_back(Box(values, TID_ACID));
@@ -54,7 +54,7 @@ void Map::load(const char *filename) {
 	// Light position
       case 'l':
 	for(int i = 0; i < 3; i++) {
-	  ss >> temp;
+	  stringStream >> temp;
 	  lightpos[i] = static_cast<GLfloat>(atof(temp.c_str()));
 	}
 	lightpos[3] = 1.f; // Set as positioned light
@@ -62,14 +62,14 @@ void Map::load(const char *filename) {
 	// Start position
       case 's':
 	for(int i = 0; i < 3; i++) {
-	  ss >> temp;
+	  stringStream >> temp;
 	  startpos[i] = static_cast<float>(atof(temp.c_str()));
 	}
 	break;
 	// Cake/goal position
       case 'c':
 	for(int i = 0; i < 3; i++) {
-	  ss >> temp;
+	  stringStream >> temp;
 	  cakepos[i] = static_cast<float>(atof(temp.c_str()));
 	}
 	cakeBox.set(cakepos[0]-0.6f, cakepos[1]-0.6f, cakepos[2]-0.6f,
@@ -79,7 +79,7 @@ void Map::load(const char *filename) {
     }
   }
 
-  ifs.close();
+  file.close();
 }
 
 /**
