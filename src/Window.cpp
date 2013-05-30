@@ -11,7 +11,8 @@ void Window::setup(int *argc, char **argv) {
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL);
   glutInitWindowSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
   glutCreateWindow("glPortal");
-  
+  glutWarpPointer(width/2, height/2); // Center pointer  
+
   if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)){
     glutGameModeString("1680x1050:32@60");
     glutEnterGameMode();
@@ -34,6 +35,14 @@ void Window::enableGlFeatures(){
   // Enable back face culling
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
+  setAmbientLight();
+}
+
+void Window::setAmbientLight(){
+  // Set ambient and diffuse lighting
+  GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
+  glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_DiffAndAmb);
 }
 
 void Window::setSize(int width, int height) {

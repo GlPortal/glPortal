@@ -37,7 +37,6 @@ void window_status(int state);
 int width, height;	
 int mousex, mousey; 
 bool keystates[256];
-bool paused;	
 bool nmap_enabled;
 float fade;  	
 

@@ -2,8 +2,6 @@
 #include "Box.hpp"
 #include "Resources.hpp"
 
-
-
 /**
  * Respawns the player after dying.
  */
@@ -28,6 +26,23 @@ void Game::nextLevel() {
 void Game::setPlayerMap(Player player, Map map){
   this->map = map;
   this->player = player;
+}
+
+void Game::setPlayer(Player player){
+  this->player = player;
+}
+
+
+Map Game::getMap(){
+  return this->map;
+}
+
+Player Game::getPlayer(){
+  this->player = player;
+}
+
+void Game::setCurrentLevel(int current_level){
+  this->current_level = current_level;
 }
 
 // This method is here for refactoring purposes 
@@ -150,7 +165,7 @@ void Game::loadTextures(){
  * Draws all 2D overlay related.
  * Should be called after drawing all 3D.
  */
-void Game::drawOverlay(bool paused) {
+void Game::drawOverlay() {
   // Switch to orthographic 2D projection
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
@@ -162,7 +177,7 @@ void Game::drawOverlay(bool paused) {
   glDisable(GL_DEPTH_TEST);
 
   // If game is paused
-  if(paused) {
+  if(this->isPaused()) {
     // Add dark tint to screen
     glColor4f(0.f, 0.f, 0.f, 0.5f);
     glDisable(GL_TEXTURE_2D);
@@ -238,3 +253,18 @@ void Game::drawOverlay(bool paused) {
   glMatrixMode(GL_MODELVIEW);
 }
 
+bool Game::isPaused(){
+  return this->paused;
+}
+
+void Game::pause(){
+  this->paused = true;
+}
+
+void Game::unpause(){
+  this->paused = false;
+}
+
+void Game::togglePause(){
+  this->paused = !this->paused;
+}
