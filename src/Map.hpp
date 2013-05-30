@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <GL/glut.h>
+#include <string>
 #include "Box.hpp"
 class Portal; // Forward declaration
 
@@ -23,7 +24,7 @@ public:
 	float getStartX() { return startpos[0]; }
 	float getStartY() { return startpos[1]; }
 	float getStartZ() { return startpos[2]; }
-
+        float stringStreamToFloat(std::stringstream& stream);
 protected:
 	void drawBox(Box &b);
 	void drawCake();

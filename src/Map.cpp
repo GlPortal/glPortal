@@ -6,6 +6,14 @@
 #include "Resources.hpp"
 #include "Portal.hpp"
 
+float Map::stringStreamToFloat(std::stringstream& stream){
+  std::string string;
+  stream >> string;
+
+  return static_cast<float>(atof(string.c_str()));
+}
+
+
 /**
  * Loads map data from a .map file
  *
@@ -13,7 +21,7 @@
  */
 void Map::load(const char *filename) {
   std::ifstream file(filename, std::ifstream::in);
-  std::string line, temp;
+  std::string line, string;
 
   // Clear data
   walls.clear();
@@ -24,53 +32,47 @@ void Map::load(const char *filename) {
     std::getline(file, line);
     std::stringstream stringStream(line);
     if(line.length() > 0) {
-      stringStream >> temp;
+      stringStream >> string;
       float values[6];
       switch(line[0]) {
 	// Wall definition
       case 'w':
 	for(int i = 0; i < 6; i++) {
-	  stringStream >> temp;
-	  values[i] = static_cast<float>(atof(temp.c_str()));
+	  values[i] = stringStreamToFloat(stringStream);
 	}
 	walls.push_back(Box(values, TID_WALL));
 	break;
 	// Tiles definition
       case 't':
 	for(int i = 0; i < 6; i++) {
-	  stringStream >> temp;
-	  values[i] = static_cast<float>(atof(temp.c_str()));
+	  values[i] = stringStreamToFloat(stringStream);
 	}
 	walls.push_back(Box(values, TID_TILES));
 	break;
 	// Acid pool definition
       case 'a':
 	for(int i = 0; i < 6; i++) {
-	  stringStream >> temp;
-	  values[i] = static_cast<float>(atof(temp.c_str()));
+	  values[i] = stringStreamToFloat(stringStream);
 	}
 	acid.push_back(Box(values, TID_ACID));
 	break;
 	// Light position
       case 'l':
 	for(int i = 0; i < 3; i++) {
-	  stringStream >> temp;
-	  lightpos[i] = static_cast<GLfloat>(atof(temp.c_str()));
+	  lightpos[i] = stringStreamToFloat(stringStream);
 	}
 	lightpos[3] = 1.f; // Set as positioned light
 	break;
 	// Start position
       case 's':
 	for(int i = 0; i < 3; i++) {
-	  stringStream >> temp;
-	  startpos[i] = static_cast<float>(atof(temp.c_str()));
+	  startpos[i] = stringStreamToFloat(stringStream);
 	}
 	break;
 	// Cake/goal position
       case 'c':
 	for(int i = 0; i < 3; i++) {
-	  stringStream >> temp;
-	  cakepos[i] = static_cast<float>(atof(temp.c_str()));
+	  cakepos[i] = stringStreamToFloat(stringStream);
 	}
 	cakeBox.set(cakepos[0]-0.6f, cakepos[1]-0.6f, cakepos[2]-0.6f,
 		    cakepos[0]+0.6f, cakepos[1]+0.2f, cakepos[2]+0.6f);
