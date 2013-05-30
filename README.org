@@ -2,11 +2,11 @@
 GlPortal is a puzzle game inspired by Valves Portal 
 originaly written by Simon Larsen. The source code needs a lot
 of cleaning up. 
-That is why GlPortal is an ideal candidate to practice code 
+That is why glPortal is an ideal candidate to practice code 
 refactoring.
 
-In case the source of GlPortal is to cryptic for you, consider 
-contributing to GlPortal2 a try to write a similar game from 
+In case the source of glPortal is to cryptic for you, consider 
+contributing to glPortal2 an effort to write a similar game from 
 scratch.
 
 If you need to talk directly to me (everything that is no bug report,
