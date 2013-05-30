@@ -34,7 +34,7 @@ https://github.com/hhirsch/glPortal/issues .
 
 Please send me a pull request on github if you have changes.
 
-* GlPortal2
+* glPortal2
 If you need a clean start, GlPortal2 might be what you are looking 
 for. GlPortal2 tries to archive the same kind of game while sticking 
 to design principles and a more strict approach to producing clean
