@@ -12,6 +12,8 @@ scratch.
 If you need to talk directly to me (everything that is no bug report,
 feature request or question that fits in the public discussion)
 you can contact me at portal at w3-net.de by email.
+
+You can find the website at http://social.w3-net.de/glportal .
 * Original Author
 Original Software 2012 by Simon Larsen. 
 * Contributors
