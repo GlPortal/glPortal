@@ -22,11 +22,7 @@ void respawn();
 void nextLevel();
 void draw();
 void registerCallbacks();
-void drawOverlay();
-void drawPortals();
-GLuint createTexture(const char *filename);
 void setup(int *, char **);
-void enableGlFeatures();
 // Callback functions
 void mouse_moved(int, int);
 void mouse_pressed(int, int, int, int);
