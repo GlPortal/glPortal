@@ -14,13 +14,14 @@
 
 class Window {
 public:
-void setup(int *, char **);
-void enableGlFeatures();
-int getWidth();
-int getHeight();
-void setSize(int, int);
+  void setup(int *, char **);
+  void enableGlFeatures();
+  int getWidth();
+  int getHeight();
+  void setSize(int, int);
 private:
-int width, height;
+  void setAmbientLight();
+  int width, height;
 };
 
 #endif

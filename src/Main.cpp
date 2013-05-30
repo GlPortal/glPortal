@@ -18,13 +18,7 @@ void setup(int *argc, char **argv) {
   for(int i = 0; i < 256; i++) keystates[i] = false;
 
   registerCallbacks();
-  glutWarpPointer(width/2, height/2); // Center pointer
-
   window.enableGlFeatures();
-  // Set ambient and diffuse lighting
-  GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
-  glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_DiffAndAmb);
 
   // Set blending function for portals
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -32,15 +26,14 @@ void setup(int *argc, char **argv) {
 
   game.loadTextures();
 
-  paused = false;
+  game.unpause();
   nmap_enabled = true;
   current_level = 0;	
   nextLevel();
 }
 
-
 void update(int value) {
-  if(!paused) {
+  if(!game.isPaused()) {
     int centerHorizontal = width/2;
     int centerVertical = height/2;
     float mouseDistanceFromCenterX = static_cast<float>(centerHorizontal-mousex);
@@ -92,7 +85,7 @@ void draw() {
   game.draw();
 
   // Draw 2D overlay
-  game.drawOverlay(paused);
+  game.drawOverlay();
  
   // Swap buffers
   glutSwapBuffers();
@@ -116,7 +109,7 @@ void key_down(unsigned char key, int x, int y) {
   keystates[key] = true;
 
   if(key == 27) { // Escape key
-    paused = !paused;
+    game.togglePause();
     glutWarpPointer(width/2, height/2);
   }
   else if(key == 13) { // Return key
@@ -152,6 +145,6 @@ void resize(int w, int h) {
 
 void window_status(int state) {
   if(state != GLUT_VISIBLE) {
-    paused = true;
+    game.pause();
   }
 }

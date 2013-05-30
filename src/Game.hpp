@@ -22,7 +22,7 @@ public:
   void respawn();
   void nextLevel();
   void drawPortals();
-  void drawOverlay(bool paused);
+  void drawOverlay();
   void draw();
   void loadTextures();
   //Refactoring Methods
@@ -33,6 +33,14 @@ public:
   void setKey(unsigned char key);
   void unsetKey(unsigned char key);
   void unsetFade();
+  void setCurrentLevel(int current_level);
+  Map getMap();
+  Player getPlayer();
+  void setPlayer(Player player);
+  bool isPaused();
+  void unpause();
+  void pause();
+  void togglePause();
   //Refactoring Methods End
 private:
   int width, height;
