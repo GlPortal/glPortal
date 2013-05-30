@@ -10,6 +10,35 @@ int main(int argc, char **argv) {
   return EXIT_SUCCESS;
 }
 
+void setup(int *argc, char **argv) {
+  height = window.getHeight();
+  width = window.getWidth();
+
+  // Reset keystates
+  for(int i = 0; i < 256; i++) keystates[i] = false;
+
+  registerCallbacks();
+  glutWarpPointer(width/2, height/2); // Center pointer
+
+  window.enableGlFeatures();
+  // Set ambient and diffuse lighting
+  GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
+  glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_DiffAndAmb);
+
+  // Set blending function for portals
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glEnable(GL_BLEND);
+
+  game.loadTextures();
+
+  paused = false;
+  nmap_enabled = true;
+  current_level = 0;	
+  nextLevel();
+}
+
+
 void update(int value) {
   if(!paused) {
     int centerHorizontal = width/2;
@@ -40,34 +69,6 @@ void registerCallbacks(){
   glutPassiveMotionFunc(mouse_moved);
   glutMouseFunc(mouse_pressed);
   glutWindowStatusFunc(window_status);
-}
-
-void setup(int *argc, char **argv) {
-  height = window.getHeight();
-  width = window.getWidth();
-
-  // Reset keystates
-  for(int i = 0; i < 256; i++) keystates[i] = false;
-
-  registerCallbacks();
-  glutWarpPointer(width/2, height/2); // Center pointer
-
-  window.enableGlFeatures();
-  // Set ambient and diffuse lighting
-  GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
-  glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_DiffAndAmb);
-
-  // Set blending function for portals
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glEnable(GL_BLEND);
-
-  game.loadTextures();
-
-  paused = false;
-  nmap_enabled = true;
-  current_level = 0;	
-  nextLevel();
 }
 
 void respawn() {
