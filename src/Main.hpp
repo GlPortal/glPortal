@@ -10,6 +10,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <GL/glext.h>
+#include <cstdlib> 
 #include "Player.hpp"
 #include "Map.hpp"
 #include "Game.hpp"
