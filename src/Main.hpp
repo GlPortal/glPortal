@@ -30,7 +30,7 @@ void key_down(unsigned char, int, int);
 void key_up(unsigned char, int , int);
 void resize(int, int);
 void window_status(int state);
-
+void resetKeyStates();
 int width, height;	
 int mousex, mousey; 
 bool keystates[256];
