@@ -8,7 +8,7 @@
 
 void Window::setup(int *argc, char **argv) {
   glutInit(argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL);
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL | GLUT_MULTISAMPLE);
   glutInitWindowSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
   glutCreateWindow("glPortal");
   glutWarpPointer(width/2, height/2); // Center pointer  
@@ -31,11 +31,16 @@ void Window::enableGlFeatures(){
   glEnable(GL_TEXTURE_2D);
   // Enable depth testing
   glEnable(GL_DEPTH_TEST);
+  glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
   glDepthFunc(GL_LESS);
   // Enable back face culling
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
   setAmbientLight();
+  // Set blending function for portals
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glEnable(GL_BLEND);
+  glEnable(GL_MULTISAMPLE_ARB);
 }
 
 void Window::setAmbientLight(){
