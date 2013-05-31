@@ -12,6 +12,7 @@
 #include "Window.hpp"
 
 #include <vector>
+#include <cstring>
 #include <GL/glut.h>
 #include "Box.hpp"
 #include "Map.hpp"
@@ -43,6 +44,7 @@ public:
   void togglePause();
   //Refactoring Methods End
 private:
+  void renderBitmapString(int x, int y, char *string);
   int width, height;
   int mousex, mousey; 
   bool keystates[256];

@@ -102,6 +102,7 @@ void Game::draw() {
 
   player.drawPortalOutlines();
   player.drawShots();
+  drawOverlay();
 }
 
 void Game::setNmapEnabled(bool nmap_enabled){
@@ -171,9 +172,11 @@ void Game::drawOverlay() {
   glPushMatrix();
   glLoadIdentity();
   gluOrtho2D(0,width,height,0);
-
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+  renderBitmapString(10, 100, "v0.0.2");
+  //  glMatrixMode(GL_PROJECTION);
+  //  glPopMatrix();
   glDisable(GL_DEPTH_TEST);
 
   // If game is paused
@@ -245,7 +248,6 @@ void Game::drawOverlay() {
       }
     }
   }
-
   glEnable(GL_DEPTH_TEST);
   // Restore perspective projection matrix
   glMatrixMode(GL_PROJECTION);
@@ -268,3 +270,14 @@ void Game::unpause(){
 void Game::togglePause(){
   this->paused = !this->paused;
 }
+
+void Game::renderBitmapString(int x, int y, char *string){
+  int len, i;
+
+  glRasterPos2f(x, y);
+  len = (int) std::strlen(string);
+  for (i = 0; i < len; i++) {
+    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
+  }
+}
+

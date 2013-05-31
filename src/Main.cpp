@@ -14,15 +14,10 @@ void setup(int *argc, char **argv) {
   height = window.getHeight();
   width = window.getWidth();
 
-  // Reset keystates
-  for(int i = 0; i < 256; i++) keystates[i] = false;
+  resetKeyStates();
 
   registerCallbacks();
   window.enableGlFeatures();
-
-  // Set blending function for portals
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glEnable(GL_BLEND);
 
   game.loadTextures();
 
@@ -44,12 +39,18 @@ void update(int value) {
     if(player.getState() != PS_ALIVE) {
       fade += 0.4f*FRAMETIME_SECONDS;
     }
+    //    window.renderBitmapString(1.0F, 1.0F, 1.0F, "v0.0.1");
   }
-
   // Redraw screen
   glutPostRedisplay();
   // Schedule new update
   glutTimerFunc(FRAMETIME, update, 1);
+}
+
+void resetKeyStates(){
+  for(int i = 0; i < 256; i++){
+    keystates[i] = false;
+  }
 }
 
 void registerCallbacks(){
@@ -83,10 +84,6 @@ void draw() {
   game.setFade(fade);
   game.setNmapEnabled(nmap_enabled);
   game.draw();
-
-  // Draw 2D overlay
-  game.drawOverlay();
- 
   // Swap buffers
   glutSwapBuffers();
 }
@@ -148,3 +145,4 @@ void window_status(int state) {
     game.pause();
   }
 }
+
