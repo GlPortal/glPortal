@@ -90,7 +90,7 @@ void Game::setFade(float fade){
 
 void Game::draw() {
   // Clear depth buffer but not color buffer.
-  // Every pixel is redraw every frame anyway.
+  // Every pixel is redrawn every frame anyway.
   glClear(GL_DEPTH_BUFFER_BIT);
   // Load identity matrix
   glLoadIdentity();
@@ -103,7 +103,17 @@ void Game::draw() {
   player.drawPortalOutlines();
   player.drawShots();
   drawOverlay();
+  //  drawHud();
 }
+
+void Game::drawHud(){
+  //glMatrixMode(GL_PROJECTION);
+  renderBitmapString(10, 100, "v0.0.2");
+  //  glPushMatrix();
+  //  glLoadIdentity();
+  
+}
+
 
 void Game::setNmapEnabled(bool nmap_enabled){
   this->nmap_enabled = nmap_enabled;
@@ -169,12 +179,12 @@ void Game::loadTextures(){
 void Game::drawOverlay() {
   // Switch to orthographic 2D projection
   glMatrixMode(GL_PROJECTION);
+  renderBitmapString(10, 100, "v0.0.2");
   glPushMatrix();
   glLoadIdentity();
   gluOrtho2D(0,width,height,0);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  renderBitmapString(10, 100, "v0.0.2");
   //  glMatrixMode(GL_PROJECTION);
   //  glPopMatrix();
   glDisable(GL_DEPTH_TEST);
@@ -252,6 +262,7 @@ void Game::drawOverlay() {
   // Restore perspective projection matrix
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
+  drawHud();
   glMatrixMode(GL_MODELVIEW);
 }
 

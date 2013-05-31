@@ -8,12 +8,14 @@
 
 #include <GL/glew.h>
 #include <GL/glext.h>
-#include "Player.hpp"
-#include "Window.hpp"
+#include <GL/glut.h>
 
 #include <vector>
 #include <cstring>
-#include <GL/glut.h>
+#include <cstdlib> 
+
+#include "Player.hpp"
+#include "Window.hpp"
 #include "Box.hpp"
 #include "Map.hpp"
 
@@ -45,6 +47,7 @@ public:
   //Refactoring Methods End
 private:
   void renderBitmapString(int x, int y, char *string);
+  void drawHud();
   int width, height;
   int mousex, mousey; 
   bool keystates[256];
