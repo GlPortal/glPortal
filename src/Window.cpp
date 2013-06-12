@@ -27,24 +27,19 @@ void Window::setup(int *argc, char **argv) {
 }
 
 void Window::enableGlFeatures(){
-  // Enable textures
   glEnable(GL_TEXTURE_2D);
-  // Enable depth testing
   glEnable(GL_DEPTH_TEST);
   glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
   glDepthFunc(GL_LESS);
-  // Enable back face culling
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
   setAmbientLight();
-  // Set blending function for portals
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
   glEnable(GL_MULTISAMPLE_ARB);
 }
 
 void Window::setAmbientLight(){
-  // Set ambient and diffuse lighting
   GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
   glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
   glLightfv(GL_LIGHT0, GL_DIFFUSE, light_DiffAndAmb);
