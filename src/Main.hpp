@@ -35,7 +35,6 @@ int width, height;
 int mousex, mousey; 
 bool keystates[256];
 bool nmap_enabled;
-float fade;  	
 
 Player player;
 Map map;

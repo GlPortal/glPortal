@@ -36,6 +36,8 @@ public:
   void setKey(unsigned char key);
   void unsetKey(unsigned char key);
   void unsetFade();
+  void resetFade();
+  void fadeOut();
   void setCurrentLevel(int current_level);
   Map getMap();
   Player getPlayer();

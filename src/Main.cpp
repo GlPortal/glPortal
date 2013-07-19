@@ -35,11 +35,10 @@ void update(int value) {
     float mouseDistanceFromCenterY = static_cast<float>(centerVertical-mousey);
     glutWarpPointer(centerHorizontal, centerVertical);
     player.update(FRAMETIME_SECONDS, keystates, mouseDistanceFromCenterX, mouseDistanceFromCenterY, map);
-    // Fade screen if dead/has won
+
     if(player.getState() != PS_ALIVE) {
-      fade += 0.4f*FRAMETIME_SECONDS;
+      game.fadeOut();
     }
-    //    window.renderBitmapString(1.0F, 1.0F, 1.0F, "v0.0.1");
   }
   // Redraw screen
   glutPostRedisplay();
@@ -66,7 +65,7 @@ void registerCallbacks(){
 }
 
 void respawn() {
-  fade = 0.f;
+  game.resetFade();
   player.create(map.getStartX(), map.getStartY(), map.getStartZ());
 }
 
@@ -81,7 +80,6 @@ void nextLevel() {
 void draw() {
   game.setPlayerMap(player, map);
   game.setHeightWidth(height, width);
-  game.setFade(fade);
   game.setNmapEnabled(nmap_enabled);
   game.draw();
   // Swap buffers
