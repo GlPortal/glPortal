@@ -88,6 +88,14 @@ void Game::setFade(float fade){
   this->fade = fade;
 }
 
+void Game::resetFade(){
+  this->fade = 0.f;
+}
+
+void Game::fadeOut(){
+  this->fade += 0.4f*FRAMETIME_SECONDS;
+}
+
 void Game::draw() {
   // Clear depth buffer but not color buffer.
   // Every pixel is redrawn every frame anyway.
@@ -179,7 +187,7 @@ void Game::loadTextures(){
 void Game::drawOverlay() {
   // Switch to orthographic 2D projection
   glMatrixMode(GL_PROJECTION);
-  renderBitmapString(10, 100, "v0.0.2");
+  renderBitmapString(10, 100, "v0.0.3");
   glPushMatrix();
   glLoadIdentity();
   gluOrtho2D(0,width,height,0);
