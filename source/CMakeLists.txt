@@ -11,8 +11,9 @@ add_executable(${EXE_NAME}
   Window.cpp
   )
 
+
 add_custom_target(run COMMAND ./${EXE_NAME})
 
 include_directories(
   ./lib 
-)
+  )
