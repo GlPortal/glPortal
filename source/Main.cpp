@@ -1,7 +1,8 @@
 #include "Main.hpp"
 #include "Box.hpp"
 #include "Resources.hpp"
-
+#include <iostream>
+using namespace std;
 int main(int argc, char **argv) {
   window.setup(&argc, argv);
   setup(&argc, argv);
@@ -71,8 +72,8 @@ void respawn() {
 
 void nextLevel() {
   current_level++;
-  char filename[] = "maps/X.map";
-  filename[5] = '0'+current_level; // Hackish but avoids using strings
+  char filename[] = "data/maps/X.map";
+  filename[10] = '0'+current_level; // Hackish but avoids using strings
   map.load(filename);
   respawn();
 }
