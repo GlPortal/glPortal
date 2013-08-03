@@ -11,6 +11,9 @@ add_executable(${EXE_NAME}
   Window.cpp
   )
 
+add_executable(map 
+  map/Main.cpp map/MapToWavefront.cpp
+  )
 
 add_custom_target(run COMMAND ./${EXE_NAME})
 
