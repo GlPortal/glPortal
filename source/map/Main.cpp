@@ -22,7 +22,8 @@ int main(int argc, char **argv) {
     switch (option){
       case 'f':
 	argument = optarg;
-	MapToWavefront *mapToObj = new MapToWavefront("data/map/1.map");
+	//	MapToWavefront *mapToObj = new MapToWavefront("data/map/1.map");
+	MapToWavefront *mapToObj = new MapToWavefront(argument);
         cout << "Argument f.";
 	break;
       case 'b':
