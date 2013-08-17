@@ -20,19 +20,29 @@ int main(int argc, char **argv) {
      
   while ((option = getopt (argc, argv, "abcf:")) != -1)
     switch (option){
-      case 'f':
+    case 'f':
+      {
 	argument = optarg;
 	//	MapToWavefront *mapToObj = new MapToWavefront("data/map/1.map");
 	MapToWavefront *mapToObj = new MapToWavefront(argument);
         cout << "Argument f.";
 	break;
-      case 'b':
+      }
+
+    case 'b':
+      {
         cout << "Argument b.";
 	break;
-      case 'c':
+      }
+      
+    case 'c':
+      {
 	argument = optarg;
 	break;
-      case '?':
+      }
+
+    case '?':
+      {
 	if (optopt == 'c')
 	  fprintf (stderr, "Option -%c requires an argument.\n", optopt);
 	else if (optopt == 'f')
@@ -45,8 +55,11 @@ int main(int argc, char **argv) {
 		   "Unknown option character `\\x%x'.\n",
 		   optopt);
 	return 1;
+      }
       default:
+	{
 	abort ();
+	}
       }
         
   for (index = optind; index < argc; index++)
