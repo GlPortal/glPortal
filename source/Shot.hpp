@@ -2,7 +2,9 @@
 #define __SHOT_HPP
 
 #include <GL/glut.h>
-#include "Box.hpp"
+#include "engine/Box.hpp"
+
+using namespace glPortal::engine;
 
 /**
  * Class representing a shot from the portal gun.

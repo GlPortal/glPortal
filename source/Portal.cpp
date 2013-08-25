@@ -1,7 +1,7 @@
 #include <cmath>
 #include <GL/glut.h>
 #include "Portal.hpp"
-#include "Resources.hpp"
+#include "engine/Resources.hpp"
 
 /**
  * Places and activates the portal.

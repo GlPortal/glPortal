@@ -1,8 +1,11 @@
 #include "Main.hpp"
-#include "Box.hpp"
-#include "Resources.hpp"
+#include "engine/Resources.hpp"
 #include <iostream>
+#include "engine/Box.hpp"
+
+using namespace glPortal::engine;
 using namespace std;
+
 int main(int argc, char **argv) {
   window.setup(&argc, argv);
   setup(&argc, argv);

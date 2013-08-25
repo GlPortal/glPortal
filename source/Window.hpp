@@ -9,8 +9,10 @@
 #include <GL/glext.h>
 #include "Player.hpp"
 #include "Map.hpp"
-#include "Box.hpp"
+#include "engine/Box.hpp"
 #include <vector>
+
+using namespace glPortal::engine;
 
 class Window {
 public:

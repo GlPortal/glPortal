@@ -5,7 +5,7 @@ project(${EXE_NAME})
 link_libraries(GLEW GL GLU glut)
 
 add_executable(${EXE_NAME} 
-  Main.cpp Game.cpp Resources.cpp 
+  Main.cpp Game.cpp engine/Resources.cpp 
   Player.cpp Map.cpp 
   Shot.cpp Portal.cpp 
   Window.cpp
