@@ -1,7 +1,7 @@
 #include "Shot.hpp"
 
 #include <cmath>
-#include "Resources.hpp"
+#include "engine/Resources.hpp"
 
 #define RADDEG 57.29577951308232088 // 180/PI
 #define SHOTSPEED 32.0

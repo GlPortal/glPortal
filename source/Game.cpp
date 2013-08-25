@@ -1,6 +1,9 @@
 #include "Game.hpp"
-#include "Box.hpp"
-#include "Resources.hpp"
+#include "engine/Resources.hpp"
+#include "engine/Box.hpp"
+
+using namespace glPortal::engine;
+
 
 /**
  * Respawns the player after dying.

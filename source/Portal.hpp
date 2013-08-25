@@ -1,9 +1,11 @@
 #ifndef __PORTAL_HPP
 #define __PORTAL_HPP
 
-#include "Box.hpp"
+#include "engine/Box.hpp"
 class Map; // Forward declaration
 #include "Map.hpp"
+
+using namespace glPortal::engine;
 
 enum PORTAL_DIR { PD_RIGHT, PD_FRONT, PD_LEFT, PD_BACK, PD_NONE }; /**< Possible direction a portal can face */
 enum PORTAL_COLOR { PC_BLUE, PC_ORANGE }; /**< Colors a portal can have */

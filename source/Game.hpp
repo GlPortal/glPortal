@@ -16,8 +16,12 @@
 
 #include "Player.hpp"
 #include "Window.hpp"
-#include "Box.hpp"
 #include "Map.hpp"
+
+#include "engine/Box.hpp"
+
+using namespace glPortal::engine;
+
 
 class Game {
 public:

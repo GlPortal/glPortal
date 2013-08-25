@@ -4,7 +4,9 @@
 #include <vector>
 #include <GL/glut.h>
 #include <string>
-#include "Box.hpp"
+#include "engine/Box.hpp"
+using namespace glPortal::engine;
+
 class Portal; // Forward declaration
 
 /**

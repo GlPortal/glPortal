@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 #include <cstdlib>
-#include "Resources.hpp"
+#include "engine/Resources.hpp"
 #include "Portal.hpp"
 
 float Map::stringStreamToFloat(std::stringstream& stream){
