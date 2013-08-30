@@ -119,7 +119,11 @@ void Game::draw() {
 
 void Game::drawHud(){
   //glMatrixMode(GL_PROJECTION);
-  renderBitmapString(10, 100, "v0.0.2");
+  renderBitmapString(10, 100, "v0.0.4");
+  glRasterPos2i(100, 120);
+  //glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)"Test");
+
   //  glPushMatrix();
   //  glLoadIdentity();
   
@@ -190,7 +194,10 @@ void Game::loadTextures(){
 void Game::drawOverlay() {
   // Switch to orthographic 2D projection
   glMatrixMode(GL_PROJECTION);
-  renderBitmapString(10, 100, "v0.0.3");
+  renderBitmapString(10, 100, "v0.0.4");
+  renderBitmapString(10, 10, "v0.0.4");
+  renderBitmapString(1, 1, "v0.0.4");
+
   glPushMatrix();
   glLoadIdentity();
   gluOrtho2D(0,width,height,0);

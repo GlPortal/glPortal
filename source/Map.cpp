@@ -4,6 +4,7 @@
 #include <string>
 #include <cstdlib>
 #include "engine/Resources.hpp"
+#include "Exception.hpp"
 #include "Portal.hpp"
 
 float Map::stringStreamToFloat(std::stringstream& stream){
