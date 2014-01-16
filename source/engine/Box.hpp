@@ -2,6 +2,7 @@
 #define __BOX_HPP
 
 #include "Resources.hpp"
+#include "Vertex.hpp"
 
 #define MAX(x,y) (((x) > (y)) ? (x) : (y))
 #define MIN(x,y) (((x) < (y)) ? (x) : (y))
@@ -22,12 +23,22 @@ namespace glPortal {
 
       Box() : x1(0), y1(0), z1(0), x2(0), y2(0), z2(0), type(TID_NONE) {}
 
-      Box(float x1, float y1, float z1, float x2, float y2, float z2, TEXTURE_ID type = TID_NONE) {
-	set(x1, y1, z1, x2, y2, z2, type);
+      /**
+       * Please prefer this constructor
+       */
+      Box(Vertex start, Vertex end, TEXTURE_ID type = TID_NONE) {	
+	set(start.getX(), start.getY(), start.getZ(), end.getX(), end.getY(), end.getZ(), type);
       }
 
       Box(float *val, TEXTURE_ID type = TID_NONE) {
 	set(val[0], val[1], val[2], val[3], val[4], val[5], type);
+      }
+
+      /**
+       * @deprecated This constructor is a trainwreck. Please use the smaller constructor instead.
+       */
+      Box(float x1, float y1, float z1, float x2, float y2, float z2, TEXTURE_ID type = TID_NONE) {
+	set(x1, y1, z1, x2, y2, z2, type);
       }
 
       /**
