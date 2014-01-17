@@ -27,6 +27,8 @@ public:
 	float getStartY() { return startpos[1]; }
 	float getStartZ() { return startpos[2]; }
         float stringStreamToFloat(std::stringstream& stream);
+private:
+  void flushCurrentMap();
 protected:
 	void drawBox(Box &b);
 	void drawCake();

@@ -14,6 +14,13 @@ float Map::stringStreamToFloat(std::stringstream& stream){
   return static_cast<float>(atof(string.c_str()));
 }
 
+/**
+ * Empties the map of all objects
+ */
+void Map::flushCurrentMap(){
+  walls.clear();
+  acid.clear();
+}
 
 /**
  * Loads map data from a .map file
@@ -24,9 +31,7 @@ void Map::load(const char *filename) {
   std::ifstream file(filename, std::ifstream::in);
   std::string line, string;
 
-  // Clear data
-  walls.clear();
-  acid.clear();
+  this->flushCurrentMap();
 
   // Read map file line by line
   while(file.good()) {
