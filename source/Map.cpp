@@ -4,15 +4,10 @@
 #include <string>
 #include <cstdlib>
 #include "engine/Resources.hpp"
+#include "engine/StringConverter.hpp"
 #include "Exception.hpp"
 #include "Portal.hpp"
 
-float Map::stringStreamToFloat(std::stringstream& stream){
-  std::string string;
-  stream >> string;
-
-  return static_cast<float>(atof(string.c_str()));
-}
 
 /**
  * Empties the map of all objects
@@ -44,41 +39,41 @@ void Map::load(const char *filename) {
 	// Wall definition
       case 'w':
 	for(int i = 0; i < 6; i++) {
-	  values[i] = stringStreamToFloat(stringStream);
+	  values[i] = StringConverter::stringStreamToFloat(stringStream);
 	}
 	walls.push_back(Box(values, TID_WALL));
 	break;
 	// Tiles definition
       case 't':
 	for(int i = 0; i < 6; i++) {
-	  values[i] = stringStreamToFloat(stringStream);
+	  values[i] = StringConverter::stringStreamToFloat(stringStream);
 	}
 	walls.push_back(Box(values, TID_TILES));
 	break;
 	// Acid pool definition
       case 'a':
 	for(int i = 0; i < 6; i++) {
-	  values[i] = stringStreamToFloat(stringStream);
+	  values[i] = StringConverter::stringStreamToFloat(stringStream);
 	}
 	acid.push_back(Box(values, TID_ACID));
 	break;
 	// Light position
       case 'l':
 	for(int i = 0; i < 3; i++) {
-	  lightpos[i] = stringStreamToFloat(stringStream);
+	  lightpos[i] = StringConverter::stringStreamToFloat(stringStream);
 	}
 	lightpos[3] = 1.f; // Set as positioned light
 	break;
 	// Start position
       case 's':
 	for(int i = 0; i < 3; i++) {
-	  startpos[i] = stringStreamToFloat(stringStream);
+	  startpos[i] = StringConverter::stringStreamToFloat(stringStream);
 	}
 	break;
 	// Cake/goal position
       case 'c':
 	for(int i = 0; i < 3; i++) {
-	  cakepos[i] = stringStreamToFloat(stringStream);
+	  cakepos[i] = StringConverter::stringStreamToFloat(stringStream);
 	}
 	cakeBox.set(cakepos[0]-0.6f, cakepos[1]-0.6f, cakepos[2]-0.6f,
 		    cakepos[0]+0.6f, cakepos[1]+0.2f, cakepos[2]+0.6f);
