@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
      
   opterr = 0;
      
-  while ((option = getopt (argc, argv, "abcf:")) != -1)
+  while ((option = getopt (argc, argv, "abcfh:")) != -1)
     switch (option){
     case 'f':
       {
@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
 	break;
       }
 
-    case '?':
+    case 'h':
       {
 	if (optopt == 'c')
 	  fprintf (stderr, "Option -%c requires an argument.\n", optopt);
