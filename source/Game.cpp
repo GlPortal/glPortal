@@ -118,14 +118,20 @@ void Game::draw() {
 }
 
 void Game::drawHud(){
-  //glMatrixMode(GL_PROJECTION);
-  renderBitmapString(10, 100, "v0.0.4");
-  glRasterPos2i(100, 120);
-  //glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
-glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)"Test");
+  glMatrixMode(GL_PROJECTION);	     
+  glPushMatrix();		     
+  glLoadIdentity();		     
+  glOrtho( 0, 10 , 10 , 0, -1, 1 );  
+  glMatrixMode(GL_MODELVIEW);	     
+  glPushMatrix();		     
+  glLoadIdentity();
 
-  //  glPushMatrix();
-  //  glLoadIdentity();
+  renderBitmapString(1, 1, "v0.0.4");
+
+  glMatrixMode( GL_PROJECTION );     
+  glPopMatrix();		     
+  glMatrixMode( GL_MODELVIEW );	     
+  glPopMatrix();	
   
 }
 
@@ -192,21 +198,14 @@ void Game::loadTextures(){
  * Should be called after drawing all 3D.
  */
 void Game::drawOverlay() {
-  // Switch to orthographic 2D projection
   glMatrixMode(GL_PROJECTION);
-  renderBitmapString(10, 100, "v0.0.4");
-  renderBitmapString(10, 10, "v0.0.4");
-  renderBitmapString(1, 1, "v0.0.4");
-
   glPushMatrix();
   glLoadIdentity();
   gluOrtho2D(0,width,height,0);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  //  glMatrixMode(GL_PROJECTION);
-  //  glPopMatrix();
   glDisable(GL_DEPTH_TEST);
-
+  renderBitmapString(20, 20, "v0.0.4");
   // If game is paused
   if(this->isPaused()) {
     // Add dark tint to screen
@@ -280,7 +279,6 @@ void Game::drawOverlay() {
   // Restore perspective projection matrix
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
-  drawHud();
   glMatrixMode(GL_MODELVIEW);
 }
 
