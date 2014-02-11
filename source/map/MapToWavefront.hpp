@@ -7,6 +7,9 @@ using namespace std;
 
 namespace glPortal {
   namespace map {
+    /**
+     * Convert a glPortal map to wavefront format
+     **/
     class MapToWavefront {
     public:
       MapToWavefront(const string & filename);

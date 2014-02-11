@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <iostream>
 #include <cstdlib>
 #include "engine/Resources.hpp"
 #include "engine/StringConverter.hpp"
@@ -9,10 +10,67 @@
 #include "Portal.hpp"
 
 
+void Map::setLightPosition(GLfloat (&position)[4]){
+     this->lightpos[0] = position[0];
+     this->lightpos[1] = position[1];
+     this->lightpos[2] = position[2];
+     this->lightpos[3] = position[3];
+     this->lightpos[4] = position[4];
+}
+
+GLfloat* Map::getLightPostition(){
+  return this->lightpos;
+}
+void Map::setSpawnPosition(float (&position)[3]){
+  this->startpos[0] = position[0];
+  this->startpos[1] = position[1];
+  this->startpos[2] = position[2];
+  this->startpos[3] = position[3];
+}
+
+float* Map::getSpawnPosition(){
+  return this->startpos;
+}
+
+void Map::setCakePosition(float (&position)[3]){
+  this->cakepos[0] = position[0];
+  this->cakepos[1] = position[1];
+  this->cakepos[2] = position[2];
+  this->cakepos[3] = position[3];
+  this->cakeBox.set(position[0]-0.6f, position[1]-0.6f, position[2]-0.6f,
+		    position[0]+0.6f, position[1]+0.2f, position[2]+0.6f);
+
+}
+
+void Map::setCakeBox(Box box){
+  this->cakeBox = box;
+}
+
+float* Map::getCakePosition(){
+  return this->cakepos;
+}
+void Map::setWallVector(std::vector<Box> walls){}
+
+std::vector<Box> Map::getWallVector(){
+  return this->walls;
+}
+
+void Map::setAcidVector(std::vector<Box> acid){}
+
+std::vector<Box> Map::getAcidVector(){
+  return this->acid;
+}
+void Map::addWallBox(Box box){
+  walls.push_back(box);
+}
+void Map::addAcidBox(Box box){
+  acid.push_back(box);
+}
+
 /**
  * Empties the map of all objects
  */
-void Map::flushCurrentMap(){
+void Map::flush(){
   walls.clear();
   acid.clear();
 }
@@ -26,7 +84,7 @@ void Map::load(const char *filename) {
   std::ifstream file(filename, std::ifstream::in);
   std::string line, string;
 
-  this->flushCurrentMap();
+  this->flush();
 
   // Read map file line by line
   while(file.good()) {
