@@ -3,6 +3,7 @@
 #include <iostream>
 #include "engine/Box.hpp"
 
+using namespace glPortal::map;
 using namespace glPortal::engine;
 using namespace std;
 
@@ -77,7 +78,8 @@ void nextLevel() {
   current_level++;
   char filename[] = "data/maps/X.map";
   filename[10] = '0'+current_level; // Hackish but avoids using strings
-  map.load(filename);
+  MapFileParser parser;
+  map = parser.getMapFromFile(filename);
   respawn();
 }
 

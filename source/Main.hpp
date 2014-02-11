@@ -13,8 +13,12 @@
 #include <cstdlib> 
 #include "Player.hpp"
 #include "Map.hpp"
+#include "map/MapFileParser.hpp"
 #include "Game.hpp"
 #include "Window.hpp"
+
+using namespace glPortal::engine;
+using namespace glPortal::map;
 
 // Main functions
 void update(int);

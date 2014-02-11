@@ -6,7 +6,6 @@
 namespace glPortal {
   namespace map {
       const char* MapToWavefront::DATA_DIRECTORY = "data";
-
       MapToWavefront::MapToWavefront(const string & filename){
 	char * inputFilename  = new char [filename.length()+1];
 	char * resultFilename = new char [filename.length()+5];
