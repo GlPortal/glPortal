@@ -17,11 +17,12 @@
 #include "Player.hpp"
 #include "Window.hpp"
 #include "Map.hpp"
+#include "map/MapFileParser.hpp"
 
 #include "engine/Box.hpp"
 
 using namespace glPortal::engine;
-
+using namespace glPortal::map;
 
 class Game {
 public:

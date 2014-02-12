@@ -35,7 +35,6 @@ public:
     * and will get moved out of this class.
     *    
     * Methods to move */
-  void load(const char *filename);
   void draw(bool nmap);
   void drawFromPortal(const Portal& portal, bool nmap);
   bool collidesWithWall(Box &bbox);
