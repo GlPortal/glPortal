@@ -18,9 +18,10 @@ void Game::respawn() {
  */
 void Game::nextLevel() {
   current_level++;
-  char filename[] = "maps/X.map";
-  filename[5] = '0'+current_level; // Hackish but avoids using strings
-  map.load(filename);
+  char filename[] = "data/maps/X.map";
+  filename[10] = '0'+current_level; // Hackish but avoids using strings
+  MapFileParser parser;
+  map = parser.getMapFromFile(filename);
   respawn();
 }
 
