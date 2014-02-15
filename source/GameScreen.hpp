@@ -10,6 +10,10 @@ class GameScreen {
 public:
   GameScreen(Window &window);
   void drawPauseScreen();
+  void drawCrosshair();
+  void drawGameOverScreen();
+  void drawRespawnScreen();
+  void drawContinueScreen();
 private:
   Window window;
 };
