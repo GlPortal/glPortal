@@ -16,6 +16,7 @@
 
 #include "Player.hpp"
 #include "Window.hpp"
+#include "GameScreen.hpp"
 #include "Map.hpp"
 #include "map/MapFileParser.hpp"
 
@@ -35,6 +36,7 @@ public:
   void loadTextures();
   //Refactoring Methods
   void setPlayerMap(Player player, Map map);
+  void setWindow(Window &window);
   void setHeightWidth(int height, int width);
   void setFade(float fade);
   void setNmapEnabled(bool nmap_enabled);

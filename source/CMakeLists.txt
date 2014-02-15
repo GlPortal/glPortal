@@ -7,7 +7,8 @@ link_libraries(GLEW GL GLU glut)
 #include(Toolchain-mingw32.cmake)
 
 add_executable(${EXE_NAME} 
-  Main.cpp Game.cpp engine/Resources.cpp engine/StringConverter.cpp
+  Main.cpp Game.cpp GameScreen.cpp engine/Resources.cpp engine/StringConverter.cpp 
+  map/MapFileParser.cpp
   Player.cpp Map.cpp 
   Shot.cpp Portal.cpp 
   Window.cpp
