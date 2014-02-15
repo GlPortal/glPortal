@@ -1,9 +1,9 @@
 #include "Game.hpp"
+#include "GameScreen.hpp"
 #include "engine/Resources.hpp"
 #include "engine/Box.hpp"
 
 using namespace glPortal::engine;
-
 
 /**
  * Respawns the player after dying.
@@ -54,6 +54,10 @@ void Game::setCurrentLevel(int current_level){
 void Game::setHeightWidth(int height, int width){
   this->width = width;
   this->height = height;
+}
+
+void Game::setWindow(Window &window){
+  this->window = window;
 }
 
 
@@ -199,6 +203,7 @@ void Game::loadTextures(){
  * Should be called after drawing all 3D.
  */
 void Game::drawOverlay() {
+  GameScreen* screen = new GameScreen(window);
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
@@ -209,26 +214,7 @@ void Game::drawOverlay() {
   renderBitmapString(20, 20, "v0.0.4");
   // If game is paused
   if(this->isPaused()) {
-    // Add dark tint to screen
-    glColor4f(0.f, 0.f, 0.f, 0.5f);
-    glDisable(GL_TEXTURE_2D);
-    glBegin(GL_QUADS);
-    glVertex2f(  0.f,    0.f);
-    glVertex2f(  0.f, height);
-    glVertex2f(width, height);
-    glVertex2f(width,    0.f);
-    glEnd();
-    // Draw "Paused" message
-    glEnable(GL_TEXTURE_2D);
-    glColor4f(1.f, 1.f, 1.f, 1.f);
-    Resources::inst().bindTexture(TID_STRINGS);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.00f, 0.125f); glVertex2f(width/2-64, height/2-32);
-    glTexCoord2f(0.00f, 0.250f); glVertex2f(width/2-64, height/2+32);
-    glTexCoord2f(0.25f, 0.250f); glVertex2f(width/2+64, height/2+32);
-    glTexCoord2f(0.25f, 0.125f); glVertex2f(width/2+64, height/2-32);
-    glEnd();
-    // If game is not paused
+    screen->drawPauseScreen();
   } else {
     // Draw crosshair if player is alive
     if(player.getState() == PS_ALIVE) {

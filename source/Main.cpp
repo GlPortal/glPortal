@@ -85,6 +85,7 @@ void nextLevel() {
 
 void draw() {
   game.setPlayerMap(player, map);
+  game.setWindow(window);
   game.setHeightWidth(height, width);
   game.setNmapEnabled(nmap_enabled);
   game.draw();
