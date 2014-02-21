@@ -88,47 +88,12 @@ namespace glPortal {
 	Character test('A');
 	test.draw(0, 0);
 	Character test2('B');
-	test2.draw(15, 15);
-	
-	/*	int height = window.getHeight();
-	int width  = window.getWidth();
-	Resources::inst().bindTexture(TID_FONT);
-	glBegin(GL_QUADS);
-	//left top corner x, y
-	glTexCoord2f(0, 0.0f); 
-	glVertex2f(0, 0);
-	//left bottom corner x, y
-	glTexCoord2f(0, 0.17f); 
-	glVertex2f(0, 27);
-	//right bottom corner x, y
-	glTexCoord2f(0.035f, 0.17f); 
-	glVertex2f(27, 27);
-	//right top corner x, y
-	glTexCoord2f(0.035f, 0.0f); 
-	glVertex2f(27, 0);
-	glEnd(); */
+	test2.draw(30, 0);
+	Character test3('Z');
+	test3.draw(60, 0);
+	Character test4('C');
+	test4.draw(90, 0);
       }
-      /*
-	void GameScreen::drawLetterFromGridPosition(int x, int y){
-	int height = window.getHeight();
-	int width  = window.getWidth();
-	Resources::inst().bindTexture(TID_FONT);
-	glBegin(GL_QUADS);
-	//left top corner x, y
-	glTexCoord2f(0, 0.0f); 
-	glVertex2f(0, 0);
-	//left bottom corner x, y
-	glTexCoord2f(0, 0.17f); 
-	glVertex2f(0, 27);
-	//right bottom corner x, y
-	glTexCoord2f(0.035f, 0.17f); 
-	glVertex2f(27, 27);
-	//right top corner x, y
-	glTexCoord2f(0.035f, 0.0f); 
-	glVertex2f(27, 0);
-	glEnd();
-	}
-      */
     }
   }
 }
