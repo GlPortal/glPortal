@@ -5,7 +5,7 @@
 #include <cstring>
 #include <cstdlib> 
 namespace glPortal {
-  namespace map {
+  namespace map{
     class FileParser {
     public:
       FileParser(string filename);

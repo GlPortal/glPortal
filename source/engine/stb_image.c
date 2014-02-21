@@ -142,7 +142,7 @@
 // stb_image now supports loading HDR images in general, and currently
 // the Radiance .HDR file format, although the support is provided
 // generically. You can still load any file through the existing interface;
-// if you attempt to load an HDR file, it will be automatically remapped to
+// if you attempt to load an HDR file, it will be automatically regameMapped to
 // LDR, assuming gamma 2.2 and an arbitrary scale factor defaulting to 1;
 // both of these constants can be reconfigured through this interface:
 //
@@ -3503,7 +3503,7 @@ static stbi_uc *psd_load(stbi *s, int *x, int *y, int *comp, int req_comp)
 
    // Make sure the color mode is RGB.
    // Valid options are:
-   //   0: Bitmap
+   //   0: BitgameMap
    //   1: Grayscale
    //   2: Indexed color
    //   3: RGB color

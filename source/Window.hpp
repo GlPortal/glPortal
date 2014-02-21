@@ -8,7 +8,7 @@
 #include <GL/glut.h>
 #include <GL/glext.h>
 #include "Player.hpp"
-#include "Map.hpp"
+#include "GameMap.hpp"
 #include "engine/Box.hpp"
 #include <vector>
 

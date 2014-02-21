@@ -4,7 +4,7 @@
 #include <cstring>
 
 namespace glPortal {
-  namespace map {
+  namespace map{
       const char* MapToWavefront::DATA_DIRECTORY = "data";
       MapToWavefront::MapToWavefront(const string & filename){
 	char * inputFilename  = new char [filename.length()+1];

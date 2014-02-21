@@ -124,7 +124,7 @@ void Resources::enableProgram(PROGRAM_ID pid) {
   GLuint paramTex = glGetUniformLocation(programs[pid], "tex");
   glUniform1i(paramTex, 0);
   // Bind second texture unit to "nmap" in fragment shader
-  GLuint paramNmap = glGetUniformLocation(programs[pid], "nmap");
+  GLuint paramNmap= glGetUniformLocation(programs[pid], "nmap");
   glUniform1i(paramNmap, 1);
 }
 
@@ -172,7 +172,7 @@ GLuint Resources::createTexture(const char *filename) {
   glGenTextures(1, &handle);
   glBindTexture(GL_TEXTURE_2D, handle);
 
-  // Read bitmap data
+  // Read bitmapdata
   int w, h, n;
   unsigned char *data = stbi_load(filename, &w, &h, &n, 0);
 

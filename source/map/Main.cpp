@@ -23,8 +23,8 @@ int main(int argc, char **argv) {
     case 'f':
       {
 	argument = optarg;
-	//	MapToWavefront *mapToObj = new MapToWavefront("data/map/1.map");
-	MapToWavefront *mapToObj = new MapToWavefront(argument);
+	//	MapToWavefront *gameMapToObj = new MapToWavefront("data/gameMap/1.gameMap");
+	MapToWavefront *gameMapToObj = new MapToWavefront(argument);
         cout << "Argument f.";
 	break;
       }

@@ -3,7 +3,7 @@
 
 #include "engine/Box.hpp"
 class Map; // Forward declaration
-#include "Map.hpp"
+#include "GameMap.hpp"
 
 using namespace glPortal::engine;
 
@@ -17,8 +17,8 @@ class Portal {
 public:
 	Portal() : x(0), y(0), z(0), dir(PD_NONE), active(false) { }
 
-        void place(float x, float y, float z, PORTAL_DIR dir, GameMap& map);
-        void placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& map);
+        void place(float x, float y, float z, PORTAL_DIR dir, GameMap& gameMap);
+        void placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& gameMap);
 	bool inPortal(Box &box);
 	bool throughPortal(float r, float s, float t);
 	void disable();

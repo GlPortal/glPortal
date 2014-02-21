@@ -6,9 +6,9 @@
 using namespace std;
 
 namespace glPortal {
-  namespace map {
+  namespace map{
     /**
-     * Convert a glPortal map to wavefront format
+     * Convert a glPortal gameMapto wavefront format
      **/
     class MapToWavefront {
     public:

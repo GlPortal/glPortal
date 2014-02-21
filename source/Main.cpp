@@ -39,7 +39,7 @@ void update(int value) {
     float mouseDistanceFromCenterX = static_cast<float>(centerHorizontal-mousex);
     float mouseDistanceFromCenterY = static_cast<float>(centerVertical-mousey);
     glutWarpPointer(centerHorizontal, centerVertical);
-    player.update(FRAMETIME_SECONDS, keystates, mouseDistanceFromCenterX, mouseDistanceFromCenterY, map);
+    player.update(FRAMETIME_SECONDS, keystates, mouseDistanceFromCenterX, mouseDistanceFromCenterY, gameMap);
 
     if(player.getState() != PS_ALIVE) {
       game.fadeOut();
@@ -71,7 +71,7 @@ void registerCallbacks(){
 
 void respawn() {
   game.resetFade();
-  player.create(map.getStartX(), map.getStartY(), map.getStartZ());
+  player.create(gameMap.getStartX(), gameMap.getStartY(), gameMap.getStartZ());
 }
 
 void nextLevel() {
@@ -79,12 +79,12 @@ void nextLevel() {
   char filename[] = "data/maps/X.map";
   filename[10] = '0'+current_level; // Hackish but avoids using strings
   MapFileParser parser;
-  map = parser.getMapFromFile(filename);
+  gameMap= parser.getMapFromFile(filename);
   respawn();
 }
 
 void draw() {
-  game.setPlayerMap(player, map);
+  game.setPlayerMap(player, gameMap);
   game.setWindow(window);
   game.setHeightWidth(height, width);
   game.setNmapEnabled(nmap_enabled);

@@ -11,10 +11,10 @@
  * @param y New y-coordinate
  * @param z New z-coordinate
  * @param dir New direction
- * @param map The current map
+ * @param gameMapThe current gameMap
  */
 #include <cstdio>
-void Portal::place(float x, float y, float z, PORTAL_DIR dir, GameMap& map) {
+void Portal::place(float x, float y, float z, PORTAL_DIR dir, GameMap& gameMap) {
   float nx, ny, nz; // New coordinates
   nx = round(x);
   ny = round(y-0.25f)+0.25f;
@@ -32,7 +32,7 @@ void Portal::place(float x, float y, float z, PORTAL_DIR dir, GameMap& map) {
     bbox.set(nx-1.49f, ny-1.24f, nz-0.74f, nx-0.01f, ny+1.24f, nz+0.74f);
   }
   // Only place portal if nothing is in front of it
-  if(map.collidesWithWall(bbox) == false && map.collidesWithAcid(bbox) == false) {
+  if(gameMap.collidesWithWall(bbox) == false && gameMap.collidesWithAcid(bbox) == false) {
     this->x = nx;
     this->y = ny;
     this->z = nz;
@@ -49,9 +49,9 @@ void Portal::place(float x, float y, float z, PORTAL_DIR dir, GameMap& map) {
  * @param hitx X-coordinate of shot-box collision
  * @param hity Y-coordinate of shot-box collision
  * @param hitz Z-coordinate of shot-box collision
- * @param map The current map
+ * @param gameMapThe current gameMap
  */
-void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& map) {
+void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& gameMap) {
   float dist[4];
   int min;
 
@@ -76,10 +76,10 @@ void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& m
 
     // Left face
     if(min == 0) {
-      place(box.x1, hity, hitz, PD_LEFT, map);
+      place(box.x1, hity, hitz, PD_LEFT, gameMap);
       // Right face
     } else {
-      place(box.x2, hity, hitz, PD_RIGHT, map);
+      place(box.x2, hity, hitz, PD_RIGHT, gameMap);
     }
 
     // Portal on the XY-plane
@@ -89,10 +89,10 @@ void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& m
 
     // Back face
     if(min == 2) {
-      place(hitx, hity, box.z1, PD_BACK, map);
+      place(hitx, hity, box.z1, PD_BACK, gameMap);
       // Front Face
     } else {
-      place(hitx, hity, box.z2, PD_FRONT, map);
+      place(hitx, hity, box.z2, PD_FRONT, gameMap);
     }
   }
 }

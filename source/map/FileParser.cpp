@@ -1,5 +1,5 @@
 namespace glPortal {
-  namespace map {
+  namespace map{
     FileParser::FileParser(string filename);
     }
   }
