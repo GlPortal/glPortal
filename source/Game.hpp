@@ -55,8 +55,6 @@ public:
   void togglePause();
   //Refactoring Methods End
 private:
-  void renderBitmapString(int x, int y, char *string);
-  void drawHud();
   int width, height;
   int mousex, mousey; 
   bool keystates[256];
