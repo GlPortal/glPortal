@@ -1,4 +1,3 @@
-if(WIN)
   include(CMakeForceCompiler)
   SET(CMAKE_SYSTEM_NAME Windows)
 
@@ -17,7 +16,9 @@ if(WIN)
   SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
   include_directories(
   /usr/i686-w64-mingw32/include
+  /usr/i686-w64-mingw32
   /usr/lib/gcc/i686-w64-mingw32/4.6/include 
+  /usr/lib/gcc/i686-w64-mingw32/4.6
   /usr/i686-w64-mingw32/include
+  /usr/i686-w64-mingw32
   )
-endif(WIN)

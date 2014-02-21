@@ -1,9 +1,10 @@
 #include "Game.hpp"
-#include "GameScreen.hpp"
+#include "engine/gui/GameScreen.hpp"
 #include "engine/Resources.hpp"
 #include "engine/Box.hpp"
 
 using namespace glPortal::engine;
+using namespace glPortal::engine::gui;
 
 /**
  * Respawns the player after dying.
@@ -27,7 +28,7 @@ void Game::nextLevel() {
 
 // This method is here for refactoring purposes 
 // and can be removed once main is decluttered
-void Game::setPlayerMap(Player player, Map map){
+void Game::setPlayerMap(Player player, GameMap map){
   this->map = map;
   this->player = player;
 }
@@ -37,7 +38,7 @@ void Game::setPlayer(Player player){
 }
 
 
-Map Game::getMap(){
+GameMap Game::getMap(){
   return this->map;
 }
 
@@ -212,6 +213,7 @@ void Game::drawOverlay() {
   glLoadIdentity();
   glDisable(GL_DEPTH_TEST);
   renderBitmapString(20, 20, "v0.0.4");
+  screen->drawTestTextScreen();
   // If game is paused
   if(this->isPaused()) {
     screen->drawPauseScreen();

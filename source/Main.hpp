@@ -18,7 +18,6 @@
 #include "Window.hpp"
 
 using namespace glPortal::engine;
-using namespace glPortal::map;
 
 // Main functions
 void update(int);
@@ -41,7 +40,7 @@ bool keystates[256];
 bool nmap_enabled;
 
 Player player;
-Map map;
+GameMap map;
 Game game;
 Window window;
 int current_level;

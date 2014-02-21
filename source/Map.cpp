@@ -9,8 +9,7 @@
 #include "Exception.hpp"
 #include "Portal.hpp"
 
-
-void Map::setLightPosition(GLfloat (&position)[4]){
+void GameMap::setLightPosition(GLfloat (&position)[4]){
      this->lightpos[0] = position[0];
      this->lightpos[1] = position[1];
      this->lightpos[2] = position[2];
@@ -18,21 +17,21 @@ void Map::setLightPosition(GLfloat (&position)[4]){
      this->lightpos[4] = position[4];
 }
 
-GLfloat* Map::getLightPostition(){
+GLfloat* GameMap::getLightPostition(){
   return this->lightpos;
 }
-void Map::setSpawnPosition(float (&position)[3]){
+void GameMap::setSpawnPosition(float (&position)[3]){
   this->startpos[0] = position[0];
   this->startpos[1] = position[1];
   this->startpos[2] = position[2];
   this->startpos[3] = position[3];
 }
 
-float* Map::getSpawnPosition(){
+float* GameMap::getSpawnPosition(){
   return this->startpos;
 }
 
-void Map::setCakePosition(float (&position)[3]){
+void GameMap::setCakePosition(float (&position)[3]){
   this->cakepos[0] = position[0];
   this->cakepos[1] = position[1];
   this->cakepos[2] = position[2];
@@ -42,35 +41,35 @@ void Map::setCakePosition(float (&position)[3]){
 
 }
 
-void Map::setCakeBox(Box box){
+void GameMap::setCakeBox(Box box){
   this->cakeBox = box;
 }
 
-float* Map::getCakePosition(){
+float* GameMap::getCakePosition(){
   return this->cakepos;
 }
-void Map::setWallVector(std::vector<Box> walls){}
+void GameMap::setWallVector(std::vector<Box> walls){}
 
-std::vector<Box> Map::getWallVector(){
+std::vector<Box> GameMap::getWallVector(){
   return this->walls;
 }
 
-void Map::setAcidVector(std::vector<Box> acid){}
+void GameMap::setAcidVector(std::vector<Box> acid){}
 
-std::vector<Box> Map::getAcidVector(){
+std::vector<Box> GameMap::getAcidVector(){
   return this->acid;
 }
-void Map::addWallBox(Box box){
+void GameMap::addWallBox(Box box){
   walls.push_back(box);
 }
-void Map::addAcidBox(Box box){
+void GameMap::addAcidBox(Box box){
   acid.push_back(box);
 }
 
 /**
  * Empties the map of all objects
  */
-void Map::flush(){
+void GameMap::flush(){
   walls.clear();
   acid.clear();
 }
@@ -80,7 +79,7 @@ void Map::flush(){
  *
  * @param nmap True if normal mapping is enabled
  */
-void Map::draw(bool nmap) {
+void GameMap::draw(bool nmap) {
   // Update light position
   glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
@@ -125,7 +124,7 @@ void Map::draw(bool nmap) {
  * @param portal Portal currently viewing through
  * @param nmap True if normal mapping is enabled
  */
-void Map::drawFromPortal(const Portal& portal, bool nmap) {
+void GameMap::drawFromPortal(const Portal& portal, bool nmap) {
   // Update light position
   glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
@@ -180,7 +179,7 @@ void Map::drawFromPortal(const Portal& portal, bool nmap) {
  *
  * @param b Box to draw
  */
-void Map::drawBox(Box &b) {
+void GameMap::drawBox(Box &b) {
   float dx = (b.x2 - b.x1)*0.5f;
   float dy = (b.y2 - b.y1)*0.5f;
   float dz = (b.z2 - b.z1)*0.5f;
@@ -237,7 +236,7 @@ void Map::drawBox(Box &b) {
 /**
  * Draws the cake model at cake position
  */
-void Map::drawCake() {
+void GameMap::drawCake() {
   glPushMatrix();
   glTranslatef(cakepos[0], cakepos[1], cakepos[2]);
   Resources::inst().bindTexture(TID_CAKE);
@@ -248,7 +247,7 @@ void Map::drawCake() {
 /**
  * Draws the lamp model at light position
  */
-void Map::drawLamp() {
+void GameMap::drawLamp() {
   glPushMatrix();
   glTranslatef(lightpos[0], lightpos[1], lightpos[2]);
   Box lightBox(-0.8f, 1.f, -0.2f, 0.8f, 0.95f, 0.2f);
@@ -269,7 +268,7 @@ void Map::drawLamp() {
  *
  * @return True if the box collides
  */
-bool Map::collidesWithWall(Box &bbox) {
+bool GameMap::collidesWithWall(Box &bbox) {
   std::vector<Box>::iterator it;
   for(it = walls.begin(); it < walls.end(); it++) {
     if(bbox.collide(*it)) return true;
@@ -284,7 +283,7 @@ bool Map::collidesWithWall(Box &bbox) {
  *
  * @return True if the box collides
  */
-bool Map::collidesWithCake(Box &bbox) {
+bool GameMap::collidesWithCake(Box &bbox) {
   return bbox.collide(cakeBox);
 }
 
@@ -295,7 +294,7 @@ bool Map::collidesWithCake(Box &bbox) {
  *
  * @return True if the box collides
  */
-bool Map::collidesWithAcid(Box &bbox) {
+bool GameMap::collidesWithAcid(Box &bbox) {
   std::vector<Box>::iterator it;
   for(it = acid.begin(); it < acid.end(); it++) {
     if(bbox.collide(*it)) return true;
@@ -313,7 +312,7 @@ bool Map::collidesWithAcid(Box &bbox) {
  *
  * @return True if a collision occurs.
  */
-bool Map::pointInWall(float x, float y, float z, Box *box = NULL) {
+bool GameMap::pointInWall(float x, float y, float z, Box *box = NULL) {
   std::vector<Box>::iterator it;
   for(it = walls.begin(); it < walls.end(); it++) {
     if(it->collide(x,y,z)) {

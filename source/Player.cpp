@@ -47,7 +47,7 @@ void Player::create(float x, float y, float z) {
  * @param mousedy Movement since last udpate in vertical axis
  * @param map Reference to the Map
  */
-void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Map &map) {
+void Player::update(float dt, bool *keystates, float mousedx, float mousedy, GameMap &map) {
   // Apply mouse movement to view
   yrot += mousedx*0.0015f;
   xrot += mousedy*0.0015f;
