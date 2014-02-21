@@ -120,25 +120,6 @@ void Game::draw() {
   player.drawPortalOutlines();
   player.drawShots();
   drawOverlay();
-  //  drawHud();
-}
-
-void Game::drawHud(){
-  glMatrixMode(GL_PROJECTION);	     
-  glPushMatrix();		     
-  glLoadIdentity();		     
-  glOrtho( 0, 10 , 10 , 0, -1, 1 );  
-  glMatrixMode(GL_MODELVIEW);	     
-  glPushMatrix();		     
-  glLoadIdentity();
-
-  renderBitmapString(1, 1, "v0.0.4");
-
-  glMatrixMode( GL_PROJECTION );     
-  glPopMatrix();		     
-  glMatrixMode( GL_MODELVIEW );	     
-  glPopMatrix();	
-  
 }
 
 
@@ -212,7 +193,6 @@ void Game::drawOverlay() {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glDisable(GL_DEPTH_TEST);
-  renderBitmapString(20, 20, "v0.0.4");
   screen->drawTestTextScreen();
   // If game is paused
   if(this->isPaused()) {
@@ -258,14 +238,3 @@ void Game::unpause(){
 void Game::togglePause(){
   this->paused = !this->paused;
 }
-
-void Game::renderBitmapString(int x, int y, char *string){
-  int len, i;
-
-  glRasterPos2f(x, y);
-  len = (int) std::strlen(string);
-  for (i = 0; i < len; i++) {
-    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, string[i]);
-  }
-}
-
