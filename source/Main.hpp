@@ -12,7 +12,7 @@
 #include <GL/glext.h>
 #include <cstdlib> 
 #include "Player.hpp"
-#include "Map.hpp"
+#include "GameMap.hpp"
 #include "map/MapFileParser.hpp"
 #include "Game.hpp"
 #include "Window.hpp"
@@ -40,7 +40,7 @@ bool keystates[256];
 bool nmap_enabled;
 
 Player player;
-GameMap map;
+GameMap gameMap;
 Game game;
 Window window;
 int current_level;

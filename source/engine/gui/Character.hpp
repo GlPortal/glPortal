@@ -6,7 +6,7 @@
 #include <GL/freeglut.h>
 #include <string.h>
 #include "../Resources.hpp"
-//#include <map>
+#include <map>
 
 namespace glPortal {
   namespace engine {
@@ -19,7 +19,7 @@ namespace glPortal {
 	char character;
 	int row    ;
 	int column ;
-	//	std::map<char, std::pair<int,int> > characterMap = {{'A', std::make_pair(1,1)}, {'B',std::make_pair(1,2)}};
+       	std::map<char, std::pair<int,int> > characterMap = {{'A', std::make_pair(1,1)}, {'B',std::make_pair(1,2)}};
       };
     }
   }

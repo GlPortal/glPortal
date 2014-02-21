@@ -45,9 +45,9 @@ void Player::create(float x, float y, float z) {
  * @param keystates Array of keyboard key states
  * @param mousedx Movement since last update in horizontal axis
  * @param mousedy Movement since last udpate in vertical axis
- * @param map Reference to the Map
+ * @param gameMapReference to the Map
  */
-void Player::update(float dt, bool *keystates, float mousedx, float mousedy, GameMap &map) {
+void Player::update(float dt, bool *keystates, float mousedx, float mousedy, GameMap &gameMap) {
   // Apply mouse movement to view
   yrot += mousedx*0.0015f;
   xrot += mousedy*0.0015f;
@@ -101,18 +101,18 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Gam
     // Check for collision in x-axis
     Box bbox;
     bbox.set(newx-0.5, y, z-0.5, newx+0.5, y+1.8, z+0.5);
-    if(map.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
+    if(gameMap.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
       x = newx;
     }
     // Check for collision in y-axis
     bbox.set(x-0.5, y, newz-0.5, x+0.5, y+1.8, newz+0.5);
-    if(map.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
+    if(gameMap.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
       z = newz;
     }
     // Check for collision in z-axis
     bbox.set(x-0.5, newy, z-0.5, x+0.5, newy+1.8, z+0.5);
     onGround = false;
-    if(map.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
+    if(gameMap.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
       y = newy;
     } else {
       // If player was falling it means must have hit the ground
@@ -124,12 +124,12 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Gam
 
     // Check if player has fallen into an acid pool
     bbox.set(x-0.5, y, z-0.5, x+0.5, y+1.8, z+0.5);
-    if(map.collidesWithAcid(bbox) == true) {
+    if(gameMap.collidesWithAcid(bbox) == true) {
       state = PS_DYING;
     }
 
     // Check if player has taken the cake
-    if(map.collidesWithCake(bbox) == true) {
+    if(gameMap.collidesWithCake(bbox) == true) {
       state = PS_WON;
     }
 
@@ -168,11 +168,11 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Gam
       shots[i].update(dt);
 
       Box sbox;
-      if(map.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
+      if(gameMap.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
 	shots[i].update(-dt); // Reverse time to before collision
 	// Collision really should be interpolated instead
 	if(sbox.type == TID_WALL) {
-	  portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z, map);
+	  portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z, gameMap);
 	}
 	shots[i].active = false;
       }

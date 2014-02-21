@@ -12,12 +12,12 @@ add_executable(${EXE_NAME}
   Main.cpp Game.cpp engine/gui/GameScreen.cpp engine/Resources.cpp engine/StringConverter.cpp 
   engine/gui/Character.cpp
   map/MapFileParser.cpp
-  Player.cpp Map.cpp 
+  Player.cpp GameMap.cpp 
   Shot.cpp Portal.cpp 
   Window.cpp
   )
 
-add_executable(map 
+add_executable(map
   map/Main.cpp map/MapToWavefront.cpp
   )
 

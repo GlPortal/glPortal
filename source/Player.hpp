@@ -1,7 +1,7 @@
 #ifndef __PLAYER_HPP
 #define __PLAYER_HPP
 
-#include "Map.hpp"
+#include "GameMap.hpp"
 #include "Portal.hpp"
 #include "Shot.hpp"
 
@@ -14,7 +14,7 @@ class Player {
 public:
 	Player();
 	void create(float x, float y, float z);
-        void update(float dt, bool *keystates, float mousex, float mousey, GameMap &map);
+        void update(float dt, bool *keystates, float mousex, float mousey, GameMap &gameMap);
 	void mousePressed(int key);
 	void setView();
 	bool portalsActive();

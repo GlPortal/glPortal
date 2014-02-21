@@ -11,7 +11,7 @@ using namespace glPortal::engine::gui;
  */
 void Game::respawn() {
   fade = 0.f;
-  player.create(map.getStartX(), map.getStartY(), map.getStartZ());
+  player.create(gameMap.getStartX(), gameMap.getStartY(), gameMap.getStartZ());
 }
 
 /**
@@ -22,14 +22,14 @@ void Game::nextLevel() {
   char filename[] = "data/maps/X.map";
   filename[10] = '0'+current_level; // Hackish but avoids using strings
   MapFileParser parser;
-  map = parser.getMapFromFile(filename);
+  gameMap = parser.getMapFromFile(filename);
   respawn();
 }
 
 // This method is here for refactoring purposes 
 // and can be removed once main is decluttered
-void Game::setPlayerMap(Player player, GameMap map){
-  this->map = map;
+void Game::setPlayerMap(Player player, GameMap gameMap){
+  this->gameMap = gameMap;
   this->player = player;
 }
 
@@ -39,7 +39,7 @@ void Game::setPlayer(Player player){
 
 
 GameMap Game::getMap(){
-  return this->map;
+  return this->gameMap;
 }
 
 Player Game::getPlayer(){
@@ -115,7 +115,7 @@ void Game::draw() {
   // Draw scene
   player.setView();
   drawPortals();
-  map.draw(nmap_enabled);
+  gameMap.draw(nmap_enabled);
 
   player.drawPortalOutlines();
   player.drawShots();
@@ -178,7 +178,7 @@ void Game::drawPortals() {
       glTranslatef(-portals[dst].x, -portals[dst].y, -portals[dst].z);
 
       // Draw scene from portal view
-      map.drawFromPortal(portals[dst], nmap_enabled);
+      gameMap.drawFromPortal(portals[dst], nmap_enabled);
       player.drawPortalOutlines();
 
       glPopMatrix();
