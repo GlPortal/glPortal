@@ -7,7 +7,7 @@ static const char *vertex_shaders[NUM_SHADERS]   = {"data/shaders/ppl.vert", "da
 static const char *fragment_shaders[NUM_SHADERS] = {"data/shaders/ppl.frag", "data/shaders/nmap.frag"};
 
 static const char *texture_files[NUM_TEXTURES] = {
-  "data/wall.png", "data/wall_normalmap.png",
+  "data/textures/font.png", "data/wall.png", "data/wall_normalmap.png",
   "data/tiles.png", "data/tiles_normalmap.png",
   "data/acid.png", "data/acid_normalmap.png",
   "data/cake.png",

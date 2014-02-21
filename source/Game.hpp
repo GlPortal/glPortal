@@ -16,7 +16,7 @@
 
 #include "Player.hpp"
 #include "Window.hpp"
-#include "GameScreen.hpp"
+#include "engine/gui/GameScreen.hpp"
 #include "Map.hpp"
 #include "map/MapFileParser.hpp"
 
@@ -35,7 +35,7 @@ public:
   void draw();
   void loadTextures();
   //Refactoring Methods
-  void setPlayerMap(Player player, Map map);
+  void setPlayerMap(Player player, GameMap map);
   void setWindow(Window &window);
   void setHeightWidth(int height, int width);
   void setFade(float fade);
@@ -46,7 +46,7 @@ public:
   void resetFade();
   void fadeOut();
   void setCurrentLevel(int current_level);
-  Map getMap();
+  GameMap getMap();
   Player getPlayer();
   void setPlayer(Player player);
   bool isPaused();
@@ -64,7 +64,7 @@ private:
   bool nmap_enabled; 
   float fade;  	
   Player player;
-  Map map;
+  GameMap map;
   Window window;
   int current_level;
 };

@@ -15,7 +15,7 @@ class Portal; // Forward declaration
  * Contains data about walls and acid pools as well as lighting.
  * Used for performing collision and drawing the current level.
  */
-class Map {
+class GameMap {
 public:
   void setLightPosition(GLfloat (&position)[4]);
   void setSpawnPosition(float (&position)[3]);

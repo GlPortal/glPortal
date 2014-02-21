@@ -14,7 +14,7 @@ class Player {
 public:
 	Player();
 	void create(float x, float y, float z);
-	void update(float dt, bool *keystates, float mousex, float mousey, Map &map);
+        void update(float dt, bool *keystates, float mousex, float mousey, GameMap &map);
 	void mousePressed(int key);
 	void setView();
 	bool portalsActive();

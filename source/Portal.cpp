@@ -14,7 +14,7 @@
  * @param map The current map
  */
 #include <cstdio>
-void Portal::place(float x, float y, float z, PORTAL_DIR dir, Map& map) {
+void Portal::place(float x, float y, float z, PORTAL_DIR dir, GameMap& map) {
   float nx, ny, nz; // New coordinates
   nx = round(x);
   ny = round(y-0.25f)+0.25f;
@@ -51,7 +51,7 @@ void Portal::place(float x, float y, float z, PORTAL_DIR dir, Map& map) {
  * @param hitz Z-coordinate of shot-box collision
  * @param map The current map
  */
-void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, Map& map) {
+void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& map) {
   float dist[4];
   int min;
 
