@@ -1,15 +1,20 @@
 #ifndef __FONT_HPP
 #define __FONT_HPP
 
-#include <GL/glew.h>
-#include <GL/glext.h>
-#include <GL/freeglut.h>
-#include "Window.hpp"
+#include <string>
+#include "Character.hpp"
 
-class Font {
-public:
-  Font();
-  void drawStringToPosition(char[] string, x, y);
-};
+namespace glPortal {
+  namespace engine {
+    namespace gui {
 
+      class Font {
+      public:
+	Font(int size);
+	Font();
+	void drawStringToPosition(std::string string, int x, int y);
+      };
+    }
+  }
+}
 #endif

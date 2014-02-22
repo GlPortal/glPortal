@@ -10,7 +10,7 @@ link_libraries(GLEW GL GLU glut)
 
 add_executable(${EXE_NAME} 
   Main.cpp Game.cpp engine/gui/GameScreen.cpp engine/Resources.cpp engine/StringConverter.cpp 
-  engine/gui/Character.cpp
+  engine/gui/Character.cpp  engine/gui/Font.cpp
   map/MapFileParser.cpp
   Player.cpp GameMap.cpp 
   Shot.cpp Portal.cpp 
