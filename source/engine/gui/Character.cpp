@@ -15,7 +15,7 @@ namespace glPortal {
 	Resources::inst().bindTexture(TID_FONT);
 	glBegin(GL_QUADS);
 	float characterTextureWidth  = 0.03829f;
-	float characterTextureHeight = 0.17f;
+	float characterTextureHeight = 0.163f;
 	//left top corner x, y
 	glTexCoord2f((column - 1)*characterTextureWidth, (row - 1)*characterTextureHeight); 
 	glVertex2f(drawPositionX, drawPositionY);
