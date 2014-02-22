@@ -116,6 +116,7 @@ void Game::draw() {
   player.setView();
   drawPortals();
   gameMap.draw(nmap_enabled);
+  gameMap.renderAvatar(player.getX(), player.getY(), player.getZ());
 
   player.drawPortalOutlines();
   player.drawShots();
@@ -160,6 +161,7 @@ void Game::drawPortals() {
 
       // Draw scene from portal view
       gameMap.drawFromPortal(portals[dst], nmap_enabled);
+      gameMap.renderAvatar(player.getX(), player.getY(), player.getZ());
       player.drawPortalOutlines();
 
       glPopMatrix();

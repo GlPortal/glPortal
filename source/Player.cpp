@@ -98,6 +98,7 @@ void Player::update(float dt, bool *keystates, float mousedx, float mousedy, Gam
     float newy = y + yspeed*dt;
     float newz = z + zspeed*dt;
 
+
     // Check for collision in x-axis
     Box bbox;
     bbox.set(newx-0.5, y, z-0.5, newx+0.5, y+1.8, z+0.5);
@@ -246,3 +247,4 @@ void Player::drawShots() {
   if(shots[0].active) shots[0].draw(xrot, yrot);
   if(shots[1].active) shots[1].draw(xrot, yrot);
 }
+

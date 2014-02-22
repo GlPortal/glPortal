@@ -28,7 +28,6 @@ public:
 	Portal *getPortals() { return portals; } /**< Gets the list of portals */
 	Shot *getShots() { return shots; } /**< Gets the list of shots */
 	PLAYER_STATE getState() { return state; } /**< Gets the player's current state */
-
 protected:
 	float x,y,z;  // Position
 	float xrot; /**< View rotation in X-axis */
