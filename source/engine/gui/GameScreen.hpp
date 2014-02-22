@@ -6,6 +6,7 @@
 #include <GL/freeglut.h>
 #include "../../Window.hpp"
 #include "Character.hpp"
+#include "Font.hpp"
 
 namespace glPortal {
   namespace engine {

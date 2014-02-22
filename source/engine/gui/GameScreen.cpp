@@ -85,18 +85,21 @@ namespace glPortal {
       }
 
       void GameScreen::drawTestTextScreen(){
+	Font* font = new Font();
+	font->drawStringToPosition("Test", 0, 190);
+	/*
 	Character test('0');
 	test.draw(0, 0);
-	Character test2('1');
+	Character test2('9');
 	test2.draw(30, 0);
-	Character test3('Z');
+	Character test3(':');
 	test3.draw(60, 0);
 	Character test4('C');
 	test4.draw(90, 0);
 	Character test5('z');
 	test5.draw(120, 0);
 	Character test6(U'Ü');
-	test6.draw(150, 0);
+	test6.draw(150, 0);*/
       }
     }
   }
