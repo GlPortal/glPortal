@@ -116,7 +116,7 @@ void Game::draw() {
   player.setView();
   drawPortals();
   gameMap.draw(nmap_enabled);
-  gameMap.renderAvatar(player.getX(), player.getY(), player.getZ());
+  //gameMap.renderAvatar(player.getX(), player.getY(), player.getZ());
 
   player.drawPortalOutlines();
   player.drawShots();
