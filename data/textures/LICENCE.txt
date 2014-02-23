@@ -1,0 +1,2 @@
+font.png and font_enhanced.png based on work from
+Urpo Lankinen http://www.beastwithin.org/
