@@ -7,6 +7,9 @@
 #include "../../Window.hpp"
 #include "Character.hpp"
 #include "Font.hpp"
+#include "../tools/Timer.hpp"
+#include <string>
+using namespace glPortal::engine::tools;
 
 namespace glPortal {
   namespace engine {
@@ -20,7 +23,9 @@ namespace glPortal {
 	void drawRespawnScreen();
 	void drawContinueScreen();
 	void drawTestTextScreen();
+        void drawTimer(std::string timeString);
       private:
+        Timer gameTimer;
 	Window window;
       };
     }

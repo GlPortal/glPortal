@@ -5,6 +5,10 @@ namespace glPortal {
     namespace gui {
       GameScreen::GameScreen(Window &window){
 	this->window = window;
+	Timer* timer = new Timer();
+	this->gameTimer = *timer;
+	//	this->gameTimer = new Timer();
+	this->gameTimer.start();
       }
 
       void GameScreen::drawPauseScreen() {
@@ -84,22 +88,18 @@ namespace glPortal {
 	glEnd();
       }
 
-      void GameScreen::drawTestTextScreen(){
+      void GameScreen::drawTimer(std::string timeString){
+	
 	Font* font = new Font();
-	font->drawStringToPosition("Test", 100, 190);
-	/*
-	Character test('0');
-	test.draw(0, 0);
-	Character test2('9');
-	test2.draw(30, 0);
-	Character test3(':');
-	test3.draw(60, 0);
-	Character test4('C');
-	test4.draw(90, 0);
-	Character test5('z');
-	test5.draw(120, 0);
-	Character test6(U'Ü');
-	test6.draw(150, 0);*/
+	font->drawStringToPosition(timeString, 10, 19);
+      }
+
+
+      void GameScreen::drawTestTextScreen(){
+	
+	Font* font = new Font();
+	//font->drawStringToPosition("10:12:55", 10, 19);
+	font->drawStringToPosition(this->gameTimer.getTimeString(), 10, 19);
       }
     }
   }
