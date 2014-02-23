@@ -1,8 +1,6 @@
 #ifndef __GAME_HPP
 #define __GAME_HPP
 
-//#define DEFAULT_WIDTH 800
-//#define DEFAULT_HEIGHT 600
 #define FRAMETIME 17 // Delay between updates (FPS = 1/FRAMETIME)
 #define FRAMETIME_SECONDS 0.017f // FRAMETIME in seconds. Used for updating game logic
 
@@ -17,16 +15,19 @@
 #include "Player.hpp"
 #include "Window.hpp"
 #include "engine/gui/GameScreen.hpp"
+#include "engine/tools/Timer.hpp"
 #include "GameMap.hpp"
 #include "map/MapFileParser.hpp"
 
 #include "engine/Box.hpp"
 
 using namespace glPortal::engine;
+using namespace glPortal::engine::tools;
 using namespace glPortal::map;
 
 class Game {
 public:
+  Game();
   void start();
   void respawn();
   void nextLevel();
@@ -65,6 +66,7 @@ private:
   GameMap gameMap;
   Window window;
   int current_level;
+  Timer timer;
 };
 
 #endif

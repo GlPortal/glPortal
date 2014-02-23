@@ -6,6 +6,13 @@
 using namespace glPortal::engine;
 using namespace glPortal::engine::gui;
 
+Game::Game(){
+	Timer* gameTimer = new Timer();
+	this->timer = *gameTimer;
+	//	this->gameTimer = new Timer();
+	this->timer.start();
+}
+
 /**
  * Respawns the player after dying.
  */
@@ -195,7 +202,7 @@ void Game::drawOverlay() {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glDisable(GL_DEPTH_TEST);
-  screen->drawTestTextScreen();
+  //  screen->drawTestTextScreen();
   // If game is paused
   if(this->isPaused()) {
     screen->drawPauseScreen();
@@ -218,6 +225,7 @@ void Game::drawOverlay() {
       }
     }
   }
+  screen->drawTimer(this->timer.getTimeString());
   glEnable(GL_DEPTH_TEST);
   // Restore perspective projection matrix
   glMatrixMode(GL_PROJECTION);
