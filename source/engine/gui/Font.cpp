@@ -18,7 +18,7 @@ namespace glPortal {
 	while(iterator != string.end()) 
 	  {
 	    Character test(*iterator);
-	    test.draw(charNumber * 30, 0);
+	    test.draw(x + (charNumber * 30), y);
 	    iterator++;        
 	    charNumber++;
 	  }
