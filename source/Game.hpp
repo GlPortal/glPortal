@@ -14,6 +14,7 @@
 
 #include "Player.hpp"
 #include "Window.hpp"
+#include "engine/object/Model.hpp"
 #include "engine/gui/GameScreen.hpp"
 #include "engine/tools/Timer.hpp"
 #include "GameMap.hpp"
@@ -22,6 +23,7 @@
 #include "engine/Box.hpp"
 
 using namespace glPortal::engine;
+using namespace glPortal::engine::object;
 using namespace glPortal::engine::tools;
 using namespace glPortal::map;
 
@@ -67,6 +69,7 @@ private:
   Window window;
   int current_level;
   Timer timer;
+  Model *barrel; 
 };
 
 #endif

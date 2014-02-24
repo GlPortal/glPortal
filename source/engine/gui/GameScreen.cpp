@@ -7,7 +7,6 @@ namespace glPortal {
 	this->window = window;
 	Timer* timer = new Timer();
 	this->gameTimer = *timer;
-	//	this->gameTimer = new Timer();
 	this->gameTimer.start();
       }
 

@@ -4,13 +4,17 @@
 #include "engine/Box.hpp"
 
 using namespace glPortal::engine;
+using namespace glPortal::engine::object;
 using namespace glPortal::engine::gui;
 
 Game::Game(){
-	Timer* gameTimer = new Timer();
-	this->timer = *gameTimer;
-	//	this->gameTimer = new Timer();
-	this->timer.start();
+  Timer* gameTimer = new Timer();
+  this->timer = *gameTimer;
+  //	this->gameTimer = new Timer();
+  this->timer.start();
+  //Model *model = 
+  this->barrel = new Model("data/objects/plastic_barrel/plastic_barrel.obj");
+  
 }
 
 /**
@@ -122,6 +126,7 @@ void Game::draw() {
   // Draw scene
   player.setView();
   drawPortals();
+  barrel->draw();
   gameMap.draw(nmap_enabled);
   //gameMap.renderAvatar(player.getX(), player.getY(), player.getZ());
 
