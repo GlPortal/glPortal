@@ -125,8 +125,8 @@ void Game::draw() {
   // Draw scene
   player.setView();
   drawPortals();
-  barrel->draw();
   gameMap.draw(nmap_enabled);
+  barrel->draw();
   //gameMap.renderAvatar(player.getX(), player.getY(), player.getZ());
 
   player.drawPortalOutlines();

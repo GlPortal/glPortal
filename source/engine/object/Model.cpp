@@ -28,19 +28,24 @@ namespace glPortal {
 
       void Model::draw()
       {
+	//glBegin(GL_QUADS);
 	for(unsigned int i = 0; i < meshes.size(); i++)
 	  {
-	    Mesh *mesh = meshes[i];
-	    
+	    Mesh *mesh = meshes[i];	    
 	    glEnableClientState(GL_NORMAL_ARRAY);
 	    glEnableClientState(GL_VERTEX_ARRAY);
 	    glNormalPointer(GL_FLOAT, 0, mesh->normals);
+	    glColor3f(0.0f,1.0f,0.0f);    // Color Blue
 	    glVertexPointer(3, GL_FLOAT, 0, mesh->vertices);
 	    glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, mesh->indices);
 
 	    glDisableClientState(GL_VERTEX_ARRAY);
 	    glDisableClientState(GL_NORMAL_ARRAY);
+	    glColor3f(1,1,1);
 	  }
+	//glEnd();            // End Drawing The Cube
+	//glFlush();
+
       }
 
       void Model::changePosition(int x, int y, int z){
