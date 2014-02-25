@@ -40,7 +40,7 @@ namespace glPortal {
 	  {':',std::make_pair(4,11)}, {';',std::make_pair(4,12)}
 	};
       };
-    }
+     }
   }
 }
 #endif

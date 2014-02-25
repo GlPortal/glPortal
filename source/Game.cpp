@@ -14,7 +14,6 @@ Game::Game(){
   this->timer.start();
   //Model *model = 
   this->barrel = new Model("data/objects/plastic_barrel/small_barrel.obj");
-  
 }
 
 /**

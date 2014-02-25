@@ -22,6 +22,8 @@ namespace glPortal {
 		
 	    meshes.push_back(tempMesh);
 	  }
+
+	this->loadTextures(scene, scene->mRootNode);
       }
 
       void Model::draw()
@@ -29,7 +31,7 @@ namespace glPortal {
 	for(unsigned int i = 0; i < meshes.size(); i++)
 	  {
 	    Mesh *mesh = meshes[i];
-
+	    
 	    glEnableClientState(GL_NORMAL_ARRAY);
 	    glEnableClientState(GL_VERTEX_ARRAY);
 	    glNormalPointer(GL_FLOAT, 0, mesh->normals);
@@ -43,6 +45,10 @@ namespace glPortal {
 
       void Model::changePosition(int x, int y, int z){
 	//do nothing
+      }
+
+
+      void Model::loadTextures(const struct aiScene *sc, const struct aiNode* nd){
       }
     }
   }
