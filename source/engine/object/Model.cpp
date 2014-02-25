@@ -32,7 +32,6 @@ namespace glPortal {
 
 	    glEnableClientState(GL_NORMAL_ARRAY);
 	    glEnableClientState(GL_VERTEX_ARRAY);
-
 	    glNormalPointer(GL_FLOAT, 0, mesh->normals);
 	    glVertexPointer(3, GL_FLOAT, 0, mesh->vertices);
 	    glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, mesh->indices);

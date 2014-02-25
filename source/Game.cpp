@@ -13,7 +13,7 @@ Game::Game(){
   //	this->gameTimer = new Timer();
   this->timer.start();
   //Model *model = 
-  this->barrel = new Model("data/objects/plastic_barrel/plastic_barrel.obj");
+  this->barrel = new Model("data/objects/plastic_barrel/small_barrel.obj");
   
 }
 

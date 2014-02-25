@@ -4,7 +4,6 @@ Makefile
 cmake_install.cmake
 portal
 docs/
-map
 *~
 [#]*[#]
 .\#*
