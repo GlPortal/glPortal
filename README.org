@@ -2,12 +2,6 @@
 GlPortal is a puzzle game inspired by Valves Portal 
 originaly written by Simon Larsen. The source code needs a lot
 of cleaning up. 
-That is why glPortal is an ideal candidate to practice code 
-refactoring.
-
-In case the source of glPortal is to cryptic for you, consider 
-contributing to glPortal2 an effort to write a similar game from 
-scratch.
 
 If you need to talk directly to me (everything that is no bug report,
 feature request or question that fits in the public discussion)
@@ -19,12 +13,19 @@ Chat with us at irc.freenode.org in the channel ##glportal.
 * Original Author
 Original Software 2012 by Simon Larsen. 
 * Contributors
+** Programming
 Henry Hirsch
-* What is happening with the code right now
+** Graphics
+Urpo Lankinen - Bitmap Font
+* Current Tasks
+** Refactoring
 I am currently migrating methods from the cluttered main class.
 To get the methods to another class without breaking functionality
 I am writing helper methods to inject all dependencies from the main class into the game class. 
-These helper methods will be removed once all the code is properly migrated.
+These helper methods will be removed once all the code is properly refactored.
+** Features
+Between refactoring I do features. They are mainly centered arround extending the mapping capability
+or adding important game elements like sound or 3D models.
 * Compile the source
 - cmake src
 - make
