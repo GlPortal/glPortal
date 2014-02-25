@@ -17,6 +17,11 @@
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 
+#include <FreeImage.h>
+
+
+#include <iostream>
+
 
 using namespace std;
 
@@ -29,6 +34,7 @@ namespace glPortal {
 	Model(const string & filename);
 	void draw();
 	void changePosition(int x, int y, int z);
+	void loadTextures(const struct aiScene *sc, const struct aiNode* nd);
       private:
 	vector<Mesh*> meshes;
 	const aiScene* scene;
