@@ -5,6 +5,9 @@
 #include <GL/glut.h>
 #include <string>
 #include "engine/Box.hpp"
+#include "engine/object/Model.hpp"
+
+using namespace glPortal::engine::object;
 
 using namespace glPortal::engine;
 
@@ -18,18 +21,21 @@ class Portal; // Forward declaration
 class GameMap {
 public:
   void setLightPosition(GLfloat (&position)[4]);
+  void setBarrelPosition(GLfloat (&position)[4]);
   void setSpawnPosition(float (&position)[3]);
   void setCakePosition(float (&position)[3]);
   void setCakeBox(Box box);
   void setWallVector(std::vector<Box> walls);
   void setAcidVector(std::vector<Box> acid);
   GLfloat* getLightPostition();
+  GLfloat* getBarrelPosition();
   float* getSpawnPosition();
   float* getCakePosition();
   std::vector<Box> getWallVector();
   std::vector<Box> getAcidVector();
   void addWallBox(Box box);
   void addAcidBox(Box box);
+  void addObject(Model model);
   void flush();
   /** Following Methods do not belong here
     * and will get moved out of this class.
@@ -52,7 +58,9 @@ protected:
   // Methods to move end
   std::vector<Box> walls;	/**< Vector of all walls in the gameMap*/
   std::vector<Box> acid;	/**< Vector of all acid pools in the gameMap*/
+  std::vector<Model> objects;
   GLfloat lightpos[4];	        /**< Position of the light in the gameMap*/
+  GLfloat barrelPosition[4];
   float startpos[3];		/**< Position where the player spawns in the gameMap*/
   float cakepos[3];		/**< Position of the cake in the gameMap*/
   Box cakeBox;			/**< Bounding box for collision with cake */

@@ -20,6 +20,19 @@ void GameMap::setLightPosition(GLfloat (&position)[4]){
 GLfloat* GameMap::getLightPostition(){
   return this->lightpos;
 }
+
+void GameMap::setBarrelPosition(GLfloat (&position)[4]){
+     this->barrelPosition[0] = position[0];
+     this->barrelPosition[1] = position[1];
+     this->barrelPosition[2] = position[2];
+     this->barrelPosition[3] = position[3];
+     this->barrelPosition[4] = position[4];
+}
+
+GLfloat* GameMap::getBarrelPosition(){
+  return this->barrelPosition;
+}
+
 void GameMap::setSpawnPosition(float (&position)[3]){
   this->startpos[0] = position[0];
   this->startpos[1] = position[1];
@@ -62,9 +75,15 @@ std::vector<Box> GameMap::getAcidVector(){
 void GameMap::addWallBox(Box box){
   walls.push_back(box);
 }
+
 void GameMap::addAcidBox(Box box){
   acid.push_back(box);
 }
+
+void GameMap::addObject(Model model){
+  objects.push_back(model);
+}
+
 
 /**
  * Empties the gameMapof all objects
@@ -98,6 +117,11 @@ void GameMap::draw(bool nMap) {
       glBegin(GL_QUADS);
     }
     drawBox(*it);
+  }
+  std::vector<Model>::iterator objectsIterator;
+  glBegin(GL_QUADS);
+  for(objectsIterator = objects.begin(); objectsIterator < objects.end(); objectsIterator++) {
+    objectsIterator->draw();
   }
   glEnd();
 

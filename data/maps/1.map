@@ -5,6 +5,9 @@ s 2.5 1 5
 c 17.5 1 5
 t 17 0 4.5 18 1 5.5
 
+! Barrel
+b 2.5 2 5
+
 ! Light position
 l 10 7 5
 
