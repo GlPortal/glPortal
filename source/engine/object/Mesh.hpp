@@ -2,10 +2,7 @@
 #define __MESH_HPP
 
     
-//#include <GL/glew.h>
 #include <GL/freeglut.h>
-//#include <GL/glext.h>
-//#include <GL/glfw.h>
 
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
