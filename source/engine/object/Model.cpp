@@ -35,7 +35,7 @@ namespace glPortal {
 	    glEnableClientState(GL_NORMAL_ARRAY);
 	    glEnableClientState(GL_VERTEX_ARRAY);
 	    glNormalPointer(GL_FLOAT, 0, mesh->normals);
-	    glColor3f(0.0f,1.0f,0.0f);    // Color Blue
+	    glColor3f(0.0f,0.0f,1.0f);   
 	    glVertexPointer(3, GL_FLOAT, 0, mesh->vertices);
 	    glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, mesh->indices);
 
@@ -48,7 +48,7 @@ namespace glPortal {
 
       }
 
-      void Model::changePosition(int x, int y, int z){
+      void Model::setPosition(int x, int y, int z){
 	//do nothing
       }
 

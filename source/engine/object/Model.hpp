@@ -3,10 +3,6 @@
 
 #include "../../Exception.hpp"
 
-#include <GL/glew.h>
-#include <GL/glut.h>
-#include <GL/glext.h>
-//#include <GL/glfw.h>
 #include <stdio.h>
 #include <string>
 #include "Mesh.hpp"
@@ -33,7 +29,7 @@ namespace glPortal {
       public:
 	Model(const string & filename);
 	void draw();
-	void changePosition(int x, int y, int z);
+	void setPosition(int x, int y, int z);
 	void loadTextures(const struct aiScene *sc, const struct aiNode* nd);
       private:
 	vector<Mesh*> meshes;

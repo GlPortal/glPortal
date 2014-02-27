@@ -61,6 +61,18 @@ namespace glPortal {
 	    
 	    this->gameMap.setLightPosition(lightpos);
 	    break;
+	  case 'b':{
+	    for(int i = 0; i < 3; i++) {
+	      barrelPosition[i] = StringConverter::stringStreamToFloat(stringStream);
+	    }
+	    barrelPosition[3] = 1.f; // Set as positioned light
+	    Model* barrelModel = new Model("data/objects/plastic_barrel/small_barrel.obj");
+	    barrelModel->setPosition(0, 0, 0);
+
+	    //	    this->gameMap.setBarrelPosition(barrelPosition);
+	    this->gameMap.addObject(*barrelModel);
+	    break;
+	  }
 	    // Start position
 	  case 's':
 	    for(int i = 0; i < 3; i++) {

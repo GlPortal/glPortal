@@ -5,6 +5,9 @@
 #include <cstring>
 #include <cstdlib> 
 #include "../GameMap.hpp"
+#include "../engine/object/Model.hpp"
+
+using namespace glPortal::engine::object;
 
 namespace glPortal {
   namespace map{
@@ -12,6 +15,7 @@ namespace glPortal {
     private:
       GameMap gameMap;
       GLfloat lightpos[4];
+      GLfloat barrelPosition[4];
       float startpos[3];
       float cakepos[3];	
       Box cakeBox;	

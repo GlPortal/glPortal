@@ -10,10 +10,7 @@ using namespace glPortal::engine::gui;
 Game::Game(){
   Timer* gameTimer = new Timer();
   this->timer = *gameTimer;
-  //	this->gameTimer = new Timer();
   this->timer.start();
-  //Model *model = 
-  this->barrel = new Model("data/objects/plastic_barrel/small_barrel.obj");
 }
 
 /**
@@ -25,7 +22,7 @@ void Game::respawn() {
 }
 
 /**
- * Loads the next level and respawns the player
+1 * Loads the next level and respawns the player
  */
 void Game::nextLevel() {
   current_level++;
@@ -126,8 +123,6 @@ void Game::draw() {
   player.setView();
   drawPortals();
   gameMap.draw(nmap_enabled);
-  barrel->draw();
-  //gameMap.renderAvatar(player.getX(), player.getY(), player.getZ());
 
   player.drawPortalOutlines();
   player.drawShots();
