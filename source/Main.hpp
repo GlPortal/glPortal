@@ -8,7 +8,7 @@
 #define RADDEG 57.29577951308232088 // 180/PI
 
 #include <GL/glew.h>
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <GL/glext.h>
 #include <cstdlib> 
 #include "Player.hpp"
