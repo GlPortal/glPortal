@@ -1,7 +1,7 @@
 #ifndef __RESOURCES_HPP
 #define __RESOURCES_HPP
 
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 
 #define NUM_SHADERS 2
 #define NUM_TEXTURES 14

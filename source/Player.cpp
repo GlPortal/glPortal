@@ -1,7 +1,7 @@
 #include "Player.hpp"
 #include <cmath>
 #include <cstdio>
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 
 #define RADDEG 57.29577951308232088 // 180/PI
 #define DEGRAD 0.017453292519943296 // PI/180
