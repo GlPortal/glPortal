@@ -1,12 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 set(EXE_NAME portal)
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "--std=c++11 ${CMAKE_CXX_FLAGS}")
 
 project(${EXE_NAME})
 link_libraries(GLEW GL GLU glut assimp)
-#Uncomment for testing of the windows build -DWIN=1
-#include(Toolchain-mingw32.cmake)
 
 add_executable(${EXE_NAME} 
   Main.cpp Game.cpp engine/gui/GameScreen.cpp engine/Resources.cpp engine/StringConverter.cpp 
