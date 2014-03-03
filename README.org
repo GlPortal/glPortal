@@ -27,8 +27,54 @@ These helper methods will be removed once all the code is properly refactored.
 Between refactoring I do features. They are mainly centered arround extending the mapping capability
 or adding important game elements like sound or 3D models.
 * Compile the source
-- cmake src
-- make
+** Quick note if you are compiling for the first time
+Well done. You did make the right decission. And it should not even be hard.
+** Satisfy dependencies
+You are going to need cmake, make and gcc in order to be able to compile C++ 
+sources on your system at all. It is impossible to predict how the packages
+are called by your package manager but in my experience they are called exactly
+that. So in Ubuntu and Debian for example you would just enter:
+apt-get install cmake make gcc
+
+Remember, you have to be root, so you might want to prefix sudo, or do sudo su first 
+or just su if you are on debian.
+
+So at the moment of this writing you can see the libraries the project is linking to in
+CMakeList.txt. They are GLEW GL GLU glut assimp.
+
+Now how will you satisfy these dependencies? No problem. You might notice that when you
+are looking for them in your package manager that you get overwhelmed by a list of possible
+installation candidates, how do you know which one is the right one?
+
+An easy rule that applies to many libraries is that a library has the lib prefix and then, 
+since you want to install the files for development there is a dev in the name. 
+Pretty much like libfoo-dev for most libraries.
+
+So for example to satisfy the dependencies in debian type the following to install all dependencies:
+apt-get install libglew-dev libgl1-mesa-dev libglew-dev freeglut3-dev libassimp-dev
+
+See how libgl1-mesa-dev does not play by the rules? There are reasons for that, which we do not care about.
+Something similar happens to glut, too. We are using the freeglut implemenation instead of glut.
+
+** Building the binary
+Get the source code by downloading a release https://github.com/hhirsch/glPortal/releases
+or after installing git with the command git clone https://github.com/hhirsch/glPortal.git 
+
+Then in the root directory of the downloaded source type
+cmake source
+
+Now if this throws an error you have to fix something first. If you don't manage to fix the error, use the
+bugtracker https://github.com/hhirsch/glPortal/issues to report what you did, and what error you got.
+
+If the command did not produce an error, you can build the binary by typing in:
+make 
+in the root directory of the downloaded source.
+
+If this produces no error you have built the binary and should be able to start GlPortal by typing in:
+./portal
+** Keep me posted
+This does not work for you? Help us figure out what we missed to make this work on 
+your system.
 * Join the team
 You can join the community at http://social.w3-net.de/groups/glportal/ 
 for questions and discussions about the development of the game.
