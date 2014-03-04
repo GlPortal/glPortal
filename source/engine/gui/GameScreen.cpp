@@ -10,6 +10,26 @@ namespace glPortal {
 	this->gameTimer.start();
       }
 
+      void GameScreen::beginOverlay() {
+	int height = window.getHeight();
+	int width  = window.getWidth();
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0,width,height,0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glDisable(GL_DEPTH_TEST);
+      }
+
+      void GameScreen::endOverlay() {
+	glEnable(GL_DEPTH_TEST);
+	// Restore perspective projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+      }
+
       void GameScreen::drawPauseScreen() {
 	int height = window.getHeight();
 	int width  = window.getWidth();

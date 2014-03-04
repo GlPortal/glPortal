@@ -2,6 +2,7 @@
 #include <GL/freeglut.h>
 #include "Portal.hpp"
 #include "engine/Resources.hpp"
+#include <iostream>
 
 /**
  * Places and activates the portal.
