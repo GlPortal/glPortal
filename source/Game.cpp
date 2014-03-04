@@ -21,10 +21,156 @@ void Game::respawn() {
   player.create(gameMap.getStartX(), gameMap.getStartY(), gameMap.getStartZ());
 }
 
+void Game::update() {
+
+  float dt = FRAMETIME_SECONDS;
+  int centerHorizontal = width/2;
+  int centerVertical = height/2;
+
+  float mousex = this->mouseX;;
+  float mousey = this->mouseY;;
+
+  float mousedx = static_cast<float>(centerHorizontal-mousex);
+  float mousedy = static_cast<float>(centerVertical-mousey);
+  glutWarpPointer(centerHorizontal, centerVertical);
+  // Apply mouse movement to view
+  yrot += mousedx*0.0015f;
+  xrot += mousedy*0.0015f;
+
+  // Restrict rotation in horizontal axis
+  if(xrot < -1.5f) xrot = -1.5f;
+  if(xrot >  1.5f) xrot =  1.5f;
+
+  if(!player.isDead() && !player.hasWon()) {
+    // Reset x and z speed
+    xspeed = zspeed = 0.f;
+    // Apply gravity to yspeed
+    yspeed -= GRAVITY*dt;
+    if(yspeed < -MAXSPEED) yspeed = -MAXSPEED;
+
+    // Move forward
+    if(keystates['w']) {
+      zspeed -= cos(yrot)*PLAYER_MOVESPEED*dt;
+      xspeed -= sin(yrot)*PLAYER_MOVESPEED*dt;
+    }
+    // Move backward
+    if(keystates['s']) {
+      zspeed += cos(yrot)*PLAYER_MOVESPEED*dt;
+      xspeed += sin(yrot)*PLAYER_MOVESPEED*dt;
+    }
+    // Strafe left
+    if(keystates['a']) {
+      xspeed -= cos(yrot)*PLAYER_MOVESPEED*dt;
+      zspeed += sin(yrot)*PLAYER_MOVESPEED*dt;
+    }
+    // Strafe right
+    if(keystates['d']) {
+      xspeed += cos(yrot)*PLAYER_MOVESPEED*dt;
+      zspeed -= sin(yrot)*PLAYER_MOVESPEED*dt;
+    }
+    // Jump if space is pressed and player is standing on ground
+    if(keystates[' '] && player.isOnGround()) {
+      yspeed = JUMPPOWER;
+    }
+    // Disable portals if R is held
+    if(keystates['r']) {
+      portals[0].disable();
+      portals[1].disable();
+    }
+
+    float newx = player.getX() + xspeed*dt;
+    float newy = player.getY() + yspeed*dt;
+    float newz = player.getZ() + zspeed*dt;
+
+    Box bbox;
+    bbox.set(newx-0.5, player.getY(), player.getZ()-0.5, newx+0.5, player.getY()+1.8, player.getZ()+0.5);
+    if(gameMap.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
+      player.setX(newx);
+    }
+    // Check for collision in y-axis
+    bbox.set(player.getX()-0.5, player.getY(), newz-0.5, player.getX()+0.5, player.getY()+1.8, newz+0.5);
+    if(gameMap.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
+      player.setZ(newz);
+    }
+    // Check for collision in z-axis
+    bbox.set(player.getX()-0.5, newy, player.getZ()-0.5, player.getX()+0.5, newy+1.8, player.getZ()+0.5);
+    player.setOffGround();
+    if(gameMap.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
+      player.setY(newy);
+    } else {
+      // If player was falling it means must have hit the ground
+      if(yspeed < 0) {
+	player.setOnGround();
+      }
+      yspeed = 0.f;
+    }
+
+    // Check if player has fallen into an acid pool
+    bbox.set(player.getX()-0.5, player.getY(), player.getZ()-0.5, player.getX()+0.5, player.getY()+1.8, player.getZ()+0.5);
+    if(gameMap.collidesWithAcid(bbox) == true) {
+      player.kill();
+    }
+
+    // Check if player has taken the cake
+    if(gameMap.collidesWithCake(bbox) == true) {
+      player.setHasWon();
+    }
+
+    // Check if player has entered a portal
+    if(portalsActive()) {
+      for(int i = 0; i < 2; i++) {
+	if(portals[i].throughPortal(player.getX(), player.getY()+0.9f,player.getZ())) {
+	  // Calculate rotation between portals
+	  float rotation = 0.f;
+	  rotation += portals[i].getToRotation()*DEGRAD;
+	  rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
+	  yrot += rotation;
+	  // Distance from portal to player
+	  float xdist = player.getX() - portals[i].x;
+	  float zdist = player.getZ() - portals[i].z;
+	  // Calculate this distance when rotated
+	  float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
+	  float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
+	  // Move player to destination portal
+	  player.setX(portals[(i+1)%2].x + nxdist);
+	  player.setZ(portals[(i+1)%2].z + nzdist);
+	  player.setY(player.getY() + portals[(i+1)%2].y - portals[i].y);
+	}
+      }
+    }
+  }
+  // If player is dying
+  else if(player.isDead()) {
+    player.setY(player.getY()-0.60f*dt);
+  }
+
+  // Update shots and check their collision with walls
+  for(int i = 0; i < 2; i++) {
+    if(shots[i].active) {
+      shots[i].update(dt);
+
+      Box sbox;
+      if(gameMap.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
+	shots[i].update(-dt); // Reverse time to before collision
+	// Collision really should be interpolated instead
+	if(sbox.type == TID_WALL) {
+	  portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z, gameMap);
+	}
+	shots[i].active = false;
+      }
+    }
+  }
+}
+
 /**
 1 * Loads the next level and respawns the player
  */
 void Game::nextLevel() {
+  for(int i = 0; i < 2; i++) {
+    portals[i].disable();
+    shots[i].active = false;
+		
+  }
   current_level++;
   char filename[] = "data/maps/X.map";
   filename[10] = '0'+current_level; // Hackish but avoids using strings
@@ -35,12 +181,12 @@ void Game::nextLevel() {
 
 // This method is here for refactoring purposes 
 // and can be removed once main is decluttered
-void Game::setPlayerMap(Player player, GameMap gameMap){
+void Game::setPlayerMap(Player &player, GameMap &gameMap){
   this->gameMap = gameMap;
   this->player = player;
 }
 
-void Game::setPlayer(Player player){
+void Game::setPlayer(Player &player){
   this->player = player;
 }
 
@@ -50,7 +196,7 @@ GameMap Game::getMap(){
 }
 
 Player Game::getPlayer(){
-  this->player = player;
+  return this->player;
 }
 
 void Game::setCurrentLevel(int current_level){
@@ -68,6 +214,38 @@ void Game::setWindow(Window &window){
   this->window = window;
 }
 
+void Game::setMouseCoordinates(int x, int y){
+  this->mouseX = x;
+  this->mouseY = y;
+}
+
+/**
+ * Called when a mouse button is pressed down
+ * @param button Mouse button being pressed
+ */
+void Game::mousePressed(int button) {
+  if(player.isDead()) return;
+
+  float x = player.getX();
+  float y = player.getY();
+  float z = player.getZ();  
+
+  switch(button) {
+  case GLUT_LEFT_BUTTON:
+    // Shoot blue portal
+     shots[0].shoot(0,x,y,z,xrot,yrot);
+    break;
+  case GLUT_RIGHT_BUTTON:
+    // Shoot orange portal
+    shots[1].shoot(1,x,y,z,xrot,yrot);
+    break;
+  case GLUT_MIDDLE_BUTTON:
+    // Disable both portals
+     portals[0].disable();
+     portals[1].disable();
+    break;
+  }
+}
 
 void Game::setKey(unsigned char key){
   keystates[key] = true;
@@ -120,26 +298,41 @@ void Game::draw() {
   glLoadIdentity();
 
   // Draw scene
-  player.setView();
+  setView();
   drawPortals();
   gameMap.draw(nmap_enabled);
-
-  player.drawPortalOutlines();
-  player.drawShots();
+  drawPortalOutlines();
+  drawShots();
   drawOverlay();
 }
 
 
-void Game::setNmapEnabled(bool nmap_enabled){
+/**
+ * Updates the view according to the player's
+ *
+ * Updates the current MODELVIEW matrix with the inverse
+ * translation and rotation of the player's
+ */
+void Game::setView() {
+  glRotatef(-xrot*RADDEG, 1,0,0);
+  glRotatef(-yrot*RADDEG, 0,1,0);
+  glTranslatef(-player.getX(), -(player.getY()+1.7f), -player.getZ());
+}
+
+void Game::setNormalMapActive(bool nmap_enabled){
   this->nmap_enabled = nmap_enabled;
+}
+
+bool Game::normalMapIsActive(){
+  return this->nmap_enabled;
 }
 
 /**
  * Draws the inside of both portals as well as their oulines and stencils.
  */
 void Game::drawPortals() {
-  if(player.portalsActive()) {
-    Portal *portals = player.getPortals();
+  if(portalsActive()) {
+    Portal *portals = getPortals();
     glEnable(GL_STENCIL_TEST);
     for(int i = 0; i < 2; i++) {
       int src = i;		// Source portal index
@@ -168,7 +361,7 @@ void Game::drawPortals() {
       // Draw scene from portal view
       gameMap.drawFromPortal(portals[dst], nmap_enabled);
       gameMap.renderAvatar(player.getX(), player.getY(), player.getZ());
-      player.drawPortalOutlines();
+      drawPortalOutlines();
 
       glPopMatrix();
     }
@@ -177,7 +370,7 @@ void Game::drawPortals() {
     // Draw portal stencils so portals wont be drawn over
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
     glClear(GL_DEPTH_BUFFER_BIT);
-    player.drawPortalStencils();
+    drawPortalStencils();
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   }
 }
@@ -194,14 +387,8 @@ void Game::loadTextures(){
  */
 void Game::drawOverlay() {
   GameScreen* screen = new GameScreen(window);
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-  glLoadIdentity();
-  gluOrtho2D(0,width,height,0);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glDisable(GL_DEPTH_TEST);
-  //  screen->drawTestTextScreen();
+  screen->beginOverlay();
+
   // If game is paused
   if(this->isPaused()) {
     screen->drawPauseScreen();
@@ -225,11 +412,7 @@ void Game::drawOverlay() {
     }
   }
   screen->drawTimer(this->timer.getTimeString());
-  glEnable(GL_DEPTH_TEST);
-  // Restore perspective projection matrix
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
-  glMatrixMode(GL_MODELVIEW);
+  screen->endOverlay();
 }
 
 bool Game::isPaused(){
@@ -246,4 +429,35 @@ void Game::unpause(){
 
 void Game::togglePause(){
   this->paused = !this->paused;
+}
+
+/**
+ * Returns true if both portals are active
+ */
+bool Game::portalsActive() {
+  return (portals[0].active && portals[1].active);
+}
+
+/**
+ * Draws stencil meshes for both portals
+ */
+void Game::drawPortalStencils() {
+  portals[0].drawStencil();
+  portals[1].drawStencil();
+}
+
+/**
+ * Draws colored outlines for both portals
+ */
+void Game::drawPortalOutlines() {
+  if(portals[0].active) portals[0].drawOutline(PC_BLUE);
+  if(portals[1].active) portals[1].drawOutline(PC_ORANGE);
+}
+
+/**
+ * Draws both portal shots
+ */
+void Game::drawShots() {
+  if(shots[0].active) shots[0].draw(xrot, yrot);
+  if(shots[1].active) shots[1].draw(xrot, yrot);
 }

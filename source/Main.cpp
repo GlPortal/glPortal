@@ -19,8 +19,6 @@ void setup(int *argc, char **argv) {
   height = window.getHeight();
   width = window.getWidth();
 
-  resetKeyStates();
-
   registerCallbacks();
   window.enableGlFeatures();
 
@@ -30,6 +28,7 @@ void setup(int *argc, char **argv) {
   nmap_enabled = true;
   current_level = 0;	
   nextLevel();
+  game.setPlayerMap(player, gameMap);
 }
 
 void update(int value) {
@@ -39,9 +38,9 @@ void update(int value) {
     float mouseDistanceFromCenterX = static_cast<float>(centerHorizontal-mousex);
     float mouseDistanceFromCenterY = static_cast<float>(centerVertical-mousey);
     glutWarpPointer(centerHorizontal, centerVertical);
-    player.update(FRAMETIME_SECONDS, keystates, mouseDistanceFromCenterX, mouseDistanceFromCenterY, gameMap);
-
-    if(player.getState() != PS_ALIVE) {
+    game.update();
+    
+    if(player.isDead()) {
       game.fadeOut();
     }
   }
@@ -84,10 +83,8 @@ void nextLevel() {
 }
 
 void draw() {
-  game.setPlayerMap(player, gameMap);
   game.setWindow(window);
   game.setHeightWidth(height, width);
-  game.setNmapEnabled(nmap_enabled);
   game.draw();
   // Swap buffers
   glutSwapBuffers();
@@ -95,6 +92,7 @@ void draw() {
 
 
 void mouse_moved(int x, int y) {
+  game.setMouseCoordinates(x, y);
   mousex = x;
   mousey = y;
 }
@@ -102,42 +100,17 @@ void mouse_moved(int x, int y) {
 
 void mouse_pressed(int button, int state, int x, int y) {
   if(state == GLUT_DOWN) {
-    player.mousePressed(button);
+    game.mousePressed(button);
   }
 }
 
 void key_down(unsigned char key, int x, int y) {
   game.setKey(key);
-  keystates[key] = true;
-
-  if(key == 27) { // Escape key
-    game.togglePause();
-    glutWarpPointer(width/2, height/2);
-  }
-  else if(key == 13) { // Return key
-    if(player.getState() == PS_DYING) {
-      respawn();
-    }
-    else if(player.getState() == PS_WON) {
-      nextLevel();
-    }
-  }
-  else if(key == 'b') {
-    nmap_enabled = !nmap_enabled; // Toggle normal mapping
-  }
-  else if(key >= '0' && key <= '9') {
-    current_level = key - '0' - 1; // Load levelX
-    nextLevel();
-  }
-  else if(key == 'q') {
-    exit(1);
-  }
 }
 
 
 void key_up(unsigned char key, int x, int y) {
-  game.setKey(key);
-  keystates[key] = false;
+  game.unsetKey(key);
 }
 
 

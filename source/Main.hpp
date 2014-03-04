@@ -4,7 +4,6 @@
 #define DEFAULT_WIDTH 1680
 #define DEFAULT_HEIGHT 1050
 #define FRAMETIME 17 // Delay between updates (FPS = 1/FRAMETIME)
-#define FRAMETIME_SECONDS 0.017f // FRAMETIME in seconds. Used for updating game logic
 #define RADDEG 57.29577951308232088 // 180/PI
 
 #include <GL/glew.h>
@@ -37,7 +36,7 @@ void resetKeyStates();
 int width, height;	
 int mousex, mousey; 
 bool keystates[256];
-bool nmap_enabled;
+bool nmap_enabled = true;
 
 Player player;
 GameMap gameMap;

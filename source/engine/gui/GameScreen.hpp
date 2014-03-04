@@ -17,6 +17,8 @@ namespace glPortal {
       class GameScreen {
       public:
 	GameScreen(Window &window);
+	void beginOverlay();
+	void endOverlay();
 	void drawPauseScreen();
 	void drawCrosshair();
 	void drawGameOverScreen();

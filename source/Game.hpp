@@ -21,6 +21,13 @@
 #include "map/MapFileParser.hpp"
 
 #include "engine/Box.hpp"
+#define FRAMETIME_SECONDS 0.017f // FRAMETIME in seconds. Used for updating game logic
+#define RADDEG 57.29577951308232088 // 180/PI
+#define DEGRAD 0.017453292519943296 // PI/180
+#define PLAYER_MOVESPEED 330
+#define GRAVITY 16.0
+#define MAXSPEED 10.0
+#define JUMPPOWER 7.0
 
 using namespace glPortal::engine;
 using namespace glPortal::engine::object;
@@ -36,22 +43,35 @@ public:
   void drawPortals();
   void drawOverlay();
   void draw();
+  void setView();
+  void update();
   void loadTextures();
+  void setNormalMapActive(bool nmap_enabled);
+  bool normalMapIsActive();
+  void mousePressed(int button);
+  //Input
+  void setMouseCoordinates(int x, int y);
+  void setKey(unsigned char key);
+  void unsetKey(unsigned char key);
+  //Portals
+  bool portalsActive();
+  void drawPortalStencils();
+  void drawPortalOutlines();
+  void drawShots();
+  Portal *getPortals() { return portals; } /**< Gets the list of portals */
+  Shot *getShots() { return shots; } /**< Gets the list of shots */
   //Refactoring Methods
-  void setPlayerMap(Player player, GameMap gameMap);
+  void setPlayerMap(Player &player, GameMap &gameMap);
   void setWindow(Window &window);
   void setHeightWidth(int height, int width);
   void setFade(float fade);
-  void setNmapEnabled(bool nmap_enabled);
-  void setKey(unsigned char key);
-  void unsetKey(unsigned char key);
   void unsetFade();
   void resetFade();
   void fadeOut();
   void setCurrentLevel(int current_level);
   GameMap getMap();
   Player getPlayer();
-  void setPlayer(Player player);
+  void setPlayer(Player &player);
   bool isPaused();
   void unpause();
   void pause();
@@ -59,10 +79,10 @@ public:
   //Refactoring Methods End
 private:
   int width, height;
-  int mousex, mousey; 
+  int mouseX, mouseY; 
   bool keystates[256];
   bool paused;	
-  bool nmap_enabled; 
+  bool nmap_enabled = true; 
   float fade;  	
   Player player;
   GameMap gameMap;
@@ -70,6 +90,11 @@ private:
   int current_level;
   Timer timer;
   Model *barrel; 
+  float xrot; /**< View rotation in X-axis */
+  float yrot; /**< View rotation in Y-axis */
+  float xspeed, yspeed, zspeed; // Velocity in x-, y- and z-axis
+  Portal portals[2];  /**< Array of player's portal */
+  Shot shots[2];		/**< Array of shots */
 };
 
 #endif
