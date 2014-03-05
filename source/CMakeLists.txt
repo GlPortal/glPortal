@@ -21,5 +21,6 @@ add_executable(map
   )
 
 add_custom_target(run COMMAND ./${EXE_NAME})
+add_custom_target(capture COMMAND avconv -f alsa -f x11grab -r 30 -s 1680x1050 -i :0.0+0,0 -acodec libfaac -vcodec libx264 -pre:0 lossless_ultrafast -threads 0 video.mkv)
 
 include_directories(./lib)
