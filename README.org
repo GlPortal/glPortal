@@ -17,6 +17,7 @@ Original Software 2012 by Simon Larsen.
 Henry Hirsch
 ** Graphics
 Urpo Lankinen - Bitmap Font
+shadowkiller255 for Blendswap - FPS Hands rigged (added portal egg)
 * Current Tasks
 ** Refactoring
 I am currently migrating methods from the cluttered main class.
