@@ -87,7 +87,7 @@ private:
   Player player;
   GameMap gameMap;
   Window window;
-  int current_level;
+  int current_level = 1;
   Timer timer;
   Model *barrel; 
   float xrot; /**< View rotation in X-axis */
@@ -95,6 +95,7 @@ private:
   float xspeed, yspeed, zspeed; // Velocity in x-, y- and z-axis
   Portal portals[2];  /**< Array of player's portal */
   Shot shots[2];		/**< Array of shots */
+  bool jetpack = true;
 };
 
 #endif

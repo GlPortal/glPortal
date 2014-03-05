@@ -93,6 +93,22 @@ void GameMap::flush(){
   acid.clear();
 }
 
+void GameMap::enableJetpack(){
+  this->jetpackEnabled = true;
+}
+
+bool GameMap::jetpackIsEnabled(){
+  return this->jetpackEnabled;
+}
+
+void GameMap::setIsLastScreen(){
+  this->isLastScreen = true;
+}
+
+bool GameMap::getIsLastScreen(){
+  return this->isLastScreen;
+}
+
 /**
  * Updates light position and draws all gameMaps and acid in level
  *

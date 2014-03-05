@@ -13,7 +13,7 @@ namespace glPortal {
   namespace map{
 
     /**
-     * Get a gameMapfrom a gameMapfile.
+     * Get a map from a gameMapfile.
      *
      * @param filename Path to the .gameMapfile
      */
@@ -23,7 +23,12 @@ namespace glPortal {
 
       this->gameMap.flush();
 
-      // Read gameMapfile line by line
+      if(!file){
+	this->gameMap.setIsLastScreen();
+	return this->gameMap;
+      }
+
+      // Read map file line by line
       while(file.good()) {
 	std::getline(file, line);
 	std::stringstream stringStream(line);
@@ -69,7 +74,6 @@ namespace glPortal {
 	    Model* barrelModel = new Model("data/objects/plastic_barrel/small_barrel.obj");
 	    barrelModel->setPosition(0, 0, 0);
 
-	    //	    this->gameMap.setBarrelPosition(barrelPosition);
 	    this->gameMap.addObject(*barrelModel);
 	    break;
 	  }
@@ -86,6 +90,15 @@ namespace glPortal {
 	      cakepos[i] = StringConverter::stringStreamToFloat(stringStream);
 	    }
 	    this->gameMap.setCakePosition(cakepos);
+	    break;
+	  case 'o':
+	    std::string optionLine;
+	    optionLine = StringConverter::stringStreamToString(stringStream);
+	    std::string jetpackOptionIndicator("j");
+
+	    if (optionLine.find(jetpackOptionIndicator) != std::string::npos) {
+	      this->gameMap.enableJetpack();
+	    }
 	    break;
 	  }
 	}

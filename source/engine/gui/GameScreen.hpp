@@ -25,6 +25,7 @@ namespace glPortal {
 	void drawRespawnScreen();
 	void drawContinueScreen();
 	void drawTestTextScreen();
+	void drawCreditsScreen();
         void drawTimer(std::string timeString);
       private:
         Timer gameTimer;

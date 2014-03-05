@@ -37,11 +37,15 @@ public:
   void addAcidBox(Box box);
   void addObject(Model model);
   void flush();
+  void enableJetpack();
+  bool jetpackIsEnabled();
   /** Following Methods do not belong here
     * and will get moved out of this class.
     *    
     * Methods to move */
   void draw(bool ngameMap);
+  void setIsLastScreen();
+  bool getIsLastScreen();
   void drawFromPortal(const Portal& portal, bool ngameMap);
   bool collidesWithWall(Box &bbox);
   bool collidesWithAcid(Box &bbox);
@@ -64,6 +68,9 @@ protected:
   float startpos[3];		/**< Position where the player spawns in the gameMap*/
   float cakepos[3];		/**< Position of the cake in the gameMap*/
   Box cakeBox;			/**< Bounding box for collision with cake */
+private:
+  bool jetpackEnabled = false;
+  bool isLastScreen = false;
 };
 
 #endif
