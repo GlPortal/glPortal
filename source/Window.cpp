@@ -9,19 +9,22 @@
 void Window::setup(int *argc, char **argv) {
   glutInit(argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL | GLUT_MULTISAMPLE);
-  glutInitWindowSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+  int autoWidth = glutGet(GLUT_SCREEN_WIDTH), autoHeight = glutGet(GLUT_SCREEN_HEIGHT);
+  width = autoWidth; height = autoHeight;
+  glutInitWindowSize(width, height);
   glutCreateWindow("glPortal");
   glutWarpPointer(width/2, height/2); // Center pointer  
 
   if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)){
-    glutGameModeString("1680x1050:32@60");
+    char modeString[20]; sprintf(modeString, "%dx%d:32@60", width, height);
+    glutGameModeString(modeString); // And you see, kids, this is why GLUT sucks
     glutEnterGameMode();
   }
   else {
-    printf("Game mode not available using default.\n");
+    printf("Game mode not available, using default.\n");
   } 
   glutSetCursor(GLUT_CURSOR_NONE);
-  setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+  setSize(width, height);
   glewInit();
 
 }
