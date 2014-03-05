@@ -21,6 +21,7 @@ namespace glPortal {
 	void endOverlay();
 	void drawPauseScreen();
 	void drawCrosshair();
+	void drawPortalEgg();
 	void drawGameOverScreen();
 	void drawRespawnScreen();
 	void drawContinueScreen();

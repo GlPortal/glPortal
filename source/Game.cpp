@@ -396,6 +396,7 @@ void Game::drawOverlay() {
     return;
   }
 
+  screen->drawPortalEgg();
   // If game is paused
   if(this->isPaused()) {
     screen->drawPauseScreen();
