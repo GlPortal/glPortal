@@ -37,7 +37,8 @@ namespace glPortal {
 	  {'y',std::make_pair(2,25)}, {'z',std::make_pair(2,26)}, {'0',std::make_pair(4,1)},{'1',std::make_pair(4,2)},
 	  {'2',std::make_pair(4,3)}, {'3',std::make_pair(4,4)}, {'4',std::make_pair(4,5)},{'5',std::make_pair(4,6)},
 	  {'6',std::make_pair(4,7)}, {'7',std::make_pair(4,8)}, {'8',std::make_pair(4,9)},{'9',std::make_pair(4,10)},
-	  {':',std::make_pair(4,11)}, {';',std::make_pair(4,12)}
+	  {':',std::make_pair(4,11)}, {';',std::make_pair(4,12)}, {'/',std::make_pair(3,11)}, {'.',std::make_pair(3,6)}, 
+	  {'-',std::make_pair(3,14)}
 	};
       };
      }

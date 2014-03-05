@@ -115,11 +115,38 @@ namespace glPortal {
 
 
       void GameScreen::drawTestTextScreen(){
-	
 	Font* font = new Font();
-	//font->drawStringToPosition("10:12:55", 10, 19);
 	font->drawStringToPosition(this->gameTimer.getTimeString(), 10, 19);
       }
+
+      void GameScreen::drawCreditsScreen(){	
+	int height = window.getHeight();
+	int width  = window.getWidth();
+	// Add dark tint to screen
+	glColor4f(0.f, 0.f, 0.f, 0.5f);
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_QUADS);
+	glVertex2f(  0.f,    0.f);
+	glVertex2f(  0.f, height);
+	glVertex2f(width, height);
+	glVertex2f(width,    0.f);
+	glEnd();
+
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(1.f, 1.f, 1.f, 1.f);
+	Font* font = new Font();
+	std::string message("Testimonial");
+	std::string message1("The subject satisfied all conditions of the tests.");
+	std::string message2("Please visit http://social.w3-net.de");
+	std::string message3("and tell us how you enjoyed the experience.");
+	std::string message4("Hit Q to quit the game.");
+	font->drawStringToPosition(message, 10, 49);
+	font->drawStringToPosition(message1, 10, 149);
+	font->drawStringToPosition(message2, 10, 189);
+	font->drawStringToPosition(message3, 10, 229);
+	font->drawStringToPosition(message4, 10, 309);
+      }
+
     }
   }
 }

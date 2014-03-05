@@ -6,6 +6,7 @@ namespace glPortal {
     class StringConverter {
     public:
       static float stringStreamToFloat(std::stringstream& stream);
+      static std::string stringStreamToString(std::stringstream& stream);
     };
   }
 }

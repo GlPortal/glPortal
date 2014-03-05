@@ -68,10 +68,11 @@ void Game::update() {
       xspeed += cos(yrot)*PLAYER_MOVESPEED*dt;
       zspeed -= sin(yrot)*PLAYER_MOVESPEED*dt;
     }
-    // Jump if space is pressed and player is standing on ground
-    if(keystates[' '] && player.isOnGround()) {
+
+    if(keystates[' '] && (player.isOnGround() || gameMap.jetpackIsEnabled())) {
       yspeed = JUMPPOWER;
     }
+
     // Disable portals if R is held
     if(keystates['r']) {
       portals[0].disable();
@@ -388,6 +389,12 @@ void Game::loadTextures(){
 void Game::drawOverlay() {
   GameScreen* screen = new GameScreen(window);
   screen->beginOverlay();
+  
+  if(gameMap.getIsLastScreen()){
+    screen->drawCreditsScreen();
+    screen->endOverlay();
+    return;
+  }
 
   // If game is paused
   if(this->isPaused()) {

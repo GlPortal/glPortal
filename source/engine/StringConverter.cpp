@@ -13,5 +13,13 @@ namespace glPortal {
 
       return static_cast<float>(atof(string.c_str()));
     }
+
+    std::string StringConverter::stringStreamToString(std::stringstream& stream){
+      std::string string;
+      stream >> string;
+      
+      return string;
+    }
+
   }
 }
