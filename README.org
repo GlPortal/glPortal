@@ -56,6 +56,7 @@ apt-get install libglew-dev libgl1-mesa-dev libglew-dev freeglut3-dev libassimp-
 See how libgl1-mesa-dev does not play by the rules? There are reasons for that, which we do not care about.
 Something similar happens to glut, too. We are using the freeglut implemenation instead of glut.
 
+You also need an additional library which may or may not go by the name libfreeimage-dev.
 ** Building the binary
 Get the source code by downloading a release https://github.com/hhirsch/glPortal/releases
 or after installing git with the command git clone https://github.com/hhirsch/glPortal.git 
