@@ -70,12 +70,24 @@ namespace glPortal {
       void GameScreen::drawPortalEgg(){
 	int height = window.getHeight();
 	int width  = window.getWidth();
-	Resources::inst().bindTexture(TID_HAND);
+	Resources::inst().bindTexture(TID_HUD_PORTAL);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0,0); glVertex2f(width-620, height-620);
-	glTexCoord2f(0,1); glVertex2f(width-620, height);
+	glTexCoord2f(0,0); glVertex2f(width/2, height/2);
+	glTexCoord2f(0,1); glVertex2f(width/2, height);
 	glTexCoord2f(1,1); glVertex2f(width, height);
-	glTexCoord2f(1,0); glVertex2f(width, height-620);
+	glTexCoord2f(1,0); glVertex2f(width, height/2);
+	glEnd();
+      }
+
+      void GameScreen::drawJetPackEggs(){
+	int height = window.getHeight();
+	int width  = window.getWidth();
+	Resources::inst().bindTexture(TID_HUD_JETPACK);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0,0); glVertex2f(0, 0);
+	glTexCoord2f(0,1); glVertex2f(0, height);
+	glTexCoord2f(1,1); glVertex2f(width, height);
+	glTexCoord2f(1,0); glVertex2f(width, 0);
 	glEnd();
       }
 
