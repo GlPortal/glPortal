@@ -16,7 +16,8 @@ static const char *texture_files[NUM_TEXTURES] = {
   "data/balls.png",
   "data/strings.png",
   "data/objects/plastic_barrel/diffus.tga",
-  "data/hand.png"
+  "data/hud/portal.png",
+  "data/hud/jetpack.png"
 };
 
 /**
