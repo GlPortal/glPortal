@@ -3,10 +3,5 @@
 @anchor mainpage
 
 @section inst Installation
-You can compile the game by entering the following commands.
--# cmake source/
--# make
-
-Make sure that the following requirenments are met:
-gcc, cmake, make, opengl, glut
+For instructions on how to build the game refer to the readme.
 */
