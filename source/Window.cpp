@@ -17,7 +17,7 @@ void Window::setup(int *argc, char **argv) {
 
   if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)){
     char modeString[20]; sprintf(modeString, "%dx%d:32@60", width, height);
-    glutGameModeString(modeString); // And you see, kids, this is why GLUT sucks
+    glutGameModeString(modeString);
     glutEnterGameMode();
   }
   else {
