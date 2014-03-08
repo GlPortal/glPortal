@@ -14,7 +14,7 @@ void Window::setup(int *argc, char **argv) {
                        SDL_WINDOWPOS_UNDEFINED,
                        DEFAULT_WIDTH,
                        DEFAULT_HEIGHT,
-                       SDL_WINDOW_OPENGL); // | SDL_WINDOW_FULLSCREEN_DESKTOP
+                       SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP);
   
   if(w == NULL) {
     printf("Could not create window: %s\n", SDL_GetError());
