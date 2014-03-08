@@ -1,4 +1,5 @@
-#include <GL/glew.h> // Needs to be imported before Resource.hpp as it includes gl.h
+#include <GL/glew.h>
+// Needs to be imported before Resource.hpp as it includes gl.h
 #include "Resources.hpp"
 #include <fstream>
 #include "stb_image.c"
@@ -43,7 +44,6 @@ void Resources::bindTexture(TEXTURE_ID id) {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, textures[TID_ACID_NMAP]);
   }
-
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, textures[id]);
 }
@@ -56,19 +56,26 @@ void Resources::compileShaders() {
   for(int i = 0; i < NUM_SHADERS; i++) {
     // Create handles for program and shaders
     programs[i] = glCreateProgram();
+    
     vert = glCreateShader(GL_VERTEX_SHADER);
     frag = glCreateShader(GL_FRAGMENT_SHADER);
+    
     // Read shaders from files
     char *vs_source = readShader(vertex_shaders[i]);
     char *fs_source = readShader(fragment_shaders[i]);
+    
     // Loader shader sources
     glShaderSource(vert, 1, (const char**)&vs_source, NULL);
     glShaderSource(frag, 1, (const char**)&fs_source, NULL);
+    
     // Compile shaders
     glCompileShader(vert);
     printShaderLog(vert);
     glCompileShader(frag);
     printShaderLog(frag);
+    
+    
+    
     // Attach shaders to program
     glAttachShader(programs[i], vert);
     glAttachShader(programs[i], frag);
@@ -172,23 +179,29 @@ GLuint Resources::createTexture(const char *filename) {
   GLuint handle;
   glGenTextures(1, &handle);
   glBindTexture(GL_TEXTURE_2D, handle);
-
+  
   // Read bitmapdata
   int w, h, n;
   unsigned char *data = stbi_load(filename, &w, &h, &n, 0);
-
+  
   // Create texture with mip maps
-  if(n == 3)
-    gluBuild2DMipmaps(GL_TEXTURE_2D, n, w, h, GL_RGB, GL_UNSIGNED_BYTE, data);
-  else if(n == 4)
-    gluBuild2DMipmaps(GL_TEXTURE_2D, n, w, h, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
+  if(n == 3) {
+    printf("3 %s\n", filename);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+  }
+  else if(n == 4) {
+    printf("4 %s\n", filename);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+  }
+  
+  glGenerateMipmap(GL_TEXTURE_2D);
+  
   stbi_image_free(data);
-
+  
   // Repeat texture in s- and t-axis
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
+  
   // Print any errors
   GLenum error = glGetError();
   while(error != GL_NO_ERROR) {

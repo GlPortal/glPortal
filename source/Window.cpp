@@ -7,23 +7,38 @@
 #include "Portal.hpp"
 
 void Window::setup(int *argc, char **argv) {
-  glutInit(argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_STENCIL | GLUT_MULTISAMPLE);
-  glutInitWindowSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-  glutCreateWindow("glPortal");
-  glutWarpPointer(width/2, height/2); // Center pointer  
-
-  if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)){
-    glutGameModeString("1680x1050:32@60");
-    glutEnterGameMode();
+  //Initialize SDL
+  SDL_Init(SDL_INIT_EVERYTHING);
+  w = SDL_CreateWindow(TITLE,
+                       SDL_WINDOWPOS_UNDEFINED,
+                       SDL_WINDOWPOS_UNDEFINED,
+                       DEFAULT_WIDTH,
+                       DEFAULT_HEIGHT,
+                       SDL_WINDOW_OPENGL); // | SDL_WINDOW_FULLSCREEN_DESKTOP
+  
+  if(w == NULL) {
+    printf("Could not create window: %s\n", SDL_GetError());
   }
-  else {
-    printf("Game mode not available using default.\n");
-  } 
-  glutSetCursor(GLUT_CURSOR_NONE);
-  setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-  glewInit();
-
+  
+  //Create an OpenGL context associated with the window
+  SDL_GLContext gl_context = SDL_GL_CreateContext(w);
+  
+  //Set double buffering
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+  
+  //Initialize GLEW
+  GLenum err = glewInit();
+  if (GLEW_OK != err) {
+    printf("Error: %s\n", glewGetErrorString(err));
+  }
+  
+  //Get the size of the window and store it
+  SDL_GetWindowSize(w, &width, &height);
+  
+  setSize(width, height);
+  
+  //Set the pointer to be able to report continuous motion
+  SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 void Window::enableGlFeatures(){
@@ -39,6 +54,10 @@ void Window::enableGlFeatures(){
   glEnable(GL_MULTISAMPLE_ARB);
 }
 
+void Window::swapBuffer() {
+  SDL_GL_SwapWindow(w);
+}
+
 void Window::setAmbientLight(){
   GLfloat light_DiffAndAmb[4] = {1.f, 1.f, 1.f, 1.f};
   glLightfv(GL_LIGHT0, GL_AMBIENT, light_DiffAndAmb);
@@ -46,18 +65,27 @@ void Window::setAmbientLight(){
 }
 
 void Window::setSize(int width, int height) {
+  //Set the size of the window
+  SDL_SetWindowSize(w, width, height);
+  this->width = width;
+  this->height = height;
+  
+  //Fix the OpenGL viewport
   glViewport(0, 0, (GLsizei)width, (GLsizei)height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluPerspective(60.0, (GLdouble)width/(GLdouble)height, 0.1f, 50.f);
-
-  this->width = width;
-  this->height = height;
-
-
   glMatrixMode(GL_MODELVIEW);
 }
 
+void Window::close() {
+    //Destroy window
+    SDL_DestroyWindow(w);
+    w = NULL;
+    
+    //Quit SDL
+    SDL_Quit();
+}
 
 int Window::getWidth(){
   return this->width;

@@ -7,12 +7,6 @@ using namespace glPortal::engine;
 using namespace glPortal::engine::object;
 using namespace glPortal::engine::gui;
 
-Game::Game(){
-  Timer* gameTimer = new Timer();
-  this->timer = *gameTimer;
-  this->timer.start();
-}
-
 /**
  * Respawns the player after dying.
  */
@@ -22,25 +16,20 @@ void Game::respawn() {
 }
 
 void Game::update() {
-
   float dt = FRAMETIME_SECONDS;
-  int centerHorizontal = width/2;
-  int centerVertical = height/2;
-
-  float mousex = this->mouseX;;
-  float mousey = this->mouseY;;
-
-  float mousedx = static_cast<float>(centerHorizontal-mousex);
-  float mousedy = static_cast<float>(centerVertical-mousey);
-  glutWarpPointer(centerHorizontal, centerVertical);
+  
+  //Get delta mouse movement
+  int mousedx, mousedy;
+  SDL_GetRelativeMouseState(&mousedx, &mousedy);
+  
   // Apply mouse movement to view
-  yrot += mousedx*0.0015f;
-  xrot += mousedy*0.0015f;
-
+  yrot -= mousedx*0.0015f;
+  xrot -= mousedy*0.0015f;
+  
   // Restrict rotation in horizontal axis
   if(xrot < -1.5f) xrot = -1.5f;
   if(xrot >  1.5f) xrot =  1.5f;
-
+  
   if(!player.isDead() && !player.hasWon()) {
     // Reset x and z speed
     xspeed = zspeed = 0.f;
@@ -101,7 +90,7 @@ void Game::update() {
     } else {
       // If player was falling it means must have hit the ground
       if(yspeed < 0) {
-	player.setOnGround();
+	      player.setOnGround();
       }
       yspeed = 0.f;
     }
@@ -120,23 +109,23 @@ void Game::update() {
     // Check if player has entered a portal
     if(portalsActive()) {
       for(int i = 0; i < 2; i++) {
-	if(portals[i].throughPortal(player.getX(), player.getY()+0.9f,player.getZ())) {
-	  // Calculate rotation between portals
-	  float rotation = 0.f;
-	  rotation += portals[i].getToRotation()*DEGRAD;
-	  rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
-	  yrot += rotation;
-	  // Distance from portal to player
-	  float xdist = player.getX() - portals[i].x;
-	  float zdist = player.getZ() - portals[i].z;
-	  // Calculate this distance when rotated
-	  float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
-	  float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
-	  // Move player to destination portal
-	  player.setX(portals[(i+1)%2].x + nxdist);
-	  player.setZ(portals[(i+1)%2].z + nzdist);
-	  player.setY(player.getY() + portals[(i+1)%2].y - portals[i].y);
-	}
+	      if(portals[i].throughPortal(player.getX(), player.getY()+0.9f,player.getZ())) {
+	        // Calculate rotation between portals
+	        float rotation = 0.f;
+	        rotation += portals[i].getToRotation()*DEGRAD;
+	        rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
+	        yrot += rotation;
+	        // Distance from portal to player
+	        float xdist = player.getX() - portals[i].x;
+	        float zdist = player.getZ() - portals[i].z;
+	        // Calculate this distance when rotated
+	        float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
+	        float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
+	        // Move player to destination portal
+	        player.setX(portals[(i+1)%2].x + nxdist);
+	        player.setZ(portals[(i+1)%2].z + nzdist);
+	        player.setY(player.getY() + portals[(i+1)%2].y - portals[i].y);
+	      }
       }
     }
   }
@@ -152,12 +141,12 @@ void Game::update() {
 
       Box sbox;
       if(gameMap.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
-	shots[i].update(-dt); // Reverse time to before collision
-	// Collision really should be interpolated instead
-	if(sbox.type == TID_WALL) {
-	  portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z, gameMap);
-	}
-	shots[i].active = false;
+	      shots[i].update(-dt); // Reverse time to before collision
+	      // Collision really should be interpolated instead
+	      if(sbox.type == TID_WALL) {
+	        portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z, gameMap);
+	      }
+	      shots[i].active = false;
       }
     }
   }
@@ -215,32 +204,27 @@ void Game::setWindow(Window &window){
   this->window = window;
 }
 
-void Game::setMouseCoordinates(int x, int y){
-  this->mouseX = x;
-  this->mouseY = y;
-}
-
 /**
  * Called when a mouse button is pressed down
  * @param button Mouse button being pressed
  */
 void Game::mousePressed(int button) {
   if(player.isDead()) return;
-
+  printf("Button pressed: %d\n", button);
   float x = player.getX();
   float y = player.getY();
   float z = player.getZ();  
 
   switch(button) {
-  case GLUT_LEFT_BUTTON:
+  case SDL_BUTTON_LEFT:
     // Shoot blue portal
      shots[0].shoot(0,x,y,z,xrot,yrot);
     break;
-  case GLUT_RIGHT_BUTTON:
+  case SDL_BUTTON_RIGHT:
     // Shoot orange portal
     shots[1].shoot(1,x,y,z,xrot,yrot);
     break;
-  case GLUT_MIDDLE_BUTTON:
+  case SDL_BUTTON_MIDDLE:
     // Disable both portals
      portals[0].disable();
      portals[1].disable();
@@ -248,12 +232,19 @@ void Game::mousePressed(int button) {
   }
 }
 
-void Game::setKey(unsigned char key){
+void Game::setKey(SDL_Keysym keysym) {
+  unsigned int mod = keysym.mod;
+  unsigned int key = keysym.sym;
+  
+  //If an invalid key was pressed map it to 0
+  if(key < 0 || key > KEY_BUFFER) {
+    key = 0;
+  }
+  
   keystates[key] = true;
 
   if(key == 27) { // Escape key
     paused = !paused;
-    glutWarpPointer(width/2, height/2);
   }
   else if(key == 13) { // Return key
     if(player.getState() == PS_DYING) {
@@ -271,11 +262,18 @@ void Game::setKey(unsigned char key){
     nextLevel();
   }
   else if(key == 'q') {
+    window.close();
     exit(1);
   }
 }
 
-void Game::unsetKey(unsigned char key){
+void Game::unsetKey(SDL_Keysym keysym) {
+  unsigned int key = keysym.sym;
+  
+  //If an invalid key was pressed map it to 0
+  if(key < 0 || key > KEY_BUFFER) {
+    key = 0;
+  }
   keystates[key] = false;
 }
 
@@ -292,12 +290,13 @@ void Game::fadeOut(){
 }
 
 void Game::draw() {
+  glClearColor(0,1,0,1);
   // Clear depth buffer but not color buffer.
   // Every pixel is redrawn every frame anyway.
-  glClear(GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   // Load identity matrix
   glLoadIdentity();
-
+  
   // Draw scene
   setView();
   drawPortals();
@@ -315,6 +314,7 @@ void Game::draw() {
  * translation and rotation of the player's
  */
 void Game::setView() {
+  glMatrixMode(GL_MODELVIEW);
   glRotatef(-xrot*RADDEG, 1,0,0);
   glRotatef(-yrot*RADDEG, 0,1,0);
   glTranslatef(-player.getX(), -(player.getY()+1.7f), -player.getZ());
@@ -410,11 +410,11 @@ void Game::drawOverlay() {
 
       // Draw "Press return to respawn" message if dead
       if(player.getState() == PS_DYING) {
-	screen->drawRespawnScreen();
+	      screen->drawRespawnScreen();
       }
       // Draw "Press return to continue" message if won
       else if(player.getState() == PS_WON) {
-	screen->drawContinueScreen();
+	      screen->drawContinueScreen();
       }
     }
   }
@@ -422,16 +422,18 @@ void Game::drawOverlay() {
   screen->endOverlay();
 }
 
-bool Game::isPaused(){
+bool Game::isPaused() {
   return this->paused;
 }
 
-void Game::pause(){
+void Game::pause() {
   this->paused = true;
+  printf("Game paused");
 }
 
-void Game::unpause(){
+void Game::unpause() {
   this->paused = false;
+  printf("Game unpaused\n");
 }
 
 void Game::togglePause(){

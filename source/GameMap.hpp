@@ -2,7 +2,6 @@
 #define __MAP_HPP
 
 #include <vector>
-#include <GL/freeglut.h>
 #include <string>
 #include "engine/Box.hpp"
 #include "engine/object/Model.hpp"
