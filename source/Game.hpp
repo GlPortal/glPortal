@@ -6,7 +6,6 @@
 
 #include <GL/glew.h>
 #include <GL/glext.h>
-#include <GL/freeglut.h>
 
 #include <vector>
 #include <cstring>
@@ -24,6 +23,7 @@
 #define FRAMETIME_SECONDS 0.017f // FRAMETIME in seconds. Used for updating game logic
 #define RADDEG 57.29577951308232088 // 180/PI
 #define DEGRAD 0.017453292519943296 // PI/180
+#define KEY_BUFFER 256
 #define PLAYER_MOVESPEED 330
 #define GRAVITY 16.0
 #define MAXSPEED 10.0
@@ -36,7 +36,6 @@ using namespace glPortal::map;
 
 class Game {
 public:
-  Game();
   void start();
   void respawn();
   void nextLevel();
@@ -48,11 +47,10 @@ public:
   void loadTextures();
   void setNormalMapActive(bool nmap_enabled);
   bool normalMapIsActive();
-  void mousePressed(int button);
   //Input
-  void setMouseCoordinates(int x, int y);
-  void setKey(unsigned char key);
-  void unsetKey(unsigned char key);
+  void mousePressed(int button);
+  void setKey(SDL_Keysym);
+  void unsetKey(SDL_Keysym);
   //Portals
   bool portalsActive();
   void drawPortalStencils();
@@ -79,8 +77,7 @@ public:
   //Refactoring Methods End
 private:
   int width, height;
-  int mouseX, mouseY; 
-  bool keystates[256];
+  bool keystates[KEY_BUFFER];
   bool paused;	
   bool nmap_enabled = true; 
   float fade;  	

@@ -1,7 +1,7 @@
 #ifndef __SHOT_HPP
 #define __SHOT_HPP
 
-#include <GL/freeglut.h>
+#include <GL/glew.h>
 #include "engine/Box.hpp"
 
 using namespace glPortal::engine;

@@ -1,12 +1,13 @@
 #ifndef __WINDOW_HPP
 #define __WINDOW_HPP
 
-#define DEFAULT_WIDTH 1680
-#define DEFAULT_HEIGHT 1050
+#define TITLE "GL Portal"
+#define DEFAULT_WIDTH 1024
+#define DEFAULT_HEIGHT 768
 
 #include <GL/glew.h>
-#include <GL/freeglut.h>
 #include <GL/glext.h>
+#include <SDL2/SDL.h>
 #include "Player.hpp"
 #include "GameMap.hpp"
 #include "engine/Box.hpp"
@@ -18,12 +19,15 @@ class Window {
 public:
   void setup(int *, char **);
   void enableGlFeatures();
+  void swapBuffer();
   int getWidth();
   int getHeight();
   void setSize(int, int);
+  void close();
 private:
   void setAmbientLight();
   int width, height;
+  SDL_Window *w;
 };
 
 #endif

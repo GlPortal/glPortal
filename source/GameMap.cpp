@@ -9,48 +9,48 @@
 #include "Exception.hpp"
 #include "Portal.hpp"
 
-void GameMap::setLightPosition(GLfloat (&position)[4]){
-     this->lightpos[0] = position[0];
-     this->lightpos[1] = position[1];
-     this->lightpos[2] = position[2];
-     this->lightpos[3] = position[3];
-     this->lightpos[4] = position[4];
+void GameMap::setLightPosition(GLfloat (&position)[4]) {
+  this->lightpos[0] = position[0];
+  this->lightpos[1] = position[1];
+  this->lightpos[2] = position[2];
+  this->lightpos[3] = position[3];
+  this->lightpos[4] = position[4];
 }
 
-GLfloat* GameMap::getLightPostition(){
+GLfloat* GameMap::getLightPostition() {
   return this->lightpos;
 }
 
-void GameMap::setBarrelPosition(GLfloat (&position)[4]){
-     this->barrelPosition[0] = position[0];
-     this->barrelPosition[1] = position[1];
-     this->barrelPosition[2] = position[2];
-     this->barrelPosition[3] = position[3];
-     this->barrelPosition[4] = position[4];
+void GameMap::setBarrelPosition(GLfloat (&position)[4]) {
+  this->barrelPosition[0] = position[0];
+  this->barrelPosition[1] = position[1];
+  this->barrelPosition[2] = position[2];
+  this->barrelPosition[3] = position[3];
+  this->barrelPosition[4] = position[4];
 }
 
-GLfloat* GameMap::getBarrelPosition(){
+GLfloat* GameMap::getBarrelPosition() {
   return this->barrelPosition;
 }
 
-void GameMap::setSpawnPosition(float (&position)[3]){
+void GameMap::setSpawnPosition(float (&position)[3]) {
   this->startpos[0] = position[0];
   this->startpos[1] = position[1];
   this->startpos[2] = position[2];
   this->startpos[3] = position[3];
 }
 
-float* GameMap::getSpawnPosition(){
+float* GameMap::getSpawnPosition() {
   return this->startpos;
 }
 
-void GameMap::setCakePosition(float (&position)[3]){
+void GameMap::setCakePosition(float (&position)[3]) {
   this->cakepos[0] = position[0];
   this->cakepos[1] = position[1];
   this->cakepos[2] = position[2];
   this->cakepos[3] = position[3];
   this->cakeBox.set(position[0]-0.6f, position[1]-0.6f, position[2]-0.6f,
-		    position[0]+0.6f, position[1]+0.2f, position[2]+0.6f);
+		                position[0]+0.6f, position[1]+0.2f, position[2]+0.6f);
 
 }
 
@@ -120,10 +120,11 @@ void GameMap::draw(bool nMap) {
 
   // Enable normal mapping
   Resources::inst().enableProgram(nMap? PID_NMAP : PID_PPL);
-
+  
   // Draw walls
   TEXTURE_ID current_type = TID_NONE;
   std::vector<Box>::iterator it;
+  
   glBegin(GL_QUADS);
   for(it = walls.begin(); it < walls.end(); it++) {
     if(it->type != current_type) {
@@ -134,13 +135,15 @@ void GameMap::draw(bool nMap) {
     }
     drawBox(*it);
   }
+  glEnd(); //<-- Added this, review please
+  
   std::vector<Model>::iterator objectsIterator;
   glBegin(GL_QUADS);
   for(objectsIterator = objects.begin(); objectsIterator < objects.end(); objectsIterator++) {
     objectsIterator->draw();
   }
   glEnd();
-
+	
   // Draw acid waste
   Resources::inst().bindTexture(TID_ACID);
   glBegin(GL_QUADS);
@@ -182,10 +185,10 @@ void GameMap::drawFromPortal(const Portal& portal, bool nMap) {
        || portal.dir == PD_RIGHT && it->x2 > portal.x
        || portal.dir == PD_LEFT  && it->x1 < portal.x) {
       if(it->type != current_type) {
-	glEnd();
-	current_type = it->type;
-	Resources::inst().bindTexture(it->type);
-	glBegin(GL_QUADS);
+	      glEnd();
+	      current_type = it->type;
+	      Resources::inst().bindTexture(it->type);
+	      glBegin(GL_QUADS);
       }
       drawBox(*it);
     }
@@ -279,8 +282,10 @@ void GameMap::drawBox(Box &b) {
 void GameMap::drawCake() {
   glPushMatrix();
   glTranslatef(cakepos[0], cakepos[1], cakepos[2]);
+  glEnable(GL_TEXTURE_2D);
   Resources::inst().bindTexture(TID_CAKE);
   Resources::inst().drawModel(MID_CAKE);
+  glDisable(GL_TEXTURE_2D);
   glPopMatrix();
 }
 
