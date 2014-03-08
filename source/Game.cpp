@@ -394,6 +394,12 @@ void Game::drawOverlay() {
     return;
   }
 
+  if(gameMap.jetpackIsEnabled()){
+    screen->drawJetPackEggs();
+  } else {
+    screen->drawPortalEgg();
+  }
+
   // If game is paused
   if(this->isPaused()) {
     screen->drawPauseScreen();
