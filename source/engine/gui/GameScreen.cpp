@@ -70,28 +70,32 @@ namespace glPortal {
 	      glDisable(GL_TEXTURE_2D);
       }
 
-      void GameScreen::drawPortalEgg(){
-	int height = window.getHeight();
-	int width  = window.getWidth();
-	Resources::inst().bindTexture(TID_HUD_PORTAL);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0,0); glVertex2f(width/2, height/2);
-	glTexCoord2f(0,1); glVertex2f(width/2, height);
-	glTexCoord2f(1,1); glVertex2f(width, height);
-	glTexCoord2f(1,0); glVertex2f(width, height/2);
-	glEnd();
+      void GameScreen::drawPortalEgg() {
+	      int height = window.getHeight();
+	      int width  = window.getWidth();
+	      glEnable(GL_TEXTURE_2D);
+	      Resources::inst().bindTexture(TID_HUD_PORTAL);
+	      glBegin(GL_QUADS);
+	      glTexCoord2f(0,0); glVertex2f(width/2, height/2);
+	      glTexCoord2f(0,1); glVertex2f(width/2, height);
+	      glTexCoord2f(1,1); glVertex2f(width, height);
+	      glTexCoord2f(1,0); glVertex2f(width, height/2);
+	      glEnd();
+	      glDisable(GL_TEXTURE_2D);
       }
 
-      void GameScreen::drawJetPackEggs(){
-	int height = window.getHeight();
-	int width  = window.getWidth();
-	Resources::inst().bindTexture(TID_HUD_JETPACK);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0,0); glVertex2f(0, 0);
-	glTexCoord2f(0,1); glVertex2f(0, height);
-	glTexCoord2f(1,1); glVertex2f(width, height);
-	glTexCoord2f(1,0); glVertex2f(width, 0);
-	glEnd();
+      void GameScreen::drawJetPackEggs() {
+	      int height = window.getHeight();
+	      int width  = window.getWidth();
+	      glEnable(GL_TEXTURE_2D);
+	      Resources::inst().bindTexture(TID_HUD_JETPACK);
+	      glBegin(GL_QUADS);
+	      glTexCoord2f(0,0); glVertex2f(0, 0);
+	      glTexCoord2f(0,1); glVertex2f(0, height);
+	      glTexCoord2f(1,1); glVertex2f(width, height);
+	      glTexCoord2f(1,0); glVertex2f(width, 0);
+	      glEnd();
+	      glDisable(GL_TEXTURE_2D);
       }
 
       void GameScreen::drawGameOverScreen() {
@@ -135,13 +139,13 @@ namespace glPortal {
         glDisable(GL_TEXTURE_2D);
       }
 
-      void GameScreen::drawTimer(std::string timeString){	
+      void GameScreen::drawTimer(std::string timeString) {	
 	      Font* font = new Font();
 	      font->drawStringToPosition(timeString, 10, 19);
       }
 
 
-      void GameScreen::drawTestTextScreen(){
+      void GameScreen::drawTestTextScreen() {
 	      Font* font = new Font();
 	      font->drawStringToPosition(this->gameTimer.getTimeString(), 10, 19);
       }
@@ -158,7 +162,6 @@ namespace glPortal {
 	      glVertex2f(width,    0.f);
 	      glEnd();
 
-	      glEnable(GL_TEXTURE_2D);
 	      glColor4f(1.f, 1.f, 1.f, 1.f);
 	      Font* font = new Font();
 	      std::string message("Testimonial");
@@ -171,7 +174,6 @@ namespace glPortal {
 	      font->drawStringToPosition(message2, 10, 189);
 	      font->drawStringToPosition(message3, 10, 229);
 	      font->drawStringToPosition(message4, 10, 309);
-	      glDisable(GL_TEXTURE_2D);
       }
     }
   }

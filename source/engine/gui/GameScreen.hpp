@@ -3,7 +3,6 @@
 
 #include <GL/glew.h>
 #include <GL/glext.h>
-#include <GL/freeglut.h>
 #include "../../Window.hpp"
 #include "Character.hpp"
 #include "Font.hpp"
@@ -16,22 +15,22 @@ namespace glPortal {
     namespace gui {
       class GameScreen {
       public:
-	GameScreen(Window &window);
-	void beginOverlay();
-	void endOverlay();
-	void drawPauseScreen();
-	void drawCrosshair();
-	void drawPortalEgg();
-	void drawJetPackEggs();
-	void drawGameOverScreen();
-	void drawRespawnScreen();
-	void drawContinueScreen();
-	void drawTestTextScreen();
-	void drawCreditsScreen();
+	      GameScreen(Window &window);
+	      void beginOverlay();
+	      void endOverlay();
+	      void drawPauseScreen();
+	      void drawCrosshair();
+	      void drawPortalEgg();
+	      void drawJetPackEggs();
+	      void drawGameOverScreen();
+	      void drawRespawnScreen();
+	      void drawContinueScreen();
+	      void drawTestTextScreen();
+	      void drawCreditsScreen();
         void drawTimer(std::string timeString);
       private:
         Timer gameTimer;
-	Window window;
+	      Window window;
       };
     }
   }
