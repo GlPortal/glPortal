@@ -7,6 +7,12 @@ using namespace glPortal::engine;
 using namespace glPortal::engine::object;
 using namespace glPortal::engine::gui;
 
+Game::Game() {
+  Timer* gameTimer = new Timer();
+  this->timer = *gameTimer;
+  this->timer.start();
+}
+
 /**
  * Respawns the player after dying.
  */
