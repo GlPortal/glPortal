@@ -25,7 +25,7 @@ namespace glPortal {
 
 	      std::string resultString = std::string(date);
 	      return resultString;
-      } 
+      }
 
       std::string Timer::getStoppedTimeString(){	
 	      struct tm * timeinfo;
