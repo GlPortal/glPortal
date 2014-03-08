@@ -129,6 +129,7 @@ namespace glPortal {
         int height = window.getHeight();
         int width  = window.getWidth();
         glEnable(GL_TEXTURE_2D);
+        glColor4f(1, 1, 1, 1);
         Resources::inst().bindTexture(TID_STRINGS);
         glBegin(GL_QUADS);
         glTexCoord2f(0, 0.25f); glVertex2f(width/2-256, height/2-64);
@@ -139,7 +140,8 @@ namespace glPortal {
         glDisable(GL_TEXTURE_2D);
       }
 
-      void GameScreen::drawTimer(std::string timeString) {	
+      void GameScreen::drawTimer(std::string timeString) {
+        glColor4f(1, 1, 1, 1);
 	      Font* font = new Font();
 	      font->drawStringToPosition(timeString, 10, 19);
       }
