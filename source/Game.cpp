@@ -210,7 +210,6 @@ void Game::setWindow(Window &window){
  */
 void Game::mousePressed(int button) {
   if(player.isDead()) return;
-  printf("Button pressed: %d\n", button);
   float x = player.getX();
   float y = player.getY();
   float z = player.getZ();  
@@ -290,7 +289,6 @@ void Game::fadeOut(){
 }
 
 void Game::draw() {
-  glClearColor(0,1,0,1);
   // Clear depth buffer but not color buffer.
   // Every pixel is redrawn every frame anyway.
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
