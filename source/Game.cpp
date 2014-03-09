@@ -64,10 +64,18 @@ void Game::update() {
       zspeed -= sin(yrot)*PLAYER_MOVESPEED*dt;
     }
 
-    if(keystates[' '] && (player.isOnGround() || gameMap.jetpackIsEnabled())) {
-      yspeed = JUMPPOWER;
+    if(keystates[' ']) {
+      if(player.isOnGround()) {
+        yspeed = JUMPPOWER;
+      }
     }
 
+    if(keystates[225]) {
+      if(gameMap.jetpackIsEnabled()) {
+        yspeed += JETPACK_ACC*dt;
+      }
+    }
+    
     // Disable portals if R is held
     if(keystates['r']) {
       portals[0].disable();
@@ -238,14 +246,13 @@ void Game::mousePressed(int button) {
 }
 
 void Game::setKey(SDL_Keysym keysym) {
-  unsigned int mod = keysym.mod;
-  unsigned int key = keysym.sym;
+  uint16_t mod = keysym.mod;
+  uint16_t key = keysym.sym;
   
   //If an invalid key was pressed map it to 0
   if(key < 0 || key > KEY_BUFFER) {
     key = 0;
   }
-  
   keystates[key] = true;
 
   if(key == 27) { // Escape key
@@ -273,7 +280,8 @@ void Game::setKey(SDL_Keysym keysym) {
 }
 
 void Game::unsetKey(SDL_Keysym keysym) {
-  unsigned int key = keysym.sym;
+  uint16_t mod = keysym.mod;
+  uint16_t key = keysym.sym;
   
   //If an invalid key was pressed map it to 0
   if(key < 0 || key > KEY_BUFFER) {
