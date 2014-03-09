@@ -135,7 +135,7 @@ void GameMap::draw(bool nMap) {
     }
     drawBox(*it);
   }
-  glEnd(); //<-- Added this, review please
+  glEnd(); 
   
   std::vector<Model>::iterator objectsIterator;
   glBegin(GL_QUADS);

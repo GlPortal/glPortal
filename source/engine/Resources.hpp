@@ -2,7 +2,6 @@
 #define __RESOURCES_HPP
 
 #include <GL/glew.h>
-
 #define NUM_SHADERS 2
 #define NUM_TEXTURES 16
 #define NUM_MODELS 3
