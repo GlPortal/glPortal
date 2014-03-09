@@ -38,6 +38,7 @@ using namespace glPortal::map;
 class Game {
 public:
   Game();
+  static bool DEBUG;
   void start();
   void respawn();
   void nextLevel();

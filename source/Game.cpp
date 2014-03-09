@@ -7,6 +7,8 @@ using namespace glPortal::engine;
 using namespace glPortal::engine::object;
 using namespace glPortal::engine::gui;
 
+bool Game::DEBUG = false;
+
 Game::Game() {
   Timer* gameTimer = new Timer();
   this->timer = *gameTimer;
@@ -29,8 +31,8 @@ void Game::update() {
   SDL_GetRelativeMouseState(&mousedx, &mousedy);
   
   // Apply mouse movement to view
-  yrot -= mousedx*0.0015f;
-  xrot -= mousedy*0.0015f;
+  yrot -= mousedx*0.0050f;
+  xrot -= mousedy*0.0050f;
   
   // Restrict rotation in horizontal axis
   if(xrot < -1.5f) xrot = -1.5f;
@@ -446,12 +448,16 @@ bool Game::isPaused() {
 
 void Game::pause() {
   this->paused = true;
-  printf("Game paused");
+  if(Game::DEBUG == true){
+    printf("Game paused");
+  }
 }
 
 void Game::unpause() {
   this->paused = false;
-  printf("Game unpaused\n");
+  if(Game::DEBUG == true){
+    printf("Game unpaused\n");
+  }
 }
 
 void Game::togglePause(){

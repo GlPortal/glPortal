@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 // Needs to be imported before Resource.hpp as it includes gl.h
 #include "Resources.hpp"
+#include "../Game.hpp"
 #include <fstream>
 #include "stb_image.c"
 
@@ -188,11 +189,15 @@ GLuint Resources::createTexture(const char *filename) {
   
   // Create texture with mip maps
   if(n == 3) {
-    printf("3 %s\n", filename);
+    if(Game::DEBUG == true){
+      printf("3 %s\n", filename);
+    }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
   }
   else if(n == 4) {
-    printf("4 %s\n", filename);
+    if(Game::DEBUG == true){
+      printf("4 %s\n", filename);
+    }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
   }
   
