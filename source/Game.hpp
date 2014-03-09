@@ -28,6 +28,7 @@
 #define GRAVITY 16.0
 #define MAXSPEED 10.0
 #define JUMPPOWER 7.0
+#define JETPACK_ACC 24.0
 
 using namespace glPortal::engine;
 using namespace glPortal::engine::object;
