@@ -26,9 +26,8 @@ void setup(int *argc, char **argv) {
 
   game.unpause();
   nmap_enabled = true;
-  current_level = 0;	
-  nextLevel();
-  game.setPlayerMap(player, gameMap);
+  game.setPlayer(player);
+  game.respawn();
 }
 
 void update(int value) {
@@ -66,20 +65,6 @@ void registerCallbacks(){
   glutPassiveMotionFunc(mouse_moved);
   glutMouseFunc(mouse_pressed);
   glutWindowStatusFunc(window_status);
-}
-
-void respawn() {
-  game.resetFade();
-  player.create(gameMap.getStartX(), gameMap.getStartY(), gameMap.getStartZ());
-}
-
-void nextLevel() {
-  current_level++;
-  char filename[] = "data/maps/X.map";
-  filename[10] = '0'+current_level; // Hackish but avoids using strings
-  MapFileParser parser;
-  gameMap= parser.getMapFromFile(filename);
-  respawn();
 }
 
 void draw() {

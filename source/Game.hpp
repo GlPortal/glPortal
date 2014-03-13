@@ -61,7 +61,6 @@ public:
   Portal *getPortals() { return portals; } /**< Gets the list of portals */
   Shot *getShots() { return shots; } /**< Gets the list of shots */
   //Refactoring Methods
-  void setPlayerMap(Player &player, GameMap &gameMap);
   void setWindow(Window &window);
   void setHeightWidth(int height, int width);
   void setFade(float fade);
@@ -87,7 +86,6 @@ private:
   Player player;
   GameMap gameMap;
   Window window;
-  int current_level = 1;
   Timer timer;
   Model *barrel; 
   float xrot; /**< View rotation in X-axis */
@@ -96,6 +94,8 @@ private:
   Portal portals[2];  /**< Array of player's portal */
   Shot shots[2];		/**< Array of shots */
   bool jetpack = true;
+  int currentLevel;
+  vector<string> mapList;
 };
 
 #endif

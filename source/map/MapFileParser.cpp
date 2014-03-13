@@ -17,13 +17,14 @@ namespace glPortal {
      *
      * @param filename Path to the .gameMapfile
      */
-    GameMap MapFileParser::getMapFromFile(const char *filename) {
+    GameMap MapFileParser::getMapFromFile(std::string filename) {
       std::ifstream file(filename, std::ifstream::in);
       std::string line, string;
 
       this->gameMap.flush();
 
       if(!file){
+	cout << "Unable to load map.";
 	this->gameMap.setIsLastScreen();
 	return this->gameMap;
       }
