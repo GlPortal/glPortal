@@ -2,8 +2,10 @@
 #include "engine/gui/GameScreen.hpp"
 #include "engine/Resources.hpp"
 #include "engine/Box.hpp"
+#include "util/ListFileParser.hpp"
 
 using namespace glPortal::engine;
+using namespace glPortal::util;
 using namespace glPortal::engine::object;
 using namespace glPortal::engine::gui;
 
@@ -11,6 +13,9 @@ Game::Game(){
   Timer* gameTimer = new Timer();
   this->timer = *gameTimer;
   this->timer.start();
+  ListFileParser* listParser = new ListFileParser();
+  mapList = listParser->getListFromFile("data/maps/levels.lst");
+  this->nextLevel();
 }
 
 /**
@@ -163,30 +168,23 @@ void Game::update() {
   }
 }
 
-/**
-1 * Loads the next level and respawns the player
- */
 void Game::nextLevel() {
   for(int i = 0; i < 2; i++) {
     portals[i].disable();
-    shots[i].active = false;
-		
+    shots[i].active = false;		
   }
-  current_level++;
-  char filename[] = "data/maps/X.map";
-  filename[10] = '0'+current_level; // Hackish but avoids using strings
-  MapFileParser parser;
-  gameMap = parser.getMapFromFile(filename);
-  respawn();
-}
 
-// This method is here for refactoring purposes 
-// and can be removed once main is decluttered
-void Game::setPlayerMap(Player &player, GameMap &gameMap){
-  this->gameMap = gameMap;
-  this->player = player;
+  if(mapList.size() <= currentLevel){
+    gameMap.flush();
+    gameMap.setIsLastScreen();
+  } else {
+    MapFileParser parser;
+    gameMap = parser.getMapFromFile("data/maps/" + mapList.at(currentLevel) + ".map");
+    respawn();
+    currentLevel++;
+  }
 }
-
+ 
 void Game::setPlayer(Player &player){
   this->player = player;
 }
@@ -201,7 +199,7 @@ Player Game::getPlayer(){
 }
 
 void Game::setCurrentLevel(int current_level){
-  this->current_level = current_level;
+  this->currentLevel = current_level;
 }
 
 // This method is here for refactoring purposes 
@@ -267,7 +265,7 @@ void Game::setKey(unsigned char key){
     nmap_enabled = !nmap_enabled; // Toggle normal mapping
   }
   else if(key >= '0' && key <= '9') {
-    current_level = key - '0' - 1; // Load levelX
+    currentLevel = key - '0' - 1; // Load levelX
     nextLevel();
   }
   else if(key == 'q') {
