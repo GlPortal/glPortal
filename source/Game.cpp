@@ -27,7 +27,7 @@ void Game::respawn() {
 }
 
 void Game::update() {
-
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   float dt = FRAMETIME_SECONDS;
   int centerHorizontal = width/2;
   int centerVertical = height/2;
