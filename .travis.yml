@@ -2,7 +2,7 @@ language: cpp
 compiler:
   - gcc
   - clang
-brefore_install:
+script: 
   - sudo apt-get update
-  - sudo apt-get install libglew-dev libgl1-mesa-dev libglew-dev freeglut3-dev libassimp-dev libfreeimage-dev
-script: cmake ./source && make
+  - sudo apt-get install libglew-dev libgl1-mesa-dev libglew-dev freeglut3-dev libassimp-dev libfreeimage-dev	
+  - cmake ./source && make
