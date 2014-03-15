@@ -3,9 +3,9 @@ compiler:
   - gcc
   - clang
 script: 
-  - sudo deb http://cz.archive.ubuntu.com/ubuntu raring main universe
-  - wget http://mirrors.cs.wmich.edu/ubuntu/pool/universe/a/assimp/libassimp-dev_3.0~dfsg-1_amd64.deb
+  - sudo echo "deb http://cz.archive.ubuntu.com/ubuntu raring main universe" >> /etc/apt/sources.list
+  - wget http://mirrors.kernel.org/ubuntu/pool/universe/a/assimp/libassimp-dev_3.0~dfsg-1_amd64.deb
   - sudo dpkg -i libassimp-dev_3.0~dfsg-1_amd64.deb
   - sudo apt-get update
-  - sudo apt-get install libglew-dev libgl1-mesa-dev libglew1.6-dev freeglut3-dev libfreeimage-dev
+  - sudo apt-get install libglew-dev libgl1-mesa-dev libglew1.6-dev freeglut3-dev libfreeimage-dev libassimp-dev
   - cmake ./source && make
