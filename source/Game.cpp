@@ -117,6 +117,11 @@ void Game::update() {
       player.kill();
     }
 
+    // Check if player has fallen into void
+    if(player.getY() <= -30) {
+      player.kill();
+    }
+
     // Check if player has taken the cake
     if(gameMap.collidesWithCake(bbox) == true) {
       player.setHasWon();
