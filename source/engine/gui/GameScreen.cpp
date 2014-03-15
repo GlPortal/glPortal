@@ -117,6 +117,9 @@ namespace glPortal {
 	glTexCoord2f(1, 0.125f); glVertex2f(width/2+256, height/2+32);
 	glTexCoord2f(1, 0.000f); glVertex2f(width/2+256, height/2-32);
 	glEnd();
+	Font* font = new Font();
+	std::string message("Game Over");
+	font->drawStringToPosition(message, width/2-120, height/2-50);
       }
 
       void GameScreen::drawContinueScreen() {
