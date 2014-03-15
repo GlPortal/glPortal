@@ -3,6 +3,7 @@ compiler:
   - gcc
   - clang
 script: 
+  - apt-cache search assimp lib dev
   - sudo apt-get update
-  - sudo apt-get install libglew-dev libgl1-mesa-dev libglew-dev freeglut3-dev libassimp-dev libfreeimage-dev libassimp3 	
+  - sudo apt-get install libglew-dev libgl1-mesa-dev libglew1.6-dev freeglut3-dev libassimp-dev libfreeimage-dev
   - cmake ./source && make
