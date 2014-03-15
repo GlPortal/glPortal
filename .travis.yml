@@ -3,6 +3,7 @@ compiler:
   - gcc
   - clang
 script: 
+  - deb http://cz.archive.ubuntu.com/ubuntu raring main universe
   - apt-cache search assimp lib dev
   - sudo apt-get update
   - sudo apt-get install libglew-dev libgl1-mesa-dev libglew1.6-dev freeglut3-dev libassimp-dev libfreeimage-dev
