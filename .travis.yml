@@ -10,4 +10,6 @@ script:
   - sudo dpkg -i libassimp-dev_3.0~dfsg-1_amd64.deb
   - sudo apt-get update
   - sudo apt-get install libglew-dev libgl1-mesa-dev libglew1.6-dev freeglut3-dev libfreeimage-dev libassimp-dev
-  - cmake ./source && make
+  - cmake ./source 
+  - cmake ./source 
+  - make
