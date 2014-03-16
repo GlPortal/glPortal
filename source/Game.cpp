@@ -27,7 +27,7 @@ void Game::respawn() {
 }
 
 void Game::update() {
-
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   float dt = FRAMETIME_SECONDS;
   int centerHorizontal = width/2;
   int centerVertical = height/2;
@@ -114,6 +114,11 @@ void Game::update() {
     // Check if player has fallen into an acid pool
     bbox.set(player.getX()-0.5, player.getY(), player.getZ()-0.5, player.getX()+0.5, player.getY()+1.8, player.getZ()+0.5);
     if(gameMap.collidesWithAcid(bbox) == true) {
+      player.kill();
+    }
+
+    // Check if player has fallen into void
+    if(player.getY() <= -30) {
       player.kill();
     }
 
