@@ -1,5 +1,5 @@
-! Start
-s 2.5 1 5
+! Start 
+s -25 -9.8 9
 
 ! Barrel
 b 5.5 1 5
@@ -13,6 +13,25 @@ l 9 7 5
 ! BACK
 ! tower
 t -10 -100 0 -4 30 4
+
+! start chamber
+! floor
+t -30 -100 15 -4 -10 4
+! ceiling
+t -30 -4 15 -4 30 4
+! path
+t -4 -100 7 0 -10 -10
+! back wall
+w -30 -10 15 -31 -4 4
+! front wall
+t -4 -10 15 -3 -4 7
+! right wall
+t -31 -10 15 -4 -4 16
+
+! left wall
+t -31 -10 4 -4 -4 5
+
+
 ! lower frame
 t -3 -1 -1 -4 0 5
 ! south balcony
