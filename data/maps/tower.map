@@ -1,0 +1,41 @@
+! Start
+s 2.5 1 5
+
+! Barrel
+b 5.5 1 5
+
+! Light position
+l 9 7 5
+
+
+r 12 12 12
+
+! back
+! x = distance from center
+! y = height
+! z = width
+w -3 0 0 -4 4 4
+t -10 -100 0 -4 30 4
+! front
+t 10 0 0 11 8 10
+
+! x = length
+! y = height 
+! z = distance from center 
+! right
+w 15 -100 15 30 8 30
+! left
+t 0 -100 -4 10 +200 -14
+w 10 30 -7 11 35 -11
+t 10 29 -7 15 30 -14
+! Cake
+c 13.2 30.5 -9.25
+t 13 30 -9 13.5 30.5 -9.5
+
+! x = length
+! y = distance from center 
+! z = width 
+! floor
+t 0 -100 0 20 0 10
+! Ceiling
+t 8 8 0 13 10 10
