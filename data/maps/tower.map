@@ -1,0 +1,96 @@
+! Start 
+s -25 -9.8 9
+
+! Barrel
+b 5.5 1 5
+
+! Light position
+l 9 7 5
+
+! x = distance from center
+! y = height
+! z = width
+! BACK
+! tower
+t -10 -100 0 -4 30 4
+
+! start chamber
+! floor
+t -30 -100 15 -4 -10 4
+! ceiling
+t -30 -4 15 -4 30 4
+! light
+l -25 -5 9
+! path
+t -4 -100 7 0 -10 -10
+! back wall
+w -30 -10 15 -31 -4 4
+! front wall
+t -4 -10 15 -3 -4 7
+! right wall
+t -31 -10 15 -4 -4 16
+
+! left wall
+t -31 -10 4 -4 -4 5
+
+
+! lower frame
+t -3 -1 -1 -4 0 5
+! south balcony
+t -10 20 0 -14 21 4
+! south balcony white paint
+w -10 21 0 -11 25 4
+! Cake
+!c 13.2 30.5 -9.25
+!t 13 30 -9 13.5 30.5 -9.5
+c -12.2 21.5 1.25
+t -12 21 1 -12.5 21.5 1.5
+
+
+
+! MIDDLE
+w -3 0 0 -4 4 4
+! top frame
+t -3 4 -1 -4 5 5
+! left frame
+t -3 0 0 -4 4 -1
+! right frame
+t -3 0 4 -4 4 5
+
+! FRONT
+t 10 0 0 11 8 10
+
+! x = length
+! y = height 
+! z = distance from center 
+! RIGHT
+! tower
+w 15 -100 15 30 8 30
+! frame
+t 15 -100 15 14 8 30
+! ceiling
+t 14 8 15 30 9 30
+! LEFT
+! tower
+t 0 -100 -4 10 +200 -14
+w 10 30 -7 11 35 -11
+! top frame
+t 10 35 -7 11 36 -11
+! left frame
+t 10 29 -6 11 36 -7
+! right frame
+t 10 30 -11 11 36 -14
+! north balcony
+t 10 29 -7 15 30 -14
+! east balcony
+t 10 30 -18 -0 31 -14
+! jump and run platform
+t 30 30 -22 -30 -100 -23
+
+! x = length
+! y = distance from center 
+! z = width 
+! floor
+t 0 -100 0 20 0 10
+! Ceiling
+t 8 8 0 13 10 10

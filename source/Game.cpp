@@ -2,17 +2,22 @@
 #include "engine/gui/GameScreen.hpp"
 #include "engine/Resources.hpp"
 #include "engine/Box.hpp"
+#include "util/ListFileParser.hpp"
 
 using namespace glPortal::engine;
+using namespace glPortal::util;
 using namespace glPortal::engine::object;
 using namespace glPortal::engine::gui;
 
 bool Game::DEBUG = false;
 
-Game::Game() {
+Game::Game(){
   Timer* gameTimer = new Timer();
   this->timer = *gameTimer;
   this->timer.start();
+  ListFileParser* listParser = new ListFileParser();
+  mapList = listParser->getListFromFile("data/maps/levels.lst");
+  this->nextLevel();
 }
 
 /**
@@ -24,6 +29,7 @@ void Game::respawn() {
 }
 
 void Game::update() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   float dt = FRAMETIME_SECONDS;
   
   //Get delta mouse movement
@@ -66,7 +72,7 @@ void Game::update() {
       zspeed -= sin(yrot)*PLAYER_MOVESPEED*dt;
     }
 
-    if(keystates[' ']) {
+    if(keystates[' '] && (player.isOnGround() || gameMap.jetpackIsEnabled())) {
       if(player.isOnGround()) {
         yspeed = JUMPPOWER;
       }
@@ -106,7 +112,7 @@ void Game::update() {
     } else {
       // If player was falling it means must have hit the ground
       if(yspeed < 0) {
-	      player.setOnGround();
+	player.setOnGround();
       }
       yspeed = 0.f;
     }
@@ -114,6 +120,11 @@ void Game::update() {
     // Check if player has fallen into an acid pool
     bbox.set(player.getX()-0.5, player.getY(), player.getZ()-0.5, player.getX()+0.5, player.getY()+1.8, player.getZ()+0.5);
     if(gameMap.collidesWithAcid(bbox) == true) {
+      player.kill();
+    }
+
+    // Check if player has fallen into void
+    if(player.getY() <= -30) {
       player.kill();
     }
 
@@ -125,23 +136,23 @@ void Game::update() {
     // Check if player has entered a portal
     if(portalsActive()) {
       for(int i = 0; i < 2; i++) {
-	      if(portals[i].throughPortal(player.getX(), player.getY()+0.9f,player.getZ())) {
-	        // Calculate rotation between portals
-	        float rotation = 0.f;
-	        rotation += portals[i].getToRotation()*DEGRAD;
-	        rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
-	        yrot += rotation;
-	        // Distance from portal to player
-	        float xdist = player.getX() - portals[i].x;
-	        float zdist = player.getZ() - portals[i].z;
-	        // Calculate this distance when rotated
-	        float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
-	        float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
-	        // Move player to destination portal
-	        player.setX(portals[(i+1)%2].x + nxdist);
-	        player.setZ(portals[(i+1)%2].z + nzdist);
-	        player.setY(player.getY() + portals[(i+1)%2].y - portals[i].y);
-	      }
+	if(portals[i].throughPortal(player.getX(), player.getY()+0.9f,player.getZ())) {
+	  // Calculate rotation between portals
+	  float rotation = 0.f;
+	  rotation += portals[i].getToRotation()*DEGRAD;
+	  rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
+	  yrot += rotation;
+	  // Distance from portal to player
+	  float xdist = player.getX() - portals[i].x;
+	  float zdist = player.getZ() - portals[i].z;
+	  // Calculate this distance when rotated
+	  float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
+	  float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
+	  // Move player to destination portal
+	  player.setX(portals[(i+1)%2].x + nxdist);
+	  player.setZ(portals[(i+1)%2].z + nzdist);
+	  player.setY(player.getY() + portals[(i+1)%2].y - portals[i].y);
+	}
       }
     }
   }
@@ -157,41 +168,34 @@ void Game::update() {
 
       Box sbox;
       if(gameMap.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
-	      shots[i].update(-dt); // Reverse time to before collision
-	      // Collision really should be interpolated instead
-	      if(sbox.type == TID_WALL) {
-	        portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z, gameMap);
-	      }
-	      shots[i].active = false;
+	shots[i].update(-dt); // Reverse time to before collision
+	// Collision really should be interpolated instead
+	if(sbox.type == TID_WALL) {
+	  portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z, gameMap);
+	}
+	shots[i].active = false;
       }
     }
   }
 }
 
-/**
-1 * Loads the next level and respawns the player
- */
 void Game::nextLevel() {
   for(int i = 0; i < 2; i++) {
     portals[i].disable();
-    shots[i].active = false;
-		
+    shots[i].active = false;		
   }
-  current_level++;
-  char filename[] = "data/maps/X.map";
-  filename[10] = '0'+current_level; // Hackish but avoids using strings
-  MapFileParser parser;
-  gameMap = parser.getMapFromFile(filename);
-  respawn();
-}
 
-// This method is here for refactoring purposes 
-// and can be removed once main is decluttered
-void Game::setPlayerMap(Player &player, GameMap &gameMap){
-  this->gameMap = gameMap;
-  this->player = player;
+  if(mapList.size() <= currentLevel){
+    gameMap.flush();
+    gameMap.setIsLastScreen();
+  } else {
+    MapFileParser parser;
+    gameMap = parser.getMapFromFile("data/maps/" + mapList.at(currentLevel) + ".map");
+    respawn();
+    currentLevel++;
+  }
 }
-
+ 
 void Game::setPlayer(Player &player){
   this->player = player;
 }
@@ -206,7 +210,7 @@ Player Game::getPlayer(){
 }
 
 void Game::setCurrentLevel(int current_level){
-  this->current_level = current_level;
+  this->currentLevel = current_level;
 }
 
 // This method is here for refactoring purposes 
@@ -272,7 +276,7 @@ void Game::setKey(SDL_Keysym keysym) {
     nmap_enabled = !nmap_enabled; // Toggle normal mapping
   }
   else if(key >= '0' && key <= '9') {
-    current_level = key - '0' - 1; // Load levelX
+    currentLevel = key - '0' - 1; // Load levelX
     nextLevel();
   }
   else if(key == 'q') {
@@ -430,11 +434,11 @@ void Game::drawOverlay() {
 
       // Draw "Press return to respawn" message if dead
       if(player.getState() == PS_DYING) {
-	      screen->drawRespawnScreen();
+	screen->drawRespawnScreen();
       }
       // Draw "Press return to continue" message if won
       else if(player.getState() == PS_WON) {
-	      screen->drawContinueScreen();
+	screen->drawContinueScreen();
       }
     }
   }
