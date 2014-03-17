@@ -20,7 +20,7 @@ namespace glPortal {
       float cakepos[3];	
       Box cakeBox;	
     public:
-      GameMap getMapFromFile(const char *filename);
+      GameMap getMapFromFile(std::string filename);
     };
   }
 }

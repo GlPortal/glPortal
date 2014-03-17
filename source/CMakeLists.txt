@@ -11,6 +11,7 @@ add_executable(${EXE_NAME}
   engine/gui/Character.cpp  engine/gui/Font.cpp engine/tools/Timer.cpp
   engine/object/Model.cpp engine/object/Mesh.cpp
   map/MapFileParser.cpp
+  util/ListFileParser.cpp
   Player.cpp GameMap.cpp 
   Shot.cpp Portal.cpp 
   Window.cpp Exception.cpp
