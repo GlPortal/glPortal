@@ -7,7 +7,9 @@
 #include "../engine/StringConverter.hpp"
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/tokenizer.hpp>
 
+using namespace boost;
 using namespace std;
 using namespace glPortal::engine;
 
@@ -24,16 +26,21 @@ namespace glPortal {
 	  std::getline(file, line);
 	  std::stringstream stringStream(line);
 	  if(line.length() > 0) {
-	    // tokenize string and write to map like this
-	    //	    configMap[pair[0]]=pair[1];
+	    vector<std::string> strings;
+	    tokenizer<> tok(line);
+	    for(tokenizer<>::iterator beg=tok.begin(); beg!=tok.end();++beg){
+	      strings.push_back(*beg);
+	      
+	    }
+	    configMap[strings.at(0)]=strings.at(1);
 	  }
 	}
 	file.close();
       }
     }
-
+    
     std::string ConfigFileParser::getConfigValueByKey(std::string key){
-
+      
       return configMap.at(key);
     }
   }
