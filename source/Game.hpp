@@ -26,7 +26,7 @@
 #define KEY_BUFFER 256
 #define PLAYER_MOVESPEED 330
 #define GRAVITY 16.0
-#define MAXSPEED 10.0
+#define MAXSPEED 50.0
 #define JUMPPOWER 7.0
 #define JETPACK_ACC 24.0
 
