@@ -50,6 +50,7 @@ void Game::update() {
     // Apply gravity to yspeed
     yspeed -= GRAVITY*dt;
     if(yspeed < -MAXSPEED) yspeed = -MAXSPEED;
+    if(yspeed > MAXSPEED) yspeed = MAXSPEED;
 
     // Move forward
     if(keystates['w']) {
