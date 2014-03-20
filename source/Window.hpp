@@ -2,8 +2,10 @@
 #define __WINDOW_HPP
 
 #define TITLE "GL Portal"
-#define DEFAULT_WIDTH 1024
-#define DEFAULT_HEIGHT 768
+//#define DEFAULT_WIDTH 1024
+//#define DEFAULT_HEIGHT 768
+#define DEFAULT_WIDTH 1680
+#define DEFAULT_HEIGHT 1050
 
 #include <GL/glew.h>
 #include <GL/glext.h>

@@ -1,16 +1,20 @@
 #include "Environment.hpp"
 
 using namespace std;
-using namespace glPortal::util;
+//using namespace glPortal::util;
 
 namespace glPortal {
   namespace engine{
-    void Environment::init(){
-    this->config = ConfigFileParser("./data/main.cfg");
+    Environment::Environment(){
+      //Do nothing
     }
     
-    ConfigFileParser Environment::getConfig(){
-      return this->config;
+    void Environment::init(){
+      this->config = new ConfigFileParser("./data/main.cfg");
+    }
+    
+    ConfigFileParser & Environment::getConfig(){
+      return *this->config;
     }
   }
 }
