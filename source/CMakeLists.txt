@@ -12,6 +12,8 @@ add_executable(${EXE_NAME}
   engine/object/Model.cpp engine/object/Mesh.cpp
   map/MapFileParser.cpp
   util/ListFileParser.cpp
+  util/ConfigFileParser.cpp
+  engine/Environment.cpp
   Player.cpp GameMap.cpp 
   Shot.cpp Portal.cpp 
   Window.cpp Exception.cpp
