@@ -2,12 +2,14 @@
 #include "engine/Resources.hpp"
 #include <iostream>
 #include "engine/Box.hpp"
+#include "engine/Environment.hpp"
 
 using namespace glPortal::map;
 using namespace glPortal::engine;
 using namespace std;
 
 int main(int argc, char **argv) {
+  Environment::init();
   window.setup(&argc, argv);
   setup(&argc, argv);
   loop();

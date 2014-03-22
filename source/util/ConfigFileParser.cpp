@@ -8,7 +8,7 @@
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/tokenizer.hpp>
-
+#include <stdexcept>      
 using namespace boost;
 using namespace std;
 using namespace glPortal::engine;
@@ -19,7 +19,7 @@ namespace glPortal {
       std::ifstream file(filename, std::ifstream::in);
       std::string line, string;
       if(!file){
-
+	throw std::invalid_argument("File " + filename + " not found.");
       } else {
 
 	while(file.good()) {
@@ -40,8 +40,15 @@ namespace glPortal {
     }
     
     std::string ConfigFileParser::getConfigValueByKey(std::string key){
-      
-      return configMap.at(key);
+      try{
+	return configMap.at(key);
+      } catch (const std::out_of_range& e){
+	throw std::invalid_argument("No such value for key.");
+      }
+    }
+
+    int ConfigFileParser::getConfigIntValueByKey(std::string key){
+      return atoi(getConfigValueByKey(key).c_str());
     }
   }
 }
