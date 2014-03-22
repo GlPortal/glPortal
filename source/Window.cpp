@@ -5,17 +5,44 @@
 #include <cstdlib>
 #include "engine/Resources.hpp"
 #include "Portal.hpp"
+#include "engine/Environment.hpp"
+#include <stdexcept>
 
 void Window::setup(int *argc, char **argv) {
-  //Initialize SDL
+  ConfigFileParser config = Environment::getConfig();
   SDL_Init(SDL_INIT_EVERYTHING);
+
+  int window_width;
+  int window_height;
+
+  try{
+    window_width =  config.getConfigIntValueByKey("width");
+    window_height =  config.getConfigIntValueByKey("height");
+  } catch (const std::invalid_argument& e){
+    window_width = DEFAULT_WIDTH;
+    window_height = DEFAULT_HEIGHT;
+  }
+
+  Uint32 windowConfigFlags = SDL_WINDOW_OPENGL;
+
+
+  try{
+    if(config.getConfigValueByKey("fullscreen") == "no"){
+      windowConfigFlags = windowConfigFlags | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED;
+    } else {
+      windowConfigFlags = windowConfigFlags | SDL_WINDOW_FULLSCREEN_DESKTOP;
+    } 
+  } catch (const std::invalid_argument& e){
+    windowConfigFlags = windowConfigFlags | SDL_WINDOW_FULLSCREEN_DESKTOP;
+  }
+
   w = SDL_CreateWindow(TITLE,
                        SDL_WINDOWPOS_UNDEFINED,
                        SDL_WINDOWPOS_UNDEFINED,
-                       DEFAULT_WIDTH,
-                       DEFAULT_HEIGHT,
-                       SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED);
-  
+                       window_width,
+                       window_height,
+                       windowConfigFlags);
+
   if(w == NULL) {
     printf("Could not create window: %s\n", SDL_GetError());
   }
@@ -33,7 +60,7 @@ void Window::setup(int *argc, char **argv) {
   }
   
   //Get the size of the window and store it
-  SDL_GetWindowSize(w, &width, &height);
+   SDL_GetWindowSize(w, &width, &height);
   
   setSize(width, height);
   

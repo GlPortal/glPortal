@@ -2,8 +2,6 @@
 #include "engine/gui/GameScreen.hpp"
 #include "engine/Resources.hpp"
 #include "engine/Box.hpp"
-#include "engine/Environment.hpp"
-#include "util/ConfigFileParser.hpp"
 #include "util/ListFileParser.hpp"
 
 using namespace glPortal::engine;
@@ -14,11 +12,6 @@ using namespace glPortal::engine::gui;
 bool Game::DEBUG = false;
 
 Game::Game(){
-  Environment* environment = new Environment();
-  environment->init();
-  ConfigFileParser config = environment->getConfig();
-  cout << config.getConfigValueByKey("width");
-  cout << config.getConfigValueByKey("widthasdf");
   Timer* gameTimer = new Timer();
   this->timer = *gameTimer;
   this->timer.start();

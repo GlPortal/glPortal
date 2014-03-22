@@ -15,11 +15,11 @@ namespace glPortal {
   namespace engine{
     class Environment{
     private:
-      ConfigFileParser *config;
+      static ConfigFileParser *config;
     public:
-      Environment();
-      void init();
-      ConfigFileParser & getConfig();
+      static void init();
+      static ConfigFileParser & getConfig();
+      static void initializeConfig();
     };
   }
 }
