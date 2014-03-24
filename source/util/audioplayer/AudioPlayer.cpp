@@ -40,7 +40,7 @@ namespace glPortal {
       }
 
       void AudioPlayer::cleanUp() {
-	Mix_CloseAudio()
+	Mix_CloseAudio();
       }
     }
   }

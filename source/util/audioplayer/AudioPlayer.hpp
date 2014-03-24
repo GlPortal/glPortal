@@ -11,15 +11,15 @@ namespace glPortal {
       class AudioPlayer {
       public:
 	void init();
-	void playByFilename(std::string filename);
+	void playByFileName(std::string filename);
 	void addSong(std::string filename);
 	void play();
 	void pause();
 	void stop();
 	void cleanUp();
       private:
-	vector<std::string> tracks;
-	Mix_Music *music = NULL
+	std::vector<std::string> tracks;
+	Mix_Music *music = NULL;
       };
     }
   }
