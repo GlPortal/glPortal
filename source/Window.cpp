@@ -41,17 +41,19 @@ void Window::setup(int *argc, char **argv) {
   SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
-void Window::enableGlFeatures(){
-  glEnable(GL_TEXTURE_2D);
+void Window::enableGlFeatures() {
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glEnable(GL_LINE_SMOOTH);
+  glEnable(GL_POLYGON_SMOOTH);
+  glEnable(GL_MULTISAMPLE_ARB);
   glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+  glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
   glDepthFunc(GL_LESS);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
   setAmbientLight();
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glEnable(GL_BLEND);
-  glEnable(GL_MULTISAMPLE_ARB);
 }
 
 void Window::swapBuffer() {
