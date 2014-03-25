@@ -32,8 +32,9 @@ namespace glPortal {
       }
 
       void AudioPlayer::play() {
+	Mix_VolumeMusic(14);
+	Mix_Fading(MIX_FADING_IN);
 	if(Mix_PlayMusic(music, 0) == -1) { printf("Unable to play Ogg file: %s\n", Mix_GetError()); } 
-	//Mix_PlayMusic(music, 1);
       }
 
       void AudioPlayer::pause() {
