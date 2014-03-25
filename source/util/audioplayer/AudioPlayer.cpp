@@ -13,7 +13,7 @@ namespace glPortal {
 	int audio_channels = 2;
 	int audio_buffers = 4096;
 
-	if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers)) {
+	if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) == -1) {
 	  printf("Unable to open audio!\n");
 	  exit(1);
 	}
@@ -32,7 +32,8 @@ namespace glPortal {
       }
 
       void AudioPlayer::play() {
-	Mix_PlayMusic(music, 1);
+	if(Mix_PlayMusic(music, 0) == -1) { printf("Unable to play Ogg file: %s\n", Mix_GetError()); } 
+	//Mix_PlayMusic(music, 1);
       }
 
       void AudioPlayer::pause() {
