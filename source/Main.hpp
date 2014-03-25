@@ -12,6 +12,7 @@
 #include "Player.hpp"
 #include "GameMap.hpp"
 #include "map/MapFileParser.hpp"
+#include "util/audioplayer/AudioPlayer.hpp"
 #include "Game.hpp"
 #include "Window.hpp"
 
