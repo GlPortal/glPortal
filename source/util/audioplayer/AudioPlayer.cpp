@@ -13,8 +13,6 @@ namespace glPortal {
 	int audio_channels = 2;
 	int audio_buffers = 4096;
 
-	SDL_Init(SDL_INIT_AUDIO);
-
 	if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers)) {
 	  printf("Unable to open audio!\n");
 	  exit(1);
@@ -22,7 +20,11 @@ namespace glPortal {
       }
 
       void AudioPlayer::playByFileName(std::string filename) {
-	music = Mix_LoadMUS("data/audio/music/track1.ogg");
+	music = Mix_LoadMUS("./data/audio/music/track1.ogg");
+	if( music == NULL )
+	  {
+	    printf( "Failed to load Music: SDL_mixer Error: %s\n", Mix_GetError() );
+	  }
       }
 
       void AudioPlayer::addSong(std::string filename) {
@@ -30,7 +32,7 @@ namespace glPortal {
       }
 
       void AudioPlayer::play() {
-	Mix_PlayMusic(music, 0);
+	Mix_PlayMusic(music, 1);
       }
 
       void AudioPlayer::pause() {
@@ -40,6 +42,7 @@ namespace glPortal {
       }
 
       void AudioPlayer::cleanUp() {
+	Mix_FreeMusic(music);
 	Mix_CloseAudio();
       }
     }
