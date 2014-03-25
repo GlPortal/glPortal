@@ -44,6 +44,7 @@ void loop() {
   bool quit = false;
 
   AudioPlayer* player = new AudioPlayer();
+  player->init();
   player->playByFileName("data/audio/music/track1.ogg");
   player->play();    
   while (!quit) {
