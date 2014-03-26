@@ -23,7 +23,6 @@ void setup(int *argc, char **argv) {
   width = window.getWidth();
   window.enableGlFeatures();
   game.loadTextures();
-  game.unpause();
 }
 
 void loop() {

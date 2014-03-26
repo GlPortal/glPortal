@@ -84,7 +84,7 @@ private:
   ConfigFileParser * config;
   int width, height;
   bool keystates[KEY_BUFFER];
-  bool paused;	
+  bool paused = false;	
   bool nmap_enabled = true; 
   float fade;  	
   Player player;
