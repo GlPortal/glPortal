@@ -19,6 +19,7 @@ namespace glPortal {
     public:
       static void init();
       static ConfigFileParser & getConfig();
+      static ConfigFileParser * getConfigPointer();
       static void initializeConfig();
     };
   }

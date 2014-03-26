@@ -18,8 +18,10 @@
 #include "engine/tools/Timer.hpp"
 #include "GameMap.hpp"
 #include "map/MapFileParser.hpp"
-
 #include "engine/Box.hpp"
+#include "engine/Environment.hpp"
+
+
 #define FRAMETIME_SECONDS 0.017f // FRAMETIME in seconds. Used for updating game logic
 #define RADDEG 57.29577951308232088 // 180/PI
 #define DEGRAD 0.017453292519943296 // PI/180
@@ -34,6 +36,7 @@ using namespace glPortal::engine;
 using namespace glPortal::engine::object;
 using namespace glPortal::engine::tools;
 using namespace glPortal::map;
+using namespace glPortal::util;
 
 class Game {
 public:
@@ -78,6 +81,7 @@ public:
   void togglePause();
   //Refactoring Methods End
 private:
+  ConfigFileParser * config;
   int width, height;
   bool keystates[KEY_BUFFER];
   bool paused;	
