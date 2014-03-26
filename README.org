@@ -7,7 +7,7 @@ If you need to talk directly to me (everything that is no bug report,
 feature request or question that fits in the public discussion)
 you can contact me at portal at w3-net.de by email.
 
-You can find the website at http://social.w3-net.de/glportal .
+You can find the website at http://glportal.de .
 
 Chat with us at irc.freenode.org in the channel ##glportal.
 * Original Author
@@ -79,7 +79,7 @@ If this produces no error you have built the binary and should be able to start 
 This does not work for you? Help us figure out what we missed to make this work on 
 your system.
 * Join the team
-You can join the community at http://social.w3-net.de/groups/glportal/ 
+You can join the community at http://glportal.de/groups/glportal/ 
 for questions and discussions about the development of the game.
 A makeshift Issue tracker can be found at 
 https://github.com/hhirsch/glPortal/issues .
