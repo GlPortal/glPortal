@@ -19,18 +19,13 @@
 using namespace glPortal::engine;
 
 // Main functions
-void update(int);
 void respawn();
-void nextLevel();
 void loop();
 void draw();
 void registerCallbacks();
 void setup(int *, char **);
 // Callback functions
 void mouse_moved(int, int);
-void mouse_pressed(SDL_MouseButtonEvent);
-void key_down(SDL_KeyboardEvent);
-void key_up(SDL_KeyboardEvent);
 void resize(int, int);
 void resetKeyStates();
 int width, height;	

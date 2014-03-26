@@ -29,16 +29,6 @@ void setup(int *argc, char **argv) {
   game.respawn();
 }
 
-void update(int value) {
-  if(!game.isPaused()) {
-    game.update();
-    
-    if(player.isDead()) {
-      game.fadeOut();
-    }
-  }
-}
-
 void loop() {
   SDL_Event event;
   bool quit = false;
@@ -53,13 +43,13 @@ void loop() {
         quit = true;
       }
       if(event.type == SDL_KEYDOWN) {
-        key_down(event.key);
+	game.setKey(event.key.keysym);
       }
       if(event.type == SDL_KEYUP) {
-        key_up(event.key);
+	game.unsetKey(event.key.keysym);
       }
       if(event.type == SDL_MOUSEBUTTONDOWN) {
-        mouse_pressed(event.button);
+	game.mousePressed(event.button.button);
       }
       if(event.type == SDL_WINDOWEVENT_RESIZED) {
         resize(event.window.data1, event.window.data2);
@@ -71,7 +61,7 @@ void loop() {
         game.unpause();
       }
     }
-    update(FRAMETIME);
+    game.update();
     draw();
   }
   window.close();
@@ -95,20 +85,6 @@ void draw() {
   game.draw();
   window.swapBuffer();
 }
-
-void mouse_pressed(SDL_MouseButtonEvent event) {
-  game.mousePressed(event.button);
-}
-
-void key_down(SDL_KeyboardEvent event) {
-  game.setKey(event.keysym);
-}
-
-
-void key_up(SDL_KeyboardEvent event) {
-  game.unsetKey(event.keysym);
-}
-
 
 void resize(int w, int h) {
   window.setSize(w, h);
