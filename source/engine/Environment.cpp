@@ -18,6 +18,15 @@ namespace glPortal {
       
       return *config;
     }
+
+    ConfigFileParser * Environment::getConfigPointer(){
+      if(!config){
+	initializeConfig();
+      }
+      
+      return config;
+    }
+
     
     void Environment::initializeConfig(){
       try{

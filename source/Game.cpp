@@ -3,6 +3,7 @@
 #include "engine/Resources.hpp"
 #include "engine/Box.hpp"
 #include "util/ListFileParser.hpp"
+#include <stdexcept>
 
 using namespace glPortal::engine;
 using namespace glPortal::util;
@@ -12,6 +13,7 @@ using namespace glPortal::engine::gui;
 bool Game::DEBUG = false;
 
 Game::Game(){
+  config = Environment::getConfigPointer();
   Timer* gameTimer = new Timer();
   this->timer = *gameTimer;
   this->timer.start();
@@ -318,7 +320,15 @@ void Game::draw() {
   
   // Draw scene
   setView();
-  drawPortals();
+
+  try{
+    if(config->getConfigValueByKey("portals") != "invisible"){
+      drawPortals();
+    }
+  } catch (const std::invalid_argument& e){
+    drawPortals();
+  }
+  
   gameMap.draw(nmap_enabled);
   drawPortalOutlines();
   drawShots();
