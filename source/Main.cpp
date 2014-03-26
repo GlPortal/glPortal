@@ -93,7 +93,6 @@ void draw() {
   game.setWindow(window);
   game.setHeightWidth(height, width);
   game.draw();
-  // Swap buffers
   window.swapBuffer();
 }
 
