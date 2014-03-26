@@ -24,18 +24,16 @@ void setup(int *argc, char **argv) {
   window.enableGlFeatures();
   game.loadTextures();
   game.unpause();
-  game.setPlayer(player);
-  game.respawn();
 }
 
 void loop() {
   SDL_Event event;
   bool quit = false;
 
-  AudioPlayer* player = new AudioPlayer();
-  player->init();
-  player->playByFileName("data/audio/music/track1.ogg");
-  player->play();    
+  AudioPlayer* audioPlayer = new AudioPlayer();
+  audioPlayer->init();
+  audioPlayer->playByFileName("data/audio/music/track1.ogg");
+  audioPlayer->play();    
   while (!quit) {
     while(SDL_PollEvent(&event)) {
       if(event.type == SDL_QUIT) {
@@ -51,7 +49,7 @@ void loop() {
 	game.mousePressed(event.button.button);
       }
       if(event.type == SDL_WINDOWEVENT_RESIZED) {
-        resize(event.window.data1, event.window.data2);
+	window.setSize(event.window.data1, event.window.data2);
       }
       if(event.type == SDL_WINDOWEVENT_FOCUS_LOST) {
         game.pause();
@@ -64,12 +62,7 @@ void loop() {
     draw();
   }
   window.close();
-  player->cleanUp();
-}
-
-void respawn() {
-  game.resetFade();
-  player.create(gameMap.getStartX(), gameMap.getStartY(), gameMap.getStartZ());
+  audioPlayer->cleanUp();
 }
 
 void draw() {
@@ -78,8 +71,3 @@ void draw() {
   game.draw();
   window.swapBuffer();
 }
-
-void resize(int w, int h) {
-  window.setSize(w, h);
-}
-

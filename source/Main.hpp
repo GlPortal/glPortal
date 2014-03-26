@@ -5,7 +5,6 @@
 #define RADDEG 57.29577951308232088 // approx. 180/PI
 
 #include <GL/glew.h>
-#include <GL/freeglut.h>
 #include <GL/glext.h>
 #include <SDL2/SDL.h>
 #include <cstdlib> 
@@ -18,13 +17,10 @@
 
 using namespace glPortal::engine;
 
-// Main functions
-void respawn();
 void loop();
 void draw();
 void registerCallbacks();
 void setup(int *, char **);
-// Callback functions
 void resize(int, int);
 void resetKeyStates();
 int width, height;	
