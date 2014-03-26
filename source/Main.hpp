@@ -25,18 +25,12 @@ void draw();
 void registerCallbacks();
 void setup(int *, char **);
 // Callback functions
-void mouse_moved(int, int);
 void resize(int, int);
 void resetKeyStates();
 int width, height;	
 int mousex, mousey; 
-bool keystates[256];
-bool nmap_enabled = true;
-
 Player player;
 GameMap gameMap;
 Game game;
 Window window;
-int current_level;
-
 #endif

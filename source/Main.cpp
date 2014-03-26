@@ -24,7 +24,6 @@ void setup(int *argc, char **argv) {
   window.enableGlFeatures();
   game.loadTextures();
   game.unpause();
-  nmap_enabled = true;
   game.setPlayer(player);
   game.respawn();
 }
@@ -38,7 +37,7 @@ void loop() {
   player->playByFileName("data/audio/music/track1.ogg");
   player->play();    
   while (!quit) {
-    while (SDL_PollEvent(&event)) {
+    while(SDL_PollEvent(&event)) {
       if(event.type == SDL_QUIT) {
         quit = true;
       }
@@ -66,12 +65,6 @@ void loop() {
   }
   window.close();
   player->cleanUp();
-}
-
-void resetKeyStates(){
-  for(int i = 0; i < 256; i++){
-    keystates[i] = false;
-  }
 }
 
 void respawn() {
