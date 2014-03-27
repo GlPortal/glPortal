@@ -8,6 +8,9 @@ namespace util {
       
       Vector3f();
       Vector3f(float x, float y, float z);
+      Vector3f *add(Vector3f v);
+      Vector3f *subtract(Vector3f v);
+      Vector3f *normalize();
   };
 }
 
