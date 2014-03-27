@@ -33,34 +33,24 @@ GLfloat* GameMap::getBarrelPosition() {
   return this->barrelPosition;
 }
 
-void GameMap::setSpawnPosition(float (&position)[3]) {
-  this->startpos[0] = position[0];
-  this->startpos[1] = position[1];
-  this->startpos[2] = position[2];
-  this->startpos[3] = position[3];
+void GameMap::setSpawnPosition(float x, float y, float z) {
+  this->startPos.x = x;
+  this->startPos.y = y;
+  this->startPos.z = z;
 }
 
-float* GameMap::getSpawnPosition() {
-  return this->startpos;
-}
-
-void GameMap::setCakePosition(float (&position)[3]) {
-  this->cakepos[0] = position[0];
-  this->cakepos[1] = position[1];
-  this->cakepos[2] = position[2];
-  this->cakepos[3] = position[3];
-  this->cakeBox.set(position[0]-0.6f, position[1]-0.6f, position[2]-0.6f,
-		                position[0]+0.6f, position[1]+0.2f, position[2]+0.6f);
-
+void GameMap::setEndPosition(float x, float y, float z) {
+  this->endPos.x = x;
+  this->endPos.y = y;
+  this->endPos.z = z;
+  this->cakeBox.set(x-0.6f, y-0.6f, z-0.6f,
+		                x+0.6f, y+0.2f, z+0.6f);
 }
 
 void GameMap::setCakeBox(Box box){
   this->cakeBox = box;
 }
 
-float* GameMap::getCakePosition(){
-  return this->cakepos;
-}
 void GameMap::setWallVector(std::vector<Box> walls){}
 
 std::vector<Box> GameMap::getWallVector(){
@@ -281,7 +271,7 @@ void GameMap::drawBox(Box &b) {
  */
 void GameMap::drawCake() {
   glPushMatrix();
-  glTranslatef(cakepos[0], cakepos[1], cakepos[2]);
+  glTranslatef(endPos.x, endPos.y, endPos.z);
   glEnable(GL_TEXTURE_2D);
   Resources::inst().bindTexture(TID_CAKE);
   Resources::inst().drawModel(MID_CAKE);

@@ -36,9 +36,8 @@ void Window::setup(int *argc, char **argv) {
   }
 
   int amountOfMultiSampleBuffers = 0;
-  SDL_GL_GetAttribute(SDL_GL_MULTISAMPLEBUFFERS, &amountOfMultiSampleBuffers);
-
-  if(amountOfMultiSampleBuffers == 0) {
+  
+  if(SDL_GL_GetAttribute(SDL_GL_MULTISAMPLEBUFFERS, &amountOfMultiSampleBuffers) == 0) {
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  16);
   }

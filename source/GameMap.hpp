@@ -23,8 +23,10 @@ class GameMap {
 public:
   void setLightPosition(GLfloat (&position)[4]);
   void setBarrelPosition(GLfloat (&position)[4]);
-  void setSpawnPosition(float (&position)[3]);
-  void setCakePosition(float (&position)[3]);
+  Vector3f getStartPosition() {return startPos;}
+  Vector3f getEndPosition() {return endPos;}
+  void setSpawnPosition(float x, float y, float z);
+  void setEndPosition(float x, float y, float z);
   void setCakeBox(Box box);
   void setWallVector(std::vector<Box> walls);
   void setAcidVector(std::vector<Box> acid);
@@ -52,9 +54,6 @@ public:
   bool collidesWithAcid(Box &bbox);
   bool collidesWithCake(Box &bbox);
   bool pointInWall(float x, float y, float z, Box *box);
-  float getStartX() { return startpos[0]; }
-  float getStartY() { return startpos[1]; }
-  float getStartZ() { return startpos[2]; }
   void renderAvatar(Vector3f position);
 protected:
   void drawBox(Box &b);
@@ -66,8 +65,8 @@ protected:
   std::vector<Model> objects;
   GLfloat lightpos[4];	        /**< Position of the light in the gameMap*/
   GLfloat barrelPosition[4];
-  float startpos[3];		/**< Position where the player spawns in the gameMap*/
-  float cakepos[3];		/**< Position of the cake in the gameMap*/
+  Vector3f startPos;		/**< Position where the player spawns in the gameMap*/
+  Vector3f endPos;	    /**< Position of the goal in the gameMap*/
   Box cakeBox;			/**< Bounding box for collision with cake */
 private:
   bool jetpackEnabled = false;
