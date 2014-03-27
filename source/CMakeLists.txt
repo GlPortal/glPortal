@@ -14,6 +14,7 @@ add_executable(${EXE_NAME}
   util/ListFileParser.cpp
   util/ConfigFileParser.cpp
   util/audioplayer/AudioPlayer.cpp
+  util/Vector3f.cpp
   engine/Environment.cpp
   Player.cpp GameMap.cpp 
   Shot.cpp Portal.cpp 
