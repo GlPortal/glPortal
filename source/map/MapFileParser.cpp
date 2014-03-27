@@ -83,14 +83,14 @@ namespace glPortal {
 	    for(int i = 0; i < 3; i++) {
 	      startpos[i] = StringConverter::stringStreamToFloat(stringStream);
 	    }
-	    this->gameMap.setSpawnPosition(startpos);
+	    this->gameMap.setSpawnPosition(startpos[0], startpos[1], startpos[2]);
 	    break;
 	    // Cake/goal position
 	  case 'c':
 	    for(int i = 0; i < 3; i++) {
 	      cakepos[i] = StringConverter::stringStreamToFloat(stringStream);
 	    }
-	    this->gameMap.setCakePosition(cakepos);
+	    this->gameMap.setEndPosition(cakepos[0], cakepos[1], cakepos[2]);
 	    break;
 	  case 'o':
 	    std::string optionLine;

@@ -27,7 +27,8 @@ Game::Game(){
  */
 void Game::respawn() {
   fade = 0.f;
-  player.create(gameMap.getStartX(), gameMap.getStartY(), gameMap.getStartZ());
+  Vector3f start = gameMap.getStartPosition();
+  player.create(start.x, start.y, start.z);
 }
 
 void Game::update() {
