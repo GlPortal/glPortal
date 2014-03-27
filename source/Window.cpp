@@ -32,11 +32,10 @@ void Window::setup(int *argc, char **argv) {
     windowConfigFlags = windowConfigFlags | SDL_WINDOW_FULLSCREEN_DESKTOP;
   }
 
-  int amountOfMultiSampleBuffers = 0;
-  if(SDL_GL_GetAttribute(SDL_GL_MULTISAMPLEBUFFERS, &amountOfMultiSampleBuffers) == 0) {
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  16);
-  }
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  1);
+  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  16);
 
   w = SDL_CreateWindow(TITLE,
                        SDL_WINDOWPOS_UNDEFINED,
@@ -46,15 +45,24 @@ void Window::setup(int *argc, char **argv) {
                        windowConfigFlags);
 
   if(w == NULL) {
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
+
+    w = SDL_CreateWindow(TITLE,
+                         SDL_WINDOWPOS_UNDEFINED,
+                         SDL_WINDOWPOS_UNDEFINED,
+                         this->width,
+                         this->height,
+                         windowConfigFlags);
+  }
+
+  if(w == NULL) {
     printf("Could not create window: %s\n", SDL_GetError());
   }
   
   //Create an OpenGL context associated with the window
   SDL_GLContext gl_context = SDL_GL_CreateContext(w);
-  
-  //Set double buffering
-  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  
+    
   //Initialize GLEW
   GLenum err = glewInit();
   if (GLEW_OK != err) {
