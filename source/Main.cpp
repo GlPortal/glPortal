@@ -2,16 +2,19 @@
 #include "engine/Resources.hpp"
 #include <iostream>
 #include "engine/Box.hpp"
+#include "engine/Environment.hpp"
 
 using namespace glPortal::map;
 using namespace glPortal::engine;
+using namespace glPortal::util::audioplayer;
 using namespace std;
 
 int main(int argc, char **argv) {
+  Environment::init();
   window.setup(&argc, argv);
   setup(&argc, argv);
   loop();
-  
+
   return EXIT_SUCCESS;
 }
 
@@ -39,7 +42,11 @@ void update(int value) {
 void loop() {
   SDL_Event event;
   bool quit = false;
-    
+
+  AudioPlayer* player = new AudioPlayer();
+  player->init();
+  player->playByFileName("data/audio/music/track1.ogg");
+  player->play();    
   while (!quit) {
     while (SDL_PollEvent(&event)) {
       if(event.type == SDL_QUIT) {
@@ -68,6 +75,7 @@ void loop() {
     draw();
   }
   window.close();
+  player->cleanUp();
 }
 
 void resetKeyStates(){

@@ -17,6 +17,7 @@ namespace glPortal {
     public:
       ConfigFileParser(std::string filename);
       std::string getConfigValueByKey(std::string key);
+      int getConfigIntValueByKey(std::string key);
     };
   }
 }
