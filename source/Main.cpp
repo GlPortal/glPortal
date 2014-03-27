@@ -39,16 +39,16 @@ void loop() {
         quit = true;
       }
       if(event.type == SDL_KEYDOWN) {
-	game.setKey(event.key.keysym);
+	      game.setKey(event.key.keysym);
       }
       if(event.type == SDL_KEYUP) {
-	game.unsetKey(event.key.keysym);
+	      game.unsetKey(event.key.keysym);
       }
       if(event.type == SDL_MOUSEBUTTONDOWN) {
-	game.mousePressed(event.button.button);
+	      game.mousePressed(event.button.button);
       }
       if(event.type == SDL_WINDOWEVENT_RESIZED) {
-	window.setSize(event.window.data1, event.window.data2);
+	      window.setSize(event.window.data1, event.window.data2);
       }
       if(event.type == SDL_WINDOWEVENT_FOCUS_LOST) {
         game.pause();
