@@ -48,9 +48,11 @@ void Window::setup(int *argc, char **argv) {
   SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE,    8);
   SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE,     8);
   SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE,    8);
- 
-  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  1);
-  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  16);
+  
+  if(SDL_GL_GetAttribute(SDL_GL_MULTISAMPLEBUFFERS, NULL) == 0) {
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  16);
+  }
 
   w = SDL_CreateWindow(TITLE,
                        SDL_WINDOWPOS_UNDEFINED,
