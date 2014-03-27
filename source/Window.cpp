@@ -36,6 +36,22 @@ void Window::setup(int *argc, char **argv) {
     windowConfigFlags = windowConfigFlags | SDL_WINDOW_FULLSCREEN_DESKTOP;
   }
 
+  SDL_GL_SetAttribute(SDL_GL_RED_SIZE,            8);
+  SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE,          8);
+  SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,           8);
+  SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,          8);
+ 
+  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,         16);
+  SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE,        32);
+ 
+  SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE,      8);
+  SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE,    8);
+  SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE,     8);
+  SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE,    8);
+ 
+  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  1);
+  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  16);
+
   w = SDL_CreateWindow(TITLE,
                        SDL_WINDOWPOS_UNDEFINED,
                        SDL_WINDOWPOS_UNDEFINED,
@@ -71,14 +87,12 @@ void Window::setup(int *argc, char **argv) {
 void Window::enableGlFeatures(){
   glEnable(GL_TEXTURE_2D);
   glEnable(GL_DEPTH_TEST);
-  glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
   glDepthFunc(GL_LESS);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
   setAmbientLight();
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
-  glEnable(GL_MULTISAMPLE_ARB);
 }
 
 void Window::swapBuffer() {
