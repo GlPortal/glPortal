@@ -7,6 +7,7 @@
 #include <cstdlib> 
 #include <map>
 #include "../util/ConfigFileParser.hpp"
+
 using namespace std;
 using namespace glPortal::util;
 
@@ -14,10 +15,11 @@ namespace glPortal {
   namespace engine{
     class Environment{
     private:
-      ConfigFileParser config;
+      static ConfigFileParser *config;
     public:
-      void init();
-      ConfigFileParser getConfig();
+      static void init();
+      static ConfigFileParser & getConfig();
+      static void initializeConfig();
     };
   }
 }
