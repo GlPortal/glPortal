@@ -25,6 +25,7 @@ public:
   int getWidth();
   int getHeight();
   void setSize(int, int);
+  void updateViewport();
   void close();
 private:
   void setAmbientLight();

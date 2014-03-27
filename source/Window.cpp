@@ -61,6 +61,9 @@ void Window::setup(int *argc, char **argv) {
     printf("Error: %s\n", glewGetErrorString(err));
   }
   
+  SDL_GetWindowSize(w, &width, &height);
+  updateViewport();
+  
   //Set the pointer to be able to report continuous motion
   SDL_SetRelativeMouseMode(SDL_TRUE);
 }
@@ -91,12 +94,14 @@ void Window::setSize(int width, int height) {
   SDL_SetWindowSize(w, width, height);
   this->width = width;
   this->height = height;
-  
-  //Fix the OpenGL viewport
-  glViewport(0, 0, (GLsizei)width, (GLsizei)height);
+  updateViewport();
+}
+
+void Window::updateViewport() {
+  glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(60.0, (GLdouble)width/(GLdouble)height, 0.1f, 50.f);
+  gluPerspective(60.0, width/height, 0.1f, 50.f);
   glMatrixMode(GL_MODELVIEW);
 }
 
