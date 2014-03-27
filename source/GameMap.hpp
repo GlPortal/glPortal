@@ -5,10 +5,12 @@
 #include <string>
 #include "engine/Box.hpp"
 #include "engine/object/Model.hpp"
+#include "util/Vector3f.hpp"
 
 using namespace glPortal::engine::object;
 
 using namespace glPortal::engine;
+using namespace util;
 
 class Portal; // Forward declaration
 
@@ -53,7 +55,7 @@ public:
   float getStartX() { return startpos[0]; }
   float getStartY() { return startpos[1]; }
   float getStartZ() { return startpos[2]; }
-  void renderAvatar(int x, int y, int z);
+  void renderAvatar(Vector3f position);
 protected:
   void drawBox(Box &b);
   void drawCake();

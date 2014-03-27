@@ -370,9 +370,9 @@ bool GameMap::pointInWall(float x, float y, float z, Box *box = NULL) {
   return false;
 }
 
-void GameMap::renderAvatar(int initialX, int initialY, int initialZ){
+void GameMap::renderAvatar(Vector3f position){
   float x, y, z;
-  x = initialX; y = initialY + 0.7f ; z = initialZ;
+  x = position.x; y = position.y + 0.7f; z = position.z;
     glBegin(GL_QUADS);        // Draw The Cube Using quads
     glColor3f(0.0f,1.0f,0.0f);    // Color Blue
     glVertex3f(x + 0.3f, y + 0.7f, z - 0.3f);    // Top Right Of The Quad (Top)
