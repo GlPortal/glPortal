@@ -316,7 +316,6 @@ void Game::draw() {
   // Clear depth buffer but not color buffer.
   // Every pixel is redrawn every frame anyway.
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  // Load identity matrix
   glLoadIdentity();
   
   // Draw scene
