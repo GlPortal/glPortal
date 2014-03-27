@@ -92,9 +92,6 @@ private:
   Window window;
   Timer timer;
   Model *barrel; 
-  float xrot; /**< View rotation in X-axis */
-  float yrot; /**< View rotation in Y-axis */
-  float xspeed, yspeed, zspeed; // Velocity in x-, y- and z-axis
   Portal portals[2];  /**< Array of player's portal */
   Shot shots[2];		/**< Array of shots */
   bool jetpack = true;

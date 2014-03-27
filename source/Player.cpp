@@ -46,33 +46,11 @@ bool Player::hasWon(){
  * @param z New Z-coordinate
  */
 void Player::create(float x, float y, float z) {
-  this->x = x;
-  this->y = y;
-  this->z = z;
-
-  xrot = yrot = 0.f;
-  xspeed = yspeed = zspeed = 0.f;
+  position = new Vector3f(x, y, z);
+  rotation = new Vector3f(0, 0, 0);
+  velocity = new Vector3f(0, 0, 0);
   onGround = false;
   state = PS_ALIVE;
-}
-
-void Player::setX(float x){
-  this->x = x;
-
-}
-
-void Player::setY(float y){
-  this->y = y;
-}
-
-void Player::setZ(float z){
-  this->z = z;
-}
-
-void Player::setPosition(float x, float y, float z) {
-  this->x = x;
-  this->y = y;
-  this->z = z;
 }
 
 bool Player::isOnGround(){ 
