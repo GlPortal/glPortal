@@ -20,7 +20,7 @@ b 2.5 2 5
 
 !PRINCIPAL
 ! luz
-l 10 6 5
+l 10 7 5
 
 ! piso detras
 t 0 0 0 5 -6 10
