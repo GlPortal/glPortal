@@ -101,7 +101,7 @@ void Window::updateViewport() {
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(60.0, width/height, 0.1f, 50.f);
+  gluPerspective(60.0, (float) width/height, 0.1f, 50.f);
   glMatrixMode(GL_MODELVIEW);
 }
 
