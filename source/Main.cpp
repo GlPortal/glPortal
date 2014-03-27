@@ -23,46 +23,32 @@ void setup(int *argc, char **argv) {
   width = window.getWidth();
   window.enableGlFeatures();
   game.loadTextures();
-  game.unpause();
-  nmap_enabled = true;
-  game.setPlayer(player);
-  game.respawn();
-}
-
-void update(int value) {
-  if(!game.isPaused()) {
-    game.update();
-    
-    if(player.isDead()) {
-      game.fadeOut();
-    }
-  }
 }
 
 void loop() {
   SDL_Event event;
   bool quit = false;
 
-  AudioPlayer* player = new AudioPlayer();
-  player->init();
-  player->playByFileName("data/audio/music/track1.ogg");
-  player->play();    
+  AudioPlayer* audioPlayer = new AudioPlayer();
+  audioPlayer->init();
+  audioPlayer->playByFileName("data/audio/music/track1.ogg");
+  audioPlayer->play();    
   while (!quit) {
-    while (SDL_PollEvent(&event)) {
+    while(SDL_PollEvent(&event)) {
       if(event.type == SDL_QUIT) {
         quit = true;
       }
       if(event.type == SDL_KEYDOWN) {
-        key_down(event.key);
+	game.setKey(event.key.keysym);
       }
       if(event.type == SDL_KEYUP) {
-        key_up(event.key);
+	game.unsetKey(event.key.keysym);
       }
       if(event.type == SDL_MOUSEBUTTONDOWN) {
-        mouse_pressed(event.button);
+	game.mousePressed(event.button.button);
       }
       if(event.type == SDL_WINDOWEVENT_RESIZED) {
-        resize(event.window.data1, event.window.data2);
+	window.setSize(event.window.data1, event.window.data2);
       }
       if(event.type == SDL_WINDOWEVENT_FOCUS_LOST) {
         game.pause();
@@ -71,47 +57,16 @@ void loop() {
         game.unpause();
       }
     }
-    update(FRAMETIME);
+    game.update();
     draw();
   }
   window.close();
-  player->cleanUp();
-}
-
-void resetKeyStates(){
-  for(int i = 0; i < 256; i++){
-    keystates[i] = false;
-  }
-}
-
-void respawn() {
-  game.resetFade();
-  player.create(gameMap.getStartX(), gameMap.getStartY(), gameMap.getStartZ());
+  audioPlayer->cleanUp();
 }
 
 void draw() {
   game.setWindow(window);
   game.setHeightWidth(height, width);
   game.draw();
-  // Swap buffers
   window.swapBuffer();
 }
-
-void mouse_pressed(SDL_MouseButtonEvent event) {
-  game.mousePressed(event.button);
-}
-
-void key_down(SDL_KeyboardEvent event) {
-  game.setKey(event.keysym);
-}
-
-
-void key_up(SDL_KeyboardEvent event) {
-  game.unsetKey(event.keysym);
-}
-
-
-void resize(int w, int h) {
-  window.setSize(w, h);
-}
-
