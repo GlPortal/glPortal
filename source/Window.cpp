@@ -11,32 +11,28 @@
 void Window::setup(int *argc, char **argv) {
   ConfigFileParser config = Environment::getConfig();
   SDL_Init(SDL_INIT_EVERYTHING);
-
-  int window_width;
-  int window_height;
-
+  
   try{
-    window_width =  config.getConfigIntValueByKey("width");
-    window_height =  config.getConfigIntValueByKey("height");
+    this->width =  config.getConfigIntValueByKey("width");
+    this->height =  config.getConfigIntValueByKey("height");
   } catch (const std::invalid_argument& e){
-    window_width = DEFAULT_WIDTH;
-    window_height = DEFAULT_HEIGHT;
+    this->width = DEFAULT_WIDTH;
+    this->height = DEFAULT_HEIGHT;
   }
 
   Uint32 windowConfigFlags = SDL_WINDOW_OPENGL;
 
   try{
-    if(config.getConfigValueByKey("fullscreen") == "no"){
+    if(config.getConfigValueByKey("fullscreen") == "no") {
       windowConfigFlags = windowConfigFlags | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED;
     } else {
       windowConfigFlags = windowConfigFlags | SDL_WINDOW_FULLSCREEN_DESKTOP;
     } 
-  } catch (const std::invalid_argument& e){
+  } catch (const std::invalid_argument& e) {
     windowConfigFlags = windowConfigFlags | SDL_WINDOW_FULLSCREEN_DESKTOP;
   }
 
   int amountOfMultiSampleBuffers = 0;
-  
   if(SDL_GL_GetAttribute(SDL_GL_MULTISAMPLEBUFFERS, &amountOfMultiSampleBuffers) == 0) {
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  16);
@@ -45,8 +41,8 @@ void Window::setup(int *argc, char **argv) {
   w = SDL_CreateWindow(TITLE,
                        SDL_WINDOWPOS_UNDEFINED,
                        SDL_WINDOWPOS_UNDEFINED,
-                       window_width,
-                       window_height,
+                       this->width,
+                       this->height,
                        windowConfigFlags);
 
   if(w == NULL) {
@@ -64,11 +60,6 @@ void Window::setup(int *argc, char **argv) {
   if (GLEW_OK != err) {
     printf("Error: %s\n", glewGetErrorString(err));
   }
-  
-  //Get the size of the window and store it
-   SDL_GetWindowSize(w, &width, &height);
-  
-  setSize(width, height);
   
   //Set the pointer to be able to report continuous motion
   SDL_SetRelativeMouseMode(SDL_TRUE);
