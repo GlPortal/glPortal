@@ -17,6 +17,7 @@ class Player {
 public:
   Player();
   void create(float x, float y, float z);
+  void destroy();
   void kill();
   void revive();
   bool isDead();

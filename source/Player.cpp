@@ -53,6 +53,12 @@ void Player::create(float x, float y, float z) {
   state = PS_ALIVE;
 }
 
+void Player::destroy() {
+  delete position;
+  delete rotation;
+  delete velocity;
+}
+
 bool Player::isOnGround(){ 
   return this->onGround;
 }
