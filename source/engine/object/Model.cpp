@@ -27,7 +27,7 @@ namespace glPortal {
       }
 
       void Model::draw() {
-	      for(unsigned int i = 0; i < meshes.size(); i++) {
+	for(unsigned int i = 0; i < meshes.size(); i++) {
           Mesh *mesh = meshes[i];	    
           glEnableClientState(GL_NORMAL_ARRAY);
           glEnableClientState(GL_VERTEX_ARRAY);
@@ -38,7 +38,7 @@ namespace glPortal {
           glDisableClientState(GL_VERTEX_ARRAY);
           glDisableClientState(GL_NORMAL_ARRAY);
           glColor3f(1,1,1);
-	      }
+	}
       }
 
       void Model::setPosition(int x, int y, int z){
