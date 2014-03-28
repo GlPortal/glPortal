@@ -3,23 +3,26 @@
 
 #include <GL/glew.h>
 #include "engine/Box.hpp"
+#include "util/Vector3f.hpp"
 
 using namespace glPortal::engine;
+using namespace util;
 
 /**
  * Class representing a shot from the portal gun.
  */
 class Shot {
 public:
-	Shot() : active(false), x(0), y(0), z(0), xspeed(0), yspeed(0), zspeed(0) { }
+	Shot() : active(false) { }
 
-	void shoot(int _id, float _x, float _y, float _z, float xrot, float yrot);
+	void shoot(int _id, float x, float y, float z, float pitch, float yaw);
 	void update(float dt);
-	void draw(float xrot, float yrot);
+	void draw(float pitch, float yaw);
 
 	bool active; /**< True if the portal is currently active */
 	int id;		 /**< ID of the portal. Either 0 or 1. */
-	float x,y,z;
-	float xspeed, yspeed, zspeed;
+	Vector3f position;
+	Vector3f velocity;
 };
 #endif
+
