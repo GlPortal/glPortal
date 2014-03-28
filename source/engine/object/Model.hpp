@@ -27,14 +27,14 @@ namespace glPortal {
 
       class Model{
       public:
-	Model(const string & filename);
-	void draw();
-	void setPosition(int x, int y, int z);
-	void loadTextures(const struct aiScene *sc, const struct aiNode* nd);
-      private:
-	vector<Mesh*> meshes;
-	const aiScene* scene;
-	Assimp::Importer* importer;
+	      Model(const string & filename);
+	      void draw();
+	      void setPosition(int x, int y, int z);
+	      void loadTextures(const struct aiScene *sc, const struct aiNode* nd);
+            private:
+	      vector<Mesh*> meshes;
+	      const aiScene* scene;
+	      Assimp::Importer* importer;
       };
     }
   }
