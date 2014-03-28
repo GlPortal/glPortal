@@ -1,4 +1,5 @@
 #include "Model.hpp"
+#include <GL/glew.h>
 
 namespace glPortal {
   namespace engine {

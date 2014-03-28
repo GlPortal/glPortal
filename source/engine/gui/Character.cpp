@@ -4,7 +4,7 @@
 namespace glPortal {
   namespace engine {
     namespace gui {
-      Character::Character(char character){
+      Character::Character(char character) {
 	      this->character = character;
 	      std::pair<int,int> pair = characterMap[character];
 	      row    = pair.first;
