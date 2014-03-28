@@ -169,17 +169,18 @@ void Game::update() {
 
   // Update shots and check their collision with walls
   for(int i = 0; i < 2; i++) {
-    if(shots[i].active) {
-      shots[i].update(dt);
+    Shot *shot = &shots[i];
+    if(shot->active) {
+      shot->update(dt);
 
       Box sbox;
-      if(gameMap.pointInWall(shots[i].x, shots[i].y, shots[i].z, &sbox)) {
-	      shots[i].update(-dt); // Reverse time to before collision
+      if(gameMap.pointInWall(shot->position.x, shot->position.y, shot->position.z, &sbox)) {
+	      shot->update(-dt); // Reverse time to before collision
 	      // Collision really should be interpolated instead
 	      if(sbox.type == TID_WALL) {
-	        portals[i].placeOnBox(sbox, shots[i].x, shots[i].y, shots[i].z, gameMap);
+	        portals[i].placeOnBox(sbox, shot->position.x, shot->position.y, shot->position.z, gameMap);
 	      }
-	      shots[i].active = false;
+	      shot->active = false;
       }
     }
   }
@@ -448,11 +449,11 @@ void Game::drawOverlay() {
 
       // Draw "Press return to respawn" message if dead
       if(player.getState() == PS_DYING) {
-	screen->drawRespawnScreen();
+	      screen->drawRespawnScreen();
       }
       // Draw "Press return to continue" message if won
       else if(player.getState() == PS_WON) {
-	screen->drawContinueScreen();
+	      screen->drawContinueScreen();
       }
     }
   }

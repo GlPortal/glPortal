@@ -16,18 +16,18 @@
  * @param xrot Gun's rotation in X-axis
  * @param yrot Gun's rotation in Y-axis
  */
-void Shot::shoot(int id, float x, float y, float z, float xrot, float yrot) {
+void Shot::shoot(int id, float x, float y, float z, float pitch, float yaw) {
 	active = true;
 
 	this->id = id;
-	this->x = x;
-	this->y = y+1.5f;
-	this->z = z;
+	this->position.x = x;
+	this->position.y = y+1.5f;
+	this->position.z = z;
 
 	// Approximation of actual vector
-	xspeed = -sin(yrot)*cos(xrot)*SHOTSPEED;
-	yspeed =  sin(xrot)*SHOTSPEED;
-	zspeed = -cos(yrot)*cos(xrot)*SHOTSPEED;
+	this->velocity.x = -sin(yaw) * cos(pitch) * SHOTSPEED;
+	this->velocity.y =  sin(pitch) * SHOTSPEED;
+	this->velocity.z = -cos(yaw) * cos(pitch) * SHOTSPEED;
 }
 
 /**
@@ -36,9 +36,9 @@ void Shot::shoot(int id, float x, float y, float z, float xrot, float yrot) {
  * @param dt Time since last update in seconds
  */
 void Shot::update(float dt) {
-	x += xspeed*dt;
-	y += yspeed*dt;
-	z += zspeed*dt;
+	position.x += velocity.x * dt;
+	position.y += velocity.y * dt;
+	position.z += velocity.z * dt;
 }
 
 /**
@@ -47,13 +47,13 @@ void Shot::update(float dt) {
  * @param xrot Camera's current rotation in X-axis
  * @param yrot Camera's current rotation in Y-axis
  */
-void Shot::draw(float xrot, float yrot) {
+void Shot::draw(float pitch, float yaw) {
 	glPushMatrix();
-	glTranslatef(x,y,z);
+	glTranslatef(position.x, position.y, position.z);
 	// Reverse camera rotation to make sprite always
 	// face the camera
-	glRotatef(yrot*RADDEG, 0,1,0);
-	glRotatef(xrot*RADDEG, 1,0,0);
+	glRotatef(yaw * RADDEG, 0,1,0);
+	glRotatef(pitch * RADDEG, 1,0,0);
 
 	Resources::inst().bindTexture(TID_BALLS);
 	float xoffset = id*0.5f;
@@ -65,3 +65,4 @@ void Shot::draw(float xrot, float yrot) {
 	glEnd();
 	glPopMatrix();
 }
+
