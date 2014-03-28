@@ -8,14 +8,15 @@
 #include "../engine/Resources.hpp"
 #include "../engine/StringConverter.hpp"
 #include "../Exception.hpp"
+#include "../util/Vector3f.hpp"
 
 namespace glPortal {
   namespace map{
 
     /**
-     * Get a map from a gameMapfile.
+     * Get a map from a map file.
      *
-     * @param filename Path to the .gameMapfile
+     * @param filename Path to the map file
      */
     GameMap MapFileParser::getMapFromFile(std::string filename) {
       std::ifstream file(filename, std::ifstream::in);
