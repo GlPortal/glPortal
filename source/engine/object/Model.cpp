@@ -6,20 +6,22 @@ namespace glPortal {
     namespace object {
       Model::Model(const string & filename) {
 	      importer = new Assimp::Importer();
-	      scene = importer->ReadFile(filename,
-				         aiProcess_Triangulate            |
-				         aiProcess_GenSmoothNormals	      |
-				         aiProcess_JoinIdenticalVertices  |
-				         aiProcess_ImproveCacheLocality   |
-				         aiProcess_SortByPType);
+	      scene = 
+		importer->ReadFile(filename,
+				   aiProcess_Triangulate            |
+				   aiProcess_GenSmoothNormals	    |
+				   aiProcess_JoinIdenticalVertices  |
+				   aiProcess_ImproveCacheLocality   |
+				   aiProcess_SortByPType);
 
 	      for(unsigned int i = 0; i < scene->mNumMeshes; i++)
 	        {
-	          Mesh* tempMesh = new Mesh(scene->mMeshes[i]->mNumVertices,
-				                              scene->mMeshes[i]->mVertices,
-				                              scene->mMeshes[i]->mNormals,
-				                              scene->mMeshes[i]->mNumFaces,
-				                              scene->mMeshes[i]->mFaces);
+	          Mesh* tempMesh = new 
+		    Mesh(scene->mMeshes[i]->mNumVertices,
+			 scene->mMeshes[i]->mVertices,
+			 scene->mMeshes[i]->mNormals,
+			 scene->mMeshes[i]->mNumFaces,
+			 scene->mMeshes[i]->mFaces);
 		
 	          meshes.push_back(tempMesh);
 	        }
