@@ -14,6 +14,13 @@ bool Game::DEBUG = false;
 
 Game::Game(){
   config = Environment::getConfigPointer();
+  //Load the configuration settings
+  try{
+    this->sensitivity = config->getConfigFloatValueByKey("sensitivity");
+  } catch (const std::invalid_argument& e){
+    this->sensitivity = 0.005f;
+  }
+  
   Timer* gameTimer = new Timer();
   this->timer = *gameTimer;
   this->timer.start();
@@ -40,8 +47,8 @@ void Game::update() {
   SDL_GetRelativeMouseState(&mousedx, &mousedy);
   
   // Apply mouse movement to view
-  player.rotation->x -= mousedy * 0.0050f;
-  player.rotation->y -= mousedx * 0.0050f;
+  player.rotation->x -= mousedy * sensitivity;
+  player.rotation->y -= mousedx * sensitivity;
   
   // Restrict rotation in horizontal axis
   if(player.rotation->x < -1.5f) player.rotation->x = -1.5f;

@@ -13,7 +13,7 @@ namespace glPortal {
 
     ConfigFileParser & Environment::getConfig(){
       if(!config){
-	initializeConfig();
+	      initializeConfig();
       }
       
       return *config;
@@ -21,7 +21,7 @@ namespace glPortal {
 
     ConfigFileParser * Environment::getConfigPointer(){
       if(!config){
-	initializeConfig();
+	      initializeConfig();
       }
       
       return config;
@@ -30,9 +30,9 @@ namespace glPortal {
     
     void Environment::initializeConfig(){
       try{
-	config = new ConfigFileParser("./data/private.cfg");
-       } catch (const std::invalid_argument& e){
-	config = new ConfigFileParser("./data/main.cfg");
+	      config = new ConfigFileParser("./data/private.cfg");
+      } catch (const std::invalid_argument& e){
+	      config = new ConfigFileParser("./data/main.cfg");
       }
     }
   }
