@@ -152,10 +152,10 @@ void GameMap::draw(bool nMap) {
 }
 
 /**
- * Draws only visible portion of gameMapfrom a given portal
+ * Draws only visible portion of map from a given portal
  *
  * @param portal Portal currently viewing through
- * @param nMapTrue if normal gameMapping is enabled
+ * @param nMapTrue if normal mapping is enabled
  */
 void GameMap::drawFromPortal(const Portal& portal, bool nMap) {
   // Update light position
