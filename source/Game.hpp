@@ -83,6 +83,7 @@ public:
 private:
   ConfigFileParser * config;
   int width, height;
+  float sensitivity;
   bool keystates[KEY_BUFFER];
   bool paused = false;	
   bool nmap_enabled = true; 
@@ -91,7 +92,7 @@ private:
   GameMap gameMap;
   Window window;
   Timer timer;
-  Model *barrel; 
+  Model *barrel;
   Portal portals[2];  /**< Array of player's portal */
   Shot shots[2];		/**< Array of shots */
   bool jetpack = true;
