@@ -164,8 +164,8 @@ namespace glPortal {
 	glColor4f(1.f, 1.f, 1.f, 1.f);
 	Font* font = new Font();
 	std::string message("Testimonial");
-	std::string message1("The subject satisfied all conditions of the tests.");
-	std::string message2("Please visit http://social.w3-net.de");
+	std::string message1("The subject has satisfied all conditions");
+	std::string message2("of the tests. Please visit http://glportal.de");
 	std::string message3("and tell us how you enjoyed the experience.");
 	std::string message4("Hit Q to quit the game.");
 	font->drawStringToPosition(message, 10, 49);
