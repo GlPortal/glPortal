@@ -1,11 +1,11 @@
-#ifndef __OBJECT_HPP
-#define __OBJECT_HPP
+#ifndef __ENTITY_HPP
+#define __ENTITY_HPP
 
 namespace glPortal {
   namespace engine {
     namespace object {
 
-      class Object{
+      class Entity{
       public:
 	void draw();
       };
