@@ -33,9 +33,9 @@ void Portal::place(float x, float y, float z, PORTAL_DIR dir, GameMap& gameMap) 
   }
   // Only place portal if nothing is in front of it
   if(gameMap.collidesWithWall(bbox) == false && gameMap.collidesWithAcid(bbox) == false) {
-    this->x = nx;
-    this->y = ny;
-    this->z = nz;
+    this->position.x = nx;
+    this->position.y = ny;
+    this->position.z = nz;
     this->dir = dir;
     active = true;
   }
@@ -108,15 +108,15 @@ bool Portal::inPortal(Box &box) {
   if(!active) return false;
 
   if(dir == PD_RIGHT || dir == PD_LEFT) {
-    if(box.z1 > z-0.75f && box.z2 < z+0.75f
-       && box.x1 < x && box.x2 > x
-       && box.y1 > y-1.25f && box.y2 < y+1.25f) {
+    if(box.z1 > position.z-0.75f && box.z2 < position.z+0.75f
+       && box.x1 < position.x && box.x2 > position.x
+       && box.y1 > position.y-1.25f && box.y2 < position.y+1.25f) {
       return true;
     }
   } else if(dir == PD_FRONT || dir == PD_BACK) {
-    if(box.x1 > x-0.75f && box.x2 < x+0.75f
-       && box.z1 < z && box.z2 > z
-       && box.y1 > y-1.25f && box.y2 < y+1.25f) {
+    if(box.x1 > position.x-0.75f && box.x2 < position.x+0.75f
+       && box.z1 < position.z && box.z2 > position.z
+       && box.y1 > position.y-1.25f && box.y2 < position.y+1.25f) {
       return true;
     }
   }
@@ -131,22 +131,25 @@ bool Portal::inPortal(Box &box) {
  * @param s Y-coordinate of the point to check
  * @param t Z-coordinate of the point to check
  */
-bool Portal::throughPortal(float r, float s, float t) {
+bool Portal::throughPortal(float x, float y, float z) {
+  float px = position.x;
+  float py = position.y;
+  float pz = position.z;
   switch(dir) {
   case PD_LEFT:
-    if(r > x && r < x+0.2f && s > y-1.25f && s < y+1.25f && t < z+0.75f && t > z-0.75f)
+    if(x > px && x < px+0.2f && y > py-1.25f && y < py+1.25f && z < pz+0.75f && z > pz-0.75f)
       return true;
     break;
   case PD_RIGHT:
-    if(r < x && x > x-0.2f && s > y-1.25f && s < y+1.25f && t < z+0.75f && t > z-0.75f)
+    if(x < px && x > px-0.2f && y > py-1.25f && y < py+1.25f && z < pz+0.75f && z > pz-0.75f)
       return true;
     break;
   case PD_FRONT:
-    if(t < z && t > z-0.2f && s > y-1.25f && s < y+1.25f && r < x+0.75f && r > x-0.75f)
+    if(z < pz && z > pz-0.2f && y > py-1.25f && y < py+1.25f && x < px+0.75f && x > px-0.75f)
       return true;
     break;
   case PD_BACK:
-    if(t > z && t < z+0.2f && s > y-1.25f && s < y+1.25f && r < x+0.75f && r > x-0.75f)
+    if(z > pz && z < pz+0.2f && y > py-1.25f && y < py+1.25f && x < px+0.75f && x > px-0.75f)
       return true;
     break;
   }
@@ -197,7 +200,7 @@ float Portal::getToRotation() {
 void Portal::drawStencil() {
   glPushMatrix();
 
-  glTranslatef(x,y,z);
+  glTranslatef(position.x, position.y, position.z);
   glRotatef(getFromRotation(), 0,1,0);
   Resources::inst().drawModel(MID_PORTAL_STENCIL);
 
@@ -212,7 +215,7 @@ void Portal::drawStencil() {
 void Portal::drawOutline(PORTAL_COLOR color) {
   glPushMatrix();
 
-  glTranslatef(x,y,z);
+  glTranslatef(position.x, position.y, position.z);
   glRotatef(getFromRotation(), 0,1,0);
 
   // Bind blue of orange portal texture

@@ -170,10 +170,10 @@ void GameMap::drawFromPortal(const Portal& portal, bool nMap) {
   glBegin(GL_QUADS);
   for(it = walls.begin(); it < walls.end(); it++) {
     // Horribly slow bounds check, but smaller code
-    if(portal.dir == PD_FRONT && it->z2 > portal.z
-       || portal.dir == PD_BACK  && it->z1 < portal.z
-       || portal.dir == PD_RIGHT && it->x2 > portal.x
-       || portal.dir == PD_LEFT  && it->x1 < portal.x) {
+    if(portal.dir == PD_FRONT && it->z2 > portal.position.z
+       || portal.dir == PD_BACK  && it->z1 < portal.position.z
+       || portal.dir == PD_RIGHT && it->x2 > portal.position.x
+       || portal.dir == PD_LEFT  && it->x1 < portal.position.x) {
       if(it->type != current_type) {
 	      glEnd();
 	      current_type = it->type;
@@ -189,10 +189,10 @@ void GameMap::drawFromPortal(const Portal& portal, bool nMap) {
   Resources::inst().bindTexture(TID_ACID);
   glBegin(GL_QUADS);
   for(it = acid.begin(); it < acid.end(); it++) {
-    if(portal.dir == PD_FRONT && it->z2 > portal.z
-       || portal.dir == PD_BACK && it->z1 < portal.z
-       || portal.dir == PD_RIGHT && it->x2 > portal.x
-       || portal.dir == PD_LEFT && it->x1 < portal.x) {
+    if(portal.dir == PD_FRONT && it->z2 > portal.position.z
+       || portal.dir == PD_BACK && it->z1 < portal.position.z
+       || portal.dir == PD_RIGHT && it->x2 > portal.position.x
+       || portal.dir == PD_LEFT && it->x1 < portal.position.x) {
       drawBox(*it);
     }
   }

@@ -149,15 +149,15 @@ void Game::update() {
 	        rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
 	        player.rotation->y += rotation;
 	        // Distance from portal to player
-	        float xdist = player.position->x - portals[i].x;
-	        float zdist = player.position->z - portals[i].z;
+	        float xdist = player.position->x - portals[i].position.x;
+	        float zdist = player.position->z - portals[i].position.z;
 	        // Calculate this distance when rotated
 	        float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
 	        float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
 	        // Move player to destination portal
-	        player.position->x = portals[(i+1)%2].x + nxdist;
-	        player.position->y = player.position->y + portals[(i+1)%2].y - portals[i].y;
-	        player.position->z = portals[(i+1)%2].z + nzdist;
+	        player.position->x = portals[(i+1)%2].position.x + nxdist;
+	        player.position->y = player.position->y + portals[(i+1)%2].position.y - portals[i].position.y;
+	        player.position->z = portals[(i+1)%2].position.z + nzdist;
 	      }
       }
     }
@@ -387,10 +387,10 @@ void Game::drawPortals() {
       glStencilFunc(GL_EQUAL, 1, 0xFF);
 
       // Move camera to portal view
-      glTranslatef(portals[src].x, portals[src].y, portals[src].z);
+      glTranslatef(portals[src].position.x, portals[src].position.y, portals[src].position.z);
       glRotatef(portals[src].getFromRotation(), 0,1,0);
       glRotatef(portals[dst].getToRotation(),   0,1,0);
-      glTranslatef(-portals[dst].x, -portals[dst].y, -portals[dst].z);
+      glTranslatef(-portals[dst].position.x, -portals[dst].position.y, -portals[dst].position.z);
 
       // Draw scene from portal view
       gameMap.drawFromPortal(portals[dst], nmap_enabled);
