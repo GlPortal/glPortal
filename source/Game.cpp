@@ -350,7 +350,7 @@ void Game::setView() {
   glMatrixMode(GL_MODELVIEW);
   glRotatef(-rotation.x * RADDEG, 1,0,0);
   glRotatef(-rotation.y * RADDEG, 0,1,0);
-  glTranslatef(-position.x, -(position.y+1.7f), -position.z);
+  glTranslatef(-position.x, -(position.y+2.0f), -position.z);
 }
 
 void Game::setNormalMapActive(bool nmap_enabled){
