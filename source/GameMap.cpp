@@ -161,7 +161,7 @@ void GameMap::drawFromPortal(const Portal& portal, bool nMap) {
   // Update light position
   glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-  // Enable normal gameMapping
+  // Enable normal mapping
   Resources::inst().enableProgram(nMap? PID_NMAP : PID_PPL);
 
   // Draw walls
