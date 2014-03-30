@@ -2,6 +2,7 @@
 #include "Portal.hpp"
 #include "engine/Resources.hpp"
 #include <iostream>
+#include <cstdio>
 
 /**
  * Places and activates the portal.
@@ -13,7 +14,6 @@
  * @param dir New direction
  * @param gameMapThe current gameMap
  */
-#include <cstdio>
 void Portal::place(float x, float y, float z, PORTAL_DIR dir, GameMap& gameMap) {
   float nx, ny, nz; // New coordinates
   nx = round(x);
