@@ -35,7 +35,7 @@ void Window::setup(int *argc, char **argv) {
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
   SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  1);
-  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  16);
+  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  4);
 
   w = SDL_CreateWindow(TITLE,
                        SDL_WINDOWPOS_UNDEFINED,
@@ -109,7 +109,7 @@ void Window::updateViewport() {
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(60.0, (float) width/height, 0.1f, 50.f);
+  gluPerspective(60.0, (float) width/height, 0.01f, 50.f);
   glMatrixMode(GL_MODELVIEW);
 }
 
