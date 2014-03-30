@@ -14,7 +14,8 @@ Chat with us at irc.freenode.org in the channel ##glportal.
 Original Software 2012 by Simon Larsen. 
 * Contributors
 ** Programming
-Henry Hirsch
+- Henry Hirsch
+- Julian Thijssen
 ** Graphics
 - Urpo Lankinen - Bitmap Font
 - shadowkiller255 for Blendswap - FPS Hands rigged (added portal egg)
