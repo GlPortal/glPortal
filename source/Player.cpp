@@ -9,6 +9,8 @@
 #define MAXSPEED 10.0
 #define JUMPPOWER 7.0
 
+const int Player::MOVE_SPEED = 330;
+
 Player::Player() {
   create(0.f, 0.f, 0.f);
 }

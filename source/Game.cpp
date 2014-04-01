@@ -2,17 +2,28 @@
 #include "engine/gui/GameScreen.hpp"
 #include "engine/Resources.hpp"
 #include "engine/Box.hpp"
+#include "engine/renderer/GameMapRenderer.hpp"
 #include "util/ListFileParser.hpp"
+#include <btBulletDynamicsCommon.h>
 #include <stdexcept>
 
 using namespace glPortal::engine;
 using namespace glPortal::util;
 using namespace glPortal::engine::object;
 using namespace glPortal::engine::gui;
+using namespace glPortal::engine::renderer;
 
 bool Game::DEBUG = false;
 
 Game::Game(){
+  btBroadphaseInterface* broadphase = new btDbvtBroadphase();
+  btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+  btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+  btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+  dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
+  dynamicsWorld->setGravity(btVector3(0,-10,0));
+
+  mapRenderer = new GameMapRenderer(std::addressof(gameMap));
   config = Environment::getConfigPointer();
   //Load the configuration settings
   try{
@@ -27,6 +38,10 @@ Game::Game(){
   ListFileParser* listParser = new ListFileParser();
   mapList = listParser->getListFromFile("data/maps/levels.lst");
   this->nextLevel();
+}
+
+Game::~Game(){
+  delete dynamicsWorld;
 }
 
 /**
@@ -338,7 +353,7 @@ void Game::draw() {
     drawPortals();
   }
   
-  gameMap.draw(nmap_enabled);
+  mapRenderer->render();
   drawPortalOutlines();
   drawShots();
   drawOverlay();
@@ -400,7 +415,7 @@ void Game::drawPortals() {
       glTranslatef(-portals[dst].position.x, -portals[dst].position.y, -portals[dst].position.z);
 
       // Draw scene from portal view
-      gameMap.drawFromPortal(portals[dst], nmap_enabled);
+      mapRenderer->drawFromPortal(portals[dst]);
       gameMap.renderAvatar(*player.position);
       drawPortalOutlines();
 

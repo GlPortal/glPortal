@@ -34,6 +34,8 @@ public:
 protected:
   bool onGround;	/**< True if player was standing on ground last frame */
   PLAYER_STATE state; /**< Players current state e.g. alive, dead etc. */
+private:
+  static const int MOVE_SPEED;
 };
 
 #endif
