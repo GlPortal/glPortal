@@ -13,7 +13,7 @@ namespace glPortal {
 
     ConfigFileParser & Environment::getConfig(){
       if(!config){
-	      initializeConfig();
+	initializeConfig();
       }
       
       return *config;
@@ -21,7 +21,7 @@ namespace glPortal {
 
     ConfigFileParser * Environment::getConfigPointer(){
       if(!config){
-	      initializeConfig();
+	initializeConfig();
       }
       
       return config;
