@@ -416,7 +416,7 @@ void Game::drawPortals() {
 
       // Draw scene from portal view
       mapRenderer->drawFromPortal(portals[dst]);
-      gameMap.renderAvatar(*player.position);
+      mapRenderer->renderAvatar(*player.position);
       drawPortalOutlines();
 
       glPopMatrix();

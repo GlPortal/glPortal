@@ -159,36 +159,6 @@ void GameMap::drawBox(Box &b) {
 }
 
 /**
- * Draws the cake model at cake position
- */
-void GameMap::drawCake() {
-  glPushMatrix();
-  glTranslatef(endPos.x, endPos.y, endPos.z);
-  glEnable(GL_TEXTURE_2D);
-  Resources::inst().bindTexture(TID_CAKE);
-  Resources::inst().drawModel(MID_CAKE);
-  glDisable(GL_TEXTURE_2D);
-  glPopMatrix();
-}
-
-/**
- * Draws the lamp model at light position
- */
-void GameMap::drawLamp() {
-  glPushMatrix();
-  glTranslatef(lightpos[0], lightpos[1], lightpos[2]);
-  Box lightBox(-0.8f, 1.f, -0.2f, 0.8f, 0.95f, 0.2f);
-
-  glDisable(GL_TEXTURE_2D);
-  glBegin(GL_QUADS);
-  drawBox(lightBox);
-  glEnd();
-  glEnable(GL_TEXTURE_2D);
-
-  glPopMatrix();
-}
-
-/**
  * Checks whether a bounding box collides with any walls in gameMap.
  *
  * @param bbox Bounding box for collision
@@ -250,43 +220,4 @@ bool GameMap::pointInWall(float x, float y, float z, Box *box = NULL) {
     }
   }
   return false;
-}
-
-void GameMap::renderAvatar(Vector3f position){
-  float x, y, z;
-  x = position.x; y = position.y + 0.7f; z = position.z;
-  glBegin(GL_QUADS);        // Draw The Cube Using quads
-  glColor3f(0.0f,1.0f,0.0f);    // Color Blue
-  glVertex3f(x + 0.3f, y + 0.7f, z - 0.3f);    // Top Right Of The Quad (Top)
-  glVertex3f(x - 0.3f, y + 0.7f, z - 0.3f);    // Top Left Of The Quad (Top)
-  glVertex3f(x - 0.3f, y + 0.7f, z + 0.3f);    // Bottom Left Of The Quad (Top)
-  glVertex3f(x + 0.3f, y + 0.7f, z + 0.3f);    // Bottom Right Of The Quad (Top)
-  glColor3f(1.0f,0.5f,0.0f);    // Color Orange
-  glVertex3f(x + 0.3f, y - 0.7f, z + 0.3f);    // Top Right Of The Quad (Bottom)
-  glVertex3f(x - 0.3f, y - 0.7f, z + 0.3f);    // Top Left Of The Quad (Bottom)
-  glVertex3f(x - 0.3f, y - 0.7f, z - 0.3f);    // Bottom Left Of The Quad (Bottom)
-  glVertex3f(x + 0.3f, y - 0.7f, z - 0.3f);    // Bottom Right Of The Quad (Bottom)
-  glColor3f(1.0f,0.0f,0.0f);    // Color Red    
-  glVertex3f(x + 0.3f, y + 0.7f, z + 0.3f);    // Top Right Of The Quad (Front)
-  glVertex3f(x - 0.3f, y + 0.7f, z + 0.3f);    // Top Left Of The Quad (Front)
-  glVertex3f(x - 0.3f, y - 0.7f, z + 0.3f);    // Bottom Left Of The Quad (Front)
-  glVertex3f(x + 0.3f, y - 0.7f, z + 0.3f);    // Bottom Right Of The Quad (Front)
-  glColor3f(1.0f,1.0f,0.0f);    // Color Yellow
-  glVertex3f(x + 0.3f, y - 0.7f, z - 0.3f);    // Top Right Of The Quad (Back)
-  glVertex3f(x - 0.3f, y - 0.7f, z - 0.3f);    // Top Left Of The Quad (Back)
-  glVertex3f(x - 0.3f, y + 0.7f, z - 0.3f);    // Bottom Left Of The Quad (Back)
-  glVertex3f(x + 0.3f, y + 0.7f, z - 0.3f);    // Bottom Right Of The Quad (Back)
-  glColor3f(0.0f,0.0f,1.0f);    // Color Blue
-  glVertex3f(x - 0.3f, y + 0.7f, z + 0.3f);    // Top Right Of The Quad (Left)
-  glVertex3f(x - 0.3f, y + 0.7f, z - 0.3f);    // Top Left Of The Quad (Left)
-  glVertex3f(x - 0.3f, y - 0.7f, z - 0.3f);    // Bottom Left Of The Quad (Left)
-  glVertex3f(x - 0.3f, y - 0.7f, z + 0.3f);    // Bottom Right Of The Quad (Left)
-  glColor3f(1.0f,0.0f,1.0f);    // Color Violet
-  glVertex3f(x + 0.3f, y + 0.7f, z - 0.3f);    // Top Right Of The Quad (Right)
-  glVertex3f(x + 0.3f, y + 0.7f, z + 0.3f);    // Top Left Of The Quad (Right)
-  glVertex3f(x + 0.3f, y - 0.7f, z + 0.3f);    // Bottom Left Of The Quad (Right)
-  glVertex3f(x + 0.3f, y - 0.7f, z - 0.3f);    // Bottom Right Of The Quad (Right)
-  glColor3f(1.0f,1.0f,1.0f);    // Color Violet
-  glEnd();            // End Drawing The Cube
-  glFlush();
 }
