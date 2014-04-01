@@ -61,8 +61,6 @@ public:
   void unsetKey(SDL_Keysym);
   //Portals
   bool portalsActive();
-  void drawPortalStencils();
-  void drawPortalOutlines();
   void drawShots();
   Portal *getPortals() { return portals; } /**< Gets the list of portals */
   Shot *getShots() { return shots; } /**< Gets the list of shots */

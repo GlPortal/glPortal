@@ -155,6 +155,55 @@ namespace glPortal {
       }
 
 
+      /**
+       * Draws the inside of both portals as well as their oulines and stencils.
+       */
+      void GameMapRenderer::renderPortals(Portal * portals, Player & player) {
+	if((portals[0].active && portals[1].active)) {
+	  glEnable(GL_STENCIL_TEST);
+	  for(int i = 0; i < 2; i++) {
+	    int src = i;		// Source portal index
+	    int dst = (i+1)%2;  // Destination portal index
+
+	    glPushMatrix();
+	    // Always write to stencil buffer
+	    glStencilFunc(GL_NEVER, 1, 0xFF);
+	    glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
+	    glStencilMask(0xFF);
+	    glClear(GL_STENCIL_BUFFER_BIT);
+
+	    portals[src].drawStencil();
+
+	    glClear(GL_DEPTH_BUFFER_BIT);
+	    // Only pass stencil test if equal to 1
+	    glStencilMask(0x00);
+	    glStencilFunc(GL_EQUAL, 1, 0xFF);
+
+	    // Move camera to portal view
+	    glTranslatef(portals[src].position.x, portals[src].position.y, portals[src].position.z);
+	    glRotatef(portals[src].getFromRotation(), 0,1,0);
+	    glRotatef(portals[dst].getToRotation(),   0,1,0);
+	    glTranslatef(-portals[dst].position.x, -portals[dst].position.y, -portals[dst].position.z);
+
+	    // Draw scene from portal view
+	    drawFromPortal(portals[dst]);
+	    renderAvatar(*player.position);
+	    if(portals[0].active) portals[0].drawOutline(PC_BLUE);
+	    if(portals[1].active) portals[1].drawOutline(PC_ORANGE);
+	    glPopMatrix();
+	  }
+	  glDisable(GL_STENCIL_TEST);
+
+	  // Draw portal stencils so portals wont be drawn over
+	  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	  glClear(GL_DEPTH_BUFFER_BIT);
+	  portals[0].drawStencil();
+	  portals[1].drawStencil();
+	  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	}
+      }
+
+
       void GameMapRenderer::renderAvatar(Vector3f position){
 	float x, y, z;
 	x = position.x; y = position.y + 0.7f; z = position.z;

@@ -140,7 +140,7 @@ void Game::update() {
     } else {
       // If player was falling it means must have hit the ground
       if(player.velocity->y < 0) {
-	      player.setOnGround();
+	player.setOnGround();
       }
       player.velocity->y = 0;
     }
@@ -164,23 +164,23 @@ void Game::update() {
     // Check if player has entered a portal
     if(portalsActive()) {
       for(int i = 0; i < 2; i++) {
-	      if(portals[i].throughPortal(player.position->x, player.position->y+0.9f,player.position->z)) {
-	        // Calculate rotation between portals
-	        float rotation = 0.f;
-	        rotation += portals[i].getToRotation()*DEGRAD;
-	        rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
-	        player.rotation->y += rotation;
-	        // Distance from portal to player
-	        float xdist = player.position->x - portals[i].position.x;
-	        float zdist = player.position->z - portals[i].position.z;
-	        // Calculate this distance when rotated
-	        float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
-	        float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
-	        // Move player to destination portal
-	        player.position->x = portals[(i+1)%2].position.x + nxdist;
-	        player.position->y = player.position->y + portals[(i+1)%2].position.y - portals[i].position.y;
-	        player.position->z = portals[(i+1)%2].position.z + nzdist;
-	      }
+	if(portals[i].throughPortal(player.position->x, player.position->y+0.9f,player.position->z)) {
+	  // Calculate rotation between portals
+	  float rotation = 0.f;
+	  rotation += portals[i].getToRotation()*DEGRAD;
+	  rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
+	  player.rotation->y += rotation;
+	  // Distance from portal to player
+	  float xdist = player.position->x - portals[i].position.x;
+	  float zdist = player.position->z - portals[i].position.z;
+	  // Calculate this distance when rotated
+	  float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
+	  float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
+	  // Move player to destination portal
+	  player.position->x = portals[(i+1)%2].position.x + nxdist;
+	  player.position->y = player.position->y + portals[(i+1)%2].position.y - portals[i].position.y;
+	  player.position->z = portals[(i+1)%2].position.z + nzdist;
+	}
       }
     }
   }
@@ -197,12 +197,12 @@ void Game::update() {
 
       Box sbox;
       if(gameMap.pointInWall(shot->position.x, shot->position.y, shot->position.z, &sbox)) {
-	      shot->update(-dt); // Reverse time to before collision
-	      // Collision really should be interpolated instead
-	      if(sbox.type == TID_WALL) {
-	        portals[i].placeOnBox(sbox, shot->position.x, shot->position.y, shot->position.z, gameMap);
-	      }
-	      shot->active = false;
+	shot->update(-dt); // Reverse time to before collision
+	// Collision really should be interpolated instead
+	if(sbox.type == TID_WALL) {
+	  portals[i].placeOnBox(sbox, shot->position.x, shot->position.y, shot->position.z, gameMap);
+	}
+	shot->active = false;
       }
     }
   }
@@ -265,7 +265,7 @@ void Game::mousePressed(int button) {
   switch(button) {
   case SDL_BUTTON_LEFT:
     // Shoot blue portal
-     shots[0].shoot(0, position.x, position.y, position.z, rotation.x, rotation.y);
+    shots[0].shoot(0, position.x, position.y, position.z, rotation.x, rotation.y);
     break;
   case SDL_BUTTON_RIGHT:
     // Shoot orange portal
@@ -273,8 +273,8 @@ void Game::mousePressed(int button) {
     break;
   case SDL_BUTTON_MIDDLE:
     // Disable both portals
-     portals[0].disable();
-     portals[1].disable();
+    portals[0].disable();
+    portals[1].disable();
     break;
   }
 }
@@ -347,14 +347,15 @@ void Game::draw() {
 
   try{
     if(config->getStringByKey("portals") != "invisible"){
-      drawPortals();
+      mapRenderer->renderPortals(getPortals(), player);
     }
   } catch (const std::invalid_argument& e){
-    drawPortals();
+    mapRenderer->renderPortals(getPortals(), player);
   }
   
   mapRenderer->render();
-  drawPortalOutlines();
+  if(portals[0].active) portals[0].drawOutline(PC_BLUE);
+  if(portals[1].active) portals[1].drawOutline(PC_ORANGE);
   drawShots();
   drawOverlay();
 }
@@ -377,54 +378,6 @@ void Game::setView() {
 
 bool Game::normalMapIsActive(){
   return this->nmap_enabled;
-}
-
-/**
- * Draws the inside of both portals as well as their oulines and stencils.
- */
-void Game::drawPortals() {
-  if(portalsActive()) {
-    Portal *portals = getPortals();
-    glEnable(GL_STENCIL_TEST);
-    for(int i = 0; i < 2; i++) {
-      int src = i;		// Source portal index
-      int dst = (i+1)%2;  // Destination portal index
-
-      glPushMatrix();
-      // Always write to stencil buffer
-      glStencilFunc(GL_NEVER, 1, 0xFF);
-      glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
-      glStencilMask(0xFF);
-      glClear(GL_STENCIL_BUFFER_BIT);
-
-      portals[src].drawStencil();
-
-      glClear(GL_DEPTH_BUFFER_BIT);
-      // Only pass stencil test if equal to 1
-      glStencilMask(0x00);
-      glStencilFunc(GL_EQUAL, 1, 0xFF);
-
-      // Move camera to portal view
-      glTranslatef(portals[src].position.x, portals[src].position.y, portals[src].position.z);
-      glRotatef(portals[src].getFromRotation(), 0,1,0);
-      glRotatef(portals[dst].getToRotation(),   0,1,0);
-      glTranslatef(-portals[dst].position.x, -portals[dst].position.y, -portals[dst].position.z);
-
-      // Draw scene from portal view
-      mapRenderer->drawFromPortal(portals[dst]);
-      mapRenderer->renderAvatar(*player.position);
-      drawPortalOutlines();
-
-      glPopMatrix();
-    }
-    glDisable(GL_STENCIL_TEST);
-
-    // Draw portal stencils so portals wont be drawn over
-    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-    glClear(GL_DEPTH_BUFFER_BIT);
-    drawPortalStencils();
-    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-  }
 }
 
 void Game::loadTextures(){
@@ -467,11 +420,11 @@ void Game::drawOverlay() {
 
       // Draw "Press return to respawn" message if dead
       if(player.getState() == PS_DYING) {
-	      screen->drawRespawnScreen();
+	screen->drawRespawnScreen();
       }
       // Draw "Press return to continue" message if won
       else if(player.getState() == PS_WON) {
-	      screen->drawContinueScreen();
+	screen->drawContinueScreen();
       }
     }
   }
@@ -506,22 +459,6 @@ void Game::togglePause(){
  */
 bool Game::portalsActive() {
   return (portals[0].active && portals[1].active);
-}
-
-/**
- * Draws stencil meshes for both portals
- */
-void Game::drawPortalStencils() {
-  portals[0].drawStencil();
-  portals[1].drawStencil();
-}
-
-/**
- * Draws colored outlines for both portals
- */
-void Game::drawPortalOutlines() {
-  if(portals[0].active) portals[0].drawOutline(PC_BLUE);
-  if(portals[1].active) portals[1].drawOutline(PC_ORANGE);
 }
 
 /**
