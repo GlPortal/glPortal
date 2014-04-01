@@ -20,9 +20,9 @@
 #include "map/MapFileParser.hpp"
 #include "engine/Box.hpp"
 #include "engine/Environment.hpp"
+#include <btBulletDynamicsCommon.h>
+#include "engine/renderer/GameMapRenderer.hpp"
 
-
-#define FRAMETIME_SECONDS 0.017f // FRAMETIME in seconds. Used for updating game logic
 #define RADDEG 57.29577951308232088 // 180/PI
 #define DEGRAD 0.017453292519943296 // PI/180
 #define KEY_BUFFER 256
@@ -35,13 +35,16 @@
 using namespace glPortal::engine;
 using namespace glPortal::engine::object;
 using namespace glPortal::engine::tools;
+using namespace glPortal::engine::renderer;
 using namespace glPortal::map;
 using namespace glPortal::util;
 
 class Game {
 public:
   Game();
+  ~Game();
   static bool DEBUG;
+  btDiscreteDynamicsWorld* dynamicsWorld;
   void start();
   void respawn();
   void nextLevel();
@@ -82,6 +85,7 @@ public:
   //Refactoring Methods End
 private:
   ConfigFileParser * config;
+  GameMapRenderer  * mapRenderer;
   int width, height;
   float sensitivity;
   bool keystates[KEY_BUFFER];

@@ -55,7 +55,6 @@ public:
   bool collidesWithCake(Box &bbox);
   bool pointInWall(float x, float y, float z, Box *box);
   void renderAvatar(Vector3f position);
-protected:
   void drawBox(Box &b);
   void drawCake();
   void drawLamp();
@@ -68,6 +67,8 @@ protected:
   Vector3f startPos;		/**< Position where the player spawns in the gameMap*/
   Vector3f endPos;	    /**< Position of the goal in the gameMap*/
   Box cakeBox;			/**< Bounding box for collision with cake */
+
+protected:
 private:
   bool jetpackEnabled = false;
   bool isLastScreen = false;
