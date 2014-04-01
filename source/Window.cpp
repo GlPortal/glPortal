@@ -13,8 +13,8 @@ void Window::setup(int *argc, char **argv) {
   SDL_Init(SDL_INIT_EVERYTHING);
   
   try{
-    this->width =  config.getConfigIntValueByKey("width");
-    this->height =  config.getConfigIntValueByKey("height");
+    this->width  =  config.getIntByKey("width");
+    this->height =  config.getIntByKey("height");
   } catch (const std::invalid_argument& e){
     this->width = DEFAULT_WIDTH;
     this->height = DEFAULT_HEIGHT;
@@ -23,7 +23,7 @@ void Window::setup(int *argc, char **argv) {
   Uint32 windowConfigFlags = SDL_WINDOW_OPENGL;
 
   try{
-    if(config.getConfigValueByKey("fullscreen") == "no") {
+    if(config.getStringByKey("fullscreen") == "no") {
       windowConfigFlags = windowConfigFlags | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED;
     } else {
       windowConfigFlags = windowConfigFlags | SDL_WINDOW_FULLSCREEN_DESKTOP;

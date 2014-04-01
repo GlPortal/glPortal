@@ -54,7 +54,6 @@ public:
   void setView();
   void update();
   void loadTextures();
-  void setNormalMapActive(bool nmap_enabled);
   bool normalMapIsActive();
   //Input
   void mousePressed(int button);
