@@ -16,9 +16,9 @@ namespace glPortal {
       std::map<string,string> configMap;
     public:
       ConfigFileParser(std::string filename);
-      std::string getConfigValueByKey(std::string key);
-      int getConfigIntValueByKey(std::string key);
-      float getConfigFloatValueByKey(std::string key);
+      std::string getStringByKey(std::string key);
+      int getIntByKey(std::string key);
+      float getFloatByKey(std::string key);
     };
   }
 }

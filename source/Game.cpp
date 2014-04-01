@@ -27,7 +27,7 @@ Game::Game(){
   config = Environment::getConfigPointer();
   //Load the configuration settings
   try{
-    this->sensitivity = config->getConfigFloatValueByKey("sensitivity");
+    this->sensitivity = config->getFloatByKey("sensitivity");
   } catch (const std::invalid_argument& e){
     this->sensitivity = 0.005f;
   }
@@ -346,7 +346,7 @@ void Game::draw() {
   setView();
 
   try{
-    if(config->getConfigValueByKey("portals") != "invisible"){
+    if(config->getStringByKey("portals") != "invisible"){
       drawPortals();
     }
   } catch (const std::invalid_argument& e){
@@ -373,10 +373,6 @@ void Game::setView() {
   glRotatef(-rotation.x * RADDEG, 1,0,0);
   glRotatef(-rotation.y * RADDEG, 0,1,0);
   glTranslatef(-position.x, -(position.y+2.0f), -position.z);
-}
-
-void Game::setNormalMapActive(bool nmap_enabled){
-  this->nmap_enabled = nmap_enabled;
 }
 
 bool Game::normalMapIsActive(){
