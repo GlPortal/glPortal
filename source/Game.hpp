@@ -67,14 +67,7 @@ public:
   //Refactoring Methods
   void setWindow(Window &window);
   void setHeightWidth(int height, int width);
-  void setFade(float fade);
-  void unsetFade();
-  void resetFade();
-  void fadeOut();
   void setCurrentLevel(int current_level);
-  GameMap getMap();
-  Player getPlayer();
-  void setPlayer(Player &player);
   bool isPaused();
   void unpause();
   void pause();
