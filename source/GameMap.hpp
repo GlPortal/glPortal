@@ -54,10 +54,7 @@ public:
   bool collidesWithAcid(Box &bbox);
   bool collidesWithCake(Box &bbox);
   bool pointInWall(float x, float y, float z, Box *box);
-  void renderAvatar(Vector3f position);
   void drawBox(Box &b);
-  void drawCake();
-  void drawLamp();
   // Methods to move end
   std::vector<Box> walls;	/**< Vector of all walls in the gameMap*/
   std::vector<Box> acid;	/**< Vector of all acid pools in the gameMap*/
@@ -67,7 +64,6 @@ public:
   Vector3f startPos;		/**< Position where the player spawns in the gameMap*/
   Vector3f endPos;	    /**< Position of the goal in the gameMap*/
   Box cakeBox;			/**< Bounding box for collision with cake */
-
 protected:
 private:
   bool jetpackEnabled = false;

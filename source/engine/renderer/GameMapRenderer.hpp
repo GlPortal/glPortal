@@ -13,6 +13,9 @@ namespace glPortal {
 	GameMapRenderer(GameMap* gameMap);
 	void render();
 	void drawFromPortal(const Portal& portal);
+	void renderAvatar(Vector3f position);
+	void drawCake();
+	void drawLamp();
       };
     }
   }
