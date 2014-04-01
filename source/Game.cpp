@@ -224,19 +224,6 @@ void Game::nextLevel() {
     currentLevel++;
   }
 }
- 
-void Game::setPlayer(Player &player){
-  this->player = player;
-}
-
-
-GameMap Game::getMap(){
-  return this->gameMap;
-}
-
-Player Game::getPlayer(){
-  return this->player;
-}
 
 void Game::setCurrentLevel(int current_level){
   this->currentLevel = current_level;
@@ -322,18 +309,6 @@ void Game::unsetKey(SDL_Keysym keysym) {
     key = 0;
   }
   keystates[key] = false;
-}
-
-void Game::setFade(float fade){
-  this->fade = fade;
-}
-
-void Game::resetFade(){
-  this->fade = 0.f;
-}
-
-void Game::fadeOut(){
-  this->fade += 0.4f*FRAMETIME_SECONDS;
 }
 
 void Game::draw() {
