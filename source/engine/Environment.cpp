@@ -5,6 +5,7 @@ using namespace std;
 
 namespace glPortal {
   namespace engine{
+    const float Environment::FRAME_TIME = 17;
     ConfigFileParser *Environment::config = NULL;
     
     void Environment::init(){
@@ -30,9 +31,9 @@ namespace glPortal {
     
     void Environment::initializeConfig(){
       try{
-	      config = new ConfigFileParser("./data/private.cfg");
+	config = new ConfigFileParser("./data/private.cfg");
       } catch (const std::invalid_argument& e){
-	      config = new ConfigFileParser("./data/main.cfg");
+	config = new ConfigFileParser("./data/main.cfg");
       }
     }
   }

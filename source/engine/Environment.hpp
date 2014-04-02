@@ -17,6 +17,7 @@ namespace glPortal {
     private:
       static ConfigFileParser *config;
     public:
+      static const float FRAME_TIME;
       static void init();
       static ConfigFileParser & getConfig();
       static ConfigFileParser * getConfigPointer();
