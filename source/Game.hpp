@@ -67,7 +67,6 @@ public:
   //Refactoring Methods
   void setWindow(Window &window);
   void setHeightWidth(int height, int width);
-  void setCurrentLevel(int current_level);
   bool isPaused();
   void unpause();
   void pause();
@@ -81,7 +80,6 @@ private:
   bool keystates[KEY_BUFFER];
   bool paused = false;	
   bool nmap_enabled = true; 
-  float fade;  	
   Player player;
   GameMap gameMap;
   Window window;

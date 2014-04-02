@@ -48,14 +48,13 @@ Game::~Game(){
  * Respawns the player after dying.
  */
 void Game::respawn() {
-  fade = 0.f;
   Vector3f start = gameMap.getStartPosition();
   player.create(start.x, start.y, start.z);
 }
 
 void Game::update() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  float dt = FRAMETIME_SECONDS;
+  float dt = Environment::FRAME_TIME/1000;
   
   //Get delta mouse movement
   int mousedx, mousedy;
@@ -79,26 +78,10 @@ void Game::update() {
     if(player.velocity->y < -MAXSPEED) player.velocity->y = -MAXSPEED;
     if(player.velocity->y > MAXSPEED) player.velocity->y = MAXSPEED;
 
-    // Move forward
-    if(keystates['w']) {
-      player.velocity->z -= cos(player.rotation->y)*PLAYER_MOVESPEED*dt;
-      player.velocity->x -= sin(player.rotation->y)*PLAYER_MOVESPEED*dt;
-    }
-    // Move backward
-    if(keystates['s']) {
-      player.velocity->z += cos(player.rotation->y)*PLAYER_MOVESPEED*dt;
-      player.velocity->x += sin(player.rotation->y)*PLAYER_MOVESPEED*dt;
-    }
-    // Strafe left
-    if(keystates['a']) {
-      player.velocity->x -= cos(player.rotation->y)*PLAYER_MOVESPEED*dt;
-      player.velocity->z += sin(player.rotation->y)*PLAYER_MOVESPEED*dt;
-    }
-    // Strafe right
-    if(keystates['d']) {
-      player.velocity->x += cos(player.rotation->y)*PLAYER_MOVESPEED*dt;
-      player.velocity->z -= sin(player.rotation->y)*PLAYER_MOVESPEED*dt;
-    }
+    if(keystates['w']) player.moveForward();
+    if(keystates['s']) player.moveBackward();
+    if(keystates['a']) player.moveLeft();
+    if(keystates['d']) player.moveRight();
 
     if(keystates[' '] && (player.isOnGround() || gameMap.jetpackIsEnabled())) {
       if(player.isOnGround()) {
@@ -223,10 +206,6 @@ void Game::nextLevel() {
     respawn();
     currentLevel++;
   }
-}
-
-void Game::setCurrentLevel(int current_level){
-  this->currentLevel = current_level;
 }
 
 // This method is here for refactoring purposes 

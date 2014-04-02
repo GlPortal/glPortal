@@ -27,15 +27,20 @@ public:
   bool isOnGround();
   void setOnGround();
   void setOffGround();
-public:
+  void moveForward();
+  void moveBackward();
+  void moveLeft();
+  void moveRight();
   Vector3f *position;
   Vector3f *rotation;
   Vector3f *velocity;
 protected:
-  bool onGround;	/**< True if player was standing on ground last frame */
+  bool onGround;      /**< True if player was standing on ground last frame */
   PLAYER_STATE state; /**< Players current state e.g. alive, dead etc. */
 private:
-  static const int MOVE_SPEED;
+  static const int   MOVE_SPEED;
+  static const float MAX_SPEED;
+  static const float JUMP_POWER;
 };
 
 #endif

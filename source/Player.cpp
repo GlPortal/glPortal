@@ -1,6 +1,9 @@
 #include "Player.hpp"
+#include "engine/Environment.hpp"
 #include <cmath>
 #include <cstdio>
+
+using namespace glPortal::engine;
 
 #define RADDEG 57.29577951308232088 // 180/PI
 #define DEGRAD 0.017453292519943296 // PI/180
@@ -9,11 +12,22 @@
 #define MAXSPEED 10.0
 #define JUMPPOWER 7.0
 
-const int Player::MOVE_SPEED = 330;
+const int   Player::MOVE_SPEED = 330;
+const float Player::MAX_SPEED  = 50.0;
+const float Player::JUMP_POWER = 7.0;
 
 Player::Player() {
   create(0.f, 0.f, 0.f);
 }
+
+void Player::create(float x, float y, float z) {
+  position = new Vector3f(x, y, z);
+  rotation = new Vector3f(0, 0, 0);
+  velocity = new Vector3f(0, 0, 0);
+  onGround = false;
+  state = PS_ALIVE;
+}
+
 
 void Player::kill(){
   state = PS_DYING;
@@ -40,20 +54,6 @@ bool Player::hasWon(){
   }
 }
 
-/**
- * Sets the position of the player
- * @param x New X-coordinate
- * @param y New Y-coordinate
- * @param z New Z-coordinate
- */
-void Player::create(float x, float y, float z) {
-  position = new Vector3f(x, y, z);
-  rotation = new Vector3f(0, 0, 0);
-  velocity = new Vector3f(0, 0, 0);
-  onGround = false;
-  state = PS_ALIVE;
-}
-
 void Player::destroy() {
   delete position;
   delete rotation;
@@ -71,3 +71,24 @@ void Player::setOnGround(){
 void Player::setOffGround(){
   this->onGround = false;
 }
+
+void Player::moveForward(){
+  velocity->z -= cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity->x -= sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+}
+
+void Player::moveBackward(){
+  velocity->z += cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity->x += sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+}
+
+void Player::moveLeft(){
+  velocity->x -= cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity->z += sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+}
+
+void Player::moveRight(){
+  velocity->x += cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity->z -= sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+}
+
