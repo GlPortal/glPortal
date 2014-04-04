@@ -20,7 +20,6 @@
 #include "map/MapFileParser.hpp"
 #include "engine/Box.hpp"
 #include "engine/Environment.hpp"
-#include <btBulletDynamicsCommon.h>
 #include "engine/renderer/GameMapRenderer.hpp"
 
 #define RADDEG 57.29577951308232088 // 180/PI
@@ -44,7 +43,6 @@ public:
   Game();
   ~Game();
   static bool DEBUG;
-  btDiscreteDynamicsWorld* dynamicsWorld;
   void start();
   void respawn();
   void nextLevel();
