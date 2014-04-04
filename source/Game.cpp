@@ -4,7 +4,6 @@
 #include "engine/Box.hpp"
 #include "engine/renderer/GameMapRenderer.hpp"
 #include "util/ListFileParser.hpp"
-#include <btBulletDynamicsCommon.h>
 #include <stdexcept>
 
 using namespace glPortal::engine;
@@ -16,13 +15,6 @@ using namespace glPortal::engine::renderer;
 bool Game::DEBUG = false;
 
 Game::Game(){
-  btBroadphaseInterface* broadphase = new btDbvtBroadphase();
-  btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-  btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-  btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
-  dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
-  dynamicsWorld->setGravity(btVector3(0,-10,0));
-
   mapRenderer = new GameMapRenderer(std::addressof(gameMap));
   config = Environment::getConfigPointer();
   //Load the configuration settings
@@ -40,10 +32,9 @@ Game::Game(){
   this->nextLevel();
 }
 
-Game::~Game(){
-  delete dynamicsWorld;
+Game::~Game() {
 }
-
+ 
 /**
  * Respawns the player after dying.
  */

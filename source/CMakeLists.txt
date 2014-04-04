@@ -4,7 +4,7 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
 project(${EXE_NAME})
-link_libraries(GLEW GL GLU assimp SDL2 SDL2_mixer BulletDynamics BulletCollision LinearMath)
+link_libraries(GLEW GL GLU assimp SDL2 SDL2_mixer)
 
 add_executable(${EXE_NAME} 
   Main.cpp Game.cpp engine/gui/GameScreen.cpp engine/Resources.cpp engine/StringConverter.cpp 
