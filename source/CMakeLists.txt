@@ -17,7 +17,7 @@ add_executable(${EXE_NAME}
   util/audioplayer/AudioPlayer.cpp
   util/Vector3f.cpp
   engine/Environment.cpp
-  Player.cpp GameMap.cpp 
+  Player.cpp GameMap.cpp Light.cpp 
   Shot.cpp Portal.cpp 
   Window.cpp Exception.cpp
   )

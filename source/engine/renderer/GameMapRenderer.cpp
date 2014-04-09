@@ -16,13 +16,15 @@ using namespace std;
 namespace glPortal {
   namespace engine{
     namespace renderer{
-      GameMapRenderer::GameMapRenderer(GameMap* gameMap){
-	this->gameMap = gameMap;
+      GameMapRenderer::GameMapRenderer(GameMap* gameMap) {
+	      this->gameMap = gameMap;
       }
 
-      void GameMapRenderer::render(){
+      void GameMapRenderer::render() {
 	// Update light position
-	glLightfv(GL_LIGHT0, GL_POSITION, this->gameMap->lightpos);
+	Vector3f lightPos = this->gameMap->light.position;
+	float lightArray[4] = {lightPos.x, lightPos.y, lightPos.z, 1.f};
+	glLightfv(GL_LIGHT0, GL_POSITION, lightArray);
 
 	// Enable normal mapping
 	bool nMap = true;
@@ -77,7 +79,9 @@ namespace glPortal {
       void GameMapRenderer::drawFromPortal(const Portal& portal) {
 	// Update light position
 	bool nMap = true;
-	glLightfv(GL_LIGHT0, GL_POSITION, this->gameMap->lightpos);
+	Vector3f lightPos = this->gameMap->light.position;
+	float lightArray[3] = {lightPos.x, lightPos.y, lightPos.z};
+	glLightfv(GL_LIGHT0, GL_POSITION, lightArray);
 
 	// Enable normal mapping
 	Resources::inst().enableProgram(nMap? PID_NMAP : PID_PPL);
@@ -141,17 +145,18 @@ namespace glPortal {
        * Draws the lamp model at light position
        */
       void GameMapRenderer::drawLamp() {
-	glPushMatrix();
-	glTranslatef(this->gameMap->lightpos[0], this->gameMap->lightpos[1], this->gameMap->lightpos[2]);
-	Box lightBox(-0.8f, 1.f, -0.2f, 0.8f, 0.95f, 0.2f);
+        Vector3f position = this->gameMap->light.position;
+	      glPushMatrix();
+	      glTranslatef(position.x, position.y, position.z);
+	      Box lightBox(-0.8f, 1.f, -0.2f, 0.8f, 0.95f, 0.2f);
 
-	glDisable(GL_TEXTURE_2D);
-	glBegin(GL_QUADS);
-	this->gameMap->drawBox(lightBox);
-	glEnd();
-	glEnable(GL_TEXTURE_2D);
+	      glDisable(GL_TEXTURE_2D);
+	      glBegin(GL_QUADS);
+	      this->gameMap->drawBox(lightBox);
+	      glEnd();
+	      glEnable(GL_TEXTURE_2D);
 
-	glPopMatrix();
+	      glPopMatrix();
       }
 
 

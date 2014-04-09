@@ -6,6 +6,7 @@
 #include "engine/Box.hpp"
 #include "engine/object/Model.hpp"
 #include "util/Vector3f.hpp"
+#include "Light.hpp"
 
 using namespace glPortal::engine::object;
 
@@ -21,7 +22,7 @@ class Portal; // Forward declaration
  */
 class GameMap {
 public:
-  void setLightPosition(GLfloat (&position)[4]);
+  void setLightPosition(float x, float y, float z);
   void setBarrelPosition(GLfloat (&position)[4]);
   Vector3f getStartPosition() {return startPos;}
   Vector3f getEndPosition() {return endPos;}
@@ -30,7 +31,6 @@ public:
   void setCakeBox(Box box);
   void setWallVector(std::vector<Box> walls);
   void setAcidVector(std::vector<Box> acid);
-  GLfloat* getLightPostition();
   GLfloat* getBarrelPosition();
   float* getSpawnPosition();
   float* getCakePosition();
@@ -59,7 +59,7 @@ public:
   std::vector<Box> walls;	/**< Vector of all walls in the gameMap*/
   std::vector<Box> acid;	/**< Vector of all acid pools in the gameMap*/
   std::vector<Model> objects;
-  GLfloat lightpos[4];	        /**< Position of the light in the gameMap*/
+  Light light;            /**< Light in the gameMap*/
   GLfloat barrelPosition[4];
   Vector3f startPos;		/**< Position where the player spawns in the gameMap*/
   Vector3f endPos;	    /**< Position of the goal in the gameMap*/

@@ -66,7 +66,7 @@ namespace glPortal {
 	    }
 	    lightpos[3] = 1.f; // Set as positioned light
 	    
-	    this->gameMap.setLightPosition(lightpos);
+	    this->gameMap.setLightPosition(lightpos[0], lightpos[1], lightpos[2]);
 	    break;
 	  case 'b':{
 	    for(int i = 0; i < 3; i++) {
