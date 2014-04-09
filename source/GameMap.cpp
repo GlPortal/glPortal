@@ -9,16 +9,10 @@
 #include "Exception.hpp"
 #include "Portal.hpp"
 
-void GameMap::setLightPosition(GLfloat (&position)[4]) {
-  this->lightpos[0] = position[0];
-  this->lightpos[1] = position[1];
-  this->lightpos[2] = position[2];
-  this->lightpos[3] = position[3];
-  this->lightpos[4] = position[4];
-}
-
-GLfloat* GameMap::getLightPostition() {
-  return this->lightpos;
+void GameMap::setLightPosition(float x, float y, float z) {
+  this->light.position.x = x;
+  this->light.position.y = y;
+  this->light.position.z = z;
 }
 
 void GameMap::setBarrelPosition(GLfloat (&position)[4]) {
@@ -78,7 +72,7 @@ void GameMap::addObject(Model model){
 /**
  * Empties the gameMapof all objects
  */
-void GameMap::flush(){
+void GameMap::flush() {
   walls.clear();
   acid.clear();
 }
