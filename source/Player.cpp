@@ -21,9 +21,7 @@ Player::Player() {
 }
 
 void Player::create(float x, float y, float z) {
-  position = new Vector3f(x, y, z);
-  rotation = new Vector3f(0, 0, 0);
-  velocity = new Vector3f(0, 0, 0);
+  position.set(x, y, z);
   onGround = false;
   state = PS_ALIVE;
 }
@@ -54,12 +52,6 @@ bool Player::hasWon(){
   }
 }
 
-void Player::destroy() {
-  delete position;
-  delete rotation;
-  delete velocity;
-}
-
 bool Player::isOnGround(){ 
   return this->onGround;
 }
@@ -73,22 +65,22 @@ void Player::setOffGround(){
 }
 
 void Player::moveForward(){
-  velocity->z -= cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
-  velocity->x -= sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity.z -= cos(rotation.y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity.x -= sin(rotation.y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
 }
 
 void Player::moveBackward(){
-  velocity->z += cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
-  velocity->x += sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity.z += cos(rotation.y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity.x += sin(rotation.y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
 }
 
 void Player::moveLeft(){
-  velocity->x -= cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
-  velocity->z += sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity.x -= cos(rotation.y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity.z += sin(rotation.y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
 }
 
 void Player::moveRight(){
-  velocity->x += cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
-  velocity->z -= sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity.x += cos(rotation.y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity.z -= sin(rotation.y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
 }
 
