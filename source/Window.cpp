@@ -100,7 +100,7 @@ void Window::setAmbientLight() {
   glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
   glLightfv(GL_LIGHT0, GL_SPECULAR, diffuse);
   glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0);
-  glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.005);
+  glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.01);
   glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse);
   glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
   glLightfv(GL_LIGHT1, GL_SPECULAR, diffuse);
