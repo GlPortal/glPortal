@@ -258,7 +258,7 @@ namespace glPortal {
                 glTranslatef(-portals[dst].position.x, -portals[dst].position.y, -portals[dst].position.z);
                 // Draw scene from portal view
                 drawFromPortal(portals[dst]);
-                renderAvatar(*player.position);
+                renderAvatar(player.position);
                 if(portals[0].active) portals[0].drawOutline(PC_BLUE);
                 if(portals[1].active) portals[1].drawOutline(PC_ORANGE);
               glPopMatrix();
