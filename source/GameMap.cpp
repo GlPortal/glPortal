@@ -36,7 +36,7 @@ void GameMap::setEndPosition(float x, float y, float z) {
   this->endPos.y = y;
   this->endPos.z = z;
   this->cakeBox.set(x-0.6f, y-0.6f, z-0.6f,
-		    x+0.6f, y+0.2f, z+0.6f);
+                    x+0.6f, y+0.2f, z+0.6f);
 }
 
 void GameMap::setCakeBox(Box box){
@@ -208,7 +208,7 @@ bool GameMap::pointInWall(float x, float y, float z, Box *box = NULL) {
   for(it = walls.begin(); it < walls.end(); it++) {
     if(it->collide(x,y,z)) {
       if(box != NULL) {
-	*box = *it;
+        *box = *it;
       }
       return true;
     }
