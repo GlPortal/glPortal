@@ -20,9 +20,6 @@ namespace glPortal {
 
     class Box {
     public:
-      Vector3f pos;
-      Vector3f size;
-      
       Vector3f start;
       Vector3f end;
       
@@ -40,14 +37,7 @@ namespace glPortal {
       Box(float *val, TEXTURE_ID type = TID_NONE) {
         set(val[0], val[1], val[2], val[3], val[4], val[5], type);
       }
-
-      /**
-       * @deprecated This constructor is a trainwreck. Please use the smaller constructor instead.
-       */
-      Box(float x1, float y1, float z1, float x2, float y2, float z2, TEXTURE_ID type = TID_NONE) {
-        set(x1, y1, z1, x2, y2, z2, type);
-      }
-
+      
       /**
        * Sets the member value sorted such that x1 <= x2, y1 <= y2 and z1 <= z2.
        */
