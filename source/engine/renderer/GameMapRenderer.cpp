@@ -17,7 +17,7 @@ namespace glPortal {
   namespace engine {
     namespace renderer {
       GameMapRenderer::GameMapRenderer(GameMap* gameMap) {
-	      this->gameMap = gameMap;
+        this->gameMap = gameMap;
       }
 
       void GameMapRenderer::render() {
@@ -221,11 +221,11 @@ namespace glPortal {
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, lamp_diffuse);
         glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, lamp_emission);
         
-	      glPushMatrix();
-	        glTranslatef(position.x, position.y, position.z);
-	        Box lightBox(-0.8f, 1.f, -0.2f, 0.8f, 0.95f, 0.2f);
-	        this->gameMap->drawBox(lightBox);
-	      glPopMatrix();
+        glPushMatrix();
+        glTranslatef(position.x, position.y, position.z);
+        Box lightBox(-0.8f, 1.f, -0.2f, 0.8f, 0.95f, 0.2f);
+        this->gameMap->drawBox(lightBox);
+        glPopMatrix();
       }
 
       /**
@@ -237,24 +237,24 @@ namespace glPortal {
             for(int i = 0; i < 2; i++) {
               int src = i;		// Source portal index
               int dst = (i+1)%2;  // Destination portal index
-	            
-	            glPushMatrix();
-                // Always write to stencil buffer
+              
+              glPushMatrix();
+              // Always write to stencil buffer
                 glStencilFunc(GL_NEVER, 1, 0xFF);
                 glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
                 glStencilMask(0xFF);
                 glClear(GL_STENCIL_BUFFER_BIT);
-	                portals[src].drawStencil();
-	                glClear(GL_DEPTH_BUFFER_BIT);
+                portals[src].drawStencil();
+                glClear(GL_DEPTH_BUFFER_BIT);
                 // Only pass stencil test if equal to 1
                 glStencilMask(0x00);
                 glStencilFunc(GL_EQUAL, 1, 0xFF);
-	                // Move camera to portal view
+                // Move camera to portal view
                 glTranslatef(portals[src].position.x, portals[src].position.y, portals[src].position.z);
                 glRotatef(portals[src].getFromRotation(), 0,1,0);
                 glRotatef(portals[dst].getToRotation(),   0,1,0);
                 glTranslatef(-portals[dst].position.x, -portals[dst].position.y, -portals[dst].position.z);
-	                // Draw scene from portal view
+                // Draw scene from portal view
                 drawFromPortal(portals[dst]);
                 renderAvatar(*player.position);
                 if(portals[0].active) portals[0].drawOutline(PC_BLUE);
@@ -262,8 +262,8 @@ namespace glPortal {
               glPopMatrix();
             }
           glDisable(GL_STENCIL_TEST);
-	  
-	        // Draw portal stencils so portals wont be drawn over
+          
+          // Draw portal stencils so portals wont be drawn over
           glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
           glClear(GL_DEPTH_BUFFER_BIT);
           portals[0].drawStencil();
@@ -311,4 +311,3 @@ namespace glPortal {
     }
   }
 }
-
