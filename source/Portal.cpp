@@ -56,10 +56,10 @@ void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& g
   int min;
 
   // Calculate distance from shot to planes
-  dist[0] = hitx - box.x1; // Distance from left face to x
-  dist[1] = box.x2 - hitx; // Distance from right face to x
-  dist[2] = hitz - box.z1; // Distance from back face to z
-  dist[3] = box.z2 - hitz; // Distance from front face to z
+  dist[0] = hitx - box.start.x; // Distance from left face to x
+  dist[1] = box.end.x - hitx; // Distance from right face to x
+  dist[2] = hitz - box.start.z; // Distance from back face to z
+  dist[3] = box.end.z - hitz; // Distance from front face to z
 
   // Find smallest distance
   min = 0;	
@@ -72,27 +72,27 @@ void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& g
   // Portal on the YZ-plane
   if(min <= 1) {
     // Make sure box is wide enough
-    if(box.z2 - box.z1 < 2) return;
+    if(box.end.z - box.start.z < 2) return;
 
     // Left face
     if(min == 0) {
-      place(box.x1, hity, hitz, PD_LEFT, gameMap);
+      place(box.start.x, hity, hitz, PD_LEFT, gameMap);
       // Right face
     } else {
-      place(box.x2, hity, hitz, PD_RIGHT, gameMap);
+      place(box.end.x, hity, hitz, PD_RIGHT, gameMap);
     }
 
     // Portal on the XY-plane
   } else {
     // Make sure box is wide enough
-    if(box.x2 - box.x1 < 2.f) return;
+    if(box.end.x - box.start.x < 2.f) return;
 
     // Back face
     if(min == 2) {
-      place(hitx, hity, box.z1, PD_BACK, gameMap);
+      place(hitx, hity, box.start.z, PD_BACK, gameMap);
       // Front Face
     } else {
-      place(hitx, hity, box.z2, PD_FRONT, gameMap);
+      place(hitx, hity, box.end.z, PD_FRONT, gameMap);
     }
   }
 }
@@ -108,15 +108,15 @@ bool Portal::inPortal(Box &box) {
   if(!active) return false;
 
   if(dir == PD_RIGHT || dir == PD_LEFT) {
-    if(box.z1 > position.z-0.75f && box.z2 < position.z+0.75f
-       && box.x1 < position.x && box.x2 > position.x
-       && box.y1 > position.y-1.25f && box.y2 < position.y+1.25f) {
+    if(box.start.z > position.z-0.75f && box.end.z < position.z+0.75f
+       && box.start.x < position.x && box.end.x > position.x
+       && box.start.y > position.y-1.25f && box.end.y < position.y+1.25f) {
       return true;
     }
   } else if(dir == PD_FRONT || dir == PD_BACK) {
-    if(box.x1 > position.x-0.75f && box.x2 < position.x+0.75f
-       && box.z1 < position.z && box.z2 > position.z
-       && box.y1 > position.y-1.25f && box.y2 < position.y+1.25f) {
+    if(box.start.x > position.x-0.75f && box.end.x < position.x+0.75f
+       && box.start.z < position.z && box.end.z > position.z
+       && box.start.y > position.y-1.25f && box.end.y < position.y+1.25f) {
       return true;
     }
   }
@@ -226,9 +226,10 @@ void Portal::drawOutline(PORTAL_COLOR color) {
     else {
       Resources::inst().bindTexture(TID_ORANGEPORTAL);
     }
-  
+    
     Resources::inst().drawModel(MID_PORTAL_OUTLINE);
   glDisable(GL_TEXTURE_2D);
 
   glPopMatrix();
 }
+

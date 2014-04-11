@@ -15,12 +15,11 @@ namespace glPortal {
 
 	      for(unsigned int i = 0; i < scene->mNumMeshes; i++)
 	        {
-	          Mesh* tempMesh = new 
-		    Mesh(scene->mMeshes[i]->mNumVertices,
-			 scene->mMeshes[i]->mVertices,
-			 scene->mMeshes[i]->mNormals,
-			 scene->mMeshes[i]->mNumFaces,
-			 scene->mMeshes[i]->mFaces);
+	          Mesh* tempMesh = new Mesh(scene->mMeshes[i]->mNumVertices,
+                                      scene->mMeshes[i]->mVertices,
+                                      scene->mMeshes[i]->mNormals,
+                                      scene->mMeshes[i]->mNumFaces,
+                                      scene->mMeshes[i]->mFaces);
 		
 	          meshes.push_back(tempMesh);
 	        }

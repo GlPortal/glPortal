@@ -149,10 +149,10 @@ namespace glPortal {
         
         glEnable(GL_TEXTURE_2D);
         for(it = this->gameMap->walls.begin(); it < this->gameMap->walls.end(); it++) {
-          if(portal.dir == PD_FRONT && it->z2 > portal.position.z
-          || portal.dir == PD_BACK  && it->z1 < portal.position.z
-          || portal.dir == PD_RIGHT && it->x2 > portal.position.x
-          || portal.dir == PD_LEFT  && it->x1 < portal.position.x) {
+          if(portal.dir == PD_FRONT && it->end.z > portal.position.z
+          || portal.dir == PD_BACK  && it->start.z < portal.position.z
+          || portal.dir == PD_RIGHT && it->end.x > portal.position.x
+          || portal.dir == PD_LEFT  && it->start.x < portal.position.x) {
             if(it->type != current_type) {
               current_type = it->type;
               Resources::inst().bindTexture(it->type);
@@ -171,10 +171,10 @@ namespace glPortal {
         glEnable(GL_TEXTURE_2D);
         Resources::inst().bindTexture(TID_ACID);
         for(it = this->gameMap->acid.begin(); it < this->gameMap->acid.end(); it++) {
-          if(portal.dir == PD_FRONT && it->z2 > portal.position.z
-          || portal.dir == PD_BACK  && it->z1 < portal.position.z
-          || portal.dir == PD_RIGHT && it->x2 > portal.position.x
-          || portal.dir == PD_LEFT  && it->x1 < portal.position.x) {
+          if(portal.dir == PD_FRONT && it->end.z > portal.position.z
+          || portal.dir == PD_BACK  && it->start.z < portal.position.z
+          || portal.dir == PD_RIGHT && it->end.x > portal.position.x
+          || portal.dir == PD_LEFT  && it->start.x < portal.position.x) {
             this->gameMap->drawBox(*it);
           }
         }

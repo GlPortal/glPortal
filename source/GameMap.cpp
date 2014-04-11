@@ -97,58 +97,58 @@ bool GameMap::getIsLastScreen() {
  * @param b Box to draw
  */
 void GameMap::drawBox(Box &b) {
-  float dx = (b.x2 - b.x1)*0.5f;
-  float dy = (b.y2 - b.y1)*0.5f;
-  float dz = (b.z2 - b.z1)*0.5f;
+  float dx = (b.end.x - b.start.x)*0.5f;
+  float dy = (b.end.y - b.start.y)*0.5f;
+  float dz = (b.end.z - b.start.z)*0.5f;
 
   glBegin(GL_QUADS);
     // Top
     //glMultiTexCoord4f(GL_TEXTURE1, 1, 0, 0, -1);
     glNormal3f(0, 1, 0);
-    glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y2, b.z1);
-    glTexCoord2f(0.f,  dz); glVertex3f(b.x1, b.y2, b.z2);
-    glTexCoord2f( dx,  dz); glVertex3f(b.x2, b.y2, b.z2);
-    glTexCoord2f( dx, 0.f); glVertex3f(b.x2, b.y2, b.z1);
+    glTexCoord2f(0.f, 0.f); glVertex3f(b.start.x, b.end.y, b.start.z);
+    glTexCoord2f(0.f,  dz); glVertex3f(b.start.x, b.end.y, b.end.z);
+    glTexCoord2f( dx,  dz); glVertex3f(b.end.x, b.end.y, b.end.z);
+    glTexCoord2f( dx, 0.f); glVertex3f(b.end.x, b.end.y, b.start.z);
 
     // Bottom
     //glMultiTexCoord4f(GL_TEXTURE1, 1, 0, 0, -1);
     glNormal3f(0, -1, 0);
-    glTexCoord2f( dx,  dz); glVertex3f(b.x2, b.y1, b.z1);
-    glTexCoord2f( dx, 0.f); glVertex3f(b.x2, b.y1, b.z2);
-    glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y1, b.z2);
-    glTexCoord2f(0.f,  dz); glVertex3f(b.x1, b.y1, b.z1);
+    glTexCoord2f( dx,  dz); glVertex3f(b.end.x, b.start.y, b.start.z);
+    glTexCoord2f( dx, 0.f); glVertex3f(b.end.x, b.start.y, b.end.z);
+    glTexCoord2f(0.f, 0.f); glVertex3f(b.start.x, b.start.y, b.end.z);
+    glTexCoord2f(0.f,  dz); glVertex3f(b.start.x, b.start.y, b.start.z);
 
     // Front
     //glMultiTexCoord4f(GL_TEXTURE1, 1, 0, 0, -1);
     glNormal3f(0, 0, 1);
-    glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y2, b.z2);
-    glTexCoord2f(0.f,  dy); glVertex3f(b.x1, b.y1, b.z2);
-    glTexCoord2f( dx,  dy); glVertex3f(b.x2, b.y1, b.z2);
-    glTexCoord2f( dx, 0.f); glVertex3f(b.x2, b.y2, b.z2);
+    glTexCoord2f(0.f, 0.f); glVertex3f(b.start.x, b.end.y, b.end.z);
+    glTexCoord2f(0.f,  dy); glVertex3f(b.start.x, b.start.y, b.end.z);
+    glTexCoord2f( dx,  dy); glVertex3f(b.end.x, b.start.y, b.end.z);
+    glTexCoord2f( dx, 0.f); glVertex3f(b.end.x, b.end.y, b.end.z);
 
     // Back
     //glMultiTexCoord4f(GL_TEXTURE1, -1, 0, 0, 1);
     glNormal3f(0, 0, -1);
-    glTexCoord2f(0.f,  dy); glVertex3f(b.x2, b.y1, b.z1);
-    glTexCoord2f( dx,  dy); glVertex3f(b.x1, b.y1, b.z1);
-    glTexCoord2f( dx, 0.f); glVertex3f(b.x1, b.y2, b.z1);
-    glTexCoord2f(0.f, 0.f); glVertex3f(b.x2, b.y2, b.z1);
+    glTexCoord2f(0.f,  dy); glVertex3f(b.end.x, b.start.y, b.start.z);
+    glTexCoord2f( dx,  dy); glVertex3f(b.start.x, b.start.y, b.start.z);
+    glTexCoord2f( dx, 0.f); glVertex3f(b.start.x, b.end.y, b.start.z);
+    glTexCoord2f(0.f, 0.f); glVertex3f(b.end.x, b.end.y, b.start.z);
 
     // Left
     //glMultiTexCoord4f(GL_TEXTURE1, 0, 0, 1, -1);
     glNormal3f(-1, 0, 0);
-    glTexCoord2f(0.f, 0.f); glVertex3f(b.x1, b.y2, b.z1);
-    glTexCoord2f(0.f,  dy); glVertex3f(b.x1, b.y1, b.z1);
-    glTexCoord2f( dz,  dy); glVertex3f(b.x1, b.y1, b.z2);
-    glTexCoord2f( dz, 0.f); glVertex3f(b.x1, b.y2, b.z2);
+    glTexCoord2f(0.f, 0.f); glVertex3f(b.start.x, b.end.y, b.start.z);
+    glTexCoord2f(0.f,  dy); glVertex3f(b.start.x, b.start.y, b.start.z);
+    glTexCoord2f( dz,  dy); glVertex3f(b.start.x, b.start.y, b.end.z);
+    glTexCoord2f( dz, 0.f); glVertex3f(b.start.x, b.end.y, b.end.z);
 
     // Right
     //glMultiTexCoord4f(GL_TEXTURE1, 0, 0, -1, -1);
     glNormal3f(1, 0, 0);
-    glTexCoord2f( dz, 0.f); glVertex3f(b.x2, b.y2, b.z1);
-    glTexCoord2f(0.f, 0.f); glVertex3f(b.x2, b.y2, b.z2);
-    glTexCoord2f(0.f,  dy); glVertex3f(b.x2, b.y1, b.z2);
-    glTexCoord2f( dz,  dy); glVertex3f(b.x2, b.y1, b.z1);
+    glTexCoord2f( dz, 0.f); glVertex3f(b.end.x, b.end.y, b.start.z);
+    glTexCoord2f(0.f, 0.f); glVertex3f(b.end.x, b.end.y, b.end.z);
+    glTexCoord2f(0.f,  dy); glVertex3f(b.end.x, b.start.y, b.end.z);
+    glTexCoord2f( dz,  dy); glVertex3f(b.end.x, b.start.y, b.start.z);
   glEnd();
 }
 
