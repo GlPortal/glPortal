@@ -199,13 +199,6 @@ void Game::nextLevel() {
   }
 }
 
-// This method is here for refactoring purposes 
-// and can be removed once main is decluttered
-void Game::setHeightWidth(int height, int width){
-  this->width = width;
-  this->height = height;
-}
-
 void Game::setWindow(Window &window){
   this->window = window;
 }

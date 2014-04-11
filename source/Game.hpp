@@ -73,7 +73,6 @@ public:
 private:
   ConfigFileParser * config;
   GameMapRenderer  * mapRenderer;
-  int width, height;
   float sensitivity;
   bool keystates[KEY_BUFFER];
   bool paused = false;	
