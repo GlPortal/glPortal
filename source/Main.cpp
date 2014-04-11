@@ -66,7 +66,6 @@ void loop() {
 
 void draw() {
   game.setWindow(window);
-  game.setHeightWidth(height, width);
   game.draw();
   window.swapBuffer();
 }
