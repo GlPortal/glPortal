@@ -14,7 +14,7 @@ using namespace glPortal::engine::renderer;
 
 bool Game::DEBUG = false;
 
-Game::Game(){
+Game::Game() {
   mapRenderer = new GameMapRenderer(std::addressof(gameMap));
   config = Environment::getConfigPointer();
   //Load the configuration settings
@@ -114,7 +114,7 @@ void Game::update() {
     } else {
       // If player was falling it means must have hit the ground
       if(player.velocity->y < 0) {
-	player.setOnGround();
+        player.setOnGround();
       }
       player.velocity->y = 0;
     }
@@ -365,11 +365,11 @@ void Game::drawOverlay() {
 
       // Draw "Press return to respawn" message if dead
       if(player.getState() == PS_DYING) {
-	screen->drawRespawnScreen();
+        screen->drawRespawnScreen();
       }
       // Draw "Press return to continue" message if won
       else if(player.getState() == PS_WON) {
-	screen->drawContinueScreen();
+        screen->drawContinueScreen();
       }
     }
   }

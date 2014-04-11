@@ -8,7 +8,7 @@ t 10 -4 4.5 11 1 5.5
 
 
 ! Light position
-l 10 7 5
+l 10 5 5
 
 ! Left floor
 t 0 -1 0 5 0 10
@@ -27,4 +27,4 @@ w 0 -1 10 20 8 11
 t 0 8 0 20 9 10
 
 ! Middle acid pool
-a 5 -5 0 15 -1 10
+a 5 -3 0 15 -1 10
