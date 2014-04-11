@@ -10,11 +10,6 @@
 #include "../engine/StringConverter.hpp"
 #include "../Exception.hpp"
 #include "../util/Vector3f.hpp"
-#include <boost/foreach.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/tokenizer.hpp>
-
-using namespace boost;
 
 namespace glPortal {
   namespace map{
@@ -116,9 +111,6 @@ namespace glPortal {
             if (optionLine.find(jetpackOptionIndicator) != std::string::npos) {
               this->gameMap.enableJetpack();
             }
-            break;
-          default:
-
             break;
           }
         
