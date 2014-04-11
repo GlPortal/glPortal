@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
+#include <cmath>
 #include "../GameMap.hpp"
 #include "../engine/Resources.hpp"
 #include "../engine/StringConverter.hpp"
@@ -54,20 +55,28 @@ namespace glPortal {
 	    break;
 	    // Acid pool definition
 	  case 'a':
+	  {
 	    for(int i = 0; i < 6; i++) {
 	      values[i] = StringConverter::stringStreamToFloat(stringStream);
 	    }
 	    this->gameMap.addAcidBox(Box(values, TID_ACID));
+	    //Add a light to the acid pool
+	    Light light(values[0] + abs(values[3]-values[0])/2, values[1] + abs(values[4]-values[1])/2 - 0.05, values[2] + abs(values[5]-values[2])/2);
+	    light.color.x = 0;
+	    light.color.z = 0;
+	    this->gameMap.addLight(light);
 	    break;
-	    // Light position
+	  }
+	  // Light position
 	  case 'l':
+	  {
 	    for(int i = 0; i < 3; i++) {
 	      lightpos[i] = StringConverter::stringStreamToFloat(stringStream);
 	    }
-	    lightpos[3] = 1.f; // Set as positioned light
-	    
-	    this->gameMap.setLightPosition(lightpos[0], lightpos[1], lightpos[2]);
+	    Light light(lightpos[0], lightpos[1], lightpos[2]);
+	    this->gameMap.addLight(light);
 	    break;
+	  }
 	  case 'b':{
 	    for(int i = 0; i < 3; i++) {
 	      barrelPosition[i] = StringConverter::stringStreamToFloat(stringStream);

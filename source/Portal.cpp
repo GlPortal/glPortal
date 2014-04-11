@@ -219,12 +219,16 @@ void Portal::drawOutline(PORTAL_COLOR color) {
   glRotatef(getFromRotation(), 0,1,0);
 
   // Bind blue of orange portal texture
-  if(color == PC_BLUE)
-    Resources::inst().bindTexture(TID_BLUEPORTAL);
-  else
-    Resources::inst().bindTexture(TID_ORANGEPORTAL);
-
-  Resources::inst().drawModel(MID_PORTAL_OUTLINE);
+  glEnable(GL_TEXTURE_2D);
+    if(color == PC_BLUE) {
+      Resources::inst().bindTexture(TID_BLUEPORTAL);
+    }
+    else {
+      Resources::inst().bindTexture(TID_ORANGEPORTAL);
+    }
+  
+    Resources::inst().drawModel(MID_PORTAL_OUTLINE);
+  glDisable(GL_TEXTURE_2D);
 
   glPopMatrix();
 }
