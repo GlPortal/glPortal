@@ -196,7 +196,7 @@ namespace glPortal {
       void GameMapRenderer::drawCake() {
         //Cake material
         float cake_diffuse[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-        float cake_emission[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+        float cake_emission[4] = {1.0f, 1.0f, 1.0f, 1.0f};
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, cake_diffuse);
         glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, cake_emission);
         
