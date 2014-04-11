@@ -222,9 +222,11 @@ namespace glPortal {
         glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, lamp_emission);
         
         glPushMatrix();
-        glTranslatef(position.x, position.y, position.z);
-        Box lightBox(-0.8f, 1.f, -0.2f, 0.8f, 0.95f, 0.2f);
-        this->gameMap->drawBox(lightBox);
+          glTranslatef(position.x, position.y, position.z);
+          Vector3f start(-0.8f, 0.95f, -0.2f);
+          Vector3f end(0.8f, 1.0f, 0.2f);
+          Box lightBox(start, end);
+          this->gameMap->drawBox(lightBox);
         glPopMatrix();
       }
 
