@@ -218,6 +218,12 @@ void Portal::drawOutline(PORTAL_COLOR color) {
   glTranslatef(position.x, position.y, position.z);
   glRotatef(getFromRotation(), 0,1,0);
 
+  //Portal material
+  float portal_diffuse[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+  float portal_emission[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, portal_diffuse);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, portal_emission);
+
   // Bind blue of orange portal texture
   glEnable(GL_TEXTURE_2D);
     if(color == PC_BLUE) {
