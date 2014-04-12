@@ -247,27 +247,27 @@ void Resources::compilePortalModel() {
   glBegin(GL_TRIANGLE_FAN);
   glVertex3f( 0.00f, 0.00f, 0.001f);
 
-  glVertex3f( 0.00f, 1.25f, 0.001f);
-  glVertex3f(-0.29f, 1.15f, 0.001f);
-  glVertex3f(-0.53f, 0.88f, 0.001f);
-  glVertex3f(-0.69f, 0.48f, 0.001f);
+  glVertex3f( 0.00f, 1.15f, 0.001f);
+  glVertex3f(-0.29f, 1.05f, 0.001f);
+  glVertex3f(-0.53f, 0.75f, 0.001f);
+  glVertex3f(-0.60f, 0.40f, 0.001f);
 
-  glVertex3f(-0.75f, 0.00f, 0.001f);
-  glVertex3f(-0.69f,-0.48f, 0.001f);
-  glVertex3f(-0.53f,-0.88f, 0.001f);
-  glVertex3f(-0.29f,-1.15f, 0.001f);
+  glVertex3f(-0.65f, 0.00f, 0.001f);
+  glVertex3f(-0.60f,-0.40f, 0.001f);
+  glVertex3f(-0.53f,-0.75f, 0.001f);
+  glVertex3f(-0.29f,-1.05f, 0.001f);
 
-  glVertex3f( 0.00f,-1.25f, 0.001f);
-  glVertex3f( 0.29f,-1.15f, 0.001f);
-  glVertex3f( 0.53f,-0.88f, 0.001f);
-  glVertex3f( 0.69f,-0.48f, 0.001f);
+  glVertex3f( 0.00f,-1.15f, 0.001f);
+  glVertex3f( 0.29f,-1.05f, 0.001f);
+  glVertex3f( 0.53f,-0.75f, 0.001f);
+  glVertex3f( 0.60f,-0.40f, 0.001f);
 
-  glVertex3f( 0.75f, 0.00f, 0.001f);
-  glVertex3f( 0.69f, 0.48f, 0.001f);
-  glVertex3f( 0.53f, 0.88f, 0.001f);
-  glVertex3f( 0.29f, 1.15f, 0.001f);
+  glVertex3f( 0.65f, 0.00f, 0.001f);
+  glVertex3f( 0.60f, 0.40f, 0.001f);
+  glVertex3f( 0.53f, 0.75f, 0.001f);
+  glVertex3f( 0.29f, 1.05f, 0.001f);
 
-  glVertex3f( 0.00f, 1.25f, 0.001f);
+  glVertex3f( 0.00f, 1.15f, 0.001f);
   glEnd();
   glEndList();
 
