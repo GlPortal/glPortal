@@ -17,7 +17,7 @@ static const char *texture_files[NUM_TEXTURES] = {
   "data/crosshair.png",
   "data/balls.png",
   "data/strings.png",
-  "data/objects/plastic_barrel/diffus.tga",
+  "data/objects/plastic_barrel/Barrel_DIFF.tga",
   "data/hud/portal.png",
   "data/hud/jetpack.png"
 };
@@ -289,25 +289,26 @@ void Resources::compileCakeModel() {
   glBegin(GL_QUADS);
   // Front side
   glTexCoord2f(0.000f, 0.00f); glVertex3f(-0.2f,  0.3f, 0.00f);
-  glTexCoord2f(0.000f, 0.25f); glVertex3f(-0.2f,  0.0f, 0.00f);
-  glTexCoord2f(0.375f, 0.25f); glVertex3f( 0.2f,  0.0f, 0.16f);
-  glTexCoord2f(0.375f, 0.00f); glVertex3f( 0.2f,  0.3f, 0.16f);
+  glTexCoord2f(0.000f, 0.50f); glVertex3f(-0.2f,  0.0f, 0.00f);
+  glTexCoord2f(1.0f, 0.50f); glVertex3f( 0.2f,  0.0f, 0.16f);
+  glTexCoord2f(1.0f, 0.00f); glVertex3f( 0.2f,  0.3f, 0.16f);
   // Back side
-  glTexCoord2f(0.375f, 0.00f); glVertex3f( 0.2f,  0.3f,-0.16f);
-  glTexCoord2f(0.375f, 0.25f); glVertex3f( 0.2f,  0.0f,-0.16f);
-  glTexCoord2f(0.000f, 0.25f); glVertex3f(-0.2f,  0.0f, 0.00f);
+  glTexCoord2f(1.0f, 0.00f); glVertex3f( 0.2f,  0.3f,-0.16f);
+  glTexCoord2f(1.0f, 0.50f); glVertex3f( 0.2f,  0.0f,-0.16f);
+  glTexCoord2f(0.000f, 0.50f); glVertex3f(-0.2f,  0.0f, 0.00f);
   glTexCoord2f(0.000f, 0.00f); glVertex3f(-0.2f,  0.3f, 0.00f);
   // Outer/right side
-  glTexCoord2f(0.000f, 0.250f); glVertex3f( 0.2f,  0.3f, 0.16f);
-  glTexCoord2f(0.000f, 0.375f); glVertex3f( 0.2f,  0.0f, 0.16f);
-  glTexCoord2f(0.125f, 0.375f); glVertex3f( 0.2f,  0.0f,-0.16f);
-  glTexCoord2f(0.125f, 0.250f); glVertex3f( 0.2f,  0.3f,-0.16f);
+  glTexCoord2f(0.000f, 0.50f); glVertex3f( 0.2f,  0.3f, 0.16f);
+  glTexCoord2f(0.000f, 0.75f); glVertex3f( 0.2f,  0.0f, 0.16f);
+  glTexCoord2f(0.5f, 0.75f); glVertex3f( 0.2f,  0.0f,-0.16f);
+  glTexCoord2f(0.5f, 0.50f); glVertex3f( 0.2f,  0.3f,-0.16f);
   glEnd();
   glBegin(GL_TRIANGLES);
   // Top side
-  glTexCoord2f(0.00f, 0.375f); glVertex3f(-0.2f,  0.3f, 0.00f);
-  glTexCoord2f(0.25f, 0.500f); glVertex3f( 0.2f,  0.3f, 0.16f);
-  glTexCoord2f(0.25f, 0.250f); glVertex3f( 0.2f,  0.3f,-0.16f);
+  glTexCoord2f(0.00f, 0.75f); glVertex3f(-0.2f,  0.3f, 0.00f);
+  glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.2f,  0.3f, 0.16f);
+  glTexCoord2f(1.0f, 0.5f); glVertex3f( 0.2f,  0.3f,-0.16f);
   glEnd();
   glEndList();
 }
+
