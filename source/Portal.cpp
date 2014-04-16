@@ -18,13 +18,13 @@ void Portal::place(float x, float y, float z, PORTAL_DIR dir, GameMap& gameMap) 
   // Calculate in front of portal
   Box bbox;
   if(dir == PD_FRONT) {
-    bbox.set(x-0.74f, y-1.24, z+0.01f, x+0.75f, y+1.24, z+1.f);
+    bbox.set(x-0.74f, y-1.24, z+0.01f, x+0.74f, y+1.24, z+1.f);
   } else if (dir == PD_BACK) {
-    bbox.set(x-0.74f, y-1.24, z-1.f, x+0.75f, y+1.24, z-0.01f);
+    bbox.set(x-0.74f, y-1.24, z-1.f, x+0.74f, y+1.24, z-0.01f);
   } else if (dir == PD_RIGHT) {
-    bbox.set(x+0.01f, y-1.24, z-0.75, x+1.f, y+1.24, z+0.74);
+    bbox.set(x+0.01f, y-1.24, z-0.74, x+1.f, y+1.24, z+0.74);
   } else if (dir == PD_LEFT) {
-    bbox.set(x-1.f, y-1.24, z-0.75, x-0.01f, y+1.24, z+0.74);
+    bbox.set(x-1.f, y-1.24, z-0.74, x-0.01f, y+1.24, z+0.74);
   }
   
   // Only place portal if nothing is in front of it
