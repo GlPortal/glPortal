@@ -4,7 +4,7 @@
 #include "engine/Resources.hpp"
 
 #define RADDEG 57.29577951308232088 // 180/PI
-#define SHOTSPEED 32.0
+#define SHOTSPEED 16.0
 
 /**
  * Shoots the portal gun from a given point in a given direction.

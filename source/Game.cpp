@@ -138,23 +138,23 @@ void Game::update() {
     // Check if player has entered a portal
     if(portalsActive()) {
       for(int i = 0; i < 2; i++) {
-	if(portals[i].throughPortal(player.position.x, player.position.y+0.9f,player.position.z)) {
-	  // Calculate rotation between portals
-	  float rotation = 0.f;
-	  rotation += portals[i].getToRotation()*DEGRAD;
-	  rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
-	  player.rotation.y += rotation;
-	  // Distance from portal to player
-	  float xdist = player.position.x - portals[i].position.x;
-	  float zdist = player.position.z - portals[i].position.z;
-	  // Calculate this distance when rotated
-	  float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
-	  float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
-	  // Move player to destination portal
-	  player.position.x = portals[(i+1)%2].position.x + nxdist;
-	  player.position.y = player.position.y + portals[(i+1)%2].position.y - portals[i].position.y;
-	  player.position.z = portals[(i+1)%2].position.z + nzdist;
-	}
+        if(portals[i].throughPortal(player.position.x, player.position.y+0.9f,player.position.z)) {
+          // Calculate rotation between portals
+          float rotation = 0.f;
+          rotation += portals[i].getToRotation()*DEGRAD;
+          rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
+          player.rotation.y += rotation;
+          // Distance from portal to player
+          float xdist = player.position.x - portals[i].position.x;
+          float zdist = player.position.z - portals[i].position.z;
+          // Calculate this distance when rotated
+          float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
+          float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
+          // Move player to destination portal
+          player.position.x = portals[(i+1)%2].position.x + nxdist;
+          player.position.y = player.position.y + portals[(i+1)%2].position.y - portals[i].position.y;
+          player.position.z = portals[(i+1)%2].position.z + nzdist;
+        }
       }
     }
   }
@@ -168,15 +168,16 @@ void Game::update() {
     Shot *shot = &shots[i];
     if(shot->active) {
       shot->update(dt);
-
+      
       Box sbox;
       if(gameMap.pointInWall(shot->position.x, shot->position.y, shot->position.z, &sbox)) {
-	shot->update(-dt); // Reverse time to before collision
-	// Collision really should be interpolated instead
-	if(sbox.type == TID_WALL) {
-	  portals[i].placeOnBox(sbox, shot->position.x, shot->position.y, shot->position.z, gameMap);
-	}
-	shot->active = false;
+        //shot->update(-dt); // Reverse time to before collision
+        // Collision really should be interpolated instead
+        if(sbox.type == TID_WALL) {
+          portals[i].placeOnBox(sbox, shot->position.x, shot->position.y, shot->position.z, gameMap);
+        }
+        
+        shot->active = false;
       }
     }
   }
@@ -215,11 +216,13 @@ void Game::mousePressed(int button) {
   switch(button) {
   case SDL_BUTTON_LEFT:
     // Shoot blue portal
-    shots[0].shoot(0, position.x, position.y, position.z, rotation.x, rotation.y);
+    // Adjust shooting height to the eye
+    shots[0].shoot(0, position.x, position.y + 0.5, position.z, rotation.x, rotation.y);
     break;
   case SDL_BUTTON_RIGHT:
     // Shoot orange portal
-    shots[1].shoot(1, position.x, position.y, position.z, rotation.x, rotation.y);
+    // Adjust shooting height to the eye
+    shots[1].shoot(1, position.x, position.y + 0.5, position.z, rotation.x, rotation.y);
     break;
   case SDL_BUTTON_MIDDLE:
     // Disable both portals
