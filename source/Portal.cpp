@@ -15,27 +15,23 @@
  * @param gameMapThe current gameMap
  */
 void Portal::place(float x, float y, float z, PORTAL_DIR dir, GameMap& gameMap) {
-  float nx, ny, nz; // New coordinates
-  nx = round(x);
-  ny = round(y-0.25f)+0.25f;
-  nz = round(z);
-
   // Calculate in front of portal
   Box bbox;
   if(dir == PD_FRONT) {
-    bbox.set(nx-0.74f, ny-1.24f, nz+0.01f, nx+0.74f, ny+1.24f, nz+1.49f);
+    bbox.set(x-0.74f, y-1.24, z+0.01f, x+0.75f, y+1.24, z+1.f);
   } else if (dir == PD_BACK) {
-    bbox.set(nx-0.74f, ny-1.24f, nz-1.49f, nx+0.74f, ny+1.24f, nz-0.01f);
+    bbox.set(x-0.74f, y-1.24, z-1.f, x+0.75f, y+1.24, z-0.01f);
   } else if (dir == PD_RIGHT) {
-    bbox.set(nx+0.01f, ny-1.24f, nz-0.74f, nx+1.49f, ny+1.24f, nz+0.74f);
+    bbox.set(x+0.01f, y-1.24, z-0.75, x+1.f, y+1.24, z+0.74);
   } else if (dir == PD_LEFT) {
-    bbox.set(nx-1.49f, ny-1.24f, nz-0.74f, nx-0.01f, ny+1.24f, nz+0.74f);
+    bbox.set(x-1.f, y-1.24, z-0.75, x-0.01f, y+1.24, z+0.74);
   }
+  
   // Only place portal if nothing is in front of it
   if(gameMap.collidesWithWall(bbox) == false && gameMap.collidesWithAcid(bbox) == false) {
-    this->position.x = nx;
-    this->position.y = ny;
-    this->position.z = nz;
+    this->position.x = x;
+    this->position.y = y;
+    this->position.z = z;
     this->dir = dir;
     active = true;
   }
@@ -54,13 +50,13 @@ void Portal::place(float x, float y, float z, PORTAL_DIR dir, GameMap& gameMap) 
 void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& gameMap) {
   float dist[4];
   int min;
-
+  
   // Calculate distance from shot to planes
   dist[0] = hitx - box.start.x; // Distance from left face to x
   dist[1] = box.end.x - hitx; // Distance from right face to x
   dist[2] = hitz - box.start.z; // Distance from back face to z
   dist[3] = box.end.z - hitz; // Distance from front face to z
-
+  
   // Find smallest distance
   min = 0;	
   for(int i = 1; i < 4; i++) {
@@ -68,29 +64,55 @@ void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& g
       min = i;
     }
   }
-
+  
   // Portal on the YZ-plane
   if(min <= 1) {
-    // Make sure box is wide enough
-    if(box.end.z - box.start.z < 2) return;
-
+    // If the box isnt big enough, dont place portal
+    if(box.end.z - box.start.z < 1.50 || box.end.y - box.start.y < 2.50) return;
+    // If the portal is on the edge, align it
+    if(hitz - box.start.z < 0.75) {
+      hitz = box.start.z + 0.75;
+    }
+    if(box.end.z - hitz < 0.75) {
+      hitz = box.end.z - 0.75;
+    }
+    if(hity - box.start.y < 1.25) {
+      hity = box.start.y + 1.25;
+    }
+    if(box.end.y - hity < 1.25) {
+      hity = box.end.y - 1.25;
+    }
+    
     // Left face
     if(min == 0) {
       place(box.start.x, hity, hitz, PD_LEFT, gameMap);
-      // Right face
+    // Right face
     } else {
       place(box.end.x, hity, hitz, PD_RIGHT, gameMap);
     }
 
-    // Portal on the XY-plane
+  // Portal on the XY-plane
   } else {
-    // Make sure box is wide enough
-    if(box.end.x - box.start.x < 2.f) return;
-
+    // If the box isnt big enough, dont place portal
+    if(box.end.x - box.start.x < 1.50 || box.end.y - box.start.y < 2.50) return;
+    // If the portal is on the edge, align it
+    if(hitx - box.start.x < 0.75) {
+      hitx = box.start.x + 0.75;
+    }
+    if(box.end.x - hitx < 0.75) {
+      hitx = box.end.x - 0.75;
+    }
+    if(hity - box.start.y < 1.25) {
+      hity = box.start.y + 1.25;
+    }
+    if(box.end.y - hity < 1.25) {
+      hity = box.end.y - 1.25;
+    }
+    
     // Back face
     if(min == 2) {
       place(hitx, hity, box.start.z, PD_BACK, gameMap);
-      // Front Face
+    // Front Face
     } else {
       place(hitx, hity, box.end.z, PD_FRONT, gameMap);
     }

@@ -11,6 +11,7 @@ namespace util {
       Vector3f *set(float x, float y, float z);
       Vector3f *add(Vector3f v);
       Vector3f *subtract(Vector3f v);
+      float length();
       Vector3f *normalize();
   };
 }

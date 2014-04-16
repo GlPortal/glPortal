@@ -29,11 +29,15 @@ Vector3f *Vector3f::subtract(Vector3f v) {
   return this;
 }
 
+float Vector3f::length() {
+  return sqrt(x*x + y*y + z*z);
+}
+
 Vector3f *Vector3f::normalize() {
-  float length = sqrt(x*x + y*y + z*z);
-  this->x /= length;
-  this->y /= length;
-  this->z /= length;
+  float l = length();
+  this->x /= l;
+  this->y /= l;
+  this->z /= l;
   return this;
 }
 
