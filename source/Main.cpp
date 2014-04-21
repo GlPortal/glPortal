@@ -9,29 +9,34 @@ using namespace glPortal::engine;
 using namespace glPortal::util::audioplayer;
 using namespace std;
 
-int main(int argc, char **argv) {
-  Environment::init();
-  window.setup(&argc, argv);
-  setup(&argc, argv);
-  loop();
+int main(int argc, char * argv[]) {
+  Environment::init(argc, argv);
+  
+  Player player;
+  GameMap gameMap;
+  Game game;
+  Window window;
+
+  window.setup(argc, argv);
+
+  window.enableGlFeatures();
+  game.loadTextures();
+  
+  loop(game, window);
 
   return EXIT_SUCCESS;
 }
 
-void setup(int *argc, char **argv) {
-  height = window.getHeight();
-  width = window.getWidth();
-  window.enableGlFeatures();
-  game.loadTextures();
-}
 
-void loop() {
+
+void loop(Game & game, Window & window) {
   SDL_Event event;
   bool quit = false;
-
+  int height = window.getHeight();
+  int width = window.getWidth();
   AudioPlayer* audioPlayer = new AudioPlayer();
   audioPlayer->init();
-  audioPlayer->playByFileName("data/audio/music/track1.ogg");
+  audioPlayer->playByFileName("audio/music/track1.ogg");
   audioPlayer->play();    
   while (!quit) {
     while(SDL_PollEvent(&event)) {
@@ -58,15 +63,12 @@ void loop() {
       }
     }
     game.update();
-    draw();
+    game.setWindow(window);
+    game.setHeightWidth(height, width);
+    game.draw();
+    window.swapBuffer();
   }
   window.close();
   audioPlayer->cleanUp();
 }
 
-void draw() {
-  game.setWindow(window);
-  game.setHeightWidth(height, width);
-  game.draw();
-  window.swapBuffer();
-}
