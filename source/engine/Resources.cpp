@@ -5,21 +5,21 @@
 #include <fstream>
 #include "stb_image.c"
 
-static const char *vertex_shaders[NUM_SHADERS]   = {"data/shaders/ppl.vert", "data/shaders/nmap.vert"};
-static const char *fragment_shaders[NUM_SHADERS] = {"data/shaders/ppl.frag", "data/shaders/nmap.frag"};
+static const char *vertex_shaders[NUM_SHADERS]   = {"shaders/ppl.vert", "shaders/nmap.vert"};
+static const char *fragment_shaders[NUM_SHADERS] = {"shaders/ppl.frag", "shaders/nmap.frag"};
 
 static const char *texture_files[NUM_TEXTURES] = {
-  "data/textures/font.png", "data/wall.png", "data/wall_normalmap.png",
-  "data/tiles.png", "data/tiles_normalmap.png",
-  "data/acid.png", "data/acid_normalmap.png",
-  "data/cake.png",
-  "data/blueportal.png", "data/orangeportal.png",
-  "data/crosshair.png",
-  "data/balls.png",
-  "data/strings.png",
-  "data/objects/plastic_barrel/diffus.tga",
-  "data/hud/portal.png",
-  "data/hud/jetpack.png"
+  "textures/font.png", "wall.png", "wall_normalmap.png",
+  "tiles.png", "tiles_normalmap.png",
+  "acid.png", "acid_normalmap.png",
+  "cake.png",
+  "blueportal.png", "orangeportal.png",
+  "crosshair.png",
+  "balls.png",
+  "strings.png",
+  "objects/plastic_barrel/diffus.tga",
+  "hud/portal.png",
+  "hud/jetpack.png"
 };
 
 /**
@@ -27,7 +27,8 @@ static const char *texture_files[NUM_TEXTURES] = {
  */
 void Resources::loadTextures() {
   for(int i = 0; i < NUM_TEXTURES; i++) {
-    textures[i] = createTexture(texture_files[i]);
+    std::string textureName(Environment::getDataDir()+"/"+texture_files[i]);
+    textures[i] = createTexture(textureName.c_str());
   }
 }
 
@@ -64,8 +65,10 @@ void Resources::compileShaders() {
     frag = glCreateShader(GL_FRAGMENT_SHADER);
     
     // Read shaders from files
-    char *vs_source = readShader(vertex_shaders[i]);
-    char *fs_source = readShader(fragment_shaders[i]);
+    std::string vertexShaderFileName(Environment::getDataDir()+"/"+vertex_shaders[i]);
+    char *vs_source = readShader(vertexShaderFileName.c_str());
+    std::string fragmentShaderFileName(Environment::getDataDir()+"/"+fragment_shaders[i]);
+    char *fs_source = readShader(fragmentShaderFileName.c_str());
     
     // Loader shader sources
     glShaderSource(vert, 1, (const char**)&vs_source, NULL);
