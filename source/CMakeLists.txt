@@ -1,9 +1,19 @@
 cmake_minimum_required(VERSION 2.8)
 set(EXE_NAME portal)
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+
+
 
 project(${EXE_NAME})
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
+
+find_package(CXX11 REQUIRED)
+set(CMAKE_CXX_FLAGS "${CXX11_FLAGS} ${CMAKE_CXX_FLAGS}")
+
+
+
 link_libraries(GLEW GL GLU assimp SDL2 SDL2_mixer)
 
 add_executable(${EXE_NAME} 
