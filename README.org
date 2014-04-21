@@ -76,6 +76,8 @@ in the root directory of the downloaded source.
 
 If this produces no error you have built the binary and should be able to start GlPortal by typing in:
 ./portal
+
+If you get errors try running cmake source again. 
 ** Keep me posted
 This does not work for you? Help us figure out what we missed to make this work on 
 your system.
