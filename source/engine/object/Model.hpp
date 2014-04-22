@@ -13,8 +13,6 @@
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 
-#include <FreeImage.h>
-
 
 #include <iostream>
 
