@@ -1,4 +1,6 @@
 #include "Environment.hpp"
+#include "Path.hpp"
+
 #include <stdexcept>
 
 using namespace std;
@@ -19,7 +21,11 @@ namespace glPortal {
       }
       // default installation dir
       if (datadir->empty()) {
+#ifndef _WIN32
         *datadir = "/usr/share/glportal/data";
+#else
+        *datadir = "C:\\glportal";
+#endif
       }
       initializeConfig();
     }
@@ -43,9 +49,9 @@ namespace glPortal {
     
     void Environment::initializeConfig(){
       try{
-        config = new ConfigFileParser(getDataDir() + "/private.cfg");
+        config = new ConfigFileParser(Path::FromUnixPath(getDataDir() + "/private.cfg"));
       } catch (const std::invalid_argument& e){
-        config = new ConfigFileParser(getDataDir() + "/main.cfg");
+        config = new ConfigFileParser(Path::FromUnixPath(getDataDir() + "/main.cfg"));
       }
     }
     
