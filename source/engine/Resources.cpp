@@ -1,7 +1,10 @@
 #include <GL/glew.h>
 // Needs to be imported before Resource.hpp as it includes gl.h
 #include "Resources.hpp"
-#include "../Game.hpp"
+#include "Game.hpp"
+#include "Path.hpp"
+
+
 #include <fstream>
 #include "stb_image.c"
 
@@ -27,7 +30,7 @@ static const char *texture_files[NUM_TEXTURES] = {
  */
 void Resources::loadTextures() {
   for(int i = 0; i < NUM_TEXTURES; i++) {
-    std::string textureName(Environment::getDataDir()+"/"+texture_files[i]);
+    std::string textureName(Path::FromUnixPath(Environment::getDataDir()+"/"+texture_files[i]));
     textures[i] = createTexture(textureName.c_str());
   }
 }
@@ -65,9 +68,9 @@ void Resources::compileShaders() {
     frag = glCreateShader(GL_FRAGMENT_SHADER);
     
     // Read shaders from files
-    std::string vertexShaderFileName(Environment::getDataDir()+"/"+vertex_shaders[i]);
+    std::string vertexShaderFileName(Path::FromUnixPath(Environment::getDataDir()+"/"+vertex_shaders[i]));
     char *vs_source = readShader(vertexShaderFileName.c_str());
-    std::string fragmentShaderFileName(Environment::getDataDir()+"/"+fragment_shaders[i]);
+    std::string fragmentShaderFileName(Path::FromUnixPath(Environment::getDataDir()+"/"+fragment_shaders[i]));
     char *fs_source = readShader(fragmentShaderFileName.c_str());
     
     // Loader shader sources

@@ -1,8 +1,9 @@
 
-include_directories(lib engine)
+include_directories(lib engine ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(${EXE_NAME} 
-  Main.cpp Game.cpp engine/gui/GameScreen.cpp engine/Resources.cpp engine/StringConverter.cpp 
+  Main.cpp Game.cpp Path.cpp
+  engine/gui/GameScreen.cpp engine/Resources.cpp engine/StringConverter.cpp 
   engine/gui/Character.cpp  engine/gui/Font.cpp engine/tools/Timer.cpp
   engine/object/Model.cpp engine/object/Mesh.cpp
   map/MapFileParser.cpp
