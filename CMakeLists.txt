@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.10)#for FindGLEW
 set(EXE_NAME portal)
 set(CMAKE_BUILD_TYPE Debug)
 
