@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.10)#for FindGLEW
-set(EXE_NAME portal)
+set(EXE_NAME glportal)
 
 if ( NOT DEFINED CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Build type" )
