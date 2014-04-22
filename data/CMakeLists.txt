@@ -1,2 +1,2 @@
 
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION /usr/share/glportal)
+install ( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION share/glportal )
