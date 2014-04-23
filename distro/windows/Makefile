@@ -35,7 +35,7 @@ glportal-zip: glportal-install
 	cp $(MINGW_PREFIX)/bin/SDL2_mixer.dll $(GLPORTAL_ZIP)
 	cp $(MINGW_PREFIX)/bin/libassimp.dll $(GLPORTAL_ZIP)
 	cp $(MINGW_PREFIX)/bin/glew32.dll $(GLPORTAL_ZIP)
-	bsdtar cf glportal.zip --format zip -C $(GLPORTAL_ZIP) .
+	bsdtar cf glportal.zip --format zip -C $(GLPORTAL_BUILD) glportal
 	
 clean:
 	rm -rf $(GLPORTAL_BUILD)
