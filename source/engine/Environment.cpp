@@ -24,7 +24,7 @@ namespace glPortal {
 #ifndef _WIN32
         *datadir = "/usr/share/glportal/data";
 #else
-        *datadir = "C:\\glportal";
+        *datadir = "data";
 #endif
       }
       initializeConfig();
