@@ -19,7 +19,7 @@ add_executable(${EXE_NAME}
 target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
 install ( TARGETS ${EXE_NAME} DESTINATION bin )
 
-add_executable(map
+add_executable(map EXCLUDE_FROM_ALL
   map/Main.cpp map/MapToWavefront.cpp
   )
 
