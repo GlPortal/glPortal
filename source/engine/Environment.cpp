@@ -19,6 +19,7 @@ namespace glPortal {
           *datadir = std::string(argv[i + 1]);
         }
       }
+
       // default installation dir
       if (datadir->empty()) {
 #ifndef _WIN32
