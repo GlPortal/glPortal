@@ -4,8 +4,9 @@
 namespace glPortal {
   namespace engine {
     namespace object {
-      Model::Model(const string & filename) {
-	      Assimp::Importer importer;
+      Model::Model(const string & filename)
+      : importer(new Assimp::Importer())
+      {
 	      scene = 
 		importer.ReadFile(filename,
 				   aiProcess_Triangulate            |
