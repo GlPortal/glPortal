@@ -85,8 +85,8 @@ private:
   int width, height;
   float sensitivity;
   bool keystates[KEY_BUFFER];
-  bool paused = false;	
-  bool nmap_enabled = true; 
+  bool paused;	
+  bool nmap_enabled; 
   float fade;  	
   Player player;
   GameMap gameMap;
@@ -95,7 +95,7 @@ private:
   Model *barrel;
   Portal portals[2];  /**< Array of player's portal */
   Shot shots[2];		/**< Array of shots */
-  bool jetpack = true;
+  bool jetpack;
   int currentLevel;
   vector<string> mapList;
 };
