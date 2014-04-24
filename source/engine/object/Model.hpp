@@ -32,6 +32,7 @@ namespace glPortal {
             private:
 	      vector<Mesh*> meshes;
 	      const aiScene* scene;
+              Assimp::Importer *importer;
       };
     }
   }
