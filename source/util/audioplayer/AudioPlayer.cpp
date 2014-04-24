@@ -26,8 +26,7 @@ namespace glPortal {
       }
 
       void AudioPlayer::playByFileName(std::string filename) {
-        std::string audioPath(Environment::getDataDir() + "/" + filename);
-	music = Mix_LoadMUS(audioPath.c_str());
+	music = Mix_LoadMUS(filename.c_str());
 	if( music == NULL )
 	  {
 	    printf( "Failed to load Music: SDL_mixer Error: %s\n", Mix_GetError() );
