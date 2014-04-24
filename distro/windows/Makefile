@@ -5,7 +5,8 @@ MINGW_PREFIX=/usr/$(TARGET)
 GLPORTAL_SRC = $(PWD)/../..
 GLPORTAL_BUILD = $(GLPORTAL_SRC)/build-$(TARGET)
 GLPORTAL_PREFIX = $(GLPORTAL_BUILD)/install
-GLPORTAL_ZIP = $(GLPORTAL_BUILD)/glportal
+GLPORTAL_ZIP = glportal-win32-$(ARCH)
+GLPORTAL_ZIP_DIR = $(GLPORTAL_BUILD)/$(GLPORTAL_ZIP)
 
 all: glportal-zip
 
@@ -24,21 +25,21 @@ glportal-install: glportal-build
 	$(TARGET)-strip $(GLPORTAL_PREFIX)/bin/glportal.exe
 	
 glportal-zip: glportal-install
-	-mkdir -p $(GLPORTAL_ZIP)
-	cp $(GLPORTAL_PREFIX)/bin/glportal.exe $(GLPORTAL_ZIP)
-	cp -r $(GLPORTAL_PREFIX)/share/glportal/data $(GLPORTAL_ZIP)
-	cp $(MINGW_PREFIX)/bin/libwinpthread-1.dll $(GLPORTAL_ZIP)
-	cp $(MINGW_PREFIX)/bin/libgcc_s_*.dll $(GLPORTAL_ZIP)
-	cp $(MINGW_PREFIX)/bin/libstdc++-6.dll $(GLPORTAL_ZIP)
-	cp $(MINGW_PREFIX)/bin/zlib1.dll $(GLPORTAL_ZIP)
-	cp $(MINGW_PREFIX)/bin/SDL2.dll $(GLPORTAL_ZIP)
-	cp $(MINGW_PREFIX)/bin/SDL2_mixer.dll $(GLPORTAL_ZIP)
-	cp $(MINGW_PREFIX)/bin/libassimp.dll $(GLPORTAL_ZIP)
-	cp $(MINGW_PREFIX)/bin/glew32.dll $(GLPORTAL_ZIP)
-	cp $(MINGW_PREFIX)/bin/libogg-0.dll $(GLPORTAL_ZIP)
-	cp $(MINGW_PREFIX)/bin/libvorbis-0.dll $(GLPORTAL_ZIP)
-	cp $(MINGW_PREFIX)/bin/libvorbisfile-3.dll $(GLPORTAL_ZIP)
-	bsdtar cf glportal.zip --format zip -C $(GLPORTAL_BUILD) glportal
+	-mkdir -p $(GLPORTAL_ZIP_DIR)
+	cp $(GLPORTAL_PREFIX)/bin/glportal.exe $(GLPORTAL_ZIP_DIR)
+	cp -r $(GLPORTAL_PREFIX)/share/glportal/data $(GLPORTAL_ZIP_DIR)
+	cp $(MINGW_PREFIX)/bin/libwinpthread-1.dll $(GLPORTAL_ZIP_DIR)
+	cp $(MINGW_PREFIX)/bin/libgcc_s_*.dll $(GLPORTAL_ZIP_DIR)
+	cp $(MINGW_PREFIX)/bin/libstdc++-6.dll $(GLPORTAL_ZIP_DIR)
+	cp $(MINGW_PREFIX)/bin/zlib1.dll $(GLPORTAL_ZIP_DIR)
+	cp $(MINGW_PREFIX)/bin/SDL2.dll $(GLPORTAL_ZIP_DIR)
+	cp $(MINGW_PREFIX)/bin/SDL2_mixer.dll $(GLPORTAL_ZIP_DIR)
+	cp $(MINGW_PREFIX)/bin/libassimp.dll $(GLPORTAL_ZIP_DIR)
+	cp $(MINGW_PREFIX)/bin/glew32.dll $(GLPORTAL_ZIP_DIR)
+	cp $(MINGW_PREFIX)/bin/libogg-0.dll $(GLPORTAL_ZIP_DIR)
+	cp $(MINGW_PREFIX)/bin/libvorbis-0.dll $(GLPORTAL_ZIP_DIR)
+	cp $(MINGW_PREFIX)/bin/libvorbisfile-3.dll $(GLPORTAL_ZIP_DIR)
+	bsdtar cf $(GLPORTAL_ZIP).zip --format zip -C $(GLPORTAL_BUILD) $(GLPORTAL_ZIP)
 	
 clean:
 	rm -rf $(GLPORTAL_BUILD)
