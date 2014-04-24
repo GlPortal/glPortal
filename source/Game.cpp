@@ -14,7 +14,15 @@ using namespace glPortal::engine::gui;
 
 bool Game::DEBUG = false;
 
-Game::Game(){
+Game::Game()
+: sensitivity(0.)
+, paused(false)
+, nmap_enabled(false)
+, jetpack(true)
+, currentLevel(0)
+, barrel(0)
+, fade(0.)
+{
   config = Environment::getConfigPointer();
   //Load the configuration settings
   try{
@@ -28,6 +36,7 @@ Game::Game(){
   this->timer.start();
   ListFileParser* listParser = new ListFileParser();
   mapList = listParser->getListFromFile( Path::FromUnixPath(Environment::getDataDir()+"/maps/levels.lst").c_str());
+  
   this->nextLevel();
 }
 
@@ -201,12 +210,16 @@ void Game::nextLevel() {
     shots[i].active = false;		
   }
 
+
   if(mapList.size() <= currentLevel){
     gameMap.flush();
     gameMap.setIsLastScreen();
   } else {
+    
     MapFileParser parser;
-    gameMap = parser.getMapFromFile(Path::FromUnixPath(Environment::getDataDir()+"/maps/" + mapList.at(currentLevel) + ".map"));
+    std::string mapFile(Path::FromUnixPath(Environment::getDataDir()+"/maps/" + mapList.at(currentLevel) + ".map"));
+
+    gameMap = parser.getMapFromFile(mapFile);
     respawn();
     currentLevel++;
   }

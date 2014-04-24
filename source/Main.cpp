@@ -3,6 +3,7 @@
 #include <iostream>
 #include "engine/Box.hpp"
 #include "engine/Environment.hpp"
+#include "Path.hpp"
 
 using namespace glPortal::map;
 using namespace glPortal::engine;
@@ -36,7 +37,8 @@ void loop(Game & game, Window & window) {
   int width = window.getWidth();
   AudioPlayer* audioPlayer = new AudioPlayer();
   audioPlayer->init();
-  audioPlayer->playByFileName("audio/music/track1.ogg");
+  string audioFile(Path::FromUnixPath(Environment::getDataDir()+"/audio/music/track1.ogg"));
+  audioPlayer->playByFileName(audioFile);
   audioPlayer->play();    
   while (!quit) {
     while(SDL_PollEvent(&event)) {
