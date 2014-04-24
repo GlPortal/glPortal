@@ -5,16 +5,17 @@ namespace glPortal {
   namespace engine {
     namespace object {
       Model::Model(const string & filename) {
-	      importer = new Assimp::Importer();
+	      Assimp::Importer importer;
 	      scene = 
-		importer->ReadFile(filename,
+		importer.ReadFile(filename,
 				   aiProcess_Triangulate            |
 				   aiProcess_GenSmoothNormals	    |
 				   aiProcess_JoinIdenticalVertices  |
 				   aiProcess_ImproveCacheLocality   |
 				   aiProcess_SortByPType);
-
-	      for(unsigned int i = 0; i < scene->mNumMeshes; i++)
+        if (!scene)
+          throw std::invalid_argument("File " + filename + " not found.");
+                for(unsigned int i = 0; i < scene->mNumMeshes; i++)
 	        {
 	          Mesh* tempMesh = new 
 		    Mesh(scene->mMeshes[i]->mNumVertices,

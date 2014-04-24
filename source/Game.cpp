@@ -3,6 +3,8 @@
 #include "engine/Resources.hpp"
 #include "engine/Box.hpp"
 #include "util/ListFileParser.hpp"
+#include "Path.hpp"
+
 #include <stdexcept>
 
 using namespace glPortal::engine;
@@ -25,7 +27,7 @@ Game::Game(){
   this->timer = *gameTimer;
   this->timer.start();
   ListFileParser* listParser = new ListFileParser();
-  mapList = listParser->getListFromFile("data/maps/levels.lst");
+  mapList = listParser->getListFromFile( Path::FromUnixPath(Environment::getDataDir()+"/maps/levels.lst").c_str());
   this->nextLevel();
 }
 
@@ -204,7 +206,7 @@ void Game::nextLevel() {
     gameMap.setIsLastScreen();
   } else {
     MapFileParser parser;
-    gameMap = parser.getMapFromFile("data/maps/" + mapList.at(currentLevel) + ".map");
+    gameMap = parser.getMapFromFile(Path::FromUnixPath(Environment::getDataDir()+"/maps/" + mapList.at(currentLevel) + ".map"));
     respawn();
     currentLevel++;
   }

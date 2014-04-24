@@ -18,8 +18,8 @@ namespace glPortal {
     ConfigFileParser::ConfigFileParser(std::string filename) {
       std::ifstream file(filename, std::ifstream::in);
       std::string line, string;
-      if(!file) {
-	      throw std::invalid_argument("File " + filename + " not found.");
+      if(!file.is_open()) {
+        throw std::invalid_argument("File " + filename + " not found.");
       } else {
 	      while(file.good()) {
 	        std::getline(file, line);

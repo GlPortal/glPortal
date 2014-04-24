@@ -7,8 +7,10 @@
 #include "../GameMap.hpp"
 #include "../engine/Resources.hpp"
 #include "../engine/StringConverter.hpp"
+#include "Environment.hpp"
 #include "../Exception.hpp"
 #include "../util/Vector3f.hpp"
+#include "Path.hpp"
 
 namespace glPortal {
   namespace map{
@@ -73,7 +75,7 @@ namespace glPortal {
 	      barrelPosition[i] = StringConverter::stringStreamToFloat(stringStream);
 	    }
 	    barrelPosition[3] = 1.f; // Set as positioned light
-	    Model* barrelModel = new Model("data/objects/plastic_barrel/small_barrel.obj");
+	    Model* barrelModel = new Model(Path::FromUnixPath(Environment::getDataDir() + "/objects/plastic_barrel/small_barrel.obj"));
 	    barrelModel->setPosition(0, 0, 0);
 
 	    this->gameMap.addObject(*barrelModel);
