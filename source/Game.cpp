@@ -15,14 +15,18 @@ using namespace glPortal::engine::gui;
 bool Game::DEBUG = false;
 
 Game::Game()
-: sensitivity(0.)
+: config(0)
+, sensitivity(0.)
 , paused(false)
 , nmap_enabled(false)
-, jetpack(true)
-, currentLevel(0)
 , barrel(0)
 , fade(0.)
-{
+, jetpack(true)
+, currentLevel(0)
+{  
+  for(int i = 0; i < KEY_BUFFER; ++i) {
+    keystates[i] = false;
+  }
   config = Environment::getConfigPointer();
   //Load the configuration settings
   try{
@@ -38,6 +42,7 @@ Game::Game()
   mapList = listParser->getListFromFile( Path::FromUnixPath(Environment::getDataDir()+"/maps/levels.lst").c_str());
   
   this->nextLevel();
+
 }
 
 /**
