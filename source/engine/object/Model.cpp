@@ -8,7 +8,7 @@ namespace glPortal {
       : importer(new Assimp::Importer())
       {
 	      scene = 
-		importer.ReadFile(filename,
+		importer->ReadFile(filename,
 				   aiProcess_Triangulate            |
 				   aiProcess_GenSmoothNormals	    |
 				   aiProcess_JoinIdenticalVertices  |
