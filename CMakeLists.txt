@@ -18,7 +18,7 @@ find_package(GLEW REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS})
 set( PORTAL_LIBRARIES ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} )
 
-find_package(Assimp NO_MODULE REQUIRED)
+find_package(Assimp REQUIRED)
 include_directories(${ASSIMP_INCLUDE_DIRS})
 list( APPEND PORTAL_LIBRARIES ${ASSIMP_LIBRARIES} )
 
