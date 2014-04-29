@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.10)#for FindGLEW
+cmake_minimum_required(VERSION 2.8)
 set(EXE_NAME glportal)
 
 if ( NOT DEFINED CMAKE_BUILD_TYPE )
