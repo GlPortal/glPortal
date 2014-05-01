@@ -61,7 +61,7 @@ void Game::respawn() {
 
 void Game::update() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  float dt = FRAMETIME_SECONDS;
+  float dt = Environment::FRAMETIME_SECONDS;
   
   //Get delta mouse movement
   int mousedx, mousedy;

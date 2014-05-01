@@ -71,22 +71,22 @@ void Player::setOffGround(){
 }
 
 void Player::moveForward(){
-  velocity->z -= cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
-  velocity->x -= sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity->z -= cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
+  velocity->x -= sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
 }
 
 void Player::moveBackward(){
-  velocity->z += cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
-  velocity->x += sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity->z += cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
+  velocity->x += sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
 }
 
 void Player::moveLeft(){
-  velocity->x -= cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
-  velocity->z += sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity->x -= cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
+  velocity->z += sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
 }
 
 void Player::moveRight(){
-  velocity->x += cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
-  velocity->z -= sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAME_TIME/1000;
+  velocity->x += cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
+  velocity->z -= sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
 }
 
