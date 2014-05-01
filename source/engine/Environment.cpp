@@ -7,6 +7,7 @@ using namespace std;
 
 namespace glPortal {
   namespace engine {
+    const float Environment::FRAMETIME_SECONDS = 0.017f; // FRAMETIME in seconds. Used for updating game logic
     std::string * Environment::datadir = 0;
     ConfigFileParser *Environment::config = NULL;
     

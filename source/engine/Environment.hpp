@@ -18,6 +18,7 @@ namespace glPortal {
       static ConfigFileParser *config;
       static std::string * datadir;
     public:
+      static const float FRAMETIME_SECONDS;
       static void init(int argc, char **argv);
       static ConfigFileParser & getConfig();
       static ConfigFileParser * getConfigPointer();

@@ -1,9 +1,6 @@
 #ifndef __GAME_HPP
 #define __GAME_HPP
 
-#define FRAMETIME 17 // Delay between updates (FPS = 1/FRAMETIME)
-#define FRAMETIME_SECONDS 0.017f // FRAMETIME in seconds. Used for updating game logic
-
 #include <GL/glew.h>
 #include <GL/glext.h>
 
