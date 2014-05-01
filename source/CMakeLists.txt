@@ -1,13 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
-set(EXE_NAME portal)
-set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
-project(${EXE_NAME})
-link_libraries(GLEW GL GLU assimp SDL2 SDL2_mixer)
+include_directories(lib engine ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(${EXE_NAME} 
-  Main.cpp Game.cpp engine/gui/GameScreen.cpp engine/Resources.cpp engine/StringConverter.cpp 
+  Main.cpp Game.cpp Path.cpp
+  engine/gui/GameScreen.cpp engine/Resources.cpp engine/StringConverter.cpp 
   engine/gui/Character.cpp  engine/gui/Font.cpp engine/tools/Timer.cpp
   engine/object/Model.cpp engine/object/Mesh.cpp
   engine/renderer/GameMapRenderer.cpp 
@@ -21,12 +17,18 @@ add_executable(${EXE_NAME}
   Shot.cpp Portal.cpp 
   Window.cpp Exception.cpp
   )
+target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
+install ( TARGETS ${EXE_NAME} DESTINATION bin )
 
-add_executable(map
+add_executable(map EXCLUDE_FROM_ALL
   map/Main.cpp map/MapToWavefront.cpp
   )
 
-add_custom_target(run COMMAND ./${EXE_NAME})
+add_custom_target(run COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXE_NAME}${CMAKE_EXECUTABLE_SUFFIX} -datadir ${CMAKE_SOURCE_DIR}/data )
 add_custom_target(capture COMMAND avconv -f alsa -f x11grab -r 30 -s 1680x1050 -i :0.0+0,0 -acodec libfaac -vcodec libx264 -pre:0 lossless_ultrafast -threads 0 video.mkv)
 add_custom_target(compressVideo COMMAND avconv -i video.mkv -s 1280x800 -c:v libx264 smallVideo.mkv)
+<<<<<<< HEAD
 include_directories("./lib" "/usr/local/include" "~/system/bin/libs/bullet-2.82-r2704/src")
+=======
+
+>>>>>>> a60bd0cd3b5e787e1f8ed99d7077683a380f61b3

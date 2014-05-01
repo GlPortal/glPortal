@@ -17,16 +17,11 @@
 
 using namespace glPortal::engine;
 
-void loop();
+void loop(Game & game, Window & window);
 void draw();
 void registerCallbacks();
-void setup(int *, char **);
+void setup(int argc, char * argv[]);
 void resize(int, int);
 void resetKeyStates();
-int width, height;	
-int mousex, mousey; 
-Player player;
-GameMap gameMap;
-Game game;
-Window window;
+
 #endif

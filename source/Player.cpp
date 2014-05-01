@@ -48,10 +48,8 @@ void Player::setHasWon(){
   state = PS_WON;
 }
 
-bool Player::hasWon(){
-  if(state == PS_WON){
-    return true;
-  }
+bool Player::hasWon() {
+  return (state == PS_WON);
 }
 
 void Player::destroy() {
