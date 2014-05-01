@@ -16,12 +16,13 @@ namespace glPortal {
     class Environment{
     private:
       static ConfigFileParser *config;
+      static std::string * datadir;
     public:
-      static const float FRAME_TIME;
-      static void init();
+      static void init(int argc, char **argv);
       static ConfigFileParser & getConfig();
       static ConfigFileParser * getConfigPointer();
       static void initializeConfig();
+      static std::string getDataDir();
     };
   }
 }

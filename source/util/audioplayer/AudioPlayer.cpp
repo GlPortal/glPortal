@@ -1,9 +1,15 @@
 #include "AudioPlayer.hpp"
+#include "Environment.hpp"
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <cstdlib>
 #include <stdexcept>
+
+
+using namespace glPortal::engine;
+
+
 namespace glPortal {
   namespace util{
     namespace audioplayer{
@@ -20,7 +26,7 @@ namespace glPortal {
       }
 
       void AudioPlayer::playByFileName(std::string filename) {
-	music = Mix_LoadMUS("./data/audio/music/track1.ogg");
+	music = Mix_LoadMUS(filename.c_str());
 	if( music == NULL )
 	  {
 	    printf( "Failed to load Music: SDL_mixer Error: %s\n", Mix_GetError() );

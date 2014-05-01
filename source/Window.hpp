@@ -17,7 +17,7 @@ using namespace glPortal::engine;
 
 class Window {
 public:
-  void setup(int *, char **);
+  void setup(int argc, char * argv[]);
   void enableGlFeatures();
   void swapBuffer();
   int getWidth();

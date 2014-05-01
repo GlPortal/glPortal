@@ -20,7 +20,6 @@ void GameMap::setBarrelPosition(GLfloat (&position)[4]) {
   this->barrelPosition[1] = position[1];
   this->barrelPosition[2] = position[2];
   this->barrelPosition[3] = position[3];
-  this->barrelPosition[4] = position[4];
 }
 
 GLfloat* GameMap::getBarrelPosition() {

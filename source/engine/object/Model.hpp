@@ -13,8 +13,6 @@
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 
-#include <FreeImage.h>
-
 
 #include <iostream>
 
@@ -34,7 +32,7 @@ namespace glPortal {
             private:
 	      vector<Mesh*> meshes;
 	      const aiScene* scene;
-	      Assimp::Importer* importer;
+              Assimp::Importer *importer;
       };
     }
   }

@@ -8,7 +8,7 @@
 #include "engine/Environment.hpp"
 #include <stdexcept>
 
-void Window::setup(int *argc, char **argv) {
+void Window::setup(int argc, char * argv[]) {
   ConfigFileParser config = Environment::getConfig();
   SDL_Init(SDL_INIT_EVERYTHING);
   

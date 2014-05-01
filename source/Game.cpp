@@ -4,6 +4,8 @@
 #include "engine/Box.hpp"
 #include "engine/renderer/GameMapRenderer.hpp"
 #include "util/ListFileParser.hpp"
+#include "Path.hpp"
+
 #include <stdexcept>
 
 using namespace glPortal::engine;
@@ -14,8 +16,19 @@ using namespace glPortal::engine::renderer;
 
 bool Game::DEBUG = false;
 
-Game::Game(){
-  mapRenderer = new GameMapRenderer(std::addressof(gameMap));
+Game::Game()
+: config(0)
+, sensitivity(0.)
+, paused(false)
+, nmap_enabled(false)
+, barrel(0)
+, fade(0.)
+, jetpack(true)
+, currentLevel(0)
+{  
+  for(int i = 0; i < KEY_BUFFER; ++i) {
+    keystates[i] = false;
+  }
   config = Environment::getConfigPointer();
   //Load the configuration settings
   try{
@@ -28,7 +41,10 @@ Game::Game(){
   this->timer = *gameTimer;
   this->timer.start();
   ListFileParser* listParser = new ListFileParser();
-  mapList = listParser->getListFromFile("data/maps/levels.lst");
+  mapList = listParser->getListFromFile( Path::FromUnixPath(Environment::getDataDir()+"/maps/levels.lst").c_str());
+  
+  mapRenderer = new GameMapRenderer(std::addressof(gameMap));
+  
   this->nextLevel();
 }
 
@@ -188,12 +204,16 @@ void Game::nextLevel() {
     shots[i].active = false;		
   }
 
+
   if(mapList.size() <= currentLevel){
     gameMap.flush();
     gameMap.setIsLastScreen();
   } else {
+    
     MapFileParser parser;
-    gameMap = parser.getMapFromFile("data/maps/" + mapList.at(currentLevel) + ".map");
+    std::string mapFile(Path::FromUnixPath(Environment::getDataDir()+"/maps/" + mapList.at(currentLevel) + ".map"));
+
+    gameMap = parser.getMapFromFile(mapFile);
     respawn();
     currentLevel++;
   }
