@@ -8,8 +8,7 @@ namespace glPortal {
       Model::Model(const string & filename)
       : importer(new Assimp::Importer())
       {
-	      scene = 
-		importer->ReadFile(filename,
+	      scene = importer->ReadFile(filename,
 				   aiProcess_Triangulate            |
 				   aiProcess_GenSmoothNormals	    |
 				   aiProcess_JoinIdenticalVertices  |
@@ -19,12 +18,11 @@ namespace glPortal {
           throw std::invalid_argument("File " + filename + " not found.");
                 for(unsigned int i = 0; i < scene->mNumMeshes; i++)
 	        {
-	          Mesh* tempMesh = new 
-		    Mesh(scene->mMeshes[i]->mNumVertices,
-			 scene->mMeshes[i]->mVertices,
-			 scene->mMeshes[i]->mNormals,
-			 scene->mMeshes[i]->mNumFaces,
-			 scene->mMeshes[i]->mFaces);
+	          Mesh* tempMesh = new Mesh(scene->mMeshes[i]->mNumVertices,
+                                      scene->mMeshes[i]->mVertices,
+                                      scene->mMeshes[i]->mNormals,
+                                      scene->mMeshes[i]->mNumFaces,
+                                      scene->mMeshes[i]->mFaces);
 		
 	          meshes.push_back(tempMesh);
 	        }
@@ -33,18 +31,16 @@ namespace glPortal {
       }
 
       void Model::draw() {
-	for(unsigned int i = 0; i < meshes.size(); i++) {
+        for(unsigned int i = 0; i < meshes.size(); i++) {
           Mesh *mesh = meshes[i];	    
           glEnableClientState(GL_NORMAL_ARRAY);
           glEnableClientState(GL_VERTEX_ARRAY);
           glNormalPointer(GL_FLOAT, 0, mesh->normals);
-          glColor3f(0.0f,0.0f,1.0f);   
           glVertexPointer(3, GL_FLOAT, 0, mesh->vertices);
           glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, mesh->indices);
           glDisableClientState(GL_VERTEX_ARRAY);
           glDisableClientState(GL_NORMAL_ARRAY);
-          glColor3f(1,1,1);
-	}
+        }
       }
 
       void Model::setPosition(int x, int y, int z){

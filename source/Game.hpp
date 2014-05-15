@@ -61,7 +61,6 @@ public:
   Shot *getShots() { return shots; } /**< Gets the list of shots */
   //Refactoring Methods
   void setWindow(Window &window);
-  void setHeightWidth(int height, int width);
   bool isPaused();
   void unpause();
   void pause();
@@ -70,7 +69,6 @@ public:
 private:
   ConfigFileParser * config;
   GameMapRenderer  * mapRenderer;
-  int width, height;
   float sensitivity;
   bool keystates[KEY_BUFFER];
   bool paused;
