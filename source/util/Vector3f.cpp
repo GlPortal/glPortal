@@ -9,6 +9,12 @@ Vector3f::Vector3f(float x, float y, float z) {
   this->z = z;
 }
 
+Vector3f *Vector3f::set(float x, float y, float z) {
+  this->x = x;
+  this->y = y;
+  this->z = z;
+}
+
 Vector3f *Vector3f::add(Vector3f v) {
   this->x += v.x;
   this->y += v.y;
@@ -23,11 +29,15 @@ Vector3f *Vector3f::subtract(Vector3f v) {
   return this;
 }
 
+float Vector3f::length() {
+  return sqrt(x*x + y*y + z*z);
+}
+
 Vector3f *Vector3f::normalize() {
-  float length = sqrt(x*x + y*y + z*z);
-  this->x /= length;
-  this->y /= length;
-  this->z /= length;
+  float l = length();
+  this->x /= l;
+  this->y /= l;
+  this->z /= l;
   return this;
 }
 

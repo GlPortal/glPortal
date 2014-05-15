@@ -22,7 +22,7 @@ class Portal; // Forward declaration
  */
 class GameMap {
 public:
-  void setLightPosition(float x, float y, float z);
+  void addLight(Light light);
   void setBarrelPosition(GLfloat (&position)[4]);
   Vector3f getStartPosition() {return startPos;}
   Vector3f getEndPosition() {return endPos;}
@@ -59,7 +59,8 @@ public:
   std::vector<Box> walls;	/**< Vector of all walls in the gameMap*/
   std::vector<Box> acid;	/**< Vector of all acid pools in the gameMap*/
   std::vector<Model> objects;
-  Light light;            /**< Light in the gameMap*/
+  Light light1, light2, light3;
+  std::vector<Light> lights;
   GLfloat barrelPosition[4];
   Vector3f startPos;		/**< Position where the player spawns in the gameMap*/
   Vector3f endPos;	    /**< Position of the goal in the gameMap*/
