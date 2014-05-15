@@ -4,13 +4,13 @@
 namespace glPortal {
   namespace engine {
     namespace tools {
-      Timer::Timer(){}
+      Timer::Timer() {}
 
-      void Timer::start(){
+      void Timer::start() {
 	      std::time_t currentTime = std::time(NULL);
 	      this->startTime = currentTime;
       }
-      void Timer::stop(){
+      void Timer::stop() {
 	      std::time_t currentTime = std::time(NULL);
 	      this->stopTime = currentTime;
       }
@@ -27,7 +27,7 @@ namespace glPortal {
 	      return resultString;
       }
 
-      std::string Timer::getStoppedTimeString(){	
+      std::string Timer::getStoppedTimeString() {	
 	      struct tm * timeinfo;
 	      std::time_t timeDifference = this->stopTime - this->startTime;
 	      char date[20];

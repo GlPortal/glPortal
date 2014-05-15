@@ -15,27 +15,23 @@
  * @param gameMapThe current gameMap
  */
 void Portal::place(float x, float y, float z, PORTAL_DIR dir, GameMap& gameMap) {
-  float nx, ny, nz; // New coordinates
-  nx = round(x);
-  ny = round(y-0.25f)+0.25f;
-  nz = round(z);
-
   // Calculate in front of portal
   Box bbox;
   if(dir == PD_FRONT) {
-    bbox.set(nx-0.74f, ny-1.24f, nz+0.01f, nx+0.74f, ny+1.24f, nz+1.49f);
+    bbox.set(x-0.74f, y-1.24, z+0.01f, x+0.74f, y+1.24, z+1.f);
   } else if (dir == PD_BACK) {
-    bbox.set(nx-0.74f, ny-1.24f, nz-1.49f, nx+0.74f, ny+1.24f, nz-0.01f);
+    bbox.set(x-0.74f, y-1.24, z-1.f, x+0.74f, y+1.24, z-0.01f);
   } else if (dir == PD_RIGHT) {
-    bbox.set(nx+0.01f, ny-1.24f, nz-0.74f, nx+1.49f, ny+1.24f, nz+0.74f);
+    bbox.set(x+0.01f, y-1.24, z-0.74, x+1.f, y+1.24, z+0.74);
   } else if (dir == PD_LEFT) {
-    bbox.set(nx-1.49f, ny-1.24f, nz-0.74f, nx-0.01f, ny+1.24f, nz+0.74f);
+    bbox.set(x-1.f, y-1.24, z-0.74, x-0.01f, y+1.24, z+0.74);
   }
+  
   // Only place portal if nothing is in front of it
   if(gameMap.collidesWithWall(bbox) == false && gameMap.collidesWithAcid(bbox) == false) {
-    this->position.x = nx;
-    this->position.y = ny;
-    this->position.z = nz;
+    this->position.x = x;
+    this->position.y = y;
+    this->position.z = z;
     this->dir = dir;
     active = true;
   }
@@ -54,13 +50,13 @@ void Portal::place(float x, float y, float z, PORTAL_DIR dir, GameMap& gameMap) 
 void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& gameMap) {
   float dist[4];
   int min;
-
+  
   // Calculate distance from shot to planes
-  dist[0] = hitx - box.x1; // Distance from left face to x
-  dist[1] = box.x2 - hitx; // Distance from right face to x
-  dist[2] = hitz - box.z1; // Distance from back face to z
-  dist[3] = box.z2 - hitz; // Distance from front face to z
-
+  dist[0] = hitx - box.start.x; // Distance from left face to x
+  dist[1] = box.end.x - hitx; // Distance from right face to x
+  dist[2] = hitz - box.start.z; // Distance from back face to z
+  dist[3] = box.end.z - hitz; // Distance from front face to z
+  
   // Find smallest distance
   min = 0;	
   for(int i = 1; i < 4; i++) {
@@ -68,31 +64,57 @@ void Portal::placeOnBox(Box &box, float hitx, float hity, float hitz, GameMap& g
       min = i;
     }
   }
-
+  
   // Portal on the YZ-plane
   if(min <= 1) {
-    // Make sure box is wide enough
-    if(box.z2 - box.z1 < 2) return;
-
+    // If the box isnt big enough, dont place portal
+    if(box.end.z - box.start.z < 1.50 || box.end.y - box.start.y < 2.50) return;
+    // If the portal is on the edge, align it
+    if(hitz - box.start.z < 0.75) {
+      hitz = box.start.z + 0.75;
+    }
+    if(box.end.z - hitz < 0.75) {
+      hitz = box.end.z - 0.75;
+    }
+    if(hity - box.start.y < 1.25) {
+      hity = box.start.y + 1.25;
+    }
+    if(box.end.y - hity < 1.25) {
+      hity = box.end.y - 1.25;
+    }
+    
     // Left face
     if(min == 0) {
-      place(box.x1, hity, hitz, PD_LEFT, gameMap);
-      // Right face
+      place(box.start.x, hity, hitz, PD_LEFT, gameMap);
+    // Right face
     } else {
-      place(box.x2, hity, hitz, PD_RIGHT, gameMap);
+      place(box.end.x, hity, hitz, PD_RIGHT, gameMap);
     }
 
-    // Portal on the XY-plane
+  // Portal on the XY-plane
   } else {
-    // Make sure box is wide enough
-    if(box.x2 - box.x1 < 2.f) return;
-
+    // If the box isnt big enough, dont place portal
+    if(box.end.x - box.start.x < 1.50 || box.end.y - box.start.y < 2.50) return;
+    // If the portal is on the edge, align it
+    if(hitx - box.start.x < 0.75) {
+      hitx = box.start.x + 0.75;
+    }
+    if(box.end.x - hitx < 0.75) {
+      hitx = box.end.x - 0.75;
+    }
+    if(hity - box.start.y < 1.25) {
+      hity = box.start.y + 1.25;
+    }
+    if(box.end.y - hity < 1.25) {
+      hity = box.end.y - 1.25;
+    }
+    
     // Back face
     if(min == 2) {
-      place(hitx, hity, box.z1, PD_BACK, gameMap);
-      // Front Face
+      place(hitx, hity, box.start.z, PD_BACK, gameMap);
+    // Front Face
     } else {
-      place(hitx, hity, box.z2, PD_FRONT, gameMap);
+      place(hitx, hity, box.end.z, PD_FRONT, gameMap);
     }
   }
 }
@@ -108,15 +130,15 @@ bool Portal::inPortal(Box &box) {
   if(!active) return false;
 
   if(dir == PD_RIGHT || dir == PD_LEFT) {
-    if(box.z1 > position.z-0.75f && box.z2 < position.z+0.75f
-       && box.x1 < position.x && box.x2 > position.x
-       && box.y1 > position.y-1.25f && box.y2 < position.y+1.25f) {
+    if(box.start.z > position.z-0.75f && box.end.z < position.z+0.75f
+       && box.start.x < position.x && box.end.x > position.x
+       && box.start.y > position.y-1.25f && box.end.y < position.y+1.25f) {
       return true;
     }
   } else if(dir == PD_FRONT || dir == PD_BACK) {
-    if(box.x1 > position.x-0.75f && box.x2 < position.x+0.75f
-       && box.z1 < position.z && box.z2 > position.z
-       && box.y1 > position.y-1.25f && box.y2 < position.y+1.25f) {
+    if(box.start.x > position.x-0.75f && box.end.x < position.x+0.75f
+       && box.start.z < position.z && box.end.z > position.z
+       && box.start.y > position.y-1.25f && box.end.y < position.y+1.25f) {
       return true;
     }
   }
@@ -218,13 +240,24 @@ void Portal::drawOutline(PORTAL_COLOR color) {
   glTranslatef(position.x, position.y, position.z);
   glRotatef(getFromRotation(), 0,1,0);
 
-  // Bind blue of orange portal texture
-  if(color == PC_BLUE)
-    Resources::inst().bindTexture(TID_BLUEPORTAL);
-  else
-    Resources::inst().bindTexture(TID_ORANGEPORTAL);
+  //Portal material
+  float portal_diffuse[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+  float portal_emission[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, portal_diffuse);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, portal_emission);
 
-  Resources::inst().drawModel(MID_PORTAL_OUTLINE);
+  // Bind blue of orange portal texture
+  glEnable(GL_TEXTURE_2D);
+    if(color == PC_BLUE) {
+      Resources::inst().bindTexture(TID_BLUEPORTAL);
+    }
+    else {
+      Resources::inst().bindTexture(TID_ORANGEPORTAL);
+    }
+    
+    Resources::inst().drawModel(MID_PORTAL_OUTLINE);
+  glDisable(GL_TEXTURE_2D);
 
   glPopMatrix();
 }
+

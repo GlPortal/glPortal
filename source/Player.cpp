@@ -21,9 +21,7 @@ Player::Player() {
 }
 
 void Player::create(float x, float y, float z) {
-  position = new Vector3f(x, y, z);
-  rotation = new Vector3f(0, 0, 0);
-  velocity = new Vector3f(0, 0, 0);
+  position.set(x, y, z);
   onGround = false;
   state = PS_ALIVE;
 }
@@ -52,41 +50,35 @@ bool Player::hasWon() {
   return (state == PS_WON);
 }
 
-void Player::destroy() {
-  delete position;
-  delete rotation;
-  delete velocity;
-}
-
-bool Player::isOnGround(){ 
+bool Player::isOnGround() { 
   return this->onGround;
 }
 
-void Player::setOnGround(){
+void Player::setOnGround() {
   this->onGround = true;
 }
 
-void Player::setOffGround(){
+void Player::setOffGround() {
   this->onGround = false;
 }
 
-void Player::moveForward(){
-  velocity->z -= cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
-  velocity->x -= sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
+void Player::moveForward() {
+  velocity.z -= cos(rotation.y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
+  velocity.x -= sin(rotation.y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
 }
 
-void Player::moveBackward(){
-  velocity->z += cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
-  velocity->x += sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
+void Player::moveBackward() {
+  velocity.z += cos(rotation.y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
+  velocity.x += sin(rotation.y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
 }
 
-void Player::moveLeft(){
-  velocity->x -= cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
-  velocity->z += sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
+void Player::moveLeft() {
+  velocity.x -= cos(rotation.y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
+  velocity.z += sin(rotation.y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
 }
 
-void Player::moveRight(){
-  velocity->x += cos(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
-  velocity->z -= sin(rotation->y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
+void Player::moveRight() {
+  velocity.x += cos(rotation.y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
+  velocity.z -= sin(rotation.y)*Player::MOVE_SPEED*Environment::FRAMETIME_SECONDS;
 }
 
