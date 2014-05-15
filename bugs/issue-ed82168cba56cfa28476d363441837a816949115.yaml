@@ -1,0 +1,22 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Creating a new map file parser.
+desc: A new map file parser that understands a more complex file format needs to be created.
+type: :feature
+component: engine
+release: v0.0.8 Overlord
+reporter: Henry Hirsch <henry@glportal.de>
+status: :unstarted
+disposition: 
+creation_time: 2014-05-15 18:17:47.748467 Z
+references: []
+
+id: ed82168cba56cfa28476d363441837a816949115
+log_events: 
+- - 2014-05-15 18:17:54.548446 Z
+  - Henry Hirsch <henry@glportal.de>
+  - created
+  - ""
+- - 2014-05-15 18:30:46.692751 Z
+  - Henry Hirsch <henry@glportal.de>
+  - assigned to release v0.0.8 Overlord from unassigned
+  - ""
