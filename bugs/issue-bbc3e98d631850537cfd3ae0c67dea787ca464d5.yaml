@@ -1,0 +1,19 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Map model support
+desc: Adding support for models.
+type: :feature
+component: engine
+release: 
+reporter: Henry Hirsch <henry@glportal.de>
+status: :unstarted
+disposition: 
+creation_time: 2014-05-15 19:54:32.671062 Z
+references: []
+
+id: bbc3e98d631850537cfd3ae0c67dea787ca464d5
+log_events: 
+- - 2014-05-15 19:54:35.551162 Z
+  - Henry Hirsch <henry@glportal.de>
+  - created
+  - ""
+claimer: 
