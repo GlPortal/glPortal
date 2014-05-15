@@ -1,0 +1,24 @@
+--- !ditz.rubyforge.org,2008-03-06/project 
+name: glportal
+version: "0.5"
+components: 
+- !ditz.rubyforge.org,2008-03-06/component 
+  name: engine
+- !ditz.rubyforge.org,2008-03-06/component 
+  name: game
+- !ditz.rubyforge.org,2008-03-06/component 
+  name: website
+- !ditz.rubyforge.org,2008-03-06/component 
+  name: documentation
+- !ditz.rubyforge.org,2008-03-06/component 
+  name: launcher
+releases: 
+- !ditz.rubyforge.org,2008-03-06/release 
+  name: v0.0.8 Overlord
+  status: :unreleased
+  release_time: 
+  log_events: 
+  - - 2014-05-15 18:25:29.044624 Z
+    - Henry Hirsch <henry@glportal.de>
+    - created
+    - ""
