@@ -20,15 +20,6 @@ Original Software 2012 by Simon Larsen.
 - Urpo Lankinen - Bitmap Font
 - Kuronus for Blendswap - FPS Hands rigged (added portal egg)
 - Jason Pulkkinen - GlPortal logo
-* Current Tasks
-** Refactoring
-I am currently migrating methods from the cluttered main class.
-To get the methods to another class without breaking functionality
-I am writing helper methods to inject all dependencies from the main class into the game class. 
-These helper methods will be removed once all the code is properly refactored.
-** Features
-Between refactoring I do features. They are mainly centered arround extending the mapping capability
-or adding important game elements like sound or 3D models.
 * Compile the source
 ** Quick note if you are compiling for the first time
 Well done. You did make the right decission. And it should not even be hard.
@@ -88,10 +79,3 @@ A makeshift Issue tracker can be found at
 https://github.com/hhirsch/glPortal/issues .
 
 Please send me a pull request on github if you have changes.
-
-* glPortal2
-If you need a clean start, GlPortal2 might be what you are looking 
-for. GlPortal2 tries to archive the same kind of game while sticking 
-to design principles and a more strict approach to producing clean
-code from the beginning. You can find the repository of GlPortal2 at 
-https://github.com/hhirsch/glPortal2/ .
