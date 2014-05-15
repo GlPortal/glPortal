@@ -1,0 +1,19 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Rotation for the map format
+desc: Add rotation to the map format.
+type: :feature
+component: engine
+release: 
+reporter: Henry Hirsch <henry@glportal.de>
+status: :unstarted
+disposition: 
+creation_time: 2014-05-15 19:52:35.399133 Z
+references: []
+
+id: ba2848d666712062a22fe7d031b154014f6b3917
+log_events: 
+- - 2014-05-15 19:52:40.639070 Z
+  - Henry Hirsch <henry@glportal.de>
+  - created
+  - ""
+claimer: 
