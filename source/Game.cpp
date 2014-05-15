@@ -68,22 +68,22 @@ void Game::update() {
   SDL_GetRelativeMouseState(&mousedx, &mousedy);
   
   // Apply mouse movement to view
-  player.rotation->x -= mousedy * sensitivity;
-  player.rotation->y -= mousedx * sensitivity;
+  player.rotation.x -= mousedy * sensitivity;
+  player.rotation.y -= mousedx * sensitivity;
   
   // Restrict rotation in horizontal axis
-  if(player.rotation->x < -1.5f) player.rotation->x = -1.5f;
-  if(player.rotation->x >  1.5f) player.rotation->x =  1.5f;
+  if(player.rotation.x < -1.5f) player.rotation.x = -1.5f;
+  if(player.rotation.x >  1.5f) player.rotation.x =  1.5f;
   
   if(!player.isDead() && !player.hasWon()) {
     // Reset x and z speed
-    player.velocity->x = 0;
-    player.velocity->z = 0;
+    player.velocity.x = 0;
+    player.velocity.z = 0;
     
     // Apply gravity to yspeed
-    player.velocity->y -= GRAVITY*dt;
-    if(player.velocity->y < -MAXSPEED) player.velocity->y = -MAXSPEED;
-    if(player.velocity->y > MAXSPEED) player.velocity->y = MAXSPEED;
+    player.velocity.y -= GRAVITY*dt;
+    if(player.velocity.y < -MAXSPEED) player.velocity.y = -MAXSPEED;
+    if(player.velocity.y > MAXSPEED) player.velocity.y = MAXSPEED;
 
     if(keystates['w']) player.moveForward();
     if(keystates['s']) player.moveBackward();
@@ -92,13 +92,13 @@ void Game::update() {
 
     if(keystates[' '] && (player.isOnGround() || gameMap.jetpackIsEnabled())) {
       if(player.isOnGround()) {
-        player.velocity->y = JUMPPOWER;
+        player.velocity.y = JUMPPOWER;
       }
     }
 
     if(keystates[225]) {
       if(gameMap.jetpackIsEnabled()) {
-        player.velocity->y += JETPACK_ACC*dt;
+        player.velocity.y += JETPACK_ACC*dt;
       }
     }
     
@@ -108,41 +108,41 @@ void Game::update() {
       portals[1].disable();
     }
     
-    float newx = player.position->x + player.velocity->x * dt;
-    float newy = player.position->y + player.velocity->y * dt;
-    float newz = player.position->z + player.velocity->z * dt;
+    float newx = player.position.x + player.velocity.x * dt;
+    float newy = player.position.y + player.velocity.y * dt;
+    float newz = player.position.z + player.velocity.z * dt;
 
     Box bbox;
-    bbox.set(newx-0.5, player.position->y, player.position->z-0.5, newx+0.5, player.position->y+1.8, player.position->z+0.5);
+    bbox.set(newx-0.5, player.position.y, player.position.z-0.5, newx+0.5, player.position.y+1.8, player.position.z+0.5);
     if(gameMap.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
-      player.position->x = newx;
+      player.position.x = newx;
     }
     // Check for collision in y-axis
-    bbox.set(player.position->x-0.5, player.position->y, newz-0.5, player.position->x+0.5, player.position->y+1.8, newz+0.5);
+    bbox.set(player.position.x-0.5, player.position.y, newz-0.5, player.position.x+0.5, player.position.y+1.8, newz+0.5);
     if(gameMap.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
-      player.position->z = newz;
+      player.position.z = newz;
     }
     // Check for collision in z-axis
-    bbox.set(player.position->x-0.5, newy, player.position->z-0.5, player.position->x+0.5, newy+1.8, player.position->z+0.5);
+    bbox.set(player.position.x-0.5, newy, player.position.z-0.5, player.position.x+0.5, newy+1.8, player.position.z+0.5);
     player.setOffGround();
     if(gameMap.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
-      player.position->y = newy;
+      player.position.y = newy;
     } else {
       // If player was falling it means must have hit the ground
-      if(player.velocity->y < 0) {
-	player.setOnGround();
+      if(player.velocity.y < 0) {
+        player.setOnGround();
       }
-      player.velocity->y = 0;
+      player.velocity.y = 0;
     }
 
     // Check if player has fallen into an acid pool
-    bbox.set(player.position->x-0.5, player.position->y, player.position->z-0.5, player.position->x+0.5, player.position->y+1.8, player.position->z+0.5);
+    bbox.set(player.position.x-0.5, player.position.y, player.position.z-0.5, player.position.x+0.5, player.position.y+1.8, player.position.z+0.5);
     if(gameMap.collidesWithAcid(bbox) == true) {
       player.kill();
     }
 
     // Check if player has fallen into void
-    if(player.position->y <= -30) {
+    if(player.position.y <= -30) {
       player.kill();
     }
 
@@ -154,29 +154,29 @@ void Game::update() {
     // Check if player has entered a portal
     if(portalsActive()) {
       for(int i = 0; i < 2; i++) {
-	if(portals[i].throughPortal(player.position->x, player.position->y+0.9f,player.position->z)) {
-	  // Calculate rotation between portals
-	  float rotation = 0.f;
-	  rotation += portals[i].getToRotation()*DEGRAD;
-	  rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
-	  player.rotation->y += rotation;
-	  // Distance from portal to player
-	  float xdist = player.position->x - portals[i].position.x;
-	  float zdist = player.position->z - portals[i].position.z;
-	  // Calculate this distance when rotated
-	  float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
-	  float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
-	  // Move player to destination portal
-	  player.position->x = portals[(i+1)%2].position.x + nxdist;
-	  player.position->y = player.position->y + portals[(i+1)%2].position.y - portals[i].position.y;
-	  player.position->z = portals[(i+1)%2].position.z + nzdist;
-	}
+        if(portals[i].throughPortal(player.position.x, player.position.y+0.9f,player.position.z)) {
+          // Calculate rotation between portals
+          float rotation = 0.f;
+          rotation += portals[i].getToRotation()*DEGRAD;
+          rotation += portals[(i+1)%2].getFromRotation()*DEGRAD;
+          player.rotation.y += rotation;
+          // Distance from portal to player
+          float xdist = player.position.x - portals[i].position.x;
+          float zdist = player.position.z - portals[i].position.z;
+          // Calculate this distance when rotated
+          float nxdist = xdist*cos(rotation) + zdist*sin(rotation);
+          float nzdist = zdist*cos(rotation) - xdist*sin(rotation);
+          // Move player to destination portal
+          player.position.x = portals[(i+1)%2].position.x + nxdist;
+          player.position.y = player.position.y + portals[(i+1)%2].position.y - portals[i].position.y;
+          player.position.z = portals[(i+1)%2].position.z + nzdist;
+        }
       }
     }
   }
   // If player is dying
   else if(player.isDead()) {
-    player.position->y -= (0.60f*dt);
+    player.position.y -= (0.60f*dt);
   }
 
   // Update shots and check their collision with walls
@@ -184,15 +184,16 @@ void Game::update() {
     Shot *shot = &shots[i];
     if(shot->active) {
       shot->update(dt);
-
+      
       Box sbox;
       if(gameMap.pointInWall(shot->position.x, shot->position.y, shot->position.z, &sbox)) {
-	shot->update(-dt); // Reverse time to before collision
-	// Collision really should be interpolated instead
-	if(sbox.type == TID_WALL) {
-	  portals[i].placeOnBox(sbox, shot->position.x, shot->position.y, shot->position.z, gameMap);
-	}
-	shot->active = false;
+        //shot->update(-dt); // Reverse time to before collision
+        // Collision really should be interpolated instead
+        if(sbox.type == TID_WALL) {
+          portals[i].placeOnBox(sbox, shot->position.x, shot->position.y, shot->position.z, gameMap);
+        }
+        
+        shot->active = false;
       }
     }
   }
@@ -219,13 +220,6 @@ void Game::nextLevel() {
   }
 }
 
-// This method is here for refactoring purposes 
-// and can be removed once main is decluttered
-void Game::setHeightWidth(int height, int width){
-  this->width = width;
-  this->height = height;
-}
-
 void Game::setWindow(Window &window){
   this->window = window;
 }
@@ -236,17 +230,19 @@ void Game::setWindow(Window &window){
  */
 void Game::mousePressed(int button) {
   if(player.isDead()) return;
-  Vector3f position = *player.position;
-  Vector3f rotation = *player.rotation;
+  Vector3f position = player.position;
+  Vector3f rotation = player.rotation;
 
   switch(button) {
   case SDL_BUTTON_LEFT:
     // Shoot blue portal
-    shots[0].shoot(0, position.x, position.y, position.z, rotation.x, rotation.y);
+    // Adjust shooting height to the eye
+    shots[0].shoot(0, position.x, position.y + 0.5, position.z, rotation.x, rotation.y);
     break;
   case SDL_BUTTON_RIGHT:
     // Shoot orange portal
-    shots[1].shoot(1, position.x, position.y, position.z, rotation.x, rotation.y);
+    // Adjust shooting height to the eye
+    shots[1].shoot(1, position.x, position.y + 0.5, position.z, rotation.x, rotation.y);
     break;
   case SDL_BUTTON_MIDDLE:
     // Disable both portals
@@ -333,8 +329,8 @@ void Game::draw() {
  * translation and rotation of the player's
  */
 void Game::setView() {
-  Vector3f position = *player.position;
-  Vector3f rotation = *player.rotation;
+  Vector3f position = player.position;
+  Vector3f rotation = player.rotation;
   glMatrixMode(GL_MODELVIEW);
   glRotatef(-rotation.x * RADDEG, 1,0,0);
   glRotatef(-rotation.y * RADDEG, 0,1,0);
@@ -385,11 +381,11 @@ void Game::drawOverlay() {
 
       // Draw "Press return to respawn" message if dead
       if(player.getState() == PS_DYING) {
-	screen->drawRespawnScreen();
+        screen->drawRespawnScreen();
       }
       // Draw "Press return to continue" message if won
       else if(player.getState() == PS_WON) {
-	screen->drawContinueScreen();
+        screen->drawContinueScreen();
       }
     }
   }
@@ -430,6 +426,6 @@ bool Game::portalsActive() {
  * Draws both portal shots
  */
 void Game::drawShots() {
-  if(shots[0].active) shots[0].draw(player.rotation->x, player.rotation->y);
-  if(shots[1].active) shots[1].draw(player.rotation->x, player.rotation->y);
+  if(shots[0].active) shots[0].draw(player.rotation.x, player.rotation.y);
+  if(shots[1].active) shots[1].draw(player.rotation.x, player.rotation.y);
 }

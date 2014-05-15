@@ -17,7 +17,6 @@ class Player {
 public:
   Player();
   void create(float x, float y, float z);
-  void destroy();
   void kill();
   void revive();
   bool isDead();
@@ -31,9 +30,10 @@ public:
   void moveBackward();
   void moveLeft();
   void moveRight();
-  Vector3f *position;
-  Vector3f *rotation;
-  Vector3f *velocity;
+  Vector3f position;
+  Vector3f rotation;
+  Vector3f velocity;
+  Box bbox;
 protected:
   bool onGround;      /**< True if player was standing on ground last frame */
   PLAYER_STATE state; /**< Players current state e.g. alive, dead etc. */

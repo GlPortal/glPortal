@@ -253,27 +253,27 @@ void Resources::compilePortalModel() {
   glBegin(GL_TRIANGLE_FAN);
   glVertex3f( 0.00f, 0.00f, 0.001f);
 
-  glVertex3f( 0.00f, 1.25f, 0.001f);
-  glVertex3f(-0.29f, 1.15f, 0.001f);
-  glVertex3f(-0.53f, 0.88f, 0.001f);
-  glVertex3f(-0.69f, 0.48f, 0.001f);
+  glVertex3f( 0.00f, 1.15f, 0.001f);
+  glVertex3f(-0.29f, 1.05f, 0.001f);
+  glVertex3f(-0.53f, 0.75f, 0.001f);
+  glVertex3f(-0.60f, 0.40f, 0.001f);
 
-  glVertex3f(-0.75f, 0.00f, 0.001f);
-  glVertex3f(-0.69f,-0.48f, 0.001f);
-  glVertex3f(-0.53f,-0.88f, 0.001f);
-  glVertex3f(-0.29f,-1.15f, 0.001f);
+  glVertex3f(-0.65f, 0.00f, 0.001f);
+  glVertex3f(-0.60f,-0.40f, 0.001f);
+  glVertex3f(-0.53f,-0.75f, 0.001f);
+  glVertex3f(-0.29f,-1.05f, 0.001f);
 
-  glVertex3f( 0.00f,-1.25f, 0.001f);
-  glVertex3f( 0.29f,-1.15f, 0.001f);
-  glVertex3f( 0.53f,-0.88f, 0.001f);
-  glVertex3f( 0.69f,-0.48f, 0.001f);
+  glVertex3f( 0.00f,-1.15f, 0.001f);
+  glVertex3f( 0.29f,-1.05f, 0.001f);
+  glVertex3f( 0.53f,-0.75f, 0.001f);
+  glVertex3f( 0.60f,-0.40f, 0.001f);
 
-  glVertex3f( 0.75f, 0.00f, 0.001f);
-  glVertex3f( 0.69f, 0.48f, 0.001f);
-  glVertex3f( 0.53f, 0.88f, 0.001f);
-  glVertex3f( 0.29f, 1.15f, 0.001f);
+  glVertex3f( 0.65f, 0.00f, 0.001f);
+  glVertex3f( 0.60f, 0.40f, 0.001f);
+  glVertex3f( 0.53f, 0.75f, 0.001f);
+  glVertex3f( 0.29f, 1.05f, 0.001f);
 
-  glVertex3f( 0.00f, 1.25f, 0.001f);
+  glVertex3f( 0.00f, 1.15f, 0.001f);
   glEnd();
   glEndList();
 
@@ -295,25 +295,26 @@ void Resources::compileCakeModel() {
   glBegin(GL_QUADS);
   // Front side
   glTexCoord2f(0.000f, 0.00f); glVertex3f(-0.2f,  0.3f, 0.00f);
-  glTexCoord2f(0.000f, 0.25f); glVertex3f(-0.2f,  0.0f, 0.00f);
-  glTexCoord2f(0.375f, 0.25f); glVertex3f( 0.2f,  0.0f, 0.16f);
-  glTexCoord2f(0.375f, 0.00f); glVertex3f( 0.2f,  0.3f, 0.16f);
+  glTexCoord2f(0.000f, 0.50f); glVertex3f(-0.2f,  0.0f, 0.00f);
+  glTexCoord2f(1.0f, 0.50f); glVertex3f( 0.2f,  0.0f, 0.16f);
+  glTexCoord2f(1.0f, 0.00f); glVertex3f( 0.2f,  0.3f, 0.16f);
   // Back side
-  glTexCoord2f(0.375f, 0.00f); glVertex3f( 0.2f,  0.3f,-0.16f);
-  glTexCoord2f(0.375f, 0.25f); glVertex3f( 0.2f,  0.0f,-0.16f);
-  glTexCoord2f(0.000f, 0.25f); glVertex3f(-0.2f,  0.0f, 0.00f);
+  glTexCoord2f(1.0f, 0.00f); glVertex3f( 0.2f,  0.3f,-0.16f);
+  glTexCoord2f(1.0f, 0.50f); glVertex3f( 0.2f,  0.0f,-0.16f);
+  glTexCoord2f(0.000f, 0.50f); glVertex3f(-0.2f,  0.0f, 0.00f);
   glTexCoord2f(0.000f, 0.00f); glVertex3f(-0.2f,  0.3f, 0.00f);
   // Outer/right side
-  glTexCoord2f(0.000f, 0.250f); glVertex3f( 0.2f,  0.3f, 0.16f);
-  glTexCoord2f(0.000f, 0.375f); glVertex3f( 0.2f,  0.0f, 0.16f);
-  glTexCoord2f(0.125f, 0.375f); glVertex3f( 0.2f,  0.0f,-0.16f);
-  glTexCoord2f(0.125f, 0.250f); glVertex3f( 0.2f,  0.3f,-0.16f);
+  glTexCoord2f(0.000f, 0.50f); glVertex3f( 0.2f,  0.3f, 0.16f);
+  glTexCoord2f(0.000f, 0.75f); glVertex3f( 0.2f,  0.0f, 0.16f);
+  glTexCoord2f(0.5f, 0.75f); glVertex3f( 0.2f,  0.0f,-0.16f);
+  glTexCoord2f(0.5f, 0.50f); glVertex3f( 0.2f,  0.3f,-0.16f);
   glEnd();
   glBegin(GL_TRIANGLES);
   // Top side
-  glTexCoord2f(0.00f, 0.375f); glVertex3f(-0.2f,  0.3f, 0.00f);
-  glTexCoord2f(0.25f, 0.500f); glVertex3f( 0.2f,  0.3f, 0.16f);
-  glTexCoord2f(0.25f, 0.250f); glVertex3f( 0.2f,  0.3f,-0.16f);
+  glTexCoord2f(0.00f, 0.75f); glVertex3f(-0.2f,  0.3f, 0.00f);
+  glTexCoord2f(1.0f, 1.0f); glVertex3f( 0.2f,  0.3f, 0.16f);
+  glTexCoord2f(1.0f, 0.5f); glVertex3f( 0.2f,  0.3f,-0.16f);
   glEnd();
   glEndList();
 }
+

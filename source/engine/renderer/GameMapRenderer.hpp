@@ -9,15 +9,15 @@ namespace glPortal {
     namespace renderer{
       class GameMapRenderer{
       private:
-	GameMap* gameMap;
+      GameMap* gameMap;
       public:
-	GameMapRenderer(GameMap* gameMap);
-	void render();
-	void drawFromPortal(const Portal& portal);
-	void renderPortals(Portal * portals, Player & player);
-	void renderAvatar(Vector3f position);
-	void drawCake();
-	void drawLamp();
+      GameMapRenderer(GameMap* gameMap);
+        void render();
+        void drawFromPortal(const Portal& portal);
+        void renderPortals(Portal * portals, Player & player);
+        void renderAvatar(Vector3f position);
+        void drawCake();
+        void drawLamp(int light);
       };
     }
   }

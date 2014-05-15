@@ -1,0 +1,56 @@
+o j
+! start
+s 6 1.25 8
+ 
+! cake
+c 8 12 8
+ 
+! start chamber
+! floor
+t -10 0 -10 10 1 10
+! ceiling
+t -10 15 -10 10 16 10
+ 
+! walls
+!behind
+t -10 1 10 10 15 9
+t -10 1 -9 10 15 -10
+t -10 1 -9 -9 15 9
+t 10 1 -9 9 15 9
+ 
+! subwalls
+! verical wall in the middle of the floor
+t -9 1 5 9 5 6
+! bridge from the wall
+t -1 4.5 9 1 5 6
+t -1 4.5 5 1 5 1
+! vertical bridge
+t -1 9 1.5 1 15 2
+t -1 12 1 1 15 1.5
+w -1 9 1 1 12 1.5
+! top bridges
+t -9 11.5 -9 -7 12 9
+t -7 11.5 -8 -6 12 7
+t 7 11.5 -9 9 12 9
+t 6 11.5 -9 7 12 9
+! borders
+t -6 12 -8 -6.5 15 7
+t 6 12 -9 6.5 15 -6
+t 6 12 -4 6.5 15 9
+t 6 12 -6 6.5 13 -4
+ 
+! portal surfaces
+ 
+! above player
+w -1 5 9 1 8 8
+ 
+! left and right blocks at begin
+w -9 1 9 -8 5 6
+w 9 1 9 8 5 6
+ 
+! far portal wall
+w -9 1 -9  9 5 -6
+ 
+w -9 12 -9 -8 15 -7
+ 
+w 7 12 -9 9 15 -8

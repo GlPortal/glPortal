@@ -66,11 +66,9 @@ void loop(Game & game, Window & window) {
     }
     game.update();
     game.setWindow(window);
-    game.setHeightWidth(height, width);
     game.draw();
     window.swapBuffer();
   }
   window.close();
   audioPlayer->cleanUp();
 }
-
