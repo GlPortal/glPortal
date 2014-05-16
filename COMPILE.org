@@ -29,8 +29,12 @@ Something similar happens to glut, too. We are using the freeglut implemenation 
 
 You also need an additional library which may or may not go by the name libfreeimage-dev.
 * Building the binary
-Get the source code by downloading a release https://github.com/hhirsch/glPortal/releases
-or after installing git with the command git clone https://github.com/hhirsch/glPortal.git 
+Get the source code by downloading a release https://github.com/GlPortal/glPortal/releases
+or after installing git with either of the following commands
+stable: git clone https://github.com/hhirsch/glPortal.git 
+development: git clone https://github.com/GlPortal/glPortal.git
+Make sure to check the README.org and COMPILE.org from the release you downloaded in case
+there are differences in the compile workflow for it.
 
 Then in the root directory of the downloaded source type
 cmake ./
