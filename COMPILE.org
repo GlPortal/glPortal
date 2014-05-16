@@ -33,7 +33,7 @@ Get the source code by downloading a release https://github.com/hhirsch/glPortal
 or after installing git with the command git clone https://github.com/hhirsch/glPortal.git 
 
 Then in the root directory of the downloaded source type
-cmake source
+cmake ./
 
 Now if this throws an error you have to fix something first. If you don't manage to fix the error, use the
 bugtracker https://github.com/hhirsch/glPortal/issues to report what you did, and what error you got.
@@ -43,7 +43,7 @@ make
 in the root directory of the downloaded source.
 
 If this produces no error you have built the binary and should be able to start GlPortal by typing in:
-./portal
+./source/glportal --datadir ../data
 
 If you get errors try running cmake source again. 
 * Keep me posted
