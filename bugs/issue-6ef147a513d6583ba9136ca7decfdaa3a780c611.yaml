@@ -1,0 +1,19 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Collision detection with bullet-physics
+desc: Replace current collision detection with the one provided by bullet-physics.
+type: :feature
+component: engine
+release: 
+reporter: Henry Hirsch <henry@glportal.de>
+status: :unstarted
+disposition: 
+creation_time: 2014-05-16 15:30:29.894083 Z
+references: []
+
+id: 6ef147a513d6583ba9136ca7decfdaa3a780c611
+log_events: 
+- - 2014-05-16 15:30:35.230039 Z
+  - Henry Hirsch <henry@glportal.de>
+  - created
+  - ""
+claimer: 
