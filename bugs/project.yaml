@@ -12,6 +12,8 @@ components:
   name: documentation
 - !ditz.rubyforge.org,2008-03-06/component 
   name: launcher
+- !ditz.rubyforge.org,2008-03-06/component 
+  name: server
 releases: 
 - !ditz.rubyforge.org,2008-03-06/release 
   name: v0.0.8 Overlord
