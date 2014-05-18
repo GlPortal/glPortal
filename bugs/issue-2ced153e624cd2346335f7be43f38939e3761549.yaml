@@ -1,0 +1,20 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Sound support
+desc: 3D Sound support using either SDL2_mixer, OpenAL or something else.
+type: :feature
+component: engine
+release: 
+reporter: Henry Hirsch <henry@glportal.de>
+status: :unstarted
+disposition: 
+creation_time: 2014-05-18 16:34:39.488826 Z
+references: []
+
+id: 2ced153e624cd2346335f7be43f38939e3761549
+log_events: 
+- - 2014-05-18 16:35:24.240917 Z
+  - Henry Hirsch <henry@glportal.de>
+  - created
+  - ""
+claimer: 
+git_branch: 
