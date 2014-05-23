@@ -1,0 +1,28 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Make binary run with newer libraries
+desc: I got a report that if the glew version is newer then the one we used for compilation then running the game on a machine with a newer glew version will fail.
+type: :bugfix
+component: engine
+release: v0.0.8 Overlord
+reporter: Henry Hirsch <henry@glportal.de>
+status: :unstarted
+disposition: 
+creation_time: 2014-05-23 15:45:01.538051 Z
+references: []
+
+id: cbb0664c17d07ba0308580f85e78f5928afd1c12
+log_events: 
+- - 2014-05-23 15:45:05.146044 Z
+  - Henry Hirsch <henry@glportal.de>
+  - created
+  - ""
+- - 2014-05-23 15:47:20.572544 Z
+  - Henry Hirsch <henry@glportal.de>
+  - edited title
+  - ""
+- - 2014-05-23 15:49:39.834323 Z
+  - Henry Hirsch <henry@glportal.de>
+  - edited title, description
+  - ""
+claimer: 
+git_branch: 
