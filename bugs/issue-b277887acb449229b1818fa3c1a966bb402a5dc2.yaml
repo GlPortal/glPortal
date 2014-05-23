@@ -20,4 +20,9 @@ log_events:
   - Nimthora <nimthora@gmail.com>
   - edited description
   - ""
+- - 2014-05-23 14:09:58.783541 Z
+  - Henry Hirsch <henry@glportal.de>
+  - commented
+  - GLM provides some important data structures especially for GLSL http://glm.g-truc.net/0.9.5/index.html
 claimer: 
+git_branch: 
