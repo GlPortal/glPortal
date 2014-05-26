@@ -113,17 +113,17 @@ void Game::update() {
     float newz = player.position.z + player.velocity.z * dt;
 
     Box bbox;
-    bbox.set(newx-0.5, player.position.y, player.position.z-0.5, newx+0.5, player.position.y+1.8, player.position.z+0.5);
+    bbox.set(newx-0.5, player.position.y, player.position.z-0.5, newx+0.5, player.position.y+2.1, player.position.z+0.5);
     if(gameMap.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
       player.position.x = newx;
     }
     // Check for collision in y-axis
-    bbox.set(player.position.x-0.5, player.position.y, newz-0.5, player.position.x+0.5, player.position.y+1.8, newz+0.5);
+    bbox.set(player.position.x-0.5, player.position.y, newz-0.5, player.position.x+0.5, player.position.y+2.1, newz+0.5);
     if(gameMap.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
       player.position.z = newz;
     }
     // Check for collision in z-axis
-    bbox.set(player.position.x-0.5, newy, player.position.z-0.5, player.position.x+0.5, newy+1.8, player.position.z+0.5);
+    bbox.set(player.position.x-0.5, newy, player.position.z-0.5, player.position.x+0.5, newy+2.1, player.position.z+0.5);
     player.setOffGround();
     if(gameMap.collidesWithWall(bbox) == false || portals[0].inPortal(bbox) || portals[1].inPortal(bbox)) {
       player.position.y = newy;
@@ -136,7 +136,7 @@ void Game::update() {
     }
 
     // Check if player has fallen into an acid pool
-    bbox.set(player.position.x-0.5, player.position.y, player.position.z-0.5, player.position.x+0.5, player.position.y+1.8, player.position.z+0.5);
+    bbox.set(player.position.x-0.5, player.position.y, player.position.z-0.5, player.position.x+0.5, player.position.y+2.1, player.position.z+0.5);
     if(gameMap.collidesWithAcid(bbox) == true) {
       player.kill();
     }
