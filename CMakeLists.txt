@@ -29,3 +29,5 @@ list( APPEND PORTAL_LIBRARIES ${SDL2_LIBRARY} ${SDL2_MIXER_LIBRARIES} )
 
 add_subdirectory(data)
 add_subdirectory(source)
+
+add_custom_target(testRun ./source/glportal -datadir ./data DEPENDS glportal) 

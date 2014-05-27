@@ -5,7 +5,7 @@
 #include "engine/renderer/GameMapRenderer.hpp"
 #include "util/ListFileParser.hpp"
 #include "Path.hpp"
-
+#include <cstdlib>
 #include <stdexcept>
 
 using namespace glPortal::engine;
@@ -282,7 +282,8 @@ void Game::setKey(SDL_Keysym keysym) {
   }
   else if(key == 'q') {
     window.close();
-    exit(1);
+    
+    std::exit(EXIT_SUCCESS);
   }
 }
 
