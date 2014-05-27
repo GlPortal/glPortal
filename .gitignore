@@ -4,6 +4,7 @@ Makefile
 cmake_install.cmake
 portal
 docs/
+source/glportal
 data/private.cfg
 *~
 [#]*[#]
