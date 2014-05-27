@@ -21,7 +21,6 @@ namespace glPortal {
 
 	if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) == -1) {
 	  printf("Unable to open audio!\n");
-	  exit(1);
 	}
       }
 
