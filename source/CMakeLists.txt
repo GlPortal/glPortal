@@ -16,6 +16,7 @@ add_executable(${EXE_NAME}
   Player.cpp GameMap.cpp Light.cpp 
   Shot.cpp Portal.cpp 
   Window.cpp Exception.cpp
+  engine/Matrix4f.cpp
   )
 target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
 install ( TARGETS ${EXE_NAME} DESTINATION bin )

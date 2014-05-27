@@ -18,6 +18,39 @@ namespace glPortal {
     namespace renderer {
       GameMapRenderer::GameMapRenderer(GameMap* gameMap) {
         this->gameMap = gameMap;
+        GLuint vao[1];
+        float playerBuf[72] = {0.3f, 0.7f, -0.3f,
+                  -0.3f, 0.7f, -0.3f,
+                  -0.3f, 0.7f, 0.3f,
+                   0.3f, 0.7f, 0.3f,
+                   0.3f, -0.7f, 0.3f,
+                  -0.3f, -0.7f, 0.3f,
+                  -0.3f, -0.7f, -0.3f,
+                   0.3f, -0.7f, -0.3f,
+                   0.3f, 0.7f, 0.3f,
+                  -0.3f, 0.7f, 0.3f,
+                  -0.3f, -0.7f, 0.3f,
+                   0.3f, -0.7f, 0.3f,
+                   0.3f, -0.7f, -0.3f,
+                  -0.3f, -0.7f, -0.3f,
+                  -0.3f, 0.7f, -0.3f,
+                   0.3f, 0.7f, -0.3f,
+                  -0.3f, 0.7f, 0.3f,
+                  -0.3f, 0.7f, -0.3f,
+                  -0.3f, -0.7f, -0.3f,
+                  -0.3f, -0.7f, 0.3f,
+                   0.3f, 0.7f, -0.3f,
+                   0.3f, 0.7f, 0.3f,
+                   0.3f, -0.7f, 0.3f,
+                   0.3f, -0.7f, -0.3f};
+        glGenVertexArrays(1, vao);
+        //GLuint vbo;
+        //glGenBuffers(1, &vbo);
+        //glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        //glBufferData(GL_ARRAY_BUFFER, 72, playerBuf, GL_STATIC_DRAW);
+        //glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+        //glBindBuffer(GL_ARRAY_BUFFER, 0);
+        //glEnableVertexAttribArray(0);
       }
 
       void GameMapRenderer::render() {
@@ -274,6 +307,12 @@ namespace glPortal {
         }
       }
 
+      /*void GameMapRenderer::renderAvatar(Vector3f position) {
+        glBindVertexArray(player);
+        glDrawArrays(GL_TRIANGLES, 0, 24);
+        glBindVertexArray(0);
+      }*/
+      
       void GameMapRenderer::renderAvatar(Vector3f position){
         float x, y, z;
         x = position.x; y = position.y + 0.7f; z = position.z;
