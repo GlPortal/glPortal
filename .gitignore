@@ -5,6 +5,7 @@ cmake_install.cmake
 portal
 docs/
 source/glportal
+source/glportal_d
 data/private.cfg
 *~
 [#]*[#]

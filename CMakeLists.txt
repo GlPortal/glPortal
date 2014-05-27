@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 set(EXE_NAME glportal)
+set(SERVER_EXE_NAME glportal_d)
 
 if ( NOT DEFINED CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Build type" )
