@@ -24,7 +24,7 @@ add_executable(${SERVER_EXE_NAME} EXCLUDE_FROM_ALL
   engine/network/server/Main.cpp  engine/network/server/Server.cpp
   )
 
-target_link_libraries(${SERVER_EXE_NAME} ${PORTAL_LIBRARIES} boost_system boost_thread)
+target_link_libraries(${SERVER_EXE_NAME} ${PORTAL_LIBRARIES} boost_system boost_thread boost_filesystem)
 
 add_custom_target(run COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXE_NAME}${CMAKE_EXECUTABLE_SUFFIX} -datadir ${CMAKE_SOURCE_DIR}/data )
 add_custom_target(capture COMMAND avconv -f alsa -f x11grab -r 30 -s 1680x1050 -i :0.0+0,0 -acodec libfaac -vcodec libx264 -pre:0 lossless_ultrafast -threads 0 video.mkv)
