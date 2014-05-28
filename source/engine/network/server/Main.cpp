@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
   {
     if (argc != 2)
     {
-      std::cerr << "Usage: async_udp_echo_server <port>\n";
+      std::cerr << "Usage: glportal_d <port>\n";
       return 1;
     }
 
