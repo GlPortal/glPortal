@@ -19,8 +19,31 @@ void Server::getReceiveHandle(const boost::system::error_code& error, size_t byt
     socket.async_send_to(boost::asio::buffer(data, bytes_recvd), sender_endpoint,
                           boost::bind(&Server::getSendHandle, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
     std::string message(data, data + bytes_recvd);
-    std::cout << message;
-    std::cout << "\n";
+
+    log.push_back(message);
+
+    if(log.size() > 10){
+      log.erase(log.begin());
+    }
+    std::ofstream myfile;
+    const char dir_path[] = "html";
+
+    boost::filesystem::path dir(dir_path);
+    if(boost::filesystem::create_directory(dir)) {
+      std::cout << "HTML directory created." << "\n";
+    }
+    myfile.open ("html/index.html");
+
+    //    return 0;
+    std::cout << "LOG:";
+    for (std::vector<std::string>::iterator it = log.begin() ; it != log.end(); ++it){
+      std::cout << "entry:";
+      //std::cout << *it;
+      myfile << *it;
+    }
+    myfile.close();
+    
+
     
   } else {
     socket.async_receive_from(boost::asio::buffer(data, max_length), sender_endpoint,
