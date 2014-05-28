@@ -18,6 +18,9 @@ void Server::getReceiveHandle(const boost::system::error_code& error, size_t byt
   if(!error && bytes_recvd > 0){
     socket.async_send_to(boost::asio::buffer(data, bytes_recvd), sender_endpoint,
                           boost::bind(&Server::getSendHandle, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+    std::string message(data, data + bytes_recvd);
+    std::cout << message;
+    std::cout << "\n";
     
   } else {
     socket.async_receive_from(boost::asio::buffer(data, max_length), sender_endpoint,
@@ -26,9 +29,6 @@ void Server::getReceiveHandle(const boost::system::error_code& error, size_t byt
 }
 
 void Server::getSendHandle(const boost::system::error_code&, size_t){
-  //      for(int i=0;i<6024;i++){
-  //      std::cout << data[i];
-  //  }
   socket.async_receive_from(
                              boost::asio::buffer(data, max_length), sender_endpoint,
                              boost::bind(&Server::getReceiveHandle, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
