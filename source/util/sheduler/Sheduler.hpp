@@ -5,17 +5,19 @@
 #include <iostream>
 #include <vector>
 #include "Job.hpp"
-
+//#include <thread>
+#include <boost/thread.hpp>
 namespace glPortal {
   class Sheduler {
   public:
-    Sheduler(int miliseconds);
+    Sheduler(int milliseconds);
     void add(glPortal::Job *job);
     void run();
     void start();
   private:
     int interval;
     std::vector<glPortal::Job*> jobs;
+    boost::thread thread;
   };
 }
 #endif
