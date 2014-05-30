@@ -12,6 +12,7 @@ namespace glPortal {
     Sheduler(int miliseconds);
     void add(glPortal::Job *job);
     void run();
+    void start();
   private:
     int interval;
     std::vector<glPortal::Job*> jobs;

@@ -1,5 +1,6 @@
 #include "Sheduler.hpp"
 #include "Job.hpp"
+#include <thread>
 
 namespace glPortal {
   Sheduler::Sheduler(int miliseconds){
@@ -11,8 +12,12 @@ namespace glPortal {
   }
 
   void Sheduler::run(){
-    /*    for( auto &i : this->jobs) {
-      i.run();;
-      }*/
+    for( auto &i : this->jobs) {
+      i->run();;
+    }
+  }
+  
+  void Sheduler::start(){
+    std::thread thread(&Sheduler::run); 
   }
 }
