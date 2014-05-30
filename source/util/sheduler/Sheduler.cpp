@@ -1,10 +1,12 @@
 #include "Sheduler.hpp"
 #include "Job.hpp"
-#include <thread>
+//#include <thread>
+#include <boost/thread.hpp>
+#include <chrono>
 
 namespace glPortal {
-  Sheduler::Sheduler(int miliseconds){
-    this->interval = miliseconds;
+  Sheduler::Sheduler(int milliseconds){
+    this->interval = milliseconds;
   }
 
   void Sheduler::add(glPortal::Job *job){
@@ -15,9 +17,11 @@ namespace glPortal {
     for( auto &i : this->jobs) {
       i->run();;
     }
+    boost::this_thread::sleep(boost::posix_time::milliseconds(this->interval));
   }
   
   void Sheduler::start(){
-    std::thread thread(&Sheduler::run); 
+    thread = boost::thread(&Sheduler::run, this);
+    thread.join();
   }
 }
