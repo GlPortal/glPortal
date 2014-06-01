@@ -7,6 +7,7 @@
 #include <boost/asio.hpp>
 #include <vector>
 #include <string>
+#include "Controller.hpp"
 
 using boost::asio::ip::udp;
 
@@ -22,7 +23,9 @@ namespace glPortal {
     udp::endpoint sender_endpoint;
     enum { max_length = 1024 };
     char data[max_length];
+    
     std::vector<std::string> log;
+    Controller controller;
   };
 }
 #endif
