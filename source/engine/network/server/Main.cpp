@@ -18,8 +18,7 @@ int main(int argc, char* argv[])
 
     boost::asio::io_service io_service;
 
-    using namespace std; // For atoi.
-    glPortal::network::server::Server server(io_service, atoi(argv[1]));
+    glPortal::Server server(io_service, std::atoi(argv[1]));
 
     io_service.run();
   }
