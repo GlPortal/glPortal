@@ -1,11 +1,10 @@
-#ifndef __SERVER_HPP
-#define __SERVER_HPP
+#ifndef __SHEDULER_HPP
+#define __SHEDULER_HPP
 
 #include <cstdlib>
 #include <iostream>
 #include <vector>
 #include "Job.hpp"
-//#include <thread>
 #include <boost/thread.hpp>
 namespace glPortal {
   class Sheduler {
