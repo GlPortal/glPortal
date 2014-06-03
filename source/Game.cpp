@@ -29,13 +29,13 @@ Game::Game()
 , currentLevel(0)
 {
   config = Environment::getConfigPointer();
-  std::string network, server, port, username;
+  std::string network, username;
   try{
-    network  = config->getFloatByKey("network");
-    username = config->getFloatByKey("username");
+    network  = config->getStringByKey("network");
+    username = config->getStringByKey("username");
     
     if(network == "yes"){
-      glPortal::Client::sendMessage(std::string("statistics loggon") + username);
+      glPortal::Client::sendMessage(std::string("statistics loggon ") + username);
     }
   } catch (const std::invalid_argument& e){
     network = "no";

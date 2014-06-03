@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include "../../../../util/sheduler/Sheduler.hpp"
 #include "../../../../util/sheduler/Job.hpp"
 #include "../ControllerInterface.hpp"
@@ -16,6 +17,7 @@ namespace glPortal {
     void run();
   private:
     std::vector<std::string> log;
+    std::map<std::string, int> userPoints;
     Sheduler *sheduler;
   };
 }

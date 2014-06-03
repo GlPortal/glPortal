@@ -6,6 +6,7 @@ namespace glPortal {
     std::string::size_type pos;
     pos = message.find(' ',0);
     controllerName = message.substr(0, pos);
+    message = message.substr(pos+1, message.size());
     
     if(controllerName == "statistics"){
       return statisticsController.setMessage(message);

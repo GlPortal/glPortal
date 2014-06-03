@@ -12,10 +12,10 @@ namespace glPortal{
   std::string Client::sendMessage(std::string message){
     ConfigFileParser * config;
     config = glPortal::engine::Environment::getConfigPointer();
-    std::string server, port, username;
+    std::string server, port;
     try{
-      server  = config->getFloatByKey("server");
-      port    = config->getFloatByKey("port");
+      server  = config->getStringByKey("server");
+      port    = config->getStringByKey("port");
     } catch (const std::invalid_argument& e){
       server  = "glportal.de";
       port    = "101010";
