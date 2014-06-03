@@ -30,9 +30,7 @@ namespace glPortal {
     }
     myfile.open ("html/index.html");
     
-    std::cout << "LOG:\n";
     for (std::vector<std::string>::iterator it = log.begin() ; it != log.end(); ++it){
-        std::cout << "entry:\n";
         myfile << *it;
     }
     myfile.close();

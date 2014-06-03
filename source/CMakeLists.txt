@@ -3,6 +3,7 @@ include_directories(lib engine ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(${EXE_NAME} 
   Main.cpp Game.cpp Path.cpp
+  engine/network/client/Client.cpp
   engine/gui/GameScreen.cpp engine/Resources.cpp engine/StringConverter.cpp 
   engine/gui/Character.cpp  engine/gui/Font.cpp engine/tools/Timer.cpp
   engine/object/Model.cpp engine/object/Mesh.cpp
@@ -17,7 +18,7 @@ add_executable(${EXE_NAME}
   Shot.cpp Portal.cpp 
   Window.cpp Exception.cpp
   )
-target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
+target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES} boost_system boost_thread boost_filesystem)
 install ( TARGETS ${EXE_NAME} DESTINATION bin )
 
 add_executable(${SERVER_EXE_NAME} EXCLUDE_FROM_ALL
@@ -25,7 +26,6 @@ add_executable(${SERVER_EXE_NAME} EXCLUDE_FROM_ALL
   util/sheduler/Sheduler.cpp util/sheduler/Job.hpp
   engine/network/server/controllers/StatisticsController.cpp
   engine/network/server/Controller.cpp
-  engine/network/server/app/ServerStatistics.cpp
   )
 
 target_link_libraries(${SERVER_EXE_NAME} ${PORTAL_LIBRARIES} boost_system boost_thread boost_filesystem)
