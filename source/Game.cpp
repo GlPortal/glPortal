@@ -3,10 +3,12 @@
 #include "engine/Resources.hpp"
 #include "engine/Box.hpp"
 #include "engine/renderer/GameMapRenderer.hpp"
+#include "engine/network/client/Client.hpp"
 #include "util/ListFileParser.hpp"
 #include "Path.hpp"
 #include <cstdlib>
 #include <stdexcept>
+#include <iostream>
 
 using namespace glPortal::engine;
 using namespace glPortal::util;
@@ -25,7 +27,9 @@ Game::Game()
 , fade(0.)
 , jetpack(true)
 , currentLevel(0)
-{  
+{
+  glPortal::Client::sendMessage(std::string("statistics Game started."));
+  
   for(int i = 0; i < KEY_BUFFER; ++i) {
     keystates[i] = false;
   }
