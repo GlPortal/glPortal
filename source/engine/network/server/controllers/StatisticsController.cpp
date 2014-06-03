@@ -18,22 +18,31 @@ namespace glPortal {
         log.erase(log.begin());
       }
     return std::string("message The statistics controller logged your message\n");
+
+    std::string controllerName;
+    std::string::size_type pos;
+    pos = message.find(' ',0);
+    controllerName = message.substr(0, pos);
+
   }
 
+  std::string StatisticsController::loggonAction(std::string message){
+  }
+  
   void StatisticsController::run(){
-    std::ofstream myfile;
+    std::ofstream htmlFile;
     const char dir_path[] = "html";
 
     boost::filesystem::path dir(dir_path);
     if(boost::filesystem::create_directory(dir)) {
       std::cout << "HTML directory created." << "\n";
     }
-    myfile.open ("html/index.html");
+    htmlFile.open ("html/index.html");
     
     for (std::vector<std::string>::iterator it = log.begin() ; it != log.end(); ++it){
-        myfile << *it;
+        htmlFile << *it;
     }
-    myfile.close();
+    htmlFile.close();
       
   }
 }
