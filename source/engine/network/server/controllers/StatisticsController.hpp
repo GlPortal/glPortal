@@ -12,6 +12,7 @@ namespace glPortal {
   public:
     StatisticsController();
     std::string setMessage(std::string message);
+    std::string loggonAction(std::string message);
     void run();
   private:
     std::vector<std::string> log;

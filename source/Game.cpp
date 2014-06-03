@@ -28,13 +28,23 @@ Game::Game()
 , jetpack(true)
 , currentLevel(0)
 {
-  glPortal::Client::sendMessage(std::string("statistics Game started."));
+  config = Environment::getConfigPointer();
+  std::string network, server, port, username;
+  try{
+    network  = config->getFloatByKey("network");
+    username = config->getFloatByKey("username");
+    
+    if(network == "yes"){
+      glPortal::Client::sendMessage(std::string("statistics loggon") + username);
+    }
+  } catch (const std::invalid_argument& e){
+    network = "no";
+  }
   
   for(int i = 0; i < KEY_BUFFER; ++i) {
     keystates[i] = false;
   }
-  config = Environment::getConfigPointer();
-  //Load the configuration settings
+
   try{
     this->sensitivity = config->getFloatByKey("sensitivity");
   } catch (const std::invalid_argument& e){
