@@ -22,7 +22,7 @@ target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES} boost_system boost_thread 
 install ( TARGETS ${EXE_NAME} DESTINATION bin )
 
 add_executable(${SERVER_EXE_NAME} EXCLUDE_FROM_ALL
-  engine/network/server/Main.cpp  engine/network/server/Server.cpp
+  engine/network/server/Main.cpp  engine/network/server/UdpServer.cpp
   util/sheduler/Sheduler.cpp util/sheduler/Job.hpp
   engine/network/server/controllers/StatisticsController.cpp
   engine/network/server/Controller.cpp
