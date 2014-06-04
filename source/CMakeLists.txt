@@ -23,6 +23,8 @@ install ( TARGETS ${EXE_NAME} DESTINATION bin )
 
 add_executable(${SERVER_EXE_NAME} EXCLUDE_FROM_ALL
   engine/network/server/Main.cpp  engine/network/server/UdpServer.cpp
+  engine/network/server/TcpServer.cpp
+  engine/network/server/TcpSession.cpp
   util/sheduler/Sheduler.cpp util/sheduler/Job.hpp
   engine/network/server/controllers/StatisticsController.cpp
   engine/network/server/Controller.cpp
