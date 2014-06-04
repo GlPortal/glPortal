@@ -3,7 +3,7 @@
 #include "engine/Resources.hpp"
 #include "engine/Box.hpp"
 #include "engine/renderer/GameMapRenderer.hpp"
-#include "engine/network/client/Client.hpp"
+#include "engine/network/client/UdpClient.hpp"
 #include "util/ListFileParser.hpp"
 #include "Path.hpp"
 #include <cstdlib>
@@ -35,10 +35,10 @@ Game::Game()
     username = config->getStringByKey("username");
     
     if(network == "yes"){
-      glPortal::Client::sendMessage(std::string("statistics loggon ") + username);
+      glPortal::UdpClient::sendMessage(std::string("statistics loggon ") + username);
     }
   } catch (const std::invalid_argument& e){
-    network = "no";
+    //networking disabled
   }
   
   for(int i = 0; i < KEY_BUFFER; ++i) {

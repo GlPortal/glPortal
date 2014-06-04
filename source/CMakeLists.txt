@@ -3,7 +3,7 @@ include_directories(lib engine ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(${EXE_NAME} 
   Main.cpp Game.cpp Path.cpp
-  engine/network/client/Client.cpp
+  engine/network/client/UdpClient.cpp
   engine/gui/GameScreen.cpp engine/Resources.cpp engine/StringConverter.cpp 
   engine/gui/Character.cpp  engine/gui/Font.cpp engine/tools/Timer.cpp
   engine/object/Model.cpp engine/object/Mesh.cpp
