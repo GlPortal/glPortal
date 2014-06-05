@@ -21,9 +21,9 @@ namespace glPortal {
     void handle_write(const boost::system::error_code& error);
     
   private:
-    tcp::socket socket_;
+    tcp::socket socket;
     enum { max_length = 1024 };
-    char data_[max_length];
+    char data[max_length];
     
     std::vector<std::string> log;
     Controller controller;

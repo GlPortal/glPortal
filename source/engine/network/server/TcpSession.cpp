@@ -8,16 +8,16 @@
 
 
 namespace glPortal {
-  TcpSession::TcpSession(boost::asio::io_service& io_service): socket_(io_service){}
+  TcpSession::TcpSession(boost::asio::io_service& io_service): socket(io_service){}
 
   tcp::socket& TcpSession::socket()
   {
-    return socket_;
+    return socket;
   }
 
   void TcpSession::start()
   {
-    socket_.async_read_some(boost::asio::buffer(data_, max_length),
+    socket.async_read_some(boost::asio::buffer(data, max_length),
                             boost::bind(&TcpSession::handle_read, this,
                                         boost::asio::placeholders::error,
                                         boost::asio::placeholders::bytes_transferred));
@@ -27,8 +27,8 @@ namespace glPortal {
                                size_t bytes_transferred)
   {
     if(!error) {
-      boost::asio::async_write(socket_,
-                               boost::asio::buffer(data_, bytes_transferred),
+      boost::asio::async_write(socket,
+                               boost::asio::buffer(data, bytes_transferred),
                                boost::bind(&TcpSession::handle_write, this,
                                            boost::asio::placeholders::error));
     } else {
@@ -39,7 +39,7 @@ namespace glPortal {
   void TcpSession::handle_write(const boost::system::error_code& error)
   {
     if (!error){
-      socket_.async_read_some(boost::asio::buffer(data_, max_length),
+      socket.async_read_some(boost::asio::buffer(data, max_length),
                               boost::bind(&TcpSession::handle_read, this,
                                           boost::asio::placeholders::error,
                                           boost::asio::placeholders::bytes_transferred));
