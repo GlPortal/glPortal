@@ -5,8 +5,8 @@ type: :bugfix
 component: engine
 release: v0.0.8 Overlord
 reporter: Henry Hirsch <henry@glportal.de>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2014-05-23 15:45:01.538051 Z
 references: []
 
@@ -24,5 +24,13 @@ log_events:
   - Henry Hirsch <henry@glportal.de>
   - edited title, description
   - ""
-claimer: 
+- - 2014-06-07 14:58:09.608358 Z
+  - Henry Hirsch <henry@glportal.de>
+  - issue claimed
+  - Already fixed.
+- - 2014-06-07 14:58:48.672309 Z
+  - Henry Hirsch <henry@glportal.de>
+  - closed with disposition fixed
+  - ""
+claimer: Henry Hirsch <henry@glportal.de>
 git_branch: 
