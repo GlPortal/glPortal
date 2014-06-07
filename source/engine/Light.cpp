@@ -1,4 +1,4 @@
-#include "Player.hpp"
+#include "Light.hpp"
 
 namespace glPortal {
 
