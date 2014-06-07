@@ -1,4 +1,4 @@
-#include "Player.hpp"
+#include "Entity.hpp"
 
 namespace glPortal {
 
