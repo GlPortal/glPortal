@@ -4,6 +4,7 @@
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <fstream>
+#include <string>
 #include <boost/filesystem.hpp>
 
 
@@ -24,9 +25,18 @@ namespace glPortal {
   void TcpSession::handle_read(const boost::system::error_code& error,
                                size_t bytes_transferred)
   {
+
+    std::string message(data, data + bytes_transferred);
+    std::string response = controller.setMessage(message);
+
     if(!error) {
-      boost::asio::async_write(socket,
+      /*      boost::asio::async_write(socket,
                                boost::asio::buffer(data, bytes_transferred),
+                               boost::bind(&TcpSession::handle_write, this,
+                               boost::asio::placeholders::error));*/
+
+      boost::asio::async_write(socket,
+                               boost::asio::buffer(response, response.size() + bytes_transferred),
                                boost::bind(&TcpSession::handle_write, this,
                                            boost::asio::placeholders::error));
     } else {
