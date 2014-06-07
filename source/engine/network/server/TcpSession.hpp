@@ -15,7 +15,7 @@ namespace glPortal {
   class TcpSession{
   public:
     TcpSession(boost::asio::io_service& io_service);
-    tcp::socket& socket();
+    tcp::socket& getSocket();
     void start();
     void handle_read(const boost::system::error_code& error, size_t bytes_transferred);
     void handle_write(const boost::system::error_code& error);

@@ -11,16 +11,16 @@ namespace glPortal {
     service(io_service), acceptor(io_service, tcp::endpoint(tcp::v4(), port))
   {
     TcpSession* session = new TcpSession(service);
-    acceptor.async_accept(session->socket(), boost::bind(&TcpServer::handle_accept, this, session, boost::asio::placeholders::error));
+    acceptor.async_accept(session->getSocket(), boost::bind(&TcpServer::acceptHandle, this, session, boost::asio::placeholders::error));
   }
 
-  void TcpServer::handle_accept(TcpSession* session, const boost::system::error_code& error)
+  void TcpServer::acceptHandle(TcpSession* session, const boost::system::error_code& error)
   {
     if(!error){
       session->start();
       session = new TcpSession(service);
-      acceptor.async_accept(session->socket(),
-                             boost::bind(&TcpServer::handle_accept, this, session, boost::asio::placeholders::error));
+      acceptor.async_accept(session->getSocket(),
+                             boost::bind(&TcpServer::acceptHandle, this, session, boost::asio::placeholders::error));
     } else {
       delete session;
     }

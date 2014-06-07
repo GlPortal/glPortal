@@ -17,7 +17,7 @@ namespace glPortal {
   {
   public:
     TcpServer(boost::asio::io_service& io_service, short port);    
-    void handle_accept(TcpSession* session, const boost::system::error_code& error);
+    void acceptHandle(TcpSession* session, const boost::system::error_code& error);
   private:
     boost::asio::io_service& service;
     tcp::acceptor acceptor;
