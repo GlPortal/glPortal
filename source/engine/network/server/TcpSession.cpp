@@ -9,14 +9,12 @@
 
 namespace glPortal {
   TcpSession::TcpSession(boost::asio::io_service& io_service): socket(io_service){}
-
-  tcp::socket& TcpSession::socket()
-  {
+  
+  tcp::socket& TcpSession::getSocket(){
     return socket;
   }
 
-  void TcpSession::start()
-  {
+  void TcpSession::start(){
     socket.async_read_some(boost::asio::buffer(data, max_length),
                             boost::bind(&TcpSession::handle_read, this,
                                         boost::asio::placeholders::error,
