@@ -1,0 +1,24 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Remove boost as a requirenment for the Game
+desc: Remove boost as a dependency for the game. However the server may still use it for the time beeing.
+type: :task
+component: game
+release: v0.0.8 Overlord
+reporter: Henry Hirsch <henry@glportal.de>
+status: :unstarted
+disposition: 
+creation_time: 2014-06-07 10:58:59.617655 Z
+references: []
+
+id: 7a4412f6fdeec4ff57b7dfeb74f23bfc8709ef9c
+log_events: 
+- - 2014-06-07 10:59:03.233538 Z
+  - Henry Hirsch <henry@glportal.de>
+  - created
+  - ""
+- - 2014-06-07 10:59:27.137626 Z
+  - Henry Hirsch <henry@glportal.de>
+  - issue claimed
+  - ""
+claimer: Henry Hirsch <henry@glportal.de>
+git_branch: 
