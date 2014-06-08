@@ -16,7 +16,7 @@ namespace glPortal {
   std::string StatisticsController::setMessage(std::string message){
 
     log.push_back(message);
-    /*            
+
     if(log.size() > 10){
       log.erase(log.begin());
     }
@@ -26,10 +26,10 @@ namespace glPortal {
     pos = message.find(' ',0);
     actionName = message.substr(0, pos);
     message = message.substr(pos+1, message.size());
-    */
-    //    if(actionName == "loggon"){
-    //      return this->loggonAction(message);
-      //    }
+
+    if(actionName == "loggon"){
+      return this->loggonAction(message);
+    }
     return std::string("message The statistics controller logged your message\n");
   }
 
