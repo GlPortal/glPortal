@@ -10,11 +10,15 @@
 
 namespace glPortal {
   TcpSession::TcpSession(boost::asio::io_service& io_service): socket(io_service){}
-  
+
   tcp::socket& TcpSession::getSocket(){
     return socket;
   }
 
+  void TcpSession::setController(std::shared_ptr<Controller> controller){
+    this->controller = controller;
+  }
+  
   void TcpSession::start(){
     socket.async_read_some(boost::asio::buffer(data, max_length),
                             boost::bind(&TcpSession::handle_read, this,
@@ -27,14 +31,9 @@ namespace glPortal {
   {
 
     std::string message(data, data + bytes_transferred);
-    std::string response = controller.setMessage(message);
+    std::string response = controller->setMessage(message);
 
     if(!error) {
-      /*      boost::asio::async_write(socket,
-                               boost::asio::buffer(data, bytes_transferred),
-                               boost::bind(&TcpSession::handle_write, this,
-                               boost::asio::placeholders::error));*/
-
       boost::asio::async_write(socket,
                                boost::asio::buffer(response, response.size() + bytes_transferred),
                                boost::bind(&TcpSession::handle_write, this,

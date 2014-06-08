@@ -26,6 +26,7 @@ add_executable(${SERVER_EXE_NAME} EXCLUDE_FROM_ALL
   engine/network/server/TcpServer.cpp
   engine/network/server/TcpSession.cpp
   util/sheduler/Sheduler.cpp util/sheduler/Job.hpp
+  util/html/Generator.cpp     
   engine/network/server/controllers/StatisticsController.cpp
   engine/network/server/Controller.cpp
   )

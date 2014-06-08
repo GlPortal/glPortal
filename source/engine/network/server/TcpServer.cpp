@@ -11,6 +11,8 @@ namespace glPortal {
     service(io_service), acceptor(io_service, tcp::endpoint(tcp::v4(), port))
   {
     TcpSession* session = new TcpSession(service);
+    auto controller = std::make_shared<Controller>();
+    session->setController(controller);
     acceptor.async_accept(session->getSocket(), boost::bind(&TcpServer::acceptHandle, this, session, boost::asio::placeholders::error));
   }
 

@@ -23,7 +23,6 @@ namespace glPortal {
     tcp::acceptor acceptor;
 
     std::vector<std::string> log;
-    Controller controller;
   };
 }
 #endif
