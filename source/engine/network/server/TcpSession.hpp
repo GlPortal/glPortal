@@ -15,6 +15,8 @@ namespace glPortal {
   class TcpSession{
   public:
     TcpSession(boost::asio::io_service& io_service);
+    void setController(std::shared_ptr<Controller> controller);
+    
     tcp::socket& getSocket();
     void start();
     void handle_read(const boost::system::error_code& error, size_t bytes_transferred);
@@ -26,7 +28,7 @@ namespace glPortal {
     char data[max_length];
     
     std::vector<std::string> log;
-    Controller controller;
+    std::shared_ptr<Controller> controller;
   };
 }
 #endif
