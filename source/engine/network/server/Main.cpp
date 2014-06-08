@@ -19,8 +19,8 @@ int main(int argc, char* argv[])
 
     boost::asio::io_service io_service;
 
-    //    glPortal::UdpServer server(io_service, std::atoi(argv[1]));
-    glPortal::TcpServer server(io_service, std::atoi(argv[1]));
+    glPortal::UdpServer server(io_service, std::atoi(argv[1]));
+    //glPortal::TcpServer server(io_service, std::atoi(argv[1]));
 
     io_service.run();
   }

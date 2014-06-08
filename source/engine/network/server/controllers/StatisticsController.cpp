@@ -2,7 +2,9 @@
 #include <fstream>
 #include <boost/filesystem.hpp>
 #include "../../../../util/sheduler/Sheduler.hpp"
+#include "../../../../util/html/Generator.hpp"
 #include <stdexcept>
+#include <mutex>
 
 namespace glPortal {
   StatisticsController::StatisticsController(){
@@ -12,7 +14,7 @@ namespace glPortal {
   }
   
   std::string StatisticsController::setMessage(std::string message){
-          
+
     log.push_back(message);
 
     if(log.size() > 10){
@@ -24,7 +26,7 @@ namespace glPortal {
     pos = message.find(' ',0);
     actionName = message.substr(0, pos);
     message = message.substr(pos+1, message.size());
-    
+
     if(actionName == "loggon"){
       return this->loggonAction(message);
     }
@@ -54,12 +56,15 @@ namespace glPortal {
     }
     htmlFile.open ("html/index.html");
     htmlFile << "<!DOCTYPE html>";
-    htmlFile << "<html><head><title>GlPortal Stats</title></head>";
+    htmlFile << "<html>";
+    htmlFile << Generator::getTagHtml("head", Generator::getTagHtml("title", "GlPortal Stats"));
     htmlFile << "<body>";
-    htmlFile << "<h1>GlPortal Stats</h1>";
+    htmlFile <<  Generator::getTagHtml("h1", "GlPortal Stats");
     htmlFile << "<table>";
     htmlFile << "<tr>";
-    htmlFile << "<th>User</th><th>Points</th>";
+    htmlFile << Generator::getTagHtml("th", "User");
+    htmlFile << Generator::getTagHtml("th", "Points");
+
     htmlFile << "</tr>";
     for (auto& userPoint : userPoints) {
       htmlFile << "<tr>";
@@ -67,14 +72,13 @@ namespace glPortal {
       htmlFile << "</tr>";
     }
     htmlFile << "</table>";
-    
-    htmlFile << "<h2>Log</h2>";
+    htmlFile << Generator::getTagHtml("h2", "Log");
     htmlFile << "<ul>";
+
     for (std::vector<std::string>::iterator it = log.begin() ; it != log.end(); ++it){
-      htmlFile << "<li>";
-      htmlFile << *it;
-      htmlFile << "</li>";
-    }
+      htmlFile << Generator::getTagHtml("li", std::string(*it));
+    }    
+    
     htmlFile << "</ul>";
     htmlFile << "</body></html>";
     htmlFile.close();
