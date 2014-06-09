@@ -7,6 +7,7 @@
 namespace glPortal {
   class Controller {
   public:
+    Controller();
     std::string setMessage(std::string message);
   private:
     StatisticsController statisticsController;

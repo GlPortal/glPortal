@@ -1,6 +1,9 @@
 #include "Controller.hpp"
 
-namespace glPortal {     
+namespace glPortal {
+  Controller::Controller(): statisticsController(){
+  }
+  
   std::string Controller::setMessage(std::string message){
     std::string controllerName;
     std::string::size_type pos;
