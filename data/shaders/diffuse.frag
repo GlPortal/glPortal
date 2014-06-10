@@ -8,11 +8,12 @@ struct Light {
 
 uniform mat4 modelMatrix;
 
+uniform sampler2D diffuse;
 uniform Light lights[150];
 uniform int numLights;
 
 in vec4 pass_position;
-//in vec2 pass_texCoord;
+in vec2 pass_texCoord;
 in vec4 pass_normal;
 
 out vec4 out_Color;
@@ -40,5 +41,5 @@ void main(void) {
     light.g = clamp(light.g, 0, 1);
     light.b = clamp(light.b, 0, 1);
     
-    out_Color = vec4(light, 1);
+    out_Color = texture(diffuse, pass_texCoord) * vec4(light, 1);
 }
