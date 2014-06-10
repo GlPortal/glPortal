@@ -1,5 +1,6 @@
 #include "MeshLoader.hpp"
 #include "GL/glew.h"
+#include <iostream>
 
 namespace glPortal {
 
@@ -48,6 +49,21 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3, mesh->mVertices, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(0);
+  }
+
+  //Store texture coordinates in a buffer
+  if(mesh->HasTextureCoords(0)) {
+    GLuint textureVBO;
+    float* texCoords = (float *) malloc(sizeof(float) * mesh->mNumVertices * 2);
+    for (unsigned int k = 0; k < mesh->mNumVertices; ++k) {
+      texCoords[k*2]   = mesh->mTextureCoords[0][k].x;
+      texCoords[k*2+1] = mesh->mTextureCoords[0][k].y;
+    }
+    glGenBuffers(1, &textureVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 2, texCoords, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 2, GL_FLOAT, 0, 0, 0);
+    glEnableVertexAttribArray(1);
   }
 
   //Store normals in a buffer

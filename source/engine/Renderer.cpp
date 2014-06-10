@@ -12,10 +12,11 @@ Renderer::Renderer() : shader(Resource::loadShaders()) {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
+
+  glClearColor(0, 0, 0.5, 1.0);
 }
 
 void Renderer::render(Scene* scene) {
-  glClearColor(0, 0, 0.5, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glUseProgram(shader);
@@ -70,8 +71,18 @@ void Renderer::render(Scene* scene) {
 
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
+    //It may also be sexually transmitted, including contact with saliva, such as kissing and mouth-to-genital contact (oral sex).
     glBindVertexArray(mesh.handle);
+
+    int loc = glGetUniformLocation(shader, "diffuse");
+    int tiling = glGetUniformLocation(shader, "tiling");
+    glUniform2f(tiling, wall.texture.xTiling, wall.texture.yTiling);
+    glUniform1i(loc, 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, wall.texture.handle);
+
     glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
+    glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
   }
 

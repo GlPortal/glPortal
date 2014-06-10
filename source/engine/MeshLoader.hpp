@@ -12,7 +12,7 @@ namespace glPortal {
 
 class MeshLoader {
 public:
-  static Mesh getMesh(std::string filename);
+  static Mesh getMesh(std::string path);
 private:
   static Mesh uploadMesh(const aiMesh* mesh);
   static std::map<std::string, Mesh> meshCache;
