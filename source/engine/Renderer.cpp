@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include "Renderer.hpp"
 #include "util/Vector3f.hpp"
+#include "util/Vector2f.hpp"
 #include "MeshLoader.hpp"
 #include "Mesh.hpp"
 #include "Resource.hpp"
@@ -58,8 +59,6 @@ void Renderer::render(Scene* scene) {
   }
 
   //Walls
-  Mesh mesh = MeshLoader::getMesh(std::string("data/Cube.obj"));
-
   for(unsigned int i = 0; i < scene->walls.size(); i++) {
     Entity wall = scene->walls[i];
     modelMatrix.setIdentity();
@@ -72,7 +71,7 @@ void Renderer::render(Scene* scene) {
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
     //It may also be sexually transmitted, including contact with saliva, such as kissing and mouth-to-genital contact (oral sex).
-    glBindVertexArray(mesh.handle);
+    glBindVertexArray(wall.mesh.handle);
 
     int loc = glGetUniformLocation(shader, "diffuse");
     int tiling = glGetUniformLocation(shader, "tiling");
@@ -81,7 +80,7 @@ void Renderer::render(Scene* scene) {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, wall.texture.handle);
 
-    glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
+    glDrawArrays(GL_TRIANGLES, 0, wall.mesh.numFaces * 3);
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
   }

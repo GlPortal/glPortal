@@ -9,6 +9,7 @@ class Renderer {
 public:
   Renderer();
   void render(Scene* scene);
+  Mesh getBox(Entity wall);
 private:
   int shader;
   Matrix4f projectionMatrix;

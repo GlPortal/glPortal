@@ -1,5 +1,5 @@
-#ifndef VECTOR3F_H
-#define VECTOR3F_H
+#ifndef VECTOR3F_HPP
+#define VECTOR3F_HPP
 
 namespace glPortal {
 

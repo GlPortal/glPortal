@@ -8,8 +8,8 @@ public:
   int handle;
   int width;
   int height;
-  float xTiling;
-  float yTiling;
+  float xTiling = 1;
+  float yTiling = 1;
 };
 
 } /* namespace glPortal */
