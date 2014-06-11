@@ -9,6 +9,8 @@ namespace glPortal {
 class MapLoader {
 public:
   static Scene* getScene(std::string path);
+private:
+  static Mesh getBox(Entity wall);
 };
 
 } /* namespace glPortal */
