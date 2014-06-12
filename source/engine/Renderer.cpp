@@ -1,7 +1,6 @@
 #include <GL/glew.h>
 #include "Renderer.hpp"
 #include "util/Vector3f.hpp"
-#include "util/Vector2f.hpp"
 #include "MeshLoader.hpp"
 #include "Mesh.hpp"
 #include "Resource.hpp"

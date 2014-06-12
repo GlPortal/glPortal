@@ -19,27 +19,24 @@ in vec4 pass_normal;
 out vec4 out_Color;
 
 void main(void) {
-	int i;
 	vec3 light = vec3(0, 0, 0);
 	
 	//Calculate the location of this fragment (pixel) in world coordinates
     vec4 position = modelMatrix * pass_position;
     
-    for(i = 0; i < numLights; i++) {
+    for(int i = 0; i < numLights; i++) {
 	    //Calculate the vector from this pixels surface to the light source
 	    vec4 lightDir = lights[i].position - position;
+	    float length = length(lightDir);
 	    vec3 lightColor = lights[i].color;
 	    
 	    //Calculate the cosine of the angle of incidence (brightness)
-	    float intensity = dot(pass_normal, normalize(lightDir)) * lights[i].intensity / length(lightDir);
-	    light.r += lightColor.r * intensity;
-	    light.g += lightColor.g * intensity;
-	    light.b += lightColor.b * intensity;
+	    float fDiffuse = dot(pass_normal, normalize(lightDir));
+	    float fAttTotal = 1 / (0.0 + 0.2 * length + 0.00008 * length * length);
+	    light.r += lightColor.r * fAttTotal;
+	    light.g += lightColor.g * fAttTotal;
+	    light.b += lightColor.b * fAttTotal;
 	}
     
-    light.r = clamp(light.r, 0, 1);
-    light.g = clamp(light.g, 0, 1);
-    light.b = clamp(light.b, 0, 1);
-    
-    out_Color = texture(diffuse, pass_texCoord) * vec4(light, 1);
+    out_Color = vec4(light, 1) * texture(diffuse, pass_texCoord);
 }
