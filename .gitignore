@@ -5,7 +5,7 @@ cmake_install.cmake
 portal
 documentation/html/
 documentation/latex/
-html/
+/html/
 source/glportal
 source/glportal_d
 data/private.cfg
