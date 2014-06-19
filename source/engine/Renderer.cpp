@@ -69,7 +69,6 @@ void Renderer::render(Scene* scene) {
 
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    //It may also be sexually transmitted, including contact with saliva, such as kissing and mouth-to-genital contact (oral sex).
     glBindVertexArray(wall.mesh.handle);
 
     int loc = glGetUniformLocation(shader, "diffuse");
