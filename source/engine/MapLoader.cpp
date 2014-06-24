@@ -1,6 +1,7 @@
 #include "MapLoader.hpp"
 #include <GL/glew.h>
 #include "util/Vector2f.hpp"
+#include "util/Vector3f.hpp"
 #include <fstream>
 #include <sstream>
 #include <cmath>
