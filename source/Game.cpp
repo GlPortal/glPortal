@@ -4,7 +4,7 @@
 
 namespace glPortal {
 
-Game::Game() {
+  Game::Game(): closed(0) {
   window.create("GlPortal", 800, 800);
   world.create();
   update();
@@ -20,7 +20,6 @@ void Game::update() {
   int skipped;
   //Amount of times rendered so far, gets reset each second
   int rendered = 0;
-
   while (!closed) {
     skipped = 0;
     //Count the FPS

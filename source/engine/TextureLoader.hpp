@@ -3,6 +3,7 @@
 
 #include "Texture.hpp"
 #include <map>
+#include <string>
 
 namespace glPortal {
 
