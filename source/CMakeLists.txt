@@ -32,7 +32,7 @@ add_executable(${EXE_NAME}
 #  Shot.cpp Portal.cpp 
 #  Window.cpp Exception.cpp
   )
-target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES} boost_system boost_thread boost_filesystem)
+target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
 install ( TARGETS ${EXE_NAME} DESTINATION bin )
 
 #add_executable(${SERVER_EXE_NAME} EXCLUDE_FROM_ALL
