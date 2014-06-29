@@ -12,6 +12,9 @@ add_executable(${EXE_NAME}
   engine/Resource.cpp
   Input.cpp engine/Renderer.cpp
   engine/MapLoader.cpp
+  engine/environment/Environment.cpp
+  engine/environment/ConfigFileParser.cpp
+  engine/environment/Path.cpp
 
 #  Main.cpp Game.cpp Path.cpp
 #  engine/network/client/UdpClient.cpp

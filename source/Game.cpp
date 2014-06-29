@@ -1,11 +1,30 @@
 #include "Game.hpp"
 #include "Window.hpp"
 #include <iostream>
+#include <stdexcept>
 
 namespace glPortal {
+Game::Game(): closed(0) {
+  config = Environment::getConfigPointer();
+  int height, width;
+  std::string fullscreen;
+  try{
+    height  = config->getIntByKey("height");
+    width   = config->getIntByKey("width");
+  } catch (const std::invalid_argument& e){
+    height  = 800;
+    width   = 800;
+  }
+  window.create("GlPortal", width, height);
+  try{
+    fullscreen  = config->getStringByKey("fullscreen");
+  } catch (const std::invalid_argument& e){
+  }
 
-  Game::Game(): closed(0) {
-  window.create("GlPortal", 800, 800);
+  if(fullscreen == "yes"){
+    window.setFullscreen();
+  }
+  
   world.create();
   update();
 }
@@ -75,6 +94,7 @@ using namespace glPortal;
 Window window;
 
 int main(int argc, char *argv[]) {
+  Environment::init(argc, argv);
   Game game;
 
   return 0;
