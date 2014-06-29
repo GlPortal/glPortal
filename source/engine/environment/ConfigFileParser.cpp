@@ -32,6 +32,7 @@ namespace glPortal {
             }
           }
           strings.push_back(stringBuffer);
+          stringBuffer = "";
           configMap[strings.at(0)] = strings.at(1);
         }
       }
