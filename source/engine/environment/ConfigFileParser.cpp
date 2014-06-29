@@ -4,33 +4,34 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
-#include <boost/foreach.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/tokenizer.hpp>
 #include <stdexcept>      
-using namespace boost;
 using namespace std;
 
 namespace glPortal {
   ConfigFileParser::ConfigFileParser(std::string filename) {
     std::ifstream file(filename, std::ifstream::in);
-    std::string line, string;
+    std::string line, string, stringBuffer;
     if(!file.is_open()) {
       throw std::invalid_argument("File " + filename + " not found.");
     } else {
       while(file.good()) {
         std::getline(file, line);
         std::stringstream stringStream(line);
+        int i;
         if(line.length() > 0) {
+          std::string seperator = " ";
           vector<std::string> strings;
-            
-          boost::char_separator<char> sep(" ");
-          tokenizer<char_separator<char>> tok(line, sep);
-          for(tokenizer<char_separator<char>>::iterator beg = tok.begin(); beg != tok.end(); ++beg) {
-            std::string sis;
-            sis = *beg;
-            strings.push_back(*beg);
+          for(i=0;i<line.length();i++){
+            if(line[i] == ' '){
+              strings.push_back(stringBuffer);
+              stringBuffer = "";
+            } else {
+              std::string character(1, line[i]);
+              const char* characterConstant = character.c_str();
+              stringBuffer.append(characterConstant);
+            }
           }
+          strings.push_back(stringBuffer);
           configMap[strings.at(0)] = strings.at(1);
         }
       }
