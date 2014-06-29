@@ -1,4 +1,5 @@
 #include "Vector3f.hpp"
+
 #include <math.h>
 #include <stdio.h>
 
@@ -16,6 +17,12 @@ void Vector3f::set(float x, float y, float z) {
   this->z = z;
 }
 
+void Vector3f::set(Vector3f v) {
+  this->x = v.x;
+  this->y = v.y;
+  this->z = v.z;
+}
+
 Vector3f* Vector3f::add(Vector3f v) {
   this->x += v.x;
   this->y += v.y;
@@ -31,7 +38,7 @@ Vector3f* Vector3f::subtract(Vector3f v) {
 }
 
 float Vector3f::length() {
-  return sqrt(x*x + y*y + z*z);
+  return sqrt(x * x + y * y + z * z);
 }
 
 Vector3f* Vector3f::normalize() {
@@ -60,6 +67,14 @@ Vector3f Vector3f::sub(Vector3f v1, Vector3f v2) {
   v.y = v1.y - v2.y;
   v.z = v1.z - v2.z;
   return v;
+}
+
+Vector3f Vector3f::scale(Vector3f v, float scale) {
+  Vector3f vc;
+  vc.x = v.x * scale;
+  vc.y = v.y * scale;
+  vc.z = v.z * scale;
+  return vc;
 }
 
 Vector3f Vector3f::negate(Vector3f v) {

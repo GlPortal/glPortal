@@ -6,9 +6,12 @@
 
 namespace glPortal {
 
-class Player : public Entity {
+class Player: public Entity {
 public:
-  Player() : velocity(0, 0, 0) {}
+  Player() :
+      velocity(0, 0, 0) {
+    scale.set(1, 2, 1);
+  }
   Vector3f velocity;
 };
 

@@ -1,30 +1,40 @@
 #include "Game.hpp"
-#include "Window.hpp"
+
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keyboard.h>
+#include <SDL2/SDL_timer.h>
 #include <iostream>
 #include <stdexcept>
+#include <string>
+
+#include "engine/environment/ConfigFileParser.hpp"
+#include "engine/environment/Environment.hpp"
+#include "Input.hpp"
 
 namespace glPortal {
-Game::Game(): closed(0) {
+
+Game::Game() :
+    closed(false) {
   config = Environment::getConfigPointer();
   int height, width;
   std::string fullscreen;
-  try{
-    height  = config->getIntByKey("height");
-    width   = config->getIntByKey("width");
-  } catch (const std::invalid_argument& e){
-    height  = 800;
-    width   = 800;
+  try {
+    height = config->getIntByKey("height");
+    width = config->getIntByKey("width");
+  } catch (const std::invalid_argument& e) {
+    height = 800;
+    width = 800;
   }
-  window.create("GlPortal", width, height);
-  try{
-    fullscreen  = config->getStringByKey("fullscreen");
-  } catch (const std::invalid_argument& e){
+  try {
+    fullscreen = config->getStringByKey("fullscreen");
+  } catch (const std::invalid_argument& e) { }
+
+  if (fullscreen == "yes") {
+    window.create("GlPortal", width, height, true);
+  } else {
+    window.create("GlPortal", width, height, false);
   }
 
-  if(fullscreen == "yes"){
-    window.setFullscreen();
-  }
-  
   world.create();
   update();
 }
@@ -39,10 +49,11 @@ void Game::update() {
   int skipped;
   //Amount of times rendered so far, gets reset each second
   int rendered = 0;
+
   while (!closed) {
     skipped = 0;
     //Count the FPS
-    if(SDL_GetTicks() - lastFpsTime > 1000) {
+    if (SDL_GetTicks() - lastFpsTime > 1000) {
       lastFpsTime = SDL_GetTicks();
       int fps = rendered;
       std::cout << fps << std::endl;
@@ -50,7 +61,7 @@ void Game::update() {
     }
 
     //Update the game if it is time
-    while(SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
+    while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
       while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
           closed = 1;
@@ -61,7 +72,7 @@ void Game::update() {
 
           Input::keyPressed(key, mod);
 
-          if(key == 'q') {
+          if (key == 'q') {
             close();
           }
         }
@@ -70,6 +81,14 @@ void Game::update() {
           int mod = event.key.keysym.mod;
 
           Input::keyReleased(key, mod);
+        }
+        if (event.type == SDL_MOUSEBUTTONDOWN) {
+          if (event.button.button == SDL_BUTTON_LEFT) {
+            world.shootPortal(1);
+          }
+          if (event.button.button == SDL_BUTTON_RIGHT) {
+            world.shootPortal(2);
+          }
         }
       }
       world.update();

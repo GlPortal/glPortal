@@ -2,6 +2,4 @@
 
 namespace glPortal {
 
-
-
 } /* namespace glPortal */
