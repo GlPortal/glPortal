@@ -1,4 +1,5 @@
 #include "Vector2f.hpp"
+
 #include <math.h>
 #include <stdio.h>
 
@@ -27,7 +28,7 @@ Vector2f* Vector2f::subtract(Vector2f v) {
 }
 
 float Vector2f::length() {
-  return sqrt(x*x + y*y);
+  return sqrt(x * x + y * y);
 }
 
 Vector2f* Vector2f::normalize() {

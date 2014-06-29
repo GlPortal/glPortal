@@ -1,12 +1,12 @@
 #ifndef MESHLOADER_HPP
 #define MESHLOADER_HPP
 
-#include "Mesh.hpp"
-#include "assimp/Importer.hpp"
-#include "assimp/scene.h"
-#include "assimp/mesh.h"
-#include "assimp/postprocess.h"
 #include <map>
+#include <string>
+
+#include "Mesh.hpp"
+
+struct aiMesh;
 
 namespace glPortal {
 

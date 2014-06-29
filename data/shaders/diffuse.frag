@@ -3,13 +3,15 @@
 struct Light {
 	vec4 position;
 	vec3 color;
-	float intensity;
+	float constantAtt;
+	float linearAtt;
+	float quadraticAtt;
 };
 
 uniform mat4 modelMatrix;
 
 uniform sampler2D diffuse;
-uniform Light lights[150];
+uniform Light lights[100];
 uniform int numLights;
 
 in vec4 pass_position;
@@ -32,11 +34,11 @@ void main(void) {
 	    
 	    //Calculate the cosine of the angle of incidence (brightness)
 	    float fDiffuse = dot(pass_normal, normalize(lightDir));
-	    float fAttTotal = 1 / (0.0 + 0.2 * length + 0.00008 * length * length);
+	    float fAttTotal = 1 / (lights[i].constantAtt + lights[i].linearAtt * length + lights[i].quadraticAtt * length * length);
 	    light.r += lightColor.r * fAttTotal;
 	    light.g += lightColor.g * fAttTotal;
 	    light.b += lightColor.b * fAttTotal;
 	}
-    
+
     out_Color = vec4(light, 1) * texture(diffuse, pass_texCoord);
 }

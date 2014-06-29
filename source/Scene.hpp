@@ -1,11 +1,12 @@
 #ifndef SCENE_HPP
 #define SCENE_HPP
 
+#include <vector>
+
 #include "engine/Camera.hpp"
-#include "engine/Entity.hpp"
 #include "engine/Light.hpp"
 #include "Player.hpp"
-#include <vector>
+#include "Portal.hpp"
 
 namespace glPortal {
 
@@ -15,6 +16,8 @@ public:
   Camera camera;
   std::vector<Entity> walls;
   std::vector<Light> lights;
+  Portal bluePortal;
+  Portal orangePortal;
 };
 
 } /* namespace glPortal */

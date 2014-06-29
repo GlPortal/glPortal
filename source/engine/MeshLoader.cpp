@@ -1,17 +1,25 @@
 #include "MeshLoader.hpp"
-#include "GL/glew.h"
-#include <iostream>
+
+#include <GL/glew.h>
+#include <assimp/Importer.hpp>
+#include <assimp/mesh.h>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+#include <assimp/vector3.h>
+#include <stdlib.h>
+#include <utility>
 
 namespace glPortal {
 
-std::map<std::string, Mesh> MeshLoader::meshCache = {};
+std::map<std::string, Mesh> MeshLoader::meshCache = { };
 
 Mesh MeshLoader::getMesh(std::string path) {
-  if(meshCache.find(path) != meshCache.end()) {
+  if (meshCache.find(path) != meshCache.end()) {
     return meshCache.at(path);
   }
   Assimp::Importer importer;
-  const aiMesh* mesh = importer.ReadFile(path, aiProcess_Triangulate)->mMeshes[0];
+  const aiMesh* mesh =
+      importer.ReadFile(path, aiProcess_Triangulate)->mMeshes[0];
   Mesh m = uploadMesh(mesh);
   meshCache.insert(std::pair<std::string, Mesh>(path, m));
   return m;
@@ -23,7 +31,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
   //Store face indices in an array
   unsigned int faceArray[mesh->mNumFaces * 3];
 
-  for(unsigned int i = 0; i < mesh->mNumFaces; i++) {
+  for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
     const aiFace* face = &mesh->mFaces[i];
     faceArray[i * 3 + 0] = face->mIndices[0];
     faceArray[i * 3 + 1] = face->mIndices[1];
@@ -39,39 +47,43 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
   GLuint faceVBO;
   glGenBuffers(1, &faceVBO);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceVBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * mesh->mNumFaces * 3, faceArray, GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+      sizeof(unsigned int) * mesh->mNumFaces * 3, faceArray, GL_STATIC_DRAW);
 
   //Store vertices in a buffer
-  if(mesh->HasPositions()) {
+  if (mesh->HasPositions()) {
     GLuint vertexVBO;
     glGenBuffers(1, &vertexVBO);
     glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3, mesh->mVertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3,
+        mesh->mVertices, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(0);
   }
 
   //Store texture coordinates in a buffer
-  if(mesh->HasTextureCoords(0)) {
+  if (mesh->HasTextureCoords(0)) {
     GLuint textureVBO;
     float* texCoords = (float *) malloc(sizeof(float) * mesh->mNumVertices * 2);
     for (unsigned int k = 0; k < mesh->mNumVertices; ++k) {
-      texCoords[k*2]   = mesh->mTextureCoords[0][k].x;
-      texCoords[k*2+1] = mesh->mTextureCoords[0][k].y;
+      texCoords[k * 2] = mesh->mTextureCoords[0][k].x;
+      texCoords[k * 2 + 1] = mesh->mTextureCoords[0][k].y;
     }
     glGenBuffers(1, &textureVBO);
     glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 2, texCoords, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 2,
+        texCoords, GL_STATIC_DRAW);
     glVertexAttribPointer(1, 2, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(1);
   }
 
   //Store normals in a buffer
-  if(mesh->HasNormals()) {
+  if (mesh->HasNormals()) {
     GLuint normalVBO;
     glGenBuffers(1, &normalVBO);
     glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3, mesh->mNormals, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3,
+        mesh->mNormals, GL_STATIC_DRAW);
     glVertexAttribPointer(2, 3, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(2);
   }

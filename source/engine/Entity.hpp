@@ -9,7 +9,9 @@ namespace glPortal {
 
 class Entity {
 public:
-  Entity() : position(0, 0, 0), rotation(0, 0, 0), scale(1, 1, 1) {}
+  Entity() :
+      position(0, 0, 0), rotation(0, 0, 0), scale(1, 1, 1) {
+  }
   Mesh mesh;
   Texture texture;
 

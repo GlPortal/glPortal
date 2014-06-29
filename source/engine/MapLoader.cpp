@@ -1,13 +1,21 @@
 #include "MapLoader.hpp"
+
 #include <GL/glew.h>
-#include "util/Vector2f.hpp"
-#include "util/Vector3f.hpp"
-#include <fstream>
-#include <sstream>
 #include <cmath>
 #include <cstdlib>
-#include <iostream>
+#include <fstream>
+#include <istream>
+#include <sstream>
+#include <vector>
+
+#include "../Player.hpp"
+#include "../Scene.hpp"
+#include "Light.hpp"
+#include "Mesh.hpp"
+#include "Texture.hpp"
 #include "TextureLoader.hpp"
+#include "util/Vector2f.hpp"
+#include "util/Vector3f.hpp"
 
 using namespace std;
 

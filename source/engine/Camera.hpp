@@ -1,8 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "util/Vector3f.hpp"
 #include "util/Matrix4f.hpp"
+#include "util/Vector3f.hpp"
 
 const float DEFAULT_FOVY = 60;
 const float DEFAULT_ASPECT = 1;
@@ -13,7 +13,10 @@ namespace glPortal {
 
 class Camera {
 public:
-  Camera() : fovy(DEFAULT_FOVY), aspect(DEFAULT_ASPECT), zNear(DEFAULT_ZNEAR), zFar(DEFAULT_ZFAR) {recalculate();}
+  Camera() :
+      fovy(DEFAULT_FOVY), aspect(DEFAULT_ASPECT), zNear(DEFAULT_ZNEAR), zFar(DEFAULT_ZFAR) {
+    recalculate();
+  }
   Camera(float fovy, float aspect, float zNear, float zFar);
   void recalculate();
   Matrix4f getProjectionMatrix();

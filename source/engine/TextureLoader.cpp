@@ -1,7 +1,9 @@
 #include "TextureLoader.hpp"
-#include "GL/glew.h"
+
+#include <GL/glew.h>
+#include <utility>
+
 #include "stb_image.c"
-#include "stdio.h"
 
 namespace glPortal {
 
