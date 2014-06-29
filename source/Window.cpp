@@ -11,12 +11,8 @@ void Window::create(const char* title, int width, int height) {
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION,3);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION,3);
 
-  //  w = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-  //                   width, height, SDL_WINDOW_OPENGL);
-
-  w = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+  w = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                        width, height, SDL_WINDOW_OPENGL);
-
 
   //Create an OpenGL context associated with the window
   context = SDL_GL_CreateContext(w);
@@ -56,4 +52,10 @@ void Window::close() {
   SDL_Quit();
 }
 
+void Window::setFullscreen()
+{
+  SDL_SetWindowFullscreen(w, SDL_WINDOW_FULLSCREEN);
+}
+
+  
 } /* namespace glPortal */
