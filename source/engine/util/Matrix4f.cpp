@@ -1,6 +1,9 @@
 #include "Matrix4f.hpp"
-#include <stdio.h>
+
 #include <math.h>
+#include <stdio.h>
+
+#include "Vector3f.hpp"
 
 #define PI 3.14159265358979323846
 
@@ -11,17 +14,16 @@ Matrix4f::Matrix4f() {
 }
 
 Matrix4f::Matrix4f(float array[]) {
-  for(int i = 0; i < 16; i++) {
+  for (int i = 0; i < 16; i++) {
     this->array[i] = array[i];
   }
 }
 
 void Matrix4f::setIdentity() {
-  for(int i = 0; i < 16; i++) {
-    if(i % 5 == 0) {
+  for (int i = 0; i < 16; i++) {
+    if (i % 5 == 0) {
       array[i] = 1;
-    }
-    else {
+    } else {
       array[i] = 0;
     }
   }
@@ -35,28 +37,55 @@ void Matrix4f::translate(Vector3f v) {
 }
 
 void Matrix4f::rotate(float angle, float x, float y, float z) {
-  float c = cos(angle*PI/180);
-  float s = sin(angle*PI/180);
+  float c = cos(angle * PI / 180);
+  float s = sin(angle * PI / 180);
   float ic = 1 - c;
 
-  float f0 = array[0]*((x*x*ic)+c) + array[4]*((x*y*ic)+(z*s)) + array[8]*((x*z*ic)-(y*s));
-  float f1 = array[1]*((x*x*ic)+c) + array[5]*((x*y*ic)+(z*s)) + array[9]*((x*z*ic)-(y*s));
-  float f2 = array[2]*((x*x*ic)+c) + array[6]*((x*y*ic)+(z*s)) + array[10]*((x*z*ic)-(y*s));
-  float f3 = array[3]*((x*x*ic)+c) + array[7]*((x*y*ic)+(z*s)) + array[11]*((x*z*ic)-(y*s));
+  float f0 = array[0] * ((x * x * ic) + c) + array[4] * ((x * y * ic) + (z * s))
+      + array[8] * ((x * z * ic) - (y * s));
+  float f1 = array[1] * ((x * x * ic) + c) + array[5] * ((x * y * ic) + (z * s))
+      + array[9] * ((x * z * ic) - (y * s));
+  float f2 = array[2] * ((x * x * ic) + c) + array[6] * ((x * y * ic) + (z * s))
+      + array[10] * ((x * z * ic) - (y * s));
+  float f3 = array[3] * ((x * x * ic) + c) + array[7] * ((x * y * ic) + (z * s))
+      + array[11] * ((x * z * ic) - (y * s));
 
-  float f4 = array[0]*((x*y*ic)-(z*s)) + array[4]*((y*y*ic)+c) + array[8]*((y*z*ic)+(x*s));
-  float f5 = array[1]*((x*y*ic)-(z*s)) + array[5]*((y*y*ic)+c) + array[9]*((y*z*ic)+(x*s));
-  float f6 = array[2]*((x*y*ic)-(z*s)) + array[6]*((y*y*ic)+c) + array[10]*((y*z*ic)+(x*s));
-  float f7 = array[3]*((x*y*ic)-(z*s)) + array[7]*((y*y*ic)+c) + array[11]*((y*z*ic)+(x*s));
+  float f4 = array[0] * ((x * y * ic) - (z * s)) + array[4] * ((y * y * ic) + c)
+      + array[8] * ((y * z * ic) + (x * s));
+  float f5 = array[1] * ((x * y * ic) - (z * s)) + array[5] * ((y * y * ic) + c)
+      + array[9] * ((y * z * ic) + (x * s));
+  float f6 = array[2] * ((x * y * ic) - (z * s)) + array[6] * ((y * y * ic) + c)
+      + array[10] * ((y * z * ic) + (x * s));
+  float f7 = array[3] * ((x * y * ic) - (z * s)) + array[7] * ((y * y * ic) + c)
+      + array[11] * ((y * z * ic) + (x * s));
 
-  float f8 = array[0]*((x*z*ic)+(y*s)) + array[4]*((y*z*ic)-(x*s)) + array[8]*((z*z*ic)+c);
-  float f9 = array[1]*((x*z*ic)+(y*s)) + array[5]*((y*z*ic)-(x*s)) + array[9]*((z*z*ic)+c);
-  float f10 = array[2]*((x*z*ic)+(y*s)) + array[6]*((y*z*ic)-(x*s)) + array[10]*((z*z*ic)+c);
-  float f11 = array[3]*((x*z*ic)+(y*s)) + array[7]*((y*z*ic)-(x*s)) + array[11]*((z*z*ic)+c);
+  float f8 = array[0] * ((x * z * ic) + (y * s))
+      + array[4] * ((y * z * ic) - (x * s)) + array[8] * ((z * z * ic) + c);
+  float f9 = array[1] * ((x * z * ic) + (y * s))
+      + array[5] * ((y * z * ic) - (x * s)) + array[9] * ((z * z * ic) + c);
+  float f10 = array[2] * ((x * z * ic) + (y * s))
+      + array[6] * ((y * z * ic) - (x * s)) + array[10] * ((z * z * ic) + c);
+  float f11 = array[3] * ((x * z * ic) + (y * s))
+      + array[7] * ((y * z * ic) - (x * s)) + array[11] * ((z * z * ic) + c);
 
-  array[0] = f0; array[1] = f1; array[2] = f2; array[3] = f3;
-  array[4] = f4; array[5] = f5; array[6] = f6; array[7] = f7;
-  array[8] = f8; array[9] = f9; array[10] = f10; array[11] = f11;
+  array[0] = f0;
+  array[1] = f1;
+  array[2] = f2;
+  array[3] = f3;
+  array[4] = f4;
+  array[5] = f5;
+  array[6] = f6;
+  array[7] = f7;
+  array[8] = f8;
+  array[9] = f9;
+  array[10] = f10;
+  array[11] = f11;
+}
+
+void Matrix4f::rotate(Vector3f v) {
+  rotate(v.x, 1, 0, 0);
+  rotate(v.y, 0, 1, 0);
+  rotate(v.z, 0, 0, 1);
 }
 
 void Matrix4f::scale(Vector3f v) {

@@ -1,11 +1,11 @@
 #include "Resource.hpp"
-#include <fstream>
+
+#include <GL/gl.h>
 #include <iostream>
-#include <vector>
+#include <fstream>
 #include <string>
 
 namespace glPortal {
-
 
 int Resource::loadShaders() {
   //Load the shaders
@@ -23,7 +23,7 @@ int Resource::loadShaders() {
   //Error checking
   GLint success = 0;
   glGetProgramiv(shaderProgram, GL_VALIDATE_STATUS, &success);
-  if(success == GL_TRUE) {
+  if (success == GL_TRUE) {
     std::cout << "Shader program linked successfully" << std::endl;
   }
 
@@ -34,8 +34,7 @@ int Resource::loadShader(const char* filename, GLenum type) {
   std::ifstream file(filename);
   std::string str;
   std::string file_contents;
-  while (std::getline(file, str))
-  {
+  while (std::getline(file, str)) {
     file_contents += str;
     file_contents.push_back('\n');
   }
@@ -49,19 +48,18 @@ int Resource::loadShader(const char* filename, GLenum type) {
   GLint success = 0;
   glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
-  if(success == GL_TRUE) {
-    if(type == GL_VERTEX_SHADER) {
+  if (success == GL_TRUE) {
+    if (type == GL_VERTEX_SHADER) {
       std::cout << "Vertex shader compiled successfully" << std::endl;
     }
-    if(type == GL_FRAGMENT_SHADER) {
+    if (type == GL_FRAGMENT_SHADER) {
       std::cout << "Fragment shader compiled successfully" << std::endl;
     }
-  }
-  else {
-    if(type == GL_VERTEX_SHADER) {
+  } else {
+    if (type == GL_VERTEX_SHADER) {
       std::cout << "Vertex shader compilation failed" << std::endl;
     }
-    if(type == GL_FRAGMENT_SHADER) {
+    if (type == GL_FRAGMENT_SHADER) {
       std::cout << "Fragment shader compilation failed" << std::endl;
     }
     GLint logSize = 0;

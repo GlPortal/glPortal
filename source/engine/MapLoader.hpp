@@ -1,10 +1,12 @@
 #ifndef MAPLOADER_HPP
 #define MAPLOADER_HPP
 
-#include "../Scene.hpp"
 #include <string>
 
 namespace glPortal {
+class Entity;
+class Mesh;
+class Scene;
 
 class MapLoader {
 public:

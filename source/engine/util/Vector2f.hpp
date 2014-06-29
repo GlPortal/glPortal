@@ -7,7 +7,9 @@ class Vector2f {
 public:
   float x, y;
 
-  Vector2f() : Vector2f(0, 0) {}
+  Vector2f() :
+      Vector2f(0, 0) {
+  }
   Vector2f(float x, float y);
   void set(float x, float y);
   Vector2f *add(Vector2f v);
