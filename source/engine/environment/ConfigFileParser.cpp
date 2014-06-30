@@ -22,7 +22,6 @@ ConfigFileParser::ConfigFileParser(std::string filename) {
       std::stringstream stringStream(line);
 
       if (line.length() > 0) {
-        std::string seperator = " ";
         vector<std::string> strings;
         for (unsigned int i = 0; i < line.length(); i++) {
           if (line[i] == ' ') {
