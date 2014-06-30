@@ -13,7 +13,7 @@ namespace glPortal {
 
 ConfigFileParser::ConfigFileParser(std::string filename) {
   std::ifstream file(filename, std::ifstream::in);
-  std::string line, string, stringBuffer;
+  std::string line, stringBuffer;
   if (!file.is_open()) {
     throw std::invalid_argument("File " + filename + " not found.");
   } else {
@@ -36,8 +36,11 @@ ConfigFileParser::ConfigFileParser(std::string filename) {
         }
         strings.push_back(stringBuffer);
         stringBuffer = "";
-
-        configMap[strings.at(0)] = strings.at(1);
+        if(strings.size() >= 2){
+          configMap[strings.at(0)] = strings.at(1);
+        } else {
+          throw std::runtime_error("Config parser is expecting two items per line.");
+        }
       }
     }
     file.close();
