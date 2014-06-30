@@ -1,0 +1,24 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Create Debian Package
+desc: Create a debian package and add the download to the website.
+type: :task
+component: game
+release: 
+reporter: Henry Hirsch <henry@glportal.de>
+status: :unstarted
+disposition: 
+creation_time: 2014-05-21 21:03:05.561039 Z
+references: []
+
+id: cd5442f051b1fdb61a1dffc7efb4755c44281b4a
+log_events: 
+- - 2014-05-21 21:03:09.144971 Z
+  - Henry Hirsch <henry@glportal.de>
+  - created
+  - ""
+- - 2014-05-21 21:04:14.865258 Z
+  - Henry Hirsch <henry@glportal.de>
+  - edited title
+  - ""
+claimer: 
+git_branch: 
