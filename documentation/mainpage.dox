@@ -1,0 +1,20 @@
+/** @mainpage Main Page
+
+@anchor mainpage
+
+Welcome to the GlPortal documentation. 
+Check out the @link Game Game class \endlink for a good starting point into the source code.
+
+@section inst Installation
+For instructions on how to build the game refer to COMPILE.org.
+
+@section tools Tools
+<p>
+<strong>Source code metrics</strong> can be found at <a href="http://metrics.glportal.de">http://metrics.glportal.de</a>.
+
+<strong>Current issues</strong> can be found at <a href="http://bugs.glportal.de">http://bugs.glportal.de</a>.
+
+You can <strong>Report Issues</strong> with the form at <a href="http://glportal.de/file-a-bug-report/">http://glportal.de/file-a-bug-report/</a>.
+</p>
+
+*/
