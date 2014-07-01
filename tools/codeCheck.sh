@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -l
 cd ..;
 mkdir -p html/cppcheck/;
 
