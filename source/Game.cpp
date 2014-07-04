@@ -45,13 +45,12 @@ void Game::update() {
   unsigned int nextUpdate = SDL_GetTicks();
   //Time of last FPS count
   unsigned int lastFpsTime = SDL_GetTicks();
-  //Amount of times rendering has been skipped in favour of updating
-  int skipped;
   //Amount of times rendered so far, gets reset each second
   int rendered = 0;
 
   while (!closed) {
-    skipped = 0;
+    //Amount of times rendering has been skipped in favour of updating
+    int skipped = 0;
     //Count the FPS
     if (SDL_GetTicks() - lastFpsTime > 1000) {
       lastFpsTime = SDL_GetTicks();
