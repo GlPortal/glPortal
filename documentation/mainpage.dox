@@ -3,7 +3,7 @@
 @anchor mainpage
 
 Welcome to the GlPortal documentation. 
-Check out the @link Game Game class \endlink for a good starting point into the source code.
+Check out the glPortal::World class for a good starting point into the source code.
 
 @section inst Installation
 For instructions on how to build the game refer to COMPILE.org.
