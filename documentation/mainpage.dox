@@ -3,7 +3,8 @@
 @anchor mainpage
 
 Welcome to the GlPortal documentation. 
-Check out the glPortal::World class for a good starting point into the source code.
+Check out the file World.cpp to get to a central point.
+Go to glPortal::Game::update() to start at the game loop.
 
 @section inst Installation
 You can get download a <strong>binary release</strong> from our website at <a href="http://glportal.de">http://glportal.de</a>.
