@@ -16,6 +16,7 @@ public:
   void close();
   static float aspect;
 private:
+  void initGlew();
   SDL_Window *w;
   SDL_GLContext context;
   ConfigFileParser * config;

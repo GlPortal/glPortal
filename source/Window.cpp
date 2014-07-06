@@ -13,6 +13,21 @@ namespace glPortal {
 
 float Window::aspect = 1;
 
+void Window::initGlew(){
+  glewExperimental = GL_TRUE;
+  GLuint error = glewInit();
+
+  if (error != GLEW_OK) {
+    std::cout << "Glew is not OK" << std::endl;
+    printf("Error initializing GLEW! %s\n", glewGetErrorString(error));
+    std::exit(1); // or handle the error in a nicer way
+  }
+  if (!GLEW_VERSION_2_1) { // check that the machine supports the 2.1 API.
+    std::cout << "Machine does not support 2.1 API" << std::endl;
+    std::exit(1); // or handle the error in a nicer way
+  }
+}
+  
 void Window::create(const char* title, int width, int height, bool fullscreen) {
   SDL_Init(SDL_INIT_VIDEO);
 
@@ -30,18 +45,7 @@ void Window::create(const char* title, int width, int height, bool fullscreen) {
   //Create an OpenGL context associated with the window
   context = SDL_GL_CreateContext(w);
 
-  glewExperimental = GL_TRUE;
-  GLuint error = glewInit();
-
-  if (error != GLEW_OK) {
-    std::cout << "Glew is not OK" << std::endl;
-    printf("Error initializing GLEW! %s\n", glewGetErrorString(error));
-    std::exit(1); // or handle the error in a nicer way
-  }
-  if (!GLEW_VERSION_2_1) { // check that the machine supports the 2.1 API.
-    std::cout << "Machine does not support 2.1 API" << std::endl;
-    std::exit(1); // or handle the error in a nicer way
-  }
+  this->initGlew();
 
   //Set aspect ratio
   aspect = (float) width / height;
@@ -59,7 +63,7 @@ void Window::createFromConfig(){
     height = config->getIntByKey("height");
     width = config->getIntByKey("width");
   } catch (const std::invalid_argument& e) {
-    height = 800;
+    height = 600;
     width = 800;
   }
   try {
