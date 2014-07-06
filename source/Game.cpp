@@ -13,28 +13,8 @@
 
 namespace glPortal {
 
-Game::Game() :
-    closed(false) {
-  config = Environment::getConfigPointer();
-  int height, width;
-  std::string fullscreen;
-  try {
-    height = config->getIntByKey("height");
-    width = config->getIntByKey("width");
-  } catch (const std::invalid_argument& e) {
-    height = 800;
-    width = 800;
-  }
-  try {
-    fullscreen = config->getStringByKey("fullscreen");
-  } catch (const std::invalid_argument& e) { }
-
-  if (fullscreen == "yes") {
-    window.create("GlPortal", width, height, true);
-  } else {
-    window.create("GlPortal", width, height, false);
-  }
-
+Game::Game() :closed(false) {
+  window.createFromConfig();
   world.create();
   update();
 }
