@@ -5,6 +5,9 @@
 #include <SDL2/SDL.h>
 #include <cstdlib>
 #include <iostream>
+#include "engine/environment/ConfigFileParser.hpp"
+#include "engine/environment/Environment.hpp"
+#include <stdexcept>
 
 namespace glPortal {
 
@@ -48,6 +51,28 @@ void Window::create(const char* title, int width, int height, bool fullscreen) {
   SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
+void Window::createFromConfig(){
+  config = Environment::getConfigPointer();
+  int height, width;
+  std::string fullscreen;
+  try {
+    height = config->getIntByKey("height");
+    width = config->getIntByKey("width");
+  } catch (const std::invalid_argument& e) {
+    height = 800;
+    width = 800;
+  }
+  try {
+    fullscreen = config->getStringByKey("fullscreen");
+  } catch (const std::invalid_argument& e) { }
+
+  if (fullscreen == "yes") {
+    this->create("GlPortal", width, height, true);
+  } else {
+    this->create("GlPortal", width, height, false);
+  }
+}
+  
 void Window::setFullscreen() {
   SDL_SetWindowFullscreen(w, SDL_WINDOW_FULLSCREEN);
 }
