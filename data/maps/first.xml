@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<map>
+  <spawn>
+    <vector x="2.5" y="1" z="5" />
+  </spawn>
+  <model type="cake">
+    <vector x="17.5" y="1" z="5" />
+  </model>
+  <objective>
+    <box>
+      <vector x="17" y="1" z="4.5" />
+      <vector x="18" y="2" z="5.5" />
+    </box>
+  </objective>
+  
+  <texture ref="inert">
+    <!-- block beneath the cake -->
+    <vector x="17" y="0" z="4.5" />
+    <vector x="18" y="1" z="5.5" />
+  </texture>
+  <texture ref="wall">
+    <!-- left floor -->
+    <box>
+      <vector x="0" y="-1" z="0" />
+      <vector x="5" y="0" z="10" />
+    </box>
+    <!-- right floor -->
+    <box>
+      <vector x="0" y="-1" z="0" />
+      <vector x="5" y="0" z="10" />
+    </box>
+    <!-- left wall -->
+    <box>
+      <vector x="-1" y="0" z="0" />
+      <vector x="0" y="8" z="10" />
+    </box>
+    <!-- right wall -->
+    <box>
+      <vector x="20" y="0" z="0" />
+      <vector x="21" y="8" z="10" />
+    </box>
+    <!-- front wall -->
+    <box>
+      <vector x="0" y="-1" z="-1" />
+      <vector x="20" y="8" z="0" />
+    </box>
+    <!-- back wall -->
+    <box>
+      <vector x="0" y="-1" z="10" />
+      <vector x="20" y="8" z="11" />
+    </box>
+  </texture>
+  <texture ref="inert">
+    <!-- ceiling -->
+    <box>
+      <vector x="0" y="8" z="0" />
+      <vector x="20" y="9" z="10" />
+    </box>
+  </texture>
+  <texture ref="waste">
+    <!-- block beneath the cake -->
+    <box>
+      <vector x="5" y="-5" z="0" />
+      <vector x="15" y="-1" z="10" />
+    </box>
+  </texture>
+</map>
