@@ -10,3 +10,7 @@ data/private.cfg
 .\#*
 /Default
 .ditz-config
+.settings/
+.project
+.cproject
+Debug/
