@@ -18,13 +18,12 @@ void Window::initGlew(){
   GLuint error = glewInit();
 
   if (error != GLEW_OK) {
-    std::cout << "Glew is not OK" << std::endl;
     printf("Error initializing GLEW! %s\n", glewGetErrorString(error));
-    std::exit(1); // or handle the error in a nicer way
+    std::exit(1); 
   }
-  if (!GLEW_VERSION_2_1) { // check that the machine supports the 2.1 API.
-    std::cout << "Machine does not support 2.1 API" << std::endl;
-    std::exit(1); // or handle the error in a nicer way
+  if (!GLEW_VERSION_2_1) { 
+    std::cout << "Your hardware does not support 2.1 API" << std::endl;
+    std::exit(1); 
   }
 }
   

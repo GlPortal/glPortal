@@ -15,8 +15,10 @@
   
   <texture ref="inert">
     <!-- block beneath the cake -->
-    <vector x="17" y="0" z="4.5" />
-    <vector x="18" y="1" z="5.5" />
+    <box>
+      <vector x="17" y="0" z="4.5" />
+      <vector x="18" y="1" z="5.5" />
+    </box>
   </texture>
   <texture ref="wall">
     <!-- left floor -->
