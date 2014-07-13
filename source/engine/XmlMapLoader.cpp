@@ -25,10 +25,7 @@ using namespace std;
 namespace glPortal {
 
 Scene* XmlMapLoader::getScene(std::string path) {
-  //  XMLDocument doc;
-  //  doc.LoadFile(Environment::getDataDir() + "first.xml" );
-  //TiXmlDocument doc(Environment::getDataDir() + "first.xml" );
-  //  TiXmlDocument doc(std::string("/home/henry/system/projects/c++/glPortal/data/maps/first.xml"));
+  Scene* scene = new Scene();
   TiXmlDocument doc(std::string(Environment::getDataDir() + "/maps/first.xml"));
   bool loaded = doc.LoadFile();
  
@@ -36,30 +33,161 @@ Scene* XmlMapLoader::getScene(std::string path) {
     TiXmlHandle docHandle(&doc);
     TiXmlElement* mapElement;
     TiXmlElement* element;
-    TiXmlElement* spawnElement;
     TiXmlElement* spawnVectorElement;
+    TiXmlElement* textureElement;
     TiXmlHandle rootHandle(0);
-    float x, y, z;
+    float spawnX, spawnY, spawnZ;
+    
     element = docHandle.FirstChildElement().Element();
     rootHandle=TiXmlHandle(element);
+    //SPAWN
     spawnVectorElement = rootHandle.FirstChild( "spawn" ).FirstChild().Element();
 
     if(spawnVectorElement){
-      spawnVectorElement->QueryFloatAttribute("x", &x);
-      spawnVectorElement->QueryFloatAttribute("y", &y);
-      spawnVectorElement->QueryFloatAttribute("z", &z);
-    }
-    std::cout << x << " / ";
-    std::cout << y << " / ";
-    std::cout << z << " / ";
+      spawnVectorElement->QueryFloatAttribute("x", &spawnX);
+      spawnVectorElement->QueryFloatAttribute("y", &spawnY);
+      spawnVectorElement->QueryFloatAttribute("z", &spawnZ);
+      scene->player.position.set(spawnX, spawnY, spawnZ);
 
+    }
+    //END_SPAWN
+
+    //WALLS
+    std::string texturePath("none");
+    std::string surfaceType("none");
+    textureElement = rootHandle.FirstChild("texture").Element();
+    if(textureElement){
+      for(textureElement; textureElement; textureElement = textureElement->NextSiblingElement()){
+        textureElement->QueryStringAttribute("source", &texturePath);
+        textureElement->QueryStringAttribute("type"  , &surfaceType);
+        TiXmlElement* wallBoxElement;
+        wallBoxElement = textureElement->FirstChildElement("box");
+        for(wallBoxElement; wallBoxElement; wallBoxElement = wallBoxElement->NextSiblingElement()){
+          TiXmlElement* boxVectorElement;
+          float boxX, boxY, boxZ, endBoxX, endBoxY, endBoxZ;
+          boxVectorElement = wallBoxElement->FirstChildElement("vector");
+          boxVectorElement->QueryFloatAttribute("x", &boxX);
+          boxVectorElement->QueryFloatAttribute("y", &boxY);
+          boxVectorElement->QueryFloatAttribute("z", &boxZ);
+
+          boxVectorElement = boxVectorElement->NextSiblingElement();
+          boxVectorElement->QueryFloatAttribute("x", &endBoxX);
+          boxVectorElement->QueryFloatAttribute("y", &endBoxY);
+          boxVectorElement->QueryFloatAttribute("z", &endBoxZ);
+
+          Entity wall;
+          wall.position.set((boxX + endBoxX) / 2, (boxY + endBoxY) / 2, (boxZ + endBoxZ) / 2);
+          wall.scale.set(abs(boxX - endBoxX), abs(boxY - endBoxY), abs(boxZ - endBoxZ));
+          wall.texture = TextureLoader::getTexture(Environment::getDataDir() + "/textures/" + texturePath);
+          wall.mesh = getBox(wall);
+          scene->walls.push_back(wall);
+          }
+        texturePath = std::string("none");
+        
+      }
+    }
+    //END_WALLS
+    
     std::cout << "File loaded.";
   } else {
     std::cout << "Unable to load File.";
   }
   
-  Scene* scene = new Scene();
   return scene;
 }
 
+Mesh XmlMapLoader::getBox(Entity wall) {
+  Mesh mesh;
+
+  GLuint vao;
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+
+  //Vertices
+  Vector3f vertices[8] = {Vector3f(-0.5, -0.5f, -0.5f),
+                          Vector3f(-0.5f, -0.5f, 0.5f),
+                          Vector3f(-0.5f, 0.5f, -0.5f),
+                          Vector3f(-0.5f, 0.5f, 0.5f),
+                          Vector3f(0.5f, -0.5f, -0.5f),
+                          Vector3f(0.5f, -0.5f, 0.5f),
+                          Vector3f(0.5f, 0.5f, -0.5f),
+                          Vector3f(0.5f, 0.5f, 0.5f)};
+
+  float vi[36] = {3,1,5,3,5,7, 7,5,4,7,4,6, 6,4,0,6,0,2, 2,0,1,2,1,3, 2,3,7,2,7,6, 1,0,4,1,4,5};
+  float vertexBuffer[36 * 3];
+  for(int i = 0; i < 36; i++) {
+    int index = vi[i];
+    vertexBuffer[i * 3 + 0] = vertices[index].x;
+    vertexBuffer[i * 3 + 1] = vertices[index].y;
+    vertexBuffer[i * 3 + 2] = vertices[index].z;
+  }
+  //Put the vertex buffer into the VAO
+  GLuint vertexVBO;
+  glGenBuffers(1, &vertexVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36 * 3, vertexBuffer, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
+  glEnableVertexAttribArray(0);
+
+  //Texture coordinates
+  Vector2f texCoords[8] = {Vector2f(0, 0),
+                          Vector2f(wall.scale.x, 0),
+                          Vector2f(wall.scale.z, 0),
+                          Vector2f(0, wall.scale.y),
+                          Vector2f(0, wall.scale.z),
+                          Vector2f(wall.scale.x, wall.scale.y),
+                          Vector2f(wall.scale.x, wall.scale.z),
+                          Vector2f(wall.scale.z, wall.scale.y)};
+
+  float ti[36] = {0,3,5,0,5,1, 0,3,7,0,7,2, 0,3,5,0,5,1, 0,3,7,0,7,2, 0,4,6,0,6,1, 0,4,6,0,6,1};
+  float textureBuffer[36 * 2];
+  for(int i = 0; i < 36; i++) {
+    int index = ti[i];
+    textureBuffer[i * 2 + 0] = texCoords[index].x;
+    textureBuffer[i * 2 + 1] = texCoords[index].y;
+  }
+  //Put the texture buffer into the VAO
+  GLuint textureVBO;
+  glGenBuffers(1, &textureVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36 * 2, textureBuffer, GL_STATIC_DRAW);
+  glVertexAttribPointer(1, 2, GL_FLOAT, 0, 0, 0);
+  glEnableVertexAttribArray(1);
+
+  //Normals
+  Vector3f normals[6] = {Vector3f(0, 0, 1),
+                         Vector3f(1, 0, 0),
+                         Vector3f(0, 0, -1),
+                         Vector3f(-1, 0, 0),
+                         Vector3f(0, 1, 0),
+                         Vector3f(0, -1, 0)};
+
+  float ni[36] = {0,0,0,0,0,0, 1,1,1,1,1,1, 2,2,2,2,2,2, 3,3,3,3,3,3, 4,4,4,4,4,4, 5,5,5,5,5,5};
+  float normalBuffer[36 * 3];
+  for(int i = 0; i < 36; i++) {
+    int index = ni[i];
+    normalBuffer[i * 3 + 0] = normals[index].x;
+    normalBuffer[i * 3 + 1] = normals[index].y;
+    normalBuffer[i * 3 + 2] = normals[index].z;
+  }
+  //Put the normal buffer into the VAO
+  GLuint normalVBO;
+  glGenBuffers(1, &normalVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36 * 3, normalBuffer, GL_STATIC_DRAW);
+  glVertexAttribPointer(2, 3, GL_FLOAT, 0, 0, 0);
+  glEnableVertexAttribArray(2);
+
+  //Unbind the buffers
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+
+  //Store relevant data in the new mesh
+  mesh.handle = vao;
+  mesh.numFaces = 12;
+
+  return mesh;
+}
+
+  
 } /* namespace glPortal */

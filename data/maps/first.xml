@@ -3,6 +3,9 @@
   <spawn>
     <vector x="2.5" y="1" z="5" />
   </spawn>
+  <light r="1" g="1" b="1">
+    <vector x="10" y="7" z="5" />
+  </light>
   <model type="cake">
     <vector x="17.5" y="1" z="5" />
   </model>
@@ -13,14 +16,14 @@
     </box>
   </objective>
   
-  <texture ref="inert">
+  <texture source="tiles.png">
     <!-- block beneath the cake -->
     <box>
       <vector x="17" y="0" z="4.5" />
       <vector x="18" y="1" z="5.5" />
     </box>
   </texture>
-  <texture ref="wall">
+  <texture source="wall.png" type="portable">
     <!-- left floor -->
     <box>
       <vector x="0" y="-1" z="0" />
@@ -28,8 +31,8 @@
     </box>
     <!-- right floor -->
     <box>
-      <vector x="0" y="-1" z="0" />
-      <vector x="5" y="0" z="10" />
+      <vector x="15" y="-1" z="0" />
+      <vector x="20" y="0" z="10" />
     </box>
     <!-- left wall -->
     <box>
@@ -52,14 +55,14 @@
       <vector x="20" y="8" z="11" />
     </box>
   </texture>
-  <texture ref="inert">
+  <texture source="tiles.png">
     <!-- ceiling -->
     <box>
       <vector x="0" y="8" z="0" />
       <vector x="20" y="9" z="10" />
     </box>
   </texture>
-  <texture ref="waste">
+  <texture source="acid.png">
     <!-- block beneath the cake -->
     <box>
       <vector x="5" y="-5" z="0" />
