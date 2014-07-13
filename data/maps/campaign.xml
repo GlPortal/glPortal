@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<campaign>
+  <screen>welcome</screen>
+  <text>Welcome to the game. Hit any key to start.</text> 
+  <map>first</map>
+  <text>Gratz, you've made it through the game.</text> 
+</campaign>

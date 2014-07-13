@@ -12,12 +12,13 @@ add_executable(${EXE_NAME}
   engine/Resource.cpp
   Input.cpp engine/Renderer.cpp
   engine/MapLoader.cpp
+  engine/XmlMapLoader.cpp
   engine/MeshLoader.cpp
   engine/environment/Environment.cpp
   engine/environment/ConfigFileParser.cpp
   engine/environment/Path.cpp
   )
-target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
+target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES} tinyxml)
 install ( TARGETS ${EXE_NAME} DESTINATION bin )
 
 add_custom_target(run COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXE_NAME}${CMAKE_EXECUTABLE_SUFFIX} -datadir ${CMAKE_SOURCE_DIR}/data )
