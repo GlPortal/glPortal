@@ -9,6 +9,7 @@
 #include "engine/Camera.hpp"
 #include "engine/Light.hpp"
 #include "engine/MapLoader.hpp"
+#include "engine/XmlMapLoader.hpp"
 #include "engine/Mesh.hpp"
 #include "engine/MeshLoader.hpp"
 #include "engine/Renderer.hpp"
@@ -30,7 +31,9 @@ const float GRAVITY = 0.05;
 
 void World::create() {
   renderer = new Renderer();
+
   scene = MapLoader::getScene(std::string("data/maps/n1.map"));
+  //scene = XmlMapLoader::getScene(std::string("data/maps/n1.map"));
 }
 
 void World::update() {
