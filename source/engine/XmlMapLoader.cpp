@@ -34,9 +34,13 @@ Scene* XmlMapLoader::getScene(std::string path) {
     TiXmlElement* mapElement;
     TiXmlElement* element;
     TiXmlElement* spawnVectorElement;
+    TiXmlElement* lightElement;
+    TiXmlElement* lightVectorElement;
     TiXmlElement* textureElement;
     TiXmlHandle rootHandle(0);
     float spawnX, spawnY, spawnZ;
+    float lightR(0), lightG(0), lightB(0);
+    float lightX, lightY, lightZ;
     
     element = docHandle.FirstChildElement().Element();
     rootHandle=TiXmlHandle(element);
@@ -51,6 +55,26 @@ Scene* XmlMapLoader::getScene(std::string path) {
 
     }
     //END_SPAWN
+
+    //LIGHT
+    lightElement = rootHandle.FirstChild( "light" ).Element();
+    lightVectorElement = lightElement->FirstChildElement();
+
+    if(lightVectorElement){
+      lightVectorElement->QueryFloatAttribute("x", &lightX);
+      lightVectorElement->QueryFloatAttribute("y", &lightY);
+      lightVectorElement->QueryFloatAttribute("z", &lightZ);
+      
+      lightElement->QueryFloatAttribute("r", &lightR);
+      lightElement->QueryFloatAttribute("g", &lightG);
+      lightElement->QueryFloatAttribute("b", &lightB);
+      Light light;
+      light.position.set(lightX, lightY, lightZ);
+      light.color.set(lightR, lightG, lightB);
+      scene->lights.push_back(light);
+
+    }
+    //END_LIGHT
 
     //WALLS
     std::string texturePath("none");
