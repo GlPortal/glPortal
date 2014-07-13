@@ -1,0 +1,24 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Blender export for xml
+desc: Create a blender export for the xml format.
+type: :feature
+component: engine
+release: v0.0.8 Overlord
+reporter: Henry Hirsch <henry@glportal.de>
+status: :unstarted
+disposition: 
+creation_time: 2014-07-13 20:10:20.956596 Z
+references: []
+
+id: 0c353cb610f4fc65b0d1582e5b70a4151596022d
+log_events: 
+- - 2014-07-13 20:10:25.436533 Z
+  - Henry Hirsch <henry@glportal.de>
+  - created
+  - ""
+- - 2014-07-13 20:11:09.196601 Z
+  - Henry Hirsch <henry@glportal.de>
+  - issue claimed
+  - ""
+claimer: Henry Hirsch <henry@glportal.de>
+git_branch: 
