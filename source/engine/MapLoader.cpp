@@ -48,7 +48,7 @@ Scene* MapLoader::getScene(std::string path) {
           Entity wall;
           wall.position.set((values[0] + values[3]) / 2, (values[1] + values[4]) / 2, (values[2] + values[5]) / 2);
           wall.scale.set(abs(values[0] - values[3]), abs(values[1] - values[4]), abs(values[2] - values[5]));
-          wall.texture = TextureLoader::getTexture("data/tiles.png");
+          wall.texture = TextureLoader::getTexture("data/textures/tiles.png");
           wall.mesh = getBox(wall);
           scene->walls.push_back(wall);
           break;
@@ -58,7 +58,7 @@ Scene* MapLoader::getScene(std::string path) {
           Entity wall;
           wall.position.set((values[0] + values[3]) / 2, (values[1] + values[4]) / 2, (values[2] + values[5]) / 2);
           wall.scale.set(abs(values[0] - values[3]), abs(values[1] - values[4]), abs(values[2] - values[5]));
-          wall.texture = TextureLoader::getTexture("data/wall.png");
+          wall.texture = TextureLoader::getTexture("data/textures/wall.png");
           wall.mesh = getBox(wall);
           scene->walls.push_back(wall);
           break;

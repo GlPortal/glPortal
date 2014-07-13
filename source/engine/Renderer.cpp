@@ -21,7 +21,7 @@ Renderer::Renderer() :
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
 
-  glClearColor(1, 0, 0.5, 1.0);
+  glClearColor(0, 0, 0, 1.0);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -38,14 +38,9 @@ void Renderer::render(Scene* scene) {
   viewLoc = glGetUniformLocation(shader, "viewMatrix");
   modelLoc = glGetUniformLocation(shader, "modelMatrix");
 
-  //Update camera position
-  viewMatrix.setIdentity();
-  viewMatrix.rotate(Vector3f::negate(scene->camera.rotation));
-  viewMatrix.translate(Vector3f::negate(scene->camera.position));
-
-  //Upload matrices
+  //Upload projection matrix
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
-  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+
 
   //Lights
   int numLights = glGetUniformLocation(shader, "numLights");
@@ -73,57 +68,102 @@ void Renderer::render(Scene* scene) {
     glUniform1f(lightQuadraticAtt, light.quadraticAtt);
   }
 
+  renderPortal(scene, scene->bluePortal, scene->orangePortal);
+  renderPortal(scene, scene->orangePortal, scene->bluePortal);
+
+  //Update camera position
+  viewMatrix.setIdentity();
+  viewMatrix.rotate(Vector3f::negate(scene->camera.rotation));
+  viewMatrix.translate(Vector3f::negate(scene->camera.position));
+  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+
+  ///
+  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+  glDepthMask(GL_TRUE);
+  glClear(GL_DEPTH_BUFFER_BIT);
+
+  modelMatrix.setIdentity();
+  modelMatrix.translate(scene->bluePortal.position);
+  modelMatrix.rotate(scene->bluePortal.rotation);
+  modelMatrix.scale(scene->bluePortal.scale);
+  glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+
+  Mesh portalStencil = MeshLoader::getMesh("data/meshes/PortalStencil.obj");
+  glBindVertexArray(portalStencil.handle);
+  glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
+
+  modelMatrix.setIdentity();
+  modelMatrix.translate(scene->orangePortal.position);
+  modelMatrix.rotate(scene->orangePortal.rotation);
+  modelMatrix.scale(scene->orangePortal.scale);
+  glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+
+  glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
+  glBindVertexArray(0);
+
+  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+  ///
+
   renderScene(scene);
 
-  renderPortal(scene, scene->orangePortal, scene->bluePortal);
-  renderPortal(scene, scene->bluePortal, scene->orangePortal);
+  renderPortalOverlay(scene->bluePortal);
+  renderPortalOverlay(scene->orangePortal);
 }
 
 void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
-  if (portal.open) {
-    if (otherPortal.open) {
-      glEnable(GL_STENCIL_TEST);
-      glClear(GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  if (portal.open && otherPortal.open) {
+    glEnable(GL_STENCIL_TEST);
+    glClear(GL_STENCIL_BUFFER_BIT);
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glDepthMask(GL_FALSE);
 
-      glStencilFunc(GL_NEVER, 1, 0xFF);
-      glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
-
-      //Set portal stencil
-      modelMatrix.setIdentity();
-      modelMatrix.translate(portal.position);
-      modelMatrix.rotate(portal.rotation);
-      modelMatrix.scale(portal.scale);
-      glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
-
-      Mesh portalStencil = MeshLoader::getMesh("data/PortalCircle.obj");
-      glBindVertexArray(portalStencil.handle);
-      glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
-      glBindVertexArray(0);
-
-      //Draw the scene from the other portal
-      glStencilFunc(GL_EQUAL, 1, 0xFF);
-      glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-
-      //Set camera in other portal
-      viewMatrix.setIdentity();
-      viewMatrix.rotate(-scene->camera.rotation.x - (portal.rotation.x - otherPortal.rotation.x), 1, 0, 0);
-      viewMatrix.rotate(-scene->camera.rotation.y- (otherPortal.rotation.y - portal.rotation.y) + 180, 0, 1, 0);
-      viewMatrix.rotate(-scene->camera.rotation.z, 0, 0, 1);
-      viewMatrix.translate(Vector3f::negate(otherPortal.position));
-      glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
-
-      renderScene(scene);
-
-      glDisable(GL_STENCIL_TEST);
-    }
-    glClear(GL_DEPTH_BUFFER_BIT);
-    //Draw portal overlay
+    //Update camera position
     viewMatrix.setIdentity();
     viewMatrix.rotate(Vector3f::negate(scene->camera.rotation));
     viewMatrix.translate(Vector3f::negate(scene->camera.position));
     glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 
-    renderPortalOverlay(portal);
+    //Stencil drawing
+    //Primary portal
+    glStencilFunc(GL_NEVER, 1, 0xFF);
+    glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
+
+    modelMatrix.setIdentity();
+    modelMatrix.translate(portal.position);
+    modelMatrix.rotate(portal.rotation);
+    modelMatrix.scale(portal.scale);
+    glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+
+    Mesh portalStencil = MeshLoader::getMesh("data/meshes/PortalStencil.obj");
+    glBindVertexArray(portalStencil.handle);
+    glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
+    glBindVertexArray(0);
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glDepthMask(GL_TRUE);
+    //Draw the scene from the other portal
+    glStencilFunc(GL_EQUAL, 1, 0xFF);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+    //Set camera in other portal
+    if(portal.rotation.x == 0) {
+      viewMatrix.setIdentity();
+      viewMatrix.rotate(-otherPortal.rotation.x, 1, 0, 0);
+      viewMatrix.rotate(-otherPortal.rotation.y - (scene->camera.rotation.y + 180 - portal.rotation.y), 0, 1, 0);
+      viewMatrix.rotate(-otherPortal.rotation.z, 0, 0, 1);
+      viewMatrix.translate(Vector3f::negate(otherPortal.position));
+    } else {
+      viewMatrix.setIdentity();
+      viewMatrix.rotate(-otherPortal.rotation.x, 1, 0, 0);
+      viewMatrix.rotate(-otherPortal.rotation.y, 0, 1, 0);
+      viewMatrix.rotate(-otherPortal.rotation.z, 0, 0, 1);
+      viewMatrix.translate(Vector3f::negate(otherPortal.position));
+    }
+    glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+
+    renderScene(scene);
+
+    glDisable(GL_STENCIL_TEST);
   }
 }
 
@@ -169,7 +209,6 @@ void Renderer::renderScene(Scene* scene) {
     glUniform1i(loc, 0);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, wall.texture.handle);
-
     glDrawArrays(GL_TRIANGLES, 0, wall.mesh.numFaces * 3);
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
