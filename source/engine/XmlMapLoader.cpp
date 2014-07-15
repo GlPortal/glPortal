@@ -7,6 +7,7 @@
 #include <istream>
 #include <sstream>
 #include <vector>
+#include <iostream>
 
 #include "../Player.hpp"
 #include "../Scene.hpp"
@@ -19,14 +20,13 @@
 #include "environment/Environment.hpp"
 #include <tinyxml.h>
 
-
 using namespace std;
 
 namespace glPortal {
 
 Scene* XmlMapLoader::getScene(std::string path) {
   Scene* scene = new Scene();
-  TiXmlDocument doc(std::string(Environment::getDataDir() + "/maps/first.xml"));
+  TiXmlDocument doc(string(Environment::getDataDir() + path));
   bool loaded = doc.LoadFile();
  
   if (loaded){
@@ -77,8 +77,8 @@ Scene* XmlMapLoader::getScene(std::string path) {
     //END_LIGHT
 
     //WALLS
-    std::string texturePath("none");
-    std::string surfaceType("none");
+    string texturePath("none");
+    string surfaceType("none");
     textureElement = rootHandle.FirstChild("texture").Element();
     if(textureElement){
       for(textureElement; textureElement; textureElement = textureElement->NextSiblingElement()){
@@ -112,9 +112,9 @@ Scene* XmlMapLoader::getScene(std::string path) {
     }
     //END_WALLS
     
-    std::cout << "File loaded.";
+    cout << "File loaded." << endl;
   } else {
-    std::cout << "Unable to load File.";
+    cout << "Unable to load File." << endl;
   }
   
   return scene;
