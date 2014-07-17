@@ -35,7 +35,7 @@ void Window::create(const char* title, int width, int height, bool fullscreen) {
 
   int flags = SDL_WINDOW_OPENGL;
   if(fullscreen) {
-    flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+    flags |= SDL_WINDOW_BORDERLESS;
   }
   //Create the window
   w = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
