@@ -32,8 +32,8 @@ const float GRAVITY = 0.05;
 void World::create() {
   renderer = new Renderer();
 
-  //scene = MapLoader::getScene(std::string("data/maps/n1.map"));
-  scene = XmlMapLoader::getScene(std::string("/maps/first.map"));
+  scene = MapLoader::getScene(std::string("data/maps/n1.map"));
+  //scene = XmlMapLoader::getScene(std::string("/maps/first.map"));
 }
 
 void World::update() {
@@ -47,10 +47,12 @@ void World::update() {
   player->rotation.y -= mousedx * sensitivity.y;
 
   // Restrict rotation in horizontal axis
-  if (player->rotation.x < -90)
+  if (player->rotation.x < -90) {
     player->rotation.x = -90;
-  if (player->rotation.x > 90)
+  }
+  if (player->rotation.x > 90) {
     player->rotation.x = 90;
+  }
 
   //Move the player
   player->velocity.x = 0;
@@ -177,12 +179,9 @@ void World::usePortal(Entity srcPortal, Entity destPortal) {
 
 void World::shootPortal(int button) {
   //Shooting
-  Vector3f cameraDir(
-      cos(scene->camera.rotation.x * PI / 180)
-          * -sin(scene->camera.rotation.y * PI / 180),
-      sin(scene->camera.rotation.x * PI / 180),
-      -cos(scene->camera.rotation.x * PI / 180)
-          * cos(scene->camera.rotation.y * PI / 180));
+  Vector3f cameraDir(cos(scene->camera.rotation.x * PI / 180) * -sin(scene->camera.rotation.y * PI / 180),
+                     sin(scene->camera.rotation.x * PI / 180),
+                     -cos(scene->camera.rotation.x * PI / 180) * cos(scene->camera.rotation.y * PI / 180));
 
   //Find the closest intersection
   Entity closestWall;
@@ -221,9 +220,7 @@ void World::shootPortal(int button) {
   //Temp spawn a light
   Light light;
   light.position.set(ipos);
-  light.constantAtt = 0.5;
-  light.linearAtt = 0.4;
-  light.quadraticAtt = 0.2;
+  light.linearAtt = 0.8;
 
   Portal portal;
   portal.position.set(ipos.x, ipos.y, ipos.z);
