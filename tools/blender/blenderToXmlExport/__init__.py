@@ -36,6 +36,12 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                lightVectorElement.set("x", str(object.location[0]))
                lightVectorElement.set("y", str(object.location[1]))
                lightVectorElement.set("z", str(object.location[2]))
+           elif object.name == "Camera":
+               cameraElement = tree.SubElement(root, "spawn")
+               spawnVectorElement = tree.SubElement(cameraElement, "vector")               
+               spawnVectorElement.set("x", str(object.location[0]))
+               spawnVectorElement.set("y", str(object.location[1]))
+               spawnVectorElement.set("z", str(object.location[2]))               
            else:    
                object.select = True
                boxElement = tree.SubElement(textureElement, "box")
