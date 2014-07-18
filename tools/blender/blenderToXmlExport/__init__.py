@@ -30,18 +30,26 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
        for object in objects:
            object.select = False
        for object in objects:
-           object.select = True
-           boxElement = tree.SubElement(textureElement, "box")
-           boundingBox = object.bound_box
-           vectorElement = tree.SubElement(boxElement, "vector")
-           vectorElement.set("x", str(boundingBox[0][0]))
-           vectorElement.set("y", str(boundingBox[0][1]))
-           vectorElement.set("z", str(boundingBox[0][2]))
-           endVectorElement = tree.SubElement(boxElement, "vector")
-           endVectorElement.set("x", str(boundingBox[1][0]))
-           endVectorElement.set("y", str(boundingBox[1][1]))
-           endVectorElement.set("z", str(boundingBox[1][2]))
-           object.select = False
+           if object.name == "Lamp":
+               lightElement = tree.SubElement(root, "light")
+               lightVectorElement = tree.SubElement(lightElement, "vector")               
+               lightVectorElement.set("x", str(object.location[0]))
+               lightVectorElement.set("y", str(object.location[1]))
+               lightVectorElement.set("z", str(object.location[2]))
+           else:    
+               object.select = True
+               boxElement = tree.SubElement(textureElement, "box")
+               boundingBox = object.bound_box
+               vectorElement = tree.SubElement(boxElement, "vector")
+               vectorElement.set("x", str(boundingBox[0][0]))
+               vectorElement.set("y", str(boundingBox[0][1]))
+               vectorElement.set("z", str(boundingBox[0][2]))
+               endVectorElement = tree.SubElement(boxElement, "vector")
+               endVectorElement.set("x", str(boundingBox[1][0]))
+               endVectorElement.set("y", str(boundingBox[1][1]))
+               endVectorElement.set("z", str(boundingBox[1][2]))
+               object.select = False
+               
        xml = minidom.parseString(tree.tostring(root))
 
        file = open(self.filepath, "w")
