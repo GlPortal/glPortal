@@ -1,12 +1,9 @@
 * About
-GlPortal is a puzzle game where you have to shoot portals in order
+GlPortal is a puzzle game where you have to use teleportation in order
 to reach the goal.
 
-It was created by Simon Larsen in 2012 and I took over in 2013.
-
-If you need to talk directly to me (everything that is no bug report,
-feature request or question that fits in the public discussion)
-you can contact me at portal at w3-net.de by email.
+GlPortal was created by Simon Larsen in 2012 and Henry Hirsch started developing it further in 2013.
+In 2014 Julian Thijssen joined the development team.
 
 You can find the website at http://glportal.de .
 
