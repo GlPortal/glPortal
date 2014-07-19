@@ -44,26 +44,26 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                lightElement.set("b", str(1))
                lightVectorElement = tree.SubElement(lightElement, "vector")
                matrix = object.matrix_world
-               vector = Vector((object.location[0],object.location[1],object.location[2]))
+               vector = Vector((object.location[0],-object.location[2], object.location[1]))
                globalVector = matrix * vector
                lightVectorElement.set("x", str(globalVector.x))
-               lightVectorElement.set("y", str(globalVector.y))
-               lightVectorElement.set("z", str(globalVector.z))
+               lightVectorElement.set("y", str(globalVector.z))
+               lightVectorElement.set("z", str(globalVector.y))
            elif mapObjectType == "Camera":
                matrix = object.matrix_world
-               vector = Vector((object.location[0],object.location[1],object.location[2]))
+               vector = Vector((object.location[0], -object.location[2], object.location[1]))
                globalVector = matrix * vector
                cameraElement = tree.SubElement(root, "spawn")
                spawnVectorElement = tree.SubElement(cameraElement, "vector")               
                spawnVectorElement.set("x", str(globalVector.x))
-               spawnVectorElement.set("y", str(globalVector.y))
-               spawnVectorElement.set("z", str(globalVector.z))               
+               spawnVectorElement.set("y", str(globalVector.z))
+               spawnVectorElement.set("z", str(globalVector.y))               
            elif mapObjectType == "Cube":
                matrix = object.matrix_world
                boundingBox = object.bound_box
                
-               boundingBoxBeginVector = Vector((boundingBox[0][0], boundingBox[0][1], boundingBox[0][2]))
-               boundingBoxEndVector   = Vector((boundingBox[6][0], boundingBox[6][1], boundingBox[6][2]))
+               boundingBoxBeginVector = Vector((boundingBox[0][0], -boundingBox[0][2], boundingBox[0][1]))
+               boundingBoxEndVector   = Vector((boundingBox[6][0], -boundingBox[6][2], boundingBox[6][1]))
                transBoundingBoxBeginVector = matrix * boundingBoxBeginVector
                transBoundingBoxEndVector   = matrix * boundingBoxEndVector
                object.select = True
@@ -71,12 +71,12 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                boundingBox = object.bound_box
                vectorElement = tree.SubElement(boxElement, "vector")
                vectorElement.set("x", str(transBoundingBoxBeginVector.x))
-               vectorElement.set("y", str(transBoundingBoxBeginVector.y))
-               vectorElement.set("z", str(transBoundingBoxBeginVector.z))
+               vectorElement.set("y", str(transBoundingBoxBeginVector.z))
+               vectorElement.set("z", str(transBoundingBoxBeginVector.y))
                endVectorElement = tree.SubElement(boxElement, "vector")
                endVectorElement.set("x", str(transBoundingBoxEndVector.x))
-               endVectorElement.set("y", str(transBoundingBoxEndVector.y))
-               endVectorElement.set("z", str(transBoundingBoxEndVector.z))
+               endVectorElement.set("y", str(transBoundingBoxEndVector.z))
+               endVectorElement.set("z", str(transBoundingBoxEndVector.y))
                object.select = False
                
        xml = minidom.parseString(tree.tostring(root))
