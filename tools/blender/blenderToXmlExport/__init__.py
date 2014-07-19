@@ -15,6 +15,7 @@ import xml.etree.cElementTree as tree
 import xml.dom.minidom as minidom
 import os
 import mathutils
+import string
 
 class ExportMyFormat(bpy.types.Operator, ExportHelper):
     bl_idname = "export_glportal_xml.xml"
@@ -30,19 +31,23 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
        for object in objects:
            object.select = False
        for object in objects:
-           if object.name == "Lamp":
+           if "." in object.name:
+               mapObjectType = object.name.split(".")[0]
+           else:
+               mapObjectType = object.name
+           if mapObjectType == "Lamp":
                lightElement = tree.SubElement(root, "light")
                lightVectorElement = tree.SubElement(lightElement, "vector")               
                lightVectorElement.set("x", str(object.location[0]))
                lightVectorElement.set("y", str(object.location[1]))
                lightVectorElement.set("z", str(object.location[2]))
-           elif object.name == "Camera":
+           elif mapObjectType == "Camera":
                cameraElement = tree.SubElement(root, "spawn")
                spawnVectorElement = tree.SubElement(cameraElement, "vector")               
                spawnVectorElement.set("x", str(object.location[0]))
                spawnVectorElement.set("y", str(object.location[1]))
                spawnVectorElement.set("z", str(object.location[2]))               
-           else:    
+           elif mapObjectType == "Cube":    
                object.select = True
                boxElement = tree.SubElement(textureElement, "box")
                boundingBox = object.bound_box
