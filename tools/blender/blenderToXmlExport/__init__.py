@@ -16,6 +16,7 @@ import xml.dom.minidom as minidom
 import os
 import mathutils
 import string
+from mathutils import Vector
 
 class ExportMyFormat(bpy.types.Operator, ExportHelper):
     bl_idname = "export_glportal_xml.xml"
@@ -28,6 +29,7 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
        objects = context.scene.objects
        root = tree.Element("map")
        textureElement = tree.SubElement(root, "texture")
+       textureElement.set("source", "tiles.png")
        for object in objects:
            object.select = False
        for object in objects:
@@ -37,28 +39,44 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                mapObjectType = object.name
            if mapObjectType == "Lamp":
                lightElement = tree.SubElement(root, "light")
-               lightVectorElement = tree.SubElement(lightElement, "vector")               
-               lightVectorElement.set("x", str(object.location[0]))
-               lightVectorElement.set("y", str(object.location[1]))
-               lightVectorElement.set("z", str(object.location[2]))
+               lightElement.set("r", str(1))
+               lightElement.set("g", str(1))
+               lightElement.set("b", str(1))
+               lightVectorElement = tree.SubElement(lightElement, "vector")
+               matrix = object.matrix_world
+               vector = Vector((object.location[0],object.location[1],object.location[2]))
+               globalVector = matrix * vector
+               lightVectorElement.set("x", str(globalVector.x))
+               lightVectorElement.set("y", str(globalVector.y))
+               lightVectorElement.set("z", str(globalVector.z))
            elif mapObjectType == "Camera":
+               matrix = object.matrix_world
+               vector = Vector((object.location[0],object.location[1],object.location[2]))
+               globalVector = matrix * vector
                cameraElement = tree.SubElement(root, "spawn")
                spawnVectorElement = tree.SubElement(cameraElement, "vector")               
-               spawnVectorElement.set("x", str(object.location[0]))
-               spawnVectorElement.set("y", str(object.location[1]))
-               spawnVectorElement.set("z", str(object.location[2]))               
-           elif mapObjectType == "Cube":    
+               spawnVectorElement.set("x", str(globalVector.x))
+               spawnVectorElement.set("y", str(globalVector.y))
+               spawnVectorElement.set("z", str(globalVector.z))               
+           elif mapObjectType == "Cube":
+               matrix = object.matrix_world
+               boundingBox = object.bound_box
+               
+               boundingBoxBeginVector = Vector((boundingBox[0][0], boundingBox[0][1], boundingBox[0][2]))
+               boundingBoxEndVector   = Vector((boundingBox[6][0], boundingBox[6][1], boundingBox[6][2]))
+               transBoundingBoxBeginVector = matrix * boundingBoxBeginVector
+               transBoundingBoxEndVector   = matrix * boundingBoxEndVector
                object.select = True
                boxElement = tree.SubElement(textureElement, "box")
                boundingBox = object.bound_box
                vectorElement = tree.SubElement(boxElement, "vector")
-               vectorElement.set("x", str(boundingBox[0][0]))
-               vectorElement.set("y", str(boundingBox[0][1]))
-               vectorElement.set("z", str(boundingBox[0][2]))
+               vectorElement.set("x", str(transBoundingBoxBeginVector.x))
+               vectorElement.set("y", str(transBoundingBoxBeginVector.y))
+               vectorElement.set("z", str(transBoundingBoxBeginVector.z))
                endVectorElement = tree.SubElement(boxElement, "vector")
-               endVectorElement.set("x", str(boundingBox[1][0]))
-               endVectorElement.set("y", str(boundingBox[1][1]))
-               endVectorElement.set("z", str(boundingBox[1][2]))
+               endVectorElement.set("x", str(transBoundingBoxEndVector.x))
+               endVectorElement.set("y", str(transBoundingBoxEndVector.y))
+               endVectorElement.set("z", str(transBoundingBoxEndVector.z))
                object.select = False
                
        xml = minidom.parseString(tree.tostring(root))
