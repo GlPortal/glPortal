@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <stdio.h>
 
 #include "engine/BoxCollider.hpp"
 #include "engine/Camera.hpp"
@@ -34,7 +35,7 @@ void World::create() {
   renderer = new Renderer();
 
   //scene = MapLoader::getScene(std::string("data/maps/n1.map"));
-    scene = XmlMapLoader::getScene(std::string("/maps/untitled.xml"));
+  scene = XmlMapLoader::getScene(std::string("/maps/untitled.xml"));
   //    scene = XmlMapLoader::getScene(std::string("/maps/first.xml"));
 }
 
@@ -195,12 +196,12 @@ void World::shootPortal(int button) {
   float dist = 1000000;
   int side = 0;
   float distances[6];
-  distances[0] = abs(ipos.x - (closestWall.position.x - closestWall.scale.x / 2));
-  distances[1] = abs(ipos.x - (closestWall.position.x + closestWall.scale.x / 2));
-  distances[2] = abs(ipos.z - (closestWall.position.z - closestWall.scale.z / 2));
-  distances[3] = abs(ipos.z - (closestWall.position.z + closestWall.scale.z / 2));
-  distances[4] = abs(ipos.y - (closestWall.position.y - closestWall.scale.y / 2));
-  distances[5] = abs(ipos.y - (closestWall.position.y + closestWall.scale.y / 2));
+  distances[0] = fabs(ipos.x - (closestWall.position.x - closestWall.scale.x / 2));
+  distances[1] = fabs(ipos.x - (closestWall.position.x + closestWall.scale.x / 2));
+  distances[2] = fabs(ipos.z - (closestWall.position.z - closestWall.scale.z / 2));
+  distances[3] = fabs(ipos.z - (closestWall.position.z + closestWall.scale.z / 2));
+  distances[4] = fabs(ipos.y - (closestWall.position.y - closestWall.scale.y / 2));
+  distances[5] = fabs(ipos.y - (closestWall.position.y + closestWall.scale.y / 2));
 
   for (int i = 0; i < 6; i++) {
     if (distances[i] < dist) {
