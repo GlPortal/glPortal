@@ -6,10 +6,10 @@
 #include <string>
 #include <vector>
 
+#include "engine/BoxCollider.hpp"
 #include "engine/Camera.hpp"
 #include "engine/Light.hpp"
 #include "engine/MapLoader.hpp"
-#include "engine/XmlMapLoader.hpp"
 #include "engine/Mesh.hpp"
 #include "engine/MeshLoader.hpp"
 #include "engine/Renderer.hpp"
@@ -17,6 +17,7 @@
 #include "engine/TextureLoader.hpp"
 #include "engine/util/Vector2f.hpp"
 #include "engine/util/Vector3f.hpp"
+#include "engine/XmlMapLoader.hpp"
 #include "Input.hpp"
 #include "Player.hpp"
 #include "Portal.hpp"
@@ -91,31 +92,21 @@ void World::update() {
   //Collision
   for (unsigned int i = 0; i < scene->walls.size(); i++) {
     Entity wall = scene->walls[i];
+    BoxCollider bboxWall(wall.position, wall.scale);
+
     //Y collision
-    if (player->position.x + player->scale.x / 2 > wall.position.x - wall.scale.x / 2 &&
-        player->position.x - player->scale.x / 2 < wall.position.x + wall.scale.x / 2 &&
-        pos.y + player->scale.y / 2 > wall.position.y - wall.scale.y / 2 &&
-        pos.y - player->scale.y / 2 < wall.position.y + wall.scale.y / 2 &&
-        player->position.z + player->scale.z / 2 > wall.position.z - wall.scale.z / 2 &&
-        player->position.z - player->scale.z / 2 < wall.position.z + wall.scale.z / 2) {
+    BoxCollider bboxY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
+    if (bboxY.collidesWith(bboxWall)) {
       player->velocity.y = 0;
     }
     //X collision
-    if (pos.x + player->scale.x / 2 > wall.position.x - wall.scale.x / 2 &&
-        pos.x - player->scale.x / 2 < wall.position.x + wall.scale.x / 2 &&
-        player->position.y + player->scale.y / 2 > wall.position.y - wall.scale.y / 2 &&
-        player->position.y - player->scale.y / 2 < wall.position.y + wall.scale.y / 2 &&
-        player->position.z + player->scale.z / 2 > wall.position.z - wall.scale.z / 2 &&
-        player->position.z - player->scale.z / 2 < wall.position.z + wall.scale.z / 2) {
+    BoxCollider bboxX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
+    if (bboxX.collidesWith(bboxWall)) {
       player->velocity.x = 0;
     }
     //Z collision
-    if (player->position.x + player->scale.x / 2 > wall.position.x - wall.scale.x / 2 &&
-        player->position.x - player->scale.x / 2 < wall.position.x + wall.scale.x / 2 &&
-        player->position.y + player->scale.y / 2 > wall.position.y - wall.scale.y / 2 &&
-        player->position.y - player->scale.y / 2 < wall.position.y + wall.scale.y / 2 &&
-        pos.z + player->scale.z / 2 > wall.position.z - wall.scale.z / 2 &&
-        pos.z - player->scale.z / 2 < wall.position.z + wall.scale.z / 2) {
+    BoxCollider bboxZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
+    if (bboxZ.collidesWith(bboxWall)) {
       player->velocity.z = 0;
     }
   }
