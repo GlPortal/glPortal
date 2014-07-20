@@ -90,17 +90,17 @@ Scene* XmlMapLoader::getScene(std::string path) {
         textureElement->QueryStringAttribute("source", &texturePath);
         textureElement->QueryStringAttribute("type"  , &surfaceType);
         TiXmlElement* wallBoxElement;
-        wallBoxElement = textureElement->FirstChildElement("box");
+        wallBoxElement = textureElement->FirstChildElement("wall");
         for(wallBoxElement; wallBoxElement; wallBoxElement = wallBoxElement->NextSiblingElement()){
           TiXmlElement* boxVectorElement;
 
           Entity wall;
-          boxVectorElement = wallBoxElement->FirstChildElement("position");
+          boxVectorElement = wallBoxElement->FirstChildElement("position")->FirstChildElement();
           boxVectorElement->QueryFloatAttribute("x", &wall.position.x);
           boxVectorElement->QueryFloatAttribute("y", &wall.position.y);
           boxVectorElement->QueryFloatAttribute("z", &wall.position.z);
 
-          boxVectorElement = wallBoxElement->FirstChildElement("scale");
+          boxVectorElement = wallBoxElement->FirstChildElement("scale")->FirstChildElement();
           boxVectorElement->QueryFloatAttribute("x", &wall.scale.x);
           boxVectorElement->QueryFloatAttribute("y", &wall.scale.y);
           boxVectorElement->QueryFloatAttribute("z", &wall.scale.z);
