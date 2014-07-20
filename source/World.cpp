@@ -36,9 +36,12 @@ void World::create() {
 
   //scene = MapLoader::getScene(std::string("data/maps/n1.map"));
   scene = XmlMapLoader::getScene(std::string("/maps/untitled.xml"));
-  //    scene = XmlMapLoader::getScene(std::string("/maps/first.xml"));
+  //scene = XmlMapLoader::getScene(std::string("/maps/first.xml"));
 }
 
+void loadScene(Scene scene) {
+
+}
 void World::update() {
   //Mouselook
   int mousedx, mousedy;

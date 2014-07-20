@@ -12,6 +12,7 @@ class World {
 public:
   void create();
   void update();
+  void loadScene(Scene scene);
   void usePortal(Entity srcPortal, Entity destPortal);
   void shootPortal(int button);
   bool collides(Vector3f ro, Vector3f rd, Entity e, float* tNear, float* tFar);
