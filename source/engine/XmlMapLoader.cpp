@@ -8,6 +8,7 @@
 #include <sstream>
 #include <vector>
 #include <iostream>
+#include <stdexcept>
 
 #include "../Player.hpp"
 #include "../Scene.hpp"
@@ -51,28 +52,32 @@ Scene* XmlMapLoader::getScene(std::string path) {
       spawnVectorElement->QueryFloatAttribute("x", &spawnX);
       spawnVectorElement->QueryFloatAttribute("y", &spawnY);
       spawnVectorElement->QueryFloatAttribute("z", &spawnZ);
-      scene->player.position.set(spawnX, spawnY, spawnZ);
-
+      scene->player.position.set(spawnX, spawnY, spawnZ);  
+    } else {
+      throw std::runtime_error("No spawn position defined.");
     }
+
     //END_SPAWN
 
     //LIGHT
     lightElement = rootHandle.FirstChild( "light" ).Element();
-    lightVectorElement = lightElement->FirstChildElement();
-
-    if(lightVectorElement){
-      lightVectorElement->QueryFloatAttribute("x", &lightX);
-      lightVectorElement->QueryFloatAttribute("y", &lightY);
-      lightVectorElement->QueryFloatAttribute("z", &lightZ);
+    for(lightElement; lightElement; lightElement = lightElement->NextSiblingElement()){
+      lightVectorElement = lightElement->FirstChildElement();
+      if(lightVectorElement){
+        lightVectorElement->QueryFloatAttribute("x", &lightX);
+        lightVectorElement->QueryFloatAttribute("y", &lightY);
+        lightVectorElement->QueryFloatAttribute("z", &lightZ);
       
-      lightElement->QueryFloatAttribute("r", &lightR);
-      lightElement->QueryFloatAttribute("g", &lightG);
-      lightElement->QueryFloatAttribute("b", &lightB);
-      Light light;
-      light.position.set(lightX, lightY, lightZ);
-      light.color.set(lightR, lightG, lightB);
-      scene->lights.push_back(light);
-
+        lightElement->QueryFloatAttribute("r", &lightR);
+        lightElement->QueryFloatAttribute("g", &lightG);
+        lightElement->QueryFloatAttribute("b", &lightB);
+        Light light;
+        light.position.set(lightX, lightY, lightZ);
+        light.color.set(lightR, lightG, lightB);
+        scene->lights.push_back(light);
+      } else {
+        throw std::runtime_error("No light source defined.");
+      }
     }
     //END_LIGHT
 
@@ -109,7 +114,10 @@ Scene* XmlMapLoader::getScene(std::string path) {
         texturePath = std::string("none");
         
       }
+    } else {
+      throw std::runtime_error("No walls defined.");
     }
+    
     //END_WALLS
     
     cout << "File loaded." << endl;
