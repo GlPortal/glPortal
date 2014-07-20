@@ -16,7 +16,7 @@ components:
   name: server
 releases: 
 - !ditz.rubyforge.org,2008-03-06/release 
-  name: v0.0.8 Overlord
+  name: v0.1 Overlord
   status: :unreleased
   release_time: 
   log_events: 
