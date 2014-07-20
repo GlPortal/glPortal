@@ -39,9 +39,10 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                mapObjectType = object.name
            if mapObjectType == "Lamp":
                lightElement = tree.SubElement(root, "light")
-               lightElement.set("r", str(1))
-               lightElement.set("g", str(1))
-               lightElement.set("b", str(1))
+               colorArray = object.data.color
+               lightElement.set("r", str(colorArray[0]))
+               lightElement.set("g", str(colorArray[1]))
+               lightElement.set("b", str(colorArray[2]))
                lightVectorElement = tree.SubElement(lightElement, "vector")
                matrix = object.matrix_world
                vector = Vector((object.location[0],-object.location[2], object.location[1]))
