@@ -70,14 +70,14 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                object.select = True
                boxElement = tree.SubElement(textureElement, "box")
                boundingBox = object.bound_box
-               vectorElement = tree.SubElement(boxElement, "vector")
-               vectorElement.set("x", str(transBoundingBoxBeginVector.x))
-               vectorElement.set("y", str(transBoundingBoxBeginVector.z))
-               vectorElement.set("z", str(transBoundingBoxBeginVector.y))
-               endVectorElement = tree.SubElement(boxElement, "vector")
-               endVectorElement.set("x", str(transBoundingBoxEndVector.x))
-               endVectorElement.set("y", str(transBoundingBoxEndVector.z))
-               endVectorElement.set("z", str(transBoundingBoxEndVector.y))
+               positionElement = tree.SubElement(boxElement, "position")
+               positionElement.set("x", str((transBoundingBoxEndVector.x + transBoundingBoxBeginVector.x)/2))
+               positionElement.set("y", str((transBoundingBoxEndVector.z + transBoundingBoxBeginVector.z)/2))
+               positionElement.set("z", str((transBoundingBoxEndVector.y + transBoundingBoxBeginVector.y)/2))
+               scaleElement = tree.SubElement(boxElement, "scale")
+               scaleElement.set("x", str(abs(transBoundingBoxEndVector.x - transBoundingBoxBeginVector.x)))
+               scaleElement.set("y", str(abs(transBoundingBoxEndVector.z - transBoundingBoxBeginVector.z)))
+               scaleElement.set("z", str(abs(transBoundingBoxEndVector.y - transBoundingBoxBeginVector.y)))
                object.select = False
                
        xml = minidom.parseString(tree.tostring(root))
