@@ -93,20 +93,18 @@ Scene* XmlMapLoader::getScene(std::string path) {
         wallBoxElement = textureElement->FirstChildElement("box");
         for(wallBoxElement; wallBoxElement; wallBoxElement = wallBoxElement->NextSiblingElement()){
           TiXmlElement* boxVectorElement;
-          float boxX, boxY, boxZ, endBoxX, endBoxY, endBoxZ;
-          boxVectorElement = wallBoxElement->FirstChildElement("vector");
-          boxVectorElement->QueryFloatAttribute("x", &boxX);
-          boxVectorElement->QueryFloatAttribute("y", &boxY);
-          boxVectorElement->QueryFloatAttribute("z", &boxZ);
-
-          boxVectorElement = boxVectorElement->NextSiblingElement();
-          boxVectorElement->QueryFloatAttribute("x", &endBoxX);
-          boxVectorElement->QueryFloatAttribute("y", &endBoxY);
-          boxVectorElement->QueryFloatAttribute("z", &endBoxZ);
 
           Entity wall;
-          wall.position.set((boxX + endBoxX) / 2, (boxY + endBoxY) / 2, (boxZ + endBoxZ) / 2);
-          wall.scale.set(abs(boxX - endBoxX), abs(boxY - endBoxY), abs(boxZ - endBoxZ));
+          boxVectorElement = wallBoxElement->FirstChildElement("vector");
+          boxVectorElement->QueryFloatAttribute("x", &wall.position.x);
+          boxVectorElement->QueryFloatAttribute("y", &wall.position.y);
+          boxVectorElement->QueryFloatAttribute("z", &wall.position.z);
+
+          boxVectorElement = boxVectorElement->NextSiblingElement();
+          boxVectorElement->QueryFloatAttribute("x", &wall.scale.x);
+          boxVectorElement->QueryFloatAttribute("y", &wall.scale.y);
+          boxVectorElement->QueryFloatAttribute("z", &wall.scale.z);
+
           wall.texture = TextureLoader::getTexture(Environment::getDataDir() + "/textures/" + texturePath);
           wall.mesh = getBox(wall);
           scene->walls.push_back(wall);
