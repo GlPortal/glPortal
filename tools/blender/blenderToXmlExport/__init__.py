@@ -18,6 +18,68 @@ import mathutils
 import string
 from mathutils import Vector
 
+class CustomPanel(bpy.types.Panel):
+    """GlPortal panel in the toolbar"""
+    bl_label = "GlPortal"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'TOOLS'
+
+    def draw(self, context):
+        layout = self.layout
+#        self.layout.prop(bpy.context.active_object, '["gl_type"]')
+        row = layout.row()
+        row.label(text="Cube properties:")
+
+        split = layout.split()
+        col = split.column(align=True)
+
+#        col.operator("pipo", text="Plane", icon='MESH_PLANE')
+        col.operator("wm.clear_selection", text="Clear Type", icon='MESH_CUBE')
+        col.operator("wm.selection_to_win", text="Set Win Area", icon='MESH_CUBE')
+        col.operator("wm.selection_to_death", text="Set Death Area", icon='MESH_CUBE')
+        col.operator("wm.selection_to_radiation", text="Set Radiation Area", icon='MESH_CUBE')
+
+class clearSelection(bpy.types.Operator):
+    bl_idname = "wm.clear_selection"
+    bl_label = "Mark the selection as neutral area."
+
+    def execute(self, context):
+        bpy.types.Object.glpType = bpy.props.StringProperty()
+        object = bpy.context.active_object
+        object["glpType"] = "None" 
+        return {'FINISHED'}
+        
+class selectionToWin(bpy.types.Operator):
+    bl_idname = "wm.selection_to_win"
+    bl_label = "Mark the selection as winning area."
+
+    def execute(self, context):
+        bpy.types.Object.glpType = bpy.props.StringProperty()
+        object = bpy.context.active_object
+        object["glpType"] = "win" 
+        return {'FINISHED'}
+
+class selectionToDeath(bpy.types.Operator):
+    bl_idname = "wm.selection_to_death"
+    bl_label = "Mark the selection as death area."
+
+    def execute(self, context):
+        bpy.types.Object.glpType = bpy.props.StringProperty()
+        object = bpy.context.active_object
+        object["glpType"] = "death" 
+        return {'FINISHED'}
+
+    
+class selectionToRadiation(bpy.types.Operator):
+    bl_idname = "wm.selection_to_radiation"
+    bl_label = "Mark the selection as radiation area."
+
+    def execute(self, context):
+        bpy.types.Object.glpType = bpy.props.StringProperty()
+        object = bpy.context.active_object
+        object["glpType"] = "radiation" 
+        return {'FINISHED'}    
+    
 class ExportMyFormat(bpy.types.Operator, ExportHelper):
     bl_idname = "export_glportal_xml.xml"
     bl_label = "GlPortal XML Format"
@@ -97,13 +159,18 @@ def menu_func(self, context):
 
 
 def register():
+#    bpy.types.Object.gl_type = bpy.props.StringProperty()
     bpy.utils.register_module(__name__)
     bpy.types.INFO_MT_file_export.append(menu_func)
+    bpy.utils.register_class(CustomPanel)
+    bpy.utils.register_class(SimpleOperator)
 
 
 def unregister():
     bpy.utils.unregister_module(__name__)
     bpy.types.INFO_MT_file_export.remove(menu_func)
+    bpy.utils.unregister_class(CustomPanel)
+    bpy.utils.unregister_class(SimpleOperator)
 
 if __name__ == "__main__":
     register()
