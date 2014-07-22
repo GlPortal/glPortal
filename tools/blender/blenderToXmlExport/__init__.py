@@ -46,7 +46,8 @@ class clearSelection(bpy.types.Operator):
     def execute(self, context):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
-        object["glpType"] = "None" 
+        if object:
+            object["glpType"] = "None" 
         return {'FINISHED'}
         
 class selectionToWin(bpy.types.Operator):
@@ -56,7 +57,8 @@ class selectionToWin(bpy.types.Operator):
     def execute(self, context):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
-        object["glpType"] = "win" 
+        if object:
+            object["glpType"] = "win" 
         return {'FINISHED'}
 
 class selectionToDeath(bpy.types.Operator):
@@ -66,7 +68,8 @@ class selectionToDeath(bpy.types.Operator):
     def execute(self, context):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
-        object["glpType"] = "death" 
+        if object:
+            object["glpType"] = "death" 
         return {'FINISHED'}
 
     
@@ -77,7 +80,8 @@ class selectionToRadiation(bpy.types.Operator):
     def execute(self, context):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
-        object["glpType"] = "radiation" 
+        if object:
+            object["glpType"] = "radiation" 
         return {'FINISHED'}    
     
 class ExportMyFormat(bpy.types.Operator, ExportHelper):
