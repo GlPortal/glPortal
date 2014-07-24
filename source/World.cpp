@@ -35,7 +35,7 @@ void World::create() {
   renderer = new Renderer();
 
   //scene = MapLoader::getScene(std::string("data/maps/n1.map"));
-  scene = XmlMapLoader::getScene(std::string("/maps/untitled.xml"));
+  scene = XmlMapLoader::getScene(std::string("/maps/test.xml"));
   //scene = XmlMapLoader::getScene(std::string("/maps/first.xml"));
 }
 
