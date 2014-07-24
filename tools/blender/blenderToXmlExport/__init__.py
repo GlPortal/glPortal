@@ -142,7 +142,7 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                    boxElement = tree.SubElement(textureElement, "wall")
                    
                boundingBox = object.bound_box
-             
+
                positionElement = tree.SubElement(boxElement, "position")
                positionElement.set("x", str((transBoundingBoxEndVector.x + transBoundingBoxBeginVector.x)/2))
                positionElement.set("y", str((transBoundingBoxEndVector.z + transBoundingBoxBeginVector.z)/2))
@@ -151,6 +151,7 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                scaleElement.set("x", str(abs(transBoundingBoxEndVector.x - transBoundingBoxBeginVector.x)))
                scaleElement.set("y", str(abs(transBoundingBoxEndVector.z - transBoundingBoxBeginVector.z)))
                scaleElement.set("z", str(abs(transBoundingBoxEndVector.y - transBoundingBoxBeginVector.y)))
+
                object.select = False
                
        xml = minidom.parseString(tree.tostring(root))
