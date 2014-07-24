@@ -3,7 +3,7 @@ title: Port to Modern OpenGL
 desc: The game has to be ported to use the modern opengl pipeline, meaning shaders and VAO/VBO's
 type: :task
 component: engine
-release: v0.0.8 Overlord
+release: v0.1 Overlord
 reporter: Nimthora <nimthora@gmail.com>
 status: :unstarted
 disposition: 

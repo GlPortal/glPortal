@@ -34,9 +34,8 @@ Scene* XmlMapLoader::getScene(std::string path) {
     TiXmlHandle docHandle(&doc);
     TiXmlElement* mapElement;
     TiXmlElement* element;
-    TiXmlElement* spawnVectorElement;
+    TiXmlElement* spawnElement;
     TiXmlElement* lightElement;
-    TiXmlElement* lightVectorElement;
     TiXmlElement* textureElement;
     TiXmlHandle rootHandle(0);
     float spawnX, spawnY, spawnZ;
@@ -46,12 +45,12 @@ Scene* XmlMapLoader::getScene(std::string path) {
     element = docHandle.FirstChildElement().Element();
     rootHandle=TiXmlHandle(element);
     //SPAWN
-    spawnVectorElement = rootHandle.FirstChild( "spawn" ).FirstChild().Element();
+    spawnElement = rootHandle.FirstChild( "spawn" ).Element();
 
-    if(spawnVectorElement){
-      spawnVectorElement->QueryFloatAttribute("x", &spawnX);
-      spawnVectorElement->QueryFloatAttribute("y", &spawnY);
-      spawnVectorElement->QueryFloatAttribute("z", &spawnZ);
+    if(spawnElement){
+      spawnElement->QueryFloatAttribute("x", &spawnX);
+      spawnElement->QueryFloatAttribute("y", &spawnY);
+      spawnElement->QueryFloatAttribute("z", &spawnZ);
       scene->player.position.set(spawnX, spawnY, spawnZ);  
     } else {
       throw std::runtime_error("No spawn position defined.");
@@ -62,11 +61,10 @@ Scene* XmlMapLoader::getScene(std::string path) {
     //LIGHT
     lightElement = rootHandle.FirstChild( "light" ).Element();
     for(lightElement; lightElement; lightElement = lightElement->NextSiblingElement()){
-      lightVectorElement = lightElement->FirstChildElement();
-      if(lightVectorElement){
-        lightVectorElement->QueryFloatAttribute("x", &lightX);
-        lightVectorElement->QueryFloatAttribute("y", &lightY);
-        lightVectorElement->QueryFloatAttribute("z", &lightZ);
+      if(lightElement){
+        lightElement->QueryFloatAttribute("x", &lightX);
+        lightElement->QueryFloatAttribute("y", &lightY);
+        lightElement->QueryFloatAttribute("z", &lightZ);
       
         lightElement->QueryFloatAttribute("r", &lightR);
         lightElement->QueryFloatAttribute("g", &lightG);
@@ -92,18 +90,19 @@ Scene* XmlMapLoader::getScene(std::string path) {
         TiXmlElement* wallBoxElement;
         wallBoxElement = textureElement->FirstChildElement("wall");
         for(wallBoxElement; wallBoxElement; wallBoxElement = wallBoxElement->NextSiblingElement()){
-          TiXmlElement* boxVectorElement;
+          TiXmlElement* boxPositionElement;
+          TiXmlElement* boxScaleElement;
 
           Entity wall;
-          boxVectorElement = wallBoxElement->FirstChildElement("position")->FirstChildElement();
-          boxVectorElement->QueryFloatAttribute("x", &wall.position.x);
-          boxVectorElement->QueryFloatAttribute("y", &wall.position.y);
-          boxVectorElement->QueryFloatAttribute("z", &wall.position.z);
+          boxPositionElement = wallBoxElement->FirstChildElement("position");
+          boxPositionElement->QueryFloatAttribute("x", &wall.position.x);
+          boxPositionElement->QueryFloatAttribute("y", &wall.position.y);
+          boxPositionElement->QueryFloatAttribute("z", &wall.position.z);
 
-          boxVectorElement = wallBoxElement->FirstChildElement("scale")->FirstChildElement();
-          boxVectorElement->QueryFloatAttribute("x", &wall.scale.x);
-          boxVectorElement->QueryFloatAttribute("y", &wall.scale.y);
-          boxVectorElement->QueryFloatAttribute("z", &wall.scale.z);
+          boxScaleElement = wallBoxElement->FirstChildElement("scale");
+          boxScaleElement->QueryFloatAttribute("x", &wall.scale.x);
+          boxScaleElement->QueryFloatAttribute("y", &wall.scale.y);
+          boxScaleElement->QueryFloatAttribute("z", &wall.scale.z);
 
           wall.texture = TextureLoader::getTexture(Environment::getDataDir() + "/textures/" + texturePath);
           wall.mesh = getBox(wall);

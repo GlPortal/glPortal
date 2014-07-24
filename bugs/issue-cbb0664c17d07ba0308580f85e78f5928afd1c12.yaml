@@ -3,7 +3,7 @@ title: Make binary run with newer libraries
 desc: I got a report that if the glew version is newer then the one we used for compilation then running the game on a machine with a newer glew version will fail.
 type: :bugfix
 component: engine
-release: v0.0.8 Overlord
+release: v0.1 Overlord
 reporter: Henry Hirsch <henry@glportal.de>
 status: :closed
 disposition: :fixed
