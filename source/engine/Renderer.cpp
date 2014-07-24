@@ -151,7 +151,7 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
       viewMatrix.rotate(-otherPortal.rotation.x - scene->camera.rotation.x, 1, 0, 0);
       viewMatrix.rotate(-otherPortal.rotation.y - (scene->camera.rotation.y + 180 - portal.rotation.y), 0, 1, 0);
       viewMatrix.rotate(-otherPortal.rotation.z, 0, 0, 1);
-      viewMatrix.translate(Vector3f::negate(otherPortal.position));
+      viewMatrix.translate(Vector3f(-otherPortal.position.x, -otherPortal.position.y - (scene->camera.position.y - portal.position.y), -otherPortal.position.z));
     } else {
       viewMatrix.setIdentity();
       viewMatrix.rotate(-otherPortal.rotation.x, 1, 0, 0);
