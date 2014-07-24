@@ -103,28 +103,27 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                mapObjectType = object.name.split(".")[0]
            else:
                mapObjectType = object.name
+               
            if mapObjectType == "Lamp":
                lightElement = tree.SubElement(root, "light")
                colorArray = object.data.color
                lightElement.set("r", str(colorArray[0]))
                lightElement.set("g", str(colorArray[1]))
                lightElement.set("b", str(colorArray[2]))
-               lightVectorElement = tree.SubElement(lightElement, "vector")
                matrix = object.matrix_world
                vector = Vector((object.location[0],-object.location[2], object.location[1]))
                globalVector = matrix * vector
-               lightVectorElement.set("x", str(globalVector.x))
-               lightVectorElement.set("y", str(globalVector.z))
-               lightVectorElement.set("z", str(globalVector.y))
+               lightElement.set("x", str(globalVector.x))
+               lightElement.set("y", str(globalVector.z))
+               lightElement.set("z", str(globalVector.y))
            elif mapObjectType == "Camera":
                matrix = object.matrix_world
                vector = Vector((object.location[0], -object.location[2], object.location[1]))
                globalVector = matrix * vector
-               cameraElement = tree.SubElement(root, "spawn")
-               spawnVectorElement = tree.SubElement(cameraElement, "vector")               
-               spawnVectorElement.set("x", str(globalVector.x))
-               spawnVectorElement.set("y", str(globalVector.z))
-               spawnVectorElement.set("z", str(globalVector.y))               
+               spawnElement = tree.SubElement(root, "spawn")
+               spawnElement.set("x", str(globalVector.x))
+               spawnElement.set("y", str(globalVector.z))
+               spawnElement.set("z", str(globalVector.y))               
            elif mapObjectType == "Cube":
                matrix = object.matrix_world
                boundingBox = object.bound_box
@@ -134,19 +133,23 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                transBoundingBoxBeginVector = matrix * boundingBoxBeginVector
                transBoundingBoxEndVector  = matrix * boundingBoxEndVector
                object.select = True
-               boxElement = tree.SubElement(textureElement, "wall")
+               if hasattr(object, 'glpType'):
+                   if object.glpType != "None":
+                       boxElement = tree.SubElement(root, "trigger")
+                       boxElement.set("type", object.glpType)
+               else:
+                   boxElement = tree.SubElement(textureElement, "wall")
+                   
                boundingBox = object.bound_box
              
                positionElement = tree.SubElement(boxElement, "position")
-               positionElementVector = tree.SubElement(positionElement, "vector")
-               positionElementVector.set("x", str((transBoundingBoxEndVector.x + transBoundingBoxBeginVector.x)/2))
-               positionElementVector.set("y", str((transBoundingBoxEndVector.z + transBoundingBoxBeginVector.z)/2))
-               positionElementVector.set("z", str((transBoundingBoxEndVector.y + transBoundingBoxBeginVector.y)/2))
+               positionElement.set("x", str((transBoundingBoxEndVector.x + transBoundingBoxBeginVector.x)/2))
+               positionElement.set("y", str((transBoundingBoxEndVector.z + transBoundingBoxBeginVector.z)/2))
+               positionElement.set("z", str((transBoundingBoxEndVector.y + transBoundingBoxBeginVector.y)/2))
                scaleElement = tree.SubElement(boxElement, "scale")
-               scaleElementVector = tree.SubElement(scaleElement, "vector")
-               scaleElementVector.set("x", str(abs(transBoundingBoxEndVector.x - transBoundingBoxBeginVector.x)))
-               scaleElementVector.set("y", str(abs(transBoundingBoxEndVector.z - transBoundingBoxBeginVector.z)))
-               scaleElementVector.set("z", str(abs(transBoundingBoxEndVector.y - transBoundingBoxBeginVector.y)))
+               scaleElement.set("x", str(abs(transBoundingBoxEndVector.x - transBoundingBoxBeginVector.x)))
+               scaleElement.set("y", str(abs(transBoundingBoxEndVector.z - transBoundingBoxBeginVector.z)))
+               scaleElement.set("z", str(abs(transBoundingBoxEndVector.y - transBoundingBoxBeginVector.y)))
                object.select = False
                
        xml = minidom.parseString(tree.tostring(root))
