@@ -6,6 +6,7 @@ add_executable(${EXE_NAME}
   engine/util/Vector3f.cpp
   engine/util/Vector2f.cpp
   engine/util/Matrix4f.cpp
+  engine/BoxCollider.cpp
   World.cpp Window.cpp
   engine/Camera.cpp
   engine/TextureLoader.cpp

@@ -62,22 +62,26 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
            elif mapObjectType == "Cube":
                matrix = object.matrix_world
                boundingBox = object.bound_box
-               
+
                boundingBoxBeginVector = Vector((boundingBox[0][0], -boundingBox[0][2], boundingBox[0][1]))
-               boundingBoxEndVector   = Vector((boundingBox[6][0], -boundingBox[6][2], boundingBox[6][1]))
+               boundingBoxEndVector  = Vector((boundingBox[6][0], -boundingBox[6][2], boundingBox[6][1]))
                transBoundingBoxBeginVector = matrix * boundingBoxBeginVector
-               transBoundingBoxEndVector   = matrix * boundingBoxEndVector
+               transBoundingBoxEndVector  = matrix * boundingBoxEndVector
                object.select = True
-               boxElement = tree.SubElement(textureElement, "box")
+               boxElement = tree.SubElement(textureElement, "wall")
                boundingBox = object.bound_box
+
                positionElement = tree.SubElement(boxElement, "position")
-               positionElement.set("x", str((transBoundingBoxEndVector.x + transBoundingBoxBeginVector.x)/2))
-               positionElement.set("y", str((transBoundingBoxEndVector.z + transBoundingBoxBeginVector.z)/2))
-               positionElement.set("z", str((transBoundingBoxEndVector.y + transBoundingBoxBeginVector.y)/2))
+               positionElementVector = tree.SubElement(positionElement, "vector")
+               positionElementVector.set("x", str((transBoundingBoxEndVector.x + transBoundingBoxBeginVector.x)/2))
+               positionElementVector.set("y", str((transBoundingBoxEndVector.z + transBoundingBoxBeginVector.z)/2))
+               positionElementVector.set("z", str((transBoundingBoxEndVector.y + transBoundingBoxBeginVector.y)/2))
                scaleElement = tree.SubElement(boxElement, "scale")
-               scaleElement.set("x", str(abs(transBoundingBoxEndVector.x - transBoundingBoxBeginVector.x)))
-               scaleElement.set("y", str(abs(transBoundingBoxEndVector.z - transBoundingBoxBeginVector.z)))
-               scaleElement.set("z", str(abs(transBoundingBoxEndVector.y - transBoundingBoxBeginVector.y)))
+               scaleElementVector = tree.SubElement(scaleElement, "vector")
+               scaleElementVector.set("x", str(abs(transBoundingBoxEndVector.x - transBoundingBoxBeginVector.x)))
+               scaleElementVector.set("y", str(abs(transBoundingBoxEndVector.z - transBoundingBoxBeginVector.z)))
+               scaleElementVector.set("z", str(abs(transBoundingBoxEndVector.y - transBoundingBoxBeginVector.y)))
+	
                object.select = False
                
        xml = minidom.parseString(tree.tostring(root))
