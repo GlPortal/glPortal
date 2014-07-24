@@ -37,6 +37,7 @@ Scene* XmlMapLoader::getScene(std::string path) {
     TiXmlElement* spawnElement;
     TiXmlElement* lightElement;
     TiXmlElement* textureElement;
+    TiXmlElement* triggerBoxElement;
     TiXmlHandle rootHandle(0);
     float spawnX, spawnY, spawnZ;
     float lightR(0), lightG(0), lightB(0);
@@ -116,6 +117,30 @@ Scene* XmlMapLoader::getScene(std::string path) {
     }
     
     //END_WALLS
+
+    //TRIGGER
+    string triggerType("none");
+    triggerBoxElement = rootHandle.FirstChild( "trigger" ).Element();
+    for(triggerBoxElement; triggerBoxElement; triggerBoxElement = triggerBoxElement->NextSiblingElement()){
+      TiXmlElement* triggerBoxPositionElement;
+      TiXmlElement* triggerBoxScaleElement;
+      
+      Trigger trigger;
+      triggerBoxPositionElement = triggerBoxElement->FirstChildElement("position");
+      triggerBoxPositionElement->QueryFloatAttribute("x", &trigger.position.x);
+      triggerBoxPositionElement->QueryFloatAttribute("y", &trigger.position.y);
+      triggerBoxPositionElement->QueryFloatAttribute("z", &trigger.position.z);
+
+      triggerBoxScaleElement = triggerBoxElement->FirstChildElement("scale");
+      triggerBoxScaleElement->QueryFloatAttribute("x", &trigger.scale.x);
+      triggerBoxScaleElement->QueryFloatAttribute("y", &trigger.scale.y);
+      triggerBoxScaleElement->QueryFloatAttribute("z", &trigger.scale.z);
+      
+      trigger.texture = TextureLoader::getTexture(Environment::getDataDir() + "/textures/" + texturePath);
+      trigger.mesh = getBox(trigger);
+      scene->triggers.push_back(trigger);
+    }
+    //END_TRIGGER    
     
     cout << "File loaded." << endl;
   } else {
