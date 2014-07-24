@@ -2,6 +2,7 @@
 #define PLAYER_HPP
 
 #include "engine/Entity.hpp"
+#include "engine/Trigger.hpp"
 #include "engine/util/Vector3f.hpp"
 
 namespace glPortal {

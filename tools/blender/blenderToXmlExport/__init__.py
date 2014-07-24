@@ -17,6 +17,7 @@ import os
 import mathutils
 import string
 from mathutils import Vector
+import re
 
 class CustomPanel(bpy.types.Panel):
     """GlPortal panel in the toolbar"""
@@ -89,7 +90,7 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
     bl_label = "GlPortal XML Format"
     bl_options = {'PRESET'}
     filename_ext = ".xml"
-
+    
     def execute(self, context):
        dir = os.path.dirname(self.filepath)
        objects = context.scene.objects
@@ -155,7 +156,9 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
        xml = minidom.parseString(tree.tostring(root))
 
        file = open(self.filepath, "w")
-       file.write(xml.toprettyxml())
+       fix = re.compile(r'((?<=>)(\n[\t]*)(?=[^<\t]))|(?<=[^>\t])(\n[\t]*)(?=<)')
+       fixed_output = re.sub(fix, '', xml.toprettyxml())
+       file.write(fixed_output)
        file.close()
 
        return {'FINISHED'}
