@@ -198,9 +198,9 @@ void World::usePortal(Entity srcPortal, Entity destPortal) {
 
 void World::shootPortal(int button) {
   //Shooting
-  Vector3f cameraDir(cos(Math::DEG_TO_RAD(scene->camera.rotation.x)) * -sin(scene->camera.rotation.y * Math::PI_RND / 180),
-                     sin(scene->camera.rotation.x * Math::PI_RND / 180),
-                     -cos(scene->camera.rotation.x * Math::PI_RND / 180) * cos(scene->camera.rotation.y * Math::PI_RND / 180));
+  Vector3f cameraDir(cos(Math::DEG_TO_RAD(scene->camera.rotation.x)) * -sin(Math::DEG_TO_RAD(scene->camera.rotation.y)),
+                     sin(Math::DEG_TO_RAD(scene->camera.rotation.x)),
+                     -cos(Math::DEG_TO_RAD(scene->camera.rotation.x)) * cos(Math::DEG_TO_RAD(scene->camera.rotation.y)));
 
   //Find the closest intersection
   Entity closestWall;
