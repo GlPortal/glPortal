@@ -5,7 +5,7 @@ type: :bugfix
 component: engine
 release: v0.1 Overlord
 reporter: Henry Hirsch <henry@glportal.de>
-status: :unstarted
+status: :in_progress
 disposition: 
 creation_time: 2014-07-26 17:00:21.232490 Z
 references: []
@@ -20,5 +20,13 @@ log_events:
   - Henry Hirsch <henry@glportal.de>
   - edited title, description
   - ""
-claimer: 
+- - 2014-07-27 17:38:29.811250 Z
+  - Henry Hirsch <henry@glportal.de>
+  - changed status from unstarted to in_progress
+  - ""
+- - 2014-07-27 17:39:39.859396 Z
+  - Henry Hirsch <henry@glportal.de>
+  - issue claimed
+  - ""
+claimer: Henry Hirsch <henry@glportal.de>
 git_branch: 
