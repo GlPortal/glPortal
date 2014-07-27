@@ -1,9 +1,8 @@
 #include "Camera.hpp"
+#include "util/Math.hpp"
 
 #include <math.h>
 #include "../Window.hpp"
-
-#define PI 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089
 
 namespace glPortal {
 
@@ -17,7 +16,7 @@ Camera::Camera(float fovy, float aspect, float zNear, float zFar) {
 
 void Camera::recalculate() {
   aspect = Window::aspect;
-  float fovyr = fovy * (PI / 180);
+  float fovyr = fovy * (Math::PI_RND / 180);
   projectionMatrix.array[0] = (float) (1 / tan(fovyr / 2)) / aspect;
   projectionMatrix.array[5] = (float) (1 / tan(fovyr / 2));
   projectionMatrix.array[10] = (zNear + zFar) / (zNear - zFar);

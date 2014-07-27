@@ -18,6 +18,7 @@
 #include "engine/TextureLoader.hpp"
 #include "engine/util/Vector2f.hpp"
 #include "engine/util/Vector3f.hpp"
+#include "engine/util/Math.hpp"
 #include "engine/XmlMapLoader.hpp"
 #include "Input.hpp"
 #include "Player.hpp"
@@ -26,7 +27,6 @@
 
 namespace glPortal {
 
-const float PI = 3.14159265358979323846;
 const Vector2f sensitivity(0.5, 0.5);
 const float SPEED = 0.5;
 const float GRAVITY = 0.05;
@@ -66,7 +66,7 @@ void World::update() {
 
   player->velocity.y -= GRAVITY;
 
-  float rotation = player->rotation.y * PI / 180;
+  float rotation = player->rotation.y * Math::PI_RND / 180;
 
   if (Input::isKeyDown('w')) {
     player->velocity.x = -sin(rotation) * SPEED;
@@ -198,9 +198,9 @@ void World::usePortal(Entity srcPortal, Entity destPortal) {
 
 void World::shootPortal(int button) {
   //Shooting
-  Vector3f cameraDir(cos(scene->camera.rotation.x * PI / 180) * -sin(scene->camera.rotation.y * PI / 180),
-                     sin(scene->camera.rotation.x * PI / 180),
-                     -cos(scene->camera.rotation.x * PI / 180) * cos(scene->camera.rotation.y * PI / 180));
+  Vector3f cameraDir(cos(scene->camera.rotation.x * Math::PI_RND / 180) * -sin(scene->camera.rotation.y * Math::PI_RND / 180),
+                     sin(scene->camera.rotation.x * Math::PI_RND / 180),
+                     -cos(scene->camera.rotation.x * Math::PI_RND / 180) * cos(scene->camera.rotation.y * Math::PI_RND / 180));
 
   //Find the closest intersection
   Entity closestWall;
