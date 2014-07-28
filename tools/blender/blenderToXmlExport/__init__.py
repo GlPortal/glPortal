@@ -134,10 +134,12 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                transBoundingBoxBeginVector = matrix * boundingBoxBeginVector
                transBoundingBoxEndVector  = matrix * boundingBoxEndVector
                object.select = True
-               if hasattr(object, 'glpType'):
-                   if object.glpType != "None":
+               if "glpType" in object:
+                   if object["glpType"] != "None":
                        boxElement = tree.SubElement(root, "trigger")
-                       boxElement.set("type", object.glpType)
+                       boxElement.set("type", object["glpType"])
+                   else:
+                       boxElement = tree.SubElement(textureElement, "wall")
                else:
                    boxElement = tree.SubElement(textureElement, "wall")
                    
