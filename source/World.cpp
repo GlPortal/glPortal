@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <stdio.h>
+#include <iostream>
 
 #include "engine/BoxCollider.hpp"
 #include "engine/Camera.hpp"
@@ -35,13 +36,15 @@ void World::create() {
   renderer = new Renderer();
 
   //scene = MapLoader::getScene(std::string("data/maps/n1.map"));
-  scene = XmlMapLoader::getScene(std::string("/maps/test.xml"));
+  //  scene = XmlMapLoader::getScene(std::string("/maps/test.xml"));
+    scene = XmlMapLoader::getScene(std::string("/maps/untitled.xml"));
   //scene = XmlMapLoader::getScene(std::string("/maps/first.xml"));
 }
 
 void loadScene(Scene scene) {
 
 }
+  
 void World::update() {
   //Mouselook
   int mousedx, mousedy;
@@ -124,17 +127,17 @@ void World::update() {
     //Y collision
     BoxCollider bboxTriggerY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
     if (bboxTriggerY.collidesWith(bboxTrigger)) {
-
+      std::cout << "trigger touched\n";
     }
     //X collision
     BoxCollider bboxTriggerX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
     if (bboxTriggerX.collidesWith(bboxTrigger)) {
-
+      std::cout << "trigger touched\n";
     }
     //Z collision
     BoxCollider bboxTriggerZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
     if (bboxTriggerZ.collidesWith(bboxTrigger)) {
-
+      std::cout << "trigger touched\n";
     }
   }
   
