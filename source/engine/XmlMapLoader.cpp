@@ -34,10 +34,6 @@ Scene* XmlMapLoader::getScene(std::string path) {
     TiXmlHandle docHandle(&doc);
     TiXmlElement* mapElement;
     TiXmlElement* element;
-    TiXmlElement* spawnElement;
-    TiXmlElement* lightElement;
-    TiXmlElement* textureElement;
-    TiXmlElement* triggerBoxElement;
     TiXmlHandle rootHandle(0);
     float spawnX, spawnY, spawnZ;
     float lightR(0), lightG(0), lightB(0);
@@ -46,6 +42,7 @@ Scene* XmlMapLoader::getScene(std::string path) {
     element = docHandle.FirstChildElement().Element();
     rootHandle=TiXmlHandle(element);
     //SPAWN
+    TiXmlElement* spawnElement;
     spawnElement = rootHandle.FirstChild( "spawn" ).Element();
 
     if(spawnElement){
@@ -60,6 +57,7 @@ Scene* XmlMapLoader::getScene(std::string path) {
     //END_SPAWN
 
     //LIGHT
+    TiXmlElement* lightElement;
     lightElement = rootHandle.FirstChild( "light" ).Element();
     for(lightElement; lightElement; lightElement = lightElement->NextSiblingElement()){
       if(lightElement){
@@ -81,6 +79,7 @@ Scene* XmlMapLoader::getScene(std::string path) {
     //END_LIGHT
 
     //WALLS
+    TiXmlElement* textureElement;
     string texturePath("none");
     string surfaceType("none");
     textureElement = rootHandle.FirstChild("texture").Element();
@@ -119,29 +118,39 @@ Scene* XmlMapLoader::getScene(std::string path) {
     //END_WALLS
 
     //TRIGGER
+    TiXmlElement* triggerElement;
     string triggerType("none");
-    triggerBoxElement = rootHandle.FirstChild( "trigger" ).Element();
-    for(triggerBoxElement; triggerBoxElement; triggerBoxElement = triggerBoxElement->NextSiblingElement()){
-      TiXmlElement* triggerBoxPositionElement;
-      TiXmlElement* triggerBoxScaleElement;
-      
-      Trigger trigger;
-      triggerBoxPositionElement = triggerBoxElement->FirstChildElement("position");
-      triggerBoxPositionElement->QueryFloatAttribute("x", &trigger.position.x);
-      triggerBoxPositionElement->QueryFloatAttribute("y", &trigger.position.y);
-      triggerBoxPositionElement->QueryFloatAttribute("z", &trigger.position.z);
+    triggerElement = rootHandle.FirstChild("trigger").Element();
+    if(triggerElement){
+      for(triggerElement; triggerElement; triggerElement = triggerElement->NextSiblingElement()){
+        TiXmlElement* triggerPositionElement;
+        TiXmlElement* triggerScaleElement;
+        
+        Trigger trigger;
+        triggerPositionElement = triggerElement->FirstChildElement("position");
+        triggerScaleElement    = triggerElement->FirstChildElement("scale");
 
-      triggerBoxScaleElement = triggerBoxElement->FirstChildElement("scale");
-      triggerBoxScaleElement->QueryFloatAttribute("x", &trigger.scale.x);
-      triggerBoxScaleElement->QueryFloatAttribute("y", &trigger.scale.y);
-      triggerBoxScaleElement->QueryFloatAttribute("z", &trigger.scale.z);
-      
-      trigger.texture = TextureLoader::getTexture(Environment::getDataDir() + "/textures/" + texturePath);
-      trigger.mesh = getBox(trigger);
-      scene->triggers.push_back(trigger);
+        if(triggerPositionElement){
+          triggerPositionElement->QueryFloatAttribute("x", &trigger.position.x);
+          triggerPositionElement->QueryFloatAttribute("y", &trigger.position.y);
+          triggerPositionElement->QueryFloatAttribute("z", &trigger.position.z);
+        }
+        
+        
+        if(triggerScaleElement){      
+                      
+          triggerScaleElement = triggerElement->FirstChildElement("scale");
+          triggerScaleElement->QueryFloatAttribute("x", &trigger.scale.x);
+          triggerScaleElement->QueryFloatAttribute("y", &trigger.scale.y);
+          triggerScaleElement->QueryFloatAttribute("z", &trigger.scale.z);
+                      
+          trigger.texture = TextureLoader::getTexture(Environment::getDataDir() + "/textures/redBox.png");
+          trigger.mesh = getBox(trigger);
+          scene->triggers.push_back(trigger);
+        }
+        //END_TRIGGER    
+      }
     }
-    //END_TRIGGER    
-    
     cout << "File loaded." << endl;
   } else {
     cout << "Unable to load File." << endl;
