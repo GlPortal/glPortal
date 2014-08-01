@@ -1,5 +1,5 @@
 
-include_directories(lib engine "/usr/local/include/bullet" ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(lib engine ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(${EXE_NAME} 
   Game.cpp
@@ -15,12 +15,13 @@ add_executable(${EXE_NAME}
   Input.cpp engine/Renderer.cpp
   engine/MapLoader.cpp
   engine/XmlMapLoader.cpp
+  engine/EntityConverter.cpp
   engine/MeshLoader.cpp
   engine/environment/Environment.cpp
   engine/environment/ConfigFileParser.cpp
   engine/environment/Path.cpp
   )
-target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES} tinyxml BulletDynamics BulletCollision LinearMath)
+target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES} tinyxml)
 install ( TARGETS ${EXE_NAME} DESTINATION bin )
 
 add_custom_target(run COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXE_NAME}${CMAKE_EXECUTABLE_SUFFIX} -datadir ${CMAKE_SOURCE_DIR}/data )
