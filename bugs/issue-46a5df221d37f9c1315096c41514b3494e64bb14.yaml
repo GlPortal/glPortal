@@ -1,0 +1,30 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Logger class
+desc: |-
+  The logger will provide an easy interface to logging messages. 
+  The first implementation should support logging to stdout and a logfile.
+type: :feature
+component: engine
+release: v0.1 Overlord
+reporter: Henry Hirsch <henry@glportal.de>
+status: :in_progress
+disposition: 
+creation_time: 2014-08-01 20:27:55.491606 Z
+references: []
+
+id: 46a5df221d37f9c1315096c41514b3494e64bb14
+log_events: 
+- - 2014-08-01 20:28:00.363513 Z
+  - Henry Hirsch <henry@glportal.de>
+  - created
+  - ""
+- - 2014-08-01 20:28:11.563479 Z
+  - Henry Hirsch <henry@glportal.de>
+  - issue claimed
+  - ""
+- - 2014-08-01 20:28:23.011569 Z
+  - Henry Hirsch <henry@glportal.de>
+  - changed status from unstarted to in_progress
+  - ""
+claimer: Henry Hirsch <henry@glportal.de>
+git_branch: 
