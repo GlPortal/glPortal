@@ -31,7 +31,7 @@ Scene* XmlMapLoader::getScene(std::string path) {
   TiXmlDocument doc(string(Environment::getDataDir() + path));
   bool loaded = doc.LoadFile();
  
-  if (loaded){
+  if(loaded){
     TiXmlHandle docHandle(&doc);
     TiXmlElement* mapElement;
     TiXmlElement* element;
