@@ -1,0 +1,24 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Obj support for map format
+desc: Add a button to the blender panel to mark an object that should be included in the map file as an Obj file.
+type: :feature
+component: engine
+release: v0.1 Overlord
+reporter: Henry Hirsch <henry@glportal.de>
+status: :unstarted
+disposition: 
+creation_time: 2014-08-04 04:40:11.764169 Z
+references: []
+
+id: 315ab37e127f045aaae152ce6b5db0d605ab0250
+log_events: 
+- - 2014-08-04 04:40:14.364187 Z
+  - Henry Hirsch <henry@glportal.de>
+  - created
+  - ""
+- - 2014-08-04 04:40:35.572177 Z
+  - Henry Hirsch <henry@glportal.de>
+  - issue claimed
+  - ""
+claimer: Henry Hirsch <henry@glportal.de>
+git_branch: 
