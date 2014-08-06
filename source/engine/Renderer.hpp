@@ -6,7 +6,7 @@
 #include "util/Matrix4f.hpp"
 
 namespace glPortal {
-
+class Entity;
 class Portal;
 class Scene;
 
@@ -14,9 +14,10 @@ class Renderer {
 public:
   Renderer();
   void render(Scene* scene);
+  void renderScene(Scene* scene);
+  void renderEntity(Entity e);
   void renderPortal(Scene* scene, Portal portal, Portal otherPortal);
   void renderPortalOverlay(Portal portal);
-  void renderScene(Scene* scene);
 private:
   int shader;
   Matrix4f projectionMatrix;
