@@ -1,30 +1,30 @@
 --- !ditz.rubyforge.org,2008-03-06/issue 
-title: Collision detection with bullet-physics
-desc: Replace current collision detection with the one provided by bullet-physics.
-type: :feature
+title: World.cpp is too big
+desc: World.cpp is too big and has multiple responsibilities. Refactoring needed.
+type: :bugfix
 component: engine
 release: v0.1 Overlord
 reporter: Henry Hirsch <henry@glportal.de>
 status: :in_progress
 disposition: 
-creation_time: 2014-05-16 15:30:29.894083 Z
+creation_time: 2014-07-26 17:00:21.232490 Z
 references: []
 
-id: 6ef147a513d6583ba9136ca7decfdaa3a780c611
+id: 56c8f4aaae5e9f412816d0cb7146467b4f60f95e
 log_events: 
-- - 2014-05-16 15:30:35.230039 Z
+- - 2014-07-26 17:00:23.728305 Z
   - Henry Hirsch <henry@glportal.de>
   - created
   - ""
-- - 2014-07-27 17:38:05.627236 Z
+- - 2014-07-26 17:01:17.208469 Z
   - Henry Hirsch <henry@glportal.de>
-  - assigned to release v0.1 Overlord from unassigned
+  - edited title, description
   - ""
-- - 2014-07-27 17:38:39.571258 Z
+- - 2014-07-27 17:38:29.811250 Z
   - Henry Hirsch <henry@glportal.de>
   - changed status from unstarted to in_progress
   - ""
-- - 2014-07-27 17:39:21.107332 Z
+- - 2014-07-27 17:39:39.859396 Z
   - Henry Hirsch <henry@glportal.de>
   - issue claimed
   - ""

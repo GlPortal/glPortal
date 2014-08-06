@@ -14,3 +14,4 @@ data/private.cfg
 .project
 .cproject
 Debug/
+__pycache__/
