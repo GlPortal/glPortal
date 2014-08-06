@@ -1,13 +1,17 @@
 #include "MeshLoader.hpp"
 
-#include <GL/glew.h>
 #include <assimp/Importer.hpp>
 #include <assimp/mesh.h>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 #include <assimp/vector3.h>
+#include <GL/glew.h>
 #include <stdlib.h>
 #include <utility>
+
+#include "Entity.hpp"
+#include "util/Vector2f.hpp"
+#include "util/Vector3f.hpp"
 
 namespace glPortal {
 
@@ -100,7 +104,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
   return m;
 }
 
-Mesh MeshLoader::getPortalWall(Entity wall) {
+Mesh MeshLoader::getPortalBox(Entity wall) {
   Mesh mesh;
 
   GLuint vao;

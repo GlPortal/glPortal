@@ -1,26 +1,20 @@
 #include "XmlMapLoader.hpp"
 
-#include <GL/glew.h>
-#include <cmath>
-#include <cstdlib>
-#include <fstream>
-#include <istream>
-#include <sstream>
-#include <vector>
+#include <tinyxml.h>
 #include <iostream>
 #include <stdexcept>
+#include <vector>
 
 #include "../Player.hpp"
 #include "../Scene.hpp"
+#include "environment/Environment.hpp"
 #include "Light.hpp"
 #include "Mesh.hpp"
-#include "EntityConverter.hpp"
+#include "MeshLoader.hpp"
 #include "Texture.hpp"
 #include "TextureLoader.hpp"
-#include "util/Vector2f.hpp"
+#include "Trigger.hpp"
 #include "util/Vector3f.hpp"
-#include "environment/Environment.hpp"
-#include <tinyxml.h>
 
 using namespace std;
 
@@ -106,7 +100,7 @@ Scene* XmlMapLoader::getScene(std::string path) {
           boxScaleElement->QueryFloatAttribute("z", &wall.scale.z);
 
           wall.texture = TextureLoader::getTexture(Environment::getDataDir() + "/textures/" + texturePath);
-          wall.mesh = EntityConverter::getMeshForBox(wall);
+          wall.mesh = MeshLoader::getPortalBox(wall);
           scene->walls.push_back(wall);
           }
         texturePath = std::string("none");
@@ -146,7 +140,7 @@ Scene* XmlMapLoader::getScene(std::string path) {
           triggerScaleElement->QueryFloatAttribute("z", &trigger.scale.z);
                       
           trigger.texture = TextureLoader::getTexture(Environment::getDataDir() + "/textures/redBox.png");
-          trigger.mesh = EntityConverter::getMeshForBox(trigger);
+          trigger.mesh = MeshLoader::getPortalBox(trigger);
           scene->triggers.push_back(trigger);
         }
         //END_TRIGGER    
