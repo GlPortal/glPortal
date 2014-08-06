@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <stdio.h>
+#include <iostream>
 
 #include "engine/BoxCollider.hpp"
 #include "engine/Camera.hpp"
@@ -18,6 +19,7 @@
 #include "engine/TextureLoader.hpp"
 #include "engine/util/Vector2f.hpp"
 #include "engine/util/Vector3f.hpp"
+#include "engine/util/Math.hpp"
 #include "engine/XmlMapLoader.hpp"
 #include "Input.hpp"
 #include "Player.hpp"
@@ -26,7 +28,6 @@
 
 namespace glPortal {
 
-const float PI = 3.14159265358979323846;
 const Vector2f sensitivity(0.5, 0.5);
 const float SPEED = 0.2;
 const float GRAVITY = 0.05;
@@ -67,7 +68,7 @@ void World::update() {
 
   player->velocity.y -= GRAVITY;
 
-  float rotation = player->rotation.y * PI / 180;
+  float rotation = player->rotation.y * Math::PI_RND / 180;
 
   if (Input::isKeyDown('w')) {
     player->velocity.x = -sin(rotation) * SPEED;
@@ -115,6 +116,28 @@ void World::update() {
     player->velocity.z = 0;
   }
 
+  //Trigger
+  for (unsigned int i = 0; i < scene->triggers.size(); i++) {
+    Trigger trigger = scene->triggers[i];
+    BoxCollider bboxTrigger(trigger.position, trigger.scale);
+
+    //Y collision
+    BoxCollider bboxTriggerY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
+    if (bboxTriggerY.collidesWith(bboxTrigger)) {
+      std::cout << "trigger touched\n";
+    }
+    //X collision
+    BoxCollider bboxTriggerX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
+    if (bboxTriggerX.collidesWith(bboxTrigger)) {
+      std::cout << "trigger touched\n";
+    }
+    //Z collision
+    BoxCollider bboxTriggerZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
+    if (bboxTriggerZ.collidesWith(bboxTrigger)) {
+      std::cout << "trigger touched\n";
+    }
+  }
+
   //Check if the player is walking through a portal
   if(scene->bluePortal.throughPortal(player->position)) {
     player->position.set(scene->orangePortal.position);
@@ -154,9 +177,9 @@ bool World::collidesWithWalls(BoxCollider collider) {
 
 void World::shootPortal(int button) {
   //Shooting
-  Vector3f cameraDir(cos(scene->camera.rotation.x * PI / 180) * -sin(scene->camera.rotation.y * PI / 180),
-                     sin(scene->camera.rotation.x * PI / 180),
-                     -cos(scene->camera.rotation.x * PI / 180) * cos(scene->camera.rotation.y * PI / 180));
+  Vector3f cameraDir(cos(Math::DEG_TO_RAD(scene->camera.rotation.x)) * -sin(Math::DEG_TO_RAD(scene->camera.rotation.y)),
+                     sin(Math::DEG_TO_RAD(scene->camera.rotation.x)),
+                     -cos(Math::DEG_TO_RAD(scene->camera.rotation.x)) * cos(Math::DEG_TO_RAD(scene->camera.rotation.y)));
 
   //Find the closest intersection
   Entity closestWall;

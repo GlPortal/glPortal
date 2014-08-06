@@ -15,6 +15,7 @@ public:
   Player player;
   Camera camera;
   std::vector<Entity> walls;
+  std::vector<Trigger> triggers;
   std::vector<Light> lights;
   Portal bluePortal;
   Portal orangePortal;

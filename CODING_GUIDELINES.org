@@ -1,0 +1,5 @@
+* Coding Guidelines
+** Stick to the principles of Object Oriented Design
+http://www.c2.com/cgi/wiki?PrinciplesOfObjectOrientedDesign
+** Don't use anti-patterns
+** Always leave the code cleaner than you have found it

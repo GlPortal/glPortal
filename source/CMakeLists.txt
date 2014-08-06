@@ -6,6 +6,7 @@ add_executable(${EXE_NAME}
   engine/util/Vector3f.cpp
   engine/util/Vector2f.cpp
   engine/util/Matrix4f.cpp
+  engine/util/Math.cpp
   engine/BoxCollider.cpp
   World.cpp Window.cpp
   engine/Camera.cpp
@@ -14,6 +15,7 @@ add_executable(${EXE_NAME}
   Input.cpp engine/Renderer.cpp
   engine/MapLoader.cpp
   engine/XmlMapLoader.cpp
+  engine/EntityConverter.cpp
   engine/MeshLoader.cpp
   engine/environment/Environment.cpp
   engine/environment/ConfigFileParser.cpp

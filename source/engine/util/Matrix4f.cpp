@@ -1,11 +1,10 @@
 #include "Matrix4f.hpp"
 
+#include "Math.hpp"
 #include <math.h>
 #include <stdio.h>
 
 #include "Vector3f.hpp"
-
-#define PI 3.14159265358979323846
 
 namespace glPortal {
 
@@ -37,8 +36,8 @@ void Matrix4f::translate(Vector3f v) {
 }
 
 void Matrix4f::rotate(float angle, float x, float y, float z) {
-  float c = cos(angle * PI / 180);
-  float s = sin(angle * PI / 180);
+  float c = cos(angle * Math::PI_RND / 180);
+  float s = sin(angle * Math::PI_RND / 180);
   float ic = 1 - c;
 
   float f0 = array[0] * ((x * x * ic) + c) + array[4] * ((x * y * ic) + (z * s))
