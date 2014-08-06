@@ -28,20 +28,21 @@ namespace glPortal {
 
 const float PI = 3.14159265358979323846;
 const Vector2f sensitivity(0.5, 0.5);
-const float SPEED = 0.5;
+const float SPEED = 0.2;
 const float GRAVITY = 0.05;
 
 void World::create() {
   renderer = new Renderer();
 
-  //scene = MapLoader::getScene(std::string("data/maps/n1.map"));
-  scene = XmlMapLoader::getScene(std::string("/maps/test.xml"));
+  loadScene("data/maps/n1.map");
+  //scene = XmlMapLoader::getScene(std::string("/maps/untitled.xml"));
   //scene = XmlMapLoader::getScene(std::string("/maps/first.xml"));
 }
 
-void loadScene(Scene scene) {
-
+void World::loadScene(std::string path) {
+  scene = MapLoader::getScene(path);
 }
+
 void World::update() {
   //Mouselook
   int mousedx, mousedy;
@@ -90,87 +91,65 @@ void World::update() {
 
   Vector3f pos = Vector3f::add(player->position, player->velocity);
 
-  //Portal teleportation
-  usePortal(scene->bluePortal, scene->orangePortal);
-  usePortal(scene->orangePortal, scene->bluePortal);
-
-  //Collision
-  for (unsigned int i = 0; i < scene->walls.size(); i++) {
-    Entity wall = scene->walls[i];
-    BoxCollider bboxWall(wall.position, wall.scale);
-
-    //Y collision
-    BoxCollider bboxY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
-    if (bboxY.collidesWith(bboxWall)) {
-      player->velocity.y = 0;
-    }
-    //X collision
-    BoxCollider bboxX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
-    if (bboxX.collidesWith(bboxWall)) {
-      player->velocity.x = 0;
-    }
-    //Z collision
-    BoxCollider bboxZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
-    if (bboxZ.collidesWith(bboxWall)) {
-      player->velocity.z = 0;
-    }
+  //Y collision
+  BoxCollider bboxY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
+  if (!collidesWithWalls(bboxY) || scene->bluePortal.inPortal(bboxY) || scene->orangePortal.inPortal(bboxY)) {
+    player->position.y = pos.y;
+  } else {
+    player->velocity.y = 0;
   }
-  player->position.add(player->velocity);
 
+  //X collision
+  BoxCollider bboxX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
+  if (!collidesWithWalls(bboxX) || scene->bluePortal.inPortal(bboxX) || scene->orangePortal.inPortal(bboxX)) {
+    player->position.x = pos.x;
+  } else {
+    player->velocity.x = 0;
+  }
+
+  //Z collision
+  BoxCollider bboxZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
+  if (!collidesWithWalls(bboxZ) || scene->bluePortal.inPortal(bboxZ) || scene->orangePortal.inPortal(bboxZ)) {
+    player->position.z = pos.z;
+  } else {
+    player->velocity.z = 0;
+  }
+
+  //Check if the player is walking through a portal
+  if(scene->bluePortal.throughPortal(player->position)) {
+    player->position.set(scene->orangePortal.position);
+    float rotation = scene->orangePortal.rotation.y - scene->bluePortal.rotation.y + 180;
+    player->rotation.y += rotation;
+  }
+  if(scene->orangePortal.throughPortal(player->position)) {
+     player->position.set(scene->bluePortal.position);
+     float rotation = scene->bluePortal.rotation.y - scene->orangePortal.rotation.y + 180;
+     player->rotation.y += rotation;
+  }
+
+  //Parent camera to player
   scene->camera.position.set(scene->player.position);
+  scene->camera.position.y += scene->player.scale.y/2;
   scene->camera.rotation.set(scene->player.rotation);
+
+  //Check if the end of the level has been reached
+  float distToEnd = Vector3f::sub(scene->end.position, scene->player.position).length();
+  if(distToEnd < 1) {
+    //FIXME Load the next scene
+    loadScene("data/maps/n1.map");
+  }
 }
 
-void World::usePortal(Entity srcPortal, Entity destPortal) {
-  Player* player = &scene->player;
-  if (srcPortal.rotation.y == 90 || srcPortal.rotation.y == -90) {
-    if (srcPortal.position.x > player->position.x - player->scale.x / 2
-        && srcPortal.position.x < player->position.x + player->scale.x / 2
-        && player->position.y + player->scale.y / 2 > srcPortal.position.y - 1
-        && player->position.y - player->scale.y / 2 < srcPortal.position.y + 1
-        && player->position.z + player->scale.z / 2 > srcPortal.position.z - 0.5
-        && player->position.z - player->scale.z / 2 < srcPortal.position.z + 0.5) {
-      player->position.set(destPortal.position);
-      if (destPortal.rotation.y == -90) {
-        player->position.x -= player->scale.x;
-      }
-      if (destPortal.rotation.y == 90) {
-        player->position.x += player->scale.x;
-      }
+bool World::collidesWithWalls(BoxCollider collider) {
+  for (unsigned int i = 0; i < scene->walls.size(); i++) {
+    Entity wall = scene->walls[i];
+    BoxCollider wallCollider(wall.position, wall.scale);
+
+    if(collider.collidesWith(wallCollider)) {
+      return true;
     }
   }
-  if ((srcPortal.rotation.y == 0 && srcPortal.rotation.x == 0) || (srcPortal.rotation.y == 180 && srcPortal.rotation.x == 0)) {
-    if (player->position.x + player->scale.x / 2 > srcPortal.position.x - 0.5
-        && player->position.x - player->scale.x / 2 < srcPortal.position.x + 0.5
-        && player->position.y + player->scale.y / 2 > srcPortal.position.y - 1
-        && player->position.y - player->scale.y / 2 < srcPortal.position.y + 1
-        && srcPortal.position.z > player->position.z - player->scale.z / 2
-        && srcPortal.position.z < player->position.z + player->scale.z / 2) {
-      player->position.set(destPortal.position);
-      if (destPortal.rotation.y == 0) {
-        player->position.z += player->scale.z;
-      }
-      if (destPortal.rotation.y == 180) {
-        player->position.z -= player->scale.z;
-      }
-    }
-  }
-  if (srcPortal.rotation.x == 90 || srcPortal.rotation.x == -90) {
-    if (player->position.x + player->scale.x / 2 > srcPortal.position.x - 0.5
-        && player->position.x - player->scale.x / 2 < srcPortal.position.x + 0.5
-        && srcPortal.position.y > player->position.y - player->scale.y / 2
-        && srcPortal.position.y < player->position.y + player->scale.y / 2
-        && player->position.z + player->scale.z / 2 > srcPortal.position.z - 1
-        && player->position.z - player->scale.z / 2 < srcPortal.position.z + 1) {
-      player->position.set(destPortal.position);
-      if (destPortal.rotation.x == -90) {
-        player->position.y += player->scale.y;
-      }
-      if (destPortal.rotation.x == 90) {
-        player->position.y -= player->scale.y;
-      }
-    }
-  }
+  return false;
 }
 
 void World::shootPortal(int button) {
@@ -220,6 +199,7 @@ void World::shootPortal(int button) {
 
   Portal portal;
   portal.position.set(ipos.x, ipos.y, ipos.z);
+  portal.scale.set(1, 2, 1);
   if (side == 0) {
     portal.rotation.y = 90;
     portal.position.x -= 0.01;

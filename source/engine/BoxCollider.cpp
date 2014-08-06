@@ -3,8 +3,8 @@
 namespace glPortal {
 
   BoxCollider::BoxCollider(Vector3f position, Vector3f size) {
-    this->position = position;
-    this->size = size;
+    this->position.set(position);
+    this->size.set(size);
   }
 
   bool BoxCollider::collidesWith(BoxCollider collider) {
