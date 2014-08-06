@@ -151,7 +151,10 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
       viewMatrix.rotate(-otherPortal.rotation.x - scene->camera.rotation.x, 1, 0, 0);
       viewMatrix.rotate(-otherPortal.rotation.y - (scene->camera.rotation.y + 180 - portal.rotation.y), 0, 1, 0);
       viewMatrix.rotate(-otherPortal.rotation.z, 0, 0, 1);
-      viewMatrix.translate(Vector3f(-otherPortal.position.x, -otherPortal.position.y - (scene->camera.position.y - portal.position.y), -otherPortal.position.z));
+      viewMatrix.translate(
+      Vector3f(-otherPortal.position.x,
+               -otherPortal.position.y - (scene->camera.position.y - portal.position.y),
+               -otherPortal.position.z));
     } else {
       viewMatrix.setIdentity();
       viewMatrix.rotate(-otherPortal.rotation.x, 1, 0, 0);
@@ -213,6 +216,28 @@ void Renderer::renderScene(Scene* scene) {
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
   }
+  //End
+  Entity end = scene->end;
+
+  modelMatrix.setIdentity();
+  modelMatrix.translate(end.position);
+  modelMatrix.rotate(end.rotation.x, 1, 0, 0);
+  modelMatrix.rotate(end.rotation.y, 0, 1, 0);
+  modelMatrix.rotate(end.rotation.z, 0, 0, 1);
+  modelMatrix.scale(end.scale);
+  glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+
+  glBindVertexArray(end.mesh.handle);
+
+  int loc = glGetUniformLocation(shader, "diffuse");
+  int tiling = glGetUniformLocation(shader, "tiling");
+  glUniform2f(tiling, end.texture.xTiling, end.texture.yTiling);
+  glUniform1i(loc, 0);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, end.texture.handle);
+  glDrawArrays(GL_TRIANGLES, 0, end.mesh.numFaces * 3);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glBindVertexArray(0);
 }
 
 } /* namespace glPortal */

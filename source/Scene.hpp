@@ -18,6 +18,8 @@ public:
   std::vector<Light> lights;
   Portal bluePortal;
   Portal orangePortal;
+  Entity start;
+  Entity end;
 };
 
 } /* namespace glPortal */
