@@ -5,6 +5,7 @@
 #include "engine/util/Vector3f.hpp"
 
 namespace glPortal {
+class BoxCollider;
 
 class Portal: public Entity {
 public:
@@ -12,6 +13,10 @@ public:
       open(false) {}
   Vector3f direction;
   bool open;
+
+  Vector3f getDirection();
+  bool throughPortal(Vector3f v);
+  bool inPortal(BoxCollider collider);
 };
 
 } /* namespace glPortal */
