@@ -110,6 +110,35 @@ void Renderer::render(Scene* scene) {
   renderPortalOverlay(scene->orangePortal);
 }
 
+void Renderer::renderScene(Scene* scene) {
+  //Walls
+  for (unsigned int i = 0; i < scene->walls.size(); i++) {
+    renderEntity(scene->walls[i]);
+  }
+  //End
+  renderEntity(scene->end);
+}
+
+void Renderer::renderEntity(Entity e) {
+  modelMatrix.setIdentity();
+  modelMatrix.translate(e.position);
+  modelMatrix.rotate(e.rotation);
+  modelMatrix.scale(e.scale);
+  glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+
+  glBindVertexArray(e.mesh.handle);
+
+  int loc = glGetUniformLocation(shader, "diffuse");
+  int tiling = glGetUniformLocation(shader, "tiling");
+  glUniform2f(tiling, e.texture.xTiling, e.texture.yTiling);
+  glUniform1i(loc, 0);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, e.texture.handle);
+  glDrawArrays(GL_TRIANGLES, 0, e.mesh.numFaces * 3);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glBindVertexArray(0);
+}
+
 void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
   if (portal.open && otherPortal.open) {
     glEnable(GL_STENCIL_TEST);
@@ -151,7 +180,10 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
       viewMatrix.rotate(-otherPortal.rotation.x - scene->camera.rotation.x, 1, 0, 0);
       viewMatrix.rotate(-otherPortal.rotation.y - (scene->camera.rotation.y + 180 - portal.rotation.y), 0, 1, 0);
       viewMatrix.rotate(-otherPortal.rotation.z, 0, 0, 1);
-      viewMatrix.translate(Vector3f(-otherPortal.position.x, -otherPortal.position.y - (scene->camera.position.y - portal.position.y), -otherPortal.position.z));
+      viewMatrix.translate(
+      Vector3f(-otherPortal.position.x,
+               -otherPortal.position.y - (scene->camera.position.y - portal.position.y),
+               -otherPortal.position.z));
     } else {
       viewMatrix.setIdentity();
       viewMatrix.rotate(-otherPortal.rotation.x, 1, 0, 0);
@@ -186,33 +218,6 @@ void Renderer::renderPortalOverlay(Portal portal) {
   glDrawArrays(GL_TRIANGLES, 0, portal.mesh.numFaces * 3);
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindVertexArray(0);
-}
-
-void Renderer::renderScene(Scene* scene) {
-  //Walls
-  for (unsigned int i = 0; i < scene->walls.size(); i++) {
-    Entity wall = scene->walls[i];
-
-    modelMatrix.setIdentity();
-    modelMatrix.translate(wall.position);
-    modelMatrix.rotate(wall.rotation.x, 1, 0, 0);
-    modelMatrix.rotate(wall.rotation.y, 0, 1, 0);
-    modelMatrix.rotate(wall.rotation.z, 0, 0, 1);
-    modelMatrix.scale(wall.scale);
-    glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
-
-    glBindVertexArray(wall.mesh.handle);
-
-    int loc = glGetUniformLocation(shader, "diffuse");
-    int tiling = glGetUniformLocation(shader, "tiling");
-    glUniform2f(tiling, wall.texture.xTiling, wall.texture.yTiling);
-    glUniform1i(loc, 0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, wall.texture.handle);
-    glDrawArrays(GL_TRIANGLES, 0, wall.mesh.numFaces * 3);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindVertexArray(0);
-  }
 }
 
 } /* namespace glPortal */
