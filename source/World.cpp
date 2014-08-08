@@ -38,10 +38,7 @@ const float GRAVITY = 0.05;
 void World::create() {
   renderer = new Renderer();
 
-  //scene = MapLoader::getScene(std::string("data/maps/n1.map"));
   loadScene("/maps/n1.xml");
-  //scene = XmlMapLoader::getScene(std::string("/maps/untitled.xml"));
-  //scene = XmlMapLoader::getScene(std::string("/maps/first.xml"));
 }
 
 void World::loadScene(std::string path) {
