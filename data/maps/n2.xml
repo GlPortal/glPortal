@@ -1,0 +1,169 @@
+<?xml version="1.0" ?>
+<map>
+	<spawn>
+		<position x="-6" y="1" z="-7"/>
+		<rotation x="0" y="0" z="0"/>
+	</spawn>
+	<end>
+		<position x="7" y="12" z="8"/>
+		<rotation x="0" y="0" z="0"/>
+	</end>
+	<light x="0" y="15" z="0" r="0" g="1" b="0"/>
+	
+	<texture source="wall.png">
+		<!-- Hallway -->
+		<wall>
+			<position x="-7.75" y="1.5" z="-7"/>
+			<scale x="0.5" y="3.0" z="2.0"/>
+		</wall>
+		<wall>
+			<position x="3.75" y="1.5" z="-7"/>
+			<scale x="0.5" y="3.0" z="2.0"/>
+		</wall>
+		
+		<!-- High platform -->
+		<wall>
+			<position x="5.75" y="13.5" z="-7"/>
+			<scale x="0.5" y="3.0" z="2.0"/>
+		</wall>
+		
+		<!-- High platform mirror -->
+		<wall>
+			<position x="-1.75" y="13.5" z="-7"/>
+			<scale x="0.5" y="3.0" z="2.0"/>
+		</wall>
+		
+		<!-- Back tunnel -->
+		<wall>
+			<position x="7.75" y="5.5" z="-7"/>
+			<scale x="0.5" y="11.0" z="2.0"/>
+		</wall>
+		
+		<!-- Second hall walls -->
+		<wall>
+			<position x="-7.75" y="7.5" z="-4.25"/>
+			<scale x="0.5" y="15" z="2.5"/>
+		</wall>
+		
+		<!-- Third room reset -->
+		<wall>
+			<position x="-7" y="1.5" z="-2.25"/>
+			<scale x="2.0" y="3.0" z="0.5"/>
+		</wall>
+	</texture>
+	<texture source="tiles.png">
+		<!-- Floor -->
+		<wall>
+			<position x="0" y="-0.5" z="0"/>
+			<scale x="20" y="1.0" z="20.0"/>
+		</wall>
+		<!-- Ceiling -->
+		<wall>
+			<position x="0" y="15.5" z="0"/>
+			<scale x="20.0" y="1.0" z="20.0"/>
+		</wall>
+		<!-- Wall -->
+		<wall>
+			<position x="-9" y="7.5" z="0"/>
+			<scale x="2.0" y="15.0" z="20.0"/>
+		</wall>
+		<wall>
+			<position x="9" y="7.5" z="0"/>
+			<scale x="2.0" y="15.0" z="20.0"/>
+		</wall>
+		<wall>
+			<position x="0" y="7.5" z="-9"/>
+			<scale x="20.0" y="15.0" z="2.0"/>
+		</wall>
+		<wall>
+			<position x="0" y="7.5" z="9"/>
+			<scale x="20.0" y="15.0" z="2.0"/>
+		</wall>
+		
+		<!-- First wall -->
+		<wall>
+			<position x="0" y="9" z="-5.75"/>
+			<scale x="16.0" y="12.0" z="0.5"/>
+		</wall>
+		<wall>
+			<position x="-1" y="1.5" z="-5.75"/>
+			<scale x="14" y="3" z="0.5"/>
+		</wall>
+		
+		<!-- Hallway -->
+		<wall>
+			<position x="-1" y="3.25" z="-7"/>
+			<scale x="10.0" y="0.5" z="2.0"/>
+		</wall>
+		<wall>
+			<position x="4.25" y="5" z="-7"/>
+			<scale x="0.5" y="10.0" z="2.0"/>
+		</wall>
+		
+		<!-- High platform -->
+		<wall>
+			<position x="6" y="11.5" z="-7"/>
+			<scale x="4.0" y="1.0" z="2.0"/>
+		</wall>
+		
+		<!-- High platform mirror -->
+		<wall>
+			<position x="-1" y="11.5" z="-7"/>
+			<scale x="2.0" y="1.0" z="2.0"/>
+		</wall>
+		
+		<!-- Second wall -->
+		<wall>
+			<position x="0" y="6" z="-2.75"/>
+			<scale x="16.0" y="12.0" z="0.5"/>
+		</wall>
+		<wall>
+			<position x="1" y="13.5" z="-2.75"/>
+			<scale x="14.0" y="3.0" z="0.5"/>
+		</wall>
+		
+		<!-- Third wall -->
+		<wall>
+			<position x="-5.75" y="6" z="2.75"/>
+			<scale x="0.5" y="12.0" z="10.5"/>
+		</wall>
+		<wall>
+			<position x="-5.75" y="13.5" z="1.75"/>
+			<scale x="0.5" y="3.0" z="8.5"/>
+		</wall>
+		
+		<!-- Third hall jump -->
+		<wall>
+			<position x="-7" y="11.5" z="2"/>
+			<scale x="2.0" y="1.0" z="2.0"/>
+		</wall>
+		<wall>
+			<position x="-7" y="11.5" z="7"/>
+			<scale x="2.0" y="1.0" z="2.0"/>
+		</wall>
+		
+		<!-- End room -->
+		<wall>
+			<position x="7" y="11.5" z="7"/>
+			<scale x="2.0" y="1.0" z="2.0"/>
+		</wall>
+		<!-- Ridge -->
+		<wall>
+			<position x="-5.25" y="11.5" z="2.75"/>
+			<scale x="0.5" y="1.0" z="10.5"/>
+		</wall>
+		<wall>
+			<position x="7.75" y="11.5" z="1.75"/>
+			<scale x="0.5" y="1.0" z="8.5"/>
+		</wall>
+		<wall>
+			<position x="1.25" y="11.5" z="-2.25"/>
+			<scale x="12.5" y="1.0" z="0.5"/>
+		</wall>
+		
+		<wall>
+			<position x="-7" y="11.5" z="-7"/>
+			<scale x="2.0" y="1.0" z="2.0"/>
+		</wall>
+	</texture>
+</map>
