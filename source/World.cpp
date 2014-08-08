@@ -38,7 +38,7 @@ const float GRAVITY = 0.05;
 void World::create() {
   renderer = new Renderer();
 
-  loadScene("/maps/n1.xml");
+  loadScene("/maps/n2.xml");
 }
 
 void World::loadScene(std::string path) {
@@ -149,7 +149,7 @@ void World::update() {
   float distToEnd = Vector3f::sub(scene->end.position, scene->player.position).length();
   if(distToEnd < 1) {
     //FIXME Load the next scene
-    loadScene("/maps/n1.map");
+    loadScene("/maps/n1.xml");
   }
 }
 
