@@ -23,7 +23,7 @@
 #include "engine/util/Math.hpp"
 #include "engine/util/Vector2f.hpp"
 #include "engine/util/Vector3f.hpp"
-#include "engine/XmlMapLoader.hpp"
+#include "engine/MapLoader.hpp"
 #include "Input.hpp"
 #include "Player.hpp"
 #include "Portal.hpp"
@@ -42,7 +42,7 @@ void World::create() {
 }
 
 void World::loadScene(std::string path) {
-  scene = XmlMapLoader::getScene(path);
+  scene = MapLoader::getScene(path);
 }
 
 void World::update() {
