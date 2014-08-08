@@ -122,22 +122,11 @@ void World::update() {
   //Trigger
   for (unsigned int i = 0; i < scene->triggers.size(); i++) {
     Trigger trigger = scene->triggers[i];
-    BoxCollider bboxTrigger(trigger.position, trigger.scale);
+    BoxCollider playerCollider(player->position, player->scale);
+    BoxCollider triggerCollider(trigger.position, trigger.scale);
 
-    //Y collision
-    BoxCollider bboxTriggerY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
-    if (bboxTriggerY.collidesWith(bboxTrigger)) {
-      std::cout << "trigger touched\n";
-    }
-    //X collision
-    BoxCollider bboxTriggerX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
-    if (bboxTriggerX.collidesWith(bboxTrigger)) {
-      std::cout << "trigger touched\n";
-    }
-    //Z collision
-    BoxCollider bboxTriggerZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
-    if (bboxTriggerZ.collidesWith(bboxTrigger)) {
-      std::cout << "trigger touched\n";
+    if (playerCollider.collidesWith(triggerCollider)) {
+      std::cout << "Trigger touched\n";
     }
   }
 
