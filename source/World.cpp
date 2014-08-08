@@ -1,12 +1,13 @@
 #include "World.hpp"
 
+#include <stdio.h>
 #include <SDL2/SDL_mouse.h>
 #include <cmath>
-#include <cstdlib>
+//#include <cstdlib>
+#include <iostream>
 #include <string>
 #include <vector>
-#include <stdio.h>
-#include <iostream>
+#include <climits>
 
 #include "engine/BoxCollider.hpp"
 #include "engine/Camera.hpp"
@@ -14,12 +15,14 @@
 #include "engine/MapLoader.hpp"
 #include "engine/Mesh.hpp"
 #include "engine/MeshLoader.hpp"
+#include "engine/Ray.hpp"
 #include "engine/Renderer.hpp"
 #include "engine/Texture.hpp"
 #include "engine/TextureLoader.hpp"
+#include "engine/Trigger.hpp"
+#include "engine/util/Math.hpp"
 #include "engine/util/Vector2f.hpp"
 #include "engine/util/Vector3f.hpp"
-#include "engine/util/Math.hpp"
 #include "engine/XmlMapLoader.hpp"
 #include "Input.hpp"
 #include "Player.hpp"
@@ -35,13 +38,14 @@ const float GRAVITY = 0.05;
 void World::create() {
   renderer = new Renderer();
 
-  loadScene("data/maps/n1.map");
+  //scene = MapLoader::getScene(std::string("data/maps/n1.map"));
+  loadScene("/maps/n1.xml");
   //scene = XmlMapLoader::getScene(std::string("/maps/untitled.xml"));
   //scene = XmlMapLoader::getScene(std::string("/maps/first.xml"));
 }
 
 void World::loadScene(std::string path) {
-  scene = MapLoader::getScene(path);
+  scene = XmlMapLoader::getScene(path);
 }
 
 void World::update() {
@@ -68,7 +72,7 @@ void World::update() {
 
   player->velocity.y -= GRAVITY;
 
-  float rotation = player->rotation.y * Math::PI_RND / 180;
+  float rotation = Math::toRadians(player->rotation.y);
 
   if (Input::isKeyDown('w')) {
     player->velocity.x = -sin(rotation) * SPEED;
@@ -119,22 +123,11 @@ void World::update() {
   //Trigger
   for (unsigned int i = 0; i < scene->triggers.size(); i++) {
     Trigger trigger = scene->triggers[i];
-    BoxCollider bboxTrigger(trigger.position, trigger.scale);
+    BoxCollider playerCollider(player->position, player->scale);
+    BoxCollider triggerCollider(trigger.position, trigger.scale);
 
-    //Y collision
-    BoxCollider bboxTriggerY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
-    if (bboxTriggerY.collidesWith(bboxTrigger)) {
-      std::cout << "trigger touched\n";
-    }
-    //X collision
-    BoxCollider bboxTriggerX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
-    if (bboxTriggerX.collidesWith(bboxTrigger)) {
-      std::cout << "trigger touched\n";
-    }
-    //Z collision
-    BoxCollider bboxTriggerZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
-    if (bboxTriggerZ.collidesWith(bboxTrigger)) {
-      std::cout << "trigger touched\n";
+    if (playerCollider.collidesWith(triggerCollider)) {
+      std::cout << "Trigger touched\n";
     }
   }
 
@@ -177,20 +170,23 @@ bool World::collidesWithWalls(BoxCollider collider) {
 
 void World::shootPortal(int button) {
   //Shooting
-  Vector3f cameraDir(cos(Math::DEG_TO_RAD(scene->camera.rotation.x)) * -sin(Math::DEG_TO_RAD(scene->camera.rotation.y)),
-                     sin(Math::DEG_TO_RAD(scene->camera.rotation.x)),
-                     -cos(Math::DEG_TO_RAD(scene->camera.rotation.x)) * cos(Math::DEG_TO_RAD(scene->camera.rotation.y)));
+  Vector3f cameraDir(cos(Math::toRadians(scene->camera.rotation.x)) * -sin(Math::toRadians(scene->camera.rotation.y)),
+                     sin(Math::toRadians(scene->camera.rotation.x)),
+                     -cos(Math::toRadians(scene->camera.rotation.x)) * cos(Math::toRadians(scene->camera.rotation.y)));
 
   //Find the closest intersection
   Entity closestWall;
-  float intersection = 5000000;
+  float intersection = INT_MAX;
   for (unsigned int i = 0; i < scene->walls.size(); i++) {
     Entity wall = scene->walls[i];
+    Ray bullet = Ray(scene->camera.position, cameraDir);
     float tNear, tFar;
-    if (collides(scene->camera.position, cameraDir, wall, &tNear, &tFar)) {
-      if (tNear < intersection) {
-        closestWall = wall;
-        intersection = tNear;
+    if (bullet.collides(wall, &tNear, &tFar)) {
+      if(wall.texture.handle == TextureLoader::getTexture("data/textures/wall.png").handle) {
+        if (tNear < intersection) {
+          closestWall = wall;
+          intersection = tNear;
+        }
       }
     }
   }
@@ -200,13 +196,12 @@ void World::shootPortal(int button) {
   //Side 0: -x, Side 1: x, Side 2: -z, Side 3: z, Side 4: -y, Side 5: y
   float dist = 1000000;
   int side = 0;
-  float distances[6];
-  distances[0] = fabs(ipos.x - (closestWall.position.x - closestWall.scale.x / 2));
-  distances[1] = fabs(ipos.x - (closestWall.position.x + closestWall.scale.x / 2));
-  distances[2] = fabs(ipos.z - (closestWall.position.z - closestWall.scale.z / 2));
-  distances[3] = fabs(ipos.z - (closestWall.position.z + closestWall.scale.z / 2));
-  distances[4] = fabs(ipos.y - (closestWall.position.y - closestWall.scale.y / 2));
-  distances[5] = fabs(ipos.y - (closestWall.position.y + closestWall.scale.y / 2));
+  float distances[6] = {(float) fabs(ipos.x - (closestWall.position.x - closestWall.scale.x / 2)),
+                        (float) fabs(ipos.x - (closestWall.position.x + closestWall.scale.x / 2)),
+                        (float) fabs(ipos.z - (closestWall.position.z - closestWall.scale.z / 2)),
+                        (float) fabs(ipos.z - (closestWall.position.z + closestWall.scale.z / 2)),
+                        (float) fabs(ipos.y - (closestWall.position.y - closestWall.scale.y / 2)),
+                        (float) fabs(ipos.y - (closestWall.position.y + closestWall.scale.y / 2))};
 
   for (int i = 0; i < 6; i++) {
     if (distances[i] < dist) {
@@ -255,66 +250,17 @@ void World::shootPortal(int button) {
   }
 
   portal.open = true;
-  portal.mesh = MeshLoader::getMesh("data/meshes/Portal.obj");
+  portal.mesh = MeshLoader::getMesh("data/meshes/Plane.obj");
   if (button == 1) {
     portal.texture = TextureLoader::getTexture("data/textures/blueportal.png");
     scene->bluePortal = portal;
-    light.color.set(0.33, 0.57, 1);
+    light.color.set(Portal::BLUE_COLOR);
   } else {
     portal.texture = TextureLoader::getTexture("data/textures/orangeportal.png");
     scene->orangePortal = portal;
-    light.color.set(1, 0.76, 0.33);
+    light.color.set(Portal::ORANGE_COLOR);
   }
   scene->lights.push_back(light);
-}
-
-bool World::collides(Vector3f ro, Vector3f rd, Entity e, float* tNear, float* tFar) {
-  float min[3] = {e.position.x - e.scale.x / 2,
-                  e.position.y - e.scale.y / 2,
-                  e.position.z - e.scale.z / 2};
-  float max[3] = {e.position.x + e.scale.x / 2,
-                  e.position.y + e.scale.y / 2,
-                  e.position.z + e.scale.z / 2};
-
-  float origin[3] = { ro.x, ro.y, ro.z };
-  float dir[3] = { rd.x, rd.y, rd.z };
-
-  *tNear = -5000000.0f;
-  *tFar = 50000000.0f;
-
-  for (int i = 0; i < 3; i++) {
-    //Parallel lines
-    if (dir[i] == 0) {
-      if (origin[i] < min[i] || origin[i] > max[i]) {
-        return false;
-      }
-    } else {
-      //Slab intersection
-      float t1 = (min[i] - origin[i]) / dir[i];
-      float t2 = (max[i] - origin[i]) / dir[i];
-      //If t1 is bigger than t2 switch them
-      if (t1 > t2) {
-        float temp = t1;
-        t1 = t2;
-        t2 = temp;
-      }
-      if (t1 > *tNear) {
-        *tNear = t1;
-      }
-      if (t2 < *tFar) {
-        *tFar = t2;
-      }
-
-      //End
-      if (*tNear > *tFar) {
-        return false;
-      }
-      if (*tFar < 0) {
-        return false;
-      }
-    }
-  }
-  return true;
 }
 
 void World::render() {
