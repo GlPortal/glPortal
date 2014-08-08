@@ -40,7 +40,7 @@ void Window::create(const char* title, int width, int height, bool fullscreen) {
 
   if (supersampling == "yes") {
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
   }
   
   int flags = SDL_WINDOW_OPENGL;
