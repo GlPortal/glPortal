@@ -71,7 +71,7 @@ void World::update() {
 
   player->velocity.y -= GRAVITY;
 
-  float rotation = player->rotation.y * Math::PI_RND / 180;
+  float rotation = Math::toRadians(player->rotation.y);
 
   if (Input::isKeyDown('w')) {
     player->velocity.x = -sin(rotation) * SPEED;
@@ -169,9 +169,9 @@ bool World::collidesWithWalls(BoxCollider collider) {
 
 void World::shootPortal(int button) {
   //Shooting
-  Vector3f cameraDir(cos(Math::DEG_TO_RAD(scene->camera.rotation.x)) * -sin(Math::DEG_TO_RAD(scene->camera.rotation.y)),
-                     sin(Math::DEG_TO_RAD(scene->camera.rotation.x)),
-                     -cos(Math::DEG_TO_RAD(scene->camera.rotation.x)) * cos(Math::DEG_TO_RAD(scene->camera.rotation.y)));
+  Vector3f cameraDir(cos(Math::toRadians(scene->camera.rotation.x)) * -sin(Math::toRadians(scene->camera.rotation.y)),
+                     sin(Math::toRadians(scene->camera.rotation.x)),
+                     -cos(Math::toRadians(scene->camera.rotation.x)) * cos(Math::toRadians(scene->camera.rotation.y)));
 
   //Find the closest intersection
   Entity closestWall;

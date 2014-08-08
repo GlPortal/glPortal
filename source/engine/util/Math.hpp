@@ -6,10 +6,10 @@ namespace glPortal {
 class Math {
 public:
   static const float PI_RND;
-  static float RAD_TO_DEG(float radius);
-  static float DEG_TO_RAD(float degree);
+  static float toDegrees(float radius);
+  static float toRadians(float degrees);
 };
 
 } /* namespace glPortal */
 
-#endif
+#endif /* MATH_HPP */
