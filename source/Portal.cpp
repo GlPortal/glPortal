@@ -3,6 +3,9 @@
 #include "engine/BoxCollider.hpp"
 
 namespace glPortal {
+  const int Portal::PORTAL_RANGE = 1000;
+  const Vector3f Portal::BLUE_COLOR = Vector3f(0.33, 0.57, 1);
+  const Vector3f Portal::ORANGE_COLOR = Vector3f(1, 0.76, 0.33);
 
   Vector3f Portal::getDirection() {
     if(rotation.x == 0) {
