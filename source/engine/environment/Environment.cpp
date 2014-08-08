@@ -14,7 +14,7 @@ ConfigFileParser *Environment::config = NULL;
 /** @class Environment
     @brief Manager for environment and config
 
-    Manages environment variables and configuration data.
+    Manages environment variables and configuration data. Get an instance of ConfigFileParser.
 */
   
 void Environment::init(int argc, char **argv) {

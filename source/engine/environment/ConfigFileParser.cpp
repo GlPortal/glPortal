@@ -11,6 +11,13 @@ using namespace std;
 
 namespace glPortal {
 
+/** @class ConfigFileParser
+    @brief Parse config files
+
+    Parses config values from a file. Key and value are seperated by a whitespace. 
+    Each entry is on a new line.
+*/
+  
 ConfigFileParser::ConfigFileParser(std::string filename) {
   std::ifstream file(filename, std::ifstream::in);
   std::string line, stringBuffer;
