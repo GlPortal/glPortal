@@ -2,6 +2,7 @@
 #define PORTAL_HPP
 
 #include "engine/Entity.hpp"
+#include "engine/Light.hpp"
 #include "engine/util/Vector3f.hpp"
 
 namespace glPortal {
@@ -16,6 +17,7 @@ public:
   Portal() :
       open(false) {}
   Vector3f direction;
+  Light light;
   bool open;
 
   Vector3f getDirection();
