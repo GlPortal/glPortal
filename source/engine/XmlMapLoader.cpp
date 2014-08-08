@@ -30,42 +30,76 @@ Scene* XmlMapLoader::getScene(std::string path) {
     TiXmlHandle docHandle(&doc);
     TiXmlElement* element;
     TiXmlHandle rootHandle(0);
-    float spawnX, spawnY, spawnZ;
-    float lightR(0), lightG(0), lightB(0);
-    float lightX, lightY, lightZ;
+    Vector3f lightPos;
+    Vector3f lightColor;
     
     element = docHandle.FirstChildElement().Element();
-    rootHandle=TiXmlHandle(element);
+    rootHandle = TiXmlHandle(element);
     //SPAWN
     TiXmlElement* spawnElement;
     spawnElement = rootHandle.FirstChild( "spawn" ).Element();
 
-    if(spawnElement){
-      spawnElement->QueryFloatAttribute("x", &spawnX);
-      spawnElement->QueryFloatAttribute("y", &spawnY);
-      spawnElement->QueryFloatAttribute("z", &spawnZ);
-      scene->player.position.set(spawnX, spawnY, spawnZ);  
+    if(spawnElement) {
+      Vector3f spawnPos;
+      Vector3f spawnRot;
+      TiXmlElement* spawnPositionElement = spawnElement->FirstChildElement("position");
+      spawnPositionElement->QueryFloatAttribute("x", &spawnPos.x);
+      spawnPositionElement->QueryFloatAttribute("y", &spawnPos.y);
+      spawnPositionElement->QueryFloatAttribute("z", &spawnPos.z);
+
+      TiXmlElement* spawnRotationElement = spawnElement->FirstChildElement("rotation");
+      spawnRotationElement->QueryFloatAttribute("x", &spawnRot.x);
+      spawnRotationElement->QueryFloatAttribute("y", &spawnRot.y);
+      spawnRotationElement->QueryFloatAttribute("z", &spawnRot.z);
+
+      scene->player.position.set(spawnPos);
+      scene->player.rotation.set(spawnRot);
     } else {
       throw std::runtime_error("No spawn position defined.");
     }
 
     //END_SPAWN
+    TiXmlElement* endElement;
+    endElement = rootHandle.FirstChild( "end" ).Element();
+
+    if(endElement) {
+      Vector3f endPos;
+      Vector3f endRot;
+      TiXmlElement* endPositionElement = endElement->FirstChildElement("position");
+      endPositionElement->QueryFloatAttribute("x", &endPos.x);
+      endPositionElement->QueryFloatAttribute("y", &endPos.y);
+      endPositionElement->QueryFloatAttribute("z", &endPos.z);
+
+      TiXmlElement* endRotationElement = endElement->FirstChildElement("rotation");
+      endRotationElement->QueryFloatAttribute("x", &endRot.x);
+      endRotationElement->QueryFloatAttribute("y", &endRot.y);
+      endRotationElement->QueryFloatAttribute("z", &endRot.z);
+
+      Entity door;
+      door.position.set(endPos);
+      door.rotation.set(endRot);
+      door.texture = TextureLoader::getTexture("data/textures/Door.png");
+      door.mesh = MeshLoader::getMesh("data/meshes/Door.obj");
+      scene->end = door;
+    } else {
+      throw std::runtime_error("No end position defined.");
+    }
 
     //LIGHT
     TiXmlElement* lightElement;
     lightElement = rootHandle.FirstChild("light").Element();
 
     do {
-      lightElement->QueryFloatAttribute("x", &lightX);
-      lightElement->QueryFloatAttribute("y", &lightY);
-      lightElement->QueryFloatAttribute("z", &lightZ);
+      lightElement->QueryFloatAttribute("x", &lightPos.x);
+      lightElement->QueryFloatAttribute("y", &lightPos.y);
+      lightElement->QueryFloatAttribute("z", &lightPos.z);
 
-      lightElement->QueryFloatAttribute("r", &lightR);
-      lightElement->QueryFloatAttribute("g", &lightG);
-      lightElement->QueryFloatAttribute("b", &lightB);
+      lightElement->QueryFloatAttribute("r", &lightColor.x);
+      lightElement->QueryFloatAttribute("g", &lightColor.y);
+      lightElement->QueryFloatAttribute("b", &lightColor.z);
       Light light;
-      light.position.set(lightX, lightY, lightZ);
-      light.color.set(lightR, lightG, lightB);
+      light.position.set(lightPos.x, lightPos.y, lightPos.z);
+      light.color.set(lightColor.x, lightColor.y, lightColor.z);
       scene->lights.push_back(light);
     } while((lightElement = lightElement->NextSiblingElement("light")) != NULL);
 
@@ -135,7 +169,6 @@ Scene* XmlMapLoader::getScene(std::string path) {
           trigger.mesh = MeshLoader::getPortalBox(trigger);
           scene->triggers.push_back(trigger);
         }
-        //END_TRIGGER    
       } while((triggerElement = triggerElement->NextSiblingElement()) != NULL);
     }
     cout << "File loaded." << endl;
@@ -145,5 +178,5 @@ Scene* XmlMapLoader::getScene(std::string path) {
   
   return scene;
 }
-  
+
 } /* namespace glPortal */

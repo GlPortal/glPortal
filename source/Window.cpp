@@ -26,7 +26,7 @@ void Window::initGlew(){
     std::exit(1); 
   }
 }
-  
+
 void Window::create(const char* title, int width, int height, bool fullscreen) {
   SDL_Init(SDL_INIT_VIDEO);
 

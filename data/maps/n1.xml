@@ -1,6 +1,13 @@
 <?xml version="1.0" ?>
 <map>
-	<spawn x="2.5" y="1" z="5"/>
+	<spawn>
+		<position x="2.5" y="1" z="5"/>
+		<rotation x="0" y="-90" z="0"/>
+	</spawn>
+	<end>
+		<position x="25" y="0" z="5"/>
+		<rotation x="0" y="90" z="0"/>
+	</end>
 	<light x="10" y="6" z="3" r="1" g="0" b="0"/>
 	<light x="10" y="6" z="7" r="1" g="0" b="1"/>
 	<light x="8" y="3" z="7"  r="0" g="1" b="1"/>
