@@ -186,7 +186,7 @@ void World::shootPortal(int button) {
       }
     }
   }
-  std::cout << intersection << std::endl;
+
   Vector3f ipos = Vector3f::add(scene->camera.position, Vector3f::scale(cameraDir, intersection));
   //Determine on what side the portal is
   //Side 0: -x, Side 1: x, Side 2: -z, Side 3: z, Side 4: -y, Side 5: y
@@ -247,7 +247,7 @@ void World::shootPortal(int button) {
   }
 
   portal.open = true;
-  portal.mesh = MeshLoader::getMesh("data/meshes/Plane.obj");
+  portal.mesh = MeshLoader::getMesh("/meshes/Plane.obj");
 
   if (button == 1) {
     portal.texture = TextureLoader::getTexture("/textures/blueportal.png");
