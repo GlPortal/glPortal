@@ -155,6 +155,7 @@ void Renderer::render(Scene* scene) {
   renderPortalOverlay(scene->orangePortal);
 
   //Draw GUI
+  glClear(GL_DEPTH_BUFFER_BIT);
   scene->camera.setOrthographic();
   //Upload matrices
   projectionMatrix = camera.getProjectionMatrix();
@@ -162,6 +163,9 @@ void Renderer::render(Scene* scene) {
   viewMatrix.setIdentity();
   glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
   modelMatrix.setIdentity();
+  modelMatrix.translate(Vector3f(0, 0, -1));
+  modelMatrix.rotate(180, 0, 1, 0);
+  modelMatrix.scale(Vector3f(0.05f, 0.1f, 1));
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
   //Crosshair
