@@ -79,7 +79,7 @@ Scene* MapLoader::getScene(std::string path) {
       door.position.set(endPos);
       door.rotation.set(endRot);
       door.texture = TextureLoader::getTexture("/textures/Door.png");
-      door.mesh = MeshLoader::getMesh("data/meshes/Door.obj");
+      door.mesh = MeshLoader::getMesh("/meshes/Door.obj");
       scene->end = door;
     } else {
       throw std::runtime_error("No end position defined.");

@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <utility>
 
+#include "environment/Environment.hpp"
 #include "Entity.hpp"
 #include "util/Vector2f.hpp"
 #include "util/Vector3f.hpp"
@@ -18,6 +19,7 @@ namespace glPortal {
 std::map<std::string, Mesh> MeshLoader::meshCache = { };
 
 Mesh MeshLoader::getMesh(std::string path) {
+  path = Environment::getDataDir() + path;
   if (meshCache.find(path) != meshCache.end()) {
     return meshCache.at(path);
   }

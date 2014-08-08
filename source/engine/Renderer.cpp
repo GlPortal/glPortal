@@ -133,7 +133,7 @@ void Renderer::render(Scene* scene) {
   modelMatrix.scale(scene->bluePortal.scale);
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-  Mesh portalStencil = MeshLoader::getMesh("data/meshes/PortalStencil.obj");
+  Mesh portalStencil = MeshLoader::getMesh("/meshes/PortalStencil.obj");
   glBindVertexArray(portalStencil.handle);
   glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
 
@@ -165,7 +165,7 @@ void Renderer::render(Scene* scene) {
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
   //Crosshair
-  Mesh mesh = MeshLoader::getMesh("data/meshes/Plane.obj");
+  Mesh mesh = MeshLoader::getMesh("/meshes/Plane.obj");
   Texture texture = TextureLoader::getTexture("/textures/Reticle.png");
   glBindVertexArray(mesh.handle);
 
@@ -233,7 +233,7 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
     modelMatrix.scale(portal.scale);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    Mesh portalStencil = MeshLoader::getMesh("data/meshes/PortalStencil.obj");
+    Mesh portalStencil = MeshLoader::getMesh("/meshes/PortalStencil.obj");
     glBindVertexArray(portalStencil.handle);
     glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
     glBindVertexArray(0);
