@@ -1,0 +1,99 @@
+<?xml version="1.0" ?>
+<map>
+	<spawn x="2.5" y="1" z="5"/>
+	<light x="10" y="6" z="3" r="1" g="0" b="0"/>
+	<light x="10" y="6" z="7" r="1" g="0" b="1"/>
+	<light x="8" y="3" z="7"  r="0" g="1" b="1"/>
+	<light x="12" y="1" z="7" r="0" g="0" b="1"/>
+	<light x="10" y="2" z="7" r="0" g="1" b="0"/>
+	
+	<texture source="wall.png">
+		<!-- Top portal wall -->
+		<wall>
+			<position x="20.25" y="6" z="5"/>
+			<scale x="0.5" y="4.0" z="4.0"/>
+		</wall>
+		<!-- Pit portal wall -->
+		<wall>
+			<position x="5.25" y="-3" z="5"/>
+			<scale x="0.5" y="4.0" z="4.0"/>
+		</wall>
+	</texture>
+	<texture source="tiles.png">
+		<!-- Back floor -->
+		<wall>
+			<position x="2.5" y="-3" z="5"/>
+			<scale x="5.0" y="6.0" z="10.0"/>
+		</wall>
+		<!-- Front floor -->
+		<wall>
+			<position x="17.5" y="-3" z="5"/>
+			<scale x="5.0" y="6.0" z="10.0"/>
+		</wall>
+		<!-- Ceiling -->
+		<wall>
+			<position x="10" y="8.5" z="5"/>
+			<scale x="20.0" y="1.0" z="10.0"/>
+		</wall>
+		<!-- Back wall -->
+		<wall>
+			<position x="0" y="4" z="5"/>
+			<scale x="2.0" y="8.0" z="10.0"/>
+		</wall>
+		<!-- Front wall left -->
+		<wall>
+			<position x="20.25" y="4" z="1.5"/>
+			<scale x="0.5" y="8.0" z="3.0"/>
+		</wall>
+		<!-- Front wall right -->
+		<wall>
+			<position x="20.5" y="4" z="8.5"/>
+			<scale x="1.0" y="8.0" z="3.0"/>
+		</wall>
+		<!-- Left wall -->
+		<wall>
+			<position x="10" y="0" z="-0.5"/>
+			<scale x="20.0" y="16.0" z="1.0"/>
+		</wall>
+		<!-- Right wall -->
+		<wall>
+			<position x="10" y="0" z="10.5"/>
+			<scale x="20.0" y="16.0" z="1.0"/>
+		</wall>
+		
+		<!-- Hall -->
+		<!-- Left wall -->
+		<wall>
+			<position x="22.75" y="2" z="2.5"/>
+			<scale x="4.5" y="4.0" z="1.0"/>
+		</wall>
+		<!-- Right wall -->
+		<wall>
+			<position x="22.75" y="2" z="7.5"/>
+			<scale x="4.5" y="4.0" z="1.0"/>
+		</wall>
+		<!-- Floor -->
+		<wall>
+			<position x="22.5" y="-3" z="5"/>
+			<scale x="5.0" y="6.0" z="4.0"/>
+		</wall>
+		<!-- Ceiling -->
+		<wall>
+			<position x="22.75" y="4.5" z="5"/>
+			<scale x="4.5" y="1.0" z="4.0"/>
+		</wall>
+		<!-- Front wall -->
+		<wall>
+			<position x="25.5" y="2" z="5"/>
+			<scale x="1.0" y="4.0" z="4.0"/>
+		</wall>
+		
+		<!-- Pit -->
+		<!-- Floor -->
+		<!-- Left wall -->
+		<wall>
+			<position x="10" y="-5.5" z="5"/>
+			<scale x="10.0" y="1.0" z="10.0"/>
+		</wall>
+	</texture>
+</map>
