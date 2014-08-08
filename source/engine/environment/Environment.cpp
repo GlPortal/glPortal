@@ -7,11 +7,16 @@
 
 using namespace std;
 
-namespace glPortal {
-
+namespace glPortal {  
 std::string * Environment::datadir = 0;
 ConfigFileParser *Environment::config = NULL;
 
+/** @class Environment
+    @brief Manager for environment and config
+
+    Manages environment variables and configuration data.
+*/
+  
 void Environment::init(int argc, char **argv) {
   if (!datadir)
     datadir = new std::string;

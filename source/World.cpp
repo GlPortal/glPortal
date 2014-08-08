@@ -149,7 +149,7 @@ void World::update() {
   float distToEnd = Vector3f::sub(scene->end.position, scene->player.position).length();
   if(distToEnd < 1) {
     //FIXME Load the next scene
-    loadScene("/maps/n1.map");
+    loadScene("/maps/n1.xml");
   }
 }
 
