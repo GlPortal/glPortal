@@ -1,6 +1,6 @@
 #include "World.hpp"
 
-//#include <stdio.h>
+#include <stdio.h>
 #include <SDL2/SDL_mouse.h>
 #include <cmath>
 //#include <cstdlib>
@@ -38,13 +38,14 @@ const float GRAVITY = 0.05;
 void World::create() {
   renderer = new Renderer();
 
-  loadScene("data/maps/n1.map");
+  //scene = MapLoader::getScene(std::string("data/maps/n1.map"));
+  loadScene("/maps/n1.xml");
   //scene = XmlMapLoader::getScene(std::string("/maps/untitled.xml"));
   //scene = XmlMapLoader::getScene(std::string("/maps/first.xml"));
 }
 
 void World::loadScene(std::string path) {
-  scene = MapLoader::getScene(path);
+  scene = XmlMapLoader::getScene(path);
 }
 
 void World::update() {
