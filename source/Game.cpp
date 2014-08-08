@@ -15,7 +15,16 @@ namespace glPortal {
 
 Game::Game() :closed(false) {
   window.createFromConfig();
-  world.create();
+
+  try {
+    world.create();
+    
+  }
+  catch (std::runtime_error &e) {
+    std::cout << "Runtime Error: ";
+    std::cout << e.what () << '\n';
+  }
+  
   update();
 }
 
