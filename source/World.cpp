@@ -38,7 +38,7 @@ const float GRAVITY = 0.05;
 void World::create() {
   renderer = new Renderer();
 
-  loadScene("/maps/n2.xml");
+  loadScene("/maps/n1.xml");
 }
 
 void World::loadScene(std::string path) {
@@ -179,15 +179,15 @@ void World::shootPortal(int button) {
     Ray bullet = Ray(scene->camera.position, cameraDir);
     float tNear, tFar;
     if (bullet.collides(wall, &tNear, &tFar)) {
-      if(wall.texture.handle == TextureLoader::getTexture("data/textures/wall.png").handle) {
+      //if(wall.texture.handle == TextureLoader::getTexture("data/textures/wall.png").handle) {
         if (tNear < intersection) {
           closestWall = wall;
           intersection = tNear;
         }
-      }
+      //}
     }
   }
-
+  std::cout << intersection << std::endl;
   Vector3f ipos = Vector3f::add(scene->camera.position, Vector3f::scale(cameraDir, intersection));
   //Determine on what side the portal is
   //Side 0: -x, Side 1: x, Side 2: -z, Side 3: z, Side 4: -y, Side 5: y

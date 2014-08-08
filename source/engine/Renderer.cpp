@@ -11,6 +11,7 @@
 #include "MeshLoader.hpp"
 #include "Resource.hpp"
 #include "Texture.hpp"
+#include "TextureLoader.hpp"
 #include "util/Vector3f.hpp"
 
 namespace glPortal {
@@ -32,6 +33,7 @@ void Renderer::render(Scene* scene) {
 
   glUseProgram(shader);
   Camera camera = scene->camera;
+  camera.setPerspective();
   projectionMatrix = camera.getProjectionMatrix();
 
   projLoc = glGetUniformLocation(shader, "projectionMatrix");
@@ -145,12 +147,37 @@ void Renderer::render(Scene* scene) {
   glBindVertexArray(0);
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-  ///
 
   renderScene(scene);
 
+  //Draw overlays
   renderPortalOverlay(scene->bluePortal);
   renderPortalOverlay(scene->orangePortal);
+
+  //Draw GUI
+  scene->camera.setOrthographic();
+  //Upload matrices
+  projectionMatrix = camera.getProjectionMatrix();
+  glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
+  viewMatrix.setIdentity();
+  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+  modelMatrix.setIdentity();
+  glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+
+  //Crosshair
+  Mesh mesh = MeshLoader::getMesh("data/meshes/Plane.obj");
+  Texture texture = TextureLoader::getTexture("data/textures/Reticle.png");
+  glBindVertexArray(mesh.handle);
+
+  int loc = glGetUniformLocation(shader, "diffuse");
+  int tiling = glGetUniformLocation(shader, "tiling");
+  glUniform2f(tiling, texture.xTiling, texture.yTiling);
+  glUniform1i(loc, 0);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture.handle);
+  glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glBindVertexArray(0);
 }
 
 void Renderer::renderScene(Scene* scene) {
