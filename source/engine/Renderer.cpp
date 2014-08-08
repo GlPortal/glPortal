@@ -41,10 +41,7 @@ void Renderer::render(Scene* scene) {
   //Upload projection matrix
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
 
-
   //Lights
-
-
   for (unsigned int i = 0; i < scene->lights.size(); i++) {
     Light light = scene->lights[i];
 
