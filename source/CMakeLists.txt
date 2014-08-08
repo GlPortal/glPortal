@@ -3,6 +3,8 @@ include_directories(lib engine ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(${EXE_NAME} 
   Game.cpp
+  Portal.cpp
+  engine/Ray.cpp    
   engine/util/Vector3f.cpp
   engine/util/Vector2f.cpp
   engine/util/Matrix4f.cpp
@@ -15,7 +17,6 @@ add_executable(${EXE_NAME}
   Input.cpp engine/Renderer.cpp
   engine/MapLoader.cpp
   engine/XmlMapLoader.cpp
-  engine/EntityConverter.cpp
   engine/MeshLoader.cpp
   engine/environment/Environment.cpp
   engine/environment/ConfigFileParser.cpp

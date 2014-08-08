@@ -33,6 +33,16 @@ void Window::create(const char* title, int width, int height, bool fullscreen) {
   //Attributes
   SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
+  std::string supersampling;
+  try {
+    supersampling = config->getStringByKey("supersampling");
+  } catch (const std::invalid_argument& e) { }
+
+  if (supersampling == "yes") {
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
+  }
+  
   int flags = SDL_WINDOW_OPENGL;
   if(fullscreen) {
     flags |= SDL_WINDOW_BORDERLESS;
