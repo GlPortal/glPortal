@@ -1,16 +1,16 @@
 #include "World.hpp"
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <SDL2/SDL_mouse.h>
-#include <cmath>
-//#include <cstdlib>
-#include <iostream>
-#include <string>
-#include <vector>
 #include <climits>
+#include <cmath>
+#include <iostream>
+//#include <string>
+#include <vector>
 
 #include "engine/BoxCollider.hpp"
 #include "engine/Camera.hpp"
+#include "engine/environment/Environment.hpp"
 #include "engine/Light.hpp"
 #include "engine/MapLoader.hpp"
 #include "engine/Mesh.hpp"
@@ -23,7 +23,6 @@
 #include "engine/util/Math.hpp"
 #include "engine/util/Vector2f.hpp"
 #include "engine/util/Vector3f.hpp"
-#include "engine/MapLoader.hpp"
 #include "Input.hpp"
 #include "Player.hpp"
 #include "Portal.hpp"
@@ -179,12 +178,12 @@ void World::shootPortal(int button) {
     Ray bullet = Ray(scene->camera.position, cameraDir);
     float tNear, tFar;
     if (bullet.collides(wall, &tNear, &tFar)) {
-      //if(wall.texture.handle == TextureLoader::getTexture("data/textures/wall.png").handle) {
+      if(wall.texture.handle == TextureLoader::getTexture(Environment::getDataDir() + "/textures/wall.png").handle) {
         if (tNear < intersection) {
           closestWall = wall;
           intersection = tNear;
         }
-      //}
+      }
     }
   }
   std::cout << intersection << std::endl;
