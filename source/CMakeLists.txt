@@ -16,7 +16,6 @@ add_executable(${EXE_NAME}
   engine/Resource.cpp
   Input.cpp engine/Renderer.cpp
   engine/MapLoader.cpp
-  engine/XmlMapLoader.cpp
   engine/MeshLoader.cpp
   engine/environment/Environment.cpp
   engine/environment/ConfigFileParser.cpp
