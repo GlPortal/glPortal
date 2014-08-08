@@ -166,7 +166,7 @@ void Renderer::render(Scene* scene) {
 
   //Crosshair
   Mesh mesh = MeshLoader::getMesh("data/meshes/Plane.obj");
-  Texture texture = TextureLoader::getTexture("data/textures/Reticle.png");
+  Texture texture = TextureLoader::getTexture("/textures/Reticle.png");
   glBindVertexArray(mesh.handle);
 
   int loc = glGetUniformLocation(shader, "diffuse");
