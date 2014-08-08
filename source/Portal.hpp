@@ -9,6 +9,10 @@ class BoxCollider;
 
 class Portal: public Entity {
 public:
+  static const int PORTAL_RANGE;
+  static const Vector3f BLUE_COLOR;
+  static const Vector3f ORANGE_COLOR;
+
   Portal() :
       open(false) {}
   Vector3f direction;
