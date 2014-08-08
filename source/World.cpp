@@ -38,7 +38,7 @@ const float GRAVITY = 0.05;
 void World::create() {
   renderer = new Renderer();
 
-  loadScene("/maps/n1.xml");
+  loadScene("/maps/n2.xml");
 }
 
 void World::loadScene(std::string path) {
@@ -207,10 +207,11 @@ void World::shootPortal(int button) {
     }
   }
 
-  //Temp spawn a light
   Light light;
   light.position.set(ipos);
+  light.constantAtt = 0.2;
   light.linearAtt = 0.8;
+  light.quadraticAtt = 0;
 
   Portal portal;
   portal.position.set(ipos.x, ipos.y, ipos.z);
@@ -248,16 +249,18 @@ void World::shootPortal(int button) {
 
   portal.open = true;
   portal.mesh = MeshLoader::getMesh("data/meshes/Plane.obj");
+
   if (button == 1) {
     portal.texture = TextureLoader::getTexture("data/textures/blueportal.png");
-    scene->bluePortal = portal;
     light.color.set(Portal::BLUE_COLOR);
+    portal.light = light;
+    scene->bluePortal = portal;
   } else {
     portal.texture = TextureLoader::getTexture("data/textures/orangeportal.png");
-    scene->orangePortal = portal;
     light.color.set(Portal::ORANGE_COLOR);
+    portal.light = light;
+    scene->orangePortal = portal;
   }
-  scene->lights.push_back(light);
 }
 
 void World::render() {
