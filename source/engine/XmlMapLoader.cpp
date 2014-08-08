@@ -2,6 +2,7 @@
 
 #include <tinyxml.h>
 #include <iostream>
+#include <cstdio>
 #include <stdexcept>
 #include <vector>
 
@@ -25,9 +26,8 @@ Scene* XmlMapLoader::getScene(std::string path) {
   TiXmlDocument doc(string(Environment::getDataDir() + path));
   bool loaded = doc.LoadFile();
  
-  if(loaded){
+  if(loaded) {
     TiXmlHandle docHandle(&doc);
-    TiXmlElement* mapElement;
     TiXmlElement* element;
     TiXmlHandle rootHandle(0);
     float spawnX, spawnY, spawnZ;
@@ -53,71 +53,65 @@ Scene* XmlMapLoader::getScene(std::string path) {
 
     //LIGHT
     TiXmlElement* lightElement;
-    lightElement = rootHandle.FirstChild( "light" ).Element();
-    for(lightElement; lightElement; lightElement = lightElement->NextSiblingElement()){
-      if(lightElement){
-        lightElement->QueryFloatAttribute("x", &lightX);
-        lightElement->QueryFloatAttribute("y", &lightY);
-        lightElement->QueryFloatAttribute("z", &lightZ);
-      
-        lightElement->QueryFloatAttribute("r", &lightR);
-        lightElement->QueryFloatAttribute("g", &lightG);
-        lightElement->QueryFloatAttribute("b", &lightB);
-        Light light;
-        light.position.set(lightX, lightY, lightZ);
-        light.color.set(lightR, lightG, lightB);
-        scene->lights.push_back(light);
-      } else {
-        throw std::runtime_error("No light source defined.");
-      }
-    }
-    //END_LIGHT
+    lightElement = rootHandle.FirstChild("light").Element();
+
+    do {
+      lightElement->QueryFloatAttribute("x", &lightX);
+      lightElement->QueryFloatAttribute("y", &lightY);
+      lightElement->QueryFloatAttribute("z", &lightZ);
+
+      lightElement->QueryFloatAttribute("r", &lightR);
+      lightElement->QueryFloatAttribute("g", &lightG);
+      lightElement->QueryFloatAttribute("b", &lightB);
+      Light light;
+      light.position.set(lightX, lightY, lightZ);
+      light.color.set(lightR, lightG, lightB);
+      scene->lights.push_back(light);
+    } while((lightElement = lightElement->NextSiblingElement("light")) != NULL);
 
     //WALLS
-    TiXmlElement* textureElement;
+    TiXmlElement* textureElement = rootHandle.FirstChild("texture").Element();
     string texturePath("none");
     string surfaceType("none");
-    textureElement = rootHandle.FirstChild("texture").Element();
-    if(textureElement){
-      for(textureElement; textureElement; textureElement = textureElement->NextSiblingElement()){
+
+    if(textureElement) {
+      do {
         textureElement->QueryStringAttribute("source", &texturePath);
         textureElement->QueryStringAttribute("type"  , &surfaceType);
-        TiXmlElement* wallBoxElement;
-        wallBoxElement = textureElement->FirstChildElement("wall");
-        for(wallBoxElement; wallBoxElement; wallBoxElement = wallBoxElement->NextSiblingElement()){
-          TiXmlElement* boxPositionElement;
-          TiXmlElement* boxScaleElement;
+        TiXmlElement* wallBoxElement = textureElement->FirstChildElement("wall");
 
-          Entity wall;
-          boxPositionElement = wallBoxElement->FirstChildElement("position");
-          boxPositionElement->QueryFloatAttribute("x", &wall.position.x);
-          boxPositionElement->QueryFloatAttribute("y", &wall.position.y);
-          boxPositionElement->QueryFloatAttribute("z", &wall.position.z);
+        if(wallBoxElement) {
+          do {
+            TiXmlElement* boxPositionElement;
+            TiXmlElement* boxScaleElement;
 
-          boxScaleElement = wallBoxElement->FirstChildElement("scale");
-          boxScaleElement->QueryFloatAttribute("x", &wall.scale.x);
-          boxScaleElement->QueryFloatAttribute("y", &wall.scale.y);
-          boxScaleElement->QueryFloatAttribute("z", &wall.scale.z);
+            Entity wall;
+            boxPositionElement = wallBoxElement->FirstChildElement("position");
+            boxPositionElement->QueryFloatAttribute("x", &wall.position.x);
+            boxPositionElement->QueryFloatAttribute("y", &wall.position.y);
+            boxPositionElement->QueryFloatAttribute("z", &wall.position.z);
 
-          wall.texture = TextureLoader::getTexture(Environment::getDataDir() + "/textures/" + texturePath);
-          wall.mesh = MeshLoader::getPortalBox(wall);
-          scene->walls.push_back(wall);
-          }
+            boxScaleElement = wallBoxElement->FirstChildElement("scale");
+            boxScaleElement->QueryFloatAttribute("x", &wall.scale.x);
+            boxScaleElement->QueryFloatAttribute("y", &wall.scale.y);
+            boxScaleElement->QueryFloatAttribute("z", &wall.scale.z);
+
+            wall.texture = TextureLoader::getTexture(Environment::getDataDir() + "/textures/" + texturePath);
+            wall.mesh = MeshLoader::getPortalBox(wall);
+            scene->walls.push_back(wall);
+          } while((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != NULL);
+        }
+
         texturePath = std::string("none");
-        
-      }
-    } else {
-      throw std::runtime_error("No walls defined.");
+      } while((textureElement = textureElement->NextSiblingElement("texture")) != NULL);
     }
-    
-    //END_WALLS
 
     //TRIGGER
-    TiXmlElement* triggerElement;
+    TiXmlElement* triggerElement = rootHandle.FirstChild("trigger").Element();
     string triggerType("none");
-    triggerElement = rootHandle.FirstChild("trigger").Element();
-    if(triggerElement){
-      for(triggerElement; triggerElement; triggerElement = triggerElement->NextSiblingElement()){
+
+    if(triggerElement) {
+      do {
         TiXmlElement* triggerPositionElement;
         TiXmlElement* triggerScaleElement;
         
@@ -125,15 +119,13 @@ Scene* XmlMapLoader::getScene(std::string path) {
         triggerPositionElement = triggerElement->FirstChildElement("position");
         triggerScaleElement    = triggerElement->FirstChildElement("scale");
 
-        if(triggerPositionElement){
+        if(triggerPositionElement) {
           triggerPositionElement->QueryFloatAttribute("x", &trigger.position.x);
           triggerPositionElement->QueryFloatAttribute("y", &trigger.position.y);
           triggerPositionElement->QueryFloatAttribute("z", &trigger.position.z);
         }
         
-        
-        if(triggerScaleElement){      
-                      
+        if(triggerScaleElement) {
           triggerScaleElement = triggerElement->FirstChildElement("scale");
           triggerScaleElement->QueryFloatAttribute("x", &trigger.scale.x);
           triggerScaleElement->QueryFloatAttribute("y", &trigger.scale.y);
@@ -144,11 +136,11 @@ Scene* XmlMapLoader::getScene(std::string path) {
           scene->triggers.push_back(trigger);
         }
         //END_TRIGGER    
-      }
+      } while((triggerElement = triggerElement->NextSiblingElement()) != NULL);
     }
     cout << "File loaded." << endl;
   } else {
-    cout << "Unable to load File." << endl;
+    cout << "Unable to load file." << endl;
   }
   
   return scene;
