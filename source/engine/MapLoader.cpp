@@ -78,7 +78,7 @@ Scene* MapLoader::getScene(std::string path) {
       Entity door;
       door.position.set(endPos);
       door.rotation.set(endRot);
-      door.texture = TextureLoader::getTexture("data/textures/Door.png");
+      door.texture = TextureLoader::getTexture("/textures/Door.png");
       door.mesh = MeshLoader::getMesh("data/meshes/Door.obj");
       scene->end = door;
     } else {
@@ -130,7 +130,7 @@ Scene* MapLoader::getScene(std::string path) {
             boxScaleElement->QueryFloatAttribute("y", &wall.scale.y);
             boxScaleElement->QueryFloatAttribute("z", &wall.scale.z);
 
-            wall.texture = TextureLoader::getTexture(Environment::getDataDir() + "/textures/" + texturePath);
+            wall.texture = TextureLoader::getTexture("/textures/" + texturePath);
             wall.mesh = MeshLoader::getPortalBox(wall);
             scene->walls.push_back(wall);
           } while((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != NULL);
@@ -165,7 +165,7 @@ Scene* MapLoader::getScene(std::string path) {
           triggerScaleElement->QueryFloatAttribute("y", &trigger.scale.y);
           triggerScaleElement->QueryFloatAttribute("z", &trigger.scale.z);
                       
-          trigger.texture = TextureLoader::getTexture(Environment::getDataDir() + "/textures/redBox.png");
+          trigger.texture = TextureLoader::getTexture("/textures/redBox.png");
           trigger.mesh = MeshLoader::getPortalBox(trigger);
           scene->triggers.push_back(trigger);
         }

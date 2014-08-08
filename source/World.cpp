@@ -178,7 +178,7 @@ void World::shootPortal(int button) {
     Ray bullet = Ray(scene->camera.position, cameraDir);
     float tNear, tFar;
     if (bullet.collides(wall, &tNear, &tFar)) {
-      if(wall.texture.handle == TextureLoader::getTexture(Environment::getDataDir() + "/textures/wall.png").handle) {
+      if(wall.texture.handle == TextureLoader::getTexture("/textures/wall.png").handle) {
         if (tNear < intersection) {
           closestWall = wall;
           intersection = tNear;
@@ -250,12 +250,12 @@ void World::shootPortal(int button) {
   portal.mesh = MeshLoader::getMesh("data/meshes/Plane.obj");
 
   if (button == 1) {
-    portal.texture = TextureLoader::getTexture("data/textures/blueportal.png");
+    portal.texture = TextureLoader::getTexture("/textures/blueportal.png");
     light.color.set(Portal::BLUE_COLOR);
     portal.light = light;
     scene->bluePortal = portal;
   } else {
-    portal.texture = TextureLoader::getTexture("data/textures/orangeportal.png");
+    portal.texture = TextureLoader::getTexture("/textures/orangeportal.png");
     light.color.set(Portal::ORANGE_COLOR);
     portal.light = light;
     scene->orangePortal = portal;
