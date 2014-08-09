@@ -131,6 +131,8 @@ Scene* MapLoader::getScene(std::string path) {
             boxScaleElement->QueryFloatAttribute("z", &wall.scale.z);
 
             wall.texture = TextureLoader::getTexture("/textures/" + texturePath);
+            wall.texture.xTiling = 0.5f;
+            wall.texture.yTiling = 0.5f;
             wall.mesh = MeshLoader::getPortalBox(wall);
             scene->walls.push_back(wall);
           } while((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != NULL);
