@@ -128,15 +128,17 @@ void World::update() {
   }
 
   //Check if the player is walking through a portal
-  if(scene->bluePortal.throughPortal(player->position)) {
-    player->position.set(scene->orangePortal.position);
-    float rotation = scene->orangePortal.rotation.y - scene->bluePortal.rotation.y + 180;
-    player->rotation.y += rotation;
-  }
-  if(scene->orangePortal.throughPortal(player->position)) {
-     player->position.set(scene->bluePortal.position);
-     float rotation = scene->bluePortal.rotation.y - scene->orangePortal.rotation.y + 180;
-     player->rotation.y += rotation;
+  if(scene->bluePortal.open && scene->orangePortal.open) {
+    if(scene->bluePortal.throughPortal(player->position)) {
+      player->position.set(scene->orangePortal.position);
+      float rotation = scene->orangePortal.rotation.y - scene->bluePortal.rotation.y + 180;
+      player->rotation.y += rotation;
+    }
+    if(scene->orangePortal.throughPortal(player->position)) {
+       player->position.set(scene->bluePortal.position);
+       float rotation = scene->bluePortal.rotation.y - scene->orangePortal.rotation.y + 180;
+       player->rotation.y += rotation;
+    }
   }
 
   //Parent camera to player
@@ -148,7 +150,7 @@ void World::update() {
   float distToEnd = Vector3f::sub(scene->end.position, scene->player.position).length();
   if(distToEnd < 1) {
     //FIXME Load the next scene
-    loadScene("/maps/n1.xml");
+    loadScene("/maps/n2.xml");
   }
 }
 
@@ -208,9 +210,9 @@ void World::shootPortal(int button) {
 
   Light light;
   light.position.set(ipos);
-  light.constantAtt = 0.2;
-  light.linearAtt = 0.8;
-  light.quadraticAtt = 0;
+  light.constantAtt = 10000;
+  light.linearAtt = 10000;
+  light.quadraticAtt = 0.0000000001;
 
   Portal portal;
   portal.position.set(ipos.x, ipos.y, ipos.z);

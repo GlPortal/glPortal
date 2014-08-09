@@ -23,7 +23,7 @@ void Window::initGlew(){
   }
   if (!GLEW_VERSION_2_1) { 
     std::cout << "Your hardware does not support 2.1 API" << std::endl;
-    std::exit(1); 
+    std::exit(1);
   }
 }
 

@@ -8,11 +8,11 @@
 		<position x="25" y="0" z="5"/>
 		<rotation x="0" y="90" z="0"/>
 	</end>
-	<light x="10" y="6" z="3" r="1" g="0" b="0"/>
-	<light x="10" y="6" z="7" r="1" g="0" b="1"/>
-	<light x="8" y="3" z="7"  r="0" g="1" b="1"/>
-	<light x="12" y="1" z="7" r="0" g="0" b="1"/>
-	<light x="10" y="2" z="7" r="0" g="1" b="0"/>
+	<light x="10" y="6" z="3" r="0.5" g="0" b="0"/>
+	<light x="10" y="6" z="7" r="0.5" g="0" b="0.5"/>
+	<light x="8" y="3" z="7"  r="0" g="0.5" b="0.5"/>
+	<light x="12" y="1" z="7" r="0" g="0" b="0.5"/>
+	<light x="10" y="2" z="7" r="0" g="0.5" b="0"/>
 	
 	<texture source="wall.png">
 		<!-- Top portal wall -->
@@ -26,7 +26,7 @@
 			<scale x="0.5" y="4.0" z="4.0"/>
 		</wall>
 	</texture>
-	<texture source="tiles.png">
+	<texture source="tiles.jpg">
 		<!-- Back floor -->
 		<wall>
 			<position x="2.5" y="-3" z="5"/>
