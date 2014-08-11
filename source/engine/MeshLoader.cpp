@@ -19,7 +19,7 @@ namespace glPortal {
 std::map<std::string, Mesh> MeshLoader::meshCache = { };
 
 Mesh MeshLoader::getMesh(std::string path) {
-  path = Environment::getDataDir() + path;
+  path = Environment::getDataDir() + "/meshes/" + path;
   if (meshCache.find(path) != meshCache.end()) {
     return meshCache.at(path);
   }

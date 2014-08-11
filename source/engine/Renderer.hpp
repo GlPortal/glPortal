@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 
+#include "Shader.hpp"
 #include "util/Matrix4f.hpp"
 
 namespace glPortal {
@@ -19,7 +20,7 @@ public:
   void renderPortal(Scene* scene, Portal portal, Portal otherPortal);
   void renderPortalOverlay(Portal portal);
 private:
-  int shader;
+  Shader shader;
   Matrix4f projectionMatrix;
   Matrix4f viewMatrix;
   Matrix4f modelMatrix;

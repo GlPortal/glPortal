@@ -1,37 +1,46 @@
-#include "Resource.hpp"
+#include "ShaderLoader.hpp"
 
-#include <GL/gl.h>
 #include <iostream>
 #include <fstream>
-#include <string>
+#include "environment/Environment.hpp"
 
 namespace glPortal {
 
-int Resource::loadShaders() {
+std::map<std::string, Shader> ShaderLoader::shaderCache = { };
+
+Shader ShaderLoader::getShader(std::string path) {
+  path = Environment::getDataDir() + "/shaders/" + path;
+  if(shaderCache.find(path) != shaderCache.end()) {
+    return shaderCache.at(path);
+  }
+
   //Load the shaders
-  int vertexShader = loadShader("data/shaders/diffuse.vert", GL_VERTEX_SHADER);
-  int fragmentShader = loadShader("data/shaders/diffuse.frag", GL_FRAGMENT_SHADER);
+  int vertShader = loadShader(Environment::getDataDir() + "/shaders/diffuse.vert", GL_VERTEX_SHADER);
+  int fragShader = loadShader(path, GL_FRAGMENT_SHADER);
 
   //Create a program and attach both shaders
-  int shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
+  int shader = glCreateProgram();
+  glAttachShader(shader, vertShader);
+  glAttachShader(shader, fragShader);
 
-  glLinkProgram(shaderProgram);
-  glValidateProgram(shaderProgram);
+  glLinkProgram(shader);
+  glValidateProgram(shader);
 
   //Error checking
   GLint success = 0;
-  glGetProgramiv(shaderProgram, GL_VALIDATE_STATUS, &success);
+  glGetProgramiv(shader, GL_VALIDATE_STATUS, &success);
   if (success == GL_TRUE) {
     std::cout << "Shader program linked successfully" << std::endl;
   }
 
-  return shaderProgram;
+  Shader s;
+  s.handle = shader;
+  shaderCache.insert(std::pair<std::string, Shader>(path, s));
+  return s;
 }
 
-int Resource::loadShader(const char* filename, GLenum type) {
-  std::ifstream file(filename);
+int ShaderLoader::loadShader(std::string path, GLenum type) {
+  std::ifstream file(path.c_str());
   std::string str;
   std::string file_contents;
   while (std::getline(file, str)) {
