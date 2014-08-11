@@ -27,6 +27,15 @@ Renderer::Renderer() {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+void Renderer::changeShader(std::string path) {
+  this->shader = ShaderLoader::getShader(path);
+  glUseProgram(shader.handle);
+
+  projLoc = glGetUniformLocation(shader.handle, "projectionMatrix");
+  viewLoc = glGetUniformLocation(shader.handle, "viewMatrix");
+  modelLoc = glGetUniformLocation(shader.handle, "modelMatrix");
+}
+
 void Renderer::render(Scene* scene) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -34,12 +43,7 @@ void Renderer::render(Scene* scene) {
   camera.setPerspective();
   projectionMatrix = camera.getProjectionMatrix();
 
-  shader = ShaderLoader::getShader("diffuse.frag");
-  glUseProgram(shader.handle);
-
-  projLoc = glGetUniformLocation(shader.handle, "projectionMatrix");
-  viewLoc = glGetUniformLocation(shader.handle, "viewMatrix");
-  modelLoc = glGetUniformLocation(shader.handle, "modelMatrix");
+  changeShader("diffuse.frag");
 
   //Upload projection matrix
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
@@ -154,11 +158,7 @@ void Renderer::render(Scene* scene) {
   renderScene(scene);
 
   //Draw overlays
-  shader = ShaderLoader::getShader("unshaded.frag");
-  glUseProgram(shader.handle);
-  projLoc = glGetUniformLocation(shader.handle, "projectionMatrix");
-  viewLoc = glGetUniformLocation(shader.handle, "viewMatrix");
-  modelLoc = glGetUniformLocation(shader.handle, "modelMatrix");
+  changeShader("unshaded.frag");
 
   projectionMatrix = camera.getProjectionMatrix();
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
