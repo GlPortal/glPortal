@@ -9,15 +9,14 @@
 #include "Light.hpp"
 #include "Mesh.hpp"
 #include "MeshLoader.hpp"
-#include "Resource.hpp"
+#include "ShaderLoader.hpp"
 #include "Texture.hpp"
 #include "TextureLoader.hpp"
 #include "util/Vector3f.hpp"
 
 namespace glPortal {
 
-Renderer::Renderer() :
-    shader(Resource::loadShaders()) {
+Renderer::Renderer() {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
@@ -31,14 +30,16 @@ Renderer::Renderer() :
 void Renderer::render(Scene* scene) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glUseProgram(shader);
   Camera camera = scene->camera;
   camera.setPerspective();
   projectionMatrix = camera.getProjectionMatrix();
 
-  projLoc = glGetUniformLocation(shader, "projectionMatrix");
-  viewLoc = glGetUniformLocation(shader, "viewMatrix");
-  modelLoc = glGetUniformLocation(shader, "modelMatrix");
+  shader = ShaderLoader::getShader("diffuse.frag");
+  glUseProgram(shader.handle);
+
+  projLoc = glGetUniformLocation(shader.handle, "projectionMatrix");
+  viewLoc = glGetUniformLocation(shader.handle, "viewMatrix");
+  modelLoc = glGetUniformLocation(shader.handle, "modelMatrix");
 
   //Upload projection matrix
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
@@ -49,15 +50,15 @@ void Renderer::render(Scene* scene) {
 
     char attribute[30];
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].position");
-    int lightPos = glGetUniformLocation(shader, attribute);
+    int lightPos = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].color");
-    int lightColor = glGetUniformLocation(shader, attribute);
+    int lightColor = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].constantAtt");
-    int lightConstantAtt = glGetUniformLocation(shader, attribute);
+    int lightConstantAtt = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].linearAtt");
-    int lightLinearAtt = glGetUniformLocation(shader, attribute);
+    int lightLinearAtt = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].quadraticAtt");
-    int lightQuadraticAtt = glGetUniformLocation(shader, attribute);
+    int lightQuadraticAtt = glGetUniformLocation(shader.handle, attribute);
 
     glUniform4f(lightPos, light.position.x, light.position.y, light.position.z, 1);
     glUniform3f(lightColor, light.color.x, light.color.y, light.color.z);
@@ -71,15 +72,15 @@ void Renderer::render(Scene* scene) {
     Light light = scene->bluePortal.light;
     char attribute[30];
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].position");
-    int lightPos = glGetUniformLocation(shader, attribute);
+    int lightPos = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].color");
-    int lightColor = glGetUniformLocation(shader, attribute);
+    int lightColor = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].constantAtt");
-    int lightConstantAtt = glGetUniformLocation(shader, attribute);
+    int lightConstantAtt = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].linearAtt");
-    int lightLinearAtt = glGetUniformLocation(shader, attribute);
+    int lightLinearAtt = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].quadraticAtt");
-    int lightQuadraticAtt = glGetUniformLocation(shader, attribute);
+    int lightQuadraticAtt = glGetUniformLocation(shader.handle, attribute);
 
     glUniform4f(lightPos, light.position.x, light.position.y, light.position.z, 1);
     glUniform3f(lightColor, light.color.x, light.color.y, light.color.z);
@@ -92,15 +93,15 @@ void Renderer::render(Scene* scene) {
     Light light = scene->orangePortal.light;
     char attribute[30];
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].position");
-    int lightPos = glGetUniformLocation(shader, attribute);
+    int lightPos = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].color");
-    int lightColor = glGetUniformLocation(shader, attribute);
+    int lightColor = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].constantAtt");
-    int lightConstantAtt = glGetUniformLocation(shader, attribute);
+    int lightConstantAtt = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].linearAtt");
-    int lightLinearAtt = glGetUniformLocation(shader, attribute);
+    int lightLinearAtt = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].quadraticAtt");
-    int lightQuadraticAtt = glGetUniformLocation(shader, attribute);
+    int lightQuadraticAtt = glGetUniformLocation(shader.handle, attribute);
 
     glUniform4f(lightPos, light.position.x, light.position.y, light.position.z, 1);
     glUniform3f(lightColor, light.color.x, light.color.y, light.color.z);
@@ -109,7 +110,7 @@ void Renderer::render(Scene* scene) {
     glUniform1f(lightQuadraticAtt, light.quadraticAtt);
     numLights++;
   }
-  int numLightsLoc = glGetUniformLocation(shader, "numLights");
+  int numLightsLoc = glGetUniformLocation(shader.handle, "numLights");
   glUniform1i(numLightsLoc, numLights);
 
   //Render portals
@@ -134,7 +135,7 @@ void Renderer::render(Scene* scene) {
     modelMatrix.scale(scene->bluePortal.scale);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    Mesh portalStencil = MeshLoader::getMesh("/meshes/PortalStencil.obj");
+    Mesh portalStencil = MeshLoader::getMesh("PortalStencil.obj");
     glBindVertexArray(portalStencil.handle);
     glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
 
@@ -153,6 +154,21 @@ void Renderer::render(Scene* scene) {
   renderScene(scene);
 
   //Draw overlays
+  shader = ShaderLoader::getShader("unshaded.frag");
+  glUseProgram(shader.handle);
+  projLoc = glGetUniformLocation(shader.handle, "projectionMatrix");
+  viewLoc = glGetUniformLocation(shader.handle, "viewMatrix");
+  modelLoc = glGetUniformLocation(shader.handle, "modelMatrix");
+
+  projectionMatrix = camera.getProjectionMatrix();
+  glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
+
+  //Update camera position
+  viewMatrix.setIdentity();
+  viewMatrix.rotate(Vector3f::negate(scene->camera.rotation));
+  viewMatrix.translate(Vector3f::negate(scene->camera.position));
+  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+
   renderPortalOverlay(scene->bluePortal);
   renderPortalOverlay(scene->orangePortal);
 
@@ -167,16 +183,16 @@ void Renderer::render(Scene* scene) {
   modelMatrix.setIdentity();
   modelMatrix.translate(Vector3f(0, 0, -1));
   modelMatrix.rotate(180, 0, 1, 0);
-  modelMatrix.scale(Vector3f(0.05f, 0.1f, 1));
+  modelMatrix.scale(Vector3f(0.1f, 0.1f, 1));
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
   //Crosshair
-  Mesh mesh = MeshLoader::getMesh("/meshes/Plane.obj");
-  Texture texture = TextureLoader::getTexture("/textures/Reticle.png");
+  Mesh mesh = MeshLoader::getMesh("Plane.obj");
+  Texture texture = TextureLoader::getTexture("Reticle.png");
   glBindVertexArray(mesh.handle);
 
-  int loc = glGetUniformLocation(shader, "diffuse");
-  int tiling = glGetUniformLocation(shader, "tiling");
+  int loc = glGetUniformLocation(shader.handle, "diffuse");
+  int tiling = glGetUniformLocation(shader.handle, "tiling");
   glUniform2f(tiling, texture.xTiling, texture.yTiling);
   glUniform1i(loc, 0);
   glActiveTexture(GL_TEXTURE0);
@@ -204,8 +220,8 @@ void Renderer::renderEntity(Entity e) {
 
   glBindVertexArray(e.mesh.handle);
 
-  int loc = glGetUniformLocation(shader, "diffuse");
-  int tiling = glGetUniformLocation(shader, "tiling");
+  int loc = glGetUniformLocation(shader.handle, "diffuse");
+  int tiling = glGetUniformLocation(shader.handle, "tiling");
   glUniform2f(tiling, e.texture.xTiling, e.texture.yTiling);
   glUniform1i(loc, 0);
   glActiveTexture(GL_TEXTURE0);
@@ -239,7 +255,7 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
     modelMatrix.scale(portal.scale);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    Mesh portalStencil = MeshLoader::getMesh("/meshes/PortalStencil.obj");
+    Mesh portalStencil = MeshLoader::getMesh("PortalStencil.obj");
     glBindVertexArray(portalStencil.handle);
     glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
     glBindVertexArray(0);
@@ -286,8 +302,8 @@ void Renderer::renderPortalOverlay(Portal portal) {
 
     glBindVertexArray(portal.mesh.handle);
 
-    int loc = glGetUniformLocation(shader, "diffuse");
-    int tiling = glGetUniformLocation(shader, "tiling");
+    int loc = glGetUniformLocation(shader.handle, "diffuse");
+    int tiling = glGetUniformLocation(shader.handle, "tiling");
     glUniform2f(tiling, portal.texture.xTiling, portal.texture.yTiling);
     glUniform1i(loc, 0);
     glActiveTexture(GL_TEXTURE0);

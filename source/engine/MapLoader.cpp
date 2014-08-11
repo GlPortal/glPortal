@@ -78,8 +78,8 @@ Scene* MapLoader::getScene(std::string path) {
       Entity door;
       door.position.set(endPos);
       door.rotation.set(endRot);
-      door.texture = TextureLoader::getTexture("/textures/Door.png");
-      door.mesh = MeshLoader::getMesh("/meshes/Door.obj");
+      door.texture = TextureLoader::getTexture("Door.png");
+      door.mesh = MeshLoader::getMesh("Door.obj");
       scene->end = door;
     } else {
       throw std::runtime_error("No end position defined.");
@@ -130,7 +130,7 @@ Scene* MapLoader::getScene(std::string path) {
             boxScaleElement->QueryFloatAttribute("y", &wall.scale.y);
             boxScaleElement->QueryFloatAttribute("z", &wall.scale.z);
 
-            wall.texture = TextureLoader::getTexture("/textures/" + texturePath);
+            wall.texture = TextureLoader::getTexture(texturePath);
             wall.texture.xTiling = 0.5f;
             wall.texture.yTiling = 0.5f;
             wall.mesh = MeshLoader::getPortalBox(wall);
@@ -167,7 +167,7 @@ Scene* MapLoader::getScene(std::string path) {
           triggerScaleElement->QueryFloatAttribute("y", &trigger.scale.y);
           triggerScaleElement->QueryFloatAttribute("z", &trigger.scale.z);
                       
-          trigger.texture = TextureLoader::getTexture("/textures/redBox.png");
+          trigger.texture = TextureLoader::getTexture("redBox.png");
           trigger.mesh = MeshLoader::getPortalBox(trigger);
           scene->triggers.push_back(trigger);
         }
