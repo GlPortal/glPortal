@@ -2,6 +2,7 @@
 #define RENDERER_HPP
 
 #include <GL/glew.h>
+#include <string>
 
 #include "Shader.hpp"
 #include "util/Matrix4f.hpp"
@@ -14,6 +15,7 @@ class Scene;
 class Renderer {
 public:
   Renderer();
+  void changeShader(std::string path);
   void render(Scene* scene);
   void renderScene(Scene* scene);
   void renderEntity(Entity e);
