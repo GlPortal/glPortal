@@ -27,18 +27,17 @@ class CustomPanel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-#        self.layout.prop(bpy.context.active_object, '["gl_type"]')
         row = layout.row()
         row.label(text="Cube properties:")
 
         split = layout.split()
         col = split.column(align=True)
 
-#        col.operator("pipo", text="Plane", icon='MESH_PLANE')
         col.operator("wm.clear_selection", text="Clear Type", icon='MESH_CUBE')
         col.operator("wm.selection_to_win", text="Set Win Area", icon='MESH_CUBE')
         col.operator("wm.selection_to_death", text="Set Death Area", icon='MESH_CUBE')
         col.operator("wm.selection_to_radiation", text="Set Radiation Area", icon='MESH_CUBE')
+        col.operator("wm.selection_to_door", text="Set Door", icon='MESH_CUBE')
 
 class clearSelection(bpy.types.Operator):
     bl_idname = "wm.clear_selection"
@@ -46,6 +45,7 @@ class clearSelection(bpy.types.Operator):
 
     def execute(self, context):
         bpy.types.Object.glpType = bpy.props.StringProperty()
+        bpy.types.Object.glpTriggerType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
             object["glpType"] = "None" 
@@ -59,7 +59,8 @@ class selectionToWin(bpy.types.Operator):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
-            object["glpType"] = "win" 
+            object["glpType"] = "trigger"
+            object["glpTriggerType"] = "trigger" 
         return {'FINISHED'}
 
 class selectionToDeath(bpy.types.Operator):
@@ -70,7 +71,8 @@ class selectionToDeath(bpy.types.Operator):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
-            object["glpType"] = "death" 
+            object["glpType"] = "trigger"
+            object["glpTriggerType"] = "death" 
         return {'FINISHED'}
 
     
@@ -82,7 +84,19 @@ class selectionToRadiation(bpy.types.Operator):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
-            object["glpType"] = "radiation" 
+            object["glpType"] = "trigger"
+            object["glpTriggerType"] = "radiation" 
+        return {'FINISHED'}    
+
+class selectionToDoor(bpy.types.Operator):
+    bl_idname = "wm.selection_to_door"
+    bl_label = "Mark the selection as door."
+
+    def execute(self, context):
+        bpy.types.Object.glpType = bpy.props.StringProperty()
+        object = bpy.context.active_object
+        if object:
+            object["glpType"] = "door" 
         return {'FINISHED'}    
     
 class ExportMyFormat(bpy.types.Operator, ExportHelper):
@@ -100,6 +114,21 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
        for object in objects:
            object.select = False
        for object in objects:
+           if "glpType" in object:
+               type = object["glpType"]
+               print(type)
+               hasType = True;
+           else:
+               type = "None"
+               hasType = False;
+               
+           if "glpTriggerType" in object:
+               triggerType = object["glpTriggerType"]
+               hasTriggerType = True;
+           else:
+               triggerType = "None"
+               hasTriggerType = False;
+               
            if "." in object.name:
                mapObjectType = object.name.split(".")[0]
            else:
@@ -117,15 +146,7 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                lightElement.set("x", str(globalVector.x))
                lightElement.set("y", str(globalVector.z))
                lightElement.set("z", str(globalVector.y))
-           elif mapObjectType == "Camera":
-               matrix = object.matrix_world
-               vector = Vector((object.location[0], -object.location[2], object.location[1]))
-               globalVector = matrix * vector
-               spawnElement = tree.SubElement(root, "spawn")
-               spawnElement.set("x", str(globalVector.x))
-               spawnElement.set("y", str(globalVector.z))
-               spawnElement.set("z", str(globalVector.y))               
-           elif mapObjectType == "Cube":
+           elif mapObjectType == "Cube" or mapObjectType == "Camera":
                matrix = object.matrix_world
                boundingBox = object.bound_box
 
@@ -133,15 +154,18 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                boundingBoxEndVector  = Vector((boundingBox[6][0], -boundingBox[6][2], boundingBox[6][1]))
                transBoundingBoxBeginVector = matrix * boundingBoxBeginVector
                transBoundingBoxEndVector  = matrix * boundingBoxEndVector
-               object.select = True
-               if "glpType" in object:
-                   if object["glpType"] != "None":
-                       boxElement = tree.SubElement(root, "trigger")
-                       boxElement.set("type", object["glpType"])
-                   else:
-                       boxElement = tree.SubElement(textureElement, "wall")
-               else:
+               if mapObjectType == "Camera":
+                   boxElement = tree.SubElement(root, "spawn")
+               else:    
                    boxElement = tree.SubElement(textureElement, "wall")
+               object.select = True
+
+               if type == "trigger":                       
+                   boxElement = tree.SubElement(root, "trigger")
+                   if "glpTriggerType" in object:
+                       boxElement.set("type", triggerType)
+               elif type == "door":
+                   boxElement = tree.SubElement(root, "end")
                    
                boundingBox = object.bound_box
 
@@ -149,11 +173,17 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                positionElement.set("x", str((transBoundingBoxEndVector.x + transBoundingBoxBeginVector.x)/2))
                positionElement.set("y", str((transBoundingBoxEndVector.z + transBoundingBoxBeginVector.z)/2))
                positionElement.set("z", str((transBoundingBoxEndVector.y + transBoundingBoxBeginVector.y)/2))
-               scaleElement = tree.SubElement(boxElement, "scale")
-               scaleElement.set("x", str(abs(transBoundingBoxEndVector.x - transBoundingBoxBeginVector.x)))
-               scaleElement.set("y", str(abs(transBoundingBoxEndVector.z - transBoundingBoxBeginVector.z)))
-               scaleElement.set("z", str(abs(transBoundingBoxEndVector.y - transBoundingBoxBeginVector.y)))
-
+               if type != "door" and mapObjectType != "Camera":
+                   scaleElement = tree.SubElement(boxElement, "scale")
+                   scaleElement.set("x", str(abs(transBoundingBoxEndVector.x - transBoundingBoxBeginVector.x)))
+                   scaleElement.set("y", str(abs(transBoundingBoxEndVector.z - transBoundingBoxBeginVector.z)))
+                   scaleElement.set("z", str(abs(transBoundingBoxEndVector.y - transBoundingBoxBeginVector.y)))
+               if type == "door" or mapObjectType == "Camera":
+                   rotationElement = tree.SubElement(boxElement, "rotation")
+                   rotationElement.set("x", str(abs(object.rotation_euler[0])))
+                   rotationElement.set("y", str(abs(object.rotation_euler[1])))
+                   rotationElement.set("z", str(abs(object.rotation_euler[2])))
+                   
                object.select = False
                
        xml = minidom.parseString(tree.tostring(root))
