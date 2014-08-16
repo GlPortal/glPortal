@@ -116,7 +116,6 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
        for object in objects:
            if "glpType" in object:
                type = object["glpType"]
-               print(type)
                hasType = True;
            else:
                type = "None"
@@ -154,19 +153,19 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                boundingBoxEndVector  = Vector((boundingBox[6][0], -boundingBox[6][2], boundingBox[6][1]))
                transBoundingBoxBeginVector = matrix * boundingBoxBeginVector
                transBoundingBoxEndVector  = matrix * boundingBoxEndVector
+               
                if mapObjectType == "Camera":
                    boxElement = tree.SubElement(root, "spawn")
-               else:    
-                   boxElement = tree.SubElement(textureElement, "wall")
-               object.select = True
-
-               if type == "trigger":                       
+               elif type == "trigger":                       
                    boxElement = tree.SubElement(root, "trigger")
                    if "glpTriggerType" in object:
                        boxElement.set("type", triggerType)
                elif type == "door":
                    boxElement = tree.SubElement(root, "end")
+               else:    
+                   boxElement = tree.SubElement(textureElement, "wall")
                    
+               object.select = True                   
                boundingBox = object.bound_box
 
                positionElement = tree.SubElement(boxElement, "position")
@@ -202,7 +201,6 @@ def menu_func(self, context):
 
 
 def register():
-#    bpy.types.Object.gl_type = bpy.props.StringProperty()
     bpy.utils.register_module(__name__)
     bpy.types.INFO_MT_file_export.append(menu_func)
     bpy.utils.register_class(CustomPanel)
