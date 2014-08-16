@@ -3,7 +3,7 @@ bl_info = {
     "name":         "GlPortal XML Format",
     "author":       "Henry Hirsch",
     "blender":      (2, 6, 3),
-    "version":      (0, 0, 1),
+    "version":      (0, 0, 2),
     "location":     "File > Import-Export",
     "description":  "GlPortal XML Format",
     "category":     "Import-Export"
@@ -38,6 +38,7 @@ class CustomPanel(bpy.types.Panel):
         col.operator("wm.selection_to_death", text="Set Death Area", icon='MESH_CUBE')
         col.operator("wm.selection_to_radiation", text="Set Radiation Area", icon='MESH_CUBE')
         col.operator("wm.selection_to_door", text="Set Door", icon='MESH_CUBE')
+        col.operator("wm.selection_to_portable", text="Set Wall Portable", icon='MESH_CUBE')
 
 class clearSelection(bpy.types.Operator):
     bl_idname = "wm.clear_selection"
@@ -98,6 +99,17 @@ class selectionToDoor(bpy.types.Operator):
         if object:
             object["glpType"] = "door" 
         return {'FINISHED'}    
+
+class selectionToPortable(bpy.types.Operator):
+    bl_idname = "wm.selection_to_portable"
+    bl_label = "Mark the selection as portable."
+
+    def execute(self, context):
+        bpy.types.Object.glpType = bpy.props.StringProperty()
+        object = bpy.context.active_object
+        if object:
+            object["glpType"] = "portable" 
+        return {'FINISHED'}    
     
 class ExportMyFormat(bpy.types.Operator, ExportHelper):
     bl_idname = "export_glportal_xml.xml"
@@ -111,6 +123,10 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
        root = tree.Element("map")
        textureElement = tree.SubElement(root, "texture")
        textureElement.set("source", "tiles.png")
+
+       textureWallElement = tree.SubElement(root, "texture")
+       textureWallElement.set("source", "wall.png")
+
        for object in objects:
            object.select = False
        for object in objects:
@@ -162,7 +178,9 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                        boxElement.set("type", triggerType)
                elif type == "door":
                    boxElement = tree.SubElement(root, "end")
-               else:    
+               elif type == "portable":
+                   boxElement = tree.SubElement(textureWallElement, "wall")
+               else:
                    boxElement = tree.SubElement(textureElement, "wall")
                    
                object.select = True                   
