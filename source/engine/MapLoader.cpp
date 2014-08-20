@@ -175,7 +175,8 @@ Scene* MapLoader::getScene(std::string path) {
     }
     cout << "File loaded." << endl;
   } else {
-    cout << "Unable to load file." << endl;
+    cout << "Unable to load file. " << endl;
+    cout << string(Environment::getDataDir()) << path << endl;
   }
   
   return scene;

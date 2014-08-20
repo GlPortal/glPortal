@@ -37,7 +37,8 @@ const float GRAVITY = 0.05;
 void World::create() {
   renderer = new Renderer();
 
-  loadScene("/maps/n1.xml");
+  //  loadScene("/maps/n1.xml");
+    loadScene("/maps/untitled.xml");
 }
 
 void World::loadScene(std::string path) {
