@@ -70,27 +70,27 @@ void World::update() {
   player->velocity.y -= GRAVITY;
 
   float rotation = Math::toRadians(player->rotation.y);
-
-  if (Input::isKeyDown('w')) {
-    player->velocity.x = -sin(rotation) * SPEED;
-    player->velocity.z = -cos(rotation) * SPEED;
+  if(player->isAlive()){
+    if (Input::isKeyDown('w')) {
+      player->velocity.x = -sin(rotation) * SPEED;
+      player->velocity.z = -cos(rotation) * SPEED;
+    }
+    if (Input::isKeyDown('s')) {
+      player->velocity.x = sin(rotation) * SPEED;
+      player->velocity.z = cos(rotation) * SPEED;
+    }
+    if (Input::isKeyDown('a')) {
+      player->velocity.x = -cos(rotation) * SPEED;
+      player->velocity.z = sin(rotation) * SPEED;
+    }
+    if (Input::isKeyDown('d')) {
+      player->velocity.x = cos(rotation) * SPEED;
+      player->velocity.z = -sin(rotation) * SPEED;
+    }
+    if (Input::isKeyDown(' ')) {
+      player->velocity.y = 0.2;
+    }
   }
-  if (Input::isKeyDown('s')) {
-    player->velocity.x = sin(rotation) * SPEED;
-    player->velocity.z = cos(rotation) * SPEED;
-  }
-  if (Input::isKeyDown('a')) {
-    player->velocity.x = -cos(rotation) * SPEED;
-    player->velocity.z = sin(rotation) * SPEED;
-  }
-  if (Input::isKeyDown('d')) {
-    player->velocity.x = cos(rotation) * SPEED;
-    player->velocity.z = -sin(rotation) * SPEED;
-  }
-  if (Input::isKeyDown(' ')) {
-    player->velocity.y = 0.2;
-  }
-
   Vector3f pos = Vector3f::add(player->position, player->velocity);
 
   //Y collision
@@ -122,9 +122,18 @@ void World::update() {
     Trigger trigger = scene->triggers[i];
     BoxCollider playerCollider(player->position, player->scale);
     BoxCollider triggerCollider(trigger.position, trigger.scale);
-
     if (playerCollider.collidesWith(triggerCollider)) {
-      std::cout << "Trigger touched\n";
+      if(trigger.type == "radiation"){
+        player->harm(10);
+      } else if(trigger.type == "death"){
+        player->kill();
+        std::cout << "death touched\n";
+      } else if(trigger.type == "win"){
+        std::cout << "win touched\n";
+      } else {
+        std::cout << "Some trigger touched\n";
+        std::cout << trigger.type << "\n";
+      }
     }
   }
 
