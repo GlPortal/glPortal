@@ -61,7 +61,7 @@ class selectionToWin(bpy.types.Operator):
         object = bpy.context.active_object
         if object:
             object["glpType"] = "trigger"
-            object["glpTriggerType"] = "trigger" 
+            object["glpTriggerType"] = "win" 
         return {'FINISHED'}
 
 class selectionToDeath(bpy.types.Operator):

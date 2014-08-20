@@ -150,11 +150,17 @@ Scene* MapLoader::getScene(std::string path) {
       do {
         TiXmlElement* triggerPositionElement;
         TiXmlElement* triggerScaleElement;
+        TiXmlElement* triggerTypeElement;
         
         Trigger trigger;
         triggerPositionElement = triggerElement->FirstChildElement("position");
         triggerScaleElement    = triggerElement->FirstChildElement("scale");
-
+        triggerPositionElement = triggerElement->FirstChildElement("type");
+        
+        if(triggerElement) {
+          triggerElement->QueryStringAttribute("type", &trigger.type);
+        }
+        
         if(triggerPositionElement) {
           triggerPositionElement->QueryFloatAttribute("x", &trigger.position.x);
           triggerPositionElement->QueryFloatAttribute("y", &trigger.position.y);
