@@ -11,6 +11,7 @@ add_executable(${EXE_NAME}
   engine/util/Math.cpp
   engine/BoxCollider.cpp
   World.cpp Window.cpp
+  Player.cpp
   engine/Camera.cpp
   Input.cpp engine/Renderer.cpp
   engine/MapLoader.cpp
