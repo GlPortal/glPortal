@@ -14,13 +14,14 @@ add_executable(${EXE_NAME}
   Player.cpp
   engine/Camera.cpp
   Input.cpp engine/Renderer.cpp
-  engine/MapLoader.cpp
-  engine/MeshLoader.cpp
-  engine/ShaderLoader.cpp
-  engine/TextureLoader.cpp
-  engine/environment/Environment.cpp
-  engine/environment/ConfigFileParser.cpp
-  engine/environment/Path.cpp
+  engine/loader/MapLoader.cpp
+  engine/loader/MeshLoader.cpp
+  engine/loader/ShaderLoader.cpp
+  engine/loader/TextureLoader.cpp
+  engine/loader/FontLoader.cpp
+  engine/env/Environment.cpp
+  engine/env/ConfigFileParser.cpp
+  engine/env/Path.cpp
   )
 target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES} tinyxml)
 install ( TARGETS ${EXE_NAME} DESTINATION bin )
