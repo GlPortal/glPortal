@@ -85,8 +85,9 @@ void World::update() {
       player->velocity.x = cos(rotation) * SPEED;
       player->velocity.z = -sin(rotation) * SPEED;
     }
-    if (Input::isKeyDown(' ')) {
-      player->velocity.y = 0.2;
+    if (Input::isKeyDown(' ') && player->grounded) {
+      player->grounded = false;
+      player->velocity.y = 0.3f;
     }
   }
   Vector3f pos = Vector3f::add(player->position, player->velocity);
@@ -96,6 +97,9 @@ void World::update() {
   if (!collidesWithWalls(bboxY) || scene->bluePortal.inPortal(bboxY) || scene->orangePortal.inPortal(bboxY)) {
     player->position.y = pos.y;
   } else {
+    if(player->velocity.y < 0) {
+      player->grounded = true;
+    }
     player->velocity.y = 0;
   }
 
