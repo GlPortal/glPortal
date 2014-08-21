@@ -11,12 +11,13 @@ add_executable(${EXE_NAME}
   engine/util/Math.cpp
   engine/BoxCollider.cpp
   World.cpp Window.cpp
+  Player.cpp
   engine/Camera.cpp
-  engine/TextureLoader.cpp
-  engine/Resource.cpp
   Input.cpp engine/Renderer.cpp
   engine/MapLoader.cpp
   engine/MeshLoader.cpp
+  engine/ShaderLoader.cpp
+  engine/TextureLoader.cpp
   engine/environment/Environment.cpp
   engine/environment/ConfigFileParser.cpp
   engine/environment/Path.cpp
