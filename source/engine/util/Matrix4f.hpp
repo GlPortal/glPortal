@@ -12,9 +12,11 @@ public:
   Matrix4f(float[]);
   void setIdentity();
   void translate(Vector3f v);
+  void translate(float x, float y, float z);
   void rotate(float angle, float x, float y, float z);
   void rotate(Vector3f v);
   void scale(Vector3f v);
+  void scale(float x, float y, float z);
   void print();
 };
 

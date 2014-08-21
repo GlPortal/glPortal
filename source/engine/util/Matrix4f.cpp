@@ -29,10 +29,14 @@ void Matrix4f::setIdentity() {
 }
 
 void Matrix4f::translate(Vector3f v) {
-  array[12] += array[0] * v.x + array[4] * v.y + array[8] * v.z;
-  array[13] += array[1] * v.x + array[5] * v.y + array[9] * v.z;
-  array[14] += array[2] * v.x + array[6] * v.y + array[10] * v.z;
-  array[15] += array[3] * v.x + array[7] * v.y + array[11] * v.z;
+  translate(v.x, v.y, v.z);
+}
+
+void Matrix4f::translate(float x, float y, float z) {
+  array[12] += array[0] * x + array[4] * y + array[8] * z;
+  array[13] += array[1] * x + array[5] * y + array[9] * z;
+  array[14] += array[2] * x + array[6] * y + array[10] * z;
+  array[15] += array[3] * x + array[7] * y + array[11] * z;
 }
 
 void Matrix4f::rotate(float angle, float x, float y, float z) {
@@ -88,18 +92,22 @@ void Matrix4f::rotate(Vector3f v) {
 }
 
 void Matrix4f::scale(Vector3f v) {
-  array[0] = array[0] * v.x;
-  array[1] = array[1] * v.x;
-  array[2] = array[2] * v.x;
-  array[3] = array[3] * v.x;
-  array[4] = array[4] * v.y;
-  array[5] = array[5] * v.y;
-  array[6] = array[6] * v.y;
-  array[7] = array[7] * v.y;
-  array[8] = array[8] * v.z;
-  array[9] = array[9] * v.z;
-  array[10] = array[10] * v.z;
-  array[11] = array[11] * v.z;
+  scale(v.x, v.y, v.z);
+}
+
+void Matrix4f::scale(float x, float y, float z) {
+  array[0] = array[0] * x;
+  array[1] = array[1] * x;
+  array[2] = array[2] * x;
+  array[3] = array[3] * x;
+  array[4] = array[4] * y;
+  array[5] = array[5] * y;
+  array[6] = array[6] * y;
+  array[7] = array[7] * y;
+  array[8] = array[8] * z;
+  array[9] = array[9] * z;
+  array[10] = array[10] * z;
+  array[11] = array[11] * z;
 }
 
 void Matrix4f::print() {

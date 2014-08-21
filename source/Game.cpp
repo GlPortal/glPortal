@@ -7,8 +7,8 @@
 #include <stdexcept>
 #include <string>
 
-#include "engine/environment/ConfigFileParser.hpp"
-#include "engine/environment/Environment.hpp"
+#include "engine/env/ConfigFileParser.hpp"
+#include "engine/env/Environment.hpp"
 #include "Input.hpp"
 
 namespace glPortal {

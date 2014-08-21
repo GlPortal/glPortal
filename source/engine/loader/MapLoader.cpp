@@ -6,16 +6,16 @@
 #include <stdexcept>
 #include <vector>
 
-#include "../Player.hpp"
-#include "../Scene.hpp"
-#include "environment/Environment.hpp"
-#include "Light.hpp"
-#include "Mesh.hpp"
+#include "Player.hpp"
+#include "Scene.hpp"
+#include "engine/env/Environment.hpp"
+#include "engine/Light.hpp"
+#include "engine/Mesh.hpp"
 #include "MeshLoader.hpp"
-#include "Texture.hpp"
+#include "engine/Texture.hpp"
 #include "TextureLoader.hpp"
-#include "Trigger.hpp"
-#include "util/Vector3f.hpp"
+#include "engine/Trigger.hpp"
+#include "engine/util/Vector3f.hpp"
 
 using namespace std;
 

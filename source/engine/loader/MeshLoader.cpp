@@ -9,10 +9,11 @@
 #include <stdlib.h>
 #include <utility>
 
-#include "environment/Environment.hpp"
-#include "Entity.hpp"
-#include "util/Vector2f.hpp"
-#include "util/Vector3f.hpp"
+#include "engine/env/Environment.hpp"
+#include "engine/Entity.hpp"
+#include "engine/util/Vector2f.hpp"
+#include "engine/util/Vector3f.hpp"
+#include <cstdio>
 
 namespace glPortal {
 
@@ -73,7 +74,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
     float* texCoords = (float *) malloc(sizeof(float) * mesh->mNumVertices * 2);
     for (unsigned int k = 0; k < mesh->mNumVertices; ++k) {
       texCoords[k * 2] = mesh->mTextureCoords[0][k].x;
-      texCoords[k * 2 + 1] = mesh->mTextureCoords[0][k].y;
+      texCoords[k * 2 + 1] = -mesh->mTextureCoords[0][k].y; //Y must be flipped due to OpenGL's coordinate system
     }
     glGenBuffers(1, &textureVBO);
     glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
@@ -195,6 +196,80 @@ Mesh MeshLoader::getPortalBox(Entity wall) {
   //Store relevant data in the new mesh
   mesh.handle = vao;
   mesh.numFaces = 12;
+
+  return mesh;
+}
+
+Mesh MeshLoader::getSubPlane(int x, int y, int width, int height, int w, int h) {
+  Mesh mesh;
+
+  GLuint vao;
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+
+  Vector3f vertices[4] = {Vector3f(0, -1, 0), Vector3f(1, -1, 0),
+                          Vector3f(1, 0, 0), Vector3f(0, 0, 0)};
+  Vector2f texCoords[4] = {Vector2f((float)x/w, (float)y/h),
+                           Vector2f((float)(x+width)/w, (float)y/h),
+                           Vector2f((float)(x+width)/w, (float)(y+height)/h),
+                           Vector2f((float)x/w, (float)(y+height)/h)};
+  Vector3f normals[1] = {Vector3f(0, 0, 1)};
+
+  float vi[6] = {0,1,3,2,3,1};
+  float vertexBuffer[6 * 3];
+  for(int i = 0; i < 6; i++) {
+    int index = vi[i];
+    vertexBuffer[i * 3 + 0] = vertices[index].x;
+    vertexBuffer[i * 3 + 1] = vertices[index].y;
+    vertexBuffer[i * 3 + 2] = vertices[index].z;
+  }
+
+  float ti[6] = {3,2,0,1,0,2};
+  float textureBuffer[6 * 2];
+  for(int i = 0; i < 6; i++) {
+    int index = ti[i];
+    textureBuffer[i * 2 + 0] = texCoords[index].x;
+    textureBuffer[i * 2 + 1] = texCoords[index].y;
+  }
+
+  float normalBuffer[6 * 3];
+  for(int i = 0; i < 6; i++) {
+    normalBuffer[i * 3 + 0] = normals[0].x;
+    normalBuffer[i * 3 + 1] = normals[0].y;
+    normalBuffer[i * 3 + 2] = normals[0].z;
+  }
+
+  //Put the vertex buffer into the VAO
+  GLuint vertexVBO;
+  glGenBuffers(1, &vertexVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 3, vertexBuffer, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
+  glEnableVertexAttribArray(0);
+
+  //Put the texture buffer into the VAO
+  GLuint textureVBO;
+  glGenBuffers(1, &textureVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 2, textureBuffer, GL_STATIC_DRAW);
+  glVertexAttribPointer(1, 2, GL_FLOAT, 0, 0, 0);
+  glEnableVertexAttribArray(1);
+
+  //Put the normal buffer into the VAO
+  GLuint normalVBO;
+  glGenBuffers(1, &normalVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 3, normalBuffer, GL_STATIC_DRAW);
+  glVertexAttribPointer(2, 3, GL_FLOAT, 0, 0, 0);
+  glEnableVertexAttribArray(2);
+
+  //Unbind the buffers
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+
+  //Store relevant data in the new mesh
+  mesh.handle = vao;
+  mesh.numFaces = 2;
 
   return mesh;
 }

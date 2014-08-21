@@ -9,10 +9,10 @@ const float DEFAULT_ASPECT = 1;
 const float DEFAULT_ZNEAR = 0.1f;
 const float DEFAULT_ZFAR = 100;
 const bool  DEFAULT_PERSPECTIVE = true;
-const float DEFAULT_TOP = 1;
-const float DEFAULT_BOTTOM = -1;
-const float DEFAULT_LEFT = -1;
-const float DEFAULT_RIGHT = 1;
+const float DEFAULT_TOP = 0.5f;
+const float DEFAULT_BOTTOM = -0.5f;
+const float DEFAULT_LEFT = -0.5f;
+const float DEFAULT_RIGHT = 0.5f;
 
 namespace glPortal {
 
