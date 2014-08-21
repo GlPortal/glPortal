@@ -9,7 +9,8 @@ namespace glPortal {
 class Player: public Entity {
 public:
   Player() :
-      velocity(0, 0, 0) {
+      velocity(0, 0, 0),
+      grounded(false) {
     scale.set(0.5f, 1, 0.5f);
   }
   int getHealth();
@@ -19,7 +20,7 @@ public:
   void kill();
 
   Vector3f velocity;
-
+  bool grounded;
 private:
   const int MAX_HEALTH = 100;
   const int MIN_HEALTH = -100;
