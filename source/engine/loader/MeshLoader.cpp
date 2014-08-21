@@ -25,8 +25,7 @@ Mesh MeshLoader::getMesh(std::string path) {
     return meshCache.at(path);
   }
   Assimp::Importer importer;
-  const aiMesh* mesh =
-      importer.ReadFile(path, aiProcess_Triangulate)->mMeshes[0];
+  const aiMesh* mesh = importer.ReadFile(path, aiProcess_Triangulate)->mMeshes[0];
   Mesh m = uploadMesh(mesh);
   meshCache.insert(std::pair<std::string, Mesh>(path, m));
   return m;
@@ -62,8 +61,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
     GLuint vertexVBO;
     glGenBuffers(1, &vertexVBO);
     glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3,
-        mesh->mVertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3, mesh->mVertices, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(0);
   }
@@ -74,12 +72,11 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
     float* texCoords = (float *) malloc(sizeof(float) * mesh->mNumVertices * 2);
     for (unsigned int k = 0; k < mesh->mNumVertices; ++k) {
       texCoords[k * 2] = mesh->mTextureCoords[0][k].x;
-      texCoords[k * 2 + 1] = -mesh->mTextureCoords[0][k].y; //Y must be flipped due to OpenGL's coordinate system
+      texCoords[k * 2 + 1] = 1 - mesh->mTextureCoords[0][k].y; //Y must be flipped due to OpenGL's coordinate system
     }
     glGenBuffers(1, &textureVBO);
     glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 2,
-        texCoords, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 2, texCoords, GL_STATIC_DRAW);
     glVertexAttribPointer(1, 2, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(1);
   }
@@ -89,8 +86,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
     GLuint normalVBO;
     glGenBuffers(1, &normalVBO);
     glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3,
-        mesh->mNormals, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3, mesh->mNormals, GL_STATIC_DRAW);
     glVertexAttribPointer(2, 3, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(2);
   }
