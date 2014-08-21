@@ -218,6 +218,7 @@ void Renderer::renderScene(Scene* scene) {
   for (unsigned int i = 0; i < scene->walls.size(); i++) {
     renderEntity(scene->walls[i]);
   }
+
   //End
   renderEntity(scene->end);
 }
