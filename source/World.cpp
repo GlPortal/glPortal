@@ -1,12 +1,10 @@
 #include "World.hpp"
 
-//#include <stdio.h>
 #include <SDL2/SDL_mouse.h>
 #include <climits>
 #include <cmath>
-#include <iostream>
-//#include <string>
 #include <vector>
+#include <cstdio>
 
 #include "engine/BoxCollider.hpp"
 #include "engine/Camera.hpp"
@@ -37,8 +35,8 @@ const float GRAVITY = 0.05;
 void World::create() {
   renderer = new Renderer();
 
-  //  loadScene("/maps/n1.xml");
-    loadScene("/maps/untitled.xml");
+    loadScene("/maps/n1.xml");
+    //loadScene("/maps/untitled.xml");
 }
 
 void World::loadScene(std::string path) {
@@ -122,17 +120,17 @@ void World::update() {
     Trigger trigger = scene->triggers[i];
     BoxCollider playerCollider(player->position, player->scale);
     BoxCollider triggerCollider(trigger.position, trigger.scale);
+
     if (playerCollider.collidesWith(triggerCollider)) {
-      if(trigger.type == "radiation"){
+      if (trigger.type == "radiation") {
         player->harm(10);
-      } else if(trigger.type == "death"){
+      } else if (trigger.type == "death") {
         player->kill();
-        std::cout << "death touched\n";
-      } else if(trigger.type == "win"){
-        std::cout << "win touched\n";
+        printf("Death touched\n");
+      } else if (trigger.type == "win") {
+        printf("Win touched\n");
       } else {
-        std::cout << "Some trigger touched\n";
-        std::cout << trigger.type << "\n";
+        printf("Some trigger touched: %s\n", trigger.type.c_str());
       }
     }
   }

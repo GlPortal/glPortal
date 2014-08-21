@@ -26,7 +26,7 @@
 			<scale x="0.5" y="4.0" z="4.0"/>
 		</wall>
 	</texture>
-	<texture source="tiles.jpg">
+	<texture source="tiles.png">
 		<!-- Back floor -->
 		<wall>
 			<position x="2.5" y="-3" z="5"/>
