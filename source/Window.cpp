@@ -5,13 +5,14 @@
 #include <SDL2/SDL.h>
 #include <cstdlib>
 #include <iostream>
-#include "engine/environment/ConfigFileParser.hpp"
-#include "engine/environment/Environment.hpp"
+#include "engine/env/ConfigFileParser.hpp"
+#include "engine/env/Environment.hpp"
 #include <stdexcept>
 
 namespace glPortal {
 
-float Window::aspect = 1;
+int Window::width = 800;
+int Window::height = 600;
 
 void Window::initGlew(){
   glewExperimental = GL_TRUE;
@@ -56,8 +57,10 @@ void Window::create(const char* title, int width, int height, bool fullscreen) {
 
   this->initGlew();
 
-  //Set aspect ratio
-  aspect = (float) width / height;
+  //Set width and height for using outside of the class
+  this->width = width;
+  this->height = height;
+
   //Allow unbound framerate
   SDL_GL_SetSwapInterval(0);
   //Lock cursor in the middle of the screen

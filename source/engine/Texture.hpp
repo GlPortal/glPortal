@@ -1,11 +1,13 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
 
+#include <GL/glew.h>
+
 namespace glPortal {
 
 class Texture {
 public:
-  int handle;
+  GLuint handle;
   int width;
   int height;
   float xTiling = 1;

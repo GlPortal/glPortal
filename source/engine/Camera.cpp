@@ -15,7 +15,7 @@ Camera::Camera(float fovy, float aspect, float zNear, float zFar) {
 }
 
 void Camera::recalculate() {
-  aspect = Window::aspect;
+  float aspect = (float) Window::width / Window::height;
 
   projectionMatrix.setIdentity();
   if(perspective) {

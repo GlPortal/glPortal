@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-#include "Texture.hpp"
+#include "../Texture.hpp"
 
 namespace glPortal {
 

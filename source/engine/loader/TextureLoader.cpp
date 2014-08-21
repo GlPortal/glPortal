@@ -3,8 +3,9 @@
 #include <GL/glew.h>
 #include <utility>
 
-#include "environment/Environment.hpp"
-#include "stb_image.c"
+#include "engine/env/Environment.hpp"
+#include "engine/stb_image.c"
+#include <cstdio>
 
 namespace glPortal {
 
@@ -18,6 +19,8 @@ Texture TextureLoader::getTexture(std::string path) {
   int width, height, bytes;
   unsigned char* data = stbi_load(path.c_str(), &width, &height, &bytes, 0);
   Texture texture = uploadTexture(data, width, height, bytes);
+  texture.width = width;
+  texture.height = height;
   textureCache.insert(std::pair<std::string, Texture>(path, texture));
   return texture;
 }

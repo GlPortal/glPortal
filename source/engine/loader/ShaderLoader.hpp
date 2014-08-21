@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 
-#include "Shader.hpp"
+#include "../Shader.hpp"
 
 namespace glPortal {
 

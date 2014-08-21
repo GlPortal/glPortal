@@ -1,11 +1,14 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
+#include <engine/Shader.hpp>
+#include <engine/util/Matrix4f.hpp>
 #include <GL/glew.h>
 #include <string>
 
-#include "Shader.hpp"
-#include "util/Matrix4f.hpp"
+namespace glPortal {
+class Font;
+} /* namespace glPortal */
 
 namespace glPortal {
 class Entity;
@@ -21,6 +24,7 @@ public:
   void renderEntity(Entity e);
   void renderPortal(Scene* scene, Portal portal, Portal otherPortal);
   void renderPortalOverlay(Portal portal);
+  void renderString(Scene* scene, std::string string, Font font, float x, float y, float size);
 private:
   Shader shader;
   Matrix4f projectionMatrix;

@@ -1,18 +1,21 @@
-#include "Renderer.hpp"
-
+#include <engine/Camera.hpp>
+#include <engine/Font.hpp>
+#include <engine/loader/FontLoader.hpp>
+#include <engine/loader/MeshLoader.hpp>
+#include <engine/loader/ShaderLoader.hpp>
+#include <engine/loader/TextureLoader.hpp>
+#include <engine/Letter.hpp>
+#include <engine/Light.hpp>
+#include <engine/Mesh.hpp>
+#include <engine/Renderer.hpp>
+#include <engine/Texture.hpp>
+#include <engine/util/Vector2f.hpp>
+#include <engine/util/Vector3f.hpp>
+#include <Portal.hpp>
 #include <stdio.h>
+#include <Scene.hpp>
+#include <Window.hpp>
 #include <vector>
-
-#include "../Portal.hpp"
-#include "../Scene.hpp"
-#include "Camera.hpp"
-#include "Light.hpp"
-#include "Mesh.hpp"
-#include "MeshLoader.hpp"
-#include "ShaderLoader.hpp"
-#include "Texture.hpp"
-#include "TextureLoader.hpp"
-#include "util/Vector3f.hpp"
 
 namespace glPortal {
 
@@ -187,6 +190,7 @@ void Renderer::render(Scene* scene) {
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
   //Crosshair
+  {
   Mesh mesh = MeshLoader::getMesh("Plane.obj");
   Texture texture = TextureLoader::getTexture("Reticle.png");
   glBindVertexArray(mesh.handle);
@@ -200,6 +204,13 @@ void Renderer::render(Scene* scene) {
   glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindVertexArray(0);
+  }
+
+  //Text
+  glClear(GL_DEPTH_BUFFER_BIT);
+
+  Font font = FontLoader::getFont("Adobe");
+  renderString(scene, "GlPortal", font, 10, Window::height - 50, 1.5f);
 }
 
 void Renderer::renderScene(Scene* scene) {
@@ -311,6 +322,43 @@ void Renderer::renderPortalOverlay(Portal portal) {
     glDrawArrays(GL_TRIANGLES, 0, portal.mesh.numFaces * 3);
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
+  }
+}
+
+void Renderer::renderString(Scene* scene, std::string string, Font font, float x, float y, float size) {
+  changeShader("text.frag");
+  projectionMatrix = scene->camera.getProjectionMatrix();
+  glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
+  viewMatrix.setIdentity();
+  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+  Texture texture = TextureLoader::getTexture("Adobe.png");
+
+  Vector2f position(x, y);
+  Vector2f scaling((1.0f / Window::width), (1.0f / Window::height));
+
+  const char* array = string.c_str();
+  for(unsigned int i = 0; i < string.length(); i++) {
+    char c = array[i];
+
+    Letter letter = font.getLetter(c);
+    Mesh mesh = letter.mesh;
+
+    modelMatrix.setIdentity();
+    modelMatrix.translate(position.x * scaling.x + letter.xOffset * scaling.x * size, position.y * scaling.y + letter.yOffset * scaling.y * size, -10);
+    modelMatrix.scale(letter.width * scaling.x * size, letter.height * scaling.y * size, 1);
+    glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+
+    glBindVertexArray(mesh.handle);
+    int loc = glGetUniformLocation(shader.handle, "diffuse");
+    int tiling = glGetUniformLocation(shader.handle, "tiling");
+    glUniform2f(tiling, texture.xTiling, texture.yTiling);
+    glUniform1i(loc, 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture.handle);
+    glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindVertexArray(0);
+    position.x += letter.advance * size;
   }
 }
 
