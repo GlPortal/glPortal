@@ -2,12 +2,13 @@
 #define WORLD_HPP
 
 #include <string>
+#include "Scene.hpp"
 
 namespace glPortal {
 
 class Entity;
 class Renderer;
-class Scene;
+  //class Scene;
 class BoxCollider;
 class Vector3f;
 
@@ -24,7 +25,7 @@ public:
 
 private:
   Renderer *renderer;
-  Scene* scene;
+  Scene *scene;
 };
 
 } /* namespace glPortal */
