@@ -26,6 +26,7 @@ Game::Game() :closed(false) {
   }
   
   update();
+  world.destroy();
 }
 
 void Game::update() {
