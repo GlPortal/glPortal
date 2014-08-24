@@ -40,6 +40,12 @@ void World::create() {
     //loadScene("/maps/untitled.xml");
 }
 
+void World::destroy() {
+  delete(renderer);
+  delete(scene);
+}
+
+  
 void World::loadScene(std::string path) {
   scene = MapLoader::getScene(path);
 }
