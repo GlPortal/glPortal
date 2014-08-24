@@ -4,7 +4,7 @@
 #include "Window.hpp"
 #include "World.hpp"
 
-const int UPDATE_RATE = 25;
+const int UPDATE_RATE = 50;
 const int SKIP_TIME = 1000 / UPDATE_RATE;
 const int MAX_SKIP = 5;
 

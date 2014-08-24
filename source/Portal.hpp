@@ -17,11 +17,10 @@ public:
   Portal() :
       open(false) {}
   Vector3f direction;
-  Light light;
   bool open;
 
   Vector3f getDirection();
-  bool throughPortal(Vector3f v);
+  bool throughPortal(BoxCollider collider);
   bool inPortal(BoxCollider collider);
 };
 

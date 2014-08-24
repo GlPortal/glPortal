@@ -15,6 +15,7 @@ public:
   void set(Vector3f v);
   Vector3f *add(Vector3f v);
   Vector3f *subtract(Vector3f v);
+  Vector3f *scale(float scale);
   float length();
   Vector3f *normalize();
   void print();
