@@ -28,14 +28,15 @@
 
 namespace glPortal {
 
-const Vector2f sensitivity(0.5, 0.5);
-const float SPEED = 0.2;
-const float GRAVITY = 0.05;
+const Vector2f sensitivity(0.25, 0.25);
+const float SPEED = 0.1f;
+const float GRAVITY = 0.01f;
+const float FRICTION = 0.01f;
 
 void World::create() {
   renderer = new Renderer();
 
-    loadScene("/maps/n1.xml");
+    loadScene("/maps/n3.xml");
     //loadScene("/maps/untitled.xml");
 }
 
@@ -61,10 +62,20 @@ void World::update() {
     player->rotation.x = 90;
   }
 
-  //Move the player
-  player->velocity.x = 0;
-  player->velocity.z = 0;
-
+  if(player->velocity.x >= FRICTION) {
+    player->velocity.x -= FRICTION;
+  }
+  if(player->velocity.x <= -FRICTION) {
+    player->velocity.x += FRICTION;
+  }
+  if(player->velocity.z >= FRICTION) {
+    player->velocity.z -= FRICTION;
+  }
+  if(player->velocity.z <= -FRICTION) {
+    player->velocity.z += FRICTION;
+  }
+  if(player->velocity.x < FRICTION && player->velocity.x > -FRICTION) {player->velocity.x = 0;}
+  if(player->velocity.z < FRICTION && player->velocity.z > -FRICTION) {player->velocity.z = 0;}
   player->velocity.y -= GRAVITY;
 
   float rotation = Math::toRadians(player->rotation.y);
@@ -87,15 +98,44 @@ void World::update() {
     }
     if (Input::isKeyDown(' ') && player->grounded) {
       player->grounded = false;
-      player->velocity.y = 0.3f;
+      player->velocity.y = 0.15f;
     }
   }
+
   Vector3f pos = Vector3f::add(player->position, player->velocity);
+
+  //Check if the player is walking through a portal
+  BoxCollider playerCollider(pos, player->scale);
+  if(scene->bluePortal.open && scene->orangePortal.open) {
+    if(scene->bluePortal.throughPortal(playerCollider)) {
+      player->position.set(scene->orangePortal.position);
+      float rotation = scene->orangePortal.rotation.y - scene->bluePortal.rotation.y + 180;
+      player->rotation.y += rotation;
+      //Transform the velocity of the player
+      float velocity = player->velocity.length();
+      player->velocity.x = scene->orangePortal.getDirection().x * velocity;
+      player->velocity.y = scene->orangePortal.getDirection().y * velocity;
+      player->velocity.z = scene->orangePortal.getDirection().z * velocity;
+      printf("Used blue portal\n");
+    }
+    if(scene->orangePortal.throughPortal(playerCollider)) {
+       player->position.set(scene->bluePortal.position);
+       float rotation = scene->bluePortal.rotation.y - scene->orangePortal.rotation.y + 180;
+       player->rotation.y += rotation;
+       //Transform the velocity of the player
+       float velocity = player->velocity.length();
+       player->velocity.x = scene->bluePortal.getDirection().x * velocity;
+       player->velocity.y = scene->bluePortal.getDirection().y * velocity;
+       player->velocity.z = scene->bluePortal.getDirection().z * velocity;
+       printf("Used orange portal\n");
+    }
+  }
+
+  pos = Vector3f::add(player->position, player->velocity);
 
   //Y collision
   BoxCollider bboxY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
   if (!collidesWithWalls(bboxY) || scene->bluePortal.inPortal(bboxY) || scene->orangePortal.inPortal(bboxY)) {
-    player->position.y = pos.y;
   } else {
     if(player->velocity.y < 0) {
       player->grounded = true;
@@ -106,7 +146,6 @@ void World::update() {
   //X collision
   BoxCollider bboxX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
   if (!collidesWithWalls(bboxX) || scene->bluePortal.inPortal(bboxX) || scene->orangePortal.inPortal(bboxX)) {
-    player->position.x = pos.x;
   } else {
     player->velocity.x = 0;
   }
@@ -114,7 +153,6 @@ void World::update() {
   //Z collision
   BoxCollider bboxZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
   if (!collidesWithWalls(bboxZ) || scene->bluePortal.inPortal(bboxZ) || scene->orangePortal.inPortal(bboxZ)) {
-    player->position.z = pos.z;
   } else {
     player->velocity.z = 0;
   }
@@ -139,19 +177,8 @@ void World::update() {
     }
   }
 
-  //Check if the player is walking through a portal
-  if(scene->bluePortal.open && scene->orangePortal.open) {
-    if(scene->bluePortal.throughPortal(player->position)) {
-      player->position.set(scene->orangePortal.position);
-      float rotation = scene->orangePortal.rotation.y - scene->bluePortal.rotation.y + 180;
-      player->rotation.y += rotation;
-    }
-    if(scene->orangePortal.throughPortal(player->position)) {
-       player->position.set(scene->bluePortal.position);
-       float rotation = scene->bluePortal.rotation.y - scene->orangePortal.rotation.y + 180;
-       player->rotation.y += rotation;
-    }
-  }
+  //Add velocity to the player position
+  player->position.add(player->velocity);
 
   //Parent camera to player
   scene->camera.position.set(scene->player.position);
@@ -220,44 +247,38 @@ void World::shootPortal(int button) {
     }
   }
 
-  Light light;
-  light.position.set(ipos);
-  light.constantAtt = 0;
-  light.linearAtt = 1;
-  light.quadraticAtt = 0;
-
   Portal portal;
   portal.position.set(ipos.x, ipos.y, ipos.z);
-  portal.scale.set(1, 2, 1);
+
   if (side == 0) {
     portal.rotation.y = 90;
     portal.position.x -= 0.01;
-    light.position.x -= 0.5;
+    portal.scale.set(1, 2, 1);
   }
   if (side == 1) {
     portal.rotation.y = -90;
     portal.position.x += 0.01;
-    light.position.x += 0.5;
+    portal.scale.set(1, 2, 1);
   }
   if (side == 2) {
     portal.rotation.y = 0;
     portal.position.z -= 0.01;
-    light.position.z -= 0.5;
+    portal.scale.set(1, 2, 1);
   }
   if (side == 3) {
     portal.rotation.y = 180;
     portal.position.z += 0.01;
-    light.position.z += 0.5;
+    portal.scale.set(1, 2, 1);
   }
   if (side == 4) {
     portal.rotation.x = -90;
     portal.position.y -= 0.01;
-    light.position.y -= 0.5;
+    portal.scale.set(1, 2, 2);
   }
   if (side == 5) {
     portal.rotation.x = 90;
     portal.position.y += 0.01;
-    light.position.y += 0.5;
+    portal.scale.set(1, 2, 2);
   }
 
   portal.open = true;
@@ -265,13 +286,9 @@ void World::shootPortal(int button) {
 
   if (button == 1) {
     portal.texture = TextureLoader::getTexture("blueportal.png");
-    light.color.set(Portal::BLUE_COLOR);
-    portal.light = light;
     scene->bluePortal = portal;
   } else {
     portal.texture = TextureLoader::getTexture("orangeportal.png");
-    light.color.set(Portal::ORANGE_COLOR);
-    portal.light = light;
     scene->orangePortal = portal;
   }
 }

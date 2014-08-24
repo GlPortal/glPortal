@@ -75,48 +75,6 @@ void Renderer::render(Scene* scene) {
   }
 
   int numLights = scene->lights.size();
-  if(scene->bluePortal.open) {
-    Light light = scene->bluePortal.light;
-    char attribute[30];
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].position");
-    int lightPos = glGetUniformLocation(shader.handle, attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].color");
-    int lightColor = glGetUniformLocation(shader.handle, attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].constantAtt");
-    int lightConstantAtt = glGetUniformLocation(shader.handle, attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].linearAtt");
-    int lightLinearAtt = glGetUniformLocation(shader.handle, attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].quadraticAtt");
-    int lightQuadraticAtt = glGetUniformLocation(shader.handle, attribute);
-
-    glUniform4f(lightPos, light.position.x, light.position.y, light.position.z, 1);
-    glUniform3f(lightColor, light.color.x, light.color.y, light.color.z);
-    glUniform1f(lightConstantAtt, light.constantAtt);
-    glUniform1f(lightLinearAtt, light.linearAtt);
-    glUniform1f(lightQuadraticAtt, light.quadraticAtt);
-    numLights++;
-  }
-  if(scene->orangePortal.open) {
-    Light light = scene->orangePortal.light;
-    char attribute[30];
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].position");
-    int lightPos = glGetUniformLocation(shader.handle, attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].color");
-    int lightColor = glGetUniformLocation(shader.handle, attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].constantAtt");
-    int lightConstantAtt = glGetUniformLocation(shader.handle, attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].linearAtt");
-    int lightLinearAtt = glGetUniformLocation(shader.handle, attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].quadraticAtt");
-    int lightQuadraticAtt = glGetUniformLocation(shader.handle, attribute);
-
-    glUniform4f(lightPos, light.position.x, light.position.y, light.position.z, 1);
-    glUniform3f(lightColor, light.color.x, light.color.y, light.color.z);
-    glUniform1f(lightConstantAtt, light.constantAtt);
-    glUniform1f(lightLinearAtt, light.linearAtt);
-    glUniform1f(lightQuadraticAtt, light.quadraticAtt);
-    numLights++;
-  }
   int numLightsLoc = glGetUniformLocation(shader.handle, "numLights");
   glUniform1i(numLightsLoc, numLights);
 

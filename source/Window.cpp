@@ -62,7 +62,7 @@ void Window::create(const char* title, int width, int height, bool fullscreen) {
   this->height = height;
 
   //Allow unbound framerate
-  SDL_GL_SetSwapInterval(0);
+  SDL_GL_SetSwapInterval(1);
   //Lock cursor in the middle of the screen
   SDL_SetRelativeMouseMode(SDL_TRUE);
 }

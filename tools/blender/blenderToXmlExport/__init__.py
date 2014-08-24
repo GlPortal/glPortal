@@ -15,6 +15,7 @@ import xml.etree.cElementTree as tree
 import xml.dom.minidom as minidom
 import os
 import mathutils
+import math
 import string
 from mathutils import Vector
 import re
@@ -187,19 +188,19 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                boundingBox = object.bound_box
 
                positionElement = tree.SubElement(boxElement, "position")
-               positionElement.set("x", str((transBoundingBoxEndVector.x + transBoundingBoxBeginVector.x)/2))
-               positionElement.set("y", str((transBoundingBoxEndVector.z + transBoundingBoxBeginVector.z)/2))
-               positionElement.set("z", str((transBoundingBoxEndVector.y + transBoundingBoxBeginVector.y)/2))
+               positionElement.set("x", str(object.location[0]))
+               positionElement.set("y", str(object.location[2]))
+               positionElement.set("z", str(object.location[1]))
                if type != "door" and mapObjectType != "Camera":
                    scaleElement = tree.SubElement(boxElement, "scale")
-                   scaleElement.set("x", str(abs(transBoundingBoxEndVector.x - transBoundingBoxBeginVector.x)))
-                   scaleElement.set("y", str(abs(transBoundingBoxEndVector.z - transBoundingBoxBeginVector.z)))
-                   scaleElement.set("z", str(abs(transBoundingBoxEndVector.y - transBoundingBoxBeginVector.y)))
+                   scaleElement.set("x", str(object.dimensions[0]))
+                   scaleElement.set("y", str(object.dimensions[2]))
+                   scaleElement.set("z", str(object.dimensions[1]))
                if type == "door" or mapObjectType == "Camera":
                    rotationElement = tree.SubElement(boxElement, "rotation")
-                   rotationElement.set("x", str(abs(object.rotation_euler[0])))
-                   rotationElement.set("y", str(abs(object.rotation_euler[1])))
-                   rotationElement.set("z", str(abs(object.rotation_euler[2])))
+                   rotationElement.set("x", str(abs(math.degrees(object.rotation_euler[0]))))
+                   rotationElement.set("y", str(abs(math.degrees(object.rotation_euler[2]))))
+                   rotationElement.set("z", str(abs(math.degrees(object.rotation_euler[1]))))
                    
                object.select = False
                

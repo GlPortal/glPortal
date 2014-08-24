@@ -35,6 +35,13 @@ Vector3f* Vector3f::subtract(Vector3f v) {
   return this;
 }
 
+Vector3f* Vector3f::scale(float scale) {
+  this->x *= scale;
+  this->y *= scale;
+  this->z *= scale;
+  return this;
+}
+
 float Vector3f::length() {
   return sqrt(x * x + y * y + z * z);
 }
