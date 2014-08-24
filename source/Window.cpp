@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <cstdlib>
-#include <iostream>
 #include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
 #include <stdexcept>
@@ -23,7 +22,7 @@ void Window::initGlew(){
     std::exit(1); 
   }
   if (!GLEW_VERSION_2_1) { 
-    std::cout << "Your hardware does not support 2.1 API" << std::endl;
+    printf("Your hardware does not support 2.1 API\n");
     std::exit(1);
   }
 }
