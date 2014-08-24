@@ -3,9 +3,10 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_timer.h>
-#include <iostream>
 #include <stdexcept>
 #include <string>
+#include <cstdio>
+#include <iostream>
 
 #include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
@@ -14,6 +15,7 @@
 namespace glPortal {
 
 Game::Game() :closed(false) {
+  printf("sada\n");
   window.createFromConfig();
 
   try {
@@ -26,7 +28,6 @@ Game::Game() :closed(false) {
   }
   
   update();
-  world.destroy();
 }
 
 void Game::update() {
@@ -89,6 +90,7 @@ void Game::update() {
     rendered++;
     window.swapBuffers();
   }
+  world.destroy();
   window.close();
 }
 
