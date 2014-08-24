@@ -119,10 +119,7 @@ void World::update() {
       player->rotation.y += rotation;
       //Transform the velocity of the player
       float velocity = player->velocity.length();
-      player->velocity.x = scene->orangePortal.getDirection().x * velocity;
-      player->velocity.y = scene->orangePortal.getDirection().y * velocity;
-      player->velocity.z = scene->orangePortal.getDirection().z * velocity;
-      printf("Used blue portal\n");
+      player->velocity = *scene->orangePortal.getDirection().scale(velocity);
     }
     if(scene->orangePortal.throughPortal(playerCollider)) {
        player->position.set(scene->bluePortal.position);
@@ -130,10 +127,7 @@ void World::update() {
        player->rotation.y += rotation;
        //Transform the velocity of the player
        float velocity = player->velocity.length();
-       player->velocity.x = scene->bluePortal.getDirection().x * velocity;
-       player->velocity.y = scene->bluePortal.getDirection().y * velocity;
-       player->velocity.z = scene->bluePortal.getDirection().z * velocity;
-       printf("Used orange portal\n");
+       player->velocity = *scene->bluePortal.getDirection().scale(velocity);
     }
   }
 
