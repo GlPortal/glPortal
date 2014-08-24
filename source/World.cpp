@@ -32,6 +32,7 @@ const Vector2f sensitivity(0.25, 0.25);
 const float SPEED = 0.1f;
 const float GRAVITY = 0.01f;
 const float FRICTION = 0.01f;
+const float JUMP_SPEED = 0.15f;
 
 void World::create() {
   renderer = new Renderer();
@@ -104,7 +105,7 @@ void World::update() {
     }
     if (Input::isKeyDown(' ') && player->grounded) {
       player->grounded = false;
-      player->velocity.y = 0.15f;
+      player->velocity.y = JUMP_SPEED;
     }
   }
 
