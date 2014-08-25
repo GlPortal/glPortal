@@ -228,61 +228,10 @@ void World::shootPortal(int button) {
     }
   }
 
+  BoxCollider wall(closestWall.position, closestWall.scale);
   Vector3f ipos = Vector3f::add(scene->camera.position, Vector3f::scale(cameraDir, intersection));
-  //Determine on what side the portal is
-  //Side 0: -x, Side 1: x, Side 2: -z, Side 3: z, Side 4: -y, Side 5: y
-  float dist = 1000000;
-  int side = 0;
-  float distances[6] = {(float) fabs(ipos.x - (closestWall.position.x - closestWall.scale.x / 2)),
-                        (float) fabs(ipos.x - (closestWall.position.x + closestWall.scale.x / 2)),
-                        (float) fabs(ipos.z - (closestWall.position.z - closestWall.scale.z / 2)),
-                        (float) fabs(ipos.z - (closestWall.position.z + closestWall.scale.z / 2)),
-                        (float) fabs(ipos.y - (closestWall.position.y - closestWall.scale.y / 2)),
-                        (float) fabs(ipos.y - (closestWall.position.y + closestWall.scale.y / 2))};
-
-  for (int i = 0; i < 6; i++) {
-    if (distances[i] < dist) {
-      side = i;
-      dist = distances[i];
-    }
-  }
-
   Portal portal;
-  portal.position.set(ipos.x, ipos.y, ipos.z);
-
-  if (side == 0) {
-    portal.rotation.y = 90;
-    portal.position.x -= 0.01;
-    portal.scale.set(1, 2, 1);
-  }
-  if (side == 1) {
-    portal.rotation.y = -90;
-    portal.position.x += 0.01;
-    portal.scale.set(1, 2, 1);
-  }
-  if (side == 2) {
-    portal.rotation.y = 0;
-    portal.position.z -= 0.01;
-    portal.scale.set(1, 2, 1);
-  }
-  if (side == 3) {
-    portal.rotation.y = 180;
-    portal.position.z += 0.01;
-    portal.scale.set(1, 2, 1);
-  }
-  if (side == 4) {
-    portal.rotation.x = -90;
-    portal.position.y -= 0.01;
-    portal.scale.set(1, 2, 2);
-  }
-  if (side == 5) {
-    portal.rotation.x = 90;
-    portal.position.y += 0.01;
-    portal.scale.set(1, 2, 2);
-  }
-
-  portal.open = true;
-  portal.mesh = MeshLoader::getMesh("Plane.obj");
+  portal.placeOnWall(wall, ipos);
 
   if (button == 1) {
     portal.texture = TextureLoader::getTexture("blueportal.png");

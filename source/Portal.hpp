@@ -14,14 +14,14 @@ public:
   static const Vector3f BLUE_COLOR;
   static const Vector3f ORANGE_COLOR;
 
-  Portal() :
-      open(false) {}
-  Vector3f direction;
-  bool open;
-
+  Portal() : open(false) {}
   Vector3f getDirection();
   bool throughPortal(BoxCollider collider);
   bool inPortal(BoxCollider collider);
+  void placeOnWall(BoxCollider wall, Vector3f point);
+
+  Vector3f direction;
+  bool open;
 };
 
 } /* namespace glPortal */
