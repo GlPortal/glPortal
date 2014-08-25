@@ -39,6 +39,9 @@ void main(void) {
 	    light.g += lightColor.g * fAttTotal;
 	    light.b += lightColor.b * fAttTotal;
 	}
+	light.r = clamp(light.r, 0, 1);
+	light.g = clamp(light.g, 0, 1);
+	light.b = clamp(light.b, 0, 1);
 
     out_Color = vec4(light, 1) * texture(diffuse, pass_texCoord);
 }
