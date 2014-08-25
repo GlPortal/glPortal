@@ -182,33 +182,77 @@ void Portal::placeOnWall(BoxCollider wall, Vector3f point) {
   case 5: direction.set(0, 1, 0); break;
   }
 
-  if (side == 0) {
-    rotation.y = 90;
-    scale.set(1, 2, 1);
+  if(wall.size.z >= 1 && wall.size.y >= 2 && (side == 0 || side == 1)) {
+    if (side == 0) {
+      rotation.y = 90;
+      scale.set(1, 2, 1);
+    }
+    if (side == 1) {
+      rotation.y = -90;
+      scale.set(1, 2, 1);
+    }
+    if(position.z - scale.z/2 < wall.position.z - wall.size.z/2) {
+      position.z = wall.position.z - wall.size.z/2 + scale.z/2;
+    }
+    if(position.z + scale.z/2 > wall.position.z + wall.size.z/2) {
+      position.z = wall.position.z + wall.size.z/2 - scale.z/2;
+    }
+    if(position.y - scale.y/2 < wall.position.y - wall.size.y/2) {
+      position.y = wall.position.y - wall.size.y/2 + scale.y/2;
+    }
+    if(position.y + scale.y/2 > wall.position.y + wall.size.y/2) {
+      position.y = wall.position.y + wall.size.y/2 - scale.y/2;
+    }
+    open = true;
   }
-  if (side == 1) {
-    rotation.y = -90;
-    scale.set(1, 2, 1);
+  if(wall.size.x >= 1 && wall.size.y >= 2 && (side == 2 || side == 3)) {
+    if (side == 2) {
+      rotation.y = 0;
+      scale.set(1, 2, 1);
+    }
+    if (side == 3) {
+      rotation.y = 180;
+      scale.set(1, 2, 1);
+    }
+    if(position.x - scale.x/2 < wall.position.x - wall.size.x/2) {
+      position.x = wall.position.x - wall.size.x/2 + scale.x/2;
+    }
+    if(position.x + scale.x/2 > wall.position.x + wall.size.x/2) {
+      position.x = wall.position.x + wall.size.x/2 - scale.x/2;
+    }
+    if(position.y - scale.y/2 < wall.position.y - wall.size.y/2) {
+      position.y = wall.position.y - wall.size.y/2 + scale.y/2;
+    }
+    if(position.y + scale.y/2 > wall.position.y + wall.size.y/2) {
+      position.y = wall.position.y + wall.size.y/2 - scale.y/2;
+    }
+    open = true;
   }
-  if (side == 2) {
-    rotation.y = 0;
-    scale.set(1, 2, 1);
-  }
-  if (side == 3) {
-    rotation.y = 180;
-    scale.set(1, 2, 1);
-  }
-  if (side == 4) {
-    rotation.x = -90;
-    scale.set(1, 2, 2);
-  }
-  if (side == 5) {
-    rotation.x = 90;
-    scale.set(1, 2, 2);
+  if(wall.size.x >= 1 && wall.size.z >= 2 && (side == 4 || side == 5)) {
+    if (side == 4) {
+      rotation.x = -90;
+      scale.set(1, 2, 2);
+    }
+    if (side == 5) {
+      rotation.x = 90;
+      scale.set(1, 2, 2);
+    }
+    if(position.x - scale.x/2 < wall.position.x - wall.size.x/2) {
+      position.x = wall.position.x - wall.size.x/2 + scale.x/2;
+    }
+    if(position.x + scale.x/2 > wall.position.x + wall.size.x/2) {
+      position.x = wall.position.x + wall.size.x/2 - scale.x/2;
+    }
+    if(position.z - scale.z/2 < wall.position.z - wall.size.z/2) {
+      position.z = wall.position.z - wall.size.z/2 + scale.z/2;
+    }
+    if(position.z + scale.z/2 > wall.position.z + wall.size.z/2) {
+      position.z = wall.position.z + wall.size.z/2 - scale.z/2;
+    }
+    open = true;
   }
 
   position.add(*getDirection().scale(0.01f));
-  open = true;
   mesh = MeshLoader::getMesh("Plane.obj");
 }
 
