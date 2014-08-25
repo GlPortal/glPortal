@@ -156,21 +156,11 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                lightElement.set("r", str(colorArray[0]))
                lightElement.set("g", str(colorArray[1]))
                lightElement.set("b", str(colorArray[2]))
-               matrix = object.matrix_world
-               vector = Vector((object.location[0],-object.location[2], object.location[1]))
-               globalVector = matrix * vector
-               lightElement.set("x", str(globalVector.x))
-               lightElement.set("y", str(globalVector.z))
-               lightElement.set("z", str(globalVector.y))
-           elif mapObjectType == "Cube" or mapObjectType == "Camera":
-               matrix = object.matrix_world
-               boundingBox = object.bound_box
-
-               boundingBoxBeginVector = Vector((boundingBox[0][0], -boundingBox[0][2], boundingBox[0][1]))
-               boundingBoxEndVector  = Vector((boundingBox[6][0], -boundingBox[6][2], boundingBox[6][1]))
-               transBoundingBoxBeginVector = matrix * boundingBoxBeginVector
-               transBoundingBoxEndVector  = matrix * boundingBoxEndVector
                
+               lightElement.set("x", str(object.location[0]))
+               lightElement.set("y", str(object.location[2]))
+               lightElement.set("z", str(-object.location[1]))
+           elif mapObjectType == "Cube" or mapObjectType == "Camera":
                if mapObjectType == "Camera":
                    boxElement = tree.SubElement(root, "spawn")
                elif type == "trigger":                       
@@ -184,13 +174,12 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                else:
                    boxElement = tree.SubElement(textureElement, "wall")
                    
-               object.select = True                   
-               boundingBox = object.bound_box
+               object.select = True
 
                positionElement = tree.SubElement(boxElement, "position")
                positionElement.set("x", str(object.location[0]))
                positionElement.set("y", str(object.location[2]))
-               positionElement.set("z", str(object.location[1]))
+               positionElement.set("z", str(-object.location[1]))
                if type != "door" and mapObjectType != "Camera":
                    scaleElement = tree.SubElement(boxElement, "scale")
                    scaleElement.set("x", str(object.dimensions[0]))
@@ -200,7 +189,7 @@ class ExportMyFormat(bpy.types.Operator, ExportHelper):
                    rotationElement = tree.SubElement(boxElement, "rotation")
                    rotationElement.set("x", str(abs(math.degrees(object.rotation_euler[0]))))
                    rotationElement.set("y", str(abs(math.degrees(object.rotation_euler[2]))))
-                   rotationElement.set("z", str(abs(math.degrees(object.rotation_euler[1]))))
+                   rotationElement.set("z", str(abs(math.degrees(-object.rotation_euler[1]))))
                    
                object.select = False
                
