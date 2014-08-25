@@ -135,26 +135,38 @@ void World::update() {
 
   //Y collision
   BoxCollider bboxY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
-  if (!collidesWithWalls(bboxY) || scene->bluePortal.inPortal(bboxY) || scene->orangePortal.inPortal(bboxY)) {
-  } else {
-    if(player->velocity.y < 0) {
-      player->grounded = true;
+  if (collidesWithWalls(bboxY)) {
+    if(scene->bluePortal.open && scene->orangePortal.open &&
+      (scene->bluePortal.inPortal(bboxY) || scene->orangePortal.inPortal(bboxY))) {
+
+    } else {
+      if(player->velocity.y < 0) {
+        player->grounded = true;
+      }
+      player->velocity.y = 0;
     }
-    player->velocity.y = 0;
   }
 
   //X collision
   BoxCollider bboxX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
-  if (!collidesWithWalls(bboxX) || scene->bluePortal.inPortal(bboxX) || scene->orangePortal.inPortal(bboxX)) {
-  } else {
-    player->velocity.x = 0;
+  if (collidesWithWalls(bboxX)) {
+    if(scene->bluePortal.open && scene->orangePortal.open &&
+      (scene->bluePortal.inPortal(bboxX) || scene->orangePortal.inPortal(bboxX))) {
+
+    } else {
+      player->velocity.x = 0;
+    }
   }
 
   //Z collision
   BoxCollider bboxZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
-  if (!collidesWithWalls(bboxZ) || scene->bluePortal.inPortal(bboxZ) || scene->orangePortal.inPortal(bboxZ)) {
-  } else {
-    player->velocity.z = 0;
+  if (collidesWithWalls(bboxZ)) {
+    if(scene->bluePortal.open && scene->orangePortal.open &&
+      (scene->bluePortal.inPortal(bboxZ) || scene->orangePortal.inPortal(bboxZ))) {
+
+    } else {
+      player->velocity.z = 0;
+    }
   }
 
   //Trigger

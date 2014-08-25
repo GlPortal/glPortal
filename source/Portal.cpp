@@ -83,9 +83,6 @@ bool Portal::throughPortal(BoxCollider collider) {
 }
 
 bool Portal::inPortal(BoxCollider collider) {
-  if(!open) {
-    return false;
-  }
   if(rotation.x == 0) {
     if(rotation.y == 90) {
       if(collider.position.x + collider.size.x/2 > position.x &&
