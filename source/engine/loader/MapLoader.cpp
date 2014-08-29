@@ -12,6 +12,7 @@
 #include "engine/Light.hpp"
 #include "engine/Mesh.hpp"
 #include "MeshLoader.hpp"
+#include "XmlHelper.hpp"
 #include "engine/Texture.hpp"
 #include "TextureLoader.hpp"
 #include "engine/Trigger.hpp"
@@ -43,14 +44,10 @@ Scene* MapLoader::getScene(std::string path) {
       Vector3f spawnPos;
       Vector3f spawnRot;
       TiXmlElement* spawnPositionElement = spawnElement->FirstChildElement("position");
-      spawnPositionElement->QueryFloatAttribute("x", &spawnPos.x);
-      spawnPositionElement->QueryFloatAttribute("y", &spawnPos.y);
-      spawnPositionElement->QueryFloatAttribute("z", &spawnPos.z);
-
+      XmlHelper::pushAttributeToVector(spawnPositionElement, spawnPos);
+      
       TiXmlElement* spawnRotationElement = spawnElement->FirstChildElement("rotation");
-      spawnRotationElement->QueryFloatAttribute("x", &spawnRot.x);
-      spawnRotationElement->QueryFloatAttribute("y", &spawnRot.y);
-      spawnRotationElement->QueryFloatAttribute("z", &spawnRot.z);
+      XmlHelper::pushAttributeToVector(spawnRotationElement, spawnRot);
 
       scene->player.position.set(spawnPos);
       scene->player.rotation.set(spawnRot);
@@ -66,14 +63,10 @@ Scene* MapLoader::getScene(std::string path) {
       Vector3f endPos;
       Vector3f endRot;
       TiXmlElement* endPositionElement = endElement->FirstChildElement("position");
-      endPositionElement->QueryFloatAttribute("x", &endPos.x);
-      endPositionElement->QueryFloatAttribute("y", &endPos.y);
-      endPositionElement->QueryFloatAttribute("z", &endPos.z);
+      XmlHelper::pushAttributeToVector(endPositionElement, endPos);
 
       TiXmlElement* endRotationElement = endElement->FirstChildElement("rotation");
-      endRotationElement->QueryFloatAttribute("x", &endRot.x);
-      endRotationElement->QueryFloatAttribute("y", &endRot.y);
-      endRotationElement->QueryFloatAttribute("z", &endRot.z);
+      XmlHelper::pushAttributeToVector(endRotationElement, endRot);
 
       Entity door;
       door.position.set(endPos);
@@ -90,9 +83,7 @@ Scene* MapLoader::getScene(std::string path) {
     lightElement = rootHandle.FirstChild("light").Element();
 
     do {
-      lightElement->QueryFloatAttribute("x", &lightPos.x);
-      lightElement->QueryFloatAttribute("y", &lightPos.y);
-      lightElement->QueryFloatAttribute("z", &lightPos.z);
+      XmlHelper::pushAttributeToVector(lightElement, lightPos);
 
       lightElement->QueryFloatAttribute("r", &lightColor.x);
       lightElement->QueryFloatAttribute("g", &lightColor.y);
@@ -121,14 +112,10 @@ Scene* MapLoader::getScene(std::string path) {
 
             Entity wall;
             boxPositionElement = wallBoxElement->FirstChildElement("position");
-            boxPositionElement->QueryFloatAttribute("x", &wall.position.x);
-            boxPositionElement->QueryFloatAttribute("y", &wall.position.y);
-            boxPositionElement->QueryFloatAttribute("z", &wall.position.z);
+            XmlHelper::pushAttributeToVector(boxPositionElement, wall.position);
 
             boxScaleElement = wallBoxElement->FirstChildElement("scale");
-            boxScaleElement->QueryFloatAttribute("x", &wall.scale.x);
-            boxScaleElement->QueryFloatAttribute("y", &wall.scale.y);
-            boxScaleElement->QueryFloatAttribute("z", &wall.scale.z);
+            XmlHelper::pushAttributeToVector(boxScaleElement, wall.scale);
 
             wall.texture = TextureLoader::getTexture(texturePath);
             wall.texture.xTiling = 0.5f;
@@ -162,16 +149,12 @@ Scene* MapLoader::getScene(std::string path) {
         }
         
         if(triggerPositionElement) {
-          triggerPositionElement->QueryFloatAttribute("x", &trigger.position.x);
-          triggerPositionElement->QueryFloatAttribute("y", &trigger.position.y);
-          triggerPositionElement->QueryFloatAttribute("z", &trigger.position.z);
+          XmlHelper::pushAttributeToVector(triggerPositionElement, trigger.position);
         }
         
         if(triggerScaleElement) {
           triggerScaleElement = triggerElement->FirstChildElement("scale");
-          triggerScaleElement->QueryFloatAttribute("x", &trigger.scale.x);
-          triggerScaleElement->QueryFloatAttribute("y", &trigger.scale.y);
-          triggerScaleElement->QueryFloatAttribute("z", &trigger.scale.z);
+          XmlHelper::pushAttributeToVector(triggerScaleElement, trigger.scale);
                       
           trigger.texture = TextureLoader::getTexture("redBox.png");
           trigger.mesh = MeshLoader::getPortalBox(trigger);
@@ -186,6 +169,5 @@ Scene* MapLoader::getScene(std::string path) {
   }
   
   return scene;
-}
-
+}  
 } /* namespace glPortal */
