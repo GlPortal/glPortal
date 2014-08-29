@@ -19,6 +19,7 @@ add_executable(${EXE_NAME}
   engine/loader/ShaderLoader.cpp
   engine/loader/TextureLoader.cpp
   engine/loader/FontLoader.cpp
+  engine/loader/XmlHelper.cpp
   engine/env/Environment.cpp
   engine/env/ConfigFileParser.cpp
   engine/env/Path.cpp
