@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include "engine/util/Vector3f.hpp"
+#include <engine/util/Vector3f.hpp>
 
 using namespace std;
 
@@ -22,5 +22,5 @@ namespace glPortal {
       xmlElement->QueryFloatAttribute("y", &targetVector.y);
       xmlElement->QueryFloatAttribute("z", &targetVector.z);
     }
-}  
+  }  
 } /* namespace glPortal */
