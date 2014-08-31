@@ -23,15 +23,18 @@ namespace glPortal {
       int yQueryResult = xmlElement->QueryFloatAttribute("y", &targetVector.y);
       int zQueryResult = xmlElement->QueryFloatAttribute("z", &targetVector.z);
       if(xQueryResult == TIXML_NO_ATTRIBUTE){
-        throw runtime_error(XmlHelper::mandatoryAttributeMessage + " <x>");
+        throwMandatoryAttributeException("<x>");
       }
       if(yQueryResult == TIXML_NO_ATTRIBUTE){
-        throw runtime_error(XmlHelper::mandatoryAttributeMessage + " <y>");
+        throwMandatoryAttributeException("<y>");
       }
       if(zQueryResult == TIXML_NO_ATTRIBUTE){
-        throw runtime_error(XmlHelper::mandatoryAttributeMessage + " <z>");
+        throwMandatoryAttributeException("<z>");
       }
-
     }
-  }  
+  }
+
+  void XmlHelper::throwMandatoryAttributeException(std::string message){
+    throw runtime_error(mandatoryAttributeMessage + message);
+  }
 } /* namespace glPortal */
