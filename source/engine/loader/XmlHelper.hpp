@@ -10,6 +10,7 @@ class XmlHelper {
 public:
   static void pushAttributeToVector(TiXmlElement* xmlElement, Vector3f &targetVector);
   static std::string mandatoryAttributeMessage;
+  static void throwMandatoryAttributeException(std::string message);
 };
 
 } /* namespace glPortal */
