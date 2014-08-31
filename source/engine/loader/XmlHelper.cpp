@@ -14,7 +14,7 @@ namespace glPortal {
 
   std::string XmlHelper::mandatoryAttributeMessage("Mandatory attribute has not been defined.");
 /*
- * Pushes vector coordinates from an element to a Vector3f
+ * Pushes vector coordinates from an XML-element to a Vector3f
  */
   void XmlHelper::pushAttributeToVector(TiXmlElement* xmlElement, Vector3f &targetVector) {
 
