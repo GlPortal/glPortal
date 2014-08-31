@@ -15,3 +15,5 @@ data/private.cfg
 .cproject
 Debug/
 __pycache__/
+CTestTestfile.cmake
+Testing/
