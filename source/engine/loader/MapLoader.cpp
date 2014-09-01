@@ -71,7 +71,7 @@ Scene* MapLoader::getScene(std::string path) {
     lightElement = rootHandle.FirstChild("light").Element();
 
     do {
-      XmlHelper::pushAttributeToVector(lightElement, lightPos);
+      XmlHelper::pushAttributeVertexToVector(lightElement, lightPos);
 
       lightElement->QueryFloatAttribute("r", &lightColor.x);
       lightElement->QueryFloatAttribute("g", &lightColor.y);
@@ -100,10 +100,10 @@ Scene* MapLoader::getScene(std::string path) {
 
             Entity wall;
             boxPositionElement = wallBoxElement->FirstChildElement("position");
-            XmlHelper::pushAttributeToVector(boxPositionElement, wall.position);
+            XmlHelper::pushAttributeVertexToVector(boxPositionElement, wall.position);
 
             boxScaleElement = wallBoxElement->FirstChildElement("scale");
-            XmlHelper::pushAttributeToVector(boxScaleElement, wall.scale);
+            XmlHelper::pushAttributeVertexToVector(boxScaleElement, wall.scale);
 
             wall.texture = TextureLoader::getTexture(texturePath);
             wall.texture.xTiling = 0.5f;
@@ -123,26 +123,18 @@ Scene* MapLoader::getScene(std::string path) {
 
     if(triggerElement) {
       do {
-        TiXmlElement* triggerPositionElement;
-        TiXmlElement* triggerScaleElement;
         TiXmlElement* triggerTypeElement;
         
         Trigger trigger;
-        triggerPositionElement = triggerElement->FirstChildElement("position");
-        triggerScaleElement    = triggerElement->FirstChildElement("scale");
-        triggerPositionElement = triggerElement->FirstChildElement("type");
         
         if(triggerElement) {
           triggerElement->QueryStringAttribute("type", &trigger.type);
         }
         
-        if(triggerPositionElement) {
-          XmlHelper::pushAttributeToVector(triggerPositionElement, trigger.position);
-        }
+        XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("position"), trigger.position);
         
         if(triggerScaleElement) {
-          triggerScaleElement = triggerElement->FirstChildElement("scale");
-          XmlHelper::pushAttributeToVector(triggerScaleElement, trigger.scale);
+          XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("scale"), trigger.scale);
                       
           trigger.texture = TextureLoader::getTexture("redBox.png");
           trigger.mesh = MeshLoader::getPortalBox(trigger);

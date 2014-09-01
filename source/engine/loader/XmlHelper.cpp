@@ -14,10 +14,12 @@ using namespace std;
 namespace glPortal {
 
   std::string XmlHelper::mandatoryAttributeMessage("Mandatory attribute has not been defined.");
+  std::string XmlHelper::invalidElementMessage("pushAttributeToVector received an invalid XML-Element.");
   /**
-   * Pushes vector coordinates from an XML-element to a Vector3f
+   * Pushes vector coordinates from an XML-element to a Vector3f.
+   * Trying to pull attributes from a non-existing element is considered an exception.
    */
-  void XmlHelper::pushAttributeToVector(TiXmlElement* xmlElement, Vector3f &targetVector) {
+  void XmlHelper::pushAttributeVertexToVector(TiXmlElement* xmlElement, Vector3f &targetVector) {
 
     if(xmlElement) {
       int xQueryResult = xmlElement->QueryFloatAttribute("x", &targetVector.x);
@@ -32,9 +34,11 @@ namespace glPortal {
       if(zQueryResult == TIXML_NO_ATTRIBUTE){
         throwMandatoryAttributeException("<z>");
       }
+    } else {
+      throw runtime_error(invalidElementMessage);
     }
   }
-
+  
   void XmlHelper::throwMandatoryAttributeException(std::string message){
     throw runtime_error(mandatoryAttributeMessage + message);
   }
@@ -43,10 +47,10 @@ namespace glPortal {
     Vector3f pos;
     Vector3f rot;
     TiXmlElement* positionElement = element->FirstChildElement("position");
-    pushAttributeToVector(positionElement, pos);
+    pushAttributeVertexToVector(positionElement, pos);
     
     TiXmlElement* rotationElement = element->FirstChildElement("rotation");
-    pushAttributeToVector(rotationElement, rot);
+    pushAttributeVertexToVector(rotationElement, rot);
 
     entity.position.set(pos);
     entity.rotation.set(rot);
