@@ -32,7 +32,7 @@ struct XmlReadingFixtures
 SUITE(XmlReading)
 {
   TEST_FIXTURE(XmlReadingFixtures, extractValidVectorDataFromXml){
-    XmlHelper::pushAttributeToVector(lightElement, vector);
+    XmlHelper::pushAttributeVertexToVector(lightElement, vector);
 
     bool vectorIsValid(false);
     Vector3f resultVector = Vector3f::sub(sourceVector, vector);
@@ -44,7 +44,7 @@ SUITE(XmlReading)
 
   TEST_FIXTURE(XmlReadingFixtures, extractMissingAttributeFromXml){
     lightElement->RemoveAttribute("z");
-    CHECK_THROW(XmlHelper::pushAttributeToVector(lightElement, vector), runtime_error); 
+    CHECK_THROW(XmlHelper::pushAttributeVertexToVector(lightElement, vector), runtime_error); 
   }
 }
 
