@@ -15,7 +15,6 @@
 namespace glPortal {
 
 Game::Game() :closed(false) {
-  printf("sada\n");
   window.createFromConfig();
 
   try {
