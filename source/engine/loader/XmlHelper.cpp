@@ -7,6 +7,7 @@
 #include <vector>
 
 #include <engine/util/Vector3f.hpp>
+#include <engine/Entity.hpp>
 
 using namespace std;
 
@@ -37,4 +38,17 @@ namespace glPortal {
   void XmlHelper::throwMandatoryAttributeException(std::string message){
     throw runtime_error(mandatoryAttributeMessage + message);
   }
+
+  void XmlHelper::extractPositionAndRotation(TiXmlElement* element, Entity &entity){
+    Vector3f pos;
+    Vector3f rot;
+    TiXmlElement* positionElement = element->FirstChildElement("position");
+    pushAttributeToVector(positionElement, pos);
+    
+    TiXmlElement* rotationElement = element->FirstChildElement("rotation");
+    pushAttributeToVector(rotationElement, rot);
+
+    entity.position.set(pos);
+    entity.rotation.set(rot);
+  }  
 } /* namespace glPortal */

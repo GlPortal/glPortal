@@ -21,7 +21,13 @@
 using namespace std;
 
 namespace glPortal {
-
+/** \class MapLoader
+ *  Load a map in GlPortal XML format.
+ */
+  
+/**
+ * Get a scene from a map file in XML format.
+ */
 Scene* MapLoader::getScene(std::string path) {
   Scene* scene = new Scene();
   TiXmlDocument doc(string(Environment::getDataDir() + path));
@@ -38,39 +44,21 @@ Scene* MapLoader::getScene(std::string path) {
     rootHandle = TiXmlHandle(element);
     //SPAWN
     TiXmlElement* spawnElement;
-    spawnElement = rootHandle.FirstChild( "spawn" ).Element();
+    spawnElement = rootHandle.FirstChild("spawn").Element();
 
     if(spawnElement) {
-      Vector3f spawnPos;
-      Vector3f spawnRot;
-      TiXmlElement* spawnPositionElement = spawnElement->FirstChildElement("position");
-      XmlHelper::pushAttributeToVector(spawnPositionElement, spawnPos);
-      
-      TiXmlElement* spawnRotationElement = spawnElement->FirstChildElement("rotation");
-      XmlHelper::pushAttributeToVector(spawnRotationElement, spawnRot);
-
-      scene->player.position.set(spawnPos);
-      scene->player.rotation.set(spawnRot);
+      XmlHelper::extractPositionAndRotation(spawnElement, scene->player);
     } else {
       throw std::runtime_error("No spawn position defined.");
     }
 
     //END_SPAWN
     TiXmlElement* endElement;
-    endElement = rootHandle.FirstChild( "end" ).Element();
+    endElement = rootHandle.FirstChild("end").Element();
 
     if(endElement) {
-      Vector3f endPos;
-      Vector3f endRot;
-      TiXmlElement* endPositionElement = endElement->FirstChildElement("position");
-      XmlHelper::pushAttributeToVector(endPositionElement, endPos);
-
-      TiXmlElement* endRotationElement = endElement->FirstChildElement("rotation");
-      XmlHelper::pushAttributeToVector(endRotationElement, endRot);
-
       Entity door;
-      door.position.set(endPos);
-      door.rotation.set(endRot);
+      XmlHelper::extractPositionAndRotation(endElement, door);
       door.texture = TextureLoader::getTexture("Door.png");
       door.mesh = MeshLoader::getMesh("Door.obj");
       scene->end = door;
