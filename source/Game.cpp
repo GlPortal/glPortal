@@ -13,19 +13,17 @@
 #include "Input.hpp"
 
 namespace glPortal {
-
+  
 Game::Game() :closed(false) {
   window.createFromConfig();
 
   try {
-    world.create();
-    
-  }
+      world.create();
+    }
   catch (std::runtime_error &e) {
-    std::cout << "Runtime Error: ";
-    std::cout << e.what () << '\n';
-  }
-  
+      std::cout << "Runtime Error: ";
+      std::cout << e.what () << '\n';
+    }
   update();
 }
 
@@ -40,7 +38,7 @@ void Game::update() {
   //Amount of times rendered so far, gets reset each second
   int rendered = 0;
 
-  while (!closed) {
+  while (not closed) {
     skipped = 0;
     //Count the FPS
     if (SDL_GetTicks() - lastFpsTime > 1000) {
