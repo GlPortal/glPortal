@@ -1,6 +1,5 @@
 #include "Game.hpp"
 
-#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_timer.h>
 #include <stdexcept>
@@ -13,7 +12,7 @@
 #include "Input.hpp"
 
 namespace glPortal {
-  
+
 Game::Game() :closed(false) {
   window.createFromConfig();
 
@@ -51,33 +50,7 @@ void Game::update() {
     //Update the game if it is time
     while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
       while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
-          closed = 1;
-        }
-        if (event.type == SDL_KEYDOWN) {
-          int key = event.key.keysym.sym;
-          int mod = event.key.keysym.mod;
-
-          Input::keyPressed(key, mod);
-
-          if (key == 'q') {
-            close();
-          }
-        }
-        if (event.type == SDL_KEYUP) {
-          int key = event.key.keysym.sym;
-          int mod = event.key.keysym.mod;
-
-          Input::keyReleased(key, mod);
-        }
-        if (event.type == SDL_MOUSEBUTTONDOWN) {
-          if (event.button.button == SDL_BUTTON_LEFT) {
-            world.shootPortal(1);
-          }
-          if (event.button.button == SDL_BUTTON_RIGHT) {
-            world.shootPortal(2);
-          }
-        }
+        handleEvent(event);
       }
       world.update();
       nextUpdate += SKIP_TIME;
@@ -93,6 +66,36 @@ void Game::update() {
 
 void Game::close() {
   closed = true;
+}
+
+void Game::handleEvent(SDL_Event event){
+  if (event.type == SDL_QUIT) {
+    closed = 1;
+  }
+  if (event.type == SDL_KEYDOWN) {
+    int key = event.key.keysym.sym;
+    int mod = event.key.keysym.mod;
+    
+    Input::keyPressed(key, mod);
+    
+    if (key == 'q') {
+      close();
+    }
+  }
+  if (event.type == SDL_KEYUP) {
+    int key = event.key.keysym.sym;
+    int mod = event.key.keysym.mod;
+    
+    Input::keyReleased(key, mod);
+  }
+  if (event.type == SDL_MOUSEBUTTONDOWN) {
+    if (event.button.button == SDL_BUTTON_LEFT) {
+      world.shootPortal(1);
+    }
+    if (event.button.button == SDL_BUTTON_RIGHT) {
+      world.shootPortal(2);
+    }
+  }
 }
 
 } /* namespace glPortal */
