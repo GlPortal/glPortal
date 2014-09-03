@@ -42,10 +42,10 @@ void World::create() {
 }
 
 void World::destroy() {
-  delete(renderer);
-  delete(scene);
+  delete (renderer);
+  delete (scene);
 }
-  
+
 void World::loadScene(std::string path) {
   scene = MapLoader::getScene(path);
 }
@@ -68,24 +68,24 @@ void World::update() {
     player->rotation.x = 90;
   }
 
-  if(player->velocity.x >= FRICTION) {
+  if (player->velocity.x >= FRICTION) {
     player->velocity.x -= FRICTION;
   }
-  if(player->velocity.x <= -FRICTION) {
+  if (player->velocity.x <= -FRICTION) {
     player->velocity.x += FRICTION;
   }
-  if(player->velocity.z >= FRICTION) {
+  if (player->velocity.z >= FRICTION) {
     player->velocity.z -= FRICTION;
   }
-  if(player->velocity.z <= -FRICTION) {
+  if (player->velocity.z <= -FRICTION) {
     player->velocity.z += FRICTION;
   }
-  if(player->velocity.x < FRICTION && player->velocity.x > -FRICTION) {player->velocity.x = 0;}
-  if(player->velocity.z < FRICTION && player->velocity.z > -FRICTION) {player->velocity.z = 0;}
+  if (player->velocity.x < FRICTION && player->velocity.x > -FRICTION) {player->velocity.x = 0;}
+  if (player->velocity.z < FRICTION && player->velocity.z > -FRICTION) {player->velocity.z = 0;}
   player->velocity.y -= GRAVITY;
 
   float rotation = Math::toRadians(player->rotation.y);
-  if(player->isAlive()){
+  if (player->isAlive()){
     if (Input::isKeyDown('w')) {
       player->velocity.x = -sin(rotation) * SPEED;
       player->velocity.z = -cos(rotation) * SPEED;
@@ -112,8 +112,8 @@ void World::update() {
 
   //Check if the player is walking through a portal
   BoxCollider playerCollider(pos, player->scale);
-  if(scene->bluePortal.open && scene->orangePortal.open) {
-    if(scene->bluePortal.throughPortal(playerCollider)) {
+  if (scene->bluePortal.open && scene->orangePortal.open) {
+    if (scene->bluePortal.throughPortal(playerCollider)) {
       player->position.set(scene->orangePortal.position);
       float rotation = scene->orangePortal.rotation.y - scene->bluePortal.rotation.y + 180;
       player->rotation.y += rotation;
@@ -121,7 +121,7 @@ void World::update() {
       float velocity = player->velocity.length();
       player->velocity = *scene->orangePortal.getDirection().scale(velocity);
     }
-    if(scene->orangePortal.throughPortal(playerCollider)) {
+    if (scene->orangePortal.throughPortal(playerCollider)) {
        player->position.set(scene->bluePortal.position);
        float rotation = scene->bluePortal.rotation.y - scene->orangePortal.rotation.y + 180;
        player->rotation.y += rotation;
@@ -136,11 +136,11 @@ void World::update() {
   //Y collision
   BoxCollider bboxY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
   if (collidesWithWalls(bboxY)) {
-    if(scene->bluePortal.open && scene->orangePortal.open &&
+    if (scene->bluePortal.open && scene->orangePortal.open &&
       (scene->bluePortal.inPortal(bboxY) || scene->orangePortal.inPortal(bboxY))) {
 
     } else {
-      if(player->velocity.y < 0) {
+      if (player->velocity.y < 0) {
         player->grounded = true;
       }
       player->velocity.y = 0;
@@ -150,7 +150,7 @@ void World::update() {
   //X collision
   BoxCollider bboxX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
   if (collidesWithWalls(bboxX)) {
-    if(scene->bluePortal.open && scene->orangePortal.open &&
+    if (scene->bluePortal.open && scene->orangePortal.open &&
       (scene->bluePortal.inPortal(bboxX) || scene->orangePortal.inPortal(bboxX))) {
 
     } else {
@@ -161,7 +161,7 @@ void World::update() {
   //Z collision
   BoxCollider bboxZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
   if (collidesWithWalls(bboxZ)) {
-    if(scene->bluePortal.open && scene->orangePortal.open &&
+    if (scene->bluePortal.open && scene->orangePortal.open &&
       (scene->bluePortal.inPortal(bboxZ) || scene->orangePortal.inPortal(bboxZ))) {
 
     } else {
