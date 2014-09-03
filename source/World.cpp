@@ -199,7 +199,7 @@ void World::update() {
 
   //Check if the end of the level has been reached
   float distToEnd = Vector3f::sub(scene->end.position, scene->player.position).length();
-  if(distToEnd < 1) {
+  if (distToEnd < 1) {
     //FIXME Load the next scene
     loadScene("/maps/n2.xml");
   }
