@@ -234,7 +234,7 @@ void World::shootPortal(int button) {
     float tNear, tFar;
     if (bullet.collides(wall, &tNear, &tFar)) {
       if (wall.texture.handle == TextureLoader::getTexture("wall.png").handle) {
-        if(tNear < intersection) {
+        if (tNear < intersection) {
           closestWall = wall;
           intersection = tNear;
         }
