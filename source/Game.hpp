@@ -3,6 +3,7 @@
 
 #include "Window.hpp"
 #include "World.hpp"
+#include <SDL2/SDL_events.h>
 
 const int UPDATE_RATE = 50;
 const int SKIP_TIME = 1000 / UPDATE_RATE;
@@ -17,6 +18,7 @@ public:
   Game();
   void update();
   void close();
+  void handleEvent(SDL_Event event);
 private:
   Window window;
   World world;

@@ -24,7 +24,7 @@ namespace glPortal {
 /** \class MapLoader
  *  Load a map in GlPortal XML format.
  */
-  
+
 /**
  * Get a scene from a map file in XML format.
  */
@@ -32,8 +32,8 @@ Scene* MapLoader::getScene(std::string path) {
   Scene* scene = new Scene();
   TiXmlDocument doc(string(Environment::getDataDir() + path));
   bool loaded = doc.LoadFile();
- 
-  if(loaded) {
+
+  if (loaded) {
     TiXmlHandle docHandle(&doc);
     TiXmlElement* element;
     TiXmlHandle rootHandle(0);
@@ -46,7 +46,7 @@ Scene* MapLoader::getScene(std::string path) {
     TiXmlElement* spawnElement;
     spawnElement = rootHandle.FirstChild("spawn").Element();
 
-    if(spawnElement) {
+    if (spawnElement) {
       XmlHelper::extractPositionAndRotation(spawnElement, scene->player);
     } else {
       throw std::runtime_error("No spawn position defined.");
@@ -56,7 +56,7 @@ Scene* MapLoader::getScene(std::string path) {
     TiXmlElement* endElement;
     endElement = rootHandle.FirstChild("end").Element();
 
-    if(endElement) {
+    if (endElement) {
       Entity door;
       XmlHelper::extractPositionAndRotation(endElement, door);
       door.texture = TextureLoader::getTexture("Door.png");
@@ -80,20 +80,20 @@ Scene* MapLoader::getScene(std::string path) {
       light.position.set(lightPos.x, lightPos.y, lightPos.z);
       light.color.set(lightColor.x, lightColor.y, lightColor.z);
       scene->lights.push_back(light);
-    } while((lightElement = lightElement->NextSiblingElement("light")) != NULL);
+    } while ((lightElement = lightElement->NextSiblingElement("light")) != NULL);
 
     //WALLS
     TiXmlElement* textureElement = rootHandle.FirstChild("texture").Element();
     string texturePath("none");
     string surfaceType("none");
 
-    if(textureElement) {
+    if (textureElement) {
       do {
         textureElement->QueryStringAttribute("source", &texturePath);
-        textureElement->QueryStringAttribute("type"  , &surfaceType);
+        textureElement->QueryStringAttribute(  "type", &surfaceType);
         TiXmlElement* wallBoxElement = textureElement->FirstChildElement("wall");
 
-        if(wallBoxElement) {
+        if (wallBoxElement) {
           do {
             TiXmlElement* boxPositionElement;
             TiXmlElement* boxScaleElement;
@@ -110,37 +110,36 @@ Scene* MapLoader::getScene(std::string path) {
             wall.texture.yTiling = 0.5f;
             wall.mesh = MeshLoader::getPortalBox(wall);
             scene->walls.push_back(wall);
-          } while((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != NULL);
+          } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != NULL);
         }
 
         texturePath = std::string("none");
-      } while((textureElement = textureElement->NextSiblingElement("texture")) != NULL);
+      } while ((textureElement = textureElement->NextSiblingElement("texture")) != NULL);
     }
 
     //TRIGGER
     TiXmlElement* triggerElement = rootHandle.FirstChild("trigger").Element();
     string triggerType("none");
 
-    if(triggerElement) {
+    if (triggerElement) {
       do {
         TiXmlElement* triggerTypeElement;
         
         Trigger trigger;
         
-        if(triggerElement) {
+        if (triggerElement) {
           triggerElement->QueryStringAttribute("type", &trigger.type);
         }
+
+        XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("position"),
+                                               trigger.position);
+        XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("scale"),
+                                               trigger.scale);
+        trigger.texture = TextureLoader::getTexture("redBox.png");
+        trigger.mesh = MeshLoader::getPortalBox(trigger);
+        scene->triggers.push_back(trigger);
         
-        XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("position"), trigger.position);
-        
-        if(triggerScaleElement) {
-          XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("scale"), trigger.scale);
-                      
-          trigger.texture = TextureLoader::getTexture("redBox.png");
-          trigger.mesh = MeshLoader::getPortalBox(trigger);
-          scene->triggers.push_back(trigger);
-        }
-      } while((triggerElement = triggerElement->NextSiblingElement()) != NULL);
+      } while ((triggerElement = triggerElement->NextSiblingElement()) != NULL);
     }
     cout << "File loaded." << endl;
   } else {
@@ -149,5 +148,5 @@ Scene* MapLoader::getScene(std::string path) {
   }
   
   return scene;
-}  
+}
 } /* namespace glPortal */
