@@ -16,9 +16,9 @@ Vector3f Portal::getDirection() {
 }
 
 bool Portal::throughPortal(BoxCollider collider) {
-  if(rotation.x == 0) {
-    if(rotation.y == 90) {
-      if(collider.position.x > position.x &&
+  if (rotation.x == 0) {
+    if (rotation.y == 90) {
+      if (collider.position.x > position.x &&
          collider.position.x + collider.size.x/2 < position.x + scale.x &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
          collider.position.y + collider.size.y/2 < position.y + scale.y/2 &&
@@ -27,8 +27,8 @@ bool Portal::throughPortal(BoxCollider collider) {
         return true;
       }
     }
-    if(rotation.y == -90) {
-      if(collider.position.x < position.x &&
+    if (rotation.y == -90) {
+      if (collider.position.x < position.x &&
          collider.position.x - collider.size.x/2 > position.x - scale.x &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
          collider.position.y + collider.size.y/2 < position.y + scale.y/2 &&
@@ -37,8 +37,8 @@ bool Portal::throughPortal(BoxCollider collider) {
         return true;
       }
     }
-    if(rotation.y == 0) {
-      if(collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
+    if (rotation.y == 0) {
+      if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
          collider.position.y + collider.size.y/2 < position.y + scale.y/2 &&
@@ -47,8 +47,8 @@ bool Portal::throughPortal(BoxCollider collider) {
         return true;
       }
     }
-    if(rotation.y == 180) {
-      if(collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
+    if (rotation.y == 180) {
+      if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
          collider.position.y + collider.size.y/2 < position.y + scale.y/2 &&
@@ -58,8 +58,8 @@ bool Portal::throughPortal(BoxCollider collider) {
       }
     }
   } else {
-    if(rotation.x == -90) {
-      if(collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
+    if (rotation.x == -90) {
+      if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
          collider.position.y > position.y &&
          collider.position.y + collider.size.y/2 < position.y + scale.y &&
@@ -68,8 +68,8 @@ bool Portal::throughPortal(BoxCollider collider) {
         return true;
       }
     }
-    if(rotation.x == 90) {
-      if(collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
+    if (rotation.x == 90) {
+      if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
          collider.position.y < position.y &&
          collider.position.y - collider.size.y/2 > position.y - scale.y &&
@@ -83,9 +83,9 @@ bool Portal::throughPortal(BoxCollider collider) {
 }
 
 bool Portal::inPortal(BoxCollider collider) {
-  if(rotation.x == 0) {
-    if(rotation.y == 90) {
-      if(collider.position.x + collider.size.x/2 > position.x &&
+  if (rotation.x == 0) {
+    if (rotation.y == 90) {
+      if (collider.position.x + collider.size.x/2 > position.x &&
          collider.position.x + collider.size.x/2 < position.x + scale.x &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
          collider.position.y + collider.size.y/2 < position.y + scale.y/2 &&
@@ -94,8 +94,8 @@ bool Portal::inPortal(BoxCollider collider) {
         return true;
       }
     }
-    if(rotation.y == -90) {
-      if(collider.position.x - collider.size.x/2  < position.x &&
+    if (rotation.y == -90) {
+      if (collider.position.x - collider.size.x/2  < position.x &&
          collider.position.x - collider.size.x/2 > position.x - scale.x &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
          collider.position.y + collider.size.y/2 < position.y + scale.y/2 &&
@@ -104,8 +104,8 @@ bool Portal::inPortal(BoxCollider collider) {
         return true;
       }
     }
-    if(rotation.y == 0) {
-      if(collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
+    if (rotation.y == 0) {
+      if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
          collider.position.y + collider.size.y/2 < position.y + scale.y/2 &&
@@ -114,8 +114,8 @@ bool Portal::inPortal(BoxCollider collider) {
         return true;
       }
     }
-    if(rotation.y == 180) {
-      if(collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
+    if (rotation.y == 180) {
+      if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
          collider.position.y + collider.size.y/2 < position.y + scale.y/2 &&
@@ -125,8 +125,8 @@ bool Portal::inPortal(BoxCollider collider) {
       }
     }
   } else {
-    if(rotation.x == -90) {
-      if(collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
+    if (rotation.x == -90) {
+      if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
          collider.position.y + collider.size.y/2 > position.y &&
          collider.position.y + collider.size.y/2 < position.y + scale.y &&
@@ -135,8 +135,8 @@ bool Portal::inPortal(BoxCollider collider) {
         return true;
       }
     }
-    if(rotation.x == 90) {
-      if(collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
+    if (rotation.x == 90) {
+      if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
          collider.position.y - collider.size.y/2 < position.y &&
          collider.position.y - collider.size.y/2 > position.y - scale.y &&
@@ -170,7 +170,7 @@ void Portal::placeOnWall(BoxCollider wall, Vector3f point) {
 
   position.set(point);
 
-  switch(side) {
+  switch (side) {
   case 0: direction.set(-1, 0, 0); break;
   case 1: direction.set(1, 0, 0); break;
   case 2: direction.set(0, 0, -1); break;
@@ -179,7 +179,7 @@ void Portal::placeOnWall(BoxCollider wall, Vector3f point) {
   case 5: direction.set(0, 1, 0); break;
   }
 
-  if(wall.size.z >= 1 && wall.size.y >= 2 && (side == 0 || side == 1)) {
+  if (wall.size.z >= 1 && wall.size.y >= 2 && (side == 0 || side == 1)) {
     if (side == 0) {
       rotation.y = 90;
       scale.set(1, 2, 1);
@@ -188,21 +188,21 @@ void Portal::placeOnWall(BoxCollider wall, Vector3f point) {
       rotation.y = -90;
       scale.set(1, 2, 1);
     }
-    if(position.z - scale.z/2 < wall.position.z - wall.size.z/2) {
+    if (position.z - scale.z/2 < wall.position.z - wall.size.z/2) {
       position.z = wall.position.z - wall.size.z/2 + scale.z/2;
     }
-    if(position.z + scale.z/2 > wall.position.z + wall.size.z/2) {
+    if (position.z + scale.z/2 > wall.position.z + wall.size.z/2) {
       position.z = wall.position.z + wall.size.z/2 - scale.z/2;
     }
-    if(position.y - scale.y/2 < wall.position.y - wall.size.y/2) {
+    if (position.y - scale.y/2 < wall.position.y - wall.size.y/2) {
       position.y = wall.position.y - wall.size.y/2 + scale.y/2;
     }
-    if(position.y + scale.y/2 > wall.position.y + wall.size.y/2) {
+    if (position.y + scale.y/2 > wall.position.y + wall.size.y/2) {
       position.y = wall.position.y + wall.size.y/2 - scale.y/2;
     }
     open = true;
   }
-  if(wall.size.x >= 1 && wall.size.y >= 2 && (side == 2 || side == 3)) {
+  if (wall.size.x >= 1 && wall.size.y >= 2 && (side == 2 || side == 3)) {
     if (side == 2) {
       rotation.y = 0;
       scale.set(1, 2, 1);
@@ -211,21 +211,21 @@ void Portal::placeOnWall(BoxCollider wall, Vector3f point) {
       rotation.y = 180;
       scale.set(1, 2, 1);
     }
-    if(position.x - scale.x/2 < wall.position.x - wall.size.x/2) {
+    if (position.x - scale.x/2 < wall.position.x - wall.size.x/2) {
       position.x = wall.position.x - wall.size.x/2 + scale.x/2;
     }
-    if(position.x + scale.x/2 > wall.position.x + wall.size.x/2) {
+    if (position.x + scale.x/2 > wall.position.x + wall.size.x/2) {
       position.x = wall.position.x + wall.size.x/2 - scale.x/2;
     }
-    if(position.y - scale.y/2 < wall.position.y - wall.size.y/2) {
+    if (position.y - scale.y/2 < wall.position.y - wall.size.y/2) {
       position.y = wall.position.y - wall.size.y/2 + scale.y/2;
     }
-    if(position.y + scale.y/2 > wall.position.y + wall.size.y/2) {
+    if (position.y + scale.y/2 > wall.position.y + wall.size.y/2) {
       position.y = wall.position.y + wall.size.y/2 - scale.y/2;
     }
     open = true;
   }
-  if(wall.size.x >= 1 && wall.size.z >= 2 && (side == 4 || side == 5)) {
+  if (wall.size.x >= 1 && wall.size.z >= 2 && (side == 4 || side == 5)) {
     if (side == 4) {
       rotation.x = -90;
       scale.set(1, 2, 2);
@@ -234,16 +234,16 @@ void Portal::placeOnWall(BoxCollider wall, Vector3f point) {
       rotation.x = 90;
       scale.set(1, 2, 2);
     }
-    if(position.x - scale.x/2 < wall.position.x - wall.size.x/2) {
+    if (position.x - scale.x/2 < wall.position.x - wall.size.x/2) {
       position.x = wall.position.x - wall.size.x/2 + scale.x/2;
     }
-    if(position.x + scale.x/2 > wall.position.x + wall.size.x/2) {
+    if (position.x + scale.x/2 > wall.position.x + wall.size.x/2) {
       position.x = wall.position.x + wall.size.x/2 - scale.x/2;
     }
-    if(position.z - scale.z/2 < wall.position.z - wall.size.z/2) {
+    if (position.z - scale.z/2 < wall.position.z - wall.size.z/2) {
       position.z = wall.position.z - wall.size.z/2 + scale.z/2;
     }
-    if(position.z + scale.z/2 > wall.position.z + wall.size.z/2) {
+    if (position.z + scale.z/2 > wall.position.z + wall.size.z/2) {
       position.z = wall.position.z + wall.size.z/2 - scale.z/2;
     }
     open = true;
