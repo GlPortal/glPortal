@@ -89,7 +89,7 @@ void Renderer::render(Scene* scene) {
   glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 
   //Depth buffer
-  if(scene->bluePortal.open && scene->orangePortal.open) {
+  if (scene->bluePortal.open && scene->orangePortal.open) {
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
     glDepthMask(GL_TRUE);
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -237,10 +237,11 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
     //Set camera in other portal
-    if(portal.rotation.x == 0) {
+    if (portal.rotation.x == 0) {
       viewMatrix.setIdentity();
       viewMatrix.rotate(-otherPortal.rotation.x - scene->camera.rotation.x, 1, 0, 0);
-      viewMatrix.rotate(-otherPortal.rotation.y - (scene->camera.rotation.y + 180 - portal.rotation.y), 0, 1, 0);
+      viewMatrix.rotate(-otherPortal.rotation.y -
+                        (scene->camera.rotation.y + 180 - portal.rotation.y), 0, 1, 0);
       viewMatrix.rotate(-otherPortal.rotation.z, 0, 0, 1);
       viewMatrix.translate(
       Vector3f(-otherPortal.position.x,
@@ -262,7 +263,7 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
 }
 
 void Renderer::renderPortalOverlay(Portal portal) {
-  if(portal.open) {
+  if (portal.open) {
     modelMatrix.setIdentity();
     modelMatrix.translate(portal.position);
     modelMatrix.rotate(portal.rotation);
@@ -284,7 +285,8 @@ void Renderer::renderPortalOverlay(Portal portal) {
   }
 }
 
-void Renderer::renderString(Scene* scene, std::string string, Font font, float x, float y, float size) {
+void Renderer::renderString(Scene* scene, std::string string,
+                            Font font, float x, float y, float size) {
   changeShader("text.frag");
   projectionMatrix = scene->camera.getProjectionMatrix();
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
@@ -296,14 +298,15 @@ void Renderer::renderString(Scene* scene, std::string string, Font font, float x
   Vector2f scaling((1.0f / Window::width), (1.0f / Window::height));
 
   const char* array = string.c_str();
-  for(unsigned int i = 0; i < string.length(); i++) {
+  for (unsigned int i = 0; i < string.length(); i++) {
     char c = array[i];
 
     Letter letter = font.getLetter(c);
     Mesh mesh = letter.mesh;
 
     modelMatrix.setIdentity();
-    modelMatrix.translate(position.x * scaling.x + letter.xOffset * scaling.x * size, position.y * scaling.y + letter.yOffset * scaling.y * size, -10);
+    modelMatrix.translate(position.x * scaling.x + letter.xOffset * scaling.x * size, position.y *
+                          scaling.y + letter.yOffset * scaling.y * size, -10);
     modelMatrix.scale(letter.width * scaling.x * size, letter.height * scaling.y * size, 1);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
