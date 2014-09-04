@@ -3,7 +3,6 @@
 #include <engine/Mesh.hpp>
 #include <Portal.hpp>
 #include <cmath>
-//#include <cstdio>
 
 namespace glPortal {
 
