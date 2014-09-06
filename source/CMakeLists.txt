@@ -13,6 +13,7 @@ add_executable(${EXE_NAME}
   Player.cpp
   engine/Camera.cpp
   Input.cpp engine/Renderer.cpp
+  engine/util/Text.cpp
   engine/loader/MapLoader.cpp
   engine/loader/MeshLoader.cpp
   engine/loader/ShaderLoader.cpp
