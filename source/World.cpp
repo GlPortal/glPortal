@@ -28,17 +28,13 @@
 
 namespace glPortal {
 
-const Vector2f sensitivity(0.25, 0.25);
-const float SPEED = 0.1f;
-const float GRAVITY = 0.01f;
-const float FRICTION = 0.01f;
-const float JUMP_SPEED = 0.15f;
+float World::gravity = GRAVITY;
+float World::friction = FRICTION;
 
 void World::create() {
   renderer = new Renderer();
 
-    loadScene("/maps/n3.xml");
-    //loadScene("/maps/untitled.xml");
+  loadScene("/maps/n3.xml");
 }
 
 void World::destroy() {
@@ -51,66 +47,14 @@ void World::loadScene(std::string path) {
 }
 
 void World::update() {
-  //Mouselook
-  int mousedx, mousedy;
-  SDL_GetRelativeMouseState(&mousedx, &mousedy);
-
   Player* player = &scene->player;
-  // Apply mouse movement to view
-  player->rotation.x -= mousedy * sensitivity.x;
-  player->rotation.y -= mousedx * sensitivity.y;
 
-  // Restrict rotation in horizontal axis
-  if (player->rotation.x < -90) {
-    player->rotation.x = -90;
-  }
-  if (player->rotation.x > 90) {
-    player->rotation.x = 90;
-  }
-
-  if (player->velocity.x >= FRICTION) {
-    player->velocity.x -= FRICTION;
-  }
-  if (player->velocity.x <= -FRICTION) {
-    player->velocity.x += FRICTION;
-  }
-  if (player->velocity.z >= FRICTION) {
-    player->velocity.z -= FRICTION;
-  }
-  if (player->velocity.z <= -FRICTION) {
-    player->velocity.z += FRICTION;
-  }
-  if (player->velocity.x < FRICTION && player->velocity.x > -FRICTION) {player->velocity.x = 0;}
-  if (player->velocity.z < FRICTION && player->velocity.z > -FRICTION) {player->velocity.z = 0;}
-  player->velocity.y -= GRAVITY;
-
-  float rotation = Math::toRadians(player->rotation.y);
-  if (player->isAlive()){
-    if (Input::isKeyDown('w')) {
-      player->velocity.x = -sin(rotation) * SPEED;
-      player->velocity.z = -cos(rotation) * SPEED;
-    }
-    if (Input::isKeyDown('s')) {
-      player->velocity.x = sin(rotation) * SPEED;
-      player->velocity.z = cos(rotation) * SPEED;
-    }
-    if (Input::isKeyDown('a')) {
-      player->velocity.x = -cos(rotation) * SPEED;
-      player->velocity.z = sin(rotation) * SPEED;
-    }
-    if (Input::isKeyDown('d')) {
-      player->velocity.x = cos(rotation) * SPEED;
-      player->velocity.z = -sin(rotation) * SPEED;
-    }
-    if (Input::isKeyDown(' ') && player->grounded) {
-      player->grounded = false;
-      player->velocity.y = JUMP_SPEED;
-    }
-  }
+  player->mouseLook();
+  player->move();
 
   Vector3f pos = Vector3f::add(player->position, player->velocity);
 
-  //Check if the player is walking through a portal
+  //Check if the player is moving through a portal
   BoxCollider playerCollider(pos, player->scale);
   if (scene->bluePortal.open && scene->orangePortal.open) {
     if (scene->bluePortal.throughPortal(playerCollider)) {

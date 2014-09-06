@@ -1,7 +1,74 @@
-#include "Player.hpp"
+#include <engine/util/Math.hpp>
+#include <engine/util/Vector2f.hpp>
+#include <Input.hpp>
+#include <Player.hpp>
+#include <SDL2/SDL_mouse.h>
+#include <World.hpp>
+#include <cmath>
 
 namespace glPortal {
 
+// Movement
+void Player::mouseLook() {
+  int mousedx, mousedy;
+  SDL_GetRelativeMouseState(&mousedx, &mousedy);
+
+  // Apply mouse movement to view
+  rotation.x -= mousedy * sensitivity.x;
+  rotation.y -= mousedx * sensitivity.y;
+
+  // Restrict rotation in horizontal axis
+  if (rotation.x < -90) {
+    rotation.x = -90;
+  }
+  if (rotation.x > 90) {
+    rotation.x = 90;
+  }
+}
+
+void Player::move() {
+  if (velocity.x >= FRICTION) {
+    velocity.x -= FRICTION;
+  }
+  if (velocity.x <= -FRICTION) {
+    velocity.x += FRICTION;
+  }
+  if (velocity.z >= FRICTION) {
+    velocity.z -= FRICTION;
+  }
+  if (velocity.z <= -FRICTION) {
+    velocity.z += FRICTION;
+  }
+  if (velocity.x < FRICTION && velocity.x > -FRICTION) {velocity.x = 0;}
+  if (velocity.z < FRICTION && velocity.z > -FRICTION) {velocity.z = 0;}
+  velocity.y -= World::gravity;
+
+  float rot = Math::toRadians(rotation.y);
+  if (isAlive()){
+    if (Input::isKeyDown('w')) {
+      velocity.x = -sin(rot) * speed;
+      velocity.z = -cos(rot) * speed;
+    }
+    if (Input::isKeyDown('s')) {
+      velocity.x = sin(rot) * speed;
+      velocity.z = cos(rot) * speed;
+    }
+    if (Input::isKeyDown('a')) {
+      velocity.x = -cos(rot) * speed;
+      velocity.z = sin(rot) * speed;
+    }
+    if (Input::isKeyDown('d')) {
+      velocity.x = cos(rot) * speed;
+      velocity.z = -sin(rot) * speed;
+    }
+    if (Input::isKeyDown(' ') && grounded) {
+      grounded = false;
+      velocity.y = JUMP_SPEED;
+    }
+  }
+}
+
+// Health
 int Player::getHealth() {
   return health;
 }

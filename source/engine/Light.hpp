@@ -8,7 +8,7 @@ namespace glPortal {
 class Light {
 public:
   Light() :
-      color(1, 1, 1), constantAtt(0.4), linearAtt(0.05), quadraticAtt(0.0008) {
+      color(1, 1, 1), constantAtt(0.6), linearAtt(0.05), quadraticAtt(0.0008) {
   }
   Vector3f position;
   Vector3f color;
