@@ -19,9 +19,9 @@ void Window::initGlew(){
 
   if (error != GLEW_OK) {
     printf("Error initializing GLEW! %s\n", glewGetErrorString(error));
-    std::exit(1); 
+    std::exit(1);
   }
-  if (!GLEW_VERSION_2_1) { 
+  if (not GLEW_VERSION_2_1) {
     printf("Your hardware does not support 2.1 API\n");
     std::exit(1);
   }
@@ -87,7 +87,7 @@ void Window::createFromConfig(){
     this->create("GlPortal", width, height, false);
   }
 }
-  
+
 void Window::setFullscreen() {
   SDL_SetWindowFullscreen(w, SDL_WINDOW_FULLSCREEN);
 }
