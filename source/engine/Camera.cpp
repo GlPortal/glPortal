@@ -1,5 +1,5 @@
 #include "Camera.hpp"
-#include "util/Math.hpp"
+#include <util/math/Math.hpp>
 
 #include <math.h>
 #include "../Window.hpp"
@@ -18,7 +18,7 @@ void Camera::recalculate() {
   float aspect = (float) Window::width / Window::height;
 
   projectionMatrix.setIdentity();
-  if(perspective) {
+  if (perspective) {
     float fovyr = Math::toRadians(fovy);
     projectionMatrix.array[0] = (float) (1 / tan(fovyr / 2)) / aspect;
     projectionMatrix.array[5] = (float) (1 / tan(fovyr / 2));

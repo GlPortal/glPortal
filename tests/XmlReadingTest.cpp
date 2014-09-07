@@ -1,6 +1,6 @@
 #include <unittest++/UnitTest++.h>
 #include <tinyxml.h>
-#include <engine/util/Vector3f.hpp>
+#include <util/math/Vector3f.hpp>
 #include <engine/loader/XmlHelper.hpp>
 #include <stdexcept>
 

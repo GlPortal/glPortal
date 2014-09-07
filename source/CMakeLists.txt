@@ -4,16 +4,16 @@ add_executable(${EXE_NAME}
   Game.cpp
   Portal.cpp
   engine/Ray.cpp    
-  engine/util/Vector3f.cpp
-  engine/util/Vector2f.cpp
-  engine/util/Matrix4f.cpp
-  engine/util/Math.cpp
+  util/math/Vector3f.cpp
+  util/math/Vector2f.cpp
+  util/math/Matrix4f.cpp
+  util/math/Math.cpp
   engine/BoxCollider.cpp
   World.cpp Window.cpp
   Player.cpp
   engine/Camera.cpp
   Input.cpp engine/Renderer.cpp
-  engine/util/Text.cpp
+  engine/Text.cpp
   engine/loader/MapLoader.cpp
   engine/loader/MeshLoader.cpp
   engine/loader/ShaderLoader.cpp

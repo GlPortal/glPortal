@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include <engine/util/Vector3f.hpp>
+#include <util/math/Vector3f.hpp>
 #include <engine/Entity.hpp>
 
 using namespace std;

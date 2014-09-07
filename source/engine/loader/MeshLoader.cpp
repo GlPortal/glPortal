@@ -11,8 +11,8 @@
 
 #include "engine/env/Environment.hpp"
 #include "engine/Entity.hpp"
-#include "engine/util/Vector2f.hpp"
-#include "engine/util/Vector3f.hpp"
+#include "util/math/Vector2f.hpp"
+#include "util/math/Vector3f.hpp"
 #include <cstdio>
 
 namespace glPortal {

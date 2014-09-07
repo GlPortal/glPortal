@@ -18,9 +18,9 @@
 #include "engine/Texture.hpp"
 #include "engine/loader/TextureLoader.hpp"
 #include "engine/Trigger.hpp"
-#include "engine/util/Math.hpp"
-#include "engine/util/Vector2f.hpp"
-#include "engine/util/Vector3f.hpp"
+#include <util/math/Math.hpp>
+#include <util/math/Vector2f.hpp>
+#include <util/math/Vector3f.hpp>
 #include "Input.hpp"
 #include "Player.hpp"
 #include "Portal.hpp"

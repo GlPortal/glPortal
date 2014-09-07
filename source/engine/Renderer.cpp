@@ -9,14 +9,14 @@
 #include <engine/Mesh.hpp>
 #include <engine/Renderer.hpp>
 #include <engine/Texture.hpp>
-#include <engine/util/Vector2f.hpp>
-#include <engine/util/Vector3f.hpp>
+#include <util/math/Vector2f.hpp>
+#include <util/math/Vector3f.hpp>
 #include <Portal.hpp>
 #include <stdio.h>
 #include <Scene.hpp>
 #include <Window.hpp>
 #include <vector>
-#include <engine/util/Text.hpp>
+#include <engine/Text.hpp>
 
 namespace glPortal {
 
