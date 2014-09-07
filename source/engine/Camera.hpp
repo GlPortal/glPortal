@@ -1,8 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "util/Matrix4f.hpp"
-#include "util/Vector3f.hpp"
+#include <util/math/Matrix4f.hpp>
+#include <util/math/Vector3f.hpp>
 
 const float DEFAULT_FOVY = 60;
 const float DEFAULT_ASPECT = 1;

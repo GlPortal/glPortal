@@ -2,10 +2,10 @@
 #define RENDERER_HPP
 
 #include <engine/Shader.hpp>
-#include <engine/util/Matrix4f.hpp>
+#include <util/math/Matrix4f.hpp>
 #include <GL/glew.h>
 #include <string>
-#include <engine/util/Text.hpp>
+#include <engine/Text.hpp>
 
 namespace glPortal {
 class Font;

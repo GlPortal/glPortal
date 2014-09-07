@@ -2,7 +2,7 @@
 #define TEXT_HPP
 
 #include <string>
-#include <util/Vector3f.hpp>
+#include <util/math/Vector3f.hpp>
 #include <engine/Font.hpp>
 #include <engine/loader/FontLoader.hpp>
 
