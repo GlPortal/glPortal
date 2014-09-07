@@ -21,7 +21,6 @@ For instructions on how to compile the game please read COMPILE.org.
 * Join the team
 You can join the community at http://glportal.de/groups/glportal/ 
 for questions and discussions about the development of the game.
-A makeshift Issue tracker can be found at 
-https://github.com/hhirsch/glPortal/issues .
+Report Issues to http://bugs.glportal.de  .
 
 Please send me a pull request on github if you have changes.
