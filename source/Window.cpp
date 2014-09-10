@@ -16,7 +16,7 @@ int Window::height = 600;
     "Your hardware does not support GLEW 2.1 API\n";
   const std::string Window::GLEW_INIT_ERROR_MESSAGE =
     "Error initializing GLEW.";
-  
+
 void Window::initGlew(){
   glewExperimental = GL_TRUE;
   GLuint error = glewInit();
