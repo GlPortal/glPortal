@@ -22,6 +22,7 @@ add_executable(${EXE_NAME}
   engine/loader/XmlHelper.cpp
   engine/env/Environment.cpp
   engine/env/ConfigFileParser.cpp
+  engine/env/Config.cpp
   engine/env/Path.cpp
   )
 target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES} tinyxml)

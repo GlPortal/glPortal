@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include <cstdlib>
 #include "engine/env/ConfigFileParser.hpp"
+#include "engine/env/Config.hpp"
 #include "engine/env/Environment.hpp"
 #include <stdexcept>
 #include <iostream>
@@ -12,6 +13,7 @@ namespace glPortal {
 
 int Window::width = 800;
 int Window::height = 600;
+  const char* Window::DEFAULT_TITLE = "GlPortal";
   const std::string Window::GLEW_UNSUPPORTED_MESSAGE =
     "Your hardware does not support GLEW 2.1 API\n";
   const std::string Window::GLEW_INIT_ERROR_MESSAGE =
@@ -39,10 +41,10 @@ void Window::create(const char* title, int width, int height, bool fullscreen) {
 
   std::string supersampling;
   try {
-    supersampling = config->getStringByKey("supersampling");
+    supersampling = config->getStringByKey(Config::SUPERSAMPLING);
   } catch (const std::invalid_argument& e) { }
 
-  if (supersampling == "yes") {
+  if (supersampling == Config::TRUE) {
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
   }
@@ -75,20 +77,20 @@ void Window::createFromConfig(){
   int height, width;
   std::string fullscreen;
   try {
-    height = config->getIntByKey("height");
-    width = config->getIntByKey("width");
+    height = config->getIntByKey(Config::HEIGHT);
+    width = config->getIntByKey(Config::WIDTH);
   } catch (const std::invalid_argument& e) {
     height = 600;
     width = 800;
   }
   try {
-    fullscreen = config->getStringByKey("fullscreen");
+    fullscreen = config->getStringByKey(Config::FULLSCREEN);
   } catch (const std::invalid_argument& e) { }
 
-  if (fullscreen == "yes") {
-    this->create("GlPortal", width, height, true);
+  if (fullscreen == Config::TRUE) {
+    this->create(DEFAULT_TITLE, width, height, true);
   } else {
-    this->create("GlPortal", width, height, false);
+    this->create(DEFAULT_TITLE, width, height, false);
   }
 }
 
