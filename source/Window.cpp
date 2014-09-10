@@ -7,22 +7,26 @@
 #include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
 #include <stdexcept>
-
+#include <iostream>
 namespace glPortal {
 
 int Window::width = 800;
 int Window::height = 600;
-
+  const std::string Window::GLEW_UNSUPPORTED_MESSAGE =
+    "Your hardware does not support GLEW 2.1 API\n";
+  const std::string Window::GLEW_INIT_ERROR_MESSAGE =
+    "Error initializing GLEW.";
+  
 void Window::initGlew(){
   glewExperimental = GL_TRUE;
   GLuint error = glewInit();
 
   if (error != GLEW_OK) {
-    printf("Error initializing GLEW! %s\n", glewGetErrorString(error));
+    std::cout << GLEW_INIT_ERROR_MESSAGE << " " <<  glewGetErrorString(error) << endl;
     std::exit(1);
   }
   if (not GLEW_VERSION_2_1) {
-    printf("Your hardware does not support 2.1 API\n");
+    std::cout << GLEW_UNSUPPORTED_MESSAGE << endl;
     std::exit(1);
   }
 }
