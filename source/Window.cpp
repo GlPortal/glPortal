@@ -53,12 +53,12 @@ void Window::create(const char* title, int width, int height, bool fullscreen) {
   if (fullscreen) {
     flags |= SDL_WINDOW_BORDERLESS;
   }
-  //Create the window
-  w = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+
+  window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
       width, height, flags);
 
   //Create an OpenGL context associated with the window
-  context = SDL_GL_CreateContext(w);
+  context = SDL_GL_CreateContext(window);
 
   this->initGlew();
 
@@ -95,21 +95,21 @@ void Window::createFromConfig(){
 }
 
 void Window::setFullscreen() {
-  SDL_SetWindowFullscreen(w, SDL_WINDOW_FULLSCREEN);
+  SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 }
 
 void Window::swapBuffers() {
-  SDL_GL_SwapWindow(w);
+  SDL_GL_SwapWindow(window);
 }
 
 void Window::getSize(int* width, int* height) {
-  SDL_GetWindowSize(w, width, height);
+  SDL_GetWindowSize(window, width, height);
 }
 
 void Window::close() {
   SDL_GL_DeleteContext(context);
-  SDL_DestroyWindow(w);
-  w = NULL;
+  SDL_DestroyWindow(window);
+  window = NULL;
 
   SDL_Quit();
 }

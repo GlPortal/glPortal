@@ -18,7 +18,7 @@ public:
   static int height;
 private:
   void initGlew();
-  SDL_Window *w;
+  SDL_Window *window;
   SDL_GLContext context;
   ConfigFileParser * config;
   static const char* DEFAULT_TITLE;
