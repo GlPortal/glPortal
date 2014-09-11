@@ -21,10 +21,10 @@ int Window::height = 600;
 
 void Window::initGlew(){
   glewExperimental = GL_TRUE;
-  GLuint error = glewInit();
+  GLuint glewInitReturnValue = glewInit();
 
-  if (error != GLEW_OK) {
-    std::cout << GLEW_INIT_ERROR_MESSAGE << " " <<  glewGetErrorString(error) << endl;
+  if (glewInitReturnValue != GLEW_OK) {
+    std::cout << GLEW_INIT_ERROR_MESSAGE << " " <<  glewGetErrorString(glewInitReturnValue) << endl;
     std::exit(1);
   }
   if (not GLEW_VERSION_2_1) {
@@ -80,15 +80,18 @@ void Window::createFromConfig(){
     height = 600;
     width = 800;
   }
+  
   try {
     fullscreen = config->getStringByKey(Config::FULLSCREEN);
   } catch (const std::invalid_argument& e) { }
 
+  bool settingIsFullscreen = false;
   if (fullscreen == Config::TRUE) {
-    this->create(DEFAULT_TITLE, width, height, true);
+    settingIsFullscreen = true;
   } else {
-    this->create(DEFAULT_TITLE, width, height, false);
+    settingIsFullscreen = false;
   }
+  this->create(DEFAULT_TITLE, width, height, settingIsFullscreen);
 }
 
 void Window::setFullscreen() {
