@@ -36,7 +36,6 @@ void Window::initGlew(){
 void Window::create(const char* title, int width, int height, bool fullscreen) {
   SDL_Init(SDL_INIT_VIDEO);
 
-  //Attributes
   SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
   std::string supersampling;
@@ -57,12 +56,10 @@ void Window::create(const char* title, int width, int height, bool fullscreen) {
   window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
       width, height, flags);
 
-  //Create an OpenGL context associated with the window
   context = SDL_GL_CreateContext(window);
 
   this->initGlew();
 
-  //Set width and height for using outside of the class
   this->width = width;
   this->height = height;
 
