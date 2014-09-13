@@ -3,7 +3,7 @@
 
 #include "engine/Entity.hpp"
 #include "engine/Light.hpp"
-#include "engine/util/Vector3f.hpp"
+#include <util/Vector3f.hpp>
 
 namespace glPortal {
 class BoxCollider;

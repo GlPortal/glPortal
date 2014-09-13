@@ -1,5 +1,5 @@
-#include <engine/util/Math.hpp>
-#include <engine/util/Vector3f.hpp>
+#include <util/Math.hpp>
+#include <util/Vector3f.hpp>
 #include <cmath>
 
 namespace glPortal {

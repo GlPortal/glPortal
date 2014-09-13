@@ -9,13 +9,14 @@
 #include <engine/Mesh.hpp>
 #include <engine/Renderer.hpp>
 #include <engine/Texture.hpp>
-#include <engine/util/Vector2f.hpp>
-#include <engine/util/Vector3f.hpp>
+#include <util/Vector2f.hpp>
+#include <util/Vector3f.hpp>
 #include <Portal.hpp>
 #include <stdio.h>
 #include <Scene.hpp>
 #include <Window.hpp>
 #include <vector>
+#include <engine/Text.hpp>
 
 namespace glPortal {
 
@@ -166,9 +167,8 @@ void Renderer::render(Scene* scene) {
 
   //Text
   glClear(GL_DEPTH_BUFFER_BIT);
-
-  Font font = FontLoader::getFont("Adobe");
-  renderString(scene, "GlPortal", font, 10, Window::height - 50, 1.5f);
+  Text text = Text(std::string("GlPortal"), Vector3f(10, Window::height - 50, 1.5f));
+  renderText(scene, text);
 }
 
 void Renderer::renderScene(Scene* scene) {
@@ -285,8 +285,13 @@ void Renderer::renderPortalOverlay(Portal portal) {
   }
 }
 
-void Renderer::renderString(Scene* scene, std::string string,
-                            Font font, float x, float y, float size) {
+void Renderer::renderText(Scene* scene, Text text) {
+  std::string string= text.text;
+  float x = text.position.x;
+  float y = text.position.y;
+  float z = text.position.z;
+  Font font = text.font;
+  int size = text.size;
   changeShader("text.frag");
   projectionMatrix = scene->camera.getProjectionMatrix();
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);

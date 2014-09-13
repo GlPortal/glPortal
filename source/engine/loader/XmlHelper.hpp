@@ -1,6 +1,6 @@
 #ifndef XMLHELPER_HPP
 #define XMLHELPER_HPP
-#include <engine/util/Vector3f.hpp>
+#include <util/Vector3f.hpp>
 #include <engine/Entity.hpp>
 #include <tinyxml.h>
 #include <string>
