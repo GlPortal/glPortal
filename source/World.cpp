@@ -54,36 +54,24 @@ void World::update() {
 
   Vector3f pos = Vector3f::add(player->position, player->velocity);
 
-  //Check if the player is moving through a portal
-  BoxCollider playerCollider(pos, player->scale);
-  if (scene->bluePortal.open && scene->orangePortal.open) {
-    if (scene->bluePortal.throughPortal(playerCollider)) {
-      player->position.set(scene->orangePortal.position);
-      float rotation = scene->orangePortal.rotation.y - scene->bluePortal.rotation.y + 180;
-      player->rotation.y += rotation;
-      //Transform the velocity of the player
-      float velocity = player->velocity.length();
-      player->velocity = *scene->orangePortal.getDirection().scale(velocity);
-    }
-    if (scene->orangePortal.throughPortal(playerCollider)) {
-       player->position.set(scene->bluePortal.position);
-       float rotation = scene->bluePortal.rotation.y - scene->orangePortal.rotation.y + 180;
-       player->rotation.y += rotation;
-       //Transform the velocity of the player
-       float velocity = player->velocity.length();
-       player->velocity = *scene->bluePortal.getDirection().scale(velocity);
-    }
-  }
-
-  pos = Vector3f::add(player->position, player->velocity);
-
+  //FIXME Remake the collision system to be less faulty and ugly
   //Y collision
   BoxCollider bboxY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
   if (collidesWithWalls(bboxY)) {
-    if (scene->bluePortal.open && scene->orangePortal.open &&
-      (scene->bluePortal.inPortal(bboxY) || scene->orangePortal.inPortal(bboxY))) {
-
-    } else {
+    bool portaling = false;
+    if (scene->bluePortal.open && scene->orangePortal.open) {
+      if(scene->bluePortal.inPortal(bboxY)) {
+        if(scene->bluePortal.rotation.x == -90 || scene->bluePortal.rotation.x == 90) {
+          portaling = true;
+        }
+      }
+      if(scene->orangePortal.inPortal(bboxY)) {
+        if(scene->orangePortal.rotation.x == -90 || scene->orangePortal.rotation.x == 90) {
+          portaling = true;
+        }
+      }
+    }
+    if(!portaling) {
       if (player->velocity.y < 0) {
         player->grounded = true;
       }
@@ -94,10 +82,20 @@ void World::update() {
   //X collision
   BoxCollider bboxX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
   if (collidesWithWalls(bboxX)) {
-    if (scene->bluePortal.open && scene->orangePortal.open &&
-      (scene->bluePortal.inPortal(bboxX) || scene->orangePortal.inPortal(bboxX))) {
-
-    } else {
+    bool portaling = false;
+    if (scene->bluePortal.open && scene->orangePortal.open) {
+      if(scene->bluePortal.inPortal(bboxX)) {
+        if(scene->bluePortal.rotation.x == 0 && (scene->bluePortal.rotation.y == -90 || scene->bluePortal.rotation.y == 90)) {
+          portaling = true;
+        }
+      }
+      if(scene->orangePortal.inPortal(bboxX)) {
+        if(scene->bluePortal.rotation.x == 0 && (scene->orangePortal.rotation.y == -90 || scene->orangePortal.rotation.y == 90)) {
+          portaling = true;
+        }
+      }
+    }
+    if(!portaling) {
       player->velocity.x = 0;
     }
   }
@@ -105,10 +103,20 @@ void World::update() {
   //Z collision
   BoxCollider bboxZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
   if (collidesWithWalls(bboxZ)) {
-    if (scene->bluePortal.open && scene->orangePortal.open &&
-      (scene->bluePortal.inPortal(bboxZ) || scene->orangePortal.inPortal(bboxZ))) {
-
-    } else {
+    bool portaling = false;
+    if (scene->bluePortal.open && scene->orangePortal.open) {
+      if(scene->bluePortal.inPortal(bboxZ)) {
+        if(scene->bluePortal.rotation.x == 0 && (scene->bluePortal.rotation.y == 0 || scene->bluePortal.rotation.y == 180)) {
+          portaling = true;
+        }
+      }
+      if(scene->orangePortal.inPortal(bboxZ)) {
+        if(scene->orangePortal.rotation.x == 0 && (scene->orangePortal.rotation.y == 0 || scene->orangePortal.rotation.y == 180)) {
+          portaling = true;
+        }
+      }
+    }
+    if(!portaling) {
       player->velocity.z = 0;
     }
   }
@@ -130,6 +138,29 @@ void World::update() {
       } else {
         printf("Some trigger touched: %s\n", trigger.type.c_str());
       }
+    }
+  }
+
+  pos = Vector3f::add(player->position, player->velocity);
+
+  //Check if the player is moving through a portal
+  BoxCollider playerCollider(pos, player->scale);
+  if (scene->bluePortal.open && scene->orangePortal.open) {
+    if (scene->bluePortal.throughPortal(playerCollider)) {
+      player->position.set(scene->orangePortal.position);
+      float rotation = scene->orangePortal.rotation.y - scene->bluePortal.rotation.y + 180;
+      player->rotation.y += rotation;
+      //Transform the velocity of the player
+      float velocity = player->velocity.length();
+      player->velocity = *scene->orangePortal.getDirection().scale(velocity);
+    }
+    if (scene->orangePortal.throughPortal(playerCollider)) {
+      player->position.set(scene->bluePortal.position);
+      float rotation = scene->bluePortal.rotation.y - scene->orangePortal.rotation.y + 180;
+      player->rotation.y += rotation;
+      //Transform the velocity of the player
+      float velocity = player->velocity.length();
+      player->velocity = *scene->bluePortal.getDirection().scale(velocity);
     }
   }
 

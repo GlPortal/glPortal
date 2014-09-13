@@ -59,22 +59,22 @@ bool Portal::throughPortal(BoxCollider collider) {
     }
   } else {
     if (rotation.x == -90) {
-      if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
-         collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
+      if (collider.position.x - collider.size.x/2 >= position.x - scale.x/2 &&
+         collider.position.x + collider.size.x/2 <= position.x + scale.x/2 &&
          collider.position.y > position.y &&
-         collider.position.y + collider.size.y/2 < position.y + scale.y &&
-         collider.position.z - collider.size.z/2 > position.z - scale.z/2 &&
-         collider.position.z + collider.size.z/2 < position.z + scale.z/2) {
+         collider.position.y + collider.size.y/2 <= position.y + scale.y &&
+         collider.position.z - collider.size.z/2 >= position.z - scale.z/2 &&
+         collider.position.z + collider.size.z/2 <= position.z + scale.z/2) {
         return true;
       }
     }
     if (rotation.x == 90) {
-      if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
-         collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
+      if (collider.position.x - collider.size.x/2 >= position.x - scale.x/2 &&
+         collider.position.x + collider.size.x/2 <= position.x + scale.x/2 &&
          collider.position.y < position.y &&
-         collider.position.y - collider.size.y/2 > position.y - scale.y &&
-         collider.position.z - collider.size.z/2 > position.z - scale.z/2 &&
-         collider.position.z + collider.size.z/2 < position.z + scale.z/2) {
+         collider.position.y - collider.size.y/2 >= position.y - scale.y &&
+         collider.position.z - collider.size.z/2 >= position.z - scale.z/2 &&
+         collider.position.z + collider.size.z/2 <= position.z + scale.z/2) {
         return true;
       }
     }
