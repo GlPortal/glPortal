@@ -7,13 +7,14 @@
 
 namespace glPortal {
 
+const Vector3f PLAYER_SIZE(0.5, 1, 0.5);
 const float RUNNING_SPEED = 0.1f;
 const float JUMP_SPEED = 0.15f;
 
 class Player: public Entity {
 public:
   Player() {
-    scale.set(0.5f, 1, 0.5f);
+    scale.set(PLAYER_SIZE);
 
     sensitivity.set(0.25, 0.25);
     velocity.set(0, 0, 0);
