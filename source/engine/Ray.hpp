@@ -1,7 +1,7 @@
 #ifndef RAY_HPP
 #define RAY_HPP
 
-#include "util/Vector3f.hpp"
+#include <util/Vector3f.hpp>
 
 namespace glPortal {
 class Entity;

@@ -16,7 +16,7 @@
 #include "engine/Texture.hpp"
 #include "TextureLoader.hpp"
 #include "engine/Trigger.hpp"
-#include "engine/util/Vector3f.hpp"
+#include "util/Vector3f.hpp"
 
 using namespace std;
 

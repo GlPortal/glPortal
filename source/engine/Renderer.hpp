@@ -2,9 +2,10 @@
 #define RENDERER_HPP
 
 #include <engine/Shader.hpp>
-#include <engine/util/Matrix4f.hpp>
+#include <util/Matrix4f.hpp>
 #include <GL/glew.h>
 #include <string>
+#include <engine/Text.hpp>
 
 namespace glPortal {
 class Font;
@@ -24,13 +25,13 @@ public:
   void renderEntity(Entity e);
   void renderPortal(Scene* scene, Portal portal, Portal otherPortal);
   void renderPortalOverlay(Portal portal);
-  void renderString(Scene* scene, std::string string, Font font, float x, float y, float size);
+  void renderText(Scene* scene, Text text);
 private:
   Shader shader;
   Matrix4f projectionMatrix;
   Matrix4f viewMatrix;
   Matrix4f modelMatrix;
-
+  
   GLuint modelLoc;
   GLuint viewLoc;
   GLuint projLoc;

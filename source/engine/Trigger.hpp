@@ -6,7 +6,7 @@
 #include "Entity.hpp"
 #include "Mesh.hpp"
 #include "Texture.hpp"
-#include "util/Vector3f.hpp"
+#include <util/Vector3f.hpp>
 
 namespace glPortal {
 
