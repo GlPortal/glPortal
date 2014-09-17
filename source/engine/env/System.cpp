@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace glPortal {  
+namespace glPortal {
 
 void System::log(std::string message) {
   logger.log(message);
