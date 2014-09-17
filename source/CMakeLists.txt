@@ -8,6 +8,8 @@ add_executable(${EXE_NAME}
   util/math/Vector2f.cpp
   util/math/Matrix4f.cpp
   util/math/Math.cpp
+  util/logger/Logger.cpp
+  util/logger/ConsoleLogger.cpp
   engine/BoxCollider.cpp
   World.cpp Window.cpp
   Player.cpp
@@ -21,6 +23,7 @@ add_executable(${EXE_NAME}
   engine/loader/FontLoader.cpp
   engine/loader/XmlHelper.cpp
   engine/env/Environment.cpp
+  engine/env/System.cpp
   engine/env/ConfigFileParser.cpp
   engine/env/Config.cpp
   engine/env/Path.cpp

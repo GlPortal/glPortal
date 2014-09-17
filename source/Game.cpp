@@ -9,6 +9,7 @@
 
 #include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
+#include <engine/env/System.hpp>
 #include "Input.hpp"
 
 namespace glPortal {
@@ -20,8 +21,7 @@ Game::Game() :closed(false) {
       world.create();
     }
   catch (std::runtime_error &e) {
-      std::cout << "Runtime Error: ";
-      std::cout << e.what () << '\n';
+    System::log(std::string("Runtime Error: " + std::string(e.what())));
     }
   update();
 }
