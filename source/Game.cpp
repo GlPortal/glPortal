@@ -18,11 +18,11 @@ Game::Game() :closed(false) {
   window.createFromConfig();
 
   try {
-      world.create();
-    }
+    world.create();
+  }
   catch (std::runtime_error &e) {
     System::log(std::string("Runtime Error: " + std::string(e.what())));
-    }
+  }
   update();
 }
 
