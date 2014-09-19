@@ -10,6 +10,7 @@ add_executable(${EXE_NAME}
   util/math/Math.cpp
   util/logger/Logger.cpp
   util/logger/ConsoleLogger.cpp
+  util/sdl/Fps.cpp
   engine/BoxCollider.cpp
   World.cpp Window.cpp
   Player.cpp
