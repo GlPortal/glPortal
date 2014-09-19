@@ -22,8 +22,8 @@ void Fps::countCycle(){
   */
 void Fps::dump(){
   std::cout << "FPS: " << getFps() << std::endl;
-}  
-  
+}
+ 
 int Fps::getFps() {
     if (SDL_GetTicks() - lastFpsTime > 1000) {
       lastFpsTime = SDL_GetTicks();
