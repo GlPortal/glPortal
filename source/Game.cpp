@@ -9,6 +9,8 @@
 
 #include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
+#include <engine/env/System.hpp>
+#include <util/sdl/Fps.hpp>
 #include "Input.hpp"
 
 namespace glPortal {
@@ -17,36 +19,23 @@ Game::Game() :closed(false) {
   window.createFromConfig();
 
   try {
-      world.create();
-    }
+    world.create();
+  }
   catch (std::runtime_error &e) {
-      std::cout << "Runtime Error: ";
-      std::cout << e.what () << '\n';
-    }
+    System::log(std::string("Runtime Error: " + std::string(e.what())));
+  }
   update();
 }
 
 void Game::update() {
   SDL_Event event;
-  //Time the next update should be run to conform to UPDATE_RATE
-  unsigned int nextUpdate = SDL_GetTicks();
-  //Time of last FPS count
-  unsigned int lastFpsTime = SDL_GetTicks();
-  //Amount of times rendering has been skipped in favour of updating
   int skipped;
-  //Amount of times rendered so far, gets reset each second
-  int rendered = 0;
-
+  unsigned int nextUpdate = SDL_GetTicks();
+  Fps fps;
+  
   while (not closed) {
     skipped = 0;
-    //Count the FPS
-    if (SDL_GetTicks() - lastFpsTime > 1000) {
-      lastFpsTime = SDL_GetTicks();
-      int fps = rendered;
-      std::cout << fps << std::endl;
-      rendered = 0;
-    }
-
+    fps.dump();
     //Update the game if it is time
     while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
       while (SDL_PollEvent(&event)) {
@@ -57,7 +46,7 @@ void Game::update() {
       skipped++;
     }
     world.render();
-    rendered++;
+    fps.countCycle();
     window.swapBuffers();
   }
   world.destroy();
