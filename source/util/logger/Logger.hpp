@@ -7,7 +7,7 @@ namespace glPortal {
 
 class Logger {
 public:
-  virtual void log(std::string message){}
+  virtual void log(std::string message) {}
 };
 
 } /* namespace glPortal */

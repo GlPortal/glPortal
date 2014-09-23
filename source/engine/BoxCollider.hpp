@@ -1,7 +1,7 @@
 #ifndef BOXCOLLIDER_HPP
 #define BOXCOLLIDER_HPP
 
-#include <util/Vector3f.hpp>
+#include <util/math/Vector3f.hpp>
 
 namespace glPortal {
 

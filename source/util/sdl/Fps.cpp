@@ -10,17 +10,18 @@ namespace glPortal {
 Fps::Fps() {
   fps = 0;
   lastFpsTime = SDL_GetTicks();
+  skipped = 0;
   rendered = 0;
 }
 
-void Fps::countCycle(){
+void Fps::countCycle() {
   rendered++;
 }
 
 /**
   * Dump current FPS to stdout
   */
-void Fps::dump(){
+void Fps::dump() {
   std::cout << "FPS: " << getFps() << std::endl;
 }
 
