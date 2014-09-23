@@ -1,6 +1,7 @@
-#include <util/Math.hpp>
-#include <util/Vector3f.hpp>
+#include <util/math/Math.hpp>
 #include <cmath>
+
+#include "Vector3f.hpp"
 
 namespace glPortal {
   const float Math::PI_RND=3.1415926535897932384626433832795028841971693993751058209749445923078164062862089;

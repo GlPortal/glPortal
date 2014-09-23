@@ -2,7 +2,7 @@
 #define RENDERER_HPP
 
 #include <engine/Shader.hpp>
-#include <util/Matrix4f.hpp>
+#include <util/math/Matrix4f.hpp>
 #include <GL/glew.h>
 #include <string>
 #include <engine/Text.hpp>

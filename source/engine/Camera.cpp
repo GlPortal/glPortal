@@ -1,5 +1,5 @@
 #include "Camera.hpp"
-#include <util/Math.hpp>
+#include <util/math/Math.hpp>
 
 #include <math.h>
 #include "../Window.hpp"
