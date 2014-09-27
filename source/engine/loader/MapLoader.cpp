@@ -25,34 +25,30 @@ namespace glPortal {
  *  Load a map in GlPortal XML format.
  */
 
+  Scene* MapLoader::scene;
+  TiXmlHandle MapLoader::rootHandle = TiXmlHandle(0);
+  
 /**
  * Get a scene from a map file in XML format.
  */
+  
 Scene* MapLoader::getScene(std::string path) {
-  Scene* scene = new Scene();
+  scene = new Scene();
+
   TiXmlDocument doc(string(Environment::getDataDir() + path));
   bool loaded = doc.LoadFile();
 
   if (loaded) {
     TiXmlHandle docHandle(&doc);
     TiXmlElement* element;
-    TiXmlHandle rootHandle(0);
     Vector3f lightPos;
     Vector3f lightColor;
     
     element = docHandle.FirstChildElement().Element();
     rootHandle = TiXmlHandle(element);
-    //SPAWN
-    TiXmlElement* spawnElement;
-    spawnElement = rootHandle.FirstChild("spawn").Element();
 
-    if (spawnElement) {
-      XmlHelper::extractPositionAndRotation(spawnElement, scene->player);
-    } else {
-      throw std::runtime_error("No spawn position defined.");
-    }
+    loadSpawn();
 
-    //END_SPAWN
     TiXmlElement* endElement;
     endElement = rootHandle.FirstChild("end").Element();
 
@@ -149,4 +145,15 @@ Scene* MapLoader::getScene(std::string path) {
   
   return scene;
 }
+
+void MapLoader::loadSpawn() {
+  TiXmlElement* spawnElement;
+  spawnElement = rootHandle.FirstChild("spawn").Element();
+
+  if (spawnElement) {
+    XmlHelper::extractPositionAndRotation(spawnElement, scene->player);
+  } else {
+    throw std::runtime_error("No spawn position defined.");
+  }
+}  
 } /* namespace glPortal */
