@@ -31,7 +31,6 @@ namespace glPortal {
 /**
  * Get a scene from a map file in XML format.
  */
-  
 Scene* MapLoader::getScene(std::string path) {
   scene = new Scene();
 
@@ -155,5 +154,5 @@ void MapLoader::loadSpawn() {
   } else {
     throw std::runtime_error("No spawn position defined.");
   }
-}  
+}
 } /* namespace glPortal */
