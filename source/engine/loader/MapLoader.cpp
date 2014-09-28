@@ -40,13 +40,11 @@ Scene* MapLoader::getScene(std::string path) {
   if (loaded) {
     TiXmlHandle docHandle(&doc);
     TiXmlElement* element;
-    Vector3f lightPos;
-    Vector3f lightColor;
     
     element = docHandle.FirstChildElement().Element();
     rootHandle = TiXmlHandle(element);
 
-    loadSpawn();
+    extractSpawn();
 
     TiXmlElement* endElement;
     endElement = rootHandle.FirstChild("end").Element();
@@ -61,22 +59,8 @@ Scene* MapLoader::getScene(std::string path) {
       throw std::runtime_error("No end position defined.");
     }
 
-    //LIGHT
-    TiXmlElement* lightElement;
-    lightElement = rootHandle.FirstChild("light").Element();
-
-    do {
-      XmlHelper::pushAttributeVertexToVector(lightElement, lightPos);
-
-      lightElement->QueryFloatAttribute("r", &lightColor.x);
-      lightElement->QueryFloatAttribute("g", &lightColor.y);
-      lightElement->QueryFloatAttribute("b", &lightColor.z);
-      Light light;
-      light.position.set(lightPos.x, lightPos.y, lightPos.z);
-      light.color.set(lightColor.x, lightColor.y, lightColor.z);
-      scene->lights.push_back(light);
-    } while ((lightElement = lightElement->NextSiblingElement("light")) != NULL);
-
+    extractLights();
+   
     //WALLS
     TiXmlElement* textureElement = rootHandle.FirstChild("texture").Element();
     string texturePath("none");
@@ -145,7 +129,7 @@ Scene* MapLoader::getScene(std::string path) {
   return scene;
 }
 
-void MapLoader::loadSpawn() {
+void MapLoader::extractSpawn() {
   TiXmlElement* spawnElement;
   spawnElement = rootHandle.FirstChild("spawn").Element();
 
@@ -155,4 +139,24 @@ void MapLoader::loadSpawn() {
     throw std::runtime_error("No spawn position defined.");
   }
 }
+
+void MapLoader::extractLights() {
+  Vector3f lightPos;
+  Vector3f lightColor;
+  TiXmlElement* lightElement;
+  lightElement = rootHandle.FirstChild("light").Element();
+
+  do {
+    XmlHelper::pushAttributeVertexToVector(lightElement, lightPos);
+
+    lightElement->QueryFloatAttribute("r", &lightColor.x);
+    lightElement->QueryFloatAttribute("g", &lightColor.y);
+    lightElement->QueryFloatAttribute("b", &lightColor.z);
+    Light light;
+    light.position.set(lightPos.x, lightPos.y, lightPos.z);
+    light.color.set(lightColor.x, lightColor.y, lightColor.z);
+    scene->lights.push_back(light);
+  } while ((lightElement = lightElement->NextSiblingElement("light")) != NULL);
+}
+  
 } /* namespace glPortal */
