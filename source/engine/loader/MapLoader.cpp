@@ -57,6 +57,9 @@ Scene* MapLoader::getScene(std::string path) {
   return scene;
 }
 
+/**
+ * Extract a spawn element containing its rotation and position elements
+ */
 void MapLoader::extractSpawn() {
   TiXmlElement* spawnElement;
   spawnElement = rootHandle.FirstChild("spawn").Element();
@@ -68,6 +71,9 @@ void MapLoader::extractSpawn() {
   }
 }
 
+/**
+ * Extract a light elements containing position (x, y, z) and colour (r, g, b) attributes
+ */
 void MapLoader::extractLights() {
   Vector3f lightPos;
   Vector3f lightColor;
@@ -102,65 +108,65 @@ void MapLoader::extractDoor() {
   }
 }
 
- void MapLoader::extractWalls() {
-   TiXmlElement* textureElement = rootHandle.FirstChild("texture").Element();
-   string texturePath("none");
-   string surfaceType("none");
+void MapLoader::extractWalls() {
+  TiXmlElement* textureElement = rootHandle.FirstChild("texture").Element();
+  string texturePath("none");
+  string surfaceType("none");
 
-   if (textureElement) {
-     do {
-       textureElement->QueryStringAttribute("source", &texturePath);
-       textureElement->QueryStringAttribute(  "type", &surfaceType);
-       TiXmlElement* wallBoxElement = textureElement->FirstChildElement("wall");
+  if (textureElement) {
+    do {
+      textureElement->QueryStringAttribute("source", &texturePath);
+      textureElement->QueryStringAttribute(  "type", &surfaceType);
+      TiXmlElement* wallBoxElement = textureElement->FirstChildElement("wall");
 
-       if (wallBoxElement) {
-         do {
-           TiXmlElement* boxPositionElement;
-           TiXmlElement* boxScaleElement;
+      if (wallBoxElement) {
+        do {
+          TiXmlElement* boxPositionElement;
+          TiXmlElement* boxScaleElement;
 
-           Entity wall;
-           boxPositionElement = wallBoxElement->FirstChildElement("position");
-           XmlHelper::pushAttributeVertexToVector(boxPositionElement, wall.position);
+          Entity wall;
+          boxPositionElement = wallBoxElement->FirstChildElement("position");
+          XmlHelper::pushAttributeVertexToVector(boxPositionElement, wall.position);
 
-           boxScaleElement = wallBoxElement->FirstChildElement("scale");
-           XmlHelper::pushAttributeVertexToVector(boxScaleElement, wall.scale);
+          boxScaleElement = wallBoxElement->FirstChildElement("scale");
+          XmlHelper::pushAttributeVertexToVector(boxScaleElement, wall.scale);
 
-           wall.texture = TextureLoader::getTexture(texturePath);
-           wall.texture.xTiling = 0.5f;
-           wall.texture.yTiling = 0.5f;
-           wall.mesh = MeshLoader::getPortalBox(wall);
-           scene->walls.push_back(wall);
-         } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != NULL);
-       }
+          wall.texture = TextureLoader::getTexture(texturePath);
+          wall.texture.xTiling = 0.5f;
+          wall.texture.yTiling = 0.5f;
+          wall.mesh = MeshLoader::getPortalBox(wall);
+          scene->walls.push_back(wall);
+        } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != NULL);
+      }
 
-       texturePath = std::string("none");
-     } while ((textureElement = textureElement->NextSiblingElement("texture")) != NULL);
-   }
- }
-
-  void MapLoader::extractTriggers() {
-    TiXmlElement* triggerElement = rootHandle.FirstChild("trigger").Element();
-    string triggerType("none");
-
-    if (triggerElement) {
-      do {
-        TiXmlElement* triggerTypeElement;
-
-        Trigger trigger;
-
-        if (triggerElement) {
-          triggerElement->QueryStringAttribute("type", &trigger.type);
-        }
-
-        XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("position"),
-                                               trigger.position);
-        XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("scale"),
-                                               trigger.scale);
-        trigger.texture = TextureLoader::getTexture("redBox.png");
-        trigger.mesh = MeshLoader::getPortalBox(trigger);
-        scene->triggers.push_back(trigger);
-
-      } while ((triggerElement = triggerElement->NextSiblingElement()) != NULL);
-    }
+      texturePath = std::string("none");
+    } while ((textureElement = textureElement->NextSiblingElement("texture")) != NULL);
   }
+}
+
+void MapLoader::extractTriggers() {
+  TiXmlElement* triggerElement = rootHandle.FirstChild("trigger").Element();
+  string triggerType("none");
+
+  if (triggerElement) {
+    do {
+      TiXmlElement* triggerTypeElement;
+
+      Trigger trigger;
+
+      if (triggerElement) {
+        triggerElement->QueryStringAttribute("type", &trigger.type);
+      }
+
+      XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("position"),
+                                             trigger.position);
+      XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("scale"),
+                                             trigger.scale);
+      trigger.texture = TextureLoader::getTexture("redBox.png");
+      trigger.mesh = MeshLoader::getPortalBox(trigger);
+      scene->triggers.push_back(trigger);
+
+    } while ((triggerElement = triggerElement->NextSiblingElement()) != NULL);
+  }
+}
 } /* namespace glPortal */
