@@ -16,7 +16,8 @@ public:
   static TiXmlHandle rootHandle;
 private:
   static Mesh getBox(Entity wall);
-  static void loadSpawn();
+  static void extractSpawn();
+  static void extractLights();
 };
 
 } /* namespace glPortal */
