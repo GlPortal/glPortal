@@ -18,6 +18,9 @@ private:
   static Mesh getBox(Entity wall);
   static void extractSpawn();
   static void extractLights();
+  static void extractDoor();
+  static void extractWalls();
+  static void extractTriggers();
 };
 
 } /* namespace glPortal */
