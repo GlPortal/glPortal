@@ -18,6 +18,7 @@ public:
   std::vector<Entity> walls;
   std::vector<Trigger> triggers;
   std::vector<Light> lights;
+  std::vector<Entity> models;
   Portal bluePortal;
   Portal orangePortal;
   Entity start;
