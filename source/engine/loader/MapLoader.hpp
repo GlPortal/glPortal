@@ -21,6 +21,7 @@ private:
   static void extractDoor();
   static void extractWalls();
   static void extractTriggers();
+  static void extractModels();
 };
 
 } /* namespace glPortal */

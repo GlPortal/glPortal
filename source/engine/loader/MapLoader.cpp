@@ -46,6 +46,7 @@ Scene* MapLoader::getScene(std::string path) {
 
     extractSpawn();
     extractDoor();
+    extractModels();
     extractLights();
     extractWalls();
     extractTriggers();
@@ -116,7 +117,7 @@ void MapLoader::extractWalls() {
   if (textureElement) {
     do {
       textureElement->QueryStringAttribute("source", &texturePath);
-      textureElement->QueryStringAttribute(  "type", &surfaceType);
+      textureElement->QueryStringAttribute("type"  , &surfaceType);
       TiXmlElement* wallBoxElement = textureElement->FirstChildElement("wall");
 
       if (wallBoxElement) {
@@ -169,4 +170,24 @@ void MapLoader::extractTriggers() {
     } while ((triggerElement = triggerElement->NextSiblingElement()) != NULL);
   }
 }
+
+void MapLoader::extractModels() {
+  Vector3f modelPos;
+  string texture("none");
+  string mesh("none");
+  TiXmlElement* modelElement = rootHandle.FirstChild("model").Element();
+  if(modelElement){
+    do {
+      modelElement->QueryStringAttribute("texture", &texture);
+      modelElement->QueryStringAttribute("mesh"   , &mesh);
+      XmlHelper::pushAttributeVertexToVector(modelElement, modelPos);
+
+      Entity model;
+      XmlHelper::extractPositionAndRotation(modelElement, model);
+      model.texture = TextureLoader::getTexture(texture);
+      model.mesh = MeshLoader::getMesh(mesh);    
+      scene->models.push_back(model);
+    } while ((modelElement = modelElement->NextSiblingElement("model")) != NULL);
+  }
+} 
 } /* namespace glPortal */
