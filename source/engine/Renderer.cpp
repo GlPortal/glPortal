@@ -172,7 +172,6 @@ void Renderer::render(Scene* scene) {
 }
 
 void Renderer::renderScene(Scene* scene) {
-  //Walls
   for (unsigned int i = 0; i < scene->walls.size(); i++) {
     renderEntity(scene->walls[i]);
   }
