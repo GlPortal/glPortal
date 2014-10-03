@@ -7,7 +7,7 @@
 #include <engine/Letter.hpp>
 #include <engine/Light.hpp>
 #include <engine/Mesh.hpp>
-#include <engine/Renderer.hpp>
+#include "Renderer.hpp"
 #include <engine/Texture.hpp>
 #include <util/math/Vector2f.hpp>
 #include <util/math/Vector3f.hpp>
