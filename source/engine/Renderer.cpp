@@ -179,7 +179,7 @@ void Renderer::renderScene(Scene* scene) {
 
   for (unsigned int i = 0; i < scene->models.size(); i++) {
     renderEntity(scene->models[i]);
-  }  
+  }
   
   //End
   renderEntity(scene->end);
