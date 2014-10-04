@@ -28,6 +28,7 @@ public:
   void renderText(Scene* scene, Text text);
   void renderTexturedMesh(Mesh mesh, Texture texture);
   void setupModelMatrix(Entity entity);
+  void setupViewMatrix(Scene* scene);
 private:
   Shader shader;
   Matrix4f projectionMatrix;
