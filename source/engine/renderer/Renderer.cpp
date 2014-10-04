@@ -169,29 +169,15 @@ void Renderer::renderScene(Scene* scene) {
   for (unsigned int i = 0; i < scene->models.size(); i++) {
     renderEntity(scene->models[i]);
   }
-  
+
   //End
   renderEntity(scene->end);
 }
 
 void Renderer::renderEntity(Entity e) {
-  modelMatrix.setIdentity();
-  modelMatrix.translate(e.position);
-  modelMatrix.rotate(e.rotation);
-  modelMatrix.scale(e.scale);
+  setupModelMatrix(e);
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
-
-  glBindVertexArray(e.mesh.handle);
-
-  int loc = glGetUniformLocation(shader.handle, "diffuse");
-  int tiling = glGetUniformLocation(shader.handle, "tiling");
-  glUniform2f(tiling, e.texture.xTiling, e.texture.yTiling);
-  glUniform1i(loc, 0);
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, e.texture.handle);
-  glDrawArrays(GL_TRIANGLES, 0, e.mesh.numFaces * 3);
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glBindVertexArray(0);
+  renderTexturedMesh(e.mesh, e.texture);
 }
 
 void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
@@ -212,10 +198,7 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
     glStencilFunc(GL_NEVER, 1, 0xFF);
     glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
 
-    modelMatrix.setIdentity();
-    modelMatrix.translate(portal.position);
-    modelMatrix.rotate(portal.rotation);
-    modelMatrix.scale(portal.scale);
+    setupModelMatrix(portal);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
     Mesh portalStencil = MeshLoader::getMesh("PortalStencil.obj");
@@ -261,7 +244,7 @@ void Renderer::renderPortalOverlay(Portal portal) {
 
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    renderTexturedMesh(portal.mesh, portal.texture);    
+    renderTexturedMesh(portal.mesh, portal.texture);
   }
 }
 
@@ -319,5 +302,5 @@ void Renderer::setupModelMatrix(Entity entity) {
   modelMatrix.rotate(entity.rotation);
   modelMatrix.scale(entity.scale);
 }
-  
+
 } /* namespace glPortal */
