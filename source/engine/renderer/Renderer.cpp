@@ -152,17 +152,7 @@ void Renderer::render(Scene* scene) {
   {
   Mesh mesh = MeshLoader::getMesh("Plane.obj");
   Texture texture = TextureLoader::getTexture("Reticle.png");
-  glBindVertexArray(mesh.handle);
-
-  int loc = glGetUniformLocation(shader.handle, "diffuse");
-  int tiling = glGetUniformLocation(shader.handle, "tiling");
-  glUniform2f(tiling, texture.xTiling, texture.yTiling);
-  glUniform1i(loc, 0);
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, texture.handle);
-  glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glBindVertexArray(0);
+  renderTexturedMesh(mesh, texture);
   }
 
   //Text
@@ -274,17 +264,7 @@ void Renderer::renderPortalOverlay(Portal portal) {
 
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    glBindVertexArray(portal.mesh.handle);
-
-    int loc = glGetUniformLocation(shader.handle, "diffuse");
-    int tiling = glGetUniformLocation(shader.handle, "tiling");
-    glUniform2f(tiling, portal.texture.xTiling, portal.texture.yTiling);
-    glUniform1i(loc, 0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, portal.texture.handle);
-    glDrawArrays(GL_TRIANGLES, 0, portal.mesh.numFaces * 3);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindVertexArray(0);
+    renderTexturedMesh(portal.mesh, portal.texture);    
   }
 }
 
@@ -332,4 +312,17 @@ void Renderer::renderText(Scene* scene, Text text) {
   }
 }
 
+void Renderer::renderTexturedMesh(Mesh mesh, Texture texture) {
+    glBindVertexArray(mesh.handle);
+    int loc = glGetUniformLocation(shader.handle, "diffuse");
+    int tiling = glGetUniformLocation(shader.handle, "tiling");
+    glUniform2f(tiling, texture.xTiling, texture.yTiling);
+    glUniform1i(loc, 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture.handle);
+    glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindVertexArray(0);
+}
+  
 } /* namespace glPortal */
