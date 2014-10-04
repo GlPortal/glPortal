@@ -298,16 +298,7 @@ void Renderer::renderText(Scene* scene, Text text) {
     modelMatrix.scale(letter.width * scaling.x * size, letter.height * scaling.y * size, 1);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    glBindVertexArray(mesh.handle);
-    int loc = glGetUniformLocation(shader.handle, "diffuse");
-    int tiling = glGetUniformLocation(shader.handle, "tiling");
-    glUniform2f(tiling, texture.xTiling, texture.yTiling);
-    glUniform1i(loc, 0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture.handle);
-    glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindVertexArray(0);
+    renderTexturedMesh(mesh, texture);
     position.x += letter.advance * size;
   }
 }
