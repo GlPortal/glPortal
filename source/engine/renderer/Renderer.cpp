@@ -84,10 +84,7 @@ void Renderer::render(Scene* scene) {
   renderPortal(scene, scene->orangePortal, scene->bluePortal);
 
   //Update camera position
-  viewMatrix.setIdentity();
-  viewMatrix.rotate(Vector3f::negate(scene->camera.rotation));
-  viewMatrix.translate(Vector3f::negate(scene->camera.position));
-  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+  setupViewMatrix(scene);
 
   //Depth buffer
   if (scene->bluePortal.open && scene->orangePortal.open) {
@@ -95,20 +92,14 @@ void Renderer::render(Scene* scene) {
     glDepthMask(GL_TRUE);
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    modelMatrix.setIdentity();
-    modelMatrix.translate(scene->bluePortal.position);
-    modelMatrix.rotate(scene->bluePortal.rotation);
-    modelMatrix.scale(scene->bluePortal.scale);
+    setupModelMatrix(scene->bluePortal);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
     Mesh portalStencil = MeshLoader::getMesh("PortalStencil.obj");
     glBindVertexArray(portalStencil.handle);
     glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
 
-    modelMatrix.setIdentity();
-    modelMatrix.translate(scene->orangePortal.position);
-    modelMatrix.rotate(scene->orangePortal.rotation);
-    modelMatrix.scale(scene->orangePortal.scale);
+    setupModelMatrix(scene->orangePortal);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
     glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
@@ -126,10 +117,7 @@ void Renderer::render(Scene* scene) {
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
 
   //Update camera position
-  viewMatrix.setIdentity();
-  viewMatrix.rotate(Vector3f::negate(scene->camera.rotation));
-  viewMatrix.translate(Vector3f::negate(scene->camera.position));
-  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+  setupViewMatrix(scene);
 
   renderPortalOverlay(scene->bluePortal);
   renderPortalOverlay(scene->orangePortal);
@@ -170,7 +158,6 @@ void Renderer::renderScene(Scene* scene) {
     renderEntity(scene->models[i]);
   }
 
-  //End
   renderEntity(scene->end);
 }
 
@@ -188,10 +175,7 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
     glDepthMask(GL_FALSE);
 
     //Update camera position
-    viewMatrix.setIdentity();
-    viewMatrix.rotate(Vector3f::negate(scene->camera.rotation));
-    viewMatrix.translate(Vector3f::negate(scene->camera.position));
-    glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+    setupViewMatrix(scene);
 
     //Stencil drawing
     //Primary portal
@@ -208,11 +192,11 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
 
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     glDepthMask(GL_TRUE);
-    //Draw the scene from the other portal
+    //Draw the scene from the secondary portal
     glStencilFunc(GL_EQUAL, 1, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-    //Set camera in other portal
+    //Set camera in secondary portal
     if (portal.rotation.x == 0) {
       viewMatrix.setIdentity();
       viewMatrix.rotate(-otherPortal.rotation.x - scene->camera.rotation.x, 1, 0, 0);
@@ -301,6 +285,13 @@ void Renderer::setupModelMatrix(Entity entity) {
   modelMatrix.translate(entity.position);
   modelMatrix.rotate(entity.rotation);
   modelMatrix.scale(entity.scale);
+}
+
+void Renderer::setupViewMatrix(Scene* scene) {
+  viewMatrix.setIdentity();
+  viewMatrix.rotate(Vector3f::negate(scene->camera.rotation));
+  viewMatrix.translate(Vector3f::negate(scene->camera.position));
+  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 }
 
 } /* namespace glPortal */
