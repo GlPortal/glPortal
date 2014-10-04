@@ -257,10 +257,7 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
 
 void Renderer::renderPortalOverlay(Portal portal) {
   if (portal.open) {
-    modelMatrix.setIdentity();
-    modelMatrix.translate(portal.position);
-    modelMatrix.rotate(portal.rotation);
-    modelMatrix.scale(portal.scale);
+    setupModelMatrix(portal);
 
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
@@ -304,16 +301,23 @@ void Renderer::renderText(Scene* scene, Text text) {
 }
 
 void Renderer::renderTexturedMesh(Mesh mesh, Texture texture) {
-    glBindVertexArray(mesh.handle);
-    int loc = glGetUniformLocation(shader.handle, "diffuse");
-    int tiling = glGetUniformLocation(shader.handle, "tiling");
-    glUniform2f(tiling, texture.xTiling, texture.yTiling);
-    glUniform1i(loc, 0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture.handle);
-    glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindVertexArray(0);
+  glBindVertexArray(mesh.handle);
+  int loc = glGetUniformLocation(shader.handle, "diffuse");
+  int tiling = glGetUniformLocation(shader.handle, "tiling");
+  glUniform2f(tiling, texture.xTiling, texture.yTiling);
+  glUniform1i(loc, 0);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture.handle);
+  glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glBindVertexArray(0);
+}
+
+void Renderer::setupModelMatrix(Entity entity) {
+  modelMatrix.setIdentity();
+  modelMatrix.translate(entity.position);
+  modelMatrix.rotate(entity.rotation);
+  modelMatrix.scale(entity.scale);
 }
   
 } /* namespace glPortal */

@@ -27,6 +27,7 @@ public:
   void renderPortalOverlay(Portal portal);
   void renderText(Scene* scene, Text text);
   void renderTexturedMesh(Mesh mesh, Texture texture);
+  void setupModelMatrix(Entity entity);
 private:
   Shader shader;
   Matrix4f projectionMatrix;
