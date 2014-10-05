@@ -39,7 +39,7 @@ public:
   void setZFar(float zFar);
   void setPerspective();
   void setOrthographic();
-
+  Vector3f getDirection();
   Vector3f position;
   Vector3f rotation;
 private:

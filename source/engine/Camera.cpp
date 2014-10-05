@@ -70,4 +70,10 @@ void Camera::setOrthographic() {
   recalculate();
 }
 
+Vector3f Camera::getDirection(){
+  float x = cos(Math::toRadians(rotation.x)) * -sin(Math::toRadians(rotation.y));
+  float y = sin(Math::toRadians(rotation.x));
+  float z = -cos(Math::toRadians(rotation.x)) * cos(Math::toRadians(rotation.y));
+  return Vector3f(x, y, z);
+}
 } /* namespace glPortal */
