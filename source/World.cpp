@@ -185,11 +185,7 @@ bool World::collidesWithWalls(BoxCollider collider) {
 
 void World::shootPortal(int button) {
   //Shooting
-  Vector3f cameraDir(cos(Math::toRadians(scene->camera.rotation.x)) *
-                     -sin(Math::toRadians(scene->camera.rotation.y)),
-                     sin(Math::toRadians(scene->camera.rotation.x)),
-                     -cos(Math::toRadians(scene->camera.rotation.x)) *
-                     cos(Math::toRadians(scene->camera.rotation.y)));
+  Vector3f cameraDir = scene->camera.getDirection();
 
   //Find the closest intersection
   Entity closestWall;
