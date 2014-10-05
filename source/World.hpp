@@ -21,6 +21,8 @@ public:
   bool collidesWithWalls(BoxCollider collider);
   void shootPortal(int button);
   bool collides(Vector3f ro, Vector3f rd, Entity e, float* tNear, float* tFar);
+  void collidePlayer();
+  bool collidesWithWallOutsidePortal(BoxCollider collider);
   void render();
 
 private:

@@ -133,41 +133,7 @@ void World::update() {
 
   pos = Vector3f::add(player->position, player->velocity);
 
-  //Y collision
-  BoxCollider bboxY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
-  if (collidesWithWalls(bboxY)) {
-    if (scene->bluePortal.open && scene->orangePortal.open &&
-      (scene->bluePortal.inPortal(bboxY) || scene->orangePortal.inPortal(bboxY))) {
-
-    } else {
-      if (player->velocity.y < 0) {
-        player->grounded = true;
-      }
-      player->velocity.y = 0;
-    }
-  }
-
-  //X collision
-  BoxCollider bboxX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
-  if (collidesWithWalls(bboxX)) {
-    if (scene->bluePortal.open && scene->orangePortal.open &&
-      (scene->bluePortal.inPortal(bboxX) || scene->orangePortal.inPortal(bboxX))) {
-
-    } else {
-      player->velocity.x = 0;
-    }
-  }
-
-  //Z collision
-  BoxCollider bboxZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
-  if (collidesWithWalls(bboxZ)) {
-    if (scene->bluePortal.open && scene->orangePortal.open &&
-      (scene->bluePortal.inPortal(bboxZ) || scene->orangePortal.inPortal(bboxZ))) {
-
-    } else {
-      player->velocity.z = 0;
-    }
-  }
+  collidePlayer();
 
   //Trigger
   for (unsigned int i = 0; i < scene->triggers.size(); i++) {
@@ -258,6 +224,40 @@ void World::shootPortal(int button) {
 
 void World::render() {
   renderer->render(scene);
+}
+
+void World::collidePlayer() {
+  Player* player = &scene->player;
+  Vector3f futurePlayerPosition = Vector3f::add(player->position, player->velocity);
+
+  BoxCollider colliderX(Vector3f(futurePlayerPosition.x, player->position.y, player->position.z), player->scale);
+  BoxCollider colliderY(Vector3f(player->position.x, futurePlayerPosition.y, player->position.z), player->scale);
+  BoxCollider colliderZ(Vector3f(player->position.x, player->position.y, futurePlayerPosition.z), player->scale);
+
+  if(collidesWithWallOutsidePortal(colliderX)) {
+    player->velocity.x = 0;
+  }
+
+  if(collidesWithWallOutsidePortal(colliderY)) {
+    if (player->velocity.y < 0) {
+      player->grounded = true;
+    }
+    player->velocity.y = 0;
+  }
+
+  if(collidesWithWallOutsidePortal(colliderZ)) {
+    player->velocity.z = 0;
+  }
+}
+
+bool World::collidesWithWallOutsidePortal(BoxCollider collider) {
+  if (collidesWithWalls(collider)) {
+    if (not(scene->bluePortal.open && scene->orangePortal.open &&
+            (scene->bluePortal.inPortal(collider) || scene->orangePortal.inPortal(collider)))) {
+      return true;
+    }
+  }
+  return false;
 }
 
 } /* namespace glPortal */
