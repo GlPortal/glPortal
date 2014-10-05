@@ -230,22 +230,25 @@ void World::collidePlayer() {
   Player* player = &scene->player;
   Vector3f futurePlayerPosition = Vector3f::add(player->position, player->velocity);
 
-  BoxCollider colliderX(Vector3f(futurePlayerPosition.x, player->position.y, player->position.z), player->scale);
-  BoxCollider colliderY(Vector3f(player->position.x, futurePlayerPosition.y, player->position.z), player->scale);
-  BoxCollider colliderZ(Vector3f(player->position.x, player->position.y, futurePlayerPosition.z), player->scale);
+  BoxCollider colliderX(Vector3f(futurePlayerPosition.x, player->position.y, player->position.z),
+                        player->scale);
+  BoxCollider colliderY(Vector3f(player->position.x, futurePlayerPosition.y, player->position.z),
+                        player->scale);
+  BoxCollider colliderZ(Vector3f(player->position.x, player->position.y, futurePlayerPosition.z),
+                        player->scale);
 
-  if(collidesWithWallOutsidePortal(colliderX)) {
+  if (collidesWithWallOutsidePortal(colliderX)) {
     player->velocity.x = 0;
   }
 
-  if(collidesWithWallOutsidePortal(colliderY)) {
+  if (collidesWithWallOutsidePortal(colliderY)) {
     if (player->velocity.y < 0) {
       player->grounded = true;
     }
     player->velocity.y = 0;
   }
 
-  if(collidesWithWallOutsidePortal(colliderZ)) {
+  if (collidesWithWallOutsidePortal(colliderZ)) {
     player->velocity.z = 0;
   }
 }
