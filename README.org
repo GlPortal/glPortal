@@ -1,8 +1,7 @@
 * About
-GlPortal is a puzzle game where you have to use teleportation in order
-to reach the goal.
+GlPortal is a puzzle game where you have to use teleportation to reach the exit.
 
-GlPortal was created by Simon Larsen in 2012 and Henry Hirsch started developing it further in 2013.
+GlPortal was created by Simon Larsen in 2012 and Henry Hirsch took over development in 2013.
 In 2014 Julian Thijssen joined the development team.
 
 You can find the website at http://glportal.de .
@@ -19,8 +18,8 @@ Chat with us at irc.freenode.org in the channel ##glportal.
 * Compile the source
 For instructions on how to compile the game please read COMPILE.org.
 * Join the team
-You can join the community at http://glportal.de/groups/glportal/ 
+Chat with us at irc.freenode.org in the channel ##glportal
 for questions and discussions about the development of the game.
-Report Issues to http://bugs.glportal.de  .
+Report Issues to http://bugs.glportal.de .
 
 Please send me a pull request on github if you have changes.
