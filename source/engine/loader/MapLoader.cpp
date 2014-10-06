@@ -158,6 +158,10 @@ void MapLoader::extractTriggers() {
       if (triggerElement) {
         triggerElement->QueryStringAttribute("type", &trigger.type);
       }
+      
+      if (triggerType == "none") {
+        throw std::runtime_error("Trigger must define a type attribute.");
+      }
 
       XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("position"),
                                              trigger.position);
