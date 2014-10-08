@@ -17,7 +17,7 @@
 #include "engine/renderer/Renderer.hpp"
 #include "engine/Texture.hpp"
 #include "engine/loader/TextureLoader.hpp"
-#include "engine/Trigger.hpp"
+#include <engine/trigger/Trigger.hpp>
 #include <util/math/Math.hpp>
 #include <util/math/Vector2f.hpp>
 #include <util/math/Vector3f.hpp>

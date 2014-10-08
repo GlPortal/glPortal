@@ -15,7 +15,7 @@
 #include "XmlHelper.hpp"
 #include "engine/Texture.hpp"
 #include "TextureLoader.hpp"
-#include "engine/Trigger.hpp"
+#include <engine/trigger/Trigger.hpp>
 #include "util/math/Vector3f.hpp"
 
 using namespace std;

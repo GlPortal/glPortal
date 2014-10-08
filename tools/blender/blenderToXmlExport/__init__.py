@@ -106,10 +106,33 @@ class selectionToPortable(bpy.types.Operator):
     bl_label = "Mark the selection as portable."
 
     def execute(self, context):
+        realpath = os.path.expanduser('~/.glportal/data/textures/wall.png')
+        try:
+            portableWallImage = bpy.data.images.load(realpath)
+        except:
+            raise NameError("Cannot load image %s" % realpath)
+
+        portableWallTexture = bpy.data.textures.new('ColorTex', type = 'IMAGE')
+        portableWallTexture.image = portableWallImage
+        
+        mat = bpy.data.materials.new('TexMat')
+ 
+        # Add texture slot for color texture
+        mtex = mat.texture_slots.add()
+        mtex.texture = portableWallTexture
+        mtex.texture_coords = 'UV'
+        mtex.use_map_color_diffuse = True 
+        mtex.use_map_color_emission = True 
+        mtex.emission_color_factor = 0.5
+        mtex.use_map_density = True 
+        mtex.mapping = 'FLAT' 
+        
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
-            object["glpType"] = "portable" 
+            object["glpType"] = "portable"
+            me = object.data
+            me.materials.append(mat)
         return {'FINISHED'}    
     
 class ExportMyFormat(bpy.types.Operator, ExportHelper):
