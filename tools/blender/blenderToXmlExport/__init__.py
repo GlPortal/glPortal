@@ -20,7 +20,7 @@ import string
 from mathutils import Vector
 import re
 
-class CustomPanel(bpy.types.Panel):
+class GlPortalPanel(bpy.types.Panel):
     """GlPortal panel in the toolbar"""
     bl_label = "GlPortal"
     bl_space_type = 'VIEW_3D'
@@ -239,7 +239,7 @@ def register():
 def unregister():
     bpy.utils.unregister_module(__name__)
     bpy.types.INFO_MT_file_export.remove(menu_func)
-    bpy.utils.unregister_class(CustomPanel)
+    bpy.utils.unregister_class(GlPortalPanel)
 
 if __name__ == "__main__":
     register()
