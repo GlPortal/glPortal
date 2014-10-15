@@ -15,7 +15,7 @@
 #include "XmlHelper.hpp"
 #include "engine/Texture.hpp"
 #include "TextureLoader.hpp"
-#include "engine/Trigger.hpp"
+#include <engine/trigger/Trigger.hpp>
 #include "util/math/Vector3f.hpp"
 
 using namespace std;
@@ -157,6 +157,10 @@ void MapLoader::extractTriggers() {
 
       if (triggerElement) {
         triggerElement->QueryStringAttribute("type", &trigger.type);
+      }
+      
+      if (triggerType == "none") {
+        throw std::runtime_error("Trigger must define a type attribute.");
       }
 
       XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("position"),

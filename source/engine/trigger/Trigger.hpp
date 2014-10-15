@@ -3,18 +3,16 @@
 
 #include <string>
 
-#include "Entity.hpp"
-#include "Mesh.hpp"
-#include "Texture.hpp"
+#include <engine/Entity.hpp>
+#include <engine/Mesh.hpp>
+#include <engine/Texture.hpp>
 #include <util/math/Vector3f.hpp>
 
 namespace glPortal {
 
 class Trigger: public Entity {
 public:
-  Trigger(): type("None") {
-
-  }
+  Trigger();
   Mesh mesh;
   Texture texture;
 
