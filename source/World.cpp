@@ -14,7 +14,7 @@
 #include "engine/Mesh.hpp"
 #include "engine/loader/MeshLoader.hpp"
 #include "engine/Ray.hpp"
-#include "engine/Renderer.hpp"
+#include "engine/renderer/Renderer.hpp"
 #include "engine/Texture.hpp"
 #include "engine/loader/TextureLoader.hpp"
 #include "engine/Trigger.hpp"

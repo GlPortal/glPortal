@@ -15,7 +15,7 @@ add_executable(${EXE_NAME}
   World.cpp Window.cpp
   Player.cpp
   engine/Camera.cpp
-  Input.cpp engine/Renderer.cpp
+  Input.cpp engine/renderer/Renderer.cpp
   engine/Text.cpp
   engine/loader/MapLoader.cpp
   engine/loader/MeshLoader.cpp
