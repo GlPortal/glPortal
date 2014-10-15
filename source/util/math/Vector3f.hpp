@@ -14,7 +14,7 @@ public:
   void set(float x, float y, float z);
   void set(Vector3f v);
   Vector3f *add(Vector3f v);
-  Vector3f *subtract(Vector3f v);
+  Vector3f *sub(Vector3f v);
   Vector3f *scale(float scale);
   float length();
   Vector3f *normalize();

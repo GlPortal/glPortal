@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<map>
+	<spawn>
+		<position x="2.5" y="1" z="5"/>
+		<rotation x="0" y="-90" z="0"/>
+	</spawn>
+	<end>
+		<position x="25" y="0" z="5"/>
+		<rotation x="0" y="90" z="0"/>
+	</end>
+	<light x="10" y="6" z="5" r="0.9" g="0.9" b="1"/>
+	
+	<texture source="wall.png">
+		<wall>
+			<position x="8" y="-3" z="5"/>
+			<scale x="3" y="3" z="3"/>
+		</wall>
+		<wall>
+			<position x="14" y="-3" z="5"/>
+			<scale x="1" y="1" z="1"/>
+		</wall>
+	</texture>
+	<texture source="tiles.png">
+		<!-- Ceiling -->
+		<wall>
+			<position x="10" y="5" z="5"/>
+			<scale x="20.0" y="1.0" z="10.0"/>
+		</wall>
+		<!-- Floor -->
+		<wall>
+			<position x="10" y="-5" z="5"/>
+			<scale x="20.0" y="1.0" z="10.0"/>
+		</wall>
+		<!-- Back wall -->
+		<wall>
+			<position x="0" y="0" z="5"/>
+			<scale x="2.0" y="10" z="10.0"/>
+		</wall>
+		<!-- Front wall -->
+		<wall>
+			<position x="20.25" y="0" z="5"/>
+			<scale x="0.5" y="10.0" z="10.0"/>
+		</wall>
+		<!-- Left wall -->
+		<wall>
+			<position x="10" y="0" z="-0.5"/>
+			<scale x="20.0" y="16.0" z="1.0"/>
+		</wall>
+		<!-- Right wall -->
+		<wall>
+			<position x="10" y="0" z="10.5"/>
+			<scale x="20.0" y="16.0" z="1.0"/>
+		</wall>
+	</texture>
+</map>

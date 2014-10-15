@@ -11,7 +11,7 @@ public:
   static float toDegrees(float radius);
   static float toRadians(float degrees);
   static Vector3f toDirection(Vector3f v);
-  static Vector3f toVector(Vector3f direction);
+  static Vector3f toEuler(Vector3f direction);
 };
 
 } /* namespace glPortal */

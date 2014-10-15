@@ -1,7 +1,7 @@
 #include <util/math/Math.hpp>
+#include <util/math/Matrix4f.hpp>
+#include <util/math/Vector3f.hpp>
 #include <cmath>
-
-#include "Vector3f.hpp"
 
 namespace glPortal {
   const float Math::PI_RND=3.1415926535897932384626433832795028841971693993751058209749445923078164062862089;
@@ -15,14 +15,33 @@ namespace glPortal {
   }
 
   Vector3f Math::toDirection(Vector3f v) {
-    Vector3f direction(cos(Math::toRadians(v.x)) * -sin(Math::toRadians(v.y)),
-                       sin(Math::toRadians(v.x)),
-                       -cos(Math::toRadians(v.x)) * cos(Math::toRadians(v.y)));
+    Matrix4f m;
+    m.rotate(v);
+
+    Vector3f direction = m.transform(Vector3f(0, 0, -1));
     return direction;
   }
 
-  Vector3f Math::toVector(Vector3f direction) {
-    //TODO
-    return Vector3f(1, 1, 1);
+  Vector3f Math::toEuler(Vector3f direction) {
+    Vector3f euler;
+
+    //Pitch
+    euler.x = Math::toDegrees(asin(direction.y));
+
+    //Yaw
+    if(direction.x <= 0 && direction.z < 0) {
+      euler.y = Math::toDegrees(atan(fabs(direction.x) / fabs(direction.z)));
+    }
+    if(direction.x < 0 && direction.z >= 0) {
+      euler.y = Math::toDegrees(atan(fabs(direction.z) / fabs(direction.x))) + 90;
+    }
+    if(direction.x >= 0 && direction.z > 0) {
+      euler.y = Math::toDegrees(atan(fabs(direction.x) / fabs(direction.z))) + 180;
+    }
+    if(direction.x > 0 && direction.z <= 0) {
+      euler.y = Math::toDegrees(atan(fabs(direction.z) / fabs(direction.x))) + 270;
+    }
+
+    return euler;
   }
 } /* namespace glPortal */
