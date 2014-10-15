@@ -17,6 +17,7 @@ public:
   void rotate(Vector3f v);
   void scale(Vector3f v);
   void scale(float x, float y, float z);
+  Vector3f transform(Vector3f v);
   void print();
 };
 

@@ -40,8 +40,8 @@ void Matrix4f::translate(float x, float y, float z) {
 }
 
 void Matrix4f::rotate(float angle, float x, float y, float z) {
-  float c = cos(angle * Math::PI_RND / 180);
-  float s = sin(angle * Math::PI_RND / 180);
+  float c = cos(Math::toRadians(angle));
+  float s = sin(Math::toRadians(angle));
   float ic = 1 - c;
 
   float f0 = array[0] * ((x * x * ic) + c) + array[4] * ((x * y * ic) + (z * s))
@@ -86,9 +86,9 @@ void Matrix4f::rotate(float angle, float x, float y, float z) {
 }
 
 void Matrix4f::rotate(Vector3f v) {
-  rotate(v.x, 1, 0, 0);
   rotate(v.y, 0, 1, 0);
-  rotate(v.z, 0, 0, 1);
+  rotate(v.x, 1, 0, 0);
+  //rotate(v.z, 0, 0, 1);
 }
 
 void Matrix4f::scale(Vector3f v) {
@@ -108,6 +108,15 @@ void Matrix4f::scale(float x, float y, float z) {
   array[9] = array[9] * z;
   array[10] = array[10] * z;
   array[11] = array[11] * z;
+}
+
+Vector3f Matrix4f::transform(Vector3f v) {
+  Vector3f dest;
+  dest.x = array[0] * v.x + array[4] * v.y + array[8] * v.z;
+  dest.y = array[1] * v.x + array[5] * v.y + array[9] * v.z;
+  dest.z = array[2] * v.x + array[6] * v.y + array[10] * v.z;
+
+  return dest;
 }
 
 void Matrix4f::print() {

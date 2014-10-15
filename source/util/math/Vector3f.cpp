@@ -28,7 +28,7 @@ Vector3f* Vector3f::add(Vector3f v) {
   return this;
 }
 
-Vector3f* Vector3f::subtract(Vector3f v) {
+Vector3f* Vector3f::sub(Vector3f v) {
   this->x -= v.x;
   this->y -= v.y;
   this->z -= v.z;

@@ -1,6 +1,6 @@
 #include <engine/Camera.hpp>
 #include <engine/Font.hpp>
-#include <engine/loader/FontLoader.hpp>
+//#include <engine/loader/FontLoader.hpp>
 #include <engine/loader/MeshLoader.hpp>
 #include <engine/loader/ShaderLoader.hpp>
 #include <engine/loader/TextureLoader.hpp>
@@ -8,15 +8,16 @@
 #include <engine/Light.hpp>
 #include <engine/Mesh.hpp>
 #include <engine/Renderer.hpp>
+//#include <engine/Text.hpp>
 #include <engine/Texture.hpp>
-#include <util/math/Vector2f.hpp>
-#include <util/math/Vector3f.hpp>
 #include <Portal.hpp>
 #include <stdio.h>
 #include <Scene.hpp>
+#include <util/math/Math.hpp>
+#include <util/math/Vector2f.hpp>
+#include <util/math/Vector3f.hpp>
 #include <Window.hpp>
 #include <vector>
-#include <engine/Text.hpp>
 
 namespace glPortal {
 
@@ -85,7 +86,8 @@ void Renderer::render(Scene* scene) {
 
   //Update camera position
   viewMatrix.setIdentity();
-  viewMatrix.rotate(Vector3f::negate(scene->camera.rotation));
+  viewMatrix.rotate(-scene->camera.rotation.x, 1, 0, 0);
+  viewMatrix.rotate(-scene->camera.rotation.y, 0, 1, 0);
   viewMatrix.translate(Vector3f::negate(scene->camera.position));
   glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 
@@ -127,7 +129,8 @@ void Renderer::render(Scene* scene) {
 
   //Update camera position
   viewMatrix.setIdentity();
-  viewMatrix.rotate(Vector3f::negate(scene->camera.rotation));
+  viewMatrix.rotate(-scene->camera.rotation.x, 1, 0, 0);
+  viewMatrix.rotate(-scene->camera.rotation.y, 0, 1, 0);
   viewMatrix.translate(Vector3f::negate(scene->camera.position));
   glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 
@@ -210,7 +213,8 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
 
     //Update camera position
     viewMatrix.setIdentity();
-    viewMatrix.rotate(Vector3f::negate(scene->camera.rotation));
+    viewMatrix.rotate(-scene->camera.rotation.x, 1, 0, 0);
+    viewMatrix.rotate(-scene->camera.rotation.y, 0, 1, 0);
     viewMatrix.translate(Vector3f::negate(scene->camera.position));
     glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 
@@ -237,23 +241,22 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
     //Set camera in other portal
-    if (portal.rotation.x == 0) {
-      viewMatrix.setIdentity();
-      viewMatrix.rotate(-otherPortal.rotation.x - scene->camera.rotation.x, 1, 0, 0);
-      viewMatrix.rotate(-otherPortal.rotation.y -
-                        (scene->camera.rotation.y + 180 - portal.rotation.y), 0, 1, 0);
-      viewMatrix.rotate(-otherPortal.rotation.z, 0, 0, 1);
-      viewMatrix.translate(
-      Vector3f(-otherPortal.position.x,
-               -otherPortal.position.y - (scene->camera.position.y - portal.position.y),
-               -otherPortal.position.z));
-    } else {
-      viewMatrix.setIdentity();
-      viewMatrix.rotate(-otherPortal.rotation.x, 1, 0, 0);
-      viewMatrix.rotate(-otherPortal.rotation.y, 0, 1, 0);
-      viewMatrix.rotate(-otherPortal.rotation.z, 0, 0, 1);
-      viewMatrix.translate(Vector3f::negate(otherPortal.position));
-    }
+    Vector3f direction = Vector3f::sub(scene->camera.position, portal.position);
+    direction.normalize();
+    Vector3f rotation = Math::toEuler(direction);
+
+    rotation.x += scene->camera.rotation.x - rotation.x;
+    rotation.y += scene->camera.rotation.y - rotation.y;
+    rotation.add(otherPortal.rotation);
+    rotation.sub(portal.rotation);
+    rotation.y += 180;
+
+    float pitchdiff = portal.rotation.x - otherPortal.rotation.x;
+
+    viewMatrix.setIdentity();
+    viewMatrix.rotate(-rotation.x, 1, 0, 0);
+    viewMatrix.rotate(-rotation.y, 0, 1, 0);
+    viewMatrix.translate(Vector3f::negate(otherPortal.position));
     glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 
     renderScene(scene);

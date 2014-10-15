@@ -34,7 +34,7 @@ float World::friction = FRICTION;
 void World::create() {
   renderer = new Renderer();
 
-  loadScene("/maps/n3.xml");
+  loadScene("/maps/n1.xml");
 }
 
 void World::destroy() {
