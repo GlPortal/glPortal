@@ -1,11 +1,15 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
+#include <engine/Font.hpp>
 #include <engine/Shader.hpp>
-#include <util/math/Matrix4f.hpp>
 #include <GL/glew.h>
+#include <util/math/Matrix4f.hpp>
 #include <string>
-#include <engine/Text.hpp>
+
+namespace glPortal {
+class Texture;
+} /* namespace glPortal */
 
 namespace glPortal {
 class Font;
@@ -25,7 +29,9 @@ public:
   void renderEntity(Entity e);
   void renderPortal(Scene* scene, Portal portal, Portal otherPortal);
   void renderPortalOverlay(Portal portal);
-  void renderText(Scene* scene, Text text);
+  void renderText(Scene* scene, int x, int y, std::string text);
+  void renderTexturedMesh(Mesh mesh, Texture texture);
+  void setFont(std::string font, float size);
 private:
   Shader shader;
   Matrix4f projectionMatrix;
@@ -35,6 +41,8 @@ private:
   GLuint modelLoc;
   GLuint viewLoc;
   GLuint projLoc;
+
+  Font font;
 };
 
 } /* namespace glPortal */

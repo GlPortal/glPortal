@@ -9,6 +9,7 @@ namespace glPortal {
 class Font {
 public:
   int num_chars;
+  float size;
 
   Letter getLetter(int index) {
     return letters.at(index);
