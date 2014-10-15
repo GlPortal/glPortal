@@ -14,6 +14,7 @@ add_executable(${EXE_NAME}
   engine/BoxCollider.cpp
   World.cpp Window.cpp
   Player.cpp
+  engine/trigger/Trigger.cpp
   engine/Camera.cpp
   Input.cpp engine/renderer/Renderer.cpp
   engine/Text.cpp

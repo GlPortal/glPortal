@@ -1,0 +1,3 @@
+rm -rf ~/.glportal/data/
+mkdir -p ~/.glportal/data/
+cp -r ../../data ~/.glportal/

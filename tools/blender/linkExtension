@@ -1,0 +1,35 @@
+#!/bin/sh
+help() {
+    echo "                                  Blender Linker"
+    echo ""
+    echo ""
+    echo "Links GlPortal module to blender for development."
+    echo ""
+    echo "Don't forget to activate the module in Blender"
+    echo ""
+    echo "Usage: $0 -b blender_version"
+    echo "Available Blender versions: "
+    ls ~/.blender/
+}
+
+
+getopts "h?vb:" opt
+    case "$opt" in
+    h|\?)
+        help
+        exit 0
+        ;;
+    b)
+        if [ -d "/home/$(whoami)/.blender/$OPTARG/scripts/addons" ]; then
+            ln -s $(pwd)/blenderToXmlExport/ ~/.blender/$OPTARG/scripts/addons/toGlPortalXml
+        else
+            echo "No blender installation found."
+            exit 0
+        fi
+
+        ;;
+    *)
+        help
+        exit 0
+        ;;
+    esac

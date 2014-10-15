@@ -5,7 +5,7 @@
 
 #include "engine/Camera.hpp"
 #include "engine/Light.hpp"
-#include "engine/Trigger.hpp"
+#include <engine/trigger/Trigger.hpp>
 #include "Player.hpp"
 #include "Portal.hpp"
 
