@@ -17,7 +17,6 @@ add_executable(${EXE_NAME}
   engine/trigger/Trigger.cpp
   engine/Camera.cpp
   Input.cpp engine/renderer/Renderer.cpp
-  engine/Text.cpp
   engine/loader/MapLoader.cpp
   engine/loader/MeshLoader.cpp
   engine/loader/ShaderLoader.cpp
