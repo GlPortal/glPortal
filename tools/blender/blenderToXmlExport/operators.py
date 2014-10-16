@@ -10,6 +10,13 @@ def setTrigger(trigger):
         object["glpType"] = "trigger"
         object["glpTriggerType"] = trigger     
 
+def clearGlpProperties():
+    object = bpy.context.active_object
+    if object:
+        object["glpType"] = "None"
+        object["glpTriggerType"] = "None"             
+    
+        
 class clearSelection(bpy.types.Operator):
     bl_idname = "wm.clear_selection"
     bl_label = "Mark the selection as neutral area."
@@ -17,10 +24,7 @@ class clearSelection(bpy.types.Operator):
     def execute(self, context):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         bpy.types.Object.glpTriggerType = bpy.props.StringProperty()
-        object = bpy.context.active_object
-        if object:
-            object["glpType"] = "None"
-            object["glpTriggerType"] = "None"             
+        clearGlpProperties()
         return {'FINISHED'}
         
 class selectionToWin(bpy.types.Operator):
@@ -55,8 +59,8 @@ class selectionToDoor(bpy.types.Operator):
     def execute(self, context):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
+        clearGlpProperties()
         if object:
-            object["glpTriggerType"] = "None"
             object["glpType"] = "door" 
         return {'FINISHED'}    
 
@@ -88,8 +92,8 @@ class selectionToPortable(bpy.types.Operator):
         
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
+        clearGlpProperties()
         if object:
-            object["glpTriggerType"] = "None"
             object["glpType"] = "portable"
             me = object.data
             me.materials.append(mat)
