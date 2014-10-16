@@ -1,11 +1,6 @@
 import bpy
-import xml.etree.cElementTree as tree
-import xml.dom.minidom as minidom
 import os
-import mathutils
-import math
 import string
-from mathutils import Vector
 import re
 
 class clearSelection(bpy.types.Operator):
