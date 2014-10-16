@@ -3,6 +3,13 @@ import os
 import string
 import re
 
+def setTrigger(trigger):
+    bpy.types.Object.glpType = bpy.props.StringProperty()
+    object = bpy.context.active_object
+    if object:
+        object["glpType"] = "trigger"
+        object["glpTriggerType"] = trigger     
+
 class clearSelection(bpy.types.Operator):
     bl_idname = "wm.clear_selection"
     bl_label = "Mark the selection as neutral area."
@@ -12,7 +19,8 @@ class clearSelection(bpy.types.Operator):
         bpy.types.Object.glpTriggerType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
-            object["glpType"] = "None" 
+            object["glpType"] = "None"
+            object["glpTriggerType"] = "None"             
         return {'FINISHED'}
         
 class selectionToWin(bpy.types.Operator):
@@ -20,11 +28,7 @@ class selectionToWin(bpy.types.Operator):
     bl_label = "Mark the selection as winning area."
 
     def execute(self, context):
-        bpy.types.Object.glpType = bpy.props.StringProperty()
-        object = bpy.context.active_object
-        if object:
-            object["glpType"] = "trigger"
-            object["glpTriggerType"] = "win" 
+        setTrigger("win")
         return {'FINISHED'}
 
 class selectionToDeath(bpy.types.Operator):
@@ -32,11 +36,7 @@ class selectionToDeath(bpy.types.Operator):
     bl_label = "Mark the selection as death area."
 
     def execute(self, context):
-        bpy.types.Object.glpType = bpy.props.StringProperty()
-        object = bpy.context.active_object
-        if object:
-            object["glpType"] = "trigger"
-            object["glpTriggerType"] = "death" 
+        setTrigger("death")
         return {'FINISHED'}
 
     
@@ -45,11 +45,7 @@ class selectionToRadiation(bpy.types.Operator):
     bl_label = "Mark the selection as radiation area."
 
     def execute(self, context):
-        bpy.types.Object.glpType = bpy.props.StringProperty()
-        object = bpy.context.active_object
-        if object:
-            object["glpType"] = "trigger"
-            object["glpTriggerType"] = "radiation" 
+        setTrigger("radiation")
         return {'FINISHED'}    
 
 class selectionToDoor(bpy.types.Operator):
@@ -60,6 +56,7 @@ class selectionToDoor(bpy.types.Operator):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
+            object["glpTriggerType"] = "None"
             object["glpType"] = "door" 
         return {'FINISHED'}    
 
@@ -92,6 +89,7 @@ class selectionToPortable(bpy.types.Operator):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
+            object["glpTriggerType"] = "None"
             object["glpType"] = "portable"
             me = object.data
             me.materials.append(mat)
