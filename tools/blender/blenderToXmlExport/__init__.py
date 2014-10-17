@@ -19,6 +19,7 @@ import string
 from mathutils import Vector
 import re
 from .glportalpanel import *
+from .glportalobjectpanel import *
 from .exportglportalformat import *    
 from .operators import *
 
@@ -33,6 +34,7 @@ def unregister():
     bpy.utils.unregister_module(__name__)
     bpy.types.INFO_MT_file_export.remove(menu_func)
     bpy.utils.unregister_class(GlPortalPanel)
+    bpy.utils.unregister_class(GlPortalObjectPanel)
 
 if __name__ == "__main__":
     register()
