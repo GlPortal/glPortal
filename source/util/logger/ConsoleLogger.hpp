@@ -8,7 +8,6 @@ namespace glPortal {
 
 class ConsoleLogger : public Logger {
 public:
-  ConsoleLogger();
   void log(std::string message);
 };
 } /* namespace glPortal */

@@ -20,11 +20,11 @@ Game::Game() :closed(false) {
 
   try {
     world.create();
+    update();
   }
   catch (std::runtime_error &e) {
     System::log(std::string("Runtime Error: " + std::string(e.what())));
   }
-  update();
 }
 
 void Game::update() {
