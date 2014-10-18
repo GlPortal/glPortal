@@ -29,13 +29,12 @@ class GlPortalObjectPanel(bpy.types.Panel):
         layout = self.layout
         row = layout.row()
         row.label(text="Type:")
-        layout.prop_menu_enum(object, "types")
+
+        if "glpType" in object:    
+            layout.prop_menu_enum(object, "types", text=object["glpType"])
+        else:
+            layout.prop_menu_enum(object, "types")
         split = layout.split()
         col = split.column(align=True)
 
         col.operator("wm.clear_selection", text="Clear Type", icon='MESH_CUBE')
-        col.operator("wm.selection_to_win", text="Set Win Area", icon='MESH_CUBE')
-        col.operator("wm.selection_to_death", text="Set Death Area", icon='MESH_CUBE')
-        col.operator("wm.selection_to_radiation", text="Set Radiation Area", icon='MESH_CUBE')
-        col.operator("wm.selection_to_door", text="Set Door", icon='MESH_CUBE')
-        col.operator("wm.selection_to_portable", text="Set Wall Portable", icon='MESH_CUBE')
