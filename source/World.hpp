@@ -2,17 +2,18 @@
 #define WORLD_HPP
 
 #include <string>
-#include "Scene.hpp"
+#include <vector>
 
 namespace glPortal {
 
-const float GRAVITY = 0.01;
-const float FRICTION = 0.01;
-
+class Scene;
 class Entity;
 class Renderer;
 class BoxCollider;
 class Vector3f;
+
+const float GRAVITY = 0.01;
+const float FRICTION = 0.01;
 
 class World {
 public:
@@ -30,6 +31,8 @@ public:
 private:
   Renderer *renderer;
   Scene *scene;
+  std::vector<std::string> mapList;
+  unsigned int currentLevel = 0;
 };
 
 } /* namespace glPortal */

@@ -17,6 +17,7 @@
 #include "engine/renderer/Renderer.hpp"
 #include "engine/Texture.hpp"
 #include "engine/loader/TextureLoader.hpp"
+#include "engine/loader/MapListLoader.hpp"
 #include <engine/trigger/Trigger.hpp>
 #include <util/math/Math.hpp>
 #include <util/math/Vector2f.hpp>
@@ -32,9 +33,10 @@ float World::gravity = GRAVITY;
 float World::friction = FRICTION;
 
 void World::create() {
+  mapList = MapListLoader::getMapList();
   renderer = new Renderer();
 
-  loadScene("/maps/n1.xml");
+  loadScene(mapList[currentLevel]);
 }
 
 void World::destroy() {
@@ -42,8 +44,8 @@ void World::destroy() {
   delete (scene);
 }
 
-void World::loadScene(std::string path) {
-  scene = MapLoader::getScene(path);
+void World::loadScene(std::string name) {
+  scene = MapLoader::getScene(name);
 }
 
 void World::update() {
@@ -175,8 +177,10 @@ void World::update() {
   //Check if the end of the level has been reached
   float distToEnd = Vector3f::sub(scene->end.position, scene->player.position).length();
   if (distToEnd < 1) {
-    //FIXME Load the next scene
-    loadScene("/maps/n2.xml");
+    if(currentLevel + 1 < mapList.size()) {
+      currentLevel++;
+    }
+    loadScene(mapList[currentLevel]);
   }
 }
 
