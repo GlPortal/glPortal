@@ -219,25 +219,13 @@ void Renderer::renderPortal(Scene* scene, Portal portal, Portal otherPortal) {
     glStencilFunc(GL_EQUAL, 1, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-    //Set camera in other portal
-    Vector3f direction = Vector3f::sub(scene->camera.position, portal.position);
-    direction.normalize();
-    Vector3f rotation = Math::toEuler(direction);
-
-    rotation.x += scene->camera.rotation.x - rotation.x;
-    rotation.y += scene->camera.rotation.y - rotation.y;
-    rotation.add(otherPortal.rotation);
-    rotation.sub(portal.rotation);
-    rotation.y += 180;
-
-    viewMatrix.setIdentity();
-    viewMatrix.rotate(-rotation.x, 1, 0, 0);
-    viewMatrix.rotate(-rotation.y, 0, 1, 0);
-    viewMatrix.translate(Vector3f::negate(otherPortal.position));
-    glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+    setCameraInPortal(scene, portal, otherPortal);
 
     renderScene(scene);
 
+    //Set the camera back to normal
+    scene->camera.setPerspective();
+    glUniformMatrix4fv(projLoc, 1, false, scene->camera.getProjectionMatrix().array);
     glDisable(GL_STENCIL_TEST);
   }
 }
@@ -298,6 +286,39 @@ void Renderer::renderTexturedMesh(Mesh mesh, Texture texture) {
   glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindVertexArray(0);
+}
+
+void Renderer::setCameraInPortal(Scene* scene, Portal portal, Portal otherPortal) {
+  //Set camera in other portal
+  Vector3f camPos = Vector3f::sub(scene->camera.position, portal.position);
+  Vector3f camDir = Math::toDirection(scene->camera.rotation);
+
+  //Invert the position and rotation to be behind the portal
+  Vector3f icamPos(-camPos.x, camPos.y, -camPos.z);
+  Vector3f icamDir(-camDir.x, camDir.y, -camDir.z);
+
+  //Calculate the position and rotation of the camera relative to the other portal
+  Matrix4f mRot;
+  mRot.rotate(Vector3f::negate(portal.rotation));
+  mRot.rotate(otherPortal.rotation);
+
+  Vector3f rcamPos = mRot.transform(icamPos);
+  Vector3f rcamDir = mRot.transform(icamDir);
+
+  Vector3f fcamPos = Vector3f::add(rcamPos, otherPortal.position);
+  Vector3f fcamRot = Math::toEuler(rcamDir);
+
+  //Draw only whats visible through the portal
+  Camera camera;
+  camera.setPerspective();
+  camera.setZNear(Vector3f::sub(otherPortal.position, fcamPos).length());
+  glUniformMatrix4fv(projLoc, 1, false, camera.getProjectionMatrix().array);
+
+  viewMatrix.setIdentity();
+  viewMatrix.rotate(-fcamRot.x, 1, 0, 0);
+  viewMatrix.rotate(-fcamRot.y, 0, 1, 0);
+  viewMatrix.translate(Vector3f::negate(fcamPos));
+  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 }
 
 void Renderer::setFont(std::string font, float size) {
