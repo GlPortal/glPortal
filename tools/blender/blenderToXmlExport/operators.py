@@ -52,8 +52,8 @@ class selectionToRadiation(bpy.types.Operator):
         setTrigger("radiation")
         return {'FINISHED'}    
 
-class selectionToDoor(bpy.types.Operator):
-    bl_idname = "wm.selection_to_door"
+class addDoor(bpy.types.Operator):
+    bl_idname = "wm.add_door"
     bl_label = "Mark the selection as door."
 
     def execute(self, context):
@@ -64,8 +64,8 @@ class selectionToDoor(bpy.types.Operator):
             object["glpType"] = "door" 
         return {'FINISHED'}    
 
-class selectionToPortable(bpy.types.Operator):
-    bl_idname = "wm.selection_to_portable"
+class addPortable(bpy.types.Operator):
+    bl_idname = "wm.add_portable"
     bl_label = "Mark the selection as portable."
 
     def execute(self, context):
