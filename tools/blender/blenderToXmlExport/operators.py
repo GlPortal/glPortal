@@ -64,32 +64,35 @@ class addDoor(bpy.types.Operator):
             object["glpType"] = "door" 
         return {'FINISHED'}    
 
+def getMaterial(texturePath):
+    realpath = os.path.expanduser(texturePath)
+    try:
+        portableWallImage = bpy.data.images.load(realpath)
+    except:
+        raise NameError("Cannot load image %s" % realpath)
+    
+    portableWallTexture = bpy.data.textures.new('ColorTex', type = 'IMAGE')
+    portableWallTexture.image = portableWallImage
+        
+    mat = bpy.data.materials.new('TexMat')
+ 
+    # Add texture slot for color texture
+    mtex = mat.texture_slots.add()
+    mtex.texture = portableWallTexture
+    mtex.texture_coords = 'UV'
+    mtex.use_map_color_diffuse = True 
+    mtex.use_map_color_emission = True 
+    mtex.emission_color_factor = 0.5
+    mtex.use_map_density = True 
+    mtex.mapping = 'FLAT'
+    return mat
+
 class addPortable(bpy.types.Operator):
     bl_idname = "wm.add_portable"
     bl_label = "Mark the selection as portable."
-
+    
     def execute(self, context):
-        realpath = os.path.expanduser('~/.glportal/data/textures/wall.png')
-        try:
-            portableWallImage = bpy.data.images.load(realpath)
-        except:
-            raise NameError("Cannot load image %s" % realpath)
-
-        portableWallTexture = bpy.data.textures.new('ColorTex', type = 'IMAGE')
-        portableWallTexture.image = portableWallImage
-        
-        mat = bpy.data.materials.new('TexMat')
- 
-        # Add texture slot for color texture
-        mtex = mat.texture_slots.add()
-        mtex.texture = portableWallTexture
-        mtex.texture_coords = 'UV'
-        mtex.use_map_color_diffuse = True 
-        mtex.use_map_color_emission = True 
-        mtex.emission_color_factor = 0.5
-        mtex.use_map_density = True 
-        mtex.mapping = 'FLAT' 
-        
+        mat = getMaterial('~/.glportal/data/textures/wall.png')
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         clearGlpProperties()
@@ -98,3 +101,20 @@ class addPortable(bpy.types.Operator):
             me = object.data
             me.materials.append(mat)
         return {'FINISHED'}    
+
+    
+class addWall(bpy.types.Operator):
+    bl_idname = "wm.add_wall"
+    bl_label = "Mark the selection as portable."
+
+    def execute(self, context):
+        mat = getMaterial('~/.glportal/data/textures/tiles.png')        
+        bpy.types.Object.glpType = bpy.props.StringProperty()
+        object = bpy.context.active_object
+        clearGlpProperties()
+        if object:
+            object["glpType"] = "portable"
+            me = object.data
+            me.materials.append(mat)
+        return {'FINISHED'}    
+    
