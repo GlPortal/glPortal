@@ -22,6 +22,11 @@ if (($ARGV[0] == "generate") && !($className eq "")){
     $template->process('tools/alan/templates/hpp.tpl', \%data, "${className}.hpp") || die $template->error;
     $template->process('tools/alan/templates/cpp.tpl', \%data, "${className}.cpp") || die $template->error;    
     exit;
-} 
-print "$className";
+}
+
+if (($ARGV[0] == "blender") && ($ARGV[1] == "install") && (defined $ARGV[2])){
+    system("./tools/blender/copyGameData");
+    system("./tools/blender/linkExtension -b ${ARGV[2]}");
+}
+ 
 print "\nUsage: alan command\n";
