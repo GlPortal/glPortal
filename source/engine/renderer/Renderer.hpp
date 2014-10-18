@@ -31,6 +31,7 @@ public:
   void renderPortalOverlay(Portal portal);
   void renderText(Scene* scene, int x, int y, std::string text);
   void renderTexturedMesh(Mesh mesh, Texture texture);
+  void setCameraInPortal(Scene* scene, Portal portal, Portal otherPortal);
   void setFont(std::string font, float size);
 private:
   Shader shader;
