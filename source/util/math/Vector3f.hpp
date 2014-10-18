@@ -23,7 +23,12 @@ public:
   static Vector3f sub(Vector3f v1, Vector3f v2);
   static Vector3f scale(Vector3f v, float scale);
   static Vector3f negate(Vector3f v);
+
 };
+
+Vector3f operator+(Vector3f v1, Vector3f v2);
+Vector3f operator-(Vector3f v1, Vector3f v2);
+Vector3f operator*(Vector3f v1, float scale);
 
 } /* namespace glPortal */
 

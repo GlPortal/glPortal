@@ -87,4 +87,28 @@ Vector3f Vector3f::negate(Vector3f v) {
   return vn;
 }
 
+Vector3f operator+(Vector3f v1, Vector3f v2) {
+  Vector3f v;
+  v.x = v1.x + v2.x;
+  v.y = v1.y + v2.y;
+  v.z = v1.z + v2.z;
+  return v;
+}
+
+Vector3f operator-(Vector3f v1, Vector3f v2) {
+  Vector3f v;
+  v.x = v1.x - v2.x;
+  v.y = v1.y - v2.y;
+  v.z = v1.z - v2.z;
+  return v;
+}
+
+Vector3f operator*(Vector3f v, float scale) {
+  Vector3f vc;
+  vc.x = v.x * scale;
+  vc.y = v.y * scale;
+  vc.z = v.z * scale;
+  return vc;
+}
+
 } /* namespace glPortal */

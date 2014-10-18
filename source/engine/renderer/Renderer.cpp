@@ -290,7 +290,7 @@ void Renderer::renderTexturedMesh(Mesh mesh, Texture texture) {
 
 void Renderer::setCameraInPortal(Scene* scene, Portal portal, Portal otherPortal) {
   //Set camera in other portal
-  Vector3f camPos = Vector3f::sub(scene->camera.position, portal.position);
+  Vector3f camPos = scene->camera.position - portal.position;
   Vector3f camDir = Math::toDirection(scene->camera.rotation);
 
   //Invert the position and rotation to be behind the portal
@@ -305,13 +305,13 @@ void Renderer::setCameraInPortal(Scene* scene, Portal portal, Portal otherPortal
   Vector3f rcamPos = mRot.transform(icamPos);
   Vector3f rcamDir = mRot.transform(icamDir);
 
-  Vector3f fcamPos = Vector3f::add(rcamPos, otherPortal.position);
+  Vector3f fcamPos = rcamPos + otherPortal.position;
   Vector3f fcamRot = Math::toEuler(rcamDir);
 
   //Draw only whats visible through the portal
   Camera camera;
   camera.setPerspective();
-  camera.setZNear(Vector3f::sub(otherPortal.position, fcamPos).length());
+  camera.setZNear((otherPortal.position - fcamPos).length());
   glUniformMatrix4fv(projLoc, 1, false, camera.getProjectionMatrix().array);
 
   viewMatrix.setIdentity();
