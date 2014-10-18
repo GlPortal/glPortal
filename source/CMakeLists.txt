@@ -18,6 +18,7 @@ add_executable(${EXE_NAME}
   engine/Camera.cpp
   Input.cpp engine/renderer/Renderer.cpp
   engine/loader/MapLoader.cpp
+  engine/loader/MapListLoader.cpp
   engine/loader/MeshLoader.cpp
   engine/loader/ShaderLoader.cpp
   engine/loader/TextureLoader.cpp
