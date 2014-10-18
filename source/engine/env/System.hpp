@@ -8,7 +8,7 @@ namespace glPortal {
 
 class System {
 private:
-  static Logger logger;
+  static ConsoleLogger logger;
 public:
   static void log(std::string message);
 };
