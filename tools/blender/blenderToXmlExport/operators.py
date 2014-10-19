@@ -16,6 +16,25 @@ def clearGlpProperties():
         object["glpType"] = "None"
         object["glpTriggerType"] = "None"             
     
+
+class saveObjectType(bpy.types.Operator):
+    bl_idname = "wm.save_object_type"
+    bl_label = "Save the type of the object to the custom property"
+ 
+    @classmethod
+    def poll(self, context):
+        if context.object and context.object.type == 'MESH':
+            return len(context.object.data.materials)
+ 
+    def execute(self, context):
+        object = context.object
+        typesSelection = object.types
+        if typesSelection:
+            if object:
+                object["glpType"] = typesSelection            
+        else:
+            object["glpType"] = "None"
+        return {'FINISHED'}
         
 class clearSelection(bpy.types.Operator):
     bl_idname = "wm.clear_selection"
