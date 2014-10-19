@@ -9,13 +9,13 @@ types = [
     ("portable" , "Portable" , "Set Wall Portable")
 ]
  
-def setSwatches():
+def setTypes():
     bpy.types.Object.types = EnumProperty(
         items = types,
         name = "type")
 
 
-setSwatches()
+setTypes()
 
 class GlPortalObjectPanel(bpy.types.Panel):
     """GlPortal panel in the toolbar"""
@@ -30,11 +30,11 @@ class GlPortalObjectPanel(bpy.types.Panel):
         row = layout.row()
         row.label(text="Type:")
 
-        if "glpType" in object:    
-            layout.prop_menu_enum(object, "types", text=object["glpType"])
+        if "glpType" in object:
+            layout.prop(object, "types", text=object["glpType"])
         else:
-            layout.prop_menu_enum(object, "types")
+            layout.prop(object, "types")
         split = layout.split()
         col = split.column(align=True)
-
+        col.operator("wm.save_object_type", text="save", icon='MESH_CUBE')
         col.operator("wm.clear_selection", text="Clear Type", icon='MESH_CUBE')
