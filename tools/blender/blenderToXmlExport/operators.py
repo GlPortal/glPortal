@@ -29,9 +29,14 @@ class saveObjectType(bpy.types.Operator):
     def execute(self, context):
         object = context.object
         typesSelection = object.types
+        triggerTypesSelection = object.triggerTypes
         if typesSelection:
             if object:
-                object["glpType"] = typesSelection            
+                object["glpType"] = typesSelection
+                if object["glpType"] == "trigger":
+                    if typesSelection:
+                        object["glpTriggerType"] = triggerTypesSelection
+                        
         else:
             object["glpType"] = "None"
         return {'FINISHED'}
