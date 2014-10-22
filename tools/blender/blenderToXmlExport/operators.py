@@ -22,6 +22,7 @@ class saveObjectType(bpy.types.Operator):
     bl_label = "Save the type of the object to the custom property"
   
     def execute(self, context):
+        clearGlpProperties()
         object = context.object
         typesSelection = object.types
         triggerTypesSelection = object.triggerTypes

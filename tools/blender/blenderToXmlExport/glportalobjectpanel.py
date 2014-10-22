@@ -46,5 +46,5 @@ class GlPortalObjectPanel(bpy.types.Panel):
             
         split = layout.split()
         col = split.column(align=True)
-        col.operator("wm.save_object_type", text="save", icon='MESH_CUBE')
-        col.operator("wm.clear_selection", text="Clear Type", icon='MESH_CUBE')
+        col.operator("wm.save_object_type", text="save", icon='FILE_TICK')
+        col.operator("wm.clear_selection", text="clear", icon='CANCEL')
