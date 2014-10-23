@@ -1,32 +1,6 @@
 import bpy
 from bpy.props import *
-
-types = [
-    ("none" ,"None" , "No special property"),
-    ("wall" ,"Wall" , "Wall"),     
-    ("trigger" , "Trigger" , "trigger")
-]
-
-triggerTypes = [
-    ("none" ,"None" , "No special property"), 
-    ("win" , "Trigger Win" , "Area triggers win"), 
-    ("death" , "Trigger Death" , "Area triggers death"),
-    ("radiation" , "Trigger Radiation" , "Area triggers rad"),
-    ("portable" , "Portable" , "Set Wall Portable")
-]
-
-def setTypes():
-    bpy.types.Object.types = EnumProperty(
-        items = types,
-        name = "type")
-
-def setTriggerTypes():
-    bpy.types.Object.triggerTypes = EnumProperty(
-        items = triggerTypes,
-        name = "triggerType")    
-    
-setTypes()
-setTriggerTypes();
+from .types import *
 
 class GlPortalObjectPanel(bpy.types.Panel):
     """GlPortal panel in the toolbar"""
