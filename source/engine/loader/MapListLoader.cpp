@@ -8,11 +8,11 @@ namespace glPortal {
 
 vector<string> MapListLoader::getMapList() {
   vector<string> mapList;
-  std::string path = Environment::getDataDir() + "/maps/maplist";
+  std::string path = Environment::getDataDir() + "maps/maplist";
   ifstream file(path);
 
   if(not file.is_open()) {
-    throw runtime_error("Could not find file: /data/maps/maplist");
+    throw runtime_error("Could not find file: data/maps/maplist");
   }
 
   string line;

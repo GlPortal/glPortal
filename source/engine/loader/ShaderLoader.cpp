@@ -9,7 +9,7 @@ namespace glPortal {
 std::map<std::string, Shader> ShaderLoader::shaderCache = { };
 
 Shader ShaderLoader::getShader(std::string path) {
-  path = Environment::getDataDir() + "/shaders/" + path;
+  path = Environment::getDataDir() + "shaders/" + path;
   if(shaderCache.find(path) != shaderCache.end()) {
     return shaderCache.at(path);
   }
