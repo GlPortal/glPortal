@@ -12,7 +12,7 @@ namespace glPortal {
 std::map<std::string, Texture> TextureLoader::textureCache = {};
 
 Texture TextureLoader::getTexture(std::string path) {
-  path = Environment::getDataDir() + "/textures/" + path;
+  path = Environment::getDataDir() + "textures/" + path;
   if(textureCache.find(path) != textureCache.end()) {
     return textureCache.at(path);
   }
