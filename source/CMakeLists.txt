@@ -31,7 +31,7 @@ add_executable(${EXE_NAME}
   engine/env/Config.cpp
   engine/env/Path.cpp
   )
-target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES} tinyxml)
+target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
 install(TARGETS ${EXE_NAME} DESTINATION bin)
 
 add_custom_target(run COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXE_NAME}${CMAKE_EXECUTABLE_SUFFIX} -datadir ${CMAKE_SOURCE_DIR}/data/ )
