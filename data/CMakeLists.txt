@@ -12,9 +12,9 @@ install ( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${SHARE_INSTALL_DIR}
  install ( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${SHARE_INSTALL_DIR}
                     FILES_MATCHING PATTERN "*.mtl") 
                     
-install ( FILES maps/levels.lst DESTINATION ${SHARE_INSTALL_DIR}/data/maps )
+install ( FILES maps/maplist DESTINATION ${SHARE_INSTALL_DIR}/data/maps )
 install ( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${SHARE_INSTALL_DIR}
-                    FILES_MATCHING PATTERN "*.map")
+                    FILES_MATCHING PATTERN "*.xml")
 
 install ( FILES shaders/ppl.vert DESTINATION ${SHARE_INSTALL_DIR}/data/shaders )
 install ( FILES shaders/nmap.vert DESTINATION ${SHARE_INSTALL_DIR}/data/shaders )
