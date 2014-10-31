@@ -11,6 +11,8 @@ Chat with us at irc.freenode.org in the channel ##glportal.
 ** Programming
 - Henry Hirsch
 - Julian Thijssen
+- Xantares
+
 ** Graphics
 - Urpo Lankinen - Bitmap Font
 - Kuronus for Blendswap - FPS Hands rigged (added portal egg)
