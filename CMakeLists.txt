@@ -39,7 +39,7 @@ set(PORTAL_TEST_LIBRARIES ${PORTAL_LIBRARIES})
 add_subdirectory(data)
 add_subdirectory(source)
 
-if (UNITESTPLUSPLUS_FOUND)
+if (UnitTestPlusPlus_FOUND)
   enable_testing()
   add_subdirectory(tests)
 endif ()
