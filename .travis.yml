@@ -6,6 +6,7 @@ before_install:
 - sudo apt-get -qq update
 - sudo apt-get -qq install libtinyxml-dev libglew-dev libunittest++-dev libsdl2-mixer-dev assimp-dev g++-4.8
 - sudo ln -sf /usr/bin/g++-4.8 /usr/bin/g++
+- sudo ln -sf /usr/lib/libassimp3.0.so /usr/lib/libassimp.so
 
 compiler:
 - gcc
@@ -14,7 +15,7 @@ compiler:
 before_script:
 - mkdir build && cd build
 script:
-- cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install  -DASSIMP_LIBRARY=/usr/lib/libassimp3.0.so ..
+- cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install ..
 - make install -j4
 - make tests -j4
 - ctest -j4
