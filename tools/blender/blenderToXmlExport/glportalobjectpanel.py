@@ -14,11 +14,9 @@ class GlPortalObjectPanel(bpy.types.Panel):
         layout = self.layout
         row = layout.row()
 
-        layout.prop(object, "types")
-        if object.types == "trigger":
-            layout.prop(object, "triggerTypes")
+        layout.prop(object, "glpTypes")
+        if object.glpTypes == "trigger":
+            layout.prop(object, "glpTriggerTypes")
+        if object.glpTypes == "wall":
+            layout.prop(object, "glpWallTypes")
             
-        split = layout.split()
-        col = split.column(align=True)
-        col.operator("wm.save_object_type", text="save", icon='FILE_TICK')
-        col.operator("wm.clear_selection", text="clear", icon='CANCEL')
