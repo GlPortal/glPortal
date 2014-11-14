@@ -48,6 +48,46 @@ def getMaterial(texturePath):
     mtex.mapping = 'FLAT'
     return mat
 
+
+class addWin(bpy.types.Operator):
+    bl_idname = "wm.add_win"
+    bl_label = "Mark the selection as win trigger."
+    
+    def execute(self, context):
+        bpy.ops.mesh.primitive_cube_add()
+        object = bpy.context.active_object
+        clearGlpProperties()
+        if object:
+            object.glpTypes = "trigger"
+            object.glpTriggerTypes = "win"
+        return {'FINISHED'}    
+
+class addDeath(bpy.types.Operator):
+    bl_idname = "wm.add_death"
+    bl_label = "Mark the selection as death trigger."
+    
+    def execute(self, context):
+        bpy.ops.mesh.primitive_cube_add()
+        object = bpy.context.active_object
+        clearGlpProperties()
+        if object:
+            object.glpTypes = "trigger"
+            object.glpTriggerTypes = "death"
+        return {'FINISHED'}    
+
+class addRadiation(bpy.types.Operator):
+    bl_idname = "wm.add_radiation"
+    bl_label = "Mark the selection as radiation trigger."
+    
+    def execute(self, context):
+        bpy.ops.mesh.primitive_cube_add()
+        object = bpy.context.active_object
+        clearGlpProperties()
+        if object:
+            object.glpTypes = "trigger"
+            object.glpTriggerTypes = "radiation"
+        return {'FINISHED'}    
+    
 class addPortable(bpy.types.Operator):
     bl_idname = "wm.add_portable"
     bl_label = "Mark the selection as portable."
