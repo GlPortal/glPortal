@@ -3,75 +3,13 @@ import os
 import string
 import re
 
-def setTrigger(trigger):
-    bpy.types.Object.glpType = bpy.props.StringProperty()
-    object = bpy.context.active_object
-    if object:
-        object["glpType"] = "trigger"
-        object["glpTriggerType"] = trigger     
-
 def clearGlpProperties():
     object = bpy.context.active_object
     if object:
         object.glpTypes = "none"
         object.glpTriggerTypes = "none"             
     
-
-class saveObjectType(bpy.types.Operator):
-    bl_idname = "wm.save_object_type"
-    bl_label = "Save the type of the object to the custom property"
-  
-    def execute(self, context):
-        clearGlpProperties()
-        object = context.object
-        typesSelection = object.types
-        triggerTypesSelection = object.triggerTypes
-        if typesSelection:
-            if object:
-                object["glpType"] = typesSelection
-                if object["glpType"] == "trigger":
-                    if typesSelection:
-                        object["glpTriggerType"] = triggerTypesSelection
-                        
-        else:
-            clearGlpProperties()
-        return {'FINISHED'}
         
-class clearSelection(bpy.types.Operator):
-    bl_idname = "wm.clear_selection"
-    bl_label = "Mark the selection as neutral area."
-
-    def execute(self, context):
-        bpy.types.Object.glpType = bpy.props.StringProperty()
-        bpy.types.Object.glpTriggerType = bpy.props.StringProperty()
-        clearGlpProperties()
-        return {'FINISHED'}
-        
-class selectionToWin(bpy.types.Operator):
-    bl_idname = "wm.selection_to_win"
-    bl_label = "Mark the selection as winning area."
-
-    def execute(self, context):
-        setTrigger("win")
-        return {'FINISHED'}
-
-class selectionToDeath(bpy.types.Operator):
-    bl_idname = "wm.selection_to_death"
-    bl_label = "Mark the selection as death area."
-
-    def execute(self, context):
-        setTrigger("death")
-        return {'FINISHED'}
-
-    
-class selectionToRadiation(bpy.types.Operator):
-    bl_idname = "wm.selection_to_radiation"
-    bl_label = "Mark the selection as radiation area."
-
-    def execute(self, context):
-        setTrigger("radiation")
-        return {'FINISHED'}    
-
 class addDoor(bpy.types.Operator):
     bl_idname = "wm.add_door"
     bl_label = "Mark the selection as door."
