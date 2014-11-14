@@ -22,7 +22,7 @@ from .glportalpanel import *
 from .glportalobjectpanel import *
 from .exportglportalformat import *    
 from .operators import *
-#from .typeselector import *
+from .triggerOperators import *
 
 def menu_func(self, context):
     self.layout.operator(ExportGlPortalFormat.bl_idname, text="GlPortal Map Format(.xml)")

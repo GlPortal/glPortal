@@ -3,12 +3,7 @@ import os
 import string
 import re
 
-def clearGlpProperties():
-    object = bpy.context.active_object
-    if object:
-        object.glpTypes = "none"
-        object.glpTriggerTypes = "none"             
-    
+from .operatorHelpers import *
         
 class addDoor(bpy.types.Operator):
     bl_idname = "wm.add_door"
@@ -20,7 +15,6 @@ class addDoor(bpy.types.Operator):
         bpy.ops.transform.translate(value=(bpy.context.scene.cursor_location))
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
-        clearGlpProperties()
         if object:
             object["glpType"] = "door" 
         return {'FINISHED'}    
@@ -47,46 +41,6 @@ def getMaterial(texturePath):
     mtex.use_map_density = True 
     mtex.mapping = 'FLAT'
     return mat
-
-
-class addWin(bpy.types.Operator):
-    bl_idname = "wm.add_win"
-    bl_label = "Mark the selection as win trigger."
-    
-    def execute(self, context):
-        bpy.ops.mesh.primitive_cube_add()
-        object = bpy.context.active_object
-        clearGlpProperties()
-        if object:
-            object.glpTypes = "trigger"
-            object.glpTriggerTypes = "win"
-        return {'FINISHED'}    
-
-class addDeath(bpy.types.Operator):
-    bl_idname = "wm.add_death"
-    bl_label = "Mark the selection as death trigger."
-    
-    def execute(self, context):
-        bpy.ops.mesh.primitive_cube_add()
-        object = bpy.context.active_object
-        clearGlpProperties()
-        if object:
-            object.glpTypes = "trigger"
-            object.glpTriggerTypes = "death"
-        return {'FINISHED'}    
-
-class addRadiation(bpy.types.Operator):
-    bl_idname = "wm.add_radiation"
-    bl_label = "Mark the selection as radiation trigger."
-    
-    def execute(self, context):
-        bpy.ops.mesh.primitive_cube_add()
-        object = bpy.context.active_object
-        clearGlpProperties()
-        if object:
-            object.glpTypes = "trigger"
-            object.glpTriggerTypes = "radiation"
-        return {'FINISHED'}    
     
 class addPortable(bpy.types.Operator):
     bl_idname = "wm.add_portable"
@@ -97,7 +51,6 @@ class addPortable(bpy.types.Operator):
         mat = getMaterial('~/.glportal/data/textures/wall.png')
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
-        clearGlpProperties()
         if object:
             object.glpTypes = "wall"
             object.glpWallTypes = "portable"
@@ -115,10 +68,8 @@ class addWall(bpy.types.Operator):
         mat = getMaterial('~/.glportal/data/textures/tiles.png')        
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
-        clearGlpProperties()
         if object:
             object.glpTypes = "wall"
             me = object.data
             me.materials.append(mat)
-        return {'FINISHED'}    
-    
+        return {'FINISHED'}
