@@ -13,8 +13,8 @@ def setTrigger(trigger):
 def clearGlpProperties():
     object = bpy.context.active_object
     if object:
-        object["glpType"] = "None"
-        object["glpTriggerType"] = "None"             
+        object.glpTypes = "none"
+        object.glpTriggerTypes = "none"             
     
 
 class saveObjectType(bpy.types.Operator):
@@ -77,6 +77,8 @@ class addDoor(bpy.types.Operator):
     bl_label = "Mark the selection as door."
 
     def execute(self, context):
+        realpath = os.path.expanduser("~/.glportal/data/meshes/Door.obj")
+        bpy.ops.import_scene.obj(filepath=realpath)
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         clearGlpProperties()
@@ -112,12 +114,14 @@ class addPortable(bpy.types.Operator):
     bl_label = "Mark the selection as portable."
     
     def execute(self, context):
+        bpy.ops.mesh.primitive_cube_add()
         mat = getMaterial('~/.glportal/data/textures/wall.png')
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         clearGlpProperties()
         if object:
-            object["glpType"] = "portable"
+            object.glpTypes = "wall"
+            object.glpWallTypes = "portable"
             me = object.data
             me.materials.append(mat)
         return {'FINISHED'}    
@@ -128,12 +132,13 @@ class addWall(bpy.types.Operator):
     bl_label = "Mark the selection as portable."
 
     def execute(self, context):
+        bpy.ops.mesh.primitive_cube_add()
         mat = getMaterial('~/.glportal/data/textures/tiles.png')        
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         clearGlpProperties()
         if object:
-            object["glpType"] = "portable"
+            object.glpTypes = "wall"
             me = object.data
             me.materials.append(mat)
         return {'FINISHED'}    
