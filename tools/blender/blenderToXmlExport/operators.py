@@ -16,7 +16,7 @@ class addDoor(bpy.types.Operator):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
-            object["glpType"] = "door" 
+            object.glpTypes = "door" 
         return {'FINISHED'}    
 
 def getMaterial(texturePath):
