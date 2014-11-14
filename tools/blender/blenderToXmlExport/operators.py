@@ -79,6 +79,7 @@ class addDoor(bpy.types.Operator):
     def execute(self, context):
         realpath = os.path.expanduser("~/.glportal/data/meshes/Door.obj")
         bpy.ops.import_scene.obj(filepath=realpath)
+        bpy.ops.transform.translate(value=(bpy.context.scene.cursor_location))
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         clearGlpProperties()
