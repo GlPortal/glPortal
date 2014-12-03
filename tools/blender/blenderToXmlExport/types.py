@@ -3,7 +3,8 @@ from bpy.props import *
 
 glpTypes = [
     ("none" ,"None" , "No special property"),
-    ("wall" ,"Wall" , "Wall"),     
+    ("wall" ,"Wall" , "Wall"),
+    ("door" ,"Door" , "Door"),         
     ("trigger" , "Trigger" , "trigger")
 ]
 
