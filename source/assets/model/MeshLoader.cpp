@@ -11,8 +11,8 @@
 
 #include "engine/env/Environment.hpp"
 #include "engine/Entity.hpp"
-#include "util/math/Vector2f.hpp"
-#include "util/math/Vector3f.hpp"
+#include "engine/core/math/Vector2f.hpp"
+#include "engine/core/math/Vector3f.hpp"
 #include <cstdio>
 
 namespace glPortal {
@@ -25,7 +25,8 @@ Mesh MeshLoader::getMesh(std::string path) {
     return meshCache.at(path);
   }
   Assimp::Importer importer;
-  const aiMesh* mesh = importer.ReadFile(path, aiProcess_Triangulate)->mMeshes[0];
+  int flags = aiProcess_Triangulate | aiProcess_GenNormals;
+  const aiMesh* mesh = importer.ReadFile(path, flags)->mMeshes[0];
   Mesh m = uploadMesh(mesh);
   meshCache.insert(std::pair<std::string, Mesh>(path, m));
   return m;
@@ -209,7 +210,6 @@ Mesh MeshLoader::getSubPlane(int x, int y, int width, int height, int w, int h) 
                            Vector2f((float)(x+width)/w, (float)y/h),
                            Vector2f((float)(x+width)/w, (float)(y+height)/h),
                            Vector2f((float)x/w, (float)(y+height)/h)};
-  Vector3f normals[1] = {Vector3f(0, 0, 1)};
 
   float vi[6] = {0,1,3,2,3,1};
   float vertexBuffer[6 * 3];
@@ -228,13 +228,6 @@ Mesh MeshLoader::getSubPlane(int x, int y, int width, int height, int w, int h) 
     textureBuffer[i * 2 + 1] = texCoords[index].y;
   }
 
-  float normalBuffer[6 * 3];
-  for(int i = 0; i < 6; i++) {
-    normalBuffer[i * 3 + 0] = normals[0].x;
-    normalBuffer[i * 3 + 1] = normals[0].y;
-    normalBuffer[i * 3 + 2] = normals[0].z;
-  }
-
   //Put the vertex buffer into the VAO
   GLuint vertexVBO;
   glGenBuffers(1, &vertexVBO);
@@ -250,14 +243,6 @@ Mesh MeshLoader::getSubPlane(int x, int y, int width, int height, int w, int h) 
   glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 2, textureBuffer, GL_STATIC_DRAW);
   glVertexAttribPointer(1, 2, GL_FLOAT, 0, 0, 0);
   glEnableVertexAttribArray(1);
-
-  //Put the normal buffer into the VAO
-  GLuint normalVBO;
-  glGenBuffers(1, &normalVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 3, normalBuffer, GL_STATIC_DRAW);
-  glVertexAttribPointer(2, 3, GL_FLOAT, 0, 0, 0);
-  glEnableVertexAttribArray(2);
 
   //Unbind the buffers
   glBindBuffer(GL_ARRAY_BUFFER, 0);

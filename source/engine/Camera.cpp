@@ -1,5 +1,5 @@
 #include "Camera.hpp"
-#include <util/math/Math.hpp>
+#include <engine/core/math/Math.hpp>
 
 #include <math.h>
 #include "../Window.hpp"
@@ -30,9 +30,9 @@ void Camera::recalculate() {
     projectionMatrix.array[0] = 2 / (right - left);
     projectionMatrix.array[5] = 2 / (top - bottom);
     projectionMatrix.array[10] = -2 / (zFar - zNear);
-    projectionMatrix.array[12] = (left - right) / (right - left);
-    projectionMatrix.array[13] = (bottom - top) / (top - bottom);
-    projectionMatrix.array[14] = (zNear - zFar) / (zFar - zNear);
+    projectionMatrix.array[12] = (-right - left) / (right - left);
+    projectionMatrix.array[13] = (-top - bottom) / (top - bottom);
+    projectionMatrix.array[14] = (-zFar - zNear) / (zFar - zNear);
   }
 }
 
@@ -67,6 +67,26 @@ void Camera::setPerspective() {
 
 void Camera::setOrthographic() {
   this->perspective = false;
+  recalculate();
+}
+
+void Camera::setLeft(float left) {
+  this->left = left;
+  recalculate();
+}
+
+void Camera::setRight(float right) {
+  this->right = right;
+  recalculate();
+}
+
+void Camera::setTop(float top) {
+  this->top = top;
+  recalculate();
+}
+
+void Camera::setBottom(float bottom) {
+  this->bottom = bottom;
   recalculate();
 }
 

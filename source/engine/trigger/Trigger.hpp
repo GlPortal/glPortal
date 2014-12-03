@@ -3,10 +3,12 @@
 
 #include <string>
 
+#include <assets/model/Mesh.hpp>
+#include <assets/texture/Texture.hpp>
+
 #include <engine/Entity.hpp>
-#include <engine/Mesh.hpp>
-#include <engine/Texture.hpp>
-#include <util/math/Vector3f.hpp>
+
+#include <engine/core/math/Vector3f.hpp>
 
 namespace glPortal {
 

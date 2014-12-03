@@ -1,7 +1,7 @@
 #ifndef CONSOLE_LOGGER_HPP
 #define CONSOLE_LOGGER_HPP
 
-#include <util/logger/Logger.hpp>
+#include <engine/core/diag/Logger.hpp>
 #include <string>
 
 namespace glPortal {

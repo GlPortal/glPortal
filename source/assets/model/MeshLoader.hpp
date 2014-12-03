@@ -1,9 +1,10 @@
 #ifndef MESHLOADER_HPP
 #define MESHLOADER_HPP
 
-#include "engine/Mesh.hpp"
-#include <map>
 #include <string>
+#include <map>
+
+#include <assets/model/Mesh.hpp>
 
 struct aiMesh;
 

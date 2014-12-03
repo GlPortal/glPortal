@@ -4,6 +4,7 @@
 #include <SDL2/SDL_video.h>
 #include "engine/env/Environment.hpp"
 #include <string>
+
 namespace glPortal {
 
 class Window {

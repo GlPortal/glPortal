@@ -1,8 +1,11 @@
-#include <engine/BoxCollider.hpp>
-#include <engine/loader/MeshLoader.hpp>
-#include <engine/Mesh.hpp>
-#include <Portal.hpp>
+#include "Portal.hpp"
+
 #include <cmath>
+
+#include <assets/model/MeshLoader.hpp>
+#include <assets/model/Mesh.hpp>
+
+#include <engine/BoxCollider.hpp>
 
 namespace glPortal {
 

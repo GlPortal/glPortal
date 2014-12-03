@@ -1,8 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <util/math/Matrix4f.hpp>
-#include <util/math/Vector3f.hpp>
+#include <engine/core/math/Matrix4f.hpp>
+#include <engine/core/math/Vector3f.hpp>
 
 const float DEFAULT_FOVY = 60;
 const float DEFAULT_ASPECT = 1;
@@ -18,16 +18,7 @@ namespace glPortal {
 
 class Camera {
 public:
-  Camera() :
-      fovy(DEFAULT_FOVY),
-      aspect(DEFAULT_ASPECT),
-      zNear(DEFAULT_ZNEAR),
-      zFar(DEFAULT_ZFAR),
-      perspective(DEFAULT_PERSPECTIVE),
-      top(DEFAULT_TOP),
-      bottom(DEFAULT_BOTTOM),
-      left(DEFAULT_LEFT),
-      right(DEFAULT_RIGHT) {
+  Camera() {
     recalculate();
   }
   Camera(float fovy, float aspect, float zNear, float zFar);
@@ -39,19 +30,25 @@ public:
   void setZFar(float zFar);
   void setPerspective();
   void setOrthographic();
+  void setLeft(float left);
+  void setRight(float right);
+  void setTop(float top);
+  void setBottom(float bottom);
+
   Vector3f position;
   Vector3f rotation;
 private:
   Matrix4f projectionMatrix;
-  float fovy;
-  float aspect;
-  float zNear;
-  float zFar;
-  bool perspective;
-  float top;
-  float bottom;
-  float left;
-  float right;
+  bool perspective = DEFAULT_PERSPECTIVE;
+  float fovy    = DEFAULT_FOVY;
+  float aspect  = DEFAULT_ASPECT;
+  float zNear   = DEFAULT_ZNEAR;
+  float zFar    = DEFAULT_ZFAR;
+
+  float top     = DEFAULT_TOP;
+  float bottom  = DEFAULT_BOTTOM;
+  float left    = DEFAULT_LEFT;
+  float right   = DEFAULT_RIGHT;
 };
 
 } /* namespace glPortal */

@@ -6,17 +6,21 @@
 #include <stdexcept>
 #include <vector>
 
-#include "Player.hpp"
-#include "Scene.hpp"
-#include "engine/env/Environment.hpp"
-#include "engine/Light.hpp"
-#include "engine/Mesh.hpp"
-#include "MeshLoader.hpp"
-#include "XmlHelper.hpp"
-#include "engine/Texture.hpp"
-#include "TextureLoader.hpp"
+#include <assets/map/XmlHelper.hpp>
+#include <engine/env/Environment.hpp>
 #include <engine/trigger/Trigger.hpp>
-#include "util/math/Vector3f.hpp"
+#include <engine/Light.hpp>
+#include <engine/core/math/Vector3f.hpp>
+
+#include <assets/scene/Scene.hpp>
+#include <assets/model/Mesh.hpp>
+#include <assets/texture/Texture.hpp>
+#include <assets/gui/GUIButton.hpp>
+
+#include <assets/model/MeshLoader.hpp>
+#include <assets/texture/TextureLoader.hpp>
+
+#include "Player.hpp"
 
 using namespace std;
 
@@ -78,6 +82,7 @@ void MapLoader::extractSpawn() {
 void MapLoader::extractLights() {
   Vector3f lightPos;
   Vector3f lightColor;
+  Vector3f lightAtt;
   TiXmlElement* lightElement;
   lightElement = rootHandle.FirstChild("light").Element();
 
@@ -87,9 +92,15 @@ void MapLoader::extractLights() {
     lightElement->QueryFloatAttribute("r", &lightColor.x);
     lightElement->QueryFloatAttribute("g", &lightColor.y);
     lightElement->QueryFloatAttribute("b", &lightColor.z);
+
+    lightElement->QueryFloatAttribute("c", &lightAtt.x);
+    lightElement->QueryFloatAttribute("l", &lightAtt.y);
+    lightElement->QueryFloatAttribute("q", &lightAtt.z);
+
     Light light;
     light.position.set(lightPos.x, lightPos.y, lightPos.z);
     light.color.set(lightColor.x, lightColor.y, lightColor.z);
+    light.attenuation.set(lightAtt.x, lightAtt.y, lightAtt.z);
     scene->lights.push_back(light);
   } while ((lightElement = lightElement->NextSiblingElement("light")) != NULL);
 }
@@ -192,6 +203,42 @@ void MapLoader::extractModels() {
       model.mesh = MeshLoader::getMesh(mesh);
       scene->models.push_back(model);
     } while ((modelElement = modelElement->NextSiblingElement("model")) != NULL);
+  }
+}
+
+
+void MapLoader::extractButtons() {
+  TiXmlElement* textureElement = rootHandle.FirstChild("texture").Element();
+  string texturePath("none");
+  string surfaceType("none");
+  Vector2f position;
+  Vector2f size;
+
+  if (textureElement) {
+    do {
+      textureElement->QueryStringAttribute("source", &texturePath);
+      textureElement->QueryStringAttribute("type", &surfaceType);
+      TiXmlElement* buttonElement = textureElement->FirstChildElement("GUIbutton");
+
+      if (buttonElement) {
+        do {
+          GUIButton button;
+
+          buttonElement->QueryFloatAttribute("x", &position.x);
+          buttonElement->QueryFloatAttribute("y", &position.y);
+
+          buttonElement->QueryFloatAttribute("w", &size.x);
+          buttonElement->QueryFloatAttribute("h", &size.y);
+
+          button.texture = TextureLoader::getTexture(texturePath);
+          button.texture.xTiling = 0.5f;
+          button.texture.yTiling = 0.5f;
+          scene->buttons.push_back(button);
+        } while ((buttonElement = buttonElement->NextSiblingElement("GUIbutton")) != NULL);
+      }
+
+      texturePath = std::string("none");
+    } while ((textureElement = textureElement->NextSiblingElement("texture")) != NULL);
   }
 }
 } /* namespace glPortal */

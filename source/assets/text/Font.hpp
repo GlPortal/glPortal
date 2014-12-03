@@ -1,7 +1,7 @@
 #ifndef FONT_HPP
 #define FONT_HPP
 
-#include <engine/Letter.hpp>
+#include <assets/text/Letter.hpp>
 #include <map>
 
 namespace glPortal {

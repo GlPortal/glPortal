@@ -11,7 +11,8 @@ public:
   static const std::string SUPERSAMPLING;
   static const std::string FULLSCREEN;
   static const std::string HEIGHT;
-  static const std::string WIDTH; 
+  static const std::string WIDTH;
+  static const std::string SOUND;
 };
 
 } /* namespace glPortal */

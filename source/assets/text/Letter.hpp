@@ -1,7 +1,7 @@
 #ifndef LETTER_HPP
 #define LETTER_HPP
 
-#include "Mesh.hpp"
+#include <assets/model/Mesh.hpp>
 
 namespace glPortal {
 

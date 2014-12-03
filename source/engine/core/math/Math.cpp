@@ -1,6 +1,6 @@
-#include <util/math/Math.hpp>
-#include <util/math/Matrix4f.hpp>
-#include <util/math/Vector3f.hpp>
+#include "Math.hpp"
+#include <engine/core/math/Matrix4f.hpp>
+#include <engine/core/math/Vector3f.hpp>
 #include <cmath>
 
 namespace glPortal {
