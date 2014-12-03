@@ -1,7 +1,7 @@
 #include <unittest++/UnitTest++.h>
 #include <tinyxml.h>
-#include <util/math/Vector3f.hpp>
-#include <engine/loader/XmlHelper.hpp>
+#include <engine/core/math/Vector3f.hpp>
+#include <assets/map/XmlHelper.hpp>
 #include <stdexcept>
 
 using namespace glPortal;
@@ -35,7 +35,7 @@ SUITE(XmlReading)
     XmlHelper::pushAttributeVertexToVector(lightElement, vector);
 
     bool vectorIsValid(false);
-    Vector3f resultVector = Vector3f::sub(sourceVector, vector);
+    Vector3f resultVector = *sourceVector.sub(vector);
     if((resultVector.x + resultVector.y + resultVector.z) == 0 ){
       vectorIsValid = true;
     }

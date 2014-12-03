@@ -64,7 +64,7 @@ class addWall(bpy.types.Operator):
     bl_label = "Mark the selection as portable."
 
     def execute(self, context):
-        bpy.ops.mesh.primitive_cube_add()
+        bpy.ops.mesh.primitive_plane_add()
         mat = getMaterial('~/.glportal/data/textures/tiles.png')        
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
