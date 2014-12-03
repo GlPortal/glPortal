@@ -165,7 +165,6 @@ void Renderer::render() {
   camera.setRight(Window::width);
   camera.setBottom(0);
   camera.setTop(Window::height);
-  camera.getProjectionMatrix().print();
 
   //Upload matrices
   projectionMatrix = camera.getProjectionMatrix();
