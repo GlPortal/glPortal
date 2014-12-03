@@ -3,12 +3,7 @@ import os
 import string
 import re
 
-def clearGlpProperties():
-    object = bpy.context.active_object
-    if object:
-        object.glpTypes = "none"
-        object.glpTriggerTypes = "none"             
-    
+from .operatorHelpers import *
         
 class addDoor(bpy.types.Operator):
     bl_idname = "wm.add_door"
@@ -20,9 +15,8 @@ class addDoor(bpy.types.Operator):
         bpy.ops.transform.translate(value=(bpy.context.scene.cursor_location))
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
-        clearGlpProperties()
         if object:
-            object["glpType"] = "door" 
+            object.glpTypes = "door" 
         return {'FINISHED'}    
 
 def getMaterial(texturePath):
@@ -47,7 +41,7 @@ def getMaterial(texturePath):
     mtex.use_map_density = True 
     mtex.mapping = 'FLAT'
     return mat
-
+    
 class addPortable(bpy.types.Operator):
     bl_idname = "wm.add_portable"
     bl_label = "Mark the selection as portable."
@@ -57,7 +51,6 @@ class addPortable(bpy.types.Operator):
         mat = getMaterial('~/.glportal/data/textures/wall.png')
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
-        clearGlpProperties()
         if object:
             object.glpTypes = "wall"
             object.glpWallTypes = "portable"
@@ -75,10 +68,8 @@ class addWall(bpy.types.Operator):
         mat = getMaterial('~/.glportal/data/textures/tiles.png')        
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
-        clearGlpProperties()
         if object:
             object.glpTypes = "wall"
             me = object.data
             me.materials.append(mat)
-        return {'FINISHED'}    
-    
+        return {'FINISHED'}
