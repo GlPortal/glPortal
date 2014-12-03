@@ -22,7 +22,7 @@ void Fps::countCycle() {
   * Dump current FPS to stdout
   */
 void Fps::dump() {
-  std::cout << "FPS: " << getFps() << std::endl;
+
 }
 
 int Fps::getFps() {
@@ -30,6 +30,7 @@ int Fps::getFps() {
       lastFpsTime = SDL_GetTicks();
       fps = rendered;
       rendered = 0;
+      std::cout << "FPS: " << fps << std::endl;
     }
     return fps;
 }

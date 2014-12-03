@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include <assets/gui/GUIButton.hpp>
 #include "engine/Camera.hpp"
 #include "engine/Light.hpp"
 #include <engine/trigger/Trigger.hpp>
@@ -19,6 +20,7 @@ public:
   std::vector<Trigger> triggers;
   std::vector<Light> lights;
   std::vector<Entity> models;
+  std::vector<GUIButton> buttons;
   Portal bluePortal;
   Portal orangePortal;
   Entity start;

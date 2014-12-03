@@ -8,8 +8,12 @@
 		<position x="25" y="0" z="5"/>
 		<rotation x="0" y="90" z="0"/>
 	</end>
-	<light x="10" y="6" z="5" r="0.9" g="0.9" b="1"/>
+	<light x="10" y="6" z="5" r="1" g="0.5" b="0.5" c="0" l="0.5" q="0.0008" />
+	<light x="24" y="3" z="5" r="0.7" g="0.7" b="0.8" c="0" l="0.2" q="0.08" />
 	
+	<texture source="test.png">
+		<GUIbutton x="200" y="100" w="50" h="50" />
+	</texture>
 	<texture source="wall.png">
 		<!-- Top portal wall -->
 		<wall>

@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-#include "../Font.hpp"
+#include <assets/text/Font.hpp>
 
 namespace glPortal {
 

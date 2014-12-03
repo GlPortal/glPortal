@@ -2,8 +2,8 @@
 #define PLAYER_HPP
 
 #include <engine/Entity.hpp>
-#include <util/math/Vector2f.hpp>
-#include <util/math/Vector3f.hpp>
+#include <engine/core/math/Vector2f.hpp>
+#include <engine/core/math/Vector3f.hpp>
 
 namespace glPortal {
 

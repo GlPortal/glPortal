@@ -5,9 +5,10 @@
 #include <cstdlib>
 #include <cstdio>
 
-#include "engine/env/Environment.hpp"
-#include "TextureLoader.hpp"
-#include "MeshLoader.hpp"
+#include <assets/model/MeshLoader.hpp>
+#include <assets/texture/TextureLoader.hpp>
+
+#include <engine/env/Environment.hpp>
 
 namespace glPortal {
 

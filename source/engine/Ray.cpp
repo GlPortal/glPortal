@@ -35,20 +35,12 @@ bool Ray::collides(Entity e, float* tNear, float* tFar) {
         t1 = t2;
         t2 = temp;
       }
-      if (t1 > *tNear) {
-        *tNear = t1;
-      }
-      if (t2 < *tFar) {
-        *tFar = t2;
-      }
+      if (t1 > *tNear) { *tNear = t1; }
+      if (t2 < *tFar) { *tFar = t2; }
 
       //End
-      if (*tNear > *tFar) {
-        return false;
-      }
-      if (*tFar < 0) {
-        return false;
-      }
+      if (*tNear > *tFar) { return false; }
+      if (*tFar < 0) { return false; }
     }
   }
   return true;

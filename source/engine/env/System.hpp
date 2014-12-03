@@ -2,7 +2,7 @@
 #define SYSTEM_HPP
 
 #include <string>
-#include <util/logger/ConsoleLogger.hpp>
+#include <engine/core/diag/ConsoleLogger.hpp>
 
 namespace glPortal {
 

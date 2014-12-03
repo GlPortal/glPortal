@@ -2,10 +2,10 @@
 #define SHADERLOADER_HPP
 
 #include <GL/glew.h>
-#include <map>
 #include <string>
+#include <map>
 
-#include "../Shader.hpp"
+#include <assets/shader/Shader.hpp>
 
 namespace glPortal {
 

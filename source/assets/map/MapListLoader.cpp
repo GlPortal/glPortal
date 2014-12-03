@@ -1,8 +1,10 @@
-#include <engine/env/Environment.hpp>
-#include <engine/loader/MapListLoader.hpp>
+#include "MapListLoader.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
+
+#include <engine/env/Environment.hpp>
 
 namespace glPortal {
 

@@ -22,8 +22,8 @@ Game::Game() : closed(false) {
   try {
     world.create();
     Sound::init();
-    Sound::load((Environment::getDataDir() + "/audio/music/track1.ogg"));
-    Sound::play();
+    //Mute sound for now
+    //Sound::load((Environment::getDataDir() + "/audio/music/track1.ogg"));
 
     update();
   }
@@ -40,7 +40,7 @@ void Game::update() {
   
   while (not closed) {
     skipped = 0;
-    fps.dump();
+    fps.getFps();
     //Update the game if it is time
     while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
       while (SDL_PollEvent(&event)) {

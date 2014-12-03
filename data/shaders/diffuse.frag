@@ -1,11 +1,9 @@
 #version 330 core
 
 struct Light {
-	vec4 position;
+	vec3 position;
 	vec3 color;
-	float constantAtt;
-	float linearAtt;
-	float quadraticAtt;
+	vec3 attenuation;
 };
 
 uniform mat4 modelMatrix;
@@ -14,34 +12,48 @@ uniform sampler2D diffuse;
 uniform Light lights[100];
 uniform int numLights;
 
-in vec4 pass_position;
+in vec3 pass_position;
 in vec2 pass_texCoord;
-in vec4 pass_normal;
+in vec3 pass_normal;
 
 out vec4 out_Color;
 
 void main(void) {
-	vec3 light = vec3(0, 0, 0);
+	vec3 refl = vec3(0, 0, 0);
 	
+	// Normals
+	mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));
+    vec3 normal = normalize(normalMatrix * pass_normal);
+    
 	//Calculate the location of this fragment (pixel) in world coordinates
-    vec4 position = modelMatrix * pass_position;
+    vec3 position = (modelMatrix * vec4(pass_position, 1)).xyz;
     
     for(int i = 0; i < numLights; i++) {
+    	Light light = lights[i];
+    	
 	    //Calculate the vector from this pixels surface to the light source
-	    vec4 lightDir = lights[i].position - position;
+	    vec3 lightDir = light.position - position;
+	    vec3 lightColor = light.color;
+	    
 	    float length = length(lightDir);
-	    vec3 lightColor = lights[i].color;
 	    
 	    //Calculate the cosine of the angle of incidence (brightness)
-	    float fDiffuse = dot(pass_normal, normalize(lightDir));
-	    float fAttTotal = 1 / (lights[i].constantAtt + lights[i].linearAtt * length + lights[i].quadraticAtt * length * length);
-	    light.r += lightColor.r * fAttTotal;
-	    light.g += lightColor.g * fAttTotal;
-	    light.b += lightColor.b * fAttTotal;
+	    float fDiffuse = dot(normal, normalize(lightDir));
+	    
+	    float constantAtt  = light.attenuation.x;
+	    float linearAtt    = light.attenuation.y;
+	    float quadraticAtt = light.attenuation.z;
+	    float fAttTotal = 1 / (constantAtt + linearAtt * length + quadraticAtt * length * length);
+	    
+	    fDiffuse = clamp(fDiffuse, 0, 1);
+	    
+	    refl.r += lightColor.r * fAttTotal * fDiffuse;
+	    refl.g += lightColor.g * fAttTotal * fDiffuse;
+	    refl.b += lightColor.b * fAttTotal * fDiffuse;
 	}
-	light.r = clamp(light.r, 0, 1);
-	light.g = clamp(light.g, 0, 1);
-	light.b = clamp(light.b, 0, 1);
+	//refl.r = clamp(refl.r, 0, 1);
+	//refl.g = clamp(refl.g, 0, 1);
+	//refl.b = clamp(refl.b, 0, 1);
 
-    out_Color = vec4(light, 1) * texture(diffuse, pass_texCoord);
+    out_Color = vec4(refl, 1) * texture(diffuse, pass_texCoord);
 }

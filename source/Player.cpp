@@ -1,5 +1,5 @@
-#include <util/math/Math.hpp>
-#include <util/math/Vector2f.hpp>
+#include <engine/core/math/Math.hpp>
+#include <engine/core/math/Vector2f.hpp>
 #include <Input.hpp>
 #include <Player.hpp>
 #include <SDL2/SDL_mouse.h>

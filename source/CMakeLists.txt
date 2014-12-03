@@ -5,12 +5,12 @@ add_executable(${EXE_NAME}
   Portal.cpp
   engine/Ray.cpp
   engine/Sound.cpp    
-  util/math/Vector3f.cpp
-  util/math/Vector2f.cpp
-  util/math/Matrix4f.cpp
-  util/math/Math.cpp
-  util/logger/Logger.cpp
-  util/logger/ConsoleLogger.cpp
+  engine/core/math/Vector3f.cpp
+  engine/core/math/Vector2f.cpp
+  engine/core/math/Matrix4f.cpp
+  engine/core/math/Math.cpp
+  engine/core/diag/Logger.cpp
+  engine/core/diag/ConsoleLogger.cpp
   util/sdl/Fps.cpp
   engine/BoxCollider.cpp
   World.cpp Window.cpp
@@ -18,18 +18,19 @@ add_executable(${EXE_NAME}
   engine/trigger/Trigger.cpp
   engine/Camera.cpp
   Input.cpp engine/renderer/Renderer.cpp
-  engine/loader/MapLoader.cpp
-  engine/loader/MapListLoader.cpp
-  engine/loader/MeshLoader.cpp
-  engine/loader/ShaderLoader.cpp
-  engine/loader/TextureLoader.cpp
-  engine/loader/FontLoader.cpp
-  engine/loader/XmlHelper.cpp
+  assets/map/MapLoader.cpp
+  assets/map/MapListLoader.cpp
+  assets/map/XmlHelper.cpp
+  assets/model/MeshLoader.cpp
+  assets/shader/ShaderLoader.cpp
+  assets/texture/TextureLoader.cpp
+  assets/text/FontLoader.cpp
+  assets/gui/GUIButton.cpp
   engine/env/Environment.cpp
   engine/env/System.cpp
   engine/env/ConfigFileParser.cpp
   engine/env/Config.cpp
-  engine/env/Path.cpp
+  engine/core/file/Path.cpp
   )
 target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
 install(TARGETS ${EXE_NAME} DESTINATION bin)

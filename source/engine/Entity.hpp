@@ -1,9 +1,10 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
-#include "Mesh.hpp"
-#include "Texture.hpp"
-#include <util/math/Vector3f.hpp>
+#include <assets/model/Mesh.hpp>
+#include <assets/texture/Texture.hpp>
+
+#include <engine/core/math/Vector3f.hpp>
 
 namespace glPortal {
 

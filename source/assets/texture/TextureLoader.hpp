@@ -1,10 +1,10 @@
 #ifndef TEXTURELOADER_HPP
 #define TEXTURELOADER_HPP
 
-#include <map>
 #include <string>
+#include <map>
 
-#include "../Texture.hpp"
+#include <assets/texture/Texture.hpp>
 
 namespace glPortal {
 

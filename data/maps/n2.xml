@@ -8,7 +8,8 @@
 		<position x="7" y="12" z="8"/>
 		<rotation x="0" y="0" z="0"/>
 	</end>
-	<light x="0" y="15" z="0" r="0" g="1" b="0"/>
+	<light x="0" y="15" z="1" r="1" g="0.5" b="0.5" c="0.2" l="0.05" q="0.008" />
+	<light x="-6" y="10" z="-7" r="1" g="0.5" b="0.5" c="0.2" l="0.05" q="0.008" />
 	
 	<texture source="wall.png">
 		<!-- Hallway -->
