@@ -44,3 +44,7 @@ if (UnitTestPlusPlus_FOUND)
   add_subdirectory(tests)
 endif ()
 
+if (CMAKE_VERSION VERSION_GREATER 2.8.5)
+  include(FeatureSummary)
+  feature_summary(WHAT ALL)
+endif ()
