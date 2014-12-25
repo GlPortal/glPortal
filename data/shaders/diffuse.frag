@@ -27,6 +27,7 @@ void main(void) {
     
 	//Calculate the location of this fragment (pixel) in world coordinates
     vec3 position = (modelMatrix * vec4(pass_position, 1)).xyz;
+    float ambient = 0.4;
     
     for(int i = 0; i < numLights; i++) {
     	Light light = lights[i];
@@ -47,9 +48,7 @@ void main(void) {
 	    
 	    fDiffuse = clamp(fDiffuse, 0, 1);
 	    
-	    refl.r += lightColor.r * fAttTotal * fDiffuse;
-	    refl.g += lightColor.g * fAttTotal * fDiffuse;
-	    refl.b += lightColor.b * fAttTotal * fDiffuse;
+	    refl += lightColor * fAttTotal * fDiffuse + ambient;
 	}
 	//refl.r = clamp(refl.r, 0, 1);
 	//refl.g = clamp(refl.g, 0, 1);
