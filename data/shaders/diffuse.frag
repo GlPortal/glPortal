@@ -23,7 +23,7 @@ out vec4 out_Color;
 float calcPointAtt(Light light, vec3 lightDir) {
 	float lightLength = length(lightDir);
 	float x = lightLength / light.distance;
-    float fAtt = 1 - x;
+    float fAtt = 1 - sqrt(x);
     if (fAtt < 0) {
     	fAtt = 0;
     }
@@ -39,7 +39,7 @@ void main(void) {
     
 	//Calculate the location of this fragment (pixel) in world coordinates
     vec3 position = (modelMatrix * vec4(pass_position, 1)).xyz;
-    float ambient = 0.2;
+    float ambient = 0.3;
     
     for(int i = 0; i < numLights; i++) {
     	Light light = lights[i];
