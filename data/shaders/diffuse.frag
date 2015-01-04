@@ -27,7 +27,7 @@ void main(void) {
     
 	//Calculate the location of this fragment (pixel) in world coordinates
     vec3 position = (modelMatrix * vec4(pass_position, 1)).xyz;
-    float ambient = 0.4;
+    float ambient = 0.3;
     
     for(int i = 0; i < numLights; i++) {
     	Light light = lights[i];
