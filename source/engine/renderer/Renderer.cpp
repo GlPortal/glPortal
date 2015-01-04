@@ -89,12 +89,15 @@ void Renderer::render() {
     int lightPos = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].color");
     int lightColor = glGetUniformLocation(shader.handle, attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].attenuation");
-    int lightAtt = glGetUniformLocation(shader.handle, attribute);
+    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].distance");
+    int lightDistance = glGetUniformLocation(shader.handle, attribute);
+    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].energy");
+    int lightEnergy = glGetUniformLocation(shader.handle, attribute);
 
     glUniform3f(lightPos, light.position.x, light.position.y, light.position.z);
     glUniform3f(lightColor, light.color.x, light.color.y, light.color.z);
-    glUniform3f(lightAtt, light.attenuation.x, light.attenuation.y, light.attenuation.z);
+    glUniform1f(lightDistance, light.distance);
+    glUniform1f(lightEnergy, light.energy);
   }
 
   int numLights = scene->lights.size();

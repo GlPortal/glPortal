@@ -82,7 +82,8 @@ void MapLoader::extractSpawn() {
 void MapLoader::extractLights() {
   Vector3f lightPos;
   Vector3f lightColor;
-  Vector3f lightAtt;
+  float distance;
+  float energy;
   TiXmlElement* lightElement;
   lightElement = rootHandle.FirstChild("light").Element();
 
@@ -93,14 +94,14 @@ void MapLoader::extractLights() {
     lightElement->QueryFloatAttribute("g", &lightColor.y);
     lightElement->QueryFloatAttribute("b", &lightColor.z);
 
-    lightElement->QueryFloatAttribute("c", &lightAtt.x);
-    lightElement->QueryFloatAttribute("l", &lightAtt.y);
-    lightElement->QueryFloatAttribute("q", &lightAtt.z);
+    lightElement->QueryFloatAttribute("distance", &distance);
+    lightElement->QueryFloatAttribute("energy", &energy);
 
     Light light;
     light.position.set(lightPos.x, lightPos.y, lightPos.z);
     light.color.set(lightColor.x, lightColor.y, lightColor.z);
-    light.attenuation.set(lightAtt.x, lightAtt.y, lightAtt.z);
+    light.distance = distance;
+    light.energy = energy;
     scene->lights.push_back(light);
   } while ((lightElement = lightElement->NextSiblingElement("light")) != NULL);
 }
