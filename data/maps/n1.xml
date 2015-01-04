@@ -8,8 +8,10 @@
 		<position x="25" y="0" z="5"/>
 		<rotation x="0" y="90" z="0"/>
 	</end>
-	<light x="10" y="6" z="5" r="1" g="1.0" b="1.0" c="0" l="0.5" q="0.0008" />
-	<light x="24" y="3" z="5" r="0.7" g="0.7" b="0.8" c="0" l="0.4" q="0.08" />
+	<light x="10" y="6" z="5" r="1" g="0.95" b="0.9" distance="4" energy="2" />
+	<light x="24.5" y="3" z="5" r="0.7" g="1" b="0.7" distance="1.1" energy="6" />
+	<light x="15" y="3" z="5" r="1" g="0.95" b="0.9" distance="60" energy="0.6" />
+	<light x="5" y="3" z="5" r="1" g="0.95" b="0.9" distance="60" energy="0.6" />
 	
 	<texture source="test.png">
 		<GUIbutton x="200" y="100" w="50" h="50" />
