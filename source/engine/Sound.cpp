@@ -28,7 +28,7 @@ void Sound::load(std::string filename) {
 void Sound::play() {
   Mix_VolumeMusic(14);
   Mix_Fading(MIX_FADING_IN);
-  if(Mix_PlayMusic(music, 0) == -1) {
+  if(Mix_PlayMusic(music, -1) == -1) {
     printf("Unable to play Ogg file: %s\n", Mix_GetError());
   }
 }
