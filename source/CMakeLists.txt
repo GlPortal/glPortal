@@ -4,7 +4,7 @@ add_executable(${EXE_NAME}
   Game.cpp
   Portal.cpp
   engine/Ray.cpp
-  engine/Sound.cpp    
+  engine/SoundManager.cpp    
   engine/core/math/Vector3f.cpp
   engine/core/math/Vector2f.cpp
   engine/core/math/Matrix4f.cpp

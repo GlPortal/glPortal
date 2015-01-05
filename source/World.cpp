@@ -22,6 +22,7 @@
 #include <engine/Light.hpp>
 #include <engine/Ray.hpp>
 #include <engine/Camera.hpp>
+#include <engine/SoundManager.hpp>
 
 #include <engine/core/math/Math.hpp>
 #include <engine/core/math/Vector2f.hpp>
@@ -36,10 +37,10 @@ namespace glPortal {
 float World::gravity = GRAVITY;
 float World::friction = FRICTION;
 
-void World::create() {
+void World::create(SoundManager* soundmngr) {
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
-
+  soundmngr = soundmngr;
   loadScene(mapList[currentLevel]);
 }
 
@@ -50,6 +51,7 @@ void World::destroy() {
 
 void World::loadScene(std::string name) {
   scene = MapLoader::getScene(name);
+  soundmngr->PlayMusic(Environment::getDataDir() + "/audio/music/track1.ogg");
 }
 
 void World::update() {

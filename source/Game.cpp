@@ -10,21 +10,18 @@
 #include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
 #include <engine/env/System.hpp>
-#include <engine/Sound.hpp>
+#include <engine/SoundManager.hpp>
 #include <util/sdl/Fps.hpp>
 #include "Input.hpp"
 
 namespace glPortal {
 
-Game::Game() : closed(false) {
+Game::Game() : closed(false), soundmngr(nullptr) {
   window.createFromConfig();
-
+  soundmngr = new SoundManager();
+  
   try {
-    world.create();
-    Sound::init();
-    //Mute sound for now
-    //Sound::load((Environment::getDataDir() + "/audio/music/track1.ogg"));
-
+    world.create(soundmngr);
     update();
   }
   catch (std::runtime_error &e) {
