@@ -23,8 +23,8 @@ Game::Game() : closed(false) {
     world.create();
     Sound::init();
     //Mute sound for now
-    //Sound::load((Environment::getDataDir() + "/audio/music/track1.ogg"));
-
+    Sound::load((Environment::getDataDir() + "/audio/music/track1.ogg"));
+    Sound::play();
     update();
   }
   catch (std::runtime_error &e) {
