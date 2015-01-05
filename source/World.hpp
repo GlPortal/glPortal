@@ -11,13 +11,14 @@ class Entity;
 class Renderer;
 class BoxCollider;
 class Vector3f;
+class SoundManager;
 
 const float GRAVITY = 0.01;
 const float FRICTION = 0.01;
 
 class World {
 public:
-  void create();
+  void create(SoundManager* soundmngr);
   void destroy();
   void update();
   void loadScene(std::string path);
@@ -31,6 +32,7 @@ public:
 private:
   Renderer *renderer;
   Scene *scene;
+  SoundManager* soundmngr;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;
 };

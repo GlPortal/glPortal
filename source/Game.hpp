@@ -12,6 +12,7 @@ const int MAX_SKIP = 5;
 namespace glPortal {
 
 class ConfigFileParser;
+class SoundManager;
 
 class Game {
 public:
@@ -25,6 +26,7 @@ private:
 
   bool closed;
   ConfigFileParser * config;
+  SoundManager* soundmngr;
 };
 
 } /* namespace glPortal */
