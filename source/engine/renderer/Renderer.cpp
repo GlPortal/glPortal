@@ -183,7 +183,7 @@ void Renderer::render() {
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
   Mesh mesh = MeshLoader::getMesh("GUIElement.obj");
   Texture texture = TextureLoader::getTexture("Reticle.png");
-  renderTexturedMesh(mesh, texture);
+  //renderTexturedMesh(mesh, texture);
   }
 
   //Text
