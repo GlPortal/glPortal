@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <random>
 
 namespace glPortal {
 
@@ -18,7 +19,7 @@ const float FRICTION = 0.01;
 
 class World {
 public:
-  void create(SoundManager* soundmngr);
+  void create();
   void destroy();
   void update();
   void loadScene(std::string path);
@@ -32,7 +33,7 @@ public:
 private:
   Renderer *renderer;
   Scene *scene;
-  SoundManager* soundmngr;
+  std::default_random_engine generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;
 };

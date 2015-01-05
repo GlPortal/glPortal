@@ -37,10 +37,9 @@ namespace glPortal {
 float World::gravity = GRAVITY;
 float World::friction = FRICTION;
 
-void World::create(SoundManager* soundmngr) {
+void World::create() {
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
-  soundmngr = soundmngr;
   loadScene(mapList[currentLevel]);
 }
 
@@ -51,7 +50,7 @@ void World::destroy() {
 
 void World::loadScene(std::string name) {
   scene = MapLoader::getScene(name);
-  soundmngr->PlayMusic(Environment::getDataDir() + "/audio/music/track1.ogg");
+  SoundManager::PlayMusic(Environment::getDataDir() + "/audio/music/track1.ogg");
 }
 
 void World::update() {
