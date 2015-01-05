@@ -3,8 +3,11 @@
 namespace glPortal
 {
 	
-SoundManager::SoundManager() : music(nullptr)
+Mix_Music *SoundManager::music = NULL;
+std::map<int,Mix_Chunk*> SoundManager::sounds = {};
+void SoundManager::Init()
 {
+	  music = nullptr;
 	  int audio_rate = 22050;
 	  Uint16 audio_format = AUDIO_S16;
 	  int audio_channels = 2;
@@ -29,6 +32,7 @@ void SoundManager::PlayMusic(const std::string& filename)
 	if( music == NULL ) 
 	{
 	printf( "Failed to load Music: SDL_mixer Error: %s\n", Mix_GetError() );
+	return;
 	}
 	
 	Mix_VolumeMusic(14);
@@ -36,32 +40,46 @@ void SoundManager::PlayMusic(const std::string& filename)
 	if(Mix_PlayMusic(music, 0) == -1) 
 	{
 	printf("Unable to play Ogg file: %s\n", Mix_GetError());
+	return;
 	}
 }
 	
 void SoundManager::PlaySound(const std::string& filename)
 {
-	Mix_Music* sound = Mix_LoadMUS(filename.c_str());
+	Mix_Chunk* sound = Mix_LoadWAV(filename.c_str());
 	if( sound == NULL ) 
 	{
 	printf( "Failed to load Music: SDL_mixer Error: %s\n", Mix_GetError() );
+	return;
 	}
 	
 	Mix_VolumeMusic(14);
 	Mix_Fading(MIX_FADING_IN);
-	if(Mix_PlayMusic(sound, 0) == -1) 
+	int channel = Mix_PlayChannel(-1,sound, 0);
+	if(channel == -1) 
 	{
 	printf("Unable to play Ogg file: %s\n", Mix_GetError());
+	return;
 	}
 	
-	sounds.push_back(sound);
+	sounds[channel] = sound;
 }
 	
-SoundManager::~SoundManager()
+void SoundManager::Update()
 {
 	for(const auto sound : sounds)
 	{
-		Mix_FreeMusic(sound);
+		if(!Mix_Playing(sound.first))
+			Mix_FreeChunk(sound.second);
+	}
+}
+
+
+void SoundManager::Destroy()
+{
+	for(const auto sound : sounds)
+	{
+		Mix_FreeChunk(sound.second);
 	}
 	if(music!=nullptr)
 		Mix_FreeMusic(music);

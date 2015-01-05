@@ -16,12 +16,12 @@
 
 namespace glPortal {
 
-Game::Game() : closed(false), soundmngr(nullptr) {
+Game::Game() : closed(false) {
   window.createFromConfig();
-  soundmngr = new SoundManager();
   
   try {
-    world.create(soundmngr);
+	SoundManager::Init();
+    world.create();
     update();
   }
   catch (std::runtime_error &e) {
@@ -43,6 +43,8 @@ void Game::update() {
       while (SDL_PollEvent(&event)) {
         handleEvent(event);
       }
+      
+      SoundManager::Update();
       world.update();
       nextUpdate += SKIP_TIME;
       skipped++;

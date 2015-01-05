@@ -3,20 +3,22 @@
  
 #include <SDL2/SDL_mixer.h>
 #include <string>
-#include <vector>
+#include <map>
 
 namespace glPortal {
 	class SoundManager
 	{
 		public:
-			SoundManager();
-			~SoundManager();
+			static void Init();
+			static void Destroy();
 			
-			void PlayMusic(const std::string& filename);
-			void PlaySound(const std::string& filename);
+			static void PlayMusic(const std::string& filename);
+			static void PlaySound(const std::string& filename);
+			
+			static void Update();
 		private:
-			Mix_Music *music;
-			std::vector<Mix_Music*> sounds;
+			static Mix_Music *music;
+			static std::map<int ,Mix_Chunk*> sounds;
 	};
 }
  #endif
