@@ -21,6 +21,9 @@ public:
   void print();
 };
 
+float determinant(const Matrix4f& m);
+Matrix4f inverse(const Matrix4f& m);
+
 } /* namespace glPortal */
 
 #endif /* MATRIX4F_H */

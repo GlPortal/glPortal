@@ -1,4 +1,4 @@
-#version 150 core
+#version 130
 
 struct Light {
 	vec3 position;
@@ -8,6 +8,7 @@ struct Light {
 };
 
 uniform mat4 modelMatrix;
+uniform mat4 normalMatrix;
 
 uniform sampler2D diffuse;
 uniform Light lights[100];
@@ -34,8 +35,9 @@ void main(void) {
 	vec3 refl = vec3(0, 0, 0);
 	
 	// Normals
-	mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));
+	mat3 normalMatrix = transpose(mat3(normalMatrix));
     vec3 normal = normalize(normalMatrix * pass_normal);
+    //vec3 normal = normalize(pass_normal);
     
 	//Calculate the location of this fragment (pixel) in world coordinates
     vec3 position = (modelMatrix * vec4(pass_position, 1)).xyz;
