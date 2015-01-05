@@ -43,6 +43,7 @@ private:
   Matrix4f modelMatrix;
   
   GLuint modelLoc;
+  GLuint normalLoc;
   GLuint viewLoc;
   GLuint projLoc;
 };

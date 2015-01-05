@@ -55,6 +55,7 @@ void Renderer::changeShader(std::string path) {
   projLoc = glGetUniformLocation(shader.handle, "projectionMatrix");
   viewLoc = glGetUniformLocation(shader.handle, "viewMatrix");
   modelLoc = glGetUniformLocation(shader.handle, "modelMatrix");
+  normalLoc = glGetUniformLocation(shader.handle, "normalMatrix");
 }
 
 /**
@@ -209,6 +210,8 @@ void Renderer::renderEntity(const Entity& e) {
   modelMatrix.rotate(e.rotation);
   modelMatrix.scale(e.scale);
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+  Matrix4f normalMatrix = inverse(modelMatrix);
+  glUniformMatrix4fv(normalLoc, 1, false, normalMatrix.array);
 
   renderTexturedMesh(e.mesh, e.texture);
 }
