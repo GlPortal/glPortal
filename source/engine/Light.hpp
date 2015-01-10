@@ -8,11 +8,12 @@ namespace glPortal {
 class Light {
 public:
   Light() :
-      color(1, 1, 1), attenuation(0.2, 0.005, 0.008) {
+      color(1, 1, 1), distance(10), energy(1) {
   }
   Vector3f position;
   Vector3f color;
-  Vector3f attenuation;
+  float distance;
+  float energy;
 };
 
 } /* namespace glPortal */

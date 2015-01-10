@@ -126,4 +126,51 @@ void Matrix4f::print() {
   printf("%f %f %f %f\n", array[3], array[7], array[11], array[15]);
 }
 
+float determinant(const Matrix4f& m) {
+  float f =
+      m.array[0] * (m.array[5] * m.array[10] - m.array[6] * m.array[9])
+      + m.array[1] * (m.array[6] * m.array[8] - m.array[4] * m.array[10])
+      + m.array[2] * (m.array[4] * m.array[9] - m.array[5] * m.array[8]);
+  return f;
+}
+
+Matrix4f inverse(const Matrix4f& m) {
+  Matrix4f dest;
+  float det = determinant(m);
+
+  if (det != 0) {
+     /* do it the ordinary way
+      *
+      * inv(A) = 1/det(A) * adj(T), where adj(T) = transpose(Conjugate Matrix)
+      *
+      * m00 m01 m02
+      * m10 m11 m12
+      * m20 m21 m22
+      */
+     float det_inv = 1.0f / det;
+
+     // get the conjugate matrix
+     float t00 = m.array[5] * m.array[10] - m.array[6] * m.array[9];
+     float t01 = - m.array[4] * m.array[10] + m.array[6] * m.array[8];
+     float t02 = m.array[4] * m.array[9] - m.array[5] * m.array[8];
+     float t10 = - m.array[1] * m.array[10] + m.array[2] * m.array[9];
+     float t11 = m.array[0] * m.array[10] - m.array[2] * m.array[8];
+     float t12 = - m.array[0] * m.array[9] + m.array[1] * m.array[8];
+     float t20 = m.array[1] * m.array[6] - m.array[2] * m.array[5];
+     float t21 = -m.array[0] * m.array[6] + m.array[2] * m.array[4];
+     float t22 = m.array[0] * m.array[5] - m.array[1] * m.array[4];
+
+     dest.array[0] = t00 * det_inv;
+     dest.array[5] = t11 * det_inv;
+     dest.array[10] = t22 * det_inv;
+     dest.array[1] = t10 * det_inv;
+     dest.array[4] = t01 * det_inv;
+     dest.array[8] = t02 * det_inv;
+     dest.array[2] = t20 * det_inv;
+     dest.array[6] = t21 * det_inv;
+     dest.array[9] = t12 * det_inv;
+  }
+  return dest;
+}
+
 } /* namespace glPortal */
