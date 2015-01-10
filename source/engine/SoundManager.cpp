@@ -49,7 +49,7 @@ void SoundManager::PlaySound(const std::string& filename)
 	Mix_Chunk* sound = Mix_LoadWAV(filename.c_str());
 	if( sound == NULL ) 
 	{
-	printf( "Failed to load Music: SDL_mixer Error: %s\n", Mix_GetError() );
+	printf( "Failed to load Sound: SDL_mixer Error: %s\n", Mix_GetError() );
 	return;
 	}
 	
@@ -67,10 +67,21 @@ void SoundManager::PlaySound(const std::string& filename)
 	
 void SoundManager::Update()
 {
-	for(const auto sound : sounds)
+	std::vector<int> erase_list;
+	
+	for(auto sound : sounds)
 	{
 		if(!Mix_Playing(sound.first))
+		{
 			Mix_FreeChunk(sound.second);
+			erase_list.push_back(sound.first);
+		}
+			
+	}
+	
+	for(auto key: erase_list)
+	{
+		sounds.erase(key);
 	}
 }
 
