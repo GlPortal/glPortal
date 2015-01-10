@@ -5,6 +5,7 @@
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
 #include <array>
+#include <random>
 
 namespace glPortal {
 
@@ -39,7 +40,9 @@ public:
     velocity.set(0, 0, 0);
     speed = RUNNING_SPEED;
 
-    grounded = false;
+    grounded = true;
+    std::random_device rd;
+	generator =  std::mt19937(rd());
   }
 
   // Movement
@@ -62,6 +65,7 @@ private:
   const int MAX_HEALTH = 100;
   const int MIN_HEALTH = -100;
   int health = MAX_HEALTH;
+  std::mt19937 generator;
 };
 
 } /* namespace glPortal */
