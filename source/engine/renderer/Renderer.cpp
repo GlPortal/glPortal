@@ -55,6 +55,7 @@ void Renderer::changeShader(std::string path) {
   projLoc = glGetUniformLocation(shader.handle, "projectionMatrix");
   viewLoc = glGetUniformLocation(shader.handle, "viewMatrix");
   modelLoc = glGetUniformLocation(shader.handle, "modelMatrix");
+  normalLoc = glGetUniformLocation(shader.handle, "normalMatrix");
 }
 
 /**
@@ -89,12 +90,15 @@ void Renderer::render() {
     int lightPos = glGetUniformLocation(shader.handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].color");
     int lightColor = glGetUniformLocation(shader.handle, attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].attenuation");
-    int lightAtt = glGetUniformLocation(shader.handle, attribute);
+    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].distance");
+    int lightDistance = glGetUniformLocation(shader.handle, attribute);
+    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].energy");
+    int lightEnergy = glGetUniformLocation(shader.handle, attribute);
 
     glUniform3f(lightPos, light.position.x, light.position.y, light.position.z);
     glUniform3f(lightColor, light.color.x, light.color.y, light.color.z);
-    glUniform3f(lightAtt, light.attenuation.x, light.attenuation.y, light.attenuation.z);
+    glUniform1f(lightDistance, light.distance);
+    glUniform1f(lightEnergy, light.energy);
   }
 
   int numLights = scene->lights.size();
@@ -180,7 +184,7 @@ void Renderer::render() {
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
   Mesh mesh = MeshLoader::getMesh("GUIElement.obj");
   Texture texture = TextureLoader::getTexture("Reticle.png");
-  renderTexturedMesh(mesh, texture);
+  //renderTexturedMesh(mesh, texture);
   }
 
   //Text
@@ -206,6 +210,8 @@ void Renderer::renderEntity(const Entity& e) {
   modelMatrix.rotate(e.rotation);
   modelMatrix.scale(e.scale);
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+  Matrix4f normalMatrix = inverse(modelMatrix);
+  glUniformMatrix4fv(normalLoc, 1, false, normalMatrix.array);
 
   renderTexturedMesh(e.mesh, e.texture);
 }
