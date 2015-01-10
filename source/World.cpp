@@ -52,7 +52,7 @@ void World::destroy() {
 
 void World::loadScene(std::string name) {
   scene = MapLoader::getScene(name);
-  //SoundManager::PlayMusic(Environment::getDataDir() + "/audio/music/track1.ogg");
+  SoundManager::PlayMusic(Environment::getDataDir() + "/audio/music/track1.ogg");
 }
 
 void World::update() {
@@ -82,7 +82,7 @@ void World::update() {
     }
     if(!portaling) {
       if (player->velocity.y < 0) {
-		if(player->grounded==false && player->velocity.y < -0.18f)
+		if(player->velocity.y < -0.18f)
 		{
 			std::uniform_int_distribution<> dis(0, PLAYER_FALL_SOUND.size()-1);
 			SoundManager::PlaySound(Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)]);
