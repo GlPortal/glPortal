@@ -33,7 +33,7 @@ public:
 private:
   Renderer *renderer;
   Scene *scene;
-  std::default_random_engine generator;
+  std::mt19937 generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;
 };

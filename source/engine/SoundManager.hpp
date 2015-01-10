@@ -4,6 +4,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <string>
 #include <map>
+#include <vector>
 
 namespace glPortal {
 	class SoundManager
