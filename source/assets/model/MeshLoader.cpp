@@ -8,6 +8,7 @@
 #include <GL/glew.h>
 #include <stdlib.h>
 #include <utility>
+#include <vector>
 
 #include "engine/env/Environment.hpp"
 #include "engine/Entity.hpp"
