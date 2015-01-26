@@ -36,13 +36,13 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
   Mesh m;
 
   //Store face indices in an array
-  unsigned int faceArray[mesh->mNumFaces * 3];
-
-  for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
-    const aiFace* face = &mesh->mFaces[i];
-    faceArray[i * 3 + 0] = face->mIndices[0];
-    faceArray[i * 3 + 1] = face->mIndices[1];
-    faceArray[i * 3 + 2] = face->mIndices[2];
+  std::vector<unsigned int> faceArray;
+  
+  for (unsigned int j = 0; j < mesh->mNumFaces; j++) {
+    const aiFace face = mesh->mFaces[j];
+    faceArray.push_back(face.mIndices[0]);
+    faceArray.push_back(face.mIndices[1]);
+    faceArray.push_back(face.mIndices[2]);
   }
 
   //Generate vertex array object
@@ -55,7 +55,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
   glGenBuffers(1, &faceVBO);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceVBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-      sizeof(unsigned int) * mesh->mNumFaces * 3, faceArray, GL_STATIC_DRAW);
+      sizeof(unsigned int) * mesh->mNumFaces * 3, &faceArray[0], GL_STATIC_DRAW);
 
   //Store vertices in a buffer
   if (mesh->HasPositions()) {
