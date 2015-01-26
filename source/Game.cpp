@@ -10,7 +10,7 @@
 #include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
 #include <engine/env/System.hpp>
-#include <engine/Sound.hpp>
+#include <engine/SoundManager.hpp>
 #include <util/sdl/Fps.hpp>
 #include "Input.hpp"
 
@@ -18,13 +18,10 @@ namespace glPortal {
 
 Game::Game() : closed(false) {
   window.createFromConfig();
-
+  
   try {
+	SoundManager::Init();
     world.create();
-    Sound::init();
-    //Mute sound for now
-    Sound::load((Environment::getDataDir() + "/audio/music/track1.ogg"));
-    Sound::play();
     update();
   }
   catch (std::runtime_error &e) {
@@ -46,6 +43,8 @@ void Game::update() {
       while (SDL_PollEvent(&event)) {
         handleEvent(event);
       }
+      
+      SoundManager::Update();
       world.update();
       nextUpdate += SKIP_TIME;
       skipped++;

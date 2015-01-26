@@ -22,6 +22,7 @@
 #include <engine/Light.hpp>
 #include <engine/Ray.hpp>
 #include <engine/Camera.hpp>
+#include <engine/SoundManager.hpp>
 
 #include <engine/core/math/Math.hpp>
 #include <engine/core/math/Vector2f.hpp>
@@ -39,8 +40,9 @@ float World::friction = FRICTION;
 void World::create() {
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
-
   loadScene(mapList[currentLevel]);
+  std::random_device rd;
+  generator =  std::mt19937(rd());
 }
 
 void World::destroy() {
@@ -50,6 +52,7 @@ void World::destroy() {
 
 void World::loadScene(std::string name) {
   scene = MapLoader::getScene(name);
+  SoundManager::PlayMusic(Environment::getDataDir() + "/audio/music/track1.ogg");
 }
 
 void World::update() {
@@ -79,6 +82,12 @@ void World::update() {
     }
     if(!portaling) {
       if (player->velocity.y < 0) {
+		if(player->velocity.y < -0.18f)
+		{
+			std::uniform_int_distribution<> dis(0, PLAYER_FALL_SOUND.size()-1);
+			SoundManager::PlaySound(Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)]);
+		}
+			
         player->grounded = true;
       }
       player->velocity.y = 0;
@@ -110,6 +119,7 @@ void World::update() {
   BoxCollider bboxZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
   if (collidesWithWalls(bboxZ)) {
     bool portaling = false;
+    
     if (scene->bluePortal.open && scene->orangePortal.open) {
       if(scene->bluePortal.inPortal(bboxZ)) {
         if(scene->bluePortal.rotation.x == 0 && (scene->bluePortal.rotation.y == 0 || scene->bluePortal.rotation.y == 180)) {

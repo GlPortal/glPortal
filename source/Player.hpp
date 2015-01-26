@@ -4,12 +4,32 @@
 #include <engine/Entity.hpp>
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
+#include <array>
+#include <random>
 
 namespace glPortal {
 
 const Vector3f PLAYER_SIZE(0.5, 1, 0.5);
 const float RUNNING_SPEED = 0.1f;
 const float JUMP_SPEED = 0.15f;
+
+const std::array<const std::string,2> PLAYER_PANTING_SOUND =
+{
+	"/audio/sfx/character/fem_panting_1.ogg",
+	"/audio/sfx/character/fem_panting_2.ogg"
+};
+
+const std::array<const std::string,2> PLAYER_JUMP_SOUND =
+{
+	"/audio/sfx/character/fem_jump_1.ogg",
+	"/audio/sfx/character/fem_jump_2.ogg"
+};
+
+const std::array<const std::string,2> PLAYER_FALL_SOUND =
+{
+	"/audio/sfx/character/fem_fall_1.ogg",
+	"/audio/sfx/character/fem_fall_2.ogg"
+};
 
 class Player: public Entity {
 public:
@@ -20,7 +40,9 @@ public:
     velocity.set(0, 0, 0);
     speed = RUNNING_SPEED;
 
-    grounded = false;
+    grounded = true;
+    std::random_device rd;
+	generator =  std::mt19937(rd());
   }
 
   // Movement
@@ -43,6 +65,7 @@ private:
   const int MAX_HEALTH = 100;
   const int MIN_HEALTH = -100;
   int health = MAX_HEALTH;
+  std::mt19937 generator;
 };
 
 } /* namespace glPortal */
