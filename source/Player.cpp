@@ -1,5 +1,7 @@
 #include <engine/core/math/Math.hpp>
 #include <engine/core/math/Vector2f.hpp>
+#include <engine/SoundManager.hpp>
+#include <engine/env/Environment.hpp>
 #include <Input.hpp>
 #include <Player.hpp>
 #include <SDL2/SDL_mouse.h>
@@ -62,6 +64,8 @@ void Player::move() {
       velocity.z = -sin(rot) * speed;
     }
     if (Input::isKeyDown(' ') && grounded) {
+	  std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);   
+	  SoundManager::PlaySound(Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)]);
       grounded = false;
       velocity.y = JUMP_SPEED;
     }
