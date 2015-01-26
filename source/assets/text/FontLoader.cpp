@@ -15,7 +15,7 @@ namespace glPortal {
 std::map<std::string, Font> FontLoader::fontCache = {};
 
 Font FontLoader::getFont(std::string name) {
-  std::string path = Environment::getDataDir() + "fonts/" + name + ".txt";
+  std::string path = Environment::getDataDir() + "/fonts/" + name + ".txt";
   if(fontCache.find(path) != fontCache.end()) {
     return fontCache.at(path);
   }
