@@ -2,7 +2,12 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "engine/env/Environment.hpp"
+
+namespace {
+  const int LOG_SIZE = 1024;
+}
 
 namespace glPortal {
 
@@ -74,13 +79,14 @@ int ShaderLoader::loadShader(std::string path, GLenum type) {
     if (type == GL_FRAGMENT_SHADER) {
       std::cout << "Fragment shader compilation failed" << std::endl;
     }
+    
     GLint logSize = 0;
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logSize);
 
-    char errorLog[logSize];
-    glGetShaderInfoLog(shader, logSize, NULL, &errorLog[0]);
+    std::string errorLog(logSize, ' ');
+    glGetShaderInfoLog(shader, logSize, &logSize, &errorLog[0]);
 
-    std::cout << errorLog << std::endl;
+    std::cout << errorLog.c_str() << std::endl;
     glDeleteShader(shader);
   }
 
