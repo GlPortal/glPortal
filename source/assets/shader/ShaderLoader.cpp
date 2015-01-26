@@ -9,7 +9,7 @@ namespace glPortal {
 std::map<std::string, Shader> ShaderLoader::shaderCache = { };
 
 Shader ShaderLoader::getShader(std::string path) {
-  path = Environment::getDataDir() + "shaders/" + path;
+  path = Environment::getDataDir() + "/shaders/" + path;
   if(shaderCache.find(path) != shaderCache.end()) {
     return shaderCache.at(path);
   }
@@ -41,6 +41,9 @@ Shader ShaderLoader::getShader(std::string path) {
 
 int ShaderLoader::loadShader(std::string path, GLenum type) {
   std::ifstream file(path.c_str());
+  if (not file.is_open()) {
+    std::cout << "Could not find file" << path << std::endl;
+  }
   std::string str;
   std::string file_contents;
   while (std::getline(file, str)) {

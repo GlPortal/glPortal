@@ -38,7 +38,7 @@ namespace glPortal {
 Scene* MapLoader::getScene(std::string path) {
   scene = new Scene();
 
-  TiXmlDocument doc(string(Environment::getDataDir() + "maps/" + path + ".xml"));
+  TiXmlDocument doc(string(Environment::getDataDir() + "/maps/" + path + ".xml"));
   bool loaded = doc.LoadFile();
 
   if (loaded) {
@@ -57,7 +57,7 @@ Scene* MapLoader::getScene(std::string path) {
     cout << "File loaded." << endl;
   } else {
     cout << "Unable to load file. " << endl;
-    cout << string(Environment::getDataDir()) << path << endl;
+    cout << string(Environment::getDataDir()) << "/" << path << ".xml" << endl;
   }
   return scene;
 }
