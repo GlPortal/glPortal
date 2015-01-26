@@ -10,7 +10,7 @@ namespace glPortal {
 
 vector<string> MapListLoader::getMapList() {
   vector<string> mapList;
-  std::string path = Environment::getDataDir() + "maps/maplist";
+  std::string path = Environment::getDataDir() + "/maps/maplist";
   ifstream file(path);
 
   if(not file.is_open()) {
