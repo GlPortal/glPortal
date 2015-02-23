@@ -52,7 +52,9 @@ void World::destroy() {
 
 void World::loadScene(std::string name) {
   scene = MapLoader::getScene(name);
-  SoundManager::PlayMusic(Environment::getDataDir() + "/audio/music/track1.ogg");
+  //play a random piece of music each team a scene is loaded
+  std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
+  SoundManager::PlaySound(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
 }
 
 void World::update() {
