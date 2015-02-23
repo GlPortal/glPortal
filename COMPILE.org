@@ -47,7 +47,7 @@ make
 in the root directory of the downloaded source.
 
 If this produces no error you have built the binary and should be able to start GlPortal by typing in:
-./source/glportal --datadir ../data
+make run
 
 If you get errors try running cmake source again. 
 * Keep me posted
