@@ -22,7 +22,7 @@ const std::array<const std::string,2> PLAYER_PANTING_SOUND =
 const std::array<const std::string,2> PLAYER_JUMP_SOUND =
 {
 	"/audio/sfx/character/fem_jump_1.ogg",
-	"/audio/sfx/character/fem_jump_2cd.ogg"
+	"/audio/sfx/character/fem_jump_2.ogg"
 };
 
 const std::array<const std::string,2> PLAYER_FALL_SOUND =
