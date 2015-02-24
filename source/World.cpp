@@ -54,7 +54,7 @@ void World::loadScene(std::string name) {
   scene = MapLoader::getScene(name);
   //play a random piece of music each team a scene is loaded
   std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
-  SoundManager::PlaySound(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
+  SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
 }
 
 void World::update() {
@@ -87,7 +87,7 @@ void World::update() {
 		if(player->velocity.y < -0.18f)
 		{
 			std::uniform_int_distribution<> dis(0, PLAYER_FALL_SOUND.size()-1);
-			SoundManager::PlaySound(Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)]);
+			SoundManager::PlaySound(Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)],player,SoundManager::PRIMARY);
 		}
 			
         player->grounded = true;
@@ -250,6 +250,11 @@ void World::shootPortal(int button) {
 void World::render() {
   renderer->setScene(scene);
   renderer->render();
+}
+
+Player* World::getPlayer()
+{
+  return &scene->player;
 }
 
 } /* namespace glPortal */

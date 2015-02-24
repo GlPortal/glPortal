@@ -44,7 +44,7 @@ void Game::update() {
         handleEvent(event);
       }
       
-      SoundManager::Update();
+      SoundManager::Update(world.getPlayer());
       world.update();
       nextUpdate += SKIP_TIME;
       skipped++;

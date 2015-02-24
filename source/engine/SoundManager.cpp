@@ -4,7 +4,7 @@ namespace glPortal
 {
 	
 Mix_Music *SoundManager::music = NULL;
-std::map<int,Mix_Chunk*> SoundManager::sounds = {};
+std::map<int,SoundManager::SoundInfo> SoundManager::sounds = {};
 void SoundManager::Init()
 {
 	  music = nullptr;
@@ -44,8 +44,11 @@ void SoundManager::PlayMusic(const std::string& filename)
 	}
 }
 	
-void SoundManager::PlaySound(const std::string& filename)
+void SoundManager::PlaySound(const std::string& filename,Player* p,SoundType type)
 {
+	if(p->getPlayingSound()==true && type == PRIMARY)
+		return;
+
 	Mix_Chunk* sound = Mix_LoadWAV(filename.c_str());
 	if( sound == NULL ) 
 	{
@@ -62,10 +65,15 @@ void SoundManager::PlaySound(const std::string& filename)
 	return;
 	}
 	
-	sounds[channel] = sound;
+	if(type==PRIMARY)
+		p->setPlayingSound(true);
+	SoundInfo info;
+	info.chunk = sound;
+	info.type = type;
+	sounds[channel] = info;
 }
 	
-void SoundManager::Update()
+void SoundManager::Update(Player* p)
 {
 	std::vector<int> erase_list;
 	
@@ -73,7 +81,8 @@ void SoundManager::Update()
 	{
 		if(!Mix_Playing(sound.first))
 		{
-			Mix_FreeChunk(sound.second);
+			p->setPlayingSound(false);
+			Mix_FreeChunk(sound.second.chunk);
 			erase_list.push_back(sound.first);
 		}
 			
@@ -90,7 +99,7 @@ void SoundManager::Destroy()
 {
 	for(const auto sound : sounds)
 	{
-		Mix_FreeChunk(sound.second);
+		Mix_FreeChunk(sound.second.chunk);
 	}
 	if(music!=nullptr)
 		Mix_FreeMusic(music);
