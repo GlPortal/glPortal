@@ -5,6 +5,7 @@
 #include <Input.hpp>
 #include <Player.hpp>
 #include <SDL2/SDL_mouse.h>
+#include <SDL.h>
 #include <World.hpp>
 #include <cmath>
 
@@ -47,25 +48,25 @@ void Player::move() {
 
   float rot = Math::toRadians(rotation.y);
   if (isAlive()){
-    if (Input::isKeyDown('w')) {
+    if (Input::isKeyDown('w') or Input::isKeyDown(SDLK_UP)) {
       velocity.x = -sin(rot) * speed;
       velocity.z = -cos(rot) * speed;
     }
-    if (Input::isKeyDown('s')) {
+    if (Input::isKeyDown('s') or Input::isKeyDown(SDLK_DOWN)) {
       velocity.x = sin(rot) * speed;
       velocity.z = cos(rot) * speed;
     }
-    if (Input::isKeyDown('a')) {
+    if (Input::isKeyDown('a') or Input::isKeyDown(SDLK_LEFT)) {
       velocity.x = -cos(rot) * speed;
       velocity.z = sin(rot) * speed;
     }
-    if (Input::isKeyDown('d')) {
+    if (Input::isKeyDown('d') or Input::isKeyDown(SDLK_RIGHT)) {
       velocity.x = cos(rot) * speed;
       velocity.z = -sin(rot) * speed;
     }
     if (Input::isKeyDown(' ') && grounded) {
-	  std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);   
-	  SoundManager::PlaySound(Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)]);
+      std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);   
+      SoundManager::PlaySound(Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)]);
       grounded = false;
       velocity.y = JUMP_SPEED;
     }
