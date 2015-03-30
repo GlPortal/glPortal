@@ -3,7 +3,7 @@
 
 namespace glPortal {
 
-const int KEY_BUFFER = 2000000000;
+const int KEY_BUFFER = 300;
 
 class Input {
 public:

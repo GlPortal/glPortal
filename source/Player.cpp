@@ -48,23 +48,23 @@ void Player::move() {
 
   float rot = Math::toRadians(rotation.y);
   if (isAlive()){
-    if (Input::isKeyDown('w') or Input::isKeyDown(SDLK_UP)) {
+    if (Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP)) {
       velocity.x = -sin(rot) * speed;
       velocity.z = -cos(rot) * speed;
     }
-    if (Input::isKeyDown('s') or Input::isKeyDown(SDLK_DOWN)) {
+    if (Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN)) {
       velocity.x = sin(rot) * speed;
       velocity.z = cos(rot) * speed;
     }
-    if (Input::isKeyDown('a') or Input::isKeyDown(SDLK_LEFT)) {
+    if (Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT)) {
       velocity.x = -cos(rot) * speed;
       velocity.z = sin(rot) * speed;
     }
-    if (Input::isKeyDown('d') or Input::isKeyDown(SDLK_RIGHT)) {
+    if (Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT)) {
       velocity.x = cos(rot) * speed;
       velocity.z = -sin(rot) * speed;
     }
-    if (Input::isKeyDown(' ') && grounded) {
+    if (Input::isKeyDown(SDL_SCANCODE_SPACE) && grounded) {
 	  std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);   
 	  SoundManager::PlaySound(Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)],this,SoundManager::PRIMARY);
       grounded = false;
