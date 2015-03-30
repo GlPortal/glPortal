@@ -65,10 +65,22 @@ void Player::move() {
       velocity.z = -sin(rot) * speed;
     }
     if (Input::isKeyDown(' ') && grounded) {
-      std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);   
-      SoundManager::PlaySound(Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)]);
+	  std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);   
+	  SoundManager::PlaySound(Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)],this,SoundManager::PRIMARY);
       grounded = false;
       velocity.y = JUMP_SPEED;
+    }
+
+    if(grounded)
+    {
+      stepCounter += abs(velocity.x);
+      stepCounter += abs(velocity.z);
+      if(stepCounter>=2.5f)
+      {
+        std::uniform_int_distribution<> dis(0, PLAYER_FOOT_SOUND.size()-1);   
+        SoundManager::PlaySound(Environment::getDataDir() + PLAYER_FOOT_SOUND[dis(generator)],this,SoundManager::SECONDARY);
+        stepCounter-=2.5f;
+      }
     }
   }
 }
@@ -101,6 +113,16 @@ void Player::harm(int amount) {
 
 void Player::kill() {
   health = 0;
+}
+
+void Player::setPlayingSound(bool state)
+{
+  playingSound = state;
+}
+
+bool Player::getPlayingSound()
+{
+  return playingSound;
 }
 
 } /* namespace glPortal */
