@@ -13,7 +13,7 @@
 #include <engine/SoundManager.hpp>
 #include <util/sdl/Fps.hpp>
 #include "Input.hpp"
-
+#include <SDL.h>
 namespace glPortal {
 
 Game::Game() : closed(false) {
@@ -66,17 +66,17 @@ void Game::handleEvent(SDL_Event event){
     closed = 1;
   }
   if (event.type == SDL_KEYDOWN) {
-    int key = event.key.keysym.sym;
+    int key = event.key.keysym.scancode;
     int mod = event.key.keysym.mod;
     
     Input::keyPressed(key, mod);
     
-    if (key == 'q') {
+    if (key == SDL_SCANCODE_Q) {
       close();
     }
   }
   if (event.type == SDL_KEYUP) {
-    int key = event.key.keysym.sym;
+    int key = event.key.keysym.scancode;
     int mod = event.key.keysym.mod;
     
     Input::keyReleased(key, mod);
