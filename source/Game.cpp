@@ -20,7 +20,7 @@ Game::Game() : closed(false) {
   window.createFromConfig();
   
   try {
-	SoundManager::Init();
+    SoundManager::Init();
     world.create();
     update();
   }
