@@ -31,6 +31,16 @@ const std::array<const std::string,2> PLAYER_FALL_SOUND =
 	"/audio/sfx/character/fem_fall_2.ogg"
 };
 
+const std::array<const std::string,6> PLAYER_FOOT_SOUND =
+{
+  "/audio/sfx/character/fem_foot_1.ogg",
+  "/audio/sfx/character/fem_foot_2.ogg",
+  "/audio/sfx/character/fem_foot_3.ogg",
+  "/audio/sfx/character/fem_foot_4.ogg",
+  "/audio/sfx/character/fem_foot_5.ogg",
+  "/audio/sfx/character/fem_foot_6.ogg"
+};
+
 class Player: public Entity {
 public:
   Player() {
@@ -42,7 +52,9 @@ public:
 
     grounded = true;
     std::random_device rd;
-	generator =  std::mt19937(rd());
+	  generator =  std::mt19937(rd());
+    playingSound = false;
+    stepCounter = 0.0f;
   }
 
   // Movement
@@ -55,7 +67,8 @@ public:
   void heal(int amount);
   void harm(int amount);
   void kill();
-
+  bool getPlayingSound();
+  void setPlayingSound(bool state);
   Vector3f velocity;
   bool grounded;
 
@@ -66,6 +79,8 @@ private:
   const int MIN_HEALTH = -100;
   int health = MAX_HEALTH;
   std::mt19937 generator;
+  bool playingSound;
+  float stepCounter;
 };
 
 } /* namespace glPortal */
