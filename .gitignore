@@ -17,3 +17,7 @@ Debug/
 __pycache__/
 CTestTestfile.cmake
 Testing/
+source/glportal
+source/glportal_d
+tests/xmlReadingTest
+/html
