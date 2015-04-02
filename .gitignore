@@ -21,3 +21,5 @@ source/glportal
 source/glportal_d
 tests/xmlReadingTest
 /html
+documentation/html/
+documentation/latex/
