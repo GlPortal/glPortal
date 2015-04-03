@@ -1,0 +1,28 @@
+# This file defines the set of scripts (rules) that should be executed
+# glportal specific rules
+# For an explaination of the rules go to https://bitbucket.org/verateam/vera/wiki/Rules
+# Copy this file to /usr/local/lib/vera++/profiles/default to make it your default
+
+rule=F001
+rule=L001
+rule=L002
+rule=L003
+rule=L004
+rule=L005
+rule=L006
+rule=T001
+rule=T002
+rule=T003
+rule=T004
+rule=T005
+rule=T006
+rule=T007
+rule=T008
+rule=T009
+rule=T010
+rule=T012
+rule=T015
+rule=T016
+rule=T017
+rule=T018
+rule=T019
