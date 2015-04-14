@@ -28,8 +28,8 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
        for object in objects:
            object.select = False
        for object in objects:
-           if "glpType" in object:
-               type = object["glpType"]
+           if object.glpTypes:
+               type = object.glpTypes
                hasType = True;
            else:
                type = "None"
