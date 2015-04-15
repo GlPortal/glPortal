@@ -8,7 +8,10 @@ GetOptions ("class=s" => \$className)
 
 $num_args = $#ARGV + 1;
 if ($num_args != 1) {
-    print "\nUsage: alan generate -class=ClassName\n";
+    print "\nUsage:";
+    print "\nalan generate -class=ClassName\n";
+    print "\nalan blender install [blender version]\n";
+    print "  Copy game data and copy the blender extension\n";
     exit;
 }
 
