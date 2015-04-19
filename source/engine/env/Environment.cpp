@@ -1,11 +1,10 @@
 #include "Environment.hpp"
 
 #include <stdexcept>
-
+#include <getopt.h>
 #include "ConfigFileParser.hpp"
 #include <engine/core/file/Path.hpp>
-
-using namespace std;
+#include <iostream>
 
 namespace glPortal {  
 std::string * Environment::datadir = 0;
@@ -20,9 +19,38 @@ ConfigFileParser *Environment::config = NULL;
 void Environment::init(int argc, char **argv) {
   if (!datadir)
     datadir = new std::string;
-  for (int i = 0; i < argc; ++i) {
-    if ((std::string(argv[i]) == "-datadir") && (i + 1 < argc)) {
-      *datadir = std::string(argv[i + 1]);
+
+  int argument;
+
+  static struct option long_options[] = {
+    {"version",  no_argument,       0, 'v'},
+    {"help",     no_argument,       0, 'h'},
+    {"datadir",  required_argument, 0, 'd'},
+    {0, 0, 0, 0}
+  };
+  
+  while (1){
+    int option_index = 0;
+    argument = getopt_long (argc, argv, "v:d:h:",long_options, &option_index);
+
+    if (argument == -1)
+      break;
+
+    switch (argument) {
+    case 'v':
+      std::cout << "Current version\n";
+      exit(0);
+      
+    case 'd':
+      *datadir = std::string(optarg);
+      break;
+      
+    case 'h':
+      std::cout << "Help\n";
+      exit(0);
+
+    default:
+      break;
     }
   }
 
