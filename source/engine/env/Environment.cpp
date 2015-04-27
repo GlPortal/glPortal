@@ -35,17 +35,21 @@ void Environment::init(int argc, char **argv) {
 
     if (argument == -1)
       break;
-
+    /// Command Line arguments
     switch (argument) {
     case 'v':
+      /// - version \n
+      /// Display the current version.
       std::cout << "Current version\n";
       exit(0);
-      
     case 'd':
+      /// - datadir \n
+      /// Set directory where the game data is stored.
       *datadir = std::string(optarg);
       break;
-      
     case 'h':
+      /// - help \n
+      /// Display the help.
       std::cout << "Help\n";
       exit(0);
 
