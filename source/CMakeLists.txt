@@ -27,6 +27,7 @@ add_executable(${EXE_NAME}
   assets/text/FontLoader.cpp
   assets/gui/GUIButton.cpp
   engine/env/Environment.cpp
+  engine/env/ArgumentsParser.cpp
   engine/env/System.cpp
   engine/env/ConfigFileParser.cpp
   engine/env/Config.cpp

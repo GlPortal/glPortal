@@ -9,6 +9,7 @@
 
 #include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
+#include "engine/env/ArgumentsParser.hpp"
 #include <engine/env/System.hpp>
 #include <engine/SoundManager.hpp>
 #include <util/sdl/Fps.hpp>
@@ -98,7 +99,8 @@ using namespace glPortal;
 Window window;
 
 int main(int argc, char *argv[]) {
-  Environment::init(argc, argv);
+  ArgumentsParser::setEnvironmentFromArgs(argc, argv);
+  Environment::init();
   Game game;
 
   return 0;

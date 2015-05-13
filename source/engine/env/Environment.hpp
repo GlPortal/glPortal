@@ -13,11 +13,12 @@ private:
   static ConfigFileParser*config;
   static std::string* datadir;
 public:
-  static void init(int argc, char **argv);
+  static void init();
   static ConfigFileParser& getConfig();
   static ConfigFileParser* getConfigPointer();
   static void initializeConfig();
   static std::string getDataDir();
+  static void setDataDir(std::string string);
 };
 
 } /* namespace glPortal */

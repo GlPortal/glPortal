@@ -16,7 +16,7 @@ ConfigFileParser *Environment::config = NULL;
     Manages environment variables and configuration data. Get an instance of ConfigFileParser.
 */
   
-void Environment::init(int argc, char **argv) {
+void Environment::init() {
   if (!datadir)
     datadir = new std::string;
 
@@ -29,34 +29,6 @@ void Environment::init(int argc, char **argv) {
     {0, 0, 0, 0}
   };
   
-  while (1){
-    int option_index = 0;
-    argument = getopt_long (argc, argv, "v:d:h:",long_options, &option_index);
-
-    if (argument == -1)
-      break;
-    /// Command Line arguments
-    switch (argument) {
-    case 'v':
-      /// - version \n
-      /// Display the current version.
-      std::cout << "Current version\n";
-      exit(0);
-    case 'd':
-      /// - datadir \n
-      /// Set directory where the game data is stored.
-      *datadir = std::string(optarg);
-      break;
-    case 'h':
-      /// - help \n
-      /// Display the help.
-      std::cout << "Help\n";
-      exit(0);
-
-    default:
-      break;
-    }
-  }
 
   // default installation dir
   if (datadir->empty()) {
@@ -101,4 +73,8 @@ std::string Environment::getDataDir() {
   return *datadir;
 }
 
+void Environment::setDataDir(std::string string) {
+  datadir = new std::string(string);
+}
+  
 } /* namespace glPortal */
