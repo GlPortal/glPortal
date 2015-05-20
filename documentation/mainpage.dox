@@ -7,7 +7,7 @@ Check out the file World.cpp to get to a central point.
 Go to glPortal::Game::update() to start at the game loop.
 
 @section inst Installation
-You can get download a <strong>binary release</strong> from our website at <a href="http://glportal.de">http://glportal.de</a>.
+You can download a <strong>binary release</strong> from our website at <a href="http://glportal.de">http://glportal.de</a>.
 
 The <strong>source code</strong> can be downloaded from <a href="https://github.com/GlPortal/glPortal">https://github.com/GlPortal/glPortal</a>.
 
