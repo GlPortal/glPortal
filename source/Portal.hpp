@@ -20,8 +20,9 @@ public:
   bool inPortal(BoxCollider collider);
   void placeOnWall(BoxCollider wall, Vector3f point);
 
-  Vector3f direction;
+  Vector3f direction, color;
   bool open;
+  Texture maskTex;
 };
 
 } /* namespace glPortal */
