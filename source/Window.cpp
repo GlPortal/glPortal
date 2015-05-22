@@ -63,8 +63,14 @@ void Window::create(const char* title, int width, int height, bool fullscreen) {
   this->width = width;
   this->height = height;
 
-  //Allow unbound framerate
-  SDL_GL_SetSwapInterval(0);
+  bool vsync = true;
+  try {
+    std::string vsyncOpt = config->getStringByKey(Config::VSYNC);
+    vsync = (vsyncOpt == Config::TRUE);
+  } catch (const std::invalid_argument& e) { }
+  // Allows unbound framerate if vsync is disabled
+  SDL_GL_SetSwapInterval(vsync ? 1 : 0);
+
   //Lock cursor in the middle of the screen
   SDL_SetRelativeMouseMode(SDL_TRUE);
 }
