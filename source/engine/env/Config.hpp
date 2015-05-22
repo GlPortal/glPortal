@@ -13,6 +13,7 @@ public:
   static const std::string HEIGHT;
   static const std::string WIDTH;
   static const std::string SOUND;
+  static const std::string VSYNC;
 };
 
 } /* namespace glPortal */
