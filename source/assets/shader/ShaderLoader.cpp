@@ -29,13 +29,34 @@ Shader ShaderLoader::getShader(std::string path) {
   glAttachShader(shader, fragShader);
 
   glLinkProgram(shader);
-  glValidateProgram(shader);
 
   //Error checking
   GLint success = 0;
-  glGetProgramiv(shader, GL_VALIDATE_STATUS, &success);
+  glGetProgramiv(shader, GL_LINK_STATUS, &success);
   if (success == GL_TRUE) {
     std::cout << "Shader program linked successfully" << std::endl;
+  } else {
+    GLint logSize = 0;
+    glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &logSize);
+    char* log = (char*)malloc(logSize);
+    glGetProgramInfoLog(shader, logSize, NULL, log);
+    std::cout << "Failed linking " << path << ":\n" << log << std::endl;
+    free(log);
+  }
+
+  glValidateProgram(shader);
+
+  //Error checking
+  glGetProgramiv(shader, GL_VALIDATE_STATUS, &success);
+  if (success == GL_TRUE) {
+    std::cout << "Shader program validated successfully" << std::endl;
+  } else {
+    GLint logSize = 0;
+    glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &logSize);
+    char* log = (char*)malloc(logSize);
+    glGetProgramInfoLog(shader, logSize, NULL, log);
+    std::cout << "Failed to validate " << path << ":\n" << log << std::endl;
+    free(log);
   }
 
   Shader s;
@@ -83,10 +104,11 @@ int ShaderLoader::loadShader(std::string path, GLenum type) {
     GLint logSize = 0;
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logSize);
 
-    std::string errorLog(logSize, ' ');
-    glGetShaderInfoLog(shader, logSize, &logSize, &errorLog[0]);
+    char* log = (char*)malloc(logSize);
+    glGetShaderInfoLog(shader, logSize, &logSize, log);
 
-    std::cout << errorLog.c_str() << std::endl;
+    std::cout << log << std::endl;
+    free(log);
     glDeleteShader(shader);
   }
 
