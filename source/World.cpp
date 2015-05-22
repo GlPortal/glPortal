@@ -236,13 +236,16 @@ void World::shootPortal(int button) {
   BoxCollider wall(closestWall.position, closestWall.scale);
   Vector3f ipos = scene->camera.position + (cameraDir * intersection);
   Portal portal;
+  portal.maskTex = TextureLoader::getTexture("portalmask.png"); 
   portal.placeOnWall(wall, ipos);
 
   if (button == 1) {
     portal.texture = TextureLoader::getTexture("blueportal.png");
+    portal.color = Portal::BLUE_COLOR;
     scene->bluePortal = portal;
   } else {
     portal.texture = TextureLoader::getTexture("orangeportal.png");
+    portal.color = Portal::ORANGE_COLOR;
     scene->orangePortal = portal;
   }
 }
