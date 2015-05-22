@@ -34,7 +34,7 @@ void Window::initGlew(){
 }
 
 void Window::create(const char* title, int width, int height, bool fullscreen) {
-  SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+  SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
 
   SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
