@@ -29,7 +29,7 @@ void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
     case 'v':
       /// - version \n
       /// Display the current version.
-      std::cout << "Current version\n";
+      std::cout << "GlPortal Version 0.1\n";
       exit(0);
     case 'd':
       /// - datadir \n

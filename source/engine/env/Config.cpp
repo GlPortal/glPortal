@@ -7,4 +7,5 @@ namespace glPortal {
   const std::string Config::HEIGHT = "height";
   const std::string Config::WIDTH = "width";
   const std::string Config::SOUND = "sound";
+  const std::string Config::MAP = "map";
 } /* namespace glPortal */

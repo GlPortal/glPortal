@@ -16,6 +16,7 @@ public:
   std::string getStringByKey(std::string key);
   int getIntByKey(std::string key);
   float getFloatByKey(std::string key);
+  void setStringByKey(std::string key, std::string value);
 };
 
 }
