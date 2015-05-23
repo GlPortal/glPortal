@@ -5,7 +5,7 @@
 #include <Input.hpp>
 #include <Player.hpp>
 #include <SDL2/SDL_mouse.h>
-#include <SDL.h>
+#include <SDL2/SDL_keyboard.h>
 #include <World.hpp>
 #include <cmath>
 
