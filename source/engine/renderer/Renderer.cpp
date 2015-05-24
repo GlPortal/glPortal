@@ -24,6 +24,8 @@
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
 
+#include <SDL2/SDL_timer.h>
+
 namespace glPortal {
 
 Renderer::Renderer() {
@@ -116,7 +118,7 @@ void Renderer::render() {
   viewMatrix.translate(negate(scene->camera.position));
   glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 
-  //Depth buffer
+  // Depth buffer
   if (scene->bluePortal.open && scene->orangePortal.open) {
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
     glDepthMask(GL_TRUE);
@@ -146,13 +148,30 @@ void Renderer::render() {
 
   renderScene();
 
-  //Draw overlays
+  // Draw simplex noise
+  changeShader("simplexTime.frag");
+  projectionMatrix = camera.getProjectionMatrix();
+  glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
+  viewMatrix.setIdentity();
+  viewMatrix.rotate(-scene->camera.rotation.x, 1, 0, 0);
+  viewMatrix.rotate(-scene->camera.rotation.y, 0, 1, 0);
+  viewMatrix.translate(negate(scene->camera.position));
+  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+
+  glDepthMask(GL_FALSE);
+  if (!scene->orangePortal.open)
+    renderPortalNoise(scene->bluePortal);
+  if (!scene->bluePortal.open)
+    renderPortalNoise(scene->orangePortal);
+  glDepthMask(GL_TRUE);
+
+  // Draw overlays
   changeShader("unshaded.frag");
 
   projectionMatrix = camera.getProjectionMatrix();
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
 
-  //Update camera position
+  // Update camera position
   viewMatrix.setIdentity();
   viewMatrix.rotate(-scene->camera.rotation.x, 1, 0, 0);
   viewMatrix.rotate(-scene->camera.rotation.y, 0, 1, 0);
@@ -272,6 +291,23 @@ void Renderer::renderPortalOverlay(const Portal& portal) {
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
     renderTexturedMesh(portal.mesh, portal.texture);
+  }
+}
+
+void Renderer::renderPortalNoise(const Portal& portal) {
+  if (portal.open) {
+    modelMatrix.setIdentity();
+    modelMatrix.translate(portal.position);
+    modelMatrix.rotate(portal.rotation);
+    modelMatrix.scale(portal.scale);
+    glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+
+    int timeLoc = glGetUniformLocation(shader.handle, "time");
+    int colorLoc = glGetUniformLocation(shader.handle, "color");
+    glUniform1f(timeLoc, SDL_GetTicks()/1000.f);
+    glUniform3f(colorLoc, portal.color.x, portal.color.y, portal.color.z);
+
+    renderTexturedMesh(portal.mesh, portal.maskTex);
   }
 }
 
