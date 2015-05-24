@@ -21,6 +21,7 @@ add_executable(${EXE_NAME}
   assets/map/MapLoader.cpp
   assets/map/MapListLoader.cpp
   assets/map/XmlHelper.cpp
+  assets/model/Mesh.cpp
   assets/model/MeshLoader.cpp
   assets/shader/ShaderLoader.cpp
   assets/texture/TextureLoader.cpp

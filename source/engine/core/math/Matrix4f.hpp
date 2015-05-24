@@ -11,18 +11,18 @@ public:
   Matrix4f();
   Matrix4f(float[]);
   void setIdentity();
-  void translate(Vector3f v);
+  void translate(const Vector3f &v);
   void translate(float x, float y, float z);
   void rotate(float angle, float x, float y, float z);
-  void rotate(Vector3f v);
-  void scale(Vector3f v);
+  void rotate(const Vector3f &v);
+  void scale(const Vector3f &v);
   void scale(float x, float y, float z);
-  Vector3f transform(Vector3f v);
+  Vector3f transform(const Vector3f &v);
   void print();
 };
 
-float determinant(const Matrix4f& m);
-Matrix4f inverse(const Matrix4f& m);
+float determinant(const Matrix4f &m);
+Matrix4f inverse(const Matrix4f &m);
 
 } /* namespace glPortal */
 

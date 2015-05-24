@@ -52,7 +52,7 @@ public:
 
     grounded = true;
     std::random_device rd;
-	  generator =  std::mt19937(rd());
+    generator = std::mt19937(rd());
     playingSound = false;
     stepCounter = 0.0f;
   }

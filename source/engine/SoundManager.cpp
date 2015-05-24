@@ -1,7 +1,7 @@
 #include "SoundManager.hpp"
 
 namespace glPortal {
-  Mix_Music *SoundManager::music = NULL;
+  Mix_Music* SoundManager::music = nullptr;
   std::map<int, SoundManager::SoundInfo> SoundManager::sounds = {};
 
   void SoundManager::Init() {
@@ -17,7 +17,7 @@ namespace glPortal {
     }
   }
 
-  void SoundManager::PlayMusic(const std::string& filename) {
+  void SoundManager::PlayMusic(const std::string &filename) {
     if (music!=nullptr) {
       Mix_FreeMusic(music);
       music = nullptr;
@@ -39,7 +39,7 @@ namespace glPortal {
     }
   }
 
-  void SoundManager::PlaySound(const std::string& filename, Player* p, SoundType type) {
+  void SoundManager::PlaySound(const std::string &filename, Player *p, SoundType type) {
     if (p->getPlayingSound()==true && type == PRIMARY)
       return;
 
@@ -67,7 +67,7 @@ namespace glPortal {
     sounds[channel] = info;
   }
 
-  void SoundManager::Update(Player* p) {
+  void SoundManager::Update(Player *p) {
     std::vector<int> erase_list;
 
     for (auto sound : sounds) {

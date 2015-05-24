@@ -29,12 +29,12 @@ void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
     case 'v':
       /// - version \n
       /// Display the current version.
-      std::cout << "GlPortal Version 0.1\n";
+      std::cout << "Current version\n";
       exit(0);
     case 'd':
       /// - datadir \n
       /// Set directory where the game data is stored.
-      Environment::setDataDir(std::string(optarg));
+      Environment::setDataDir(optarg);
       break;
     case 'h':
       /// - help \n

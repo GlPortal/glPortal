@@ -23,6 +23,7 @@ Game::Game() : closed(false) {
   try {
     SoundManager::Init();
     world.create();
+    world.setRendererWindow(&window);
     update();
   }
   catch (std::runtime_error &e) {

@@ -20,27 +20,25 @@ namespace glPortal {
 
 std::map<std::string, Mesh> MeshLoader::meshCache = { };
 
-Mesh MeshLoader::getMesh(std::string path) {
-  path = Environment::getDataDir() + "/meshes/" + path;
+Mesh& MeshLoader::getMesh(const std::string &fpath) {
+  std::string path = Environment::getDataDir() + "/meshes/" + fpath;
   if (meshCache.find(path) != meshCache.end()) {
     return meshCache.at(path);
   }
   Assimp::Importer importer;
   int flags = aiProcess_Triangulate | aiProcess_GenNormals;
-  const aiMesh* mesh = importer.ReadFile(path, flags)->mMeshes[0];
+  const aiMesh *mesh = importer.ReadFile(path, flags)->mMeshes[0];
   Mesh m = uploadMesh(mesh);
-  meshCache.insert(std::pair<std::string, Mesh>(path, m));
-  return m;
+  // Return reference to newly cached Mesh
+  return (*meshCache.insert(std::pair<std::string, Mesh>(path, m)).first).second;
 }
 
-Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
-  Mesh m;
-
+Mesh MeshLoader::uploadMesh(const aiMesh *mesh) {
   //Store face indices in an array
   std::vector<unsigned int> faceArray;
   
   for (unsigned int j = 0; j < mesh->mNumFaces; j++) {
-    const aiFace face = mesh->mFaces[j];
+    const aiFace &face = mesh->mFaces[j];
     faceArray.push_back(face.mIndices[0]);
     faceArray.push_back(face.mIndices[1]);
     faceArray.push_back(face.mIndices[2]);
@@ -71,7 +69,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
   //Store texture coordinates in a buffer
   if (mesh->HasTextureCoords(0)) {
     GLuint textureVBO;
-    float* texCoords = (float *) malloc(sizeof(float) * mesh->mNumVertices * 2);
+    float *texCoords = new float[mesh->mNumVertices * 2];
     for (unsigned int k = 0; k < mesh->mNumVertices; ++k) {
       texCoords[k * 2] = mesh->mTextureCoords[0][k].x;
       texCoords[k * 2 + 1] = 1 - mesh->mTextureCoords[0][k].y; //Y must be flipped due to OpenGL's coordinate system
@@ -81,6 +79,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 2, texCoords, GL_STATIC_DRAW);
     glVertexAttribPointer(1, 2, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(1);
+    delete texCoords;
   }
 
   //Store normals in a buffer
@@ -98,14 +97,15 @@ Mesh MeshLoader::uploadMesh(const aiMesh* mesh) {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
+  
   //Store relevant data in the new mesh
-  m.handle = vao;
+  Mesh m(vao);
   m.numFaces = mesh->mNumFaces;
 
   return m;
 }
 
-Mesh MeshLoader::getPortalBox(Entity wall) {
+Mesh MeshLoader::getPortalBox(const Entity &wall) {
   Mesh mesh;
 
   GLuint vao;

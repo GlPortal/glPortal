@@ -8,15 +8,14 @@ class Entity;
 
 class Ray {
 public:
-  Ray(Vector3f origin, Vector3f direction) {
-    this->origin = origin;
-    this->direction = direction;
+  Ray(const Vector3f &origin, const Vector3f &direction)
+    : origin(origin), direction(direction) {
   }
 
   Vector3f origin;
   Vector3f direction;
 
-  bool collides(Entity e, float* tNear, float* tFar);
+  bool collides(const Entity &e, float *tNear, float *tFar);
 };
 
 } /* namespace glPortal */

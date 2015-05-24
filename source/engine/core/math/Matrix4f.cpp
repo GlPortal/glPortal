@@ -28,7 +28,7 @@ void Matrix4f::setIdentity() {
   }
 }
 
-void Matrix4f::translate(Vector3f v) {
+void Matrix4f::translate(const Vector3f &v) {
   translate(v.x, v.y, v.z);
 }
 
@@ -85,13 +85,13 @@ void Matrix4f::rotate(float angle, float x, float y, float z) {
   array[11] = f11;
 }
 
-void Matrix4f::rotate(Vector3f v) {
+void Matrix4f::rotate(const Vector3f &v) {
   rotate(v.y, 0, 1, 0);
   rotate(v.x, 1, 0, 0);
-  //rotate(v.z, 0, 0, 1);
+  rotate(v.z, 0, 0, 1);
 }
 
-void Matrix4f::scale(Vector3f v) {
+void Matrix4f::scale(const Vector3f &v) {
   scale(v.x, v.y, v.z);
 }
 
@@ -110,7 +110,7 @@ void Matrix4f::scale(float x, float y, float z) {
   array[11] = array[11] * z;
 }
 
-Vector3f Matrix4f::transform(Vector3f v) {
+Vector3f Matrix4f::transform(const Vector3f &v) {
   Vector3f dest;
   dest.x = array[0] * v.x + array[4] * v.y + array[8] * v.z;
   dest.y = array[1] * v.x + array[5] * v.y + array[9] * v.z;
@@ -126,7 +126,7 @@ void Matrix4f::print() {
   printf("%f %f %f %f\n", array[3], array[7], array[11], array[15]);
 }
 
-float determinant(const Matrix4f& m) {
+float determinant(const Matrix4f &m) {
   float f =
       m.array[0] * (m.array[5] * m.array[10] - m.array[6] * m.array[9])
       + m.array[1] * (m.array[6] * m.array[8] - m.array[4] * m.array[10])
@@ -134,7 +134,7 @@ float determinant(const Matrix4f& m) {
   return f;
 }
 
-Matrix4f inverse(const Matrix4f& m) {
+Matrix4f inverse(const Matrix4f &m) {
   Matrix4f dest;
   float det = determinant(m);
 

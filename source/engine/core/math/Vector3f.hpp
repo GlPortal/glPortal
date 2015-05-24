@@ -24,16 +24,17 @@ public:
   const std::string str() const;
 };
 
-Vector3f add(const Vector3f& v1, const Vector3f& v2);
-Vector3f sub(const Vector3f& v1, const Vector3f& v2);
-Vector3f scale(const Vector3f& v, float scale);
-float dot(const Vector3f& v1, const Vector3f& v2);
-Vector3f cross(const Vector3f& v1, const Vector3f& v2);
-Vector3f negate(const Vector3f& v);
+Vector3f add(const Vector3f &v1, const Vector3f &v2);
+Vector3f sub(const Vector3f &v1, const Vector3f &v2);
+Vector3f scale(const Vector3f &v, float scale);
+float dot(const Vector3f &v1, const Vector3f &v2);
+Vector3f cross(const Vector3f &v1, const Vector3f &v2);
+Vector3f negate(const Vector3f &v);
 
-Vector3f operator+(const Vector3f& v1, const Vector3f& v2);
-Vector3f operator-(const Vector3f& v1, const Vector3f& v2);
-Vector3f operator*(const Vector3f& v1, float scale);
+Vector3f operator+(const Vector3f &v1, const Vector3f &v2);
+Vector3f& operator+=(Vector3f &v, const Vector3f &v1);
+Vector3f operator-(const Vector3f &v1, const Vector3f &v2);
+Vector3f operator*(const Vector3f &v1, float scale);
 
 } /* namespace glPortal */
 
