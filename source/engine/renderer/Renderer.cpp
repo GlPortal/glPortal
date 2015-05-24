@@ -159,10 +159,12 @@ void Renderer::render() {
   glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 
   glDepthMask(GL_FALSE);
-  if (!scene->orangePortal.open)
+  if (not scene->orangePortal.open) {
     renderPortalNoise(scene->bluePortal);
-  if (!scene->bluePortal.open)
+  }
+  if (not scene->bluePortal.open) {
     renderPortalNoise(scene->orangePortal);
+  }
   glDepthMask(GL_TRUE);
 
   // Draw overlays
