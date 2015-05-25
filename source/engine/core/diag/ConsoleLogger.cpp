@@ -4,7 +4,7 @@
 
 namespace glPortal {
 
-void ConsoleLogger::log(std::string message) {
+void ConsoleLogger::log(const std::string &message) {
   std::cout << message << std::endl;
 }
 

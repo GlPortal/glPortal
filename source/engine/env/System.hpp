@@ -10,7 +10,7 @@ class System {
 private:
   static ConsoleLogger logger;
 public:
-  static void log(std::string message);
+  static void log(const std::string &message);
 };
 
 } /* namespace glPortal */

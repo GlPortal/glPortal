@@ -6,9 +6,9 @@
 #include <engine/core/file/Path.hpp>
 #include <iostream>
 
-namespace glPortal {  
-std::string * Environment::datadir = 0;
-ConfigFileParser *Environment::config = NULL;
+namespace glPortal {
+std::string Environment::datadir = "";
+ConfigFileParser *Environment::config = nullptr;
 
 /** @class Environment
     @brief Manager for environment and config
@@ -17,9 +17,6 @@ ConfigFileParser *Environment::config = NULL;
 */
   
 void Environment::init() {
-  if (!datadir)
-    datadir = new std::string;
-
   int argument;
 
   static struct option long_options[] = {
@@ -31,17 +28,17 @@ void Environment::init() {
   
 
   // default installation dir
-  if (datadir->empty()) {
+  if (datadir.empty()) {
 #ifndef _WIN32
-    *datadir = "/usr/share/glportal/data/";
+    datadir = "/usr/share/glportal/data/";
 #else
-    *datadir = "data/";
+    datadir = "data/";
 #endif
   }
   initializeConfig();
 }
 
-ConfigFileParser & Environment::getConfig() {
+ConfigFileParser& Environment::getConfig() {
   if (!config) {
     initializeConfig();
   }
@@ -68,13 +65,11 @@ void Environment::initializeConfig() {
 }
 
 std::string Environment::getDataDir() {
-  if (!datadir)
-    datadir = new std::string;
-  return *datadir;
+  return datadir;
 }
 
-void Environment::setDataDir(std::string string) {
-  datadir = new std::string(string);
+void Environment::setDataDir(const std::string &string) {
+  datadir = string;
 }
   
 } /* namespace glPortal */
