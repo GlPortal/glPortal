@@ -10,15 +10,15 @@ class ConfigFileParser;
 
 class Environment {
 private:
-  static ConfigFileParser*config;
-  static std::string* datadir;
+  static ConfigFileParser *config;
+  static std::string datadir;
 public:
   static void init();
   static ConfigFileParser& getConfig();
   static ConfigFileParser* getConfigPointer();
   static void initializeConfig();
   static std::string getDataDir();
-  static void setDataDir(std::string string);
+  static void setDataDir(const std::string &string);
 };
 
 } /* namespace glPortal */

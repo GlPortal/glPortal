@@ -34,7 +34,7 @@ void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
     case 'd':
       /// - datadir \n
       /// Set directory where the game data is stored.
-      Environment::setDataDir(std::string(optarg));
+      Environment::setDataDir(optarg);
       break;
     case 'h':
       /// - help \n
