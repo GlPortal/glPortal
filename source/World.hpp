@@ -26,19 +26,22 @@ const std::array<const std::string,3> MUSIC_PLAYLIST =
 };
 
 class Player;
+class Window;
 
 class World {
 public:
+  World();
   void create();
+  void setRendererWindow(Window*);
   void destroy();
   void update();
-  void loadScene(std::string path);
-  bool collidesWithWalls(BoxCollider collider);
+  void loadScene(const std::string &path);
+  bool collidesWithWalls(const BoxCollider &collider) const;
   void shootPortal(int button);
-  bool collides(Vector3f ro, Vector3f rd, Entity e, float* tNear, float* tFar);
+  bool collides(const Vector3f &ro, const Vector3f &rd, const Entity &e, float *tNear, float *tFar);
   void render();
-  Player* getPlayer();
-	  
+  Player *getPlayer();
+
   static float gravity;
   static float friction;
 private:

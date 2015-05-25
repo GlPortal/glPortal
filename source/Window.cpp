@@ -11,13 +11,13 @@
 #include <iostream>
 namespace glPortal {
 
-int Window::width = 800;
-int Window::height = 600;
-  const char* Window::DEFAULT_TITLE = "GlPortal";
-  const std::string Window::GLEW_UNSUPPORTED_MESSAGE =
-    "Your hardware does not support GLEW 2.1 API\n";
-  const std::string Window::GLEW_INIT_ERROR_MESSAGE =
-    "Error initializing GLEW.";
+const int Window::DEFAULT_WIDTH = 800;
+const int Window::DEFAULT_HEIGHT = 600;
+const char* Window::DEFAULT_TITLE = "GlPortal";
+const std::string Window::GLEW_UNSUPPORTED_MESSAGE =
+  "Your hardware does not support GLEW 2.1 API\n";
+const std::string Window::GLEW_INIT_ERROR_MESSAGE =
+  "Error initializing GLEW.";
 
 void Window::initGlew(){
   glewExperimental = GL_TRUE;
@@ -33,7 +33,7 @@ void Window::initGlew(){
   }
 }
 
-void Window::create(const char* title, int width, int height, bool fullscreen) {
+void Window::create(const char *title, int width, int height, bool fullscreen) {
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
 
   SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
@@ -83,8 +83,8 @@ void Window::createFromConfig(){
     height = config->getIntByKey(Config::HEIGHT);
     width = config->getIntByKey(Config::WIDTH);
   } catch (const std::invalid_argument& e) {
-    height = 600;
-    width = 800;
+    height = DEFAULT_HEIGHT;
+    width = DEFAULT_WIDTH;
   }
   
   try {
@@ -108,14 +108,14 @@ void Window::swapBuffers() {
   SDL_GL_SwapWindow(window);
 }
 
-void Window::getSize(int* width, int* height) {
+void Window::getSize(int *width, int *height) const {
   SDL_GetWindowSize(window, width, height);
 }
 
 void Window::close() {
   SDL_GL_DeleteContext(context);
   SDL_DestroyWindow(window);
-  window = NULL;
+  window = nullptr;
 
   SDL_Quit();
 }

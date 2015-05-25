@@ -23,6 +23,7 @@ Game::Game() : closed(false) {
   try {
     SoundManager::Init();
     world.create();
+    world.setRendererWindow(&window);
     update();
   }
   catch (std::runtime_error &e) {
@@ -62,7 +63,7 @@ void Game::close() {
   closed = true;
 }
 
-void Game::handleEvent(SDL_Event event){
+void Game::handleEvent(const SDL_Event &event) {
   if (event.type == SDL_QUIT) {
     closed = 1;
   }

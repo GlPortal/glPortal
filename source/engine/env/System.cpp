@@ -4,7 +4,7 @@ namespace glPortal {
 
 ConsoleLogger System::logger;
 
-void System::log(std::string message) {
+void System::log(const std::string &message) {
   logger.log(message);
 }
 

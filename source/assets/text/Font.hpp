@@ -11,7 +11,7 @@ public:
   int num_chars;
   float size;
 
-  Letter getLetter(int index) {
+  const Letter& getLetter(int index) const {
     return letters.at(index);
   }
 

@@ -18,13 +18,13 @@ public:
   Game();
   void update();
   void close();
-  void handleEvent(SDL_Event event);
+  void handleEvent(const SDL_Event &event);
 private:
   Window window;
   World world;
 
   bool closed;
-  ConfigFileParser * config;
+  ConfigFileParser *config;
 };
 
 } /* namespace glPortal */
