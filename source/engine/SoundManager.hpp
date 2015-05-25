@@ -25,10 +25,10 @@ namespace glPortal {
 			static void Init();
 			static void Destroy();
 			
-			static void PlayMusic(const std::string& filename);
-			static void PlaySound(const std::string& filename,Player* p,SoundType type);
+			static void PlayMusic(const std::string &filename);
+			static void PlaySound(const std::string &filename, Player *p, SoundType type);
 			
-			static void Update(Player* p);
+			static void Update(Player *p);
 		private:
 			static Mix_Music *music;
 			static std::map<int ,SoundInfo> sounds;
