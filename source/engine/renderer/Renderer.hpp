@@ -9,7 +9,7 @@
 #include <assets/text/Font.hpp>
 
 #include <engine/core/math/Matrix4f.hpp>
-
+#include <engine/Viewport.hpp>
 
 namespace glPortal {
 class Entity;
@@ -21,23 +21,28 @@ class Font;
 class Renderer {
 public:
   Renderer();
-  void setScene(Scene* scene);
-  void changeShader(std::string path);
+  void setViewport(Viewport *vp); 
+
+  void setScene(Scene *scene);
+  void changeShader(const std::string &path);
 
   void render();
   void renderScene();
-  void renderEntity(const Entity& e);
-  void renderPortal(const Portal& portal, const Portal& otherPortal);
-  void renderPortalOverlay(const Portal& portal);
-  void renderPortalNoise(const Portal& portal);
-  void renderText(std::string text, int x, int y);
-  void renderTexturedMesh(const Mesh& mesh, const Texture& texture);
-  void setCameraInPortal(const Portal& portal, const Portal& otherPortal);
-  void setFont(std::string font, float size);
+  void renderEntity(const Entity &e);
+  void renderPortal(const Portal &portal, const Portal &otherPortal);
+  void renderPortalOverlay(const Portal &portal);
+  void renderPortalNoise(const Portal &portal);
+  void renderText(const std::string &text, int x, int y);
+  void renderTexturedMesh(const Mesh &mesh, const Texture &texture);
+  void setCameraInPortal(const Portal &portal, const Portal &otherPortal);
+  void setFont(const std::string &font, float size);
 private:
-  Scene* scene;
+  Viewport *viewport;
+  int vpWidth, vpHeight;
+
+  Scene *scene;
   Shader shader;
-  Font font;
+  Font *font;
 
   Matrix4f projectionMatrix;
   Matrix4f viewMatrix;

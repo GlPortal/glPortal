@@ -24,7 +24,7 @@ private:
   World world;
 
   bool closed;
-  ConfigFileParser * config;
+  ConfigFileParser *config;
 };
 
 } /* namespace glPortal */

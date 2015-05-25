@@ -18,8 +18,7 @@ namespace glPortal {
    * Pushes vector coordinates from an XML-element to a Vector3f.
    * Trying to pull attributes from a non-existing element is considered an exception.
    */
-  void XmlHelper::pushAttributeVertexToVector(TiXmlElement* xmlElement, Vector3f &targetVector) {
-
+  void XmlHelper::pushAttributeVertexToVector(TiXmlElement *xmlElement, Vector3f &targetVector) {
     if(xmlElement) {
       int xQueryResult = xmlElement->QueryFloatAttribute("x", &targetVector.x);
       int yQueryResult = xmlElement->QueryFloatAttribute("y", &targetVector.y);
@@ -38,20 +37,15 @@ namespace glPortal {
     }
   }
   
-  void XmlHelper::throwMandatoryAttributeException(std::string message){
+  void XmlHelper::throwMandatoryAttributeException(const std::string &message){
     throw runtime_error(mandatoryAttributeMessage + message);
   }
 
-  void XmlHelper::extractPositionAndRotation(TiXmlElement* element, Entity &entity){
-    Vector3f pos;
-    Vector3f rot;
-    TiXmlElement* positionElement = element->FirstChildElement("position");
-    pushAttributeVertexToVector(positionElement, pos);
+  void XmlHelper::extractPositionAndRotation(TiXmlElement *element, Entity &entity){
+    TiXmlElement *positionElement = element->FirstChildElement("position");
+    pushAttributeVertexToVector(positionElement, entity.position);
     
-    TiXmlElement* rotationElement = element->FirstChildElement("rotation");
-    pushAttributeVertexToVector(rotationElement, rot);
-
-    entity.position.set(pos);
-    entity.rotation.set(rot);
+    TiXmlElement *rotationElement = element->FirstChildElement("rotation");
+    pushAttributeVertexToVector(rotationElement, entity.rotation);
   }  
 } /* namespace glPortal */

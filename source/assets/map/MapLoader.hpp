@@ -11,11 +11,10 @@ class Scene;
 
 class MapLoader {
 public:
-  static Scene* getScene(std::string path);
+  static Scene* getScene(const std::string &path);
   static Scene* scene;
   static TiXmlHandle rootHandle;
 private:
-  static Mesh getBox(Entity wall);
   static void extractSpawn();
   static void extractLights();
   static void extractDoor();

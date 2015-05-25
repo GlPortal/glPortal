@@ -5,7 +5,7 @@
 
 namespace glPortal {
 
-bool Ray::collides(Entity e, float* tNear, float* tFar) {
+bool Ray::collides(const Entity &e, float *tNear, float *tFar) {
   float min[3] = {e.position.x - e.scale.x / 2,
                   e.position.y - e.scale.y / 2,
                   e.position.z - e.scale.z / 2};

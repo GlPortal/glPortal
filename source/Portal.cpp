@@ -17,7 +17,7 @@ Vector3f Portal::getDirection() {
   return direction;
 }
 
-bool Portal::throughPortal(BoxCollider collider) {
+bool Portal::throughPortal(const BoxCollider &collider) {
   if (rotation.x == 0) {
     if (rotation.y == 90) {
       if (collider.position.x > position.x &&
@@ -84,7 +84,7 @@ bool Portal::throughPortal(BoxCollider collider) {
   return false;
 }
 
-bool Portal::inPortal(BoxCollider collider) {
+bool Portal::inPortal(const BoxCollider &collider) {
   if (rotation.x == 0) {
     if (rotation.y == 90) {
       if (collider.position.x + collider.size.x/2 > position.x &&
@@ -151,7 +151,7 @@ bool Portal::inPortal(BoxCollider collider) {
   return false;
 }
 
-void Portal::placeOnWall(BoxCollider wall, Vector3f point) {
+void Portal::placeOnWall(const BoxCollider &wall, const Vector3f &point) {
   //Determine on what side the portal is
   //Side 0: -x, Side 1: x, Side 2: -z, Side 3: z, Side 4: -y, Side 5: y
   float dist = 1000000;
@@ -251,7 +251,7 @@ void Portal::placeOnWall(BoxCollider wall, Vector3f point) {
     open = true;
   }
 
-  position.add(*getDirection().scale(0.01f));
+  position += getDirection()*0.01f;
   mesh = MeshLoader::getMesh("Plane.obj");
 }
 

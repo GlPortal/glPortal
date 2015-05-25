@@ -5,8 +5,7 @@
 
 namespace glPortal {
 
-Vector3f::Vector3f(float x, float y, float z): x(0), y(0), z(0) {
-  this->set(x, y, z);
+Vector3f::Vector3f(float x, float y, float z): x(x), y(y), z(z) {
 }
 
 void Vector3f::set(float x, float y, float z) {
@@ -60,7 +59,7 @@ const std::string Vector3f::str() const {
   return ss.str();
 }
 
-Vector3f add(const Vector3f& v1, const Vector3f& v2) {
+Vector3f add(const Vector3f &v1, const Vector3f &v2) {
   Vector3f v;
   v.x = v1.x + v2.x;
   v.y = v1.y + v2.y;
@@ -68,7 +67,7 @@ Vector3f add(const Vector3f& v1, const Vector3f& v2) {
   return v;
 }
 
-Vector3f sub(const Vector3f& v1, const Vector3f& v2) {
+Vector3f sub(const Vector3f &v1, const Vector3f &v2) {
   Vector3f v;
   v.x = v1.x - v2.x;
   v.y = v1.y - v2.y;
@@ -76,7 +75,7 @@ Vector3f sub(const Vector3f& v1, const Vector3f& v2) {
   return v;
 }
 
-Vector3f scale(const Vector3f& v, float scale) {
+Vector3f scale(const Vector3f &v, float scale) {
   Vector3f vs;
   vs.x = v.x * scale;
   vs.y = v.y * scale;
@@ -84,11 +83,11 @@ Vector3f scale(const Vector3f& v, float scale) {
   return vs;
 }
 
-float dot(const Vector3f& v1, const Vector3f& v2) {
+float dot(const Vector3f &v1, const Vector3f &v2) {
   return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-Vector3f cross(const Vector3f& v1, const Vector3f& v2) {
+Vector3f cross(const Vector3f &v1, const Vector3f &v2) {
   Vector3f v;
   v.x = v1.y * v2.z - v1.z * v2.y;
   v.y = v2.x * v1.z - v2.z * v1.x;
@@ -96,7 +95,7 @@ Vector3f cross(const Vector3f& v1, const Vector3f& v2) {
   return v;
 }
 
-Vector3f negate(const Vector3f& v) {
+Vector3f negate(const Vector3f &v) {
   Vector3f vn;
   vn.x = -v.x;
   vn.y = -v.y;
@@ -104,7 +103,7 @@ Vector3f negate(const Vector3f& v) {
   return vn;
 }
 
-Vector3f operator+(const Vector3f& v1, const Vector3f& v2) {
+Vector3f operator+(const Vector3f &v1, const Vector3f &v2) {
   Vector3f v;
   v.x = v1.x + v2.x;
   v.y = v1.y + v2.y;
@@ -112,7 +111,14 @@ Vector3f operator+(const Vector3f& v1, const Vector3f& v2) {
   return v;
 }
 
-Vector3f operator-(const Vector3f& v1, const Vector3f& v2) {
+Vector3f& operator+=(Vector3f &v, const Vector3f &v1) {
+  v.x += v1.x;
+  v.y += v1.y;
+  v.z += v1.z;
+  return v;
+}
+
+Vector3f operator-(const Vector3f &v1, const Vector3f &v2) {
   Vector3f v;
   v.x = v1.x - v2.x;
   v.y = v1.y - v2.y;
@@ -120,7 +126,7 @@ Vector3f operator-(const Vector3f& v1, const Vector3f& v2) {
   return v;
 }
 
-Vector3f operator*(const Vector3f& v, float scale) {
+Vector3f operator*(const Vector3f &v, float scale) {
   Vector3f vs;
   vs.x = v.x * scale;
   vs.y = v.y * scale;

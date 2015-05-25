@@ -14,17 +14,17 @@ namespace glPortal {
 
 std::map<std::string, Font> FontLoader::fontCache = {};
 
-Font FontLoader::getFont(std::string name) {
+Font& FontLoader::getFont(const std::string &name) {
   std::string path = Environment::getDataDir() + "/fonts/" + name + ".txt";
   if(fontCache.find(path) != fontCache.end()) {
     return fontCache.at(path);
   }
   Font font = loadFont(path, name);
-  fontCache.insert(std::pair<std::string, Font>(path, font));
-  return font;
+  // Return reference to newly cached Font
+  return (*fontCache.insert(std::pair<std::string, Font>(path, font)).first).second;
 }
 
-Font FontLoader::loadFont(std::string path, std::string name) {
+Font FontLoader::loadFont(const std::string &path, const std::string &name) {
   Font font;
   std::ifstream input(path);
   for(std::string line; getline(input, line);) {
