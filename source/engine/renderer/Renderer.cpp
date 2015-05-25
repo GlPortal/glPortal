@@ -16,6 +16,7 @@
 
 #include <engine/Camera.hpp>
 #include <engine/Light.hpp>
+#include <engine/Viewport.hpp>
 
 #include <Window.hpp>
 #include <Portal.hpp>
@@ -28,7 +29,7 @@
 
 namespace glPortal {
 
-Renderer::Renderer() {
+Renderer::Renderer() : viewport(nullptr) {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
@@ -37,6 +38,10 @@ Renderer::Renderer() {
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void Renderer::setViewport(Viewport *vp) {
+  viewport = vp;
 }
 
 /**
@@ -72,10 +77,13 @@ void Renderer::setFont(std::string font, float size) {
 
 
 void Renderer::render() {
+  viewport->getSize(&vpWidth, &vpHeight);
+
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   Camera& camera = scene->camera;
   camera.setPerspective();
+  camera.setAspect((float)vpWidth / vpHeight);
   projectionMatrix = camera.getProjectionMatrix();
 
   changeShader("diffuse.frag");
@@ -187,9 +195,9 @@ void Renderer::render() {
   glClear(GL_DEPTH_BUFFER_BIT);
   camera.setOrthographic();
   camera.setLeft(0);
-  camera.setRight(Window::width);
+  camera.setRight(vpWidth);
   camera.setBottom(0);
-  camera.setTop(Window::height);
+  camera.setTop(vpHeight);
 
   //Upload matrices
   projectionMatrix = camera.getProjectionMatrix();
@@ -200,7 +208,7 @@ void Renderer::render() {
   //Crosshair
   {
   modelMatrix.setIdentity();
-  modelMatrix.translate(Vector3f(Window::width/2, Window::height/2, -2));
+  modelMatrix.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
   modelMatrix.scale(Vector3f(80, 80, 1));
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
   Mesh mesh = MeshLoader::getMesh("GUIElement.obj");
@@ -210,7 +218,7 @@ void Renderer::render() {
 
   //Text
   setFont("Adobe", 1.5f);
-  renderText("GlPortal", 25, Window::height - 75);
+  renderText("GlPortal", 25, vpHeight - 75);
 }
 
 void Renderer::renderScene() {
@@ -279,6 +287,7 @@ void Renderer::renderPortal(const Portal& portal, const Portal& otherPortal) {
 
     //Set the camera back to normal
     scene->camera.setPerspective();
+    scene->camera.setAspect((float)vpWidth / vpHeight);
     glUniformMatrix4fv(projLoc, 1, false, scene->camera.getProjectionMatrix().array);
     glDisable(GL_STENCIL_TEST);
   }
@@ -387,6 +396,7 @@ void Renderer::setCameraInPortal(const Portal& portal, const Portal& otherPortal
   //Draw only whats visible through the portal
   Camera camera;
   camera.setPerspective();
+  camera.setAspect((float)vpWidth / vpHeight);
   camera.setZNear((otherPortal.position - fcamPos).length());
   glUniformMatrix4fv(projLoc, 1, false, camera.getProjectionMatrix().array);
 

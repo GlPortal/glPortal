@@ -26,10 +26,12 @@ const std::array<const std::string,3> MUSIC_PLAYLIST =
 };
 
 class Player;
+class Window;
 
 class World {
 public:
   void create();
+  void setRendererWindow(Window*);
   void destroy();
   void update();
   void loadScene(std::string path);
@@ -37,8 +39,8 @@ public:
   void shootPortal(int button);
   bool collides(Vector3f ro, Vector3f rd, Entity e, float* tNear, float* tFar);
   void render();
-  Player* getPlayer();
-	  
+  Player *getPlayer();
+
   static float gravity;
   static float friction;
 private:

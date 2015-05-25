@@ -31,6 +31,7 @@
 #include "Input.hpp"
 #include "Player.hpp"
 #include "Portal.hpp"
+#include "Window.hpp"
 
 namespace glPortal {
 
@@ -43,6 +44,10 @@ void World::create() {
   loadScene(mapList[currentLevel]);
   std::random_device rd;
   generator =  std::mt19937(rd());
+}
+
+void World::setRendererWindow(Window *win) {
+  renderer->setViewport(win);
 }
 
 void World::destroy() {
