@@ -16,9 +16,9 @@ public:
 
   Portal() : open(false) {}
   Vector3f getDirection();
-  bool throughPortal(BoxCollider collider);
-  bool inPortal(BoxCollider collider);
-  void placeOnWall(BoxCollider wall, Vector3f point);
+  bool throughPortal(const BoxCollider &collider) const;
+  bool inPortal(const BoxCollider &collider) const;
+  void placeOnWall(const BoxCollider &wall, const Vector3f &point);
 
   Vector3f direction, color;
   bool open;
