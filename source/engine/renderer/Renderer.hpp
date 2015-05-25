@@ -25,7 +25,7 @@ public:
   void setViewport(Viewport *vp);
   
   void setScene(Scene *scene);
-  void changeShader(std::string path);
+  void changeShader(const std::string &path);
 
   void render();
   void renderScene();
@@ -42,7 +42,7 @@ private:
   int vpWidth, vpHeight;
 
   Scene *scene;
-  Shader shader;
+  Shader *shader;
   Font *font;
 
   Matrix4f projectionMatrix;

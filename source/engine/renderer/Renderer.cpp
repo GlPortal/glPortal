@@ -55,14 +55,14 @@ void Renderer::setScene(Scene* scene) {
  * Changes the current shader to the shader located at path
  * @param path The path of the shader
  */
-void Renderer::changeShader(std::string path) {
-  this->shader = ShaderLoader::getShader(path);
-  glUseProgram(shader.handle);
+void Renderer::changeShader(const std::string &path) {
+  this->shader = &ShaderLoader::getShader(path);
+  glUseProgram(shader->handle);
 
-  projLoc = glGetUniformLocation(shader.handle, "projectionMatrix");
-  viewLoc = glGetUniformLocation(shader.handle, "viewMatrix");
-  modelLoc = glGetUniformLocation(shader.handle, "modelMatrix");
-  normalLoc = glGetUniformLocation(shader.handle, "normalMatrix");
+  projLoc = glGetUniformLocation(shader->handle, "projectionMatrix");
+  viewLoc = glGetUniformLocation(shader->handle, "viewMatrix");
+  modelLoc = glGetUniformLocation(shader->handle, "modelMatrix");
+  normalLoc = glGetUniformLocation(shader->handle, "normalMatrix");
 }
 
 /**
@@ -97,13 +97,13 @@ void Renderer::render() {
 
     char attribute[30];
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].position");
-    int lightPos = glGetUniformLocation(shader.handle, attribute);
+    int lightPos = glGetUniformLocation(shader->handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].color");
-    int lightColor = glGetUniformLocation(shader.handle, attribute);
+    int lightColor = glGetUniformLocation(shader->handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].distance");
-    int lightDistance = glGetUniformLocation(shader.handle, attribute);
+    int lightDistance = glGetUniformLocation(shader->handle, attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].energy");
-    int lightEnergy = glGetUniformLocation(shader.handle, attribute);
+    int lightEnergy = glGetUniformLocation(shader->handle, attribute);
 
     glUniform3f(lightPos, light.position.x, light.position.y, light.position.z);
     glUniform3f(lightColor, light.color.x, light.color.y, light.color.z);
@@ -112,7 +112,7 @@ void Renderer::render() {
   }
 
   int numLights = scene->lights.size();
-  int numLightsLoc = glGetUniformLocation(shader.handle, "numLights");
+  int numLightsLoc = glGetUniformLocation(shader->handle, "numLights");
   glUniform1i(numLightsLoc, numLights);
 
   //Render portals
@@ -313,8 +313,8 @@ void Renderer::renderPortalNoise(const Portal& portal) {
     modelMatrix.scale(portal.scale);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    int timeLoc = glGetUniformLocation(shader.handle, "time");
-    int colorLoc = glGetUniformLocation(shader.handle, "color");
+    int timeLoc = glGetUniformLocation(shader->handle, "time");
+    int colorLoc = glGetUniformLocation(shader->handle, "color");
     glUniform1f(timeLoc, SDL_GetTicks()/1000.f);
     glUniform3f(colorLoc, portal.color.x, portal.color.y, portal.color.z);
 
@@ -360,8 +360,8 @@ void Renderer::renderText(const std::string &text, int x, int y) {
  * @param mesh The mesh to render
  */
 void Renderer::renderTexturedMesh(const Mesh& mesh, const Texture& texture) {
-  int loc = glGetUniformLocation(shader.handle, "diffuse");
-  int tiling = glGetUniformLocation(shader.handle, "tiling");
+  int loc = glGetUniformLocation(shader->handle, "diffuse");
+  int tiling = glGetUniformLocation(shader->handle, "tiling");
   glUniform2f(tiling, texture.xTiling, texture.yTiling);
   glUniform1i(loc, 0);
   glActiveTexture(GL_TEXTURE0);
