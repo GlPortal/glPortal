@@ -8,8 +8,8 @@ namespace glPortal {
 class BoxCollider {
 public:
   BoxCollider();
-  BoxCollider(Vector3f position, Vector3f size);
-  bool collidesWith(BoxCollider collider);
+  BoxCollider(const Vector3f &position, const Vector3f &size);
+  bool collidesWith(const BoxCollider &collider) const;
 
   Vector3f position;
   Vector3f size;
