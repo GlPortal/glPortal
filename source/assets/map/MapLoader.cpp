@@ -35,17 +35,15 @@ namespace glPortal {
 /**
  * Get a scene from a map file in XML format.
  */
-Scene* MapLoader::getScene(std::string path) {
+Scene* MapLoader::getScene(const std::string &path) {
   scene = new Scene();
 
-  TiXmlDocument doc(string(Environment::getDataDir() + "/maps/" + path + ".xml"));
+  TiXmlDocument doc(Environment::getDataDir() + "/maps/" + path + ".xml");
   bool loaded = doc.LoadFile();
 
   if (loaded) {
     TiXmlHandle docHandle(&doc);
-    TiXmlElement* element;
-
-    element = docHandle.FirstChildElement().Element();
+    TiXmlElement *element = docHandle.FirstChildElement().ToElement();
     rootHandle = TiXmlHandle(element);
 
     extractSpawn();
@@ -57,7 +55,7 @@ Scene* MapLoader::getScene(std::string path) {
     cout << "File loaded." << endl;
   } else {
     cout << "Unable to load file. " << endl;
-    cout << string(Environment::getDataDir()) << "/" << path << ".xml" << endl;
+    cout << Environment::getDataDir() << "/" << path << ".xml" << endl;
   }
   return scene;
 }
@@ -66,8 +64,7 @@ Scene* MapLoader::getScene(std::string path) {
  * Extract a spawn element containing its rotation and position elements
  */
 void MapLoader::extractSpawn() {
-  TiXmlElement* spawnElement;
-  spawnElement = rootHandle.FirstChild("spawn").Element();
+  TiXmlElement *spawnElement = rootHandle.FirstChild("spawn").ToElement();
 
   if (spawnElement) {
     XmlHelper::extractPositionAndRotation(spawnElement, scene->player);
@@ -84,8 +81,7 @@ void MapLoader::extractLights() {
   Vector3f lightColor;
   float distance;
   float energy;
-  TiXmlElement* lightElement;
-  lightElement = rootHandle.FirstChild("light").Element();
+  TiXmlElement* lightElement = rootHandle.FirstChild("light").ToElement();
 
   do {
     XmlHelper::pushAttributeVertexToVector(lightElement, lightPos);
@@ -97,18 +93,17 @@ void MapLoader::extractLights() {
     lightElement->QueryFloatAttribute("distance", &distance);
     lightElement->QueryFloatAttribute("energy", &energy);
 
-    Light light;
+    scene->lights.emplace_back();
+    Light &light = scene->lights.back();
     light.position.set(lightPos.x, lightPos.y, lightPos.z);
     light.color.set(lightColor.x, lightColor.y, lightColor.z);
     light.distance = distance;
     light.energy = energy;
-    scene->lights.push_back(light);
-  } while ((lightElement = lightElement->NextSiblingElement("light")) != NULL);
+  } while ((lightElement = lightElement->NextSiblingElement("light")) != nullptr);
 }
 
 void MapLoader::extractDoor() {
-  TiXmlElement* endElement;
-  endElement = rootHandle.FirstChild("end").Element();
+  TiXmlElement *endElement = rootHandle.FirstChild("end").ToElement();
 
   if (endElement) {
     Entity door;
@@ -122,7 +117,7 @@ void MapLoader::extractDoor() {
 }
 
 void MapLoader::extractWalls() {
-  TiXmlElement* textureElement = rootHandle.FirstChild("texture").Element();
+  TiXmlElement *textureElement = rootHandle.FirstChild("texture").ToElement();
   string texturePath("none");
   string surfaceType("none");
 
@@ -130,42 +125,41 @@ void MapLoader::extractWalls() {
     do {
       textureElement->QueryStringAttribute("source", &texturePath);
       textureElement->QueryStringAttribute("type", &surfaceType);
-      TiXmlElement* wallBoxElement = textureElement->FirstChildElement("wall");
+      TiXmlElement *wallBoxElement = textureElement->FirstChildElement("wall");
 
       if (wallBoxElement) {
         do {
-          TiXmlElement* boxPositionElement;
-          TiXmlElement* boxScaleElement;
+          scene->walls.emplace_back();
+          Entity &wall = scene->walls.back();
 
-          Entity wall;
-          boxPositionElement = wallBoxElement->FirstChildElement("position");
+          TiXmlElement *boxPositionElement = wallBoxElement->FirstChildElement("position");
           XmlHelper::pushAttributeVertexToVector(boxPositionElement, wall.position);
 
-          boxScaleElement = wallBoxElement->FirstChildElement("scale");
+          TiXmlElement *boxScaleElement = wallBoxElement->FirstChildElement("scale");
           XmlHelper::pushAttributeVertexToVector(boxScaleElement, wall.scale);
 
           wall.texture = TextureLoader::getTexture(texturePath);
           wall.texture.xTiling = 0.5f;
           wall.texture.yTiling = 0.5f;
           wall.mesh = MeshLoader::getPortalBox(wall);
-          scene->walls.push_back(wall);
-        } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != NULL);
+        } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != nullptr);
       }
 
-      texturePath = std::string("none");
-    } while ((textureElement = textureElement->NextSiblingElement("texture")) != NULL);
+      texturePath = "none";
+    } while ((textureElement = textureElement->NextSiblingElement("texture")) != nullptr);
   }
 }
 
 void MapLoader::extractTriggers() {
-  TiXmlElement* triggerElement = rootHandle.FirstChild("trigger").Element();
+  TiXmlElement *triggerElement = rootHandle.FirstChild("trigger").ToElement();
   string triggerType("none");
 
   if (triggerElement) {
     do {
-      TiXmlElement* triggerTypeElement;
+      TiXmlElement *triggerTypeElement;
 
-      Trigger trigger;
+      scene->triggers.emplace_back();
+      Trigger &trigger = scene->triggers.back();
 
       if (triggerElement) {
         triggerElement->QueryStringAttribute("type", &trigger.type);
@@ -181,9 +175,8 @@ void MapLoader::extractTriggers() {
                                              trigger.scale);
       trigger.texture = TextureLoader::getTexture("redBox.png");
       trigger.mesh = MeshLoader::getPortalBox(trigger);
-      scene->triggers.push_back(trigger);
 
-    } while ((triggerElement = triggerElement->NextSiblingElement()) != NULL);
+    } while ((triggerElement = triggerElement->NextSiblingElement()) != nullptr);
   }
 }
 
@@ -191,25 +184,25 @@ void MapLoader::extractModels() {
   Vector3f modelPos;
   string texture("none");
   string mesh("none");
-  TiXmlElement* modelElement = rootHandle.FirstChild("model").Element();
+  TiXmlElement *modelElement = rootHandle.FirstChild("model").ToElement();
   if (modelElement){
     do {
       modelElement->QueryStringAttribute("texture", &texture);
       modelElement->QueryStringAttribute("mesh", &mesh);
       XmlHelper::pushAttributeVertexToVector(modelElement, modelPos);
 
-      Entity model;
+      scene->models.emplace_back();
+      Entity &model = scene->models.back();
       XmlHelper::extractPositionAndRotation(modelElement, model);
       model.texture = TextureLoader::getTexture(texture);
       model.mesh = MeshLoader::getMesh(mesh);
-      scene->models.push_back(model);
-    } while ((modelElement = modelElement->NextSiblingElement("model")) != NULL);
+    } while ((modelElement = modelElement->NextSiblingElement("model")) != nullptr);
   }
 }
 
 
 void MapLoader::extractButtons() {
-  TiXmlElement* textureElement = rootHandle.FirstChild("texture").Element();
+  TiXmlElement *textureElement = rootHandle.FirstChild("texture").ToElement();
   string texturePath("none");
   string surfaceType("none");
   Vector2f position;
@@ -219,11 +212,12 @@ void MapLoader::extractButtons() {
     do {
       textureElement->QueryStringAttribute("source", &texturePath);
       textureElement->QueryStringAttribute("type", &surfaceType);
-      TiXmlElement* buttonElement = textureElement->FirstChildElement("GUIbutton");
+      TiXmlElement *buttonElement = textureElement->FirstChildElement("GUIbutton");
 
       if (buttonElement) {
         do {
-          GUIButton button;
+          scene->buttons.emplace_back();
+          GUIButton &button = scene->buttons.back();
 
           buttonElement->QueryFloatAttribute("x", &position.x);
           buttonElement->QueryFloatAttribute("y", &position.y);
@@ -234,12 +228,11 @@ void MapLoader::extractButtons() {
           button.texture = TextureLoader::getTexture(texturePath);
           button.texture.xTiling = 0.5f;
           button.texture.yTiling = 0.5f;
-          scene->buttons.push_back(button);
-        } while ((buttonElement = buttonElement->NextSiblingElement("GUIbutton")) != NULL);
+        } while ((buttonElement = buttonElement->NextSiblingElement("GUIbutton")) != nullptr);
       }
 
-      texturePath = std::string("none");
-    } while ((textureElement = textureElement->NextSiblingElement("texture")) != NULL);
+      texturePath = "none";
+    } while ((textureElement = textureElement->NextSiblingElement("texture")) != nullptr);
   }
 }
 } /* namespace glPortal */

@@ -31,11 +31,15 @@
 #include "Input.hpp"
 #include "Player.hpp"
 #include "Portal.hpp"
+#include "Window.hpp"
 
 namespace glPortal {
 
 float World::gravity = GRAVITY;
 float World::friction = FRICTION;
+
+World::World() : scene(nullptr) {
+}
 
 void World::create() {
   mapList = MapListLoader::getMapList();
@@ -45,12 +49,18 @@ void World::create() {
   generator =  std::mt19937(rd());
 }
 
-void World::destroy() {
-  delete (renderer);
-  delete (scene);
+void World::setRendererWindow(Window *win) {
+  renderer->setViewport(win);
 }
 
-void World::loadScene(std::string name) {
+void World::destroy() {
+  delete renderer;
+  delete scene;
+}
+
+void World::loadScene(const std::string &name) {
+  // Delete previous scene
+  delete scene;
   scene = MapLoader::getScene(name);
   //play a random piece of music each team a scene is loaded
   std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
@@ -58,19 +68,19 @@ void World::loadScene(std::string name) {
 }
 
 void World::update() {
-  Player* player = &scene->player;
+  Player &player = scene->player;
 
-  player->mouseLook();
-  player->move();
+  player.mouseLook();
+  player.move();
 
-  Vector3f pos = add(player->position, player->velocity);
+  Vector3f pos = add(player.position, player.velocity);
 
   //FIXME Remake the collision system to be less faulty and ugly
   //Y collision
-  BoxCollider bboxY(Vector3f(player->position.x, pos.y, player->position.z), player->scale);
+  BoxCollider bboxY(Vector3f(player.position.x, pos.y, player.position.z), player.scale);
   if (collidesWithWalls(bboxY)) {
     bool portaling = false;
-    if (scene->bluePortal.open && scene->orangePortal.open) {
+    if (scene->bluePortal.open and scene->orangePortal.open) {
       if(scene->bluePortal.inPortal(bboxY)) {
         if(scene->bluePortal.rotation.x == -90 || scene->bluePortal.rotation.x == 90) {
           portaling = true;
@@ -83,73 +93,72 @@ void World::update() {
       }
     }
     if(!portaling) {
-      if (player->velocity.y < 0) {
-		if(player->velocity.y < -0.18f)
-		{
-			std::uniform_int_distribution<> dis(0, PLAYER_FALL_SOUND.size()-1);
-			SoundManager::PlaySound(Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)],player,SoundManager::PRIMARY);
-		}
-			
-        player->grounded = true;
+      if (player.velocity.y < 0) {
+        if(player.velocity.y < -0.18f) {
+          std::uniform_int_distribution<> dis(0, PLAYER_FALL_SOUND.size()-1);
+          SoundManager::PlaySound(Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)], &player, SoundManager::PRIMARY);
+        }
+
+        player.grounded = true;
       }
-      player->velocity.y = 0;
+      player.velocity.y = 0;
     }
   }
 
   //X collision
-  BoxCollider bboxX(Vector3f(pos.x, player->position.y, player->position.z), player->scale);
+  BoxCollider bboxX(Vector3f(pos.x, player.position.y, player.position.z), player.scale);
   if (collidesWithWalls(bboxX)) {
     bool portaling = false;
-    if (scene->bluePortal.open && scene->orangePortal.open) {
+    if (scene->bluePortal.open and scene->orangePortal.open) {
       if(scene->bluePortal.inPortal(bboxX)) {
-        if(scene->bluePortal.rotation.x == 0 && (scene->bluePortal.rotation.y == -90 || scene->bluePortal.rotation.y == 90)) {
+        if(scene->bluePortal.rotation.x == 0 and (scene->bluePortal.rotation.y == -90 || scene->bluePortal.rotation.y == 90)) {
           portaling = true;
         }
       }
       if(scene->orangePortal.inPortal(bboxX)) {
-        if(scene->bluePortal.rotation.x == 0 && (scene->orangePortal.rotation.y == -90 || scene->orangePortal.rotation.y == 90)) {
+        if(scene->bluePortal.rotation.x == 0 and (scene->orangePortal.rotation.y == -90 || scene->orangePortal.rotation.y == 90)) {
           portaling = true;
         }
       }
     }
     if(!portaling) {
-      player->velocity.x = 0;
+      player.velocity.x = 0;
     }
   }
 
   //Z collision
-  BoxCollider bboxZ(Vector3f(player->position.x, player->position.y, pos.z), player->scale);
+  BoxCollider bboxZ(Vector3f(player.position.x, player.position.y, pos.z), player.scale);
   if (collidesWithWalls(bboxZ)) {
     bool portaling = false;
     
-    if (scene->bluePortal.open && scene->orangePortal.open) {
+    if (scene->bluePortal.open and scene->orangePortal.open) {
       if(scene->bluePortal.inPortal(bboxZ)) {
-        if(scene->bluePortal.rotation.x == 0 && (scene->bluePortal.rotation.y == 0 || scene->bluePortal.rotation.y == 180)) {
+        if(scene->bluePortal.rotation.x == 0 and (scene->bluePortal.rotation.y == 0 || scene->bluePortal.rotation.y == 180)) {
           portaling = true;
         }
       }
       if(scene->orangePortal.inPortal(bboxZ)) {
-        if(scene->orangePortal.rotation.x == 0 && (scene->orangePortal.rotation.y == 0 || scene->orangePortal.rotation.y == 180)) {
+        if(scene->orangePortal.rotation.x == 0 and (scene->orangePortal.rotation.y == 0 || scene->orangePortal.rotation.y == 180)) {
           portaling = true;
         }
       }
     }
     if(!portaling) {
-      player->velocity.z = 0;
+      player.velocity.z = 0;
     }
   }
 
   //Trigger
   for (unsigned int i = 0; i < scene->triggers.size(); i++) {
-    Trigger trigger = scene->triggers[i];
-    BoxCollider playerCollider(player->position, player->scale);
+    const Trigger &trigger = scene->triggers[i];
+    BoxCollider playerCollider(player.position, player.scale);
     BoxCollider triggerCollider(trigger.position, trigger.scale);
 
     if (playerCollider.collidesWith(triggerCollider)) {
       if (trigger.type == "radiation") {
-        player->harm(10);
+        player.harm(10);
       } else if (trigger.type == "death") {
-        player->kill();
+        player.kill();
         printf("Death touched\n");
       } else if (trigger.type == "win") {
         printf("Win touched\n");
@@ -159,31 +168,31 @@ void World::update() {
     }
   }
 
-  pos = player->position + player->velocity;
+  pos = player.position + player.velocity;
 
   //Check if the player is moving through a portal
-  BoxCollider playerCollider(pos, player->scale);
-  if (scene->bluePortal.open && scene->orangePortal.open) {
+  BoxCollider playerCollider(pos, player.scale);
+  if (scene->bluePortal.open and scene->orangePortal.open) {
     if (scene->bluePortal.throughPortal(playerCollider)) {
-      player->position.set(scene->orangePortal.position);
+      player.position.set(scene->orangePortal.position);
       float rotation = scene->orangePortal.rotation.y - scene->bluePortal.rotation.y + 180;
-      player->rotation.y += rotation;
+      player.rotation.y += rotation;
       //Transform the velocity of the player
-      float velocity = player->velocity.length();
-      player->velocity = *scene->orangePortal.getDirection().scale(velocity);
+      float velocity = player.velocity.length();
+      player.velocity = *scene->orangePortal.getDirection().scale(velocity);
     }
     if (scene->orangePortal.throughPortal(playerCollider)) {
-      player->position.set(scene->bluePortal.position);
+      player.position.set(scene->bluePortal.position);
       float rotation = scene->bluePortal.rotation.y - scene->orangePortal.rotation.y + 180;
-      player->rotation.y += rotation;
+      player.rotation.y += rotation;
       //Transform the velocity of the player
-      float velocity = player->velocity.length();
-      player->velocity = *scene->bluePortal.getDirection().scale(velocity);
+      float velocity = player.velocity.length();
+      player.velocity = *scene->bluePortal.getDirection().scale(velocity);
     }
   }
 
   //Add velocity to the player position
-  player->position.add(player->velocity);
+  player.position.add(player.velocity);
 
   //Parent camera to player
   scene->camera.position.set(scene->player.position);
@@ -200,9 +209,9 @@ void World::update() {
   }
 }
 
-bool World::collidesWithWalls(BoxCollider collider) {
+bool World::collidesWithWalls(const BoxCollider &collider) const {
   for (unsigned int i = 0; i < scene->walls.size(); i++) {
-    Entity wall = scene->walls[i];
+    const Entity &wall = scene->walls[i];
     BoxCollider wallCollider(wall.position, wall.scale);
 
     if (collider.collidesWith(wallCollider)) {
@@ -217,36 +226,42 @@ void World::shootPortal(int button) {
   Vector3f cameraDir = Math::toDirection(scene->camera.rotation);
 
   //Find the closest intersection
-  Entity closestWall;
+  Entity *closestWall = nullptr;
   float intersection = INT_MAX;
-  for (unsigned int i = 0; i < scene->walls.size(); i++) {
-    Entity wall = scene->walls[i];
-    Ray bullet = Ray(scene->camera.position, cameraDir);
+  for (unsigned int i = 0; i < scene->walls.size(); ++i) {
+    Entity &wall = scene->walls[i];
+    Ray bullet(scene->camera.position, cameraDir);
     float tNear, tFar;
     if (bullet.collides(wall, &tNear, &tFar)) {
-      if (wall.texture.handle == TextureLoader::getTexture("wall.png").handle) {
-        if (tNear < intersection) {
-          closestWall = wall;
-          intersection = tNear;
-        }
+      if (tNear < intersection) {
+        closestWall = &wall;
+        intersection = tNear;
       }
     }
   }
 
-  BoxCollider wall(closestWall.position, closestWall.scale);
-  Vector3f ipos = scene->camera.position + (cameraDir * intersection);
-  Portal portal;
-  portal.maskTex = TextureLoader::getTexture("portalmask.png"); 
-  portal.placeOnWall(wall, ipos);
+  if (closestWall != nullptr and (closestWall->texture.handle == TextureLoader::getTexture("wall.png").handle)) {
+    BoxCollider wall(closestWall->position, closestWall->scale);
+    Vector3f ipos = scene->camera.position + (cameraDir * intersection);
+    Portal portal;
+    portal.maskTex = TextureLoader::getTexture("portalmask.png"); 
+    portal.placeOnWall(wall, ipos);
 
-  if (button == 1) {
-    portal.texture = TextureLoader::getTexture("blueportal.png");
-    portal.color = Portal::BLUE_COLOR;
-    scene->bluePortal = portal;
+    if (button == 1) {
+      portal.texture = TextureLoader::getTexture("blueportal.png");
+      portal.color = Portal::BLUE_COLOR;
+      scene->bluePortal = portal;
+    } else {
+      portal.texture = TextureLoader::getTexture("orangeportal.png");
+      portal.color = Portal::ORANGE_COLOR;
+      scene->orangePortal = portal;
+    }
   } else {
-    portal.texture = TextureLoader::getTexture("orangeportal.png");
-    portal.color = Portal::ORANGE_COLOR;
-    scene->orangePortal = portal;
+    if (button == 1) {
+      scene->bluePortal.open = false;
+    } else {
+      scene->orangePortal.open = false;
+    }
   }
 }
 
@@ -255,8 +270,7 @@ void World::render() {
   renderer->render();
 }
 
-Player* World::getPlayer()
-{
+Player *World::getPlayer() {
   return &scene->player;
 }
 

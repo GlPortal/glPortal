@@ -10,9 +10,9 @@ namespace glPortal {
 
 class FontLoader {
 public:
-  static Font getFont(std::string path);
+  static Font& getFont(const std::string &path);
 private:
-  static Font loadFont(std::string path, std::string name);
+  static Font loadFont(const std::string &path, const std::string &name);
   static std::map<std::string, Font> fontCache;
 };
 
