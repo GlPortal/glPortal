@@ -47,7 +47,7 @@ void Renderer::setViewport(Viewport *vp) {
 /**
  * Sets the current scene for rendering
  */
-void Renderer::setScene(Scene* scene) {
+void Renderer::setScene(Scene *scene) {
   this->scene = scene;
 }
 
@@ -81,7 +81,7 @@ void Renderer::render() {
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  Camera& camera = scene->camera;
+  Camera &camera = scene->camera;
   camera.setPerspective();
   camera.setAspect((float)vpWidth / vpHeight);
   projectionMatrix = camera.getProjectionMatrix();
@@ -93,7 +93,7 @@ void Renderer::render() {
 
   //Lights
   for (unsigned int i = 0; i < scene->lights.size(); i++) {
-    Light light = scene->lights[i];
+    const Light &light = scene->lights[i];
 
     char attribute[30];
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].position");
@@ -127,7 +127,7 @@ void Renderer::render() {
   glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 
   // Depth buffer
-  if (scene->bluePortal.open && scene->orangePortal.open) {
+  if (scene->bluePortal.open and scene->orangePortal.open) {
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
     glDepthMask(GL_TRUE);
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -233,7 +233,7 @@ void Renderer::renderScene() {
   renderEntity(scene->end);
 }
 
-void Renderer::renderEntity(const Entity& e) {
+void Renderer::renderEntity(const Entity &e) {
   modelMatrix.setIdentity();
   modelMatrix.translate(e.position);
   modelMatrix.rotate(e.rotation);
@@ -245,8 +245,8 @@ void Renderer::renderEntity(const Entity& e) {
   renderTexturedMesh(e.mesh, e.texture);
 }
 
-void Renderer::renderPortal(const Portal& portal, const Portal& otherPortal) {
-  if (portal.open && otherPortal.open) {
+void Renderer::renderPortal(const Portal &portal, const Portal &otherPortal) {
+  if (portal.open and otherPortal.open) {
     glEnable(GL_STENCIL_TEST);
     glClear(GL_STENCIL_BUFFER_BIT);
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
@@ -270,7 +270,7 @@ void Renderer::renderPortal(const Portal& portal, const Portal& otherPortal) {
     modelMatrix.scale(portal.scale);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    Mesh portalStencil = MeshLoader::getMesh("PortalStencil.obj");
+    const Mesh &portalStencil = MeshLoader::getMesh("PortalStencil.obj");
     glBindVertexArray(portalStencil.handle);
     glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
     glBindVertexArray(0);
@@ -334,7 +334,7 @@ void Renderer::renderText(const std::string &text, int x, int y) {
 
   Vector2f position(x, y);
 
-  const char* array = text.c_str();
+  const char *array = text.c_str();
   for (unsigned int i = 0; i < text.length(); i++) {
     char c = array[i];
 
@@ -359,7 +359,7 @@ void Renderer::renderText(const std::string &text, int x, int y) {
  * Renders a mesh with the specified texture
  * @param mesh The mesh to render
  */
-void Renderer::renderTexturedMesh(const Mesh& mesh, const Texture& texture) {
+void Renderer::renderTexturedMesh(const Mesh &mesh, const Texture &texture) {
   int loc = glGetUniformLocation(shader->handle, "diffuse");
   int tiling = glGetUniformLocation(shader->handle, "tiling");
   glUniform2f(tiling, texture.xTiling, texture.yTiling);
@@ -373,7 +373,7 @@ void Renderer::renderTexturedMesh(const Mesh& mesh, const Texture& texture) {
   glBindVertexArray(0);
 }
 
-void Renderer::setCameraInPortal(const Portal& portal, const Portal& otherPortal) {
+void Renderer::setCameraInPortal(const Portal &portal, const Portal &otherPortal) {
   //Set camera in other portal
   Vector3f camPos = scene->camera.position - portal.position;
   Vector3f camDir = Math::toDirection(scene->camera.rotation);

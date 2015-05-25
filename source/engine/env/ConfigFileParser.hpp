@@ -4,19 +4,17 @@
 #include <map>
 #include <string>
 
-using namespace std;
-
 namespace glPortal {
 
 class ConfigFileParser {
 private:
-  std::map<string, string> configMap;
+  std::map<std::string, std::string> configMap;
 public:
-  ConfigFileParser(std::string filename);
-  std::string getStringByKey(std::string key);
-  int getIntByKey(std::string key);
-  float getFloatByKey(std::string key);
-  void setStringByKey(std::string key, std::string value);
+  ConfigFileParser(const std::string &filename);
+  std::string getStringByKey(const std::string &key);
+  int getIntByKey(const std::string &key);
+  float getFloatByKey(const std::string &key);
+  void setStringByKey(const std::string &key, const std::string &value);
 };
 
 }
