@@ -70,9 +70,9 @@ void Renderer::changeShader(std::string path) {
  * @param font Name of the font
  * @param size Size of the text drawn with this font
  */
-void Renderer::setFont(std::string font, float size) {
-  this->font = FontLoader::getFont(font);
-  this->font.size = size;
+void Renderer::setFont(const std::string &font, float size) {
+  this->font = &FontLoader::getFont(font);
+  this->font->size = size;
 }
 
 
@@ -138,7 +138,7 @@ void Renderer::render() {
     modelMatrix.scale(scene->bluePortal.scale);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    Mesh portalStencil = MeshLoader::getMesh("PortalStencil.obj");
+    const Mesh &portalStencil = MeshLoader::getMesh("PortalStencil.obj");
     glBindVertexArray(portalStencil.handle);
     glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
 
@@ -211,7 +211,7 @@ void Renderer::render() {
   modelMatrix.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
   modelMatrix.scale(Vector3f(80, 80, 1));
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
-  Mesh mesh = MeshLoader::getMesh("GUIElement.obj");
+  const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   Texture texture = TextureLoader::getTexture("Reticle.png");
   renderTexturedMesh(mesh, texture);
   }
@@ -322,7 +322,7 @@ void Renderer::renderPortalNoise(const Portal& portal) {
   }
 }
 
-void Renderer::renderText(std::string text, int x, int y) {
+void Renderer::renderText(const std::string &text, int x, int y) {
   glClear(GL_DEPTH_BUFFER_BIT);
 
   changeShader("text.frag");
@@ -338,20 +338,20 @@ void Renderer::renderText(std::string text, int x, int y) {
   for (unsigned int i = 0; i < text.length(); i++) {
     char c = array[i];
 
-    Letter letter = font.getLetter(c);
-    Mesh mesh = letter.mesh;
+    const Letter &letter = font->getLetter(c);
+    const Mesh &mesh = letter.mesh;
 
     modelMatrix.setIdentity();
-    modelMatrix.translate(position.x + letter.xOffset * font.size,
-                          position.y + letter.yOffset * font.size,
+    modelMatrix.translate(position.x + letter.xOffset * font->size,
+                          position.y + letter.yOffset * font->size,
                           -10);
 
-    modelMatrix.scale(letter.width * font.size,
-                      letter.height * font.size, 1);
+    modelMatrix.scale(letter.width * font->size,
+                      letter.height * font->size, 1);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
     renderTexturedMesh(mesh, texture);
-    position.x += letter.advance * font.size;
+    position.x += letter.advance * font->size;
   }
 }
 

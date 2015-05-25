@@ -33,17 +33,17 @@ public:
   void renderPortal(const Portal &portal, const Portal &otherPortal);
   void renderPortalOverlay(const Portal &portal);
   void renderPortalNoise(const Portal &portal);
-  void renderText(std::string text, int x, int y);
-  void renderTexturedMesh(const Mesh& mesh, const Texture &texture);
+  void renderText(const std::string &text, int x, int y);
+  void renderTexturedMesh(const Mesh &mesh, const Texture &texture);
   void setCameraInPortal(const Portal &portal, const Portal &otherPortal);
-  void setFont(std::string font, float size);
+  void setFont(const std::string &font, float size);
 private:
   Viewport *viewport;
   int vpWidth, vpHeight;
 
   Scene *scene;
   Shader shader;
-  Font font;
+  Font *font;
 
   Matrix4f projectionMatrix;
   Matrix4f viewMatrix;
