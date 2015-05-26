@@ -53,6 +53,15 @@ void Window::create(const char *title, int width, int height, bool fullscreen) {
     flags |= SDL_WINDOW_BORDERLESS;
   }
 
+  SDL_DisplayMode dispMode = {SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0};
+  SDL_GetDesktopDisplayMode(0, &dispMode);
+  if (width == -1) {
+    width = dispMode.w;
+  }
+  if (height == -1) {
+    height = dispMode.h;
+  }
+
   window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
       width, height, flags);
 
@@ -78,26 +87,33 @@ void Window::create(const char *title, int width, int height, bool fullscreen) {
 void Window::createFromConfig(){
   config = Environment::getConfigPointer();
   int height, width;
-  std::string fullscreen;
+  bool fullscreen = false;
   try {
-    height = config->getIntByKey(Config::HEIGHT);
-    width = config->getIntByKey(Config::WIDTH);
-  } catch (const std::invalid_argument& e) {
-    height = DEFAULT_HEIGHT;
+    fullscreen = (config->getStringByKey(Config::FULLSCREEN) == Config::TRUE);
+  } catch (const std::invalid_argument &e) { }
+
+  try {
+    std::string widthConf = config->getStringByKey(Config::WIDTH);
+    if (widthConf == "auto") {
+      width = -1;
+    } else {
+      width = std::stoi(widthConf);
+    }
+  } catch (const std::invalid_argument &e) {
     width = DEFAULT_WIDTH;
   }
-  
   try {
-    fullscreen = config->getStringByKey(Config::FULLSCREEN);
-  } catch (const std::invalid_argument& e) { }
-
-  bool settingIsFullscreen = false;
-  if (fullscreen == Config::TRUE) {
-    settingIsFullscreen = true;
-  } else {
-    settingIsFullscreen = false;
+    std::string heightConf = config->getStringByKey(Config::HEIGHT);
+    if (heightConf == "auto") {
+      height = -1;
+    } else {
+      height = std::stoi(heightConf);
+    }
+  } catch (const std::invalid_argument &e) {
+    height = DEFAULT_HEIGHT;
   }
-  this->create(DEFAULT_TITLE, width, height, settingIsFullscreen);
+
+  this->create(DEFAULT_TITLE, width, height, fullscreen);
 }
 
 void Window::setFullscreen() {
