@@ -18,12 +18,9 @@ namespace glPortal {
 
 class Camera {
 public:
-  Camera() {
-    recalculate();
-  }
+  Camera() {}
   Camera(float fovy, float aspect, float zNear, float zFar);
-  void recalculate();
-  Matrix4f getProjectionMatrix();
+  void loadMatrix(Matrix4f& m) const;
   void setFovy(float fovy);
   void setAspect(float aspect);
   void setZNear(float zNear);
@@ -38,7 +35,6 @@ public:
   Vector3f position;
   Vector3f rotation;
 private:
-  Matrix4f projectionMatrix;
   bool perspective = DEFAULT_PERSPECTIVE;
   float fovy    = DEFAULT_FOVY;
   float aspect  = DEFAULT_ASPECT;

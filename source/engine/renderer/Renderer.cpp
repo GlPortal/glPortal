@@ -84,7 +84,7 @@ void Renderer::render() {
   Camera &camera = scene->camera;
   camera.setPerspective();
   camera.setAspect((float)vpWidth / vpHeight);
-  projectionMatrix = camera.getProjectionMatrix();
+  camera.loadMatrix(projectionMatrix);
 
   changeShader("diffuse.frag");
 
@@ -158,7 +158,7 @@ void Renderer::render() {
 
   // Draw simplex noise
   changeShader("simplexTime.frag");
-  projectionMatrix = camera.getProjectionMatrix();
+  camera.loadMatrix(projectionMatrix);
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
   viewMatrix.setIdentity();
   viewMatrix.rotate(-scene->camera.rotation.x, 1, 0, 0);
@@ -178,7 +178,7 @@ void Renderer::render() {
   // Draw overlays
   changeShader("unshaded.frag");
 
-  projectionMatrix = camera.getProjectionMatrix();
+  camera.loadMatrix(projectionMatrix);
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
 
   // Update camera position
@@ -200,7 +200,7 @@ void Renderer::render() {
   camera.setTop(vpHeight);
 
   //Upload matrices
-  projectionMatrix = camera.getProjectionMatrix();
+  camera.loadMatrix(projectionMatrix);
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
   viewMatrix.setIdentity();
   glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
@@ -288,7 +288,8 @@ void Renderer::renderPortal(const Portal &portal, const Portal &otherPortal) {
     //Set the camera back to normal
     scene->camera.setPerspective();
     scene->camera.setAspect((float)vpWidth / vpHeight);
-    glUniformMatrix4fv(projLoc, 1, false, scene->camera.getProjectionMatrix().array);
+    scene->camera.loadMatrix(projectionMatrix);
+    glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
     glDisable(GL_STENCIL_TEST);
   }
 }
@@ -326,7 +327,7 @@ void Renderer::renderText(const std::string &text, int x, int y) {
   glClear(GL_DEPTH_BUFFER_BIT);
 
   changeShader("text.frag");
-  projectionMatrix = scene->camera.getProjectionMatrix();
+  scene->camera.loadMatrix(projectionMatrix);
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
   viewMatrix.setIdentity();
   glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
@@ -398,7 +399,8 @@ void Renderer::setCameraInPortal(const Portal &portal, const Portal &otherPortal
   camera.setPerspective();
   camera.setAspect((float)vpWidth / vpHeight);
   camera.setZNear((otherPortal.position - fcamPos).length());
-  glUniformMatrix4fv(projLoc, 1, false, camera.getProjectionMatrix().array);
+  camera.loadMatrix(projectionMatrix);
+  glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
 
   viewMatrix.setIdentity();
   viewMatrix.rotate(-fcamRot.x, 1, 0, 0);
