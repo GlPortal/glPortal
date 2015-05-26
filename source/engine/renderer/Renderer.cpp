@@ -88,9 +88,6 @@ void Renderer::render() {
 
   changeShader("diffuse.frag");
 
-  //Upload projection matrix
-  glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
-
   //Lights
   for (unsigned int i = 0; i < scene->lights.size(); i++) {
     const Light &light = scene->lights[i];
@@ -120,11 +117,7 @@ void Renderer::render() {
   renderPortal(scene->orangePortal, scene->bluePortal);
 
   //Update camera position
-  viewMatrix.setIdentity();
-  viewMatrix.rotate(-scene->camera.rotation.x, 1, 0, 0);
-  viewMatrix.rotate(-scene->camera.rotation.y, 0, 1, 0);
-  viewMatrix.translate(negate(scene->camera.position));
-  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+  setCameraInPlayer(scene->camera);
 
   // Depth buffer
   if (scene->bluePortal.open and scene->orangePortal.open) {
@@ -158,13 +151,8 @@ void Renderer::render() {
 
   // Draw simplex noise
   changeShader("simplexTime.frag");
-  camera.loadMatrix(projectionMatrix);
-  glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
-  viewMatrix.setIdentity();
-  viewMatrix.rotate(-scene->camera.rotation.x, 1, 0, 0);
-  viewMatrix.rotate(-scene->camera.rotation.y, 0, 1, 0);
-  viewMatrix.translate(negate(scene->camera.position));
-  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+  
+  setCameraInPlayer(scene->camera);
 
   glDepthMask(GL_FALSE);
   if (not scene->orangePortal.open) {
@@ -178,15 +166,8 @@ void Renderer::render() {
   // Draw overlays
   changeShader("unshaded.frag");
 
-  camera.loadMatrix(projectionMatrix);
-  glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
-
   // Update camera position
-  viewMatrix.setIdentity();
-  viewMatrix.rotate(-scene->camera.rotation.x, 1, 0, 0);
-  viewMatrix.rotate(-scene->camera.rotation.y, 0, 1, 0);
-  viewMatrix.translate(negate(scene->camera.position));
-  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+  setCameraInPlayer(scene->camera);
 
   renderPortalOverlay(scene->bluePortal);
   renderPortalOverlay(scene->orangePortal);
@@ -250,11 +231,7 @@ void Renderer::renderPortal(const Portal &portal, const Portal &otherPortal) {
     glDepthMask(GL_FALSE);
 
     //Update camera position
-    viewMatrix.setIdentity();
-    viewMatrix.rotate(-scene->camera.rotation.x, 1, 0, 0);
-    viewMatrix.rotate(-scene->camera.rotation.y, 0, 1, 0);
-    viewMatrix.translate(negate(scene->camera.position));
-    glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+    setCameraInPlayer(scene->camera);
 
     //Stencil drawing
     //Primary portal
@@ -403,6 +380,17 @@ void Renderer::setCameraInPortal(const Portal &portal, const Portal &otherPortal
   viewMatrix.rotate(-fcamRot.x, 1, 0, 0);
   viewMatrix.rotate(-fcamRot.y, 0, 1, 0);
   viewMatrix.translate(negate(fcamPos));
+  glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
+}
+
+void Renderer::setCameraInPlayer(const Camera& camera) {
+  camera.loadMatrix(projectionMatrix);
+  glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
+
+  viewMatrix.setIdentity();
+  viewMatrix.rotate(-camera.rotation.x, 1, 0, 0);
+  viewMatrix.rotate(-camera.rotation.y, 0, 1, 0);
+  viewMatrix.translate(negate(camera.position));
   glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 }
 

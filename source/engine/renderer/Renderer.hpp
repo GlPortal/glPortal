@@ -12,6 +12,7 @@
 
 
 namespace glPortal {
+class Camera;
 class Entity;
 class Portal;
 class Scene;
@@ -36,6 +37,7 @@ public:
   void renderText(const std::string &text, int x, int y);
   void renderTexturedMesh(const Mesh &mesh, const Texture &texture);
   void setCameraInPortal(const Portal &portal, const Portal &otherPortal);
+  void setCameraInPlayer(const Camera& camera);
   void setFont(const std::string &font, float size);
 private:
   Viewport *viewport;
