@@ -57,20 +57,11 @@ void Camera::setOrthographic() {
   this->perspective = false;
 }
 
-void Camera::setLeft(float left) {
+void Camera::setBounds(float left, float right, float bottom, float top) {
   this->left = left;
-}
-
-void Camera::setRight(float right) {
   this->right = right;
-}
-
-void Camera::setTop(float top) {
-  this->top = top;
-}
-
-void Camera::setBottom(float bottom) {
   this->bottom = bottom;
+  this->top = top;
 }
 
 } /* namespace glPortal */

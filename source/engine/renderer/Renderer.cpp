@@ -194,10 +194,7 @@ void Renderer::render() {
   //Draw GUI
   glClear(GL_DEPTH_BUFFER_BIT);
   camera.setOrthographic();
-  camera.setLeft(0);
-  camera.setRight(vpWidth);
-  camera.setBottom(0);
-  camera.setTop(vpHeight);
+  camera.setBounds(0, vpWidth, 0, vpHeight);
 
   //Upload matrices
   camera.loadMatrix(projectionMatrix);

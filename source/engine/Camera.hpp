@@ -27,10 +27,7 @@ public:
   void setZFar(float zFar);
   void setPerspective();
   void setOrthographic();
-  void setLeft(float left);
-  void setRight(float right);
-  void setTop(float top);
-  void setBottom(float bottom);
+  void setBounds(float left, float right, float bottom, float top);
 
   Vector3f position;
   Vector3f rotation;
