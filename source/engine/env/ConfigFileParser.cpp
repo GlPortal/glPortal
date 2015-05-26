@@ -18,7 +18,7 @@ namespace glPortal {
     Each entry is on a new line.
 */
   
-ConfigFileParser::ConfigFileParser(std::string filename) {
+ConfigFileParser::ConfigFileParser(const std::string &filename) {
   std::ifstream file(filename, std::ifstream::in);
   std::string line, stringBuffer;
   if (!file.is_open()) {
@@ -53,7 +53,7 @@ ConfigFileParser::ConfigFileParser(std::string filename) {
   }
 }
 
-std::string ConfigFileParser::getStringByKey(std::string key) {
+std::string ConfigFileParser::getStringByKey(const std::string &key) {
   try {
     return configMap.at(key);
   } catch (const std::out_of_range& e) {
@@ -61,16 +61,16 @@ std::string ConfigFileParser::getStringByKey(std::string key) {
   }
 }
 
-int ConfigFileParser::getIntByKey(std::string key) {
+int ConfigFileParser::getIntByKey(const std::string &key) {
   return atoi(getStringByKey(key).c_str());
 }
 
-float ConfigFileParser::getFloatByKey(std::string key) {
+float ConfigFileParser::getFloatByKey(const std::string &key) {
   float s = atof(getStringByKey(key).c_str());
   return s;
 }
 
-void ConfigFileParser::setStringByKey(std::string key, std::string value) {
+void ConfigFileParser::setStringByKey(const std::string &key, const std::string &value) {
   configMap.at(key) = value;
 }
   
