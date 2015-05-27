@@ -1,4 +1,11 @@
 #!/bin/sh
+
+if [ -d "$HOME/.config/blender" ]; then
+    BLENDERVERPATH="$HOME/.config/blender"
+else
+    BLENDERVERPATH="$HOME/.blender"
+fi
+
 help() {
     echo "                                  Blender Linker"
     echo ""
@@ -9,7 +16,7 @@ help() {
     echo ""
     echo "Usage: $0 -b blender_version"
     echo "Available Blender versions: "
-    ls ~/.blender/
+    ls "$BLENDERVERPATH"
 }
 
 
@@ -20,8 +27,11 @@ getopts "h?vb:" opt
         exit 0
         ;;
     b)
-        if [ -d "/home/$(whoami)/.blender/$OPTARG/scripts/addons" ]; then
-            ln -s $(pwd)/blenderToXmlExport/ ~/.blender/$OPTARG/scripts/addons/toGlPortalXml
+        if [ -d "$BLENDERVERPATH/$OPTARG" ]; then
+            ADDONSPATH="$BLENDERVERPATH/$OPTARG/scripts/addons"
+            mkdir -p "$ADDONSPATH"
+            DIR=$(CDPATH= cd "$(dirname "$0")" && pwd)
+            ln -fs "$DIR/blenderToXmlExport/" "$ADDONSPATH/toGlPortalXml"
         else
             echo "No blender installation found."
             exit 0
