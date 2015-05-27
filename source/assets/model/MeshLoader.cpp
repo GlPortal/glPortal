@@ -129,6 +129,11 @@ Mesh MeshLoader::getPortalBox(Entity wall) {
                           Vector3f(0.5f, 0.5f, -0.5f),
                           Vector3f(0.5f, 0.5f, 0.5f)};
 
+  mesh.vertices.resize(8);
+  for (int i = 0; i < 8; i++) {
+    mesh.vertices[i] = vertices[i];
+  }
+
   float vi[36] = {3,1,5,3,5,7, 7,5,4,7,4,6, 6,4,0,6,0,2, 2,0,1,2,1,3, 2,3,7,2,7,6, 1,0,4,1,4,5};
   float vertexBuffer[36 * 3];
   for(int i = 0; i < 36; i++) {

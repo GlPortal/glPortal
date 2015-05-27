@@ -3,7 +3,7 @@
 
 #include <assets/model/Mesh.hpp>
 #include <assets/texture/Texture.hpp>
-
+#include <engine/BoxCollider.hpp>
 #include <engine/core/math/Vector3f.hpp>
 
 namespace glPortal {
@@ -13,6 +13,7 @@ public:
   Entity() :
       position(0, 0, 0), rotation(0, 0, 0), scale(1, 1, 1) {
   }
+  BoxCollider* collider;
   Mesh mesh;
   Texture texture;
 

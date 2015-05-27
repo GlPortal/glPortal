@@ -8,6 +8,7 @@
 
 #include <assets/map/XmlHelper.hpp>
 #include <engine/env/Environment.hpp>
+#include <engine/BoxCollider.hpp>
 #include <engine/trigger/Trigger.hpp>
 #include <engine/Light.hpp>
 #include <engine/core/math/Vector3f.hpp>
@@ -133,7 +134,7 @@ void MapLoader::extractWalls() {
         do {
           scene->walls.emplace_back();
           Entity &wall = scene->walls.back();
-
+          
           XmlHelper::extractPosition(wallBoxElement, wall.position);
           XmlHelper::extractRotation(wallBoxElement, wall.rotation);
           XmlHelper::extractScale(wallBoxElement, wall.scale);
@@ -142,6 +143,7 @@ void MapLoader::extractWalls() {
           wall.texture.xTiling = 0.5f;
           wall.texture.yTiling = 0.5f;
           wall.mesh = MeshLoader::getPortalBox(wall);
+          wall.collider = BoxCollider::generateCage(wall);
         } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != nullptr);
       }
 

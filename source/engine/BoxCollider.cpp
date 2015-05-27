@@ -1,5 +1,11 @@
 #include "BoxCollider.hpp"
 
+#include "engine/Entity.hpp"
+#include "engine/core/math/Matrix4f.hpp"
+
+#include <cmath>
+#include <cstdio>
+
 namespace glPortal {
 
   BoxCollider::BoxCollider(const Vector3f &position, const Vector3f &size) {
@@ -18,4 +24,27 @@ namespace glPortal {
     }
     return false;
   }
+
+  BoxCollider* BoxCollider::generateCage(const Entity &entity) {
+    Matrix4f modelMatrix;
+    //modelMatrix.translate(entity.position);
+    modelMatrix.rotate(entity.rotation);
+    modelMatrix.scale(entity.scale);
+
+    Vector3f position;
+    position.set(entity.position);
+    Vector3f size;
+    for (unsigned int i = 0; i < entity.mesh.vertices.size(); i++) {
+      Vector3f v = modelMatrix.transform(entity.mesh.vertices[i]);
+
+      size.x = (fabs(v.x) > size.x) ? fabs(v.x) : size.x;
+      size.y = (fabs(v.y) > size.y) ? fabs(v.y) : size.y;
+      size.z = (fabs(v.z) > size.z) ? fabs(v.z) : size.z;
+    }
+
+    BoxCollider *collider = new BoxCollider(position, size * 2);
+
+    return collider;
+  }
 } /* namespace glPortal */
+
