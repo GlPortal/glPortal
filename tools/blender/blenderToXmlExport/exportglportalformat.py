@@ -40,10 +40,14 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
             else:
                 mapObjectType = object.name
             
-            if mapObjectType == "Lamp":
-                lightElement = tree.SubElement(root, "light")
-                colorArray = object.data.color
+            if object.type == "LAMP":
+                lamp = object.data
                 
+                colorArray = lamp.color
+                lightDistance = lamp.distance
+                lightEnergy = lamp.energy
+                
+                lightElement = tree.SubElement(root, "light")
                 lightElement.set("x", str(object.location[0]))
                 lightElement.set("y", str(object.location[2]))
                 lightElement.set("z", str(-object.location[1]))
@@ -51,6 +55,9 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
                 lightElement.set("r", str(colorArray[0]))
                 lightElement.set("g", str(colorArray[1]))
                 lightElement.set("b", str(colorArray[2]))
+                
+                lightElement.set("distance", str(lightDistance))
+                lightElement.set("energy", str(lightEnergy))
                 
             elif mapObjectType == "Cube" or mapObjectType == "Camera":
                 if mapObjectType == "Camera":
