@@ -16,7 +16,7 @@ public:
   Vector3f origin;
   Vector3f direction;
 
-  bool collides(Entity e, float* tNear, float* tFar);
+  bool collides(const Entity &e, float *tNear, float *tFar);
 };
 
 } /* namespace glPortal */
