@@ -219,7 +219,7 @@ void World::update() {
 bool World::collidesWithWalls(const BoxCollider &collider) const {
   for (unsigned int i = 0; i < scene->walls.size(); i++) {
     const Entity &wall = scene->walls[i];
-    BoxCollider wallCollider = *wall.collider;//(wall.position, wall.scale);
+    const BoxCollider &wallCollider = wall.collider;//(wall.position, wall.scale);
 
     if (collider.collidesWith(wallCollider)) {
       return true;

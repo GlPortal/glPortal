@@ -10,10 +10,9 @@ namespace glPortal {
 
 class Entity {
 public:
-  Entity() :
-      position(0, 0, 0), rotation(0, 0, 0), scale(1, 1, 1) {
-  }
-  BoxCollider* collider;
+  Entity();
+
+  BoxCollider collider;
   Mesh mesh;
   Texture texture;
 

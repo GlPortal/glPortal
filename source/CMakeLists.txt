@@ -3,6 +3,7 @@ include_directories(lib engine ${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(${EXE_NAME} 
   Game.cpp
   Portal.cpp
+  engine/Entity.cpp
   engine/Ray.cpp
   engine/SoundManager.cpp    
   engine/core/math/Vector3f.cpp
