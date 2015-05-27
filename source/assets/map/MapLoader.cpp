@@ -67,7 +67,8 @@ void MapLoader::extractSpawn() {
   TiXmlElement *spawnElement = rootHandle.FirstChild("spawn").ToElement();
 
   if (spawnElement) {
-    XmlHelper::extractPositionAndRotation(spawnElement, scene->player);
+    XmlHelper::extractPosition(spawnElement, scene->player.position);
+    XmlHelper::extractRotation(spawnElement, scene->player.rotation);
   } else {
     throw std::runtime_error("No spawn position defined.");
   }
@@ -107,7 +108,8 @@ void MapLoader::extractDoor() {
 
   if (endElement) {
     Entity door;
-    XmlHelper::extractPositionAndRotation(endElement, door);
+    XmlHelper::extractPosition(endElement, door.position);
+    XmlHelper::extractRotation(endElement, door.rotation);
     door.texture = TextureLoader::getTexture("Door.png");
     door.mesh = MeshLoader::getMesh("Door.obj");
     scene->end = door;
@@ -132,11 +134,8 @@ void MapLoader::extractWalls() {
           scene->walls.emplace_back();
           Entity &wall = scene->walls.back();
 
-          TiXmlElement *boxPositionElement = wallBoxElement->FirstChildElement("position");
-          XmlHelper::pushAttributeVertexToVector(boxPositionElement, wall.position);
-
-          TiXmlElement *boxScaleElement = wallBoxElement->FirstChildElement("scale");
-          XmlHelper::pushAttributeVertexToVector(boxScaleElement, wall.scale);
+          XmlHelper::extractPosition(wallBoxElement, wall.position);
+          XmlHelper::extractScale(wallBoxElement, wall.scale);
 
           wall.texture = TextureLoader::getTexture(texturePath);
           wall.texture.xTiling = 0.5f;
@@ -169,10 +168,9 @@ void MapLoader::extractTriggers() {
         throw std::runtime_error("Trigger must define a type attribute.");
       }
 
-      XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("position"),
-                                             trigger.position);
-      XmlHelper::pushAttributeVertexToVector(triggerElement->FirstChildElement("scale"),
-                                             trigger.scale);
+      XmlHelper::extractPosition(triggerElement, trigger.position);
+      XmlHelper::extractScale(triggerElement, trigger.scale);
+
       trigger.texture = TextureLoader::getTexture("redBox.png");
       trigger.mesh = MeshLoader::getPortalBox(trigger);
 
@@ -193,13 +191,13 @@ void MapLoader::extractModels() {
 
       scene->models.emplace_back();
       Entity &model = scene->models.back();
-      XmlHelper::extractPositionAndRotation(modelElement, model);
+      XmlHelper::extractPosition(modelElement, model.position);
+      XmlHelper::extractRotation(modelElement, model.rotation);
       model.texture = TextureLoader::getTexture(texture);
       model.mesh = MeshLoader::getMesh(mesh);
     } while ((modelElement = modelElement->NextSiblingElement("model")) != nullptr);
   }
 }
-
 
 void MapLoader::extractButtons() {
   TiXmlElement *textureElement = rootHandle.FirstChild("texture").ToElement();

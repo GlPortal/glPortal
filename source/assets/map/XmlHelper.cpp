@@ -42,17 +42,16 @@ void XmlHelper::throwMandatoryAttributeException(const std::string &message){
   throw runtime_error(mandatoryAttributeMessage + message);
 }
 
-void XmlHelper::extractPositionAndRotation(TiXmlElement *element, Entity &entity){
-  Vector3f pos;
-  Vector3f rot;
-  TiXmlElement *positionElement = element->FirstChildElement("position");
-  pushAttributeVertexToVector(positionElement, pos);
-  
-  TiXmlElement *rotationElement = element->FirstChildElement("rotation");
-  pushAttributeVertexToVector(rotationElement, rot);
+void XmlHelper::extractPosition(TiXmlElement *xmlElement, Vector3f &position) {
+  pushAttributeVertexToVector(xmlElement->FirstChildElement("position"), position);
+}
 
-  entity.position.set(pos);
-  entity.rotation.set(rot);
+void XmlHelper::extractRotation(TiXmlElement *xmlElement, Vector3f &rotation) {
+  pushAttributeVertexToVector(xmlElement->FirstChildElement("rotation"), rotation);
+}
+
+void XmlHelper::extractScale(TiXmlElement *xmlElement, Vector3f &scale) {
+  pushAttributeVertexToVector(xmlElement->FirstChildElement("scale"), scale);
 }
 
 } /* namespace glPortal */

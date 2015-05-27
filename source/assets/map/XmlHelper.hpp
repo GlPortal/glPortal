@@ -13,7 +13,9 @@ public:
   static std::string mandatoryAttributeMessage;
   static std::string invalidElementMessage;
   static void throwMandatoryAttributeException(const std::string &message);
-  static void extractPositionAndRotation(TiXmlElement *spawnElement, Entity &entity);
+  static void extractPosition(TiXmlElement *xmlElement, Vector3f &position);
+  static void extractRotation(TiXmlElement *xmlElement, Vector3f &rotation);
+  static void extractScale(TiXmlElement *xmlElement, Vector3f &scale);
 };
 
 } /* namespace glPortal */
