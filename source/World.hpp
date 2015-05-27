@@ -1,6 +1,8 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
+#include "engine/env/ConfigFileParser.hpp"
+#include "engine/env/Config.hpp"
 #include <string>
 #include <vector>
 #include <random>
@@ -50,6 +52,7 @@ private:
   std::mt19937 generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;
+  ConfigFileParser *config;
 };
 
 } /* namespace glPortal */

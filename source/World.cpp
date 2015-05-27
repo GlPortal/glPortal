@@ -39,12 +39,19 @@ float World::gravity = GRAVITY;
 float World::friction = FRICTION;
 
 World::World() : scene(nullptr) {
+  config = Environment::getConfigPointer();
 }
 
 void World::create() {
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
-  loadScene(mapList[currentLevel]);
+  try {
+    std::string map = config->getStringByKey(Config::MAP);
+    loadScene(map);
+  } catch (const std::invalid_argument& e) {
+    loadScene(mapList[currentLevel]);
+  }
+
   std::random_device rd;
   generator =  std::mt19937(rd());
 }
