@@ -9,6 +9,21 @@ import string
 from mathutils import Vector
 import re
 
+def storePosition(element, object):
+    element.set("x", str(object.location[0]))
+    element.set("y", str(object.location[2]))
+    element.set("z", str(-object.location[1]))
+
+def storeRotation(element, object):
+    element.set("x", str(abs(math.degrees(object.rotation_euler[0]))))
+    element.set("y", str(abs(math.degrees(object.rotation_euler[2]))))
+    element.set("z", str(abs(math.degrees(-object.rotation_euler[1]))))
+
+def storeScale(element, object):
+    element.set("x", str(object.dimensions[0]))
+    element.set("y", str(object.dimensions[2]))
+    element.set("z", str(object.dimensions[1]))
+
 class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
     bl_idname = "export_glportal_xml.xml"
     bl_label = "GlPortal XML Format"
@@ -30,16 +45,9 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
         for object in objects:
             if object.glpTypes:
                 type = object.glpTypes
-                hasType = True;
             else:
                 type = "None"
-                hasType = False;
-            
-            if "." in object.name:
-                mapObjectType = object.name.split(".")[0]
-            else:
-                mapObjectType = object.name
-            
+
             if object.type == "LAMP":
                 lamp = object.data
                 
@@ -48,9 +56,7 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
                 lightEnergy = lamp.energy
                 
                 lightElement = tree.SubElement(root, "light")
-                lightElement.set("x", str(object.location[0]))
-                lightElement.set("y", str(object.location[2]))
-                lightElement.set("z", str(-object.location[1]))
+                storePosition(lightElement, object);
                 
                 lightElement.set("r", str(colorArray[0]))
                 lightElement.set("g", str(colorArray[1]))
@@ -58,20 +64,20 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
                 
                 lightElement.set("distance", str(lightDistance))
                 lightElement.set("energy", str(lightEnergy))
+            if object.type == "CAMERA":
+                boxElement = tree.SubElement(root, "spawn")
                 
-            elif mapObjectType == "Cube" or mapObjectType == "Camera":
-                if mapObjectType == "Camera":
-                    boxElement = tree.SubElement(root, "spawn")
-                elif type == "trigger":
-                    print("Trigger type: " + str(triggerType))
+                positionElement = tree.SubElement(boxElement, "position")
+                storePosition(positionElement, object);
+                
+                rotationElement = tree.SubElement(boxElement, "rotation")
+                storeRotation(rotationElement, object);
+            if object.type == "MESH":
+                if type == "trigger":
                     if object.glpTriggerTypes == "win":
                         boxElement = tree.SubElement(root, "end")
                     else:
                         boxElement = tree.SubElement(root, "trigger")
-                    #if "glpTriggerType" in object:
-                    #    boxElement.set("type", triggerType)
-                elif type == "door":
-                    boxElement = tree.SubElement(root, "end")
                 elif type == "portable":
                     boxElement = tree.SubElement(textureWallElement, "wall")
                 else:
@@ -80,20 +86,14 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
                 object.select = True
 
                 positionElement = tree.SubElement(boxElement, "position")
-                positionElement.set("x", str(object.location[0]))
-                positionElement.set("y", str(object.location[2]))
-                positionElement.set("z", str(-object.location[1]))
-                if type != "door" and mapObjectType != "Camera":
-                    scaleElement = tree.SubElement(boxElement, "scale")
-                    scaleElement.set("x", str(object.dimensions[0]))
-                    scaleElement.set("y", str(object.dimensions[2]))
-                    scaleElement.set("z", str(object.dimensions[1]))
-                if type == "door" or mapObjectType == "Camera":
-                    rotationElement = tree.SubElement(boxElement, "rotation")
-                    rotationElement.set("x", str(abs(math.degrees(object.rotation_euler[0]))))
-                    rotationElement.set("y", str(abs(math.degrees(object.rotation_euler[2]))))
-                    rotationElement.set("z", str(abs(math.degrees(-object.rotation_euler[1]))))
+                storePosition(positionElement, object);
                 
+                rotationElement = tree.SubElement(boxElement, "rotation")
+                storeRotation(rotationElement, object);
+                
+                scaleElement = tree.SubElement(boxElement, "scale")
+                storeScale(scaleElement, object);
+
                 object.select = False
         
         xml = minidom.parseString(tree.tostring(root))
