@@ -135,6 +135,7 @@ void MapLoader::extractWalls() {
           Entity &wall = scene->walls.back();
 
           XmlHelper::extractPosition(wallBoxElement, wall.position);
+          XmlHelper::extractRotation(wallBoxElement, wall.rotation);
           XmlHelper::extractScale(wallBoxElement, wall.scale);
 
           wall.texture = TextureLoader::getTexture(texturePath);
