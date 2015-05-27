@@ -61,10 +61,16 @@ Mesh MeshLoader::uploadMesh(const aiMesh *mesh) {
 
   //Store vertices in a buffer
   if (mesh->HasPositions()) {
+    m.vertices.resize(mesh->mNumVertices);
+    for (unsigned int j = 0; j < mesh->mNumVertices; j++) {
+      Vector3f v(mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z);
+      m.vertices[j] = v;
+    }
+
     GLuint vertexVBO;
     glGenBuffers(1, &vertexVBO);
     glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3, mesh->mVertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3, &m.vertices[0], GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(0);
   }
