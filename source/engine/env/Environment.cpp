@@ -15,17 +15,9 @@ ConfigFileParser *Environment::config = nullptr;
 
     Manages environment variables and configuration data. Get an instance of ConfigFileParser.
 */
-  
+
 void Environment::init() {
   int argument;
-
-  static struct option long_options[] = {
-    {"version",  no_argument,       0, 'v'},
-    {"help",     no_argument,       0, 'h'},
-    {"datadir",  required_argument, 0, 'd'},
-    {0, 0, 0, 0}
-  };
-  
 
   // default installation dir
   if (datadir.empty()) {
@@ -39,7 +31,7 @@ void Environment::init() {
 }
 
 ConfigFileParser& Environment::getConfig() {
-  if (!config) {
+  if (config == nullptr) {
     initializeConfig();
   }
 
@@ -47,7 +39,7 @@ ConfigFileParser& Environment::getConfig() {
 }
 
 ConfigFileParser * Environment::getConfigPointer() {
-  if (!config) {
+  if (config == nullptr) {
     initializeConfig();
   }
 
@@ -71,5 +63,5 @@ std::string Environment::getDataDir() {
 void Environment::setDataDir(const std::string &string) {
   datadir = string;
 }
-  
+
 } /* namespace glPortal */
