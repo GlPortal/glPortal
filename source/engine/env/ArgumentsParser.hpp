@@ -8,8 +8,11 @@ using namespace std;
 namespace glPortal {
 
 class ArgumentsParser {
+private:
+  static std::string mapName;
 public:
   static void setEnvironmentFromArgs(int argc, char **argv);
+  static void populateConfig();
 };
 
 } /* namespace glPortal */

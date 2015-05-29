@@ -10,10 +10,9 @@
 #include "engine/env/Config.hpp"
 
 namespace glPortal {
-
+std::string ArgumentsParser::mapName = "";
 void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
   int argument;
-  std::string mapName;
   
   static struct option long_options[] = {
     {"version",  no_argument,       0, 'v'},
@@ -56,10 +55,11 @@ void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
       break;
     }
   }
+}
+void ArgumentsParser::populateConfig() {
   ConfigFileParser *config = Environment::getConfigPointer();
   if (not(mapName == "")){
     config->setStringByKey(Config::MAP, mapName);
   }
 }
-
 } /* namespace glPortal */

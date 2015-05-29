@@ -71,7 +71,10 @@ float ConfigFileParser::getFloatByKey(const std::string &key) {
 }
 
 void ConfigFileParser::setStringByKey(const std::string &key, const std::string &value) {
-  configMap.at(key) = value;
+  //configMap.erase(configMap.find(key));
+  //configMap.insert ( std::pair<std::string, std::string>(key, value) );
+  // configMap.at(key) = value;
+  configMap[key] = value;
 }
   
 } /* namespace glPortal */

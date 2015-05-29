@@ -102,6 +102,7 @@ Window window;
 int main(int argc, char *argv[]) {
   ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   Environment::init();
+  ArgumentsParser::populateConfig();
   Game game;
 
   return 0;

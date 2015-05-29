@@ -48,6 +48,7 @@ void World::create() {
   try {
     std::string map = config->getStringByKey(Config::MAP);
     loadScene(map);
+    std::cout << "Custom map loaded.";
   } catch (const std::invalid_argument& e) {
     loadScene(mapList[currentLevel]);
   }
