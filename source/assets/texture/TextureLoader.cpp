@@ -12,12 +12,12 @@ namespace glPortal {
 std::map<std::string, Texture> TextureLoader::textureCache = {};
 
 Texture TextureLoader::getTexture(std::string path) {
-  path = Environment::getDataDir() + "/textures/" + path;
-  if(textureCache.find(path) != textureCache.end()) {
-    return textureCache.at(path);
+  auto it = textureCache.find(path);
+  if (it != textureCache.end()) {
+    return it->second;
   }
   int width, height, bytes;
-  unsigned char* data = stbi_load(path.c_str(), &width, &height, &bytes, 0);
+  unsigned char *data = stbi_load((Environment::getDataDir() + "/textures/" + path).c_str(), &width, &height, &bytes, 0);
   Texture texture = uploadTexture(data, width, height, bytes);
   texture.width = width;
   texture.height = height;
@@ -25,7 +25,7 @@ Texture TextureLoader::getTexture(std::string path) {
   return texture;
 }
 
-Texture TextureLoader::uploadTexture(unsigned char* data, int width, int height, int bytes) {
+Texture TextureLoader::uploadTexture(unsigned char *data, int width, int height, int bytes) {
   Texture texture;
   GLuint handle;
   glGenTextures(1, &handle);

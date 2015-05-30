@@ -159,7 +159,6 @@ void Renderer::render() {
     uint32_t dtOpen = SDL_GetTicks()-max(scene->orangePortal.openSince, scene->bluePortal.openSince);
     if (dtOpen < Portal::NOISE_FADE_DELAY) {
       float al = 1-((float)dtOpen/Portal::NOISE_FADE_DELAY)*2;
-      printf("%d\n", dtOpen);
       if (true or not scene->orangePortal.open) {
         renderPortalNoise(scene->bluePortal, al);
       }
