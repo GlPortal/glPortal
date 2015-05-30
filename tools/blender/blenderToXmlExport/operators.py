@@ -19,7 +19,7 @@ class addDoor(bpy.types.Operator):
             object.glpTypes = "door" 
         return {'FINISHED'}    
 
-def getMaterial(texturePath):
+def getMaterial(texturePath, diffuse):
     realpath = os.path.expanduser(texturePath)
     try:
         portableWallImage = bpy.data.images.load(realpath)
@@ -28,9 +28,10 @@ def getMaterial(texturePath):
     
     portableWallTexture = bpy.data.textures.new('ColorTex', type = 'IMAGE')
     portableWallTexture.image = portableWallImage
-        
+    
     mat = bpy.data.materials.new('TexMat')
- 
+    mat.diffuse_color = diffuse
+
     # Add texture slot for color texture
     mtex = mat.texture_slots.add()
     mtex.texture = portableWallTexture
@@ -41,20 +42,20 @@ def getMaterial(texturePath):
     mtex.use_map_density = True 
     mtex.mapping = 'FLAT'
     return mat
-    
+
 class setPortable(bpy.types.Operator):
     bl_idname = "wm.set_portable"
     bl_label = "Mark the selection as portable."
     
     def execute(self, context):
-        mat = getMaterial('~/.glportal/data/textures/wall.png')
+        mat = getMaterial('~/.glportal/data/textures/wall.png', (1, 1, 1))
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
             object.glpTypes = "wall"
             object.glpWallTypes = "portable"
             me = object.data
-            me.materials.append(mat)
+            me.materials[0] = mat
         return {'FINISHED'}    
 
 class setWall(bpy.types.Operator):
@@ -62,12 +63,12 @@ class setWall(bpy.types.Operator):
     bl_label = "Mark the selection as portable."
 
     def execute(self, context):
-        mat = getMaterial('~/.glportal/data/textures/tiles.png')        
+        mat = getMaterial('~/.glportal/data/textures/tiles.png', (0.2, 0.2, 0.2))
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
             object.glpTypes = "wall"
             object.glpWallTypes = "default"
             me = object.data
-            me.materials.append(mat)
+            me.materials[0] = mat
         return {'FINISHED'}
