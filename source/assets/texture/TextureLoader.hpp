@@ -12,7 +12,7 @@ class TextureLoader {
 public:
   static Texture getTexture(std::string path);
 private:
-  static Texture uploadTexture(unsigned char* data, int width, int height, int bytes);
+  static Texture uploadTexture(unsigned char *data, int width, int height, int bytes);
   static std::map<std::string, Texture> textureCache;
 };
 

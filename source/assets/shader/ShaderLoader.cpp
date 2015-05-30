@@ -13,15 +13,17 @@ namespace glPortal {
 
 std::map<std::string, Shader> ShaderLoader::shaderCache = { };
 
-Shader& ShaderLoader::getShader(const std::string &fpath) {
-  std::string path = Environment::getDataDir() + "/shaders/" + fpath;
-  if(shaderCache.find(path) != shaderCache.end()) {
-    return shaderCache.at(path);
+Shader& ShaderLoader::getShader(const std::string &path) {
+  auto it = shaderCache.find(path);
+  if (it != shaderCache.end()) {
+    return it->second;
   }
+
+  std::string fpath = Environment::getDataDir() + "/shaders/" + path;
 
   //Load the shaders
   int vertShader = loadShader(Environment::getDataDir() + "/shaders/diffuse.vert", GL_VERTEX_SHADER);
-  int fragShader = loadShader(path, GL_FRAGMENT_SHADER);
+  int fragShader = loadShader(fpath, GL_FRAGMENT_SHADER);
 
   //Create a program and attach both shaders
   int shader = glCreateProgram();
@@ -40,7 +42,7 @@ Shader& ShaderLoader::getShader(const std::string &fpath) {
     glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &logSize);
     char* log = (char*)malloc(logSize);
     glGetProgramInfoLog(shader, logSize, NULL, log);
-    std::cout << "Failed linking " << path << ":\n" << log << std::endl;
+    std::cout << "Failed linking " << fpath << ":\n" << log << std::endl;
     free(log);
   }
 
@@ -55,7 +57,7 @@ Shader& ShaderLoader::getShader(const std::string &fpath) {
     glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &logSize);
     char* log = (char*)malloc(logSize);
     glGetProgramInfoLog(shader, logSize, NULL, log);
-    std::cout << "Failed to validate " << path << ":\n" << log << std::endl;
+    std::cout << "Failed to validate " << fpath << ":\n" << log << std::endl;
     free(log);
   }
 
@@ -63,7 +65,7 @@ Shader& ShaderLoader::getShader(const std::string &fpath) {
   s.handle = shader;
   auto inserted = shaderCache.insert(std::pair<std::string, Shader>(path, s));
   // Return reference to newly inserted Shader
-  return (*inserted.first).second;
+  return inserted.first->second;
 }
 
 int ShaderLoader::loadShader(const std::string &path, GLenum type) {

@@ -20,18 +20,19 @@ namespace glPortal {
 
 std::map<std::string, Mesh> MeshLoader::meshCache = { };
 
-Mesh& MeshLoader::getMesh(const std::string &fpath) {
-  std::string path = Environment::getDataDir() + "/meshes/" + fpath;
-  if (meshCache.find(path) != meshCache.end()) {
-    return meshCache.at(path);
+Mesh& MeshLoader::getMesh(const std::string &path) {
+  auto it = meshCache.find(path);
+  if (it != meshCache.end()) {
+    return it->second;
   }
+  std::string fpath = Environment::getDataDir() + "/meshes/" + path;
   Assimp::Importer importer;
   int flags = aiProcess_Triangulate | aiProcess_GenNormals;
-  const aiMesh* mesh = importer.ReadFile(path, flags)->mMeshes[0];
+  const aiMesh *mesh = importer.ReadFile(fpath, flags)->mMeshes[0];
   Mesh m = uploadMesh(mesh);
   auto inserted = meshCache.insert(std::pair<std::string, Mesh>(path, m));
   // Return reference to newly inserted Mesh
-  return (*inserted.first).second;
+  return inserted.first->second;
 }
 
 Mesh MeshLoader::uploadMesh(const aiMesh *mesh) {
