@@ -30,7 +30,7 @@ public:
 
   void render();
   void renderScene();
-  void renderEntity(const Entity &e);
+  void renderEntity(const VisualEntity &e);
   void renderPortal(const Portal &portal, const Portal &otherPortal);
   void renderPortalOverlay(const Portal &portal);
   void renderPortalNoise(const Portal &portal);

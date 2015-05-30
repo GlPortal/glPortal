@@ -108,7 +108,7 @@ void MapLoader::extractDoor() {
   TiXmlElement *endElement = rootHandle.FirstChild("end").ToElement();
 
   if (endElement) {
-    Entity door;
+    VisualEntity door;
     XmlHelper::extractPosition(endElement, door.position);
     XmlHelper::extractRotation(endElement, door.rotation);
     door.texture = TextureLoader::getTexture("Door.png");
@@ -133,7 +133,7 @@ void MapLoader::extractWalls() {
       if (wallBoxElement) {
         do {
           scene->walls.emplace_back();
-          Entity &wall = scene->walls.back();
+          PhysicsEntity &wall = scene->walls.back();
           
           XmlHelper::extractPosition(wallBoxElement, wall.position);
           XmlHelper::extractRotation(wallBoxElement, wall.rotation);
@@ -143,7 +143,7 @@ void MapLoader::extractWalls() {
           wall.texture.xTiling = 0.5f;
           wall.texture.yTiling = 0.5f;
           wall.mesh = MeshLoader::getPortalBox(wall);
-          wall.collider = BoxCollider::generateCage(wall);
+          wall.physBody = BoxCollider::generateCage(wall);
         } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != nullptr);
       }
 
@@ -174,9 +174,6 @@ void MapLoader::extractTriggers() {
       XmlHelper::extractPosition(triggerElement, trigger.position);
       XmlHelper::extractScale(triggerElement, trigger.scale);
 
-      trigger.texture = TextureLoader::getTexture("redBox.png");
-      trigger.mesh = MeshLoader::getPortalBox(trigger);
-
     } while ((triggerElement = triggerElement->NextSiblingElement()) != nullptr);
   }
 }
@@ -193,7 +190,7 @@ void MapLoader::extractModels() {
       XmlHelper::pushAttributeVertexToVector(modelElement, modelPos);
 
       scene->models.emplace_back();
-      Entity &model = scene->models.back();
+      VisualEntity &model = scene->models.back();
       XmlHelper::extractPosition(modelElement, model.position);
       XmlHelper::extractRotation(modelElement, model.rotation);
       model.texture = TextureLoader::getTexture(texture);

@@ -5,14 +5,14 @@
 
 namespace glPortal {
 
-class Entity;
+class VisualEntity;
 
 class BoxCollider {
 public:
   BoxCollider();
   BoxCollider(const Vector3f &position, const Vector3f &size);
   bool collidesWith(const BoxCollider &collider) const;
-  static BoxCollider generateCage(const Entity &entity);
+  static BoxCollider generateCage(const VisualEntity &entity);
 
   Vector3f position;
   Vector3f size;

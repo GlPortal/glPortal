@@ -3,20 +3,15 @@
 
 #include <string>
 
-#include <assets/model/Mesh.hpp>
-#include <assets/texture/Texture.hpp>
-
-#include <engine/Entity.hpp>
+#include <engine/TechVolEntity.hpp>
 
 #include <engine/core/math/Vector3f.hpp>
 
 namespace glPortal {
 
-class Trigger: public Entity {
+class Trigger: public TechVolEntity {
 public:
   Trigger();
-  Mesh mesh;
-  Texture texture;
 
   std::string type;
 };

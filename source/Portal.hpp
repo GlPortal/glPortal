@@ -1,14 +1,13 @@
 #ifndef PORTAL_HPP
 #define PORTAL_HPP
 
-#include "engine/Entity.hpp"
-#include "engine/Light.hpp"
+#include <engine/PhysicsEntity.hpp>
+#include <engine/Light.hpp>
 #include <engine/core/math/Vector3f.hpp>
 
 namespace glPortal {
-class BoxCollider;
 
-class Portal: public Entity {
+class Portal: public PhysicsEntity {
 public:
   static const int PORTAL_RANGE;
   static const Vector3f BLUE_COLOR;

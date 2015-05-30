@@ -1,6 +1,6 @@
 #include "BoxCollider.hpp"
 
-#include "engine/Entity.hpp"
+#include "engine/VisualEntity.hpp"
 #include "engine/core/math/Matrix4f.hpp"
 
 #include <cmath>
@@ -28,7 +28,7 @@ bool BoxCollider::collidesWith(const BoxCollider &collider) const {
   return false;
 }
 
-BoxCollider BoxCollider::generateCage(const Entity &entity) {
+BoxCollider BoxCollider::generateCage(const VisualEntity &entity) {
   Matrix4f modelMatrix;
   //modelMatrix.translate(entity.position);
   modelMatrix.rotate(entity.rotation);

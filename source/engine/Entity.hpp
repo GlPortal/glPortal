@@ -12,10 +12,6 @@ class Entity {
 public:
   Entity();
 
-  BoxCollider collider;
-  Mesh mesh;
-  Texture texture;
-
   Vector3f position;
   Vector3f rotation;
   Vector3f scale;

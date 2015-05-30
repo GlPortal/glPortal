@@ -16,15 +16,15 @@ class Scene {
 public:
   Player player;
   Camera camera;
-  std::vector<Entity> walls;
+  std::vector<PhysicsEntity> walls;
   std::vector<Trigger> triggers;
   std::vector<Light> lights;
-  std::vector<Entity> models;
+  std::vector<VisualEntity> models;
   std::vector<GUIButton> buttons;
   Portal bluePortal;
   Portal orangePortal;
-  Entity start;
-  Entity end;
+  VisualEntity start;
+  VisualEntity end;
 };
 
 } /* namespace glPortal */

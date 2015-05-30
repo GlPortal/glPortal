@@ -219,8 +219,8 @@ void World::update() {
 
 bool World::collidesWithWalls(const BoxCollider &collider) const {
   for (unsigned int i = 0; i < scene->walls.size(); i++) {
-    const Entity &wall = scene->walls[i];
-    const BoxCollider &wallCollider = wall.collider;//(wall.position, wall.scale);
+    const PhysicsEntity &wall = scene->walls[i];
+    const BoxCollider &wallCollider = wall.physBody;//(wall.position, wall.scale);
 
     if (collider.collidesWith(wallCollider)) {
       return true;
@@ -234,10 +234,10 @@ void World::shootPortal(int button) {
   Vector3f cameraDir = Math::toDirection(scene->camera.rotation);
 
   //Find the closest intersection
-  Entity *closestWall = nullptr;
+  PhysicsEntity *closestWall = nullptr;
   float intersection = INT_MAX;
   for (unsigned int i = 0; i < scene->walls.size(); ++i) {
-    Entity &wall = scene->walls[i];
+    PhysicsEntity &wall = scene->walls[i];
     Ray bullet(scene->camera.position, cameraDir);
     float tNear, tFar;
     if (bullet.collides(wall, &tNear, &tFar)) {

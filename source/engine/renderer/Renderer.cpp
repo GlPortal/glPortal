@@ -211,7 +211,7 @@ void Renderer::renderScene() {
   renderEntity(scene->end);
 }
 
-void Renderer::renderEntity(const Entity &e) {
+void Renderer::renderEntity(const VisualEntity &e) {
   modelMatrix.setIdentity();
   modelMatrix.translate(e.position);
   modelMatrix.rotate(e.rotation);
