@@ -18,8 +18,8 @@ class GlPortalPanel(bpy.types.Panel):
         row = layout.row()
         split = layout.split()
         col = split.column(align=True)
-        col.operator("wm.add_portable", text="Portable", icon='MESH_PLANE')
-        col.operator("wm.add_wall", text="Default", icon='MESH_PLANE')
+        col.operator("wm.set_portable", text="Portable", icon='MESH_PLANE')
+        col.operator("wm.set_wall", text="Default", icon='MESH_PLANE')
 
         
         layout.label("Triggers")

@@ -9,10 +9,9 @@ glpTypes = [
 ]
 
 glpWallTypes = [
-    ("none" ,"None" , "No special property"),
-    ("invisible" ,"Invisible" , "Invisible"),    
-    ("default" ,"default" , "Nothing special just a painted concrete wall"),
-    ("glas" ,"glas" , "Glass"),
+    ("default" ,"Default" , "Nothing special just a painted concrete wall"),
+    ("invisible" ,"Invisible" , "Invisible (Not implemented)"),    
+    ("glass" ,"Glass" , "Glass (Not implemented)"),
     ("portable" ,"Portable" , "Portable Wall")
 ]
 

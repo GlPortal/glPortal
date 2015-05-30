@@ -78,8 +78,12 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
                         boxElement = tree.SubElement(root, "end")
                     else:
                         boxElement = tree.SubElement(root, "trigger")
-                elif type == "portable":
-                    boxElement = tree.SubElement(textureWallElement, "wall")
+                elif type == "wall":
+                    print(object.glpWallTypes)
+                    if object.glpWallTypes == "portable":
+                        boxElement = tree.SubElement(textureWallElement, "wall")
+                    else:
+                        boxElement = tree.SubElement(textureElement, "wall")
                 else:
                     boxElement = tree.SubElement(textureElement, "wall")
                 
