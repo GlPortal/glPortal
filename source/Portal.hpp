@@ -12,6 +12,7 @@ public:
   static const int PORTAL_RANGE;
   static const Vector3f BLUE_COLOR;
   static const Vector3f ORANGE_COLOR;
+  static const int NOISE_FADE_DELAY;
 
   Portal() : open(false) {}
   Vector3f getDirection();
@@ -22,6 +23,7 @@ public:
   Vector3f direction, color;
   bool open;
   Texture maskTex;
+  uint32_t openSince;
 };
 
 } /* namespace glPortal */

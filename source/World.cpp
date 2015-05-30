@@ -1,6 +1,7 @@
 #include "World.hpp"
 
 #include <SDL2/SDL_mouse.h>
+#include <SDL2/SDL_timer.h>
 #include <climits>
 #include <cmath>
 #include <vector>
@@ -252,6 +253,7 @@ void World::shootPortal(int button) {
     BoxCollider wall(closestWall->position, closestWall->scale);
     Vector3f ipos = scene->camera.position + (cameraDir * intersection);
     Portal portal;
+    portal.openSince = SDL_GetTicks();
     portal.maskTex = TextureLoader::getTexture("portalmask.png"); 
     portal.placeOnWall(wall, ipos);
 

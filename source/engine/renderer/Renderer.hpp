@@ -33,7 +33,7 @@ public:
   void renderEntity(const VisualEntity &e);
   void renderPortal(const Portal &portal, const Portal &otherPortal);
   void renderPortalOverlay(const Portal &portal);
-  void renderPortalNoise(const Portal &portal);
+  void renderPortalNoise(const Portal &portal, float fade);
   void renderText(const std::string &text, int x, int y);
   void renderTexturedMesh(const Mesh &mesh, const Texture &texture);
   void setCameraInPortal(const Portal &portal, const Portal &otherPortal);

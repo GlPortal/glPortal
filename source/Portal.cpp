@@ -12,6 +12,7 @@ namespace glPortal {
 const int Portal::PORTAL_RANGE = 1000;
 const Vector3f Portal::BLUE_COLOR = Vector3f(0.33, 0.57, 1);
 const Vector3f Portal::ORANGE_COLOR = Vector3f(1, 0.76, 0.33);
+const int Portal::NOISE_FADE_DELAY = 300;
 
 Vector3f Portal::getDirection() {
   return direction;

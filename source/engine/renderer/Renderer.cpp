@@ -155,11 +155,25 @@ void Renderer::render() {
   setCameraInPlayer(scene->camera);
 
   glDepthMask(GL_FALSE);
-  if (not scene->orangePortal.open) {
-    renderPortalNoise(scene->bluePortal);
-  }
-  if (not scene->bluePortal.open) {
-    renderPortalNoise(scene->orangePortal);
+  if (scene->orangePortal.open and scene->bluePortal.open) {
+    uint32_t dtOpen = SDL_GetTicks()-max(scene->orangePortal.openSince, scene->bluePortal.openSince);
+    if (dtOpen < Portal::NOISE_FADE_DELAY) {
+      float al = 1-((float)dtOpen/Portal::NOISE_FADE_DELAY)*2;
+      printf("%d\n", dtOpen);
+      if (true or not scene->orangePortal.open) {
+        renderPortalNoise(scene->bluePortal, al);
+      }
+      if (true or not scene->bluePortal.open) {
+        renderPortalNoise(scene->orangePortal, al);
+      }
+    }
+  } else {
+    if (scene->orangePortal.open) {
+      renderPortalNoise(scene->orangePortal, 1.f);
+    }
+    if (scene->bluePortal.open) {
+      renderPortalNoise(scene->bluePortal, 1.f);
+    }
   }
   glDepthMask(GL_TRUE);
 
@@ -280,21 +294,21 @@ void Renderer::renderPortalOverlay(const Portal& portal) {
   }
 }
 
-void Renderer::renderPortalNoise(const Portal& portal) {
-  if (portal.open) {
-    modelMatrix.setIdentity();
-    modelMatrix.translate(portal.position);
-    modelMatrix.rotate(portal.rotation);
-    modelMatrix.scale(portal.scale);
-    glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+void Renderer::renderPortalNoise(const Portal &portal, float fade) {
+  modelMatrix.setIdentity();
+  modelMatrix.translate(portal.position);
+  modelMatrix.rotate(portal.rotation);
+  modelMatrix.scale(portal.scale);
+  glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    int timeLoc = glGetUniformLocation(shader->handle, "time");
-    int colorLoc = glGetUniformLocation(shader->handle, "color");
-    glUniform1f(timeLoc, SDL_GetTicks()/1000.f);
-    glUniform3f(colorLoc, portal.color.x, portal.color.y, portal.color.z);
+  int timeLoc = glGetUniformLocation(shader->handle, "time");
+  int colorLoc = glGetUniformLocation(shader->handle, "color");
+  int noiseAlphaLoc = glGetUniformLocation(shader->handle, "noiseAlpha");
+  glUniform1f(timeLoc, SDL_GetTicks()/1000.f);
+  glUniform3f(colorLoc, portal.color.x, portal.color.y, portal.color.z);
+  glUniform1f(noiseAlphaLoc, fade);
 
-    renderTexturedMesh(portal.mesh, portal.maskTex);
-  }
+  renderTexturedMesh(portal.mesh, portal.maskTex);
 }
 
 void Renderer::renderText(const std::string &text, int x, int y) {
