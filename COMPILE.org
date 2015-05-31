@@ -37,7 +37,7 @@ there are differences in the compile workflow for it.
 
 After checking out the repo using git, fetch the assets:
 git submodule init 
-git submodule update
+git submodule update --depth 1
 
 Then in the root directory of the downloaded source type
 cmake ./
