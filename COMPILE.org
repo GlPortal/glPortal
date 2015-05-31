@@ -36,7 +36,8 @@ Make sure to check the README.org and COMPILE.org from the release you downloade
 there are differences in the compile workflow for it.
 
 After checking out the repo using git, fetch the assets:
-git submodule --init --depth 1
+git submodule init 
+git submodule update
 
 Then in the root directory of the downloaded source type
 cmake ./
