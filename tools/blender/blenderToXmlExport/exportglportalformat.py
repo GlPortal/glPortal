@@ -84,6 +84,10 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
                         boxElement = tree.SubElement(textureWallElement, "wall")
                     else:
                         boxElement = tree.SubElement(textureElement, "wall")
+                elif type == "volume":
+                    print(object.glpVolumeTypes)
+                    if object.glpVolumeTypes == "acid":
+                        boxElement = tree.SubElement(root, "acid")
                 else:
                     boxElement = tree.SubElement(textureElement, "wall")
                 

@@ -39,4 +39,4 @@ class addRadiation(bpy.types.Operator):
         if object:
             object.glpTypes = "trigger"
             object.glpTriggerTypes = "radiation"
-        return {'FINISHED'}    
+        return {'FINISHED'}

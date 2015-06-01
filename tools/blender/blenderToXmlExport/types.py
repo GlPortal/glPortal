@@ -2,10 +2,11 @@ import bpy
 from bpy.props import *
 
 glpTypes = [
-    ("none" ,"None" , "No special property"),
-    ("wall" ,"Wall" , "Wall"),
-    ("door" ,"Door" , "Door"),         
-    ("trigger" , "Trigger" , "trigger")
+    ("none" , "None", "No special property"),
+    ("wall" , "Wall", "Wall"),
+    ("door" , "Door", "Door"),
+    ("volume", "Volume", "Volume"),
+    ("trigger", "Trigger", "trigger")
 ]
 
 glpWallTypes = [
@@ -15,30 +16,42 @@ glpWallTypes = [
     ("portable" ,"Portable" , "Portable Wall")
 ]
 
+glpVolumeTypes = [
+    ("acid", "Acid Pool", "A pool full of acid, hurts..")
+]
+
 glpTriggerTypes = [
     ("none" ,"None" , "No special property"), 
     ("win" , "Trigger Win" , "Area triggers win"), 
-    ("death" , "Trigger Death" , "Area triggers death"),
-    ("radiation" , "Trigger Radiation" , "Area triggers rad"),
-    ("portable" , "Portable" , "Set Wall Portable")
+    ("death" , "Trigger Death" , "Area triggers death (Not implemented)"),
+    ("radiation" , "Trigger Radiation" , "Area triggers rad (Not implemented)")
 ]
 
 def setTypes():
     bpy.types.Object.glpTypes = EnumProperty(
         items = glpTypes,
-        name = "Type")
+        name = "Type"
+    )
+
+def setVolumeTypes():
+    bpy.types.Object.glpVolumeTypes = EnumProperty(
+        items = glpVolumeTypes,
+        name = "Volume Type"
+    )
 
 def setTriggerTypes():
     bpy.types.Object.glpTriggerTypes = EnumProperty(
         items = glpTriggerTypes,
-        name = "Trigger Type")    
+        name = "Trigger Type"
+    )    
 
 def setWallTypes():
     bpy.types.Object.glpWallTypes = EnumProperty(
         items = glpWallTypes,
-        name = "Wall Type")    
+        name = "Wall Type"
+    )    
 
-    
 setTypes()
-setTriggerTypes();
-setWallTypes();
+setVolumeTypes()
+setTriggerTypes()
+setWallTypes()

@@ -23,6 +23,7 @@ from .glportalobjectpanel import *
 from .exportglportalformat import *    
 from .operators import *
 from .triggerOperators import *
+from .volumeOperators import *
 from .mapOperators import *
 
 def menu_func(self, context):
