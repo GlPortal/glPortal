@@ -29,3 +29,9 @@ class GlPortalPanel(bpy.types.Panel):
         col.operator("wm.add_death", text="Death", icon='MESH_CUBE')
         col.operator("wm.add_radiation", text="Radiation", icon='MESH_CUBE')
         col.operator("wm.add_win", text="Win", icon='MESH_CUBE')
+        
+        layout.label("Map")
+        row = layout.row()
+        split = layout.split()
+        col = split.column(align=True)
+        col.operator("wm.fix_map", text="Fix Map", icon='MESH_CUBE')
