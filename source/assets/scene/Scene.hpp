@@ -6,7 +6,8 @@
 #include <assets/gui/GUIButton.hpp>
 #include "engine/Camera.hpp"
 #include "engine/Light.hpp"
-#include <engine/trigger/Trigger.hpp>
+#include "engine/volumes/Volume.hpp"
+#include "engine/trigger/Trigger.hpp"
 #include "Player.hpp"
 #include "Portal.hpp"
 
@@ -17,6 +18,7 @@ public:
   Player player;
   Camera camera;
   std::vector<PhysicsEntity> walls;
+  std::vector<Volume> volumes;
   std::vector<Trigger> triggers;
   std::vector<Light> lights;
   std::vector<VisualEntity> models;

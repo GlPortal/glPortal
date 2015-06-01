@@ -20,6 +20,7 @@ private:
   static void extractLights();
   static void extractDoor();
   static void extractWalls();
+  static void extractAcids();
   static void extractTriggers();
   static void extractModels();
   static void extractButtons();

@@ -79,6 +79,12 @@ void World::loadScene(const std::string &name) {
 void World::update() {
   Player &player = scene->player;
 
+  // Check if player is still alive
+  if (not player.isAlive()) {
+    player.position.set(scene->start.position);
+    player.heal(100);
+  }
+
   player.mouseLook();
   player.move();
 
@@ -157,7 +163,18 @@ void World::update() {
     }
   }
 
-  //Trigger
+  // Acids
+  for (unsigned int i = 0; i < scene->volumes.size(); i++) {
+    const PhysicsEntity &acid = scene->volumes[i];
+    const BoxCollider playerCollider(player.position, player.scale);
+    BoxCollider acidCollider(acid.position, acid.scale);
+
+    if (playerCollider.collidesWith(acidCollider)) {
+      player.kill();
+    }
+  }
+
+  // Trigger
   for (unsigned int i = 0; i < scene->triggers.size(); i++) {
     const Trigger &trigger = scene->triggers[i];
     BoxCollider playerCollider(player.position, player.scale);
@@ -221,7 +238,7 @@ void World::update() {
 bool World::collidesWithWalls(const BoxCollider &collider) const {
   for (unsigned int i = 0; i < scene->walls.size(); i++) {
     const PhysicsEntity &wall = scene->walls[i];
-    const BoxCollider &wallCollider = wall.physBody;//(wall.position, wall.scale);
+    const BoxCollider &wallCollider = wall.physBody;
 
     if (collider.collidesWith(wallCollider)) {
       return true;

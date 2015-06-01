@@ -221,6 +221,10 @@ void Renderer::renderScene() {
     renderEntity(scene->models[i]);
   }
 
+  for (unsigned int i = 0; i < scene->volumes.size(); i++) {
+    renderEntity(scene->volumes[i]);
+  }
+
   renderEntity(scene->end);
 }
 

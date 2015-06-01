@@ -9,6 +9,7 @@
 #include <assets/map/XmlHelper.hpp>
 #include <engine/env/Environment.hpp>
 #include <engine/BoxCollider.hpp>
+#include <engine/volumes/Volume.hpp>
 #include <engine/trigger/Trigger.hpp>
 #include <engine/Light.hpp>
 #include <engine/core/math/Vector3f.hpp>
@@ -52,6 +53,7 @@ Scene* MapLoader::getScene(const std::string &path) {
     extractModels();
     extractLights();
     extractWalls();
+    extractAcids();
     extractTriggers();
     cout << "File loaded." << endl;
   } else {
@@ -68,8 +70,10 @@ void MapLoader::extractSpawn() {
   TiXmlElement *spawnElement = rootHandle.FirstChild("spawn").ToElement();
 
   if (spawnElement) {
-    XmlHelper::extractPosition(spawnElement, scene->player.position);
-    XmlHelper::extractRotation(spawnElement, scene->player.rotation);
+    XmlHelper::extractPosition(spawnElement, scene->start.position);
+    XmlHelper::extractRotation(spawnElement, scene->start.rotation);
+    scene->player.position.set(scene->start.position);
+    scene->player.rotation.set(scene->start.rotation);
   } else {
     throw std::runtime_error("No spawn position defined.");
   }
@@ -149,6 +153,23 @@ void MapLoader::extractWalls() {
 
       texturePath = "none";
     } while ((textureElement = textureElement->NextSiblingElement("texture")) != nullptr);
+  }
+}
+
+void MapLoader::extractAcids() {
+  TiXmlElement *acidElement = rootHandle.FirstChild("acid").ToElement();
+  
+  if (acidElement) {
+    do {
+      scene->volumes.emplace_back("acid");
+      Volume &acid = scene->volumes.back();
+      
+      acid.texture = TextureLoader::getTexture("acid.png");
+      acid.mesh = MeshLoader::getPortalBox(acid);
+      acid.physBody = BoxCollider::generateCage(acid);
+      XmlHelper::extractPosition(acidElement, acid.position);
+      XmlHelper::extractScale(acidElement, acid.scale);
+    } while ((acidElement = acidElement->NextSiblingElement("acid")) != nullptr);
   }
 }
 
