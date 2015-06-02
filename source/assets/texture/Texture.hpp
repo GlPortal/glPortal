@@ -12,6 +12,7 @@ public:
   int height;
   float xTiling = 1;
   float yTiling = 1;
+  float emission = 0;
 };
 
 } /* namespace glPortal */

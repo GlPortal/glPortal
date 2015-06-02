@@ -354,6 +354,8 @@ void Renderer::renderText(const std::string &text, int x, int y) {
 void Renderer::renderTexturedMesh(const Mesh &mesh, const Texture &texture) {
   int loc = glGetUniformLocation(shader->handle, "diffuse");
   int tiling = glGetUniformLocation(shader->handle, "tiling");
+  glUniform1f(glGetUniformLocation(shader->handle, "emission"), texture.emission);
+
   glUniform2f(tiling, texture.xTiling, texture.yTiling);
   glUniform1i(loc, 0);
   glActiveTexture(GL_TEXTURE0);

@@ -165,6 +165,7 @@ void MapLoader::extractAcids() {
       Volume &acid = scene->volumes.back();
       
       acid.texture = TextureLoader::getTexture("acid.png");
+      acid.texture.emission = 1.3f;
       acid.mesh = MeshLoader::getPortalBox(acid);
       acid.physBody = BoxCollider::generateCage(acid);
       XmlHelper::extractPosition(acidElement, acid.position);
