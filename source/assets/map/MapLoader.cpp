@@ -118,8 +118,6 @@ void MapLoader::extractDoor() {
     door.texture = TextureLoader::getTexture("Door.png");
     door.mesh = MeshLoader::getMesh("Door.obj");
     scene->end = door;
-  } else {
-    throw std::runtime_error("No end position defined.");
   }
 }
 
@@ -176,12 +174,9 @@ void MapLoader::extractAcids() {
 
 void MapLoader::extractTriggers() {
   TiXmlElement *triggerElement = rootHandle.FirstChild("trigger").ToElement();
-  string triggerType("none");
 
   if (triggerElement) {
     do {
-      TiXmlElement *triggerTypeElement;
-
       scene->triggers.emplace_back();
       Trigger &trigger = scene->triggers.back();
 
@@ -189,14 +184,10 @@ void MapLoader::extractTriggers() {
         triggerElement->QueryStringAttribute("type", &trigger.type);
       }
       
-      if (triggerType == "none") {
-        throw std::runtime_error("Trigger must define a type attribute.");
-      }
-
       XmlHelper::extractPosition(triggerElement, trigger.position);
       XmlHelper::extractScale(triggerElement, trigger.scale);
 
-    } while ((triggerElement = triggerElement->NextSiblingElement()) != nullptr);
+    } while ((triggerElement = triggerElement->NextSiblingElement("trigger")) != nullptr);
   }
 }
 

@@ -46,8 +46,7 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
             if object.glpTypes:
                 type = object.glpTypes
             else:
-                type = "None"
-
+                type = "None"                 
             if object.type == "LAMP":
                 lamp = object.data
                 
@@ -74,10 +73,9 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
                 storeRotation(rotationElement, object);
             if object.type == "MESH":
                 if type == "trigger":
-                    if object.glpTriggerTypes == "win":
-                        boxElement = tree.SubElement(root, "end")
-                    else:
-                        boxElement = tree.SubElement(root, "trigger")
+                    boxElement = tree.SubElement(root, "trigger")
+                    if object.glpTriggerTypes:
+                        boxElement.set("type", object.glpTriggerTypes)
                 elif type == "wall":
                     print(object.glpWallTypes)
                     if object.glpWallTypes == "portable":

@@ -12,8 +12,8 @@ namespace glPortal {
 class Trigger: public TechVolEntity {
 public:
   Trigger();
-
   std::string type;
+  std::string reference;
 };
 
 } /* namespace glPortal */

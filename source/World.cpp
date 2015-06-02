@@ -187,7 +187,16 @@ void World::update() {
         player.kill();
         printf("Death touched\n");
       } else if (trigger.type == "win") {
+        if(currentLevel + 1 < mapList.size()) {
+          currentLevel++;
+        }
+        loadScene(mapList[currentLevel]);
         printf("Win touched\n");
+      } else if (trigger.type == "map") {
+        printf("Map Trigger touched\n");
+        loadScene(trigger.reference);
+      } else if (trigger.type == "button") {
+        printf("Button touched\n");
       } else {
         printf("Some trigger touched: %s\n", trigger.type.c_str());
       }
