@@ -21,6 +21,7 @@
 
 #include <assets/model/MeshLoader.hpp>
 #include <assets/texture/TextureLoader.hpp>
+#include <assets/material/MaterialLoader.hpp>
 
 #include "Player.hpp"
 
@@ -48,6 +49,7 @@ Scene* MapLoader::getScene(const std::string &path) {
     TiXmlElement *element = docHandle.FirstChildElement().ToElement();
     rootHandle = TiXmlHandle(element);
 
+    extractMaterials();
     extractSpawn();
     extractDoor();
     extractModels();
@@ -61,6 +63,30 @@ Scene* MapLoader::getScene(const std::string &path) {
     cout << Environment::getDataDir() << "/" << path << ".xml" << endl;
   }
   return scene;
+}
+
+void MapLoader::extractMaterials() {
+  TiXmlElement *matIdxElm = rootHandle.FirstChild("materials").ToElement();
+
+  if (matIdxElm) {
+    TiXmlElement *matElm = matIdxElm->FirstChildElement("mat");
+    if (matElm) {
+      do {
+        int mid = -1;
+        matElm->QueryIntAttribute("mid", &mid);
+        if (mid == -1) {
+          continue; // Ignore, no good Material ID bound to it
+        }
+        std::string name("");
+        matElm->QueryStringAttribute("name", &name);
+        if (name.length() > 0) {
+          scene->materials[mid] = MaterialLoader::getMaterial(name);
+        } else {
+          continue; // No name, no candy
+        }
+      } while ((matElm = matElm->NextSiblingElement("mat")) != nullptr);
+    }
+  }
 }
 
 /**
@@ -122,35 +148,27 @@ void MapLoader::extractDoor() {
 }
 
 void MapLoader::extractWalls() {
-  TiXmlElement *textureElement = rootHandle.FirstChild("texture").ToElement();
-  string texturePath("none");
-  string surfaceType("none");
+  TiXmlElement *wallBoxElement = rootHandle.FirstChildElement("wall").ToElement();
 
-  if (textureElement) {
+  if (wallBoxElement) {
     do {
-      textureElement->QueryStringAttribute("source", &texturePath);
-      textureElement->QueryStringAttribute("type", &surfaceType);
-      TiXmlElement *wallBoxElement = textureElement->FirstChildElement("wall");
+      scene->walls.emplace_back();
+      PhysicsEntity &wall = scene->walls.back();
+      
+      XmlHelper::extractPosition(wallBoxElement, wall.position);
+      XmlHelper::extractRotation(wallBoxElement, wall.rotation);
+      XmlHelper::extractScale(wallBoxElement, wall.scale);
 
-      if (wallBoxElement) {
-        do {
-          scene->walls.emplace_back();
-          PhysicsEntity &wall = scene->walls.back();
-          
-          XmlHelper::extractPosition(wallBoxElement, wall.position);
-          XmlHelper::extractRotation(wallBoxElement, wall.rotation);
-          XmlHelper::extractScale(wallBoxElement, wall.scale);
-
-          wall.texture = TextureLoader::getTexture(texturePath);
-          wall.texture.xTiling = 0.5f;
-          wall.texture.yTiling = 0.5f;
-          wall.mesh = MeshLoader::getPortalBox(wall);
-          wall.physBody = BoxCollider::generateCage(wall);
-        } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != nullptr);
-      }
-
-      texturePath = "none";
-    } while ((textureElement = textureElement->NextSiblingElement("texture")) != nullptr);
+      int mid = -1;
+      wallBoxElement->QueryIntAttribute("mid", &mid);
+      // FIXME: real material handling & no texture
+      wall.material = scene->materials[mid];
+      wall.texture = wall.material.diffuse;
+      wall.texture.xTiling = 0.5f;
+      wall.texture.yTiling = 0.5f;
+      wall.mesh = MeshLoader::getPortalBox(wall);
+      wall.physBody = BoxCollider::generateCage(wall);
+    } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != nullptr);
   }
 }
 

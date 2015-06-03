@@ -2,8 +2,10 @@
 #define SCENE_HPP
 
 #include <vector>
+#include <map>
 
 #include <assets/gui/GUIButton.hpp>
+#include <assets/material/Material.hpp>
 #include "engine/Camera.hpp"
 #include "engine/Light.hpp"
 #include "engine/volumes/Volume.hpp"
@@ -17,6 +19,7 @@ class Scene {
 public:
   Player player;
   Camera camera;
+  std::map<int, Material> materials;
   std::vector<PhysicsEntity> walls;
   std::vector<Volume> volumes;
   std::vector<Trigger> triggers;

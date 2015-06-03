@@ -275,7 +275,7 @@ void World::shootPortal(int button) {
     }
   }
 
-  if (closestWall != nullptr and (closestWall->texture.handle == TextureLoader::getTexture("wall.png").handle)) {
+  if (closestWall != nullptr and (closestWall->material.portalable)) {
     BoxCollider wall(closestWall->position, closestWall->scale);
     Vector3f ipos = scene->camera.position + (cameraDir * intersection);
     Portal portal;

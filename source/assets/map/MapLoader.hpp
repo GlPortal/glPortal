@@ -16,6 +16,7 @@ public:
   static TiXmlHandle rootHandle;
 private:
   static Mesh getBox(const Entity &wall);
+  static void extractMaterials();
   static void extractSpawn();
   static void extractLights();
   static void extractDoor();
