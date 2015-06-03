@@ -141,7 +141,7 @@ void MapLoader::extractDoor() {
     VisualEntity door;
     XmlHelper::extractPosition(endElement, door.position);
     XmlHelper::extractRotation(endElement, door.rotation);
-    door.texture = TextureLoader::getTexture("Door.png");
+    door.material = MaterialLoader::fromTexture("Door.png");
     door.mesh = MeshLoader::getMesh("Door.obj");
     scene->end = door;
   }
@@ -161,11 +161,8 @@ void MapLoader::extractWalls() {
 
       int mid = -1;
       wallBoxElement->QueryIntAttribute("mid", &mid);
-      // FIXME: real material handling & no texture
       wall.material = scene->materials[mid];
-      wall.texture = wall.material.diffuse;
-      wall.texture.xTiling = 0.5f;
-      wall.texture.yTiling = 0.5f;
+      wall.material.scaleU = wall.material.scaleV = 2.f;
       wall.mesh = MeshLoader::getPortalBox(wall);
       wall.physBody = BoxCollider::generateCage(wall);
     } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != nullptr);
@@ -180,8 +177,7 @@ void MapLoader::extractAcids() {
       scene->volumes.emplace_back("acid");
       Volume &acid = scene->volumes.back();
       
-      acid.texture = TextureLoader::getTexture("acid.png");
-      acid.texture.emission = 1.3f;
+      acid.material.diffuse = TextureLoader::getTexture("acid.png");
       acid.mesh = MeshLoader::getPortalBox(acid);
       acid.physBody = BoxCollider::generateCage(acid);
       XmlHelper::extractPosition(acidElement, acid.position);
@@ -224,7 +220,7 @@ void MapLoader::extractModels() {
       VisualEntity &model = scene->models.back();
       XmlHelper::extractPosition(modelElement, model.position);
       XmlHelper::extractRotation(modelElement, model.rotation);
-      model.texture = TextureLoader::getTexture(texture);
+      model.material = MaterialLoader::fromTexture(texture);
       model.mesh = MeshLoader::getMesh(mesh);
     } while ((modelElement = modelElement->NextSiblingElement("model")) != nullptr);
   }
@@ -254,9 +250,8 @@ void MapLoader::extractButtons() {
           buttonElement->QueryFloatAttribute("w", &size.x);
           buttonElement->QueryFloatAttribute("h", &size.y);
 
-          button.texture = TextureLoader::getTexture(texturePath);
-          button.texture.xTiling = 0.5f;
-          button.texture.yTiling = 0.5f;
+          button.material = MaterialLoader::fromTexture(texturePath);
+          button.material.scaleU = button.material.scaleV = 2.f;
         } while ((buttonElement = buttonElement->NextSiblingElement("GUIbutton")) != nullptr);
       }
 

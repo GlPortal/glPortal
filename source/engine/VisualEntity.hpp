@@ -9,8 +9,6 @@ namespace glPortal {
 class VisualEntity : public Entity {
 public:
   Mesh mesh;
-  // FIXME: remove? Other class?
-  Texture texture;
   Material material;
 };
 

@@ -5,14 +5,10 @@
 
 namespace glPortal {
 
-class Texture {
-public:
-  GLuint handle;
+struct Texture {
+  GLuint handle = 0xBAD7E96;
   int width;
   int height;
-  float xTiling = 1;
-  float yTiling = 1;
-  float emission = 0;
 };
 
 } /* namespace glPortal */

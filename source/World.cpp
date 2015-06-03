@@ -280,15 +280,15 @@ void World::shootPortal(int button) {
     Vector3f ipos = scene->camera.position + (cameraDir * intersection);
     Portal portal;
     portal.openSince = SDL_GetTicks();
-    portal.maskTex = TextureLoader::getTexture("portalmask.png"); 
+    portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png"); 
     portal.placeOnWall(wall, ipos);
 
     if (button == 1) {
-      portal.texture = TextureLoader::getTexture("blueportal.png");
+      portal.material.diffuse = TextureLoader::getTexture("blueportal.png");
       portal.color = Portal::BLUE_COLOR;
       scene->bluePortal = portal;
     } else {
-      portal.texture = TextureLoader::getTexture("orangeportal.png");
+      portal.material.diffuse = TextureLoader::getTexture("orangeportal.png");
       portal.color = Portal::ORANGE_COLOR;
       scene->orangePortal = portal;
     }

@@ -35,7 +35,7 @@ public:
   void renderPortalOverlay(const Portal &portal);
   void renderPortalNoise(const Portal &portal, float fade);
   void renderText(const std::string &text, int x, int y);
-  void renderTexturedMesh(const Mesh &mesh, const Texture &texture);
+  void renderTexturedMesh(const Mesh &mesh, const Material &mat);
   void setCameraInPortal(const Portal &portal, const Portal &otherPortal);
   void setCameraInPlayer(const Camera& camera);
   void setFont(const std::string &font, float size);

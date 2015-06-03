@@ -56,4 +56,17 @@ const Material& MaterialLoader::getMaterial(const std::string &name) {
   return inserted.first->second;
 }
 
+const Material& MaterialLoader::fromTexture(const std::string &name) {
+  auto it = materialCache.find("rawtex/" + name);
+  if (it != materialCache.end()) {
+    return it->second;
+  }
+  Material m;
+  m.name = "rawtex/" + name;
+  m.diffuse = TextureLoader::getTexture(name);
+  auto inserted = materialCache.insert(std::pair<std::string, Material>(m.name, m));
+  // Return reference to newly inserted Material
+  return inserted.first->second;
+}
+
 } /* namespace glPortal */

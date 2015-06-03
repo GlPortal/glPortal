@@ -11,8 +11,9 @@ class Material {
 public:
   std::string name, fancyname;
   Texture diffuse, specular, normal, height;
+  float scaleU = 1, scaleV = 1;
+
   bool portalable, portalBump;
-  float scaleU, scaleV;
   std::string kind;
   std::vector<std::string> tags;
 

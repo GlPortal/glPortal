@@ -22,7 +22,7 @@ public:
 
   Vector3f direction, color;
   bool open;
-  Texture maskTex;
+  Material maskTex;
   uint32_t openSince;
 };
 

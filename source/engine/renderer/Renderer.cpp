@@ -13,6 +13,7 @@
 #include <assets/texture/Texture.hpp>
 #include <assets/text/Font.hpp>
 #include <assets/text/Letter.hpp>
+#include <assets/material/MaterialLoader.hpp>
 
 #include <engine/Camera.hpp>
 #include <engine/Light.hpp>
@@ -203,8 +204,8 @@ void Renderer::render() {
   modelMatrix.scale(Vector3f(80, 80, 1));
   glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
-  Texture texture = TextureLoader::getTexture("Reticle.png");
-  renderTexturedMesh(mesh, texture);
+  const Material &mat = MaterialLoader::fromTexture("Reticle.png");
+  renderTexturedMesh(mesh, mat);
   }
 
   //Text
@@ -237,7 +238,7 @@ void Renderer::renderEntity(const VisualEntity &e) {
   Matrix4f normalMatrix = inverse(modelMatrix);
   glUniformMatrix4fv(normalLoc, 1, false, normalMatrix.array);
 
-  renderTexturedMesh(e.mesh, e.texture);
+  renderTexturedMesh(e.mesh, e.material);
 }
 
 void Renderer::renderPortal(const Portal &portal, const Portal &otherPortal) {
@@ -293,7 +294,7 @@ void Renderer::renderPortalOverlay(const Portal& portal) {
     modelMatrix.scale(portal.scale);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    renderTexturedMesh(portal.mesh, portal.texture);
+    renderTexturedMesh(portal.mesh, portal.material);
   }
 }
 
@@ -322,7 +323,7 @@ void Renderer::renderText(const std::string &text, int x, int y) {
   glUniformMatrix4fv(projLoc, 1, false, projectionMatrix.array);
   viewMatrix.setIdentity();
   glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
-  Texture texture = TextureLoader::getTexture("Adobe.png");
+  const Material &mat = MaterialLoader::fromTexture("Adobe.png");
 
   Vector2f position(x, y);
 
@@ -342,7 +343,7 @@ void Renderer::renderText(const std::string &text, int x, int y) {
                       letter.height * font->size, 1);
     glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
 
-    renderTexturedMesh(mesh, texture);
+    renderTexturedMesh(mesh, mat);
     position.x += letter.advance * font->size;
   }
 }
@@ -351,17 +352,16 @@ void Renderer::renderText(const std::string &text, int x, int y) {
  * Renders a mesh with the specified texture
  * @param mesh The mesh to render
  */
-void Renderer::renderTexturedMesh(const Mesh &mesh, const Texture &texture) {
+void Renderer::renderTexturedMesh(const Mesh &mesh, const Material &mat) {
   int loc = glGetUniformLocation(shader->handle, "diffuse");
   int tiling = glGetUniformLocation(shader->handle, "tiling");
-  glUniform1f(glGetUniformLocation(shader->handle, "emission"), texture.emission);
 
-  glUniform2f(tiling, texture.xTiling, texture.yTiling);
+  glUniform2f(tiling, mat.scaleU, mat.scaleV);
   glUniform1i(loc, 0);
   glActiveTexture(GL_TEXTURE0);
 
   glBindVertexArray(mesh.handle);
-  glBindTexture(GL_TEXTURE_2D, texture.handle);
+  glBindTexture(GL_TEXTURE_2D, mat.diffuse.handle);
   glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindVertexArray(0);
