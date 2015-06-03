@@ -47,7 +47,12 @@ void XmlHelper::extractPosition(TiXmlElement *xmlElement, Vector3f &position) {
 }
 
 void XmlHelper::extractRotation(TiXmlElement *xmlElement, Vector3f &rotation) {
-  pushAttributeVertexToVector(xmlElement->FirstChildElement("rotation"), rotation);
+  TiXmlElement *elm = xmlElement->FirstChildElement("rotation");
+  if (elm) {
+    pushAttributeVertexToVector(elm, rotation);
+  } else {
+    rotation.x = rotation.y = rotation.z = 0;
+  }
 }
 
 void XmlHelper::extractScale(TiXmlElement *xmlElement, Vector3f &scale) {
