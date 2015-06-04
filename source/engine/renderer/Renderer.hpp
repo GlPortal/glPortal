@@ -31,6 +31,7 @@ public:
   void render();
   void renderScene();
   void renderEntity(const VisualEntity &e);
+  void renderPlayer();
   void renderPortal(const Portal &portal, const Portal &otherPortal);
   void renderPortalOverlay(const Portal &portal);
   void renderPortalNoise(const Portal &portal, float fade);

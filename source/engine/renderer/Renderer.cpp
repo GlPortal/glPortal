@@ -241,6 +241,16 @@ void Renderer::renderEntity(const VisualEntity &e) {
   renderTexturedMesh(e.mesh, e.material);
 }
 
+void Renderer::renderPlayer(){
+  modelMatrix.setIdentity();
+  modelMatrix.translate(scene->player.position);
+  modelMatrix.rotate(scene->player.rotation);
+  glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+  const Mesh &dummy = MeshLoader::getMesh("Door.obj");
+  const Material &mat = MaterialLoader::fromTexture("Door.png");
+  renderTexturedMesh(dummy, mat);
+}
+  
 void Renderer::renderPortal(const Portal &portal, const Portal &otherPortal) {
   if (portal.open and otherPortal.open) {
     glEnable(GL_STENCIL_TEST);
@@ -275,14 +285,7 @@ void Renderer::renderPortal(const Portal &portal, const Portal &otherPortal) {
 
     setCameraInPortal(portal, otherPortal);
   
-    modelMatrix.setIdentity();
-    modelMatrix.translate(scene->player.position);
-    modelMatrix.rotate(scene->player.rotation);
-    glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
-    const Mesh &dummy = MeshLoader::getMesh("Door.obj");
-    const Material &mat = MaterialLoader::fromTexture("Door.png");
-    renderTexturedMesh(dummy, mat);
-
+    renderPlayer();
     renderScene();    
 
     //Set the camera back to normal
@@ -293,7 +296,7 @@ void Renderer::renderPortal(const Portal &portal, const Portal &otherPortal) {
     glDisable(GL_STENCIL_TEST);
   }
 }
-
+  
 void Renderer::renderPortalOverlay(const Portal& portal) {
   if (portal.open) {
     modelMatrix.setIdentity();
