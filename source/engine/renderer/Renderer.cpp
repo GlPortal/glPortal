@@ -274,8 +274,16 @@ void Renderer::renderPortal(const Portal &portal, const Portal &otherPortal) {
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
     setCameraInPortal(portal, otherPortal);
+  
+    modelMatrix.setIdentity();
+    modelMatrix.translate(scene->player.position);
+    modelMatrix.rotate(scene->player.rotation);
+    glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+    const Mesh &dummy = MeshLoader::getMesh("Door.obj");
+    const Material &mat = MaterialLoader::fromTexture("Door.png");
+    renderTexturedMesh(dummy, mat);
 
-    renderScene();
+    renderScene();    
 
     //Set the camera back to normal
     scene->camera.setPerspective();
