@@ -287,13 +287,11 @@ void Renderer::renderPortal(const Portal &portal, const Portal &otherPortal) {
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
     setCameraInPortal(portal, otherPortal);
-
-    renderPortalOverlay(scene->bluePortal);
-    renderPortalOverlay(scene->orangePortal);
-
     renderPlayer();
     renderScene();
-
+    changeShader("unshaded.frag");
+    renderPortalOverlay(scene->bluePortal);
+    renderPortalOverlay(scene->orangePortal);
     //Set the camera back to normal
     scene->camera.setPerspective();
     scene->camera.setAspect((float)vpWidth / vpHeight);
