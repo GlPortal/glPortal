@@ -198,7 +198,6 @@ void Renderer::render() {
   glUniformMatrix4fv(viewLoc, 1, false, viewMatrix.array);
 
   //Crosshair
-  {
   modelMatrix.setIdentity();
   modelMatrix.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
   modelMatrix.scale(Vector3f(80, 80, 1));
@@ -206,7 +205,6 @@ void Renderer::render() {
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   const Material &mat = MaterialLoader::fromTexture("Reticle.png");
   renderTexturedMesh(mesh, mat);
-  }
 
   //Text
   setFont("Adobe", 1.5f);
@@ -250,6 +248,27 @@ void Renderer::renderPlayer(){
   const Material &mat = MaterialLoader::fromTexture("Door.png");
   renderTexturedMesh(dummy, mat);
 }
+
+void Renderer::renderPortalContent(const Portal &portal){
+  //Stencil drawing
+  //Primary portal
+  glStencilFunc(GL_NEVER, 1, 0xFF);
+  glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
+  
+  modelMatrix.setIdentity();
+  modelMatrix.translate(portal.position);
+  modelMatrix.rotate(portal.rotation);
+  modelMatrix.scale(portal.scale);
+  glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
+
+  const Mesh &portalStencil = MeshLoader::getMesh("PortalStencil.obj");
+  glBindVertexArray(portalStencil.handle);
+  glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
+  glBindVertexArray(0);
+
+  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+  glDepthMask(GL_TRUE);
+}
   
 void Renderer::renderPortal(const Portal &portal, const Portal &otherPortal) {
   if (portal.open and otherPortal.open) {
@@ -261,32 +280,15 @@ void Renderer::renderPortal(const Portal &portal, const Portal &otherPortal) {
     //Update camera position
     setCameraInPlayer(scene->camera);
 
-    //Stencil drawing
-    //Primary portal
-    glStencilFunc(GL_NEVER, 1, 0xFF);
-    glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
-
-    modelMatrix.setIdentity();
-    modelMatrix.translate(portal.position);
-    modelMatrix.rotate(portal.rotation);
-    modelMatrix.scale(portal.scale);
-    glUniformMatrix4fv(modelLoc, 1, false, modelMatrix.array);
-
-    const Mesh &portalStencil = MeshLoader::getMesh("PortalStencil.obj");
-    glBindVertexArray(portalStencil.handle);
-    glDrawArrays(GL_TRIANGLES, 0, portalStencil.numFaces * 3);
-    glBindVertexArray(0);
-
-    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-    glDepthMask(GL_TRUE);
+    renderPortalContent(portal);
+    
     //Draw the scene from the secondary portal
     glStencilFunc(GL_EQUAL, 1, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-    setCameraInPortal(portal, otherPortal);
-  
+    setCameraInPortal(portal, otherPortal);  
     renderPlayer();
-    renderScene();    
+    renderScene();
 
     //Set the camera back to normal
     scene->camera.setPerspective();

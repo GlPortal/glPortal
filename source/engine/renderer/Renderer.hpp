@@ -32,6 +32,7 @@ public:
   void renderScene();
   void renderEntity(const VisualEntity &e);
   void renderPlayer();
+  void renderPortalContent(const Portal &portal);
   void renderPortal(const Portal &portal, const Portal &otherPortal);
   void renderPortalOverlay(const Portal &portal);
   void renderPortalNoise(const Portal &portal, float fade);
@@ -47,7 +48,7 @@ private:
   Scene *scene;
   Shader *shader;
   Font *font;
-
+  
   Matrix4f projectionMatrix;
   Matrix4f viewMatrix;
   Matrix4f modelMatrix;
