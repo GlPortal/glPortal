@@ -30,7 +30,7 @@
 
 namespace glPortal {
 
-Renderer::Renderer() : viewport(nullptr) {
+Renderer::Renderer() : viewport(nullptr), portalDepth(2) {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
@@ -286,7 +286,11 @@ void Renderer::renderPortal(const Portal &portal, const Portal &otherPortal) {
     glStencilFunc(GL_EQUAL, 1, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-    setCameraInPortal(portal, otherPortal);  
+    setCameraInPortal(portal, otherPortal);
+
+    renderPortalOverlay(scene->bluePortal);
+    renderPortalOverlay(scene->orangePortal);
+
     renderPlayer();
     renderScene();
 

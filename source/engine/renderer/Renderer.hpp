@@ -48,7 +48,7 @@ private:
   Scene *scene;
   Shader *shader;
   Font *font;
-  
+  int portalDepth;
   Matrix4f projectionMatrix;
   Matrix4f viewMatrix;
   Matrix4f modelMatrix;
