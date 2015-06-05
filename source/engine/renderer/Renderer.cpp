@@ -213,10 +213,11 @@ void Renderer::renderEntity(const Camera &cam, const VisualEntity &e) {
 
 void Renderer::renderPlayer(const Camera &cam) {
   Matrix4f mtx;
-  mtx.translate(scene->player.position);
-  mtx.rotate(scene->player.rotation);
-  const Mesh &dummy = MeshLoader::getMesh("Door.obj");
-  const Material &mat = MaterialLoader::fromTexture("Door.png");
+  mtx.translate(scene->player.position+Vector3f(0, -.5f, 0));
+  mtx.rotate(scene->player.rotation.y, 0, 1, 0);
+  mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
+  const Mesh &dummy = MeshLoader::getMesh("HumanToken.obj");
+  const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
   const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
   renderMesh(cam, diffuse, mtx, dummy, mat);
 }
