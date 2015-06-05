@@ -13,12 +13,15 @@ public:
   static const Vector3f BLUE_COLOR;
   static const Vector3f ORANGE_COLOR;
   static const int NOISE_FADE_DELAY;
+  static const int OPEN_ANIM_DURATION;
 
   Portal() : open(false) {}
   Vector3f getDirection();
   bool throughPortal(const BoxCollider &collider) const;
   bool inPortal(const BoxCollider &collider) const;
   void placeOnWall(const BoxCollider &wall, const Vector3f &point);
+
+  Vector3f getScaleMult() const;
 
   Vector3f direction, color;
   bool open;

@@ -7,12 +7,15 @@
 
 #include <engine/BoxCollider.hpp>
 
+#include <SDL2/SDL_timer.h>
+
 namespace glPortal {
 
 const int Portal::PORTAL_RANGE = 1000;
 const Vector3f Portal::BLUE_COLOR = Vector3f(0.33, 0.57, 1);
 const Vector3f Portal::ORANGE_COLOR = Vector3f(1, 0.76, 0.33);
 const int Portal::NOISE_FADE_DELAY = 300;
+const int Portal::OPEN_ANIM_DURATION = 250;
 
 Vector3f Portal::getDirection() {
   return direction;
@@ -254,6 +257,27 @@ void Portal::placeOnWall(const BoxCollider &wall, const Vector3f &point) {
 
   position.add(*getDirection().scale(0.01f));
   mesh = MeshLoader::getMesh("Plane.obj");
+}
+
+Vector3f Portal::getScaleMult() const {
+  uint32_t delta  = SDL_GetTicks()-openSince;
+  if (delta > OPEN_ANIM_DURATION)
+    return Vector3f(1, 1, 1);
+  float s = delta;
+
+  // Linear:
+  //  std::min((float)delta/OPEN_ANIM_DURATION, 1.0f);
+
+  // Quadratic in/out:
+  s /= OPEN_ANIM_DURATION / 2;
+  if (s < 1) {
+    s = 0.5f*s*s;
+  } else {
+    s--;
+    s = -0.5f * (s*(s-2) - 1);
+  }
+
+  return Vector3f(s, s, s);
 }
 
 } /* namespace glPortal */

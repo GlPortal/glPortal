@@ -119,6 +119,7 @@ void Renderer::render(const Camera &cam) {
     mtx.translate(scene->bluePortal.position);
     mtx.rotate(scene->bluePortal.rotation);
     mtx.scale(scene->bluePortal.scale);
+    mtx.scale(scene->bluePortal.getScaleMult());
 
     const Mesh &portalStencil = MeshLoader::getMesh("PortalStencil.obj");
     renderMesh(cam, unshaded, mtx, portalStencil);
@@ -127,6 +128,7 @@ void Renderer::render(const Camera &cam) {
     mtx.translate(scene->orangePortal.position);
     mtx.rotate(scene->orangePortal.rotation);
     mtx.scale(scene->orangePortal.scale);
+    mtx.scale(scene->orangePortal.getScaleMult());
 
     renderMesh(cam, unshaded, mtx, portalStencil);
 
@@ -232,6 +234,7 @@ void Renderer::renderPortalContent(const Camera &cam, const Portal &portal) {
   mtx.translate(portal.position);
   mtx.rotate(portal.rotation);
   mtx.scale(portal.scale);
+  mtx.scale(portal.getScaleMult());
   const Mesh &portalStencil = MeshLoader::getMesh("PortalStencil.obj");
   renderMesh(cam, ShaderLoader::getShader("unshaded.frag"), mtx, portalStencil);
 
@@ -270,6 +273,7 @@ void Renderer::renderPortalOverlay(const Camera &cam, const Portal &portal) {
     mtx.translate(portal.position);
     mtx.rotate(portal.rotation);
     mtx.scale(portal.scale);
+    mtx.scale(portal.getScaleMult());
 
     renderMesh(cam, unshaded, mtx, portal.mesh, portal.material);
   }
@@ -280,6 +284,7 @@ void Renderer::renderPortalNoise(const Camera &cam, const Portal &portal, float 
   mtx.translate(portal.position);
   mtx.rotate(portal.rotation);
   mtx.scale(portal.scale);
+  mtx.scale(portal.getScaleMult());
 
   const Shader &simplexTime = ShaderLoader::getShader("simplexTime.frag");
   glUseProgram(simplexTime.handle);
