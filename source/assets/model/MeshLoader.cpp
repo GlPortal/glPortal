@@ -27,7 +27,7 @@ Mesh& MeshLoader::getMesh(const std::string &path) {
   }
   std::string fpath = Environment::getDataDir() + "/meshes/" + path;
   Assimp::Importer importer;
-  int flags = aiProcess_Triangulate | aiProcess_GenNormals;
+  int flags = aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_CalcTangentSpace;
   const aiMesh *mesh = importer.ReadFile(fpath, flags)->mMeshes[0];
   Mesh m = uploadMesh(mesh);
   auto inserted = meshCache.insert(std::pair<std::string, Mesh>(path, m));
@@ -99,6 +99,16 @@ Mesh MeshLoader::uploadMesh(const aiMesh *mesh) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3, mesh->mNormals, GL_STATIC_DRAW);
     glVertexAttribPointer(2, 3, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(2);
+  }
+
+  //Store tangents in a buffer
+  if (mesh->HasTangentsAndBitangents()) {
+    GLuint tangentVBO;
+    glGenBuffers(1, &tangentVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, tangentVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->mNumVertices * 3, mesh->mTangents, GL_STATIC_DRAW);
+    glVertexAttribPointer(3, 3, GL_FLOAT, 0, 0, 0);
+    glEnableVertexAttribArray(3);
   }
 
   //Unbind the buffers
@@ -199,6 +209,30 @@ Mesh MeshLoader::getPortalBox(Entity wall) {
   glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36 * 3, normalBuffer, GL_STATIC_DRAW);
   glVertexAttribPointer(2, 3, GL_FLOAT, 0, 0, 0);
   glEnableVertexAttribArray(2);
+  
+  //Tangents
+  Vector3f tangents[6] = {Vector3f(0, 1, 0),
+                         Vector3f(-1, 0, 0),
+                         Vector3f(0, 1, 0),
+                         Vector3f(-1, 0, 0),
+                         Vector3f(0, -1, 0),
+                         Vector3f(0, -1, 0)};
+
+  float tai[36] = {0,0,0,0,0,0, 1,1,1,1,1,1, 2,2,2,2,2,2, 3,3,3,3,3,3, 4,4,4,4,4,4, 5,5,5,5,5,5};
+  float tangentsBuffer[36 * 3];
+  for(int i = 0; i < 36; i++) {
+    int index = tai[i];
+    tangentsBuffer[i * 3 + 0] = tangents[index].x;
+    tangentsBuffer[i * 3 + 1] = tangents[index].y;
+    tangentsBuffer[i * 3 + 2] = tangents[index].z;
+  }
+  //Put the normal buffer into the VAO
+  GLuint tangentsVBO;
+  glGenBuffers(1, &tangentsVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, tangentsVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36 * 3, tangentsBuffer, GL_STATIC_DRAW);
+  glVertexAttribPointer(3, 3, GL_FLOAT, 0, 0, 0);
+  glEnableVertexAttribArray(3);
 
   //Unbind the buffers
   glBindBuffer(GL_ARRAY_BUFFER, 0);
