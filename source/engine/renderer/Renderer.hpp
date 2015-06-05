@@ -24,39 +24,32 @@ class Renderer {
 public:
   Renderer();
   void setViewport(Viewport *vp);
+  Viewport* getViewport() const;
   
   void setScene(Scene *scene);
-  void changeShader(const std::string &path);
 
-  void render();
-  void renderScene();
-  void renderEntity(const VisualEntity &e);
-  void renderPlayer();
-  void renderPortalContent(const Portal &portal);
-  void renderPortal(const Portal &portal, const Portal &otherPortal);
-  void renderPortalOverlay(const Portal &portal);
-  void renderPortalNoise(const Portal &portal, float fade);
-  void renderText(const std::string &text, int x, int y);
-  void renderTexturedMesh(const Mesh &mesh, const Material &mat);
-  void setCameraInPortal(const Portal &portal, const Portal &otherPortal);
-  void setCameraInPlayer(const Camera& camera);
+  void render(const Camera &cam);
+  void renderScene(const Camera &cam);
+  void renderEntity(const Camera &cam, const VisualEntity &e);
+  void renderPlayer(const Camera &cam);
+  void renderPortalContent(const Camera &cam, const Portal &portal);
+  void renderPortal(const Camera &cam, const Portal &portal, const Portal &otherPortal);
+  void renderPortalOverlay(const Camera &cam, const Portal &portal);
+  void renderPortalNoise(const Camera &cam, const Portal &portal, float fade);
+  void renderText(const Camera &cam, const std::string &text, int x, int y);
+  void renderMesh(const Camera &cam, const Shader &sh, const Matrix4f &mdlMtx, const Mesh &mesh, const Material &mat) {
+    return renderMesh(cam, sh, mdlMtx, mesh, &mat);
+  }
+  void renderMesh(const Camera &cam, const Shader &sh, const Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat = nullptr);
+  void setCameraInPortal(const Camera &cam, Camera &dest, const Portal &portal, const Portal &otherPortal);
   void setFont(const std::string &font, float size);
 private:
   Viewport *viewport;
   int vpWidth, vpHeight;
 
   Scene *scene;
-  Shader *shader;
   Font *font;
   int portalDepth;
-  Matrix4f projectionMatrix;
-  Matrix4f viewMatrix;
-  Matrix4f modelMatrix;
-  
-  GLuint modelLoc;
-  GLuint normalLoc;
-  GLuint viewLoc;
-  GLuint projLoc;
 };
 
 } /* namespace glPortal */

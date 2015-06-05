@@ -20,9 +20,11 @@ class Camera {
 public:
   Camera() {}
   Camera(float fovy, float aspect, float zNear, float zFar);
-  void loadMatrix(Matrix4f& m) const;
+  void getProjMatrix(Matrix4f &m) const;
+  void getViewMatrix(Matrix4f &m) const;
   void setFovy(float fovy);
   void setAspect(float aspect);
+  float getAspect() const;
   void setZNear(float zNear);
   void setZFar(float zFar);
   void setPerspective();

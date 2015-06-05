@@ -13,7 +13,7 @@ Camera::Camera(float fovy, float aspect, float zNear, float zFar) {
   this->zFar = zFar;
 }
 
-void Camera::loadMatrix(Matrix4f& m) const {
+void Camera::getProjMatrix(Matrix4f &m) const {
   m.setIdentity();
   if (perspective) {
     float fovyr = Math::toRadians(fovy);
@@ -33,12 +33,23 @@ void Camera::loadMatrix(Matrix4f& m) const {
   }
 }
 
+void Camera::getViewMatrix(Matrix4f &m) const {
+  m.setIdentity();
+  m.rotate(-rotation.x, 1, 0, 0);
+  m.rotate(-rotation.y, 0, 1, 0);
+  m.translate(negate(position));
+}
+
 void Camera::setFovy(float fovy) {
   this->fovy = fovy;
 }
 
 void Camera::setAspect(float aspect) {
   this->aspect = aspect;
+}
+
+float Camera::getAspect() const {
+  return aspect;
 }
 
 void Camera::setZNear(float zNear) {

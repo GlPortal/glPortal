@@ -230,6 +230,10 @@ void World::update() {
   player.position.add(player.velocity);
 
   //Parent camera to player
+  scene->camera.setPerspective();
+  int vpWidth, vpHeight;
+  renderer->getViewport()->getSize(&vpWidth, &vpHeight);
+  scene->camera.setAspect((float)vpWidth / vpHeight);
   scene->camera.position.set(scene->player.position);
   scene->camera.position.y += scene->player.scale.y/2;
   scene->camera.rotation.set(scene->player.rotation);
@@ -303,10 +307,10 @@ void World::shootPortal(int button) {
 
 void World::render() {
   renderer->setScene(scene);
-  renderer->render();
+  renderer->render(scene->camera);
 }
 
-Player *World::getPlayer() {
+Player* World::getPlayer() {
   return &scene->player;
 }
 

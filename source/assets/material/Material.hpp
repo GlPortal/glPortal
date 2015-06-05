@@ -9,6 +9,8 @@ namespace glPortal {
 
 class Material {
 public:
+  static const Material Empty;
+
   std::string name, fancyname;
   Texture diffuse, specular, normal, height;
   float scaleU = 1, scaleV = 1;
