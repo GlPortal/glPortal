@@ -24,6 +24,23 @@ def storeScale(element, object):
     element.set("y", str(object.dimensions[2]))
     element.set("z", str(object.dimensions[1]))
 
+def writeLampToTree(object, targetTree):
+    lamp = object.data
+    
+    colorArray = lamp.color
+    lightDistance = lamp.distance
+    lightEnergy = lamp.energy
+                
+    lightElement = tree.SubElement(targetTree, "light")
+    storePosition(lightElement, object);
+                
+    lightElement.set("r", str(colorArray[0]))
+    lightElement.set("g", str(colorArray[1]))
+    lightElement.set("b", str(colorArray[2]))
+                
+    lightElement.set("distance", str(lightDistance))
+    lightElement.set("energy", str(lightEnergy))
+
 class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
     bl_idname = "export_glportal_xml.xml"
     bl_label = "GlPortal XML Format"
@@ -48,21 +65,7 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
             else:
                 type = "None"                 
             if object.type == "LAMP":
-                lamp = object.data
-                
-                colorArray = lamp.color
-                lightDistance = lamp.distance
-                lightEnergy = lamp.energy
-                
-                lightElement = tree.SubElement(root, "light")
-                storePosition(lightElement, object);
-                
-                lightElement.set("r", str(colorArray[0]))
-                lightElement.set("g", str(colorArray[1]))
-                lightElement.set("b", str(colorArray[2]))
-                
-                lightElement.set("distance", str(lightDistance))
-                lightElement.set("energy", str(lightEnergy))
+                writeLampToTree(object, root)
             if object.type == "CAMERA":
                 boxElement = tree.SubElement(root, "spawn")
                 
