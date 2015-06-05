@@ -36,9 +36,14 @@ End position is deprecated and will be replaced by the end_map trigger in the fu
 </end>
 #+END_SRC
 
-**
-
-
+** Model
+#+BEGIN_SRC xml
+<model mesh="door" texture="door">
+	<position x="25" y="0" z="5"/>
+	<rotation x="0" y="90" z="0"/>
+</model>
+#+END_SRC
+* Example file
 #+BEGIN_SRC xml
 <?xml version="1.0" ?>
 <map>
