@@ -8,7 +8,8 @@ from .operatorHelpers import *
 class addDoor(bpy.types.Operator):
     bl_idname = "wm.add_door"
     bl_label = "Mark the selection as door."
-
+    bl_options = {"UNDO"}
+    
     def execute(self, context):
         realpath = os.path.expanduser("~/.glportal/data/meshes/Door.obj")
         bpy.ops.import_scene.obj(filepath=realpath)
@@ -22,6 +23,7 @@ class addDoor(bpy.types.Operator):
 class setPortable(bpy.types.Operator):
     bl_idname = "wm.set_portable"
     bl_label = "Mark the selection as portable."
+    bl_options = {"UNDO"}
     
     def execute(self, context):
         mat = getMaterial('~/.glportal/data/textures/wall.png', (1, 1, 1))
@@ -40,7 +42,8 @@ class setPortable(bpy.types.Operator):
 class setWall(bpy.types.Operator):
     bl_idname = "wm.set_wall"
     bl_label = "Mark the selection as portable."
-
+    bl_options = {"UNDO"}
+    
     def execute(self, context):
         mat = getMaterial('~/.glportal/data/textures/tiles.png', (0.2, 0.2, 0.2))
         bpy.types.Object.glpType = bpy.props.StringProperty()
@@ -53,4 +56,24 @@ class setWall(bpy.types.Operator):
                 me.materials.append(mat)
             else:
                 me.materials[0] = mat
+        return {'FINISHED'}
+
+class addWall(bpy.types.Operator):
+    bl_idname = "wm.add_wall"
+    bl_label = "Add a wall."
+    bl_options = {"UNDO"}
+
+    def execute(self, context):
+        bpy.ops.mesh.primitive_cube_add()
+        setWall.execute(self, context)
+        return {'FINISHED'}
+
+class addPortable(bpy.types.Operator):
+    bl_idname = "wm.add_portable"
+    bl_label = "Add a portable wall."
+    bl_options = {"UNDO"}
+
+    def execute(self, context):
+        bpy.ops.mesh.primitive_cube_add()
+        setPortable.execute(self, context)
         return {'FINISHED'}

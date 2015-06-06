@@ -1,12 +1,13 @@
 import bpy
 
-class GlPortalPanel(bpy.types.Panel):
-    """GlPortal panel in the toolbar"""
-    bl_label = "GlPortal Quick Bar"
+class GlPortalCreationPanel(bpy.types.Panel):
+    """GlPortal creation panel in the toolbar"""
+    bl_label = "GlPortal"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'TOOLS'
-    bl_category = "Tools"
-    
+    bl_context = "objectmode"
+    bl_category = "Create"  
+
     def draw(self, context):
         layout = self.layout
         layout.label("Objects")
@@ -19,14 +20,8 @@ class GlPortalPanel(bpy.types.Panel):
         row = layout.row()
         split = layout.split()
         col = split.column(align=True)
-        col.operator("wm.set_portable", text="Set Portable", icon='MESH_PLANE')
-        col.operator("wm.set_wall", text="Set Tiles", icon='MESH_PLANE')
-
-        layout.label("Volumes")
-        row = layout.row()
-        split = layout.split()
-        col = split.column(align=True)
-        col.operator("wm.set_acid", text="Set Acid", icon='MESH_CUBE')
+        col.operator("wm.add_portable", text="Add Portable", icon='MESH_PLANE')
+        col.operator("wm.add_wall", text="Add Tiles", icon='MESH_PLANE')
         
         layout.label("Triggers")
         row = layout.row()
@@ -35,9 +30,3 @@ class GlPortalPanel(bpy.types.Panel):
         col.operator("wm.add_death", text="Death", icon='MESH_CUBE')
         col.operator("wm.add_radiation", text="Radiation", icon='MESH_CUBE')
         col.operator("wm.add_win", text="Win", icon='MESH_CUBE')
-        
-        layout.label("Map")
-        row = layout.row()
-        split = layout.split()
-        col = split.column(align=True)
-        col.operator("wm.fix_map", text="Fix Map", icon='MESH_CUBE')

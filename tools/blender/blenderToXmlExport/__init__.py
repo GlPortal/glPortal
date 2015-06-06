@@ -18,6 +18,7 @@ import math
 import string
 from mathutils import Vector
 import re
+from .glportalcreationpanel import *
 from .glportalpanel import *
 from .glportalobjectpanel import *
 from .exportglportalformat import *    
@@ -27,7 +28,7 @@ from .volumeOperators import *
 from .mapOperators import *
 
 def menu_func(self, context):
-    self.layout.operator(ExportGlPortalFormat.bl_idname, text="GlPortal Map Format(.xml)")
+    self.layout.operator(ExportGlPortalFormat.bl_idname, text="GlPortal Map (.xml)")
 
 def register():
     bpy.utils.register_module(__name__)
@@ -37,6 +38,7 @@ def unregister():
     bpy.utils.unregister_module(__name__)
     bpy.types.INFO_MT_file_export.remove(menu_func)
     bpy.utils.unregister_class(GlPortalPanel)
+    bpy.utils.unregister_class(GlPortalCreationPanel)
     bpy.utils.unregister_class(GlPortalObjectPanel)
 
 if __name__ == "__main__":
