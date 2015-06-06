@@ -92,11 +92,14 @@ void Renderer::render(const Camera &cam) {
     int lightDistance = diffuse.uni(attribute);
     snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].energy");
     int lightEnergy = diffuse.uni(attribute);
+    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].specular");
+    int lightSpecular = diffuse.uni(attribute);
 
     glUniform3f(lightPos, light.position.x, light.position.y, light.position.z);
     glUniform3f(lightColor, light.color.x, light.color.y, light.color.z);
     glUniform1f(lightDistance, light.distance);
     glUniform1f(lightEnergy, light.energy);
+    glUniform1f(lightSpecular, light.specular);
   }
 
   int numLights = scene->lights.size();
@@ -206,10 +209,6 @@ void Renderer::renderEntity(const Camera &cam, const VisualEntity &e) {
   mtx.rotate(e.rotation);
   mtx.scale(e.scale);
   const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
-  glUseProgram(diffuse.handle);
-  Matrix4f normalMatrix = inverse(mtx);
-  glUniformMatrix4fv(diffuse.uni("normalMatrix"), 1, false, normalMatrix.array);
-
   renderMesh(cam, diffuse, mtx, e.mesh, e.material);
 }
 
@@ -335,31 +334,43 @@ void Renderer::renderText(const Camera &cam, const std::string &text, int x, int
 void Renderer::renderMesh(const Camera &cam, const Shader &sh, const Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat) {
   glUseProgram(sh.handle);
 
-  //if (lastRenderCam != &cam) {
   Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
   glUniformMatrix4fv(sh.uni("projectionMatrix"), 1, false, projMatrix.array);
   Matrix4f viewMatrix; cam.getViewMatrix(viewMatrix);
   glUniformMatrix4fv(sh.uni("viewMatrix"), 1, false, viewMatrix.array);
-  //lastRenderCam = &cam;
-  //}
+  Matrix4f invViewMatrix = inverse(viewMatrix);
+  glUniformMatrix4fv(sh.uni("invViewMatrix"), 1, false, invViewMatrix.array);
+
+  Matrix4f i3 = inverse3(mdlMtx);
+  Matrix4f modelTrInv4Matrix = transpose(i3);
+  glUniformMatrix4fv(sh.uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.array);
 
   glUniformMatrix4fv(sh.uni("modelMatrix"), 1, false, mdlMtx.array);
 
-  int loc = sh.uni("diffuse");
-  int tiling = sh.uni("tiling");
-
-  if (mat) {
-    glUniform2f(tiling, mat->scaleU, mat->scaleV);
-    glUniform1i(loc, 0);
-    glActiveTexture(GL_TEXTURE0);
-  }
-
   glBindVertexArray(mesh.handle);
   if (mat) {
+    int tiling = sh.uni("tiling");
+    glUniform2f(tiling, mat->scaleU, mat->scaleV);
+    glUniform1i(sh.uni("diffuse"), 0);
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mat->diffuse.handle);
+    glUniform1i(sh.uni("normalMap"), 1);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, mat->normal.handle);
+    glUniform1i(sh.uni("specularMap"), 2);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, mat->specular.handle);
+    glUniform1f(sh.uni("shininess"), mat->shininess);
   }
   glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
-  glBindTexture(GL_TEXTURE_2D, 0);
+  if (mat) {
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, 0);
+  }
   glBindVertexArray(0);
 }
 

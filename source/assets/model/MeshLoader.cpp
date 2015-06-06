@@ -212,11 +212,11 @@ Mesh MeshLoader::getPortalBox(Entity wall) {
   
   //Tangents
   Vector3f tangents[6] = {Vector3f(0, 1, 0),
-                         Vector3f(-1, 0, 0),
-                         Vector3f(0, 1, 0),
-                         Vector3f(-1, 0, 0),
+                         Vector3f(0, 0, 1),
                          Vector3f(0, -1, 0),
-                         Vector3f(0, -1, 0)};
+                         Vector3f(0, 0, -1),
+                         Vector3f(1, 0, 0),
+                         Vector3f(-1, 0, 0)};
 
   float tai[36] = {0,0,0,0,0,0, 1,1,1,1,1,1, 2,2,2,2,2,2, 3,3,3,3,3,3, 4,4,4,4,4,4, 5,5,5,5,5,5};
   float tangentsBuffer[36 * 3];

@@ -111,8 +111,7 @@ void MapLoader::extractSpawn() {
 void MapLoader::extractLights() {
   Vector3f lightPos;
   Vector3f lightColor;
-  float distance;
-  float energy;
+  float distance, energy, specular;
   TiXmlElement* lightElement = rootHandle.FirstChild("light").ToElement();
 
   do {
@@ -124,6 +123,7 @@ void MapLoader::extractLights() {
 
     lightElement->QueryFloatAttribute("distance", &distance);
     lightElement->QueryFloatAttribute("energy", &energy);
+    lightElement->QueryFloatAttribute("specular", &specular);
 
     scene->lights.emplace_back();
     Light &light = scene->lights.back();
@@ -131,6 +131,7 @@ void MapLoader::extractLights() {
     light.color.set(lightColor.x, lightColor.y, lightColor.z);
     light.distance = distance;
     light.energy = energy;
+    light.specular = specular;
   } while ((lightElement = lightElement->NextSiblingElement("light")) != nullptr);
 }
 

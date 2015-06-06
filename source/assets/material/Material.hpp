@@ -13,6 +13,7 @@ public:
 
   std::string name, fancyname;
   Texture diffuse, specular, normal, height;
+  float shininess = 0;
   float scaleU = 1, scaleV = 1;
 
   bool portalable, portalBump;

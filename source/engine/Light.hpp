@@ -14,6 +14,7 @@ public:
   Vector3f color;
   float distance;
   float energy;
+  float specular;
 };
 
 } /* namespace glPortal */

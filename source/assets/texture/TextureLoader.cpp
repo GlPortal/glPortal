@@ -11,6 +11,46 @@ namespace glPortal {
 
 std::map<std::string, Texture> TextureLoader::textureCache = {};
 
+Texture TextureLoader::getEmptyDiffuse() {
+  auto it = textureCache.find("engine@empty/diffuse");
+  if (it != textureCache.end()) {
+    return it->second;
+  }
+  int width, height, bytes;
+  Texture texture = uploadTexture((const unsigned char*)"\xFF\xFF\xFF", 1, 1, 3);
+  texture.width = width;
+  texture.height = height;
+  textureCache.insert(std::pair<std::string, Texture>("engine@empty/diffuse", texture));
+  return texture;
+}
+
+Texture TextureLoader::getEmptyNormal() {
+  auto it = textureCache.find("engine@empty/normal");
+  if (it != textureCache.end()) {
+    return it->second;
+  }
+  int width, height, bytes;
+  Texture texture = uploadTexture((const unsigned char*)"\x7F\x7F\xFF", 1, 1, 3);
+  texture.width = width;
+  texture.height = height;
+  textureCache.insert(std::pair<std::string, Texture>("engine@empty/normal", texture));
+  return texture;
+}
+
+Texture TextureLoader::getEmptySpecular() {
+  auto it = textureCache.find("engine@empty/specular");
+  if (it != textureCache.end()) {
+    return it->second;
+  }
+  int width, height, bytes;
+  Texture texture = uploadTexture((const unsigned char*)"\xFF\xFF\xFF", 1, 1, 3);
+  texture.width = width;
+  texture.height = height;
+  textureCache.insert(std::pair<std::string, Texture>("engine@empty/specular", texture));
+  return texture;
+}
+
+
 Texture TextureLoader::getTexture(std::string path) {
   auto it = textureCache.find(path);
   if (it != textureCache.end()) {
@@ -25,7 +65,7 @@ Texture TextureLoader::getTexture(std::string path) {
   return texture;
 }
 
-Texture TextureLoader::uploadTexture(unsigned char *data, int width, int height, int bytes) {
+Texture TextureLoader::uploadTexture(const unsigned char *data, int width, int height, int bytes) {
   Texture texture;
   GLuint handle;
   glGenTextures(1, &handle);

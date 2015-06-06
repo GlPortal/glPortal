@@ -31,6 +31,35 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
       printf("%s\n", diffP.c_str());
       mat.diffuse = TextureLoader::getTexture(diffP);
     }
+  } else {
+    mat.diffuse = TextureLoader::getEmptyDiffuse();
+  }
+
+  TiXmlElement *normE = rootH.FirstChildElement("normal").ToElement();
+  if (normE) {
+    std::string normP("");
+    normE->QueryStringAttribute("path", &normP);
+    if (normP.length() > 0) {
+      normP = dir + "/" + normP;
+      printf("%s\n", normP.c_str());
+      mat.normal = TextureLoader::getTexture(normP);
+    }
+  } else {
+    mat.normal = TextureLoader::getEmptyNormal();
+  }
+
+  TiXmlElement *specE = rootH.FirstChildElement("specular").ToElement();
+  if (specE) {
+    std::string specP("");
+    specE->QueryStringAttribute("path", &specP);
+    if (specP.length() > 0) {
+      specP = dir + "/" + specP;
+      printf("%s\n", specP.c_str());
+      mat.specular = TextureLoader::getTexture(specP);
+    }
+    specE->QueryFloatAttribute("shininess", &mat.shininess);
+  } else {
+    mat.specular = TextureLoader::getEmptySpecular();
   }
 
   TiXmlElement *portalE = rootH.FirstChildElement("portal").ToElement();

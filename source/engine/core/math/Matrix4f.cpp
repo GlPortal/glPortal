@@ -119,7 +119,7 @@ Vector3f Matrix4f::transform(Vector3f v) {
   return dest;
 }
 
-void Matrix4f::print() {
+void Matrix4f::print() const {
   printf("%f %f %f %f\n", array[0], array[4], array[8], array[12]);
   printf("%f %f %f %f\n", array[1], array[5], array[9], array[13]);
   printf("%f %f %f %f\n", array[2], array[6], array[10], array[14]);
@@ -134,7 +134,7 @@ float determinant(const Matrix4f& m) {
   return f;
 }
 
-Matrix4f inverse(const Matrix4f& m) {
+Matrix4f inverse3(const Matrix4f& m) {
   Matrix4f dest;
   float det = determinant(m);
 
@@ -171,6 +171,143 @@ Matrix4f inverse(const Matrix4f& m) {
      dest.array[9] = t12 * det_inv;
   }
   return dest;
+}
+
+Matrix4f inverse(const Matrix4f &m) {
+  // Shamelessly stolen from MESA's GLU
+  float inv[16], det;
+  int i;
+
+  inv[0] = m[5]  * m[10] * m[15] - 
+            m[5]  * m[11] * m[14] - 
+            m[9]  * m[6]  * m[15] + 
+            m[9]  * m[7]  * m[14] +
+            m[13] * m[6]  * m[11] - 
+            m[13] * m[7]  * m[10];
+
+  inv[4] = -m[4]  * m[10] * m[15] + 
+            m[4]  * m[11] * m[14] + 
+            m[8]  * m[6]  * m[15] - 
+            m[8]  * m[7]  * m[14] - 
+            m[12] * m[6]  * m[11] + 
+            m[12] * m[7]  * m[10];
+
+  inv[8] = m[4]  * m[9] * m[15] - 
+            m[4]  * m[11] * m[13] - 
+            m[8]  * m[5] * m[15] + 
+            m[8]  * m[7] * m[13] + 
+            m[12] * m[5] * m[11] - 
+            m[12] * m[7] * m[9];
+
+  inv[12] = -m[4]  * m[9] * m[14] + 
+              m[4]  * m[10] * m[13] +
+              m[8]  * m[5] * m[14] - 
+              m[8]  * m[6] * m[13] - 
+              m[12] * m[5] * m[10] + 
+              m[12] * m[6] * m[9];
+
+  inv[1] = -m[1]  * m[10] * m[15] + 
+            m[1]  * m[11] * m[14] + 
+            m[9]  * m[2] * m[15] - 
+            m[9]  * m[3] * m[14] - 
+            m[13] * m[2] * m[11] + 
+            m[13] * m[3] * m[10];
+
+  inv[5] = m[0]  * m[10] * m[15] - 
+            m[0]  * m[11] * m[14] - 
+            m[8]  * m[2] * m[15] + 
+            m[8]  * m[3] * m[14] + 
+            m[12] * m[2] * m[11] - 
+            m[12] * m[3] * m[10];
+
+  inv[9] = -m[0]  * m[9] * m[15] + 
+            m[0]  * m[11] * m[13] + 
+            m[8]  * m[1] * m[15] - 
+            m[8]  * m[3] * m[13] - 
+            m[12] * m[1] * m[11] + 
+            m[12] * m[3] * m[9];
+
+  inv[13] = m[0]  * m[9] * m[14] - 
+            m[0]  * m[10] * m[13] - 
+            m[8]  * m[1] * m[14] + 
+            m[8]  * m[2] * m[13] + 
+            m[12] * m[1] * m[10] - 
+            m[12] * m[2] * m[9];
+
+  inv[2] = m[1]  * m[6] * m[15] - 
+            m[1]  * m[7] * m[14] - 
+            m[5]  * m[2] * m[15] + 
+            m[5]  * m[3] * m[14] + 
+            m[13] * m[2] * m[7] - 
+            m[13] * m[3] * m[6];
+
+  inv[6] = -m[0]  * m[6] * m[15] + 
+            m[0]  * m[7] * m[14] + 
+            m[4]  * m[2] * m[15] - 
+            m[4]  * m[3] * m[14] - 
+            m[12] * m[2] * m[7] + 
+            m[12] * m[3] * m[6];
+
+  inv[10] = m[0]  * m[5] * m[15] - 
+            m[0]  * m[7] * m[13] - 
+            m[4]  * m[1] * m[15] + 
+            m[4]  * m[3] * m[13] + 
+            m[12] * m[1] * m[7] - 
+            m[12] * m[3] * m[5];
+
+  inv[14] = -m[0]  * m[5] * m[14] + 
+              m[0]  * m[6] * m[13] + 
+              m[4]  * m[1] * m[14] - 
+              m[4]  * m[2] * m[13] - 
+              m[12] * m[1] * m[6] + 
+              m[12] * m[2] * m[5];
+
+  inv[3] = -m[1] * m[6] * m[11] + 
+            m[1] * m[7] * m[10] + 
+            m[5] * m[2] * m[11] - 
+            m[5] * m[3] * m[10] - 
+            m[9] * m[2] * m[7] + 
+            m[9] * m[3] * m[6];
+
+  inv[7] = m[0] * m[6] * m[11] - 
+            m[0] * m[7] * m[10] - 
+            m[4] * m[2] * m[11] + 
+            m[4] * m[3] * m[10] + 
+            m[8] * m[2] * m[7] - 
+            m[8] * m[3] * m[6];
+
+  inv[11] = -m[0] * m[5] * m[11] + 
+              m[0] * m[7] * m[9] + 
+              m[4] * m[1] * m[11] - 
+              m[4] * m[3] * m[9] - 
+              m[8] * m[1] * m[7] + 
+              m[8] * m[3] * m[5];
+
+  inv[15] = m[0] * m[5] * m[10] - 
+            m[0] * m[6] * m[9] - 
+            m[4] * m[1] * m[10] + 
+            m[4] * m[2] * m[9] + 
+            m[8] * m[1] * m[6] - 
+            m[8] * m[2] * m[5];
+
+  det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
+
+  if (det == 0)
+      return m;
+
+  det = 1.0 / det;
+
+  return Matrix4f(inv);
+}
+
+Matrix4f transpose(const Matrix4f &m) {
+  Matrix4f d;
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      d.array[j+i*4] = m.array[i+j*4];
+    }
+  }
+  return d;
 }
 
 } /* namespace glPortal */
