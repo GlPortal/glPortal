@@ -10,20 +10,20 @@ class GlPortalCreationPanel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        layout.label("Objects")
+        layout.label("Object:")
         row = layout.row()
         split = layout.split()
         col = split.column(align=True)
         col.operator("wm.add_door", text="Door", icon='MESH_CUBE')
 
-        layout.label("Walls")
+        layout.label("Wall:")
         row = layout.row()
         split = layout.split()
         col = split.column(align=True)
-        col.operator("wm.add_portable", text="Add Portable", icon='MESH_PLANE')
-        col.operator("wm.add_wall", text="Add Tiles", icon='MESH_PLANE')
+        col.operator("wm.add_portable", text="Portable", icon='MESH_PLANE')
+        col.operator("wm.add_wall", text="Tiles", icon='MESH_PLANE')
         
-        layout.label("Triggers")
+        layout.label("Trigger:")
         row = layout.row()
         split = layout.split()
         col = split.column(align=True)
