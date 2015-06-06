@@ -14,14 +14,14 @@ class GlPortalPanel(bpy.types.Panel):
         row = layout.row()
         split = layout.split()
         col = split.column(align=True)
-        col.operator("wm.set_portable", text="Set Portable", icon='MESH_PLANE')
-        col.operator("wm.set_wall", text="Set Tiles", icon='MESH_PLANE')
+        col.operator("wm.set_portable", text="Portable", icon='MESH_PLANE')
+        col.operator("wm.set_wall", text="Tiles", icon='MESH_PLANE')
 
         layout.label("Volume:")
         row = layout.row()
         split = layout.split()
         col = split.column(align=True)
-        col.operator("wm.set_acid", text="Set Acid", icon='MESH_CUBE')
+        col.operator("wm.set_acid", text="Acid", icon='MESH_CUBE')
         
         layout.label("Trigger:")
         row = layout.row()
