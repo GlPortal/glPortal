@@ -88,7 +88,7 @@ void World::update() {
   player.mouseLook();
   player.move();
 
-  Vector3f pos = add(player.position, player.velocity);
+  Vector3f pos = player.position + player.velocity;
 
   //FIXME Remake the collision system to be less faulty and ugly
   //Y collision
@@ -278,7 +278,7 @@ void World::shootPortal(int button) {
       }
     }
   }
-
+  
   if (closestWall != nullptr and (closestWall->material.portalable)) {
     BoxCollider wall(closestWall->position, closestWall->scale);
     Vector3f ipos = scene->camera.position + (cameraDir * intersection);

@@ -23,6 +23,7 @@
 #include <Portal.hpp>
 
 #include <engine/core/math/Math.hpp>
+#include <engine/core/math/Matrix3f.hpp>
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
 
@@ -314,12 +315,12 @@ void Renderer::renderText(const Camera &cam, const std::string &text, int x, int
     const Mesh &mesh = letter.mesh;
 
     mtx.setIdentity();
-    mtx.translate(position.x + letter.xOffset * font->size,
+    mtx.translate(Vector3f(position.x + letter.xOffset * font->size,
                   position.y + letter.yOffset * font->size,
-                  -10);
+                  -10));
 
-    mtx.scale(letter.width * font->size,
-                      letter.height * font->size, 1);
+    mtx.scale(Vector3f(letter.width * font->size,
+                      letter.height * font->size, 1));
 
     renderMesh(cam, sh, mtx, mesh, mat);
     position.x += letter.advance * font->size;
@@ -331,21 +332,22 @@ void Renderer::renderText(const Camera &cam, const std::string &text, int x, int
  * Renders a mesh with the specified texture
  * @param mesh The mesh to render
  */
-void Renderer::renderMesh(const Camera &cam, const Shader &sh, const Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat) {
+void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat) {
   glUseProgram(sh.handle);
 
   Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
-  glUniformMatrix4fv(sh.uni("projectionMatrix"), 1, false, projMatrix.array);
+  glUniformMatrix4fv(sh.uni("projectionMatrix"), 1, false, projMatrix.toArray());
   Matrix4f viewMatrix; cam.getViewMatrix(viewMatrix);
-  glUniformMatrix4fv(sh.uni("viewMatrix"), 1, false, viewMatrix.array);
+  glUniformMatrix4fv(sh.uni("viewMatrix"), 1, false, viewMatrix.toArray());
   Matrix4f invViewMatrix = inverse(viewMatrix);
-  glUniformMatrix4fv(sh.uni("invViewMatrix"), 1, false, invViewMatrix.array);
+  glUniformMatrix4fv(sh.uni("invViewMatrix"), 1, false, invViewMatrix.toArray());
 
-  Matrix4f i3 = inverse3(mdlMtx);
-  Matrix4f modelTrInv4Matrix = transpose(i3);
-  glUniformMatrix4fv(sh.uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.array);
+  Matrix3f mdlMtx3 = toMatrix3f(mdlMtx);
+  Matrix3f i3 = inverse(mdlMtx3);
+  Matrix4f modelTrInv4Matrix = toMatrix4f(transpose(i3));
+  glUniformMatrix4fv(sh.uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.toArray());
 
-  glUniformMatrix4fv(sh.uni("modelMatrix"), 1, false, mdlMtx.array);
+  glUniformMatrix4fv(sh.uni("modelMatrix"), 1, false, mdlMtx.toArray());
 
   glBindVertexArray(mesh.handle);
   if (mat) {

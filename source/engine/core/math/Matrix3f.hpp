@@ -3,33 +3,33 @@
 ** support, and with no warranty, express or implied, as to its usefulness for
 ** any purpose.
 **
-** Matrix4f.hpp
-** Declares a 4x4 matrix consisting of 16 float values and its helper functions
+** Matrix3f.hpp
+** Declares a 3x3 matrix consisting of 9 float values and its helper functions
 **
 ** Author: Nim
 ** -------------------------------------------------------------------------*/
 
 #pragma once
-#ifndef MATRIX4F_HPP
-#define MATRIX4F_HPP
+#ifndef MATRIX3F_HPP
+#define MATRIX3F_HPP
 
 #include <string>
 
 namespace glPortal {
 
-class Matrix3f;
+class Matrix4f;
 class Vector3f;
+class Vector2f;
 
-class Matrix4f {
+class Matrix3f {
 public:
   /* Core */
-  Matrix4f();
+  Matrix3f();
   void setIdentity();
-  void translate(const Vector3f& v);
-  void rotate(float angle, float x, float y, float z);
-  void rotate(const Vector3f& euler);
+  void translate(const Vector2f& v);
+  void rotate(float angle);
   void scale(float scale);
-  void scale(const Vector3f& scale);
+  void scale(const Vector2f& scale);
   Vector3f transform(const Vector3f& v) const;
 
   float* toArray();
@@ -38,20 +38,20 @@ public:
   /* Operator overloads */
   float operator[](int i) const;
   float& operator[](int i);
-  bool operator==(const Matrix4f& m) const;
-  bool operator!=(const Matrix4f& m) const;
-  Matrix4f operator*(const Matrix4f& m) const;
+  bool operator==(const Matrix3f& m) const;
+  bool operator!=(const Matrix3f& m) const;
+  Matrix3f operator*(const Matrix3f& m) const;
 private:
-  float a[16];
+  float a[9];
 };
 
 /* Utility functions */
-Matrix4f transpose(const Matrix4f& m);
-float determinant(const Matrix4f& m);
-Matrix4f inverse(const Matrix4f& m);
-Matrix3f toMatrix3f(const Matrix4f& m);
+Matrix3f transpose(const Matrix3f& m);
+float determinant(const Matrix3f& m);
+Matrix3f inverse(const Matrix3f& m);
+Matrix4f toMatrix4f(const Matrix3f& m);
 
 } /* namespace glPortal */
 
-#endif /* MATRIX4F_HPP */
+#endif /* MATRIX3F_HPP */
 

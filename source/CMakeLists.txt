@@ -9,6 +9,7 @@ add_executable(${EXE_NAME}
   engine/core/math/Vector3f.cpp
   engine/core/math/Vector2f.cpp
   engine/core/math/Matrix4f.cpp
+  engine/core/math/Matrix3f.cpp
   engine/core/math/Math.cpp
   engine/core/diag/Logger.cpp
   engine/core/diag/ConsoleLogger.cpp

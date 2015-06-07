@@ -37,10 +37,10 @@ public:
   void renderPortalOverlay(const Camera &cam, const Portal &portal);
   void renderPortalNoise(const Camera &cam, const Portal &portal, float fade);
   void renderText(const Camera &cam, const std::string &text, int x, int y);
-  void renderMesh(const Camera &cam, const Shader &sh, const Matrix4f &mdlMtx, const Mesh &mesh, const Material &mat) {
+  void renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh, const Material &mat) {
     return renderMesh(cam, sh, mdlMtx, mesh, &mat);
   }
-  void renderMesh(const Camera &cam, const Shader &sh, const Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat = nullptr);
+  void renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat = nullptr);
   void setCameraInPortal(const Camera &cam, Camera &dest, const Portal &portal, const Portal &otherPortal);
   void setFont(const std::string &font, float size);
 private:

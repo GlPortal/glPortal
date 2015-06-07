@@ -1,42 +1,45 @@
+/* ---------------------------------------------------------------------------
+** This software is in the public domain, furnished "as is", without technical
+** support, and with no warranty, express or implied, as to its usefulness for
+** any purpose.
+**
+** Matrix4f.cpp
+** Implements a 4x4 matrix consisting of 16 float values and its helper functions
+**
+** Author: Nim
+** -------------------------------------------------------------------------*/
+
 #include "Matrix4f.hpp"
 
-#include "Math.hpp"
-#include <math.h>
-#include <stdio.h>
-
+#include "Matrix3f.hpp"
 #include "Vector3f.hpp"
+#include "Math.hpp"
+
+#include <math.h>
+#include <sstream>
 
 namespace glPortal {
 
+/* Core */
 Matrix4f::Matrix4f() {
   setIdentity();
 }
 
-Matrix4f::Matrix4f(float array[]) {
-  for (int i = 0; i < 16; i++) {
-    this->array[i] = array[i];
-  }
-}
-
 void Matrix4f::setIdentity() {
   for (int i = 0; i < 16; i++) {
-    if (i % 5 == 0) {
-      array[i] = 1;
+    if(i % 5 == 0) {
+      a[i] = 1;
     } else {
-      array[i] = 0;
+      a[i] = 0;
     }
   }
 }
 
-void Matrix4f::translate(Vector3f v) {
-  translate(v.x, v.y, v.z);
-}
-
-void Matrix4f::translate(float x, float y, float z) {
-  array[12] += array[0] * x + array[4] * y + array[8] * z;
-  array[13] += array[1] * x + array[5] * y + array[9] * z;
-  array[14] += array[2] * x + array[6] * y + array[10] * z;
-  array[15] += array[3] * x + array[7] * y + array[11] * z;
+void Matrix4f::translate(const Vector3f& v) {
+  a[12] += a[0] * v.x + a[4] * v.y + a[8] * v.z;
+  a[13] += a[1] * v.x + a[5] * v.y + a[9] * v.z;
+  a[14] += a[2] * v.x + a[6] * v.y + a[10] * v.z;
+  a[15] += a[3] * v.x + a[7] * v.y + a[11] * v.z;
 }
 
 void Matrix4f::rotate(float angle, float x, float y, float z) {
@@ -44,270 +47,218 @@ void Matrix4f::rotate(float angle, float x, float y, float z) {
   float s = sin(Math::toRadians(angle));
   float ic = 1 - c;
 
-  float f0 = array[0] * ((x * x * ic) + c) + array[4] * ((x * y * ic) + (z * s))
-      + array[8] * ((x * z * ic) - (y * s));
-  float f1 = array[1] * ((x * x * ic) + c) + array[5] * ((x * y * ic) + (z * s))
-      + array[9] * ((x * z * ic) - (y * s));
-  float f2 = array[2] * ((x * x * ic) + c) + array[6] * ((x * y * ic) + (z * s))
-      + array[10] * ((x * z * ic) - (y * s));
-  float f3 = array[3] * ((x * x * ic) + c) + array[7] * ((x * y * ic) + (z * s))
-      + array[11] * ((x * z * ic) - (y * s));
+  float f0 = a[0] * ((x * x * ic) + c) + a[4] * ((x * y * ic) + (z * s)) + a[8] * ((x * z * ic) - (y * s));
+  float f1 = a[1] * ((x * x * ic) + c) + a[5] * ((x * y * ic) + (z * s)) + a[9] * ((x * z * ic) - (y * s));
+  float f2 = a[2] * ((x * x * ic) + c) + a[6] * ((x * y * ic) + (z * s)) + a[10] * ((x * z * ic) - (y * s));
+  float f3 = a[3] * ((x * x * ic) + c) + a[7] * ((x * y * ic) + (z * s)) + a[11] * ((x * z * ic) - (y * s));
 
-  float f4 = array[0] * ((x * y * ic) - (z * s)) + array[4] * ((y * y * ic) + c)
-      + array[8] * ((y * z * ic) + (x * s));
-  float f5 = array[1] * ((x * y * ic) - (z * s)) + array[5] * ((y * y * ic) + c)
-      + array[9] * ((y * z * ic) + (x * s));
-  float f6 = array[2] * ((x * y * ic) - (z * s)) + array[6] * ((y * y * ic) + c)
-      + array[10] * ((y * z * ic) + (x * s));
-  float f7 = array[3] * ((x * y * ic) - (z * s)) + array[7] * ((y * y * ic) + c)
-      + array[11] * ((y * z * ic) + (x * s));
+  float f4 = a[0] * ((x * y * ic) - (z * s)) + a[4] * ((y * y * ic) + c) + a[8] * ((y * z * ic) + (x * s));
+  float f5 = a[1] * ((x * y * ic) - (z * s)) + a[5] * ((y * y * ic) + c) + a[9] * ((y * z * ic) + (x * s));
+  float f6 = a[2] * ((x * y * ic) - (z * s)) + a[6] * ((y * y * ic) + c) + a[10] * ((y * z * ic) + (x * s));
+  float f7 = a[3] * ((x * y * ic) - (z * s)) + a[7] * ((y * y * ic) + c) + a[11] * ((y * z * ic) + (x * s));
 
-  float f8 = array[0] * ((x * z * ic) + (y * s))
-      + array[4] * ((y * z * ic) - (x * s)) + array[8] * ((z * z * ic) + c);
-  float f9 = array[1] * ((x * z * ic) + (y * s))
-      + array[5] * ((y * z * ic) - (x * s)) + array[9] * ((z * z * ic) + c);
-  float f10 = array[2] * ((x * z * ic) + (y * s))
-      + array[6] * ((y * z * ic) - (x * s)) + array[10] * ((z * z * ic) + c);
-  float f11 = array[3] * ((x * z * ic) + (y * s))
-      + array[7] * ((y * z * ic) - (x * s)) + array[11] * ((z * z * ic) + c);
+  float f8 = a[0] * ((x * z * ic) + (y * s)) + a[4] * ((y * z * ic) - (x * s)) + a[8] * ((z * z * ic) + c);
+  float f9 = a[1] * ((x * z * ic) + (y * s)) + a[5] * ((y * z * ic) - (x * s)) + a[9] * ((z * z * ic) + c);
+  float f10 = a[2] * ((x * z * ic) + (y * s)) + a[6] * ((y * z * ic) - (x * s)) + a[10] * ((z * z * ic) + c);
+  float f11 = a[3] * ((x * z * ic) + (y * s)) + a[7] * ((y * z * ic) - (x * s)) + a[11] * ((z * z * ic) + c);
 
-  array[0] = f0;
-  array[1] = f1;
-  array[2] = f2;
-  array[3] = f3;
-  array[4] = f4;
-  array[5] = f5;
-  array[6] = f6;
-  array[7] = f7;
-  array[8] = f8;
-  array[9] = f9;
-  array[10] = f10;
-  array[11] = f11;
+  a[0] = f0; a[1] = f1; a[2] = f2; a[3] = f3;
+  a[4] = f4; a[5] = f5; a[6] = f6; a[7] = f7;
+  a[8] = f8; a[9] = f9; a[10] = f10; a[11] = f11;
 }
 
-void Matrix4f::rotate(Vector3f v) {
-  rotate(v.y, 0, 1, 0);
-  rotate(v.x, 1, 0, 0);
-  //rotate(v.z, 0, 0, 1);
+void Matrix4f::rotate(const Vector3f& euler) {
+  rotate(euler.y, 0, 1, 0);
+  rotate(euler.x, 1, 0, 0);
+  //rotate(euler.z, 0, 0, 1);
 }
 
-void Matrix4f::scale(Vector3f v) {
-  scale(v.x, v.y, v.z);
+void Matrix4f::scale(float scale) {
+  a[0] *= scale;
+  a[1] *= scale;
+  a[2] *= scale;
+  a[3] *= scale;
+  a[4] *= scale;
+  a[5] *= scale;
+  a[6] *= scale;
+  a[7] *= scale;
+  a[8] *= scale;
+  a[9] *= scale;
+  a[10] *= scale;
+  a[11] *= scale;
+  a[12] *= scale;
+  a[13] *= scale;
+  a[14] *= scale;
+  a[15] *= scale;
 }
 
-void Matrix4f::scale(float x, float y, float z) {
-  array[0] = array[0] * x;
-  array[1] = array[1] * x;
-  array[2] = array[2] * x;
-  array[3] = array[3] * x;
-  array[4] = array[4] * y;
-  array[5] = array[5] * y;
-  array[6] = array[6] * y;
-  array[7] = array[7] * y;
-  array[8] = array[8] * z;
-  array[9] = array[9] * z;
-  array[10] = array[10] * z;
-  array[11] = array[11] * z;
+void Matrix4f::scale(const Vector3f& scale) {
+  a[0] *= scale.x;
+  a[1] *= scale.x;
+  a[2] *= scale.x;
+  a[3] *= scale.x;
+  a[4] *= scale.y;
+  a[5] *= scale.y;
+  a[6] *= scale.y;
+  a[7] *= scale.y;
+  a[8] *= scale.z;
+  a[9] *= scale.z;
+  a[10] *= scale.z;
+  a[11] *= scale.z;
 }
 
-Vector3f Matrix4f::transform(Vector3f v) {
+Vector3f Matrix4f::transform(const Vector3f& v) const {
   Vector3f dest;
-  dest.x = array[0] * v.x + array[4] * v.y + array[8] * v.z;
-  dest.y = array[1] * v.x + array[5] * v.y + array[9] * v.z;
-  dest.z = array[2] * v.x + array[6] * v.y + array[10] * v.z;
-
+  dest.x = a[0] * v.x + a[4] * v.y + a[8] * v.z;
+  dest.y = a[1] * v.x + a[5] * v.y + a[9] * v.z;
+  dest.z = a[2] * v.x + a[6] * v.y + a[10] * v.z;
   return dest;
 }
 
-void Matrix4f::print() const {
-  printf("%f %f %f %f\n", array[0], array[4], array[8], array[12]);
-  printf("%f %f %f %f\n", array[1], array[5], array[9], array[13]);
-  printf("%f %f %f %f\n", array[2], array[6], array[10], array[14]);
-  printf("%f %f %f %f\n", array[3], array[7], array[11], array[15]);
+float* Matrix4f::toArray() {
+  return a;
+}
+
+std::string Matrix4f::str() const {
+  std::stringstream ss;
+  ss << "[" << a[0] << ", " << a[4] << ", " << a[8] << ", " << a[12] << "]\n";
+  ss << "[" << a[1] << ", " << a[5] << ", " << a[9] << ", " << a[13] << "]\n";
+  ss << "[" << a[2] << ", " << a[6] << ", " << a[10] << ", " << a[14] << "]\n";
+  ss << "[" << a[3] << ", " << a[7] << ", " << a[11] << ", " << a[15] << "]\n";
+
+  return ss.str();
+}
+
+
+/* Operator overloads */
+float Matrix4f::operator[](int i) const {
+  return a[i];
+}
+
+float& Matrix4f::operator[](int i) {
+  return a[i];
+}
+
+bool Matrix4f::operator==(const Matrix4f& m) const {
+  for (int i = 0; i < 16; i++) {
+    if (a[i] != m.a[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool Matrix4f::operator!=(const Matrix4f& m) const {
+  for (int i = 0; i < 16; i++) {
+    if (a[i] != m.a[i]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+Matrix4f Matrix4f::operator*(const Matrix4f& m) const {
+  Matrix4f d;
+  d[0] = a[0] * m[0] + a[4] * m[1] + a[8] * m[2] + a[12] * m[3];
+  d[1] = a[1] * m[0] + a[5] * m[1] + a[9] * m[2] + a[13] * m[3];
+  d[2] = a[2] * m[0] + a[6] * m[1] + a[10] * m[2] + a[14] * m[3];
+  d[3] = a[3] * m[0] + a[7] * m[1] + a[11] * m[2] + a[15] * m[3];
+
+  d[4] = a[0] * m[4] + a[4] * m[5] + a[8] * m[6] + a[12] * m[7];
+  d[5] = a[1] * m[4] + a[5] * m[5] + a[9] * m[6] + a[13] * m[7];
+  d[6] = a[2] * m[4] + a[6] * m[5] + a[10] * m[6] + a[14] * m[7];
+  d[7] = a[3] * m[4] + a[7] * m[5] + a[11] * m[6] + a[15] * m[7];
+
+  d[8] = a[0] * m[8] + a[4] * m[9] + a[8] * m[10] + a[12] * m[11];
+  d[9] = a[1] * m[8] + a[5] * m[9] + a[9] * m[10] + a[13] * m[11];
+  d[10] = a[2] * m[8] + a[6] * m[9] + a[10] * m[10] + a[14] * m[11];
+  d[11] = a[3] * m[8] + a[7] * m[9] + a[11] * m[10] + a[15] * m[11];
+
+  d[12] = a[0] * m[12] + a[4] * m[13] + a[8] * m[14] + a[12] * m[15];
+  d[13] = a[1] * m[12] + a[5] * m[13] + a[9] * m[14] + a[13] * m[15];
+  d[14] = a[2] * m[12] + a[6] * m[13] + a[10] * m[14] + a[14] * m[15];
+  d[15] = a[3] * m[12] + a[7] * m[13] + a[11] * m[14] + a[15] * m[15];
+
+  return d;
+}
+
+/* Utility functions */
+Matrix4f transpose(const Matrix4f& m) {
+  Matrix4f d;
+  d[0] = m[0];  d[4] = m[1];  d[8] = m[2];  d[12] = m[3];
+  d[1] = m[4];  d[5] = m[5];  d[9] = m[6];  d[13] = m[7];
+  d[2] = m[8];  d[6] = m[9];  d[10] = m[10];  d[14] = m[11];
+  d[3] = m[12]; d[7] = m[13]; d[11] = m[14];  d[15] = m[15];
+  return d;
 }
 
 float determinant(const Matrix4f& m) {
-  float f =
-      m.array[0] * (m.array[5] * m.array[10] - m.array[6] * m.array[9])
-      + m.array[1] * (m.array[6] * m.array[8] - m.array[4] * m.array[10])
-      + m.array[2] * (m.array[4] * m.array[9] - m.array[5] * m.array[8]);
-  return f;
+  float det =
+    m[0] * m[5] * m[10] * m[15] + m[0] * m[9] * m[14] * m[7] +
+    m[0] * m[13] * m[6] * m[11] + m[4] * m[1] * m[14] * m[11] +
+    m[4] * m[9] * m[2] * m[15] + m[4] * m[13] * m[10] * m[3] +
+    m[8] * m[1] * m[6] * m[15] + m[8] * m[5] * m[14] * m[3] +
+    m[8] * m[13] * m[2] * m[7] + m[12] * m[1] * m[10] * m[7] +
+    m[12] * m[5] * m[2] * m[11] + m[12] * m[9] * m[6] * m[3] -
+    m[0] * m[5] * m[14] * m[11] - m[0] * m[9] * m[6] * m[15] -
+    m[0] * m[13] * m[10] * m[7] - m[4] * m[1] * m[10] * m[15] -
+    m[4] * m[9] * m[14] * m[3] - m[4] * m[13] * m[2] * m[11] -
+    m[8] * m[1] * m[14] * m[7] - m[8] * m[5] * m[2] * m[15] -
+    m[8] * m[13] * m[6] * m[3] - m[12] * m[1] * m[6] * m[11] -
+    m[12] * m[5] * m[10] * m[3] - m[12] * m[9] * m[2] * m[7];
+
+  return det;
 }
 
-Matrix4f inverse3(const Matrix4f& m) {
-  Matrix4f dest;
+Matrix4f inverse(const Matrix4f& m) {
   float det = determinant(m);
 
-  if (det != 0) {
-     /* do it the ordinary way
-      *
-      * inv(A) = 1/det(A) * adj(T), where adj(T) = transpose(Conjugate Matrix)
-      *
-      * m00 m01 m02
-      * m10 m11 m12
-      * m20 m21 m22
-      */
-     float det_inv = 1.0f / det;
-
-     // get the conjugate matrix
-     float t00 = m.array[5] * m.array[10] - m.array[6] * m.array[9];
-     float t01 = - m.array[4] * m.array[10] + m.array[6] * m.array[8];
-     float t02 = m.array[4] * m.array[9] - m.array[5] * m.array[8];
-     float t10 = - m.array[1] * m.array[10] + m.array[2] * m.array[9];
-     float t11 = m.array[0] * m.array[10] - m.array[2] * m.array[8];
-     float t12 = - m.array[0] * m.array[9] + m.array[1] * m.array[8];
-     float t20 = m.array[1] * m.array[6] - m.array[2] * m.array[5];
-     float t21 = -m.array[0] * m.array[6] + m.array[2] * m.array[4];
-     float t22 = m.array[0] * m.array[5] - m.array[1] * m.array[4];
-
-     dest.array[0] = t00 * det_inv;
-     dest.array[5] = t11 * det_inv;
-     dest.array[10] = t22 * det_inv;
-     dest.array[1] = t10 * det_inv;
-     dest.array[4] = t01 * det_inv;
-     dest.array[8] = t02 * det_inv;
-     dest.array[2] = t20 * det_inv;
-     dest.array[6] = t21 * det_inv;
-     dest.array[9] = t12 * det_inv;
-  }
-  return dest;
-}
-
-Matrix4f inverse(const Matrix4f &m) {
-  // Shamelessly stolen from MESA's GLU
-  float inv[16], det;
-  int i;
-
-  inv[0] = m[5]  * m[10] * m[15] - 
-            m[5]  * m[11] * m[14] - 
-            m[9]  * m[6]  * m[15] + 
-            m[9]  * m[7]  * m[14] +
-            m[13] * m[6]  * m[11] - 
-            m[13] * m[7]  * m[10];
-
-  inv[4] = -m[4]  * m[10] * m[15] + 
-            m[4]  * m[11] * m[14] + 
-            m[8]  * m[6]  * m[15] - 
-            m[8]  * m[7]  * m[14] - 
-            m[12] * m[6]  * m[11] + 
-            m[12] * m[7]  * m[10];
-
-  inv[8] = m[4]  * m[9] * m[15] - 
-            m[4]  * m[11] * m[13] - 
-            m[8]  * m[5] * m[15] + 
-            m[8]  * m[7] * m[13] + 
-            m[12] * m[5] * m[11] - 
-            m[12] * m[7] * m[9];
-
-  inv[12] = -m[4]  * m[9] * m[14] + 
-              m[4]  * m[10] * m[13] +
-              m[8]  * m[5] * m[14] - 
-              m[8]  * m[6] * m[13] - 
-              m[12] * m[5] * m[10] + 
-              m[12] * m[6] * m[9];
-
-  inv[1] = -m[1]  * m[10] * m[15] + 
-            m[1]  * m[11] * m[14] + 
-            m[9]  * m[2] * m[15] - 
-            m[9]  * m[3] * m[14] - 
-            m[13] * m[2] * m[11] + 
-            m[13] * m[3] * m[10];
-
-  inv[5] = m[0]  * m[10] * m[15] - 
-            m[0]  * m[11] * m[14] - 
-            m[8]  * m[2] * m[15] + 
-            m[8]  * m[3] * m[14] + 
-            m[12] * m[2] * m[11] - 
-            m[12] * m[3] * m[10];
-
-  inv[9] = -m[0]  * m[9] * m[15] + 
-            m[0]  * m[11] * m[13] + 
-            m[8]  * m[1] * m[15] - 
-            m[8]  * m[3] * m[13] - 
-            m[12] * m[1] * m[11] + 
-            m[12] * m[3] * m[9];
-
-  inv[13] = m[0]  * m[9] * m[14] - 
-            m[0]  * m[10] * m[13] - 
-            m[8]  * m[1] * m[14] + 
-            m[8]  * m[2] * m[13] + 
-            m[12] * m[1] * m[10] - 
-            m[12] * m[2] * m[9];
-
-  inv[2] = m[1]  * m[6] * m[15] - 
-            m[1]  * m[7] * m[14] - 
-            m[5]  * m[2] * m[15] + 
-            m[5]  * m[3] * m[14] + 
-            m[13] * m[2] * m[7] - 
-            m[13] * m[3] * m[6];
-
-  inv[6] = -m[0]  * m[6] * m[15] + 
-            m[0]  * m[7] * m[14] + 
-            m[4]  * m[2] * m[15] - 
-            m[4]  * m[3] * m[14] - 
-            m[12] * m[2] * m[7] + 
-            m[12] * m[3] * m[6];
-
-  inv[10] = m[0]  * m[5] * m[15] - 
-            m[0]  * m[7] * m[13] - 
-            m[4]  * m[1] * m[15] + 
-            m[4]  * m[3] * m[13] + 
-            m[12] * m[1] * m[7] - 
-            m[12] * m[3] * m[5];
-
-  inv[14] = -m[0]  * m[5] * m[14] + 
-              m[0]  * m[6] * m[13] + 
-              m[4]  * m[1] * m[14] - 
-              m[4]  * m[2] * m[13] - 
-              m[12] * m[1] * m[6] + 
-              m[12] * m[2] * m[5];
-
-  inv[3] = -m[1] * m[6] * m[11] + 
-            m[1] * m[7] * m[10] + 
-            m[5] * m[2] * m[11] - 
-            m[5] * m[3] * m[10] - 
-            m[9] * m[2] * m[7] + 
-            m[9] * m[3] * m[6];
-
-  inv[7] = m[0] * m[6] * m[11] - 
-            m[0] * m[7] * m[10] - 
-            m[4] * m[2] * m[11] + 
-            m[4] * m[3] * m[10] + 
-            m[8] * m[2] * m[7] - 
-            m[8] * m[3] * m[6];
-
-  inv[11] = -m[0] * m[5] * m[11] + 
-              m[0] * m[7] * m[9] + 
-              m[4] * m[1] * m[11] - 
-              m[4] * m[3] * m[9] - 
-              m[8] * m[1] * m[7] + 
-              m[8] * m[3] * m[5];
-
-  inv[15] = m[0] * m[5] * m[10] - 
-            m[0] * m[6] * m[9] - 
-            m[4] * m[1] * m[10] + 
-            m[4] * m[2] * m[9] + 
-            m[8] * m[1] * m[6] - 
-            m[8] * m[2] * m[5];
-
-  det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
-
-  if (det == 0)
-      return m;
-
-  det = 1.0 / det;
-
-  return Matrix4f(inv);
-}
-
-Matrix4f transpose(const Matrix4f &m) {
   Matrix4f d;
-  for (int i = 0; i < 4; ++i) {
-    for (int j = 0; j < 4; ++j) {
-      d.array[j+i*4] = m.array[i+j*4];
-    }
-  }
+  d[0] = m[5] * m[10] * m[15] + m[9] * m[14] * m[7] + m[13] * m[6] * m[11]
+       - m[5] * m[14] * m[11] - m[9] * m[6] * m[15] - m[13] * m[10] * m[7];
+  d[1] = m[1] * m[14] * m[11] + m[9] * m[2] * m[15] + m[13] * m[10] * m[3]
+       - m[1] * m[10] * m[15] - m[9] * m[14] * m[3] - m[13] * m[2] * m[11];
+  d[2] = m[1] * m[6] * m[15] + m[5] * m[14] * m[3] + m[13] * m[2] * m[7]
+       - m[1] * m[14] * m[7] - m[5] * m[2] * m[15] - m[13] * m[6] * m[3];
+  d[3] = m[1] * m[10] * m[7] + m[5] * m[2] * m[11] + m[9] * m[6] * m[3]
+       - m[1] * m[6] * m[11] - m[5] * m[10] * m[3] - m[9] * m[2] * m[7];
+  d[4] = m[4] * m[14] * m[11] + m[8] * m[6] * m[15] + m[12] * m[10] * m[7]
+       - m[4] * m[10] * m[15] - m[8] * m[14] * m[7] - m[12] * m[6] * m[11];
+  d[5] = m[0] * m[10] * m[15] + m[8] * m[14] * m[3] + m[12] * m[2] * m[11]
+       - m[0] * m[14] * m[11] - m[8] * m[2] * m[15] - m[12] * m[10] * m[3];
+  d[6] = m[0] * m[14] * m[7] + m[4] * m[2] * m[15] + m[12] * m[6] * m[3]
+       - m[0] * m[6] * m[15] - m[4] * m[14] * m[3] - m[12] * m[2] * m[7];
+  d[7] = m[0] * m[6] * m[11] + m[4] * m[10] * m[3] + m[8] * m[2] * m[7]
+       - m[0] * m[10] * m[7] - m[4] * m[2] * m[11] - m[8] * m[6] * m[3];
+  d[8] = m[4] * m[9] * m[15] + m[8] * m[13] * m[7] + m[12] * m[5] * m[11]
+       - m[4] * m[13] * m[11] - m[8] * m[5] * m[15] - m[12] * m[9] * m[7];
+  d[9] = m[0] * m[13] * m[11] + m[8] * m[1] * m[15] + m[12] * m[9] * m[3]
+        - m[0] * m[9] * m[15] - m[8] * m[13] * m[3] - m[12] * m[1] * m[11];
+  d[10] = m[0] * m[5] * m[15] + m[4] * m[13] * m[3] + m[12] * m[1] * m[7]
+        - m[0] * m[13] * m[7] - m[4] * m[1] * m[15] - m[12] * m[5] * m[3];
+  d[11] = m[0] * m[9] * m[7] + m[4] * m[1] * m[11] + m[8] * m[5] * m[3]
+        - m[0] * m[5] * m[11] - m[4] * m[9] * m[3] - m[8] * m[1] * m[7];
+  d[12] = m[4] * m[13] * m[10] + m[8] * m[5] * m[14] + m[12] * m[9] * m[6]
+        - m[4] * m[9] * m[14] - m[8] * m[13] * m[6] - m[12] * m[5] * m[10];
+  d[13] = m[0] * m[9] * m[14] + m[8] * m[13] * m[2] + m[12] * m[1] * m[10]
+        - m[0] * m[13] * m[10] - m[8] * m[1] * m[14] - m[12] * m[9] * m[2];
+  d[14] = m[0] * m[13] * m[6] + m[4] * m[1] * m[14] + m[12] * m[5] * m[2]
+        - m[0] * m[5] * m[14] - m[4] * m[13] * m[2] - m[12] * m[1] * m[6];
+  d[15] = m[0] * m[5] * m[10] + m[4] * m[9] * m[2] + m[8] * m[1] * m[6]
+        - m[0] * m[9] * m[6] - m[4] * m[1] * m[10] - m[8] * m[5] * m[2];
+
+  d.scale(1 / det);
+
+  return d;
+}
+
+Matrix3f toMatrix3f(const Matrix4f& m) {
+  Matrix3f d;
+  d[0] = m[0];  d[3] = m[4];  d[6] = m[8];
+  d[1] = m[1];  d[4] = m[5];  d[7] = m[9];
+  d[2] = m[2];  d[5] = m[6];  d[8] = m[10];
   return d;
 }
 
 } /* namespace glPortal */
+

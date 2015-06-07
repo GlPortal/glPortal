@@ -17,19 +17,19 @@ void Camera::getProjMatrix(Matrix4f &m) const {
   m.setIdentity();
   if (perspective) {
     float fovyr = Math::toRadians(fovy);
-    m.array[0] = (float) (1 / tan(fovyr / 2)) / aspect;
-    m.array[5] = (float) (1 / tan(fovyr / 2));
-    m.array[10] = (zNear + zFar) / (zNear - zFar);
-    m.array[11] = -1;
-    m.array[14] = (2 * zNear * zFar) / (zNear - zFar);
-    m.array[15] = 0;
+    m[0] = (float) (1 / tan(fovyr / 2)) / aspect;
+    m[5] = (float) (1 / tan(fovyr / 2));
+    m[10] = (zNear + zFar) / (zNear - zFar);
+    m[11] = -1;
+    m[14] = (2 * zNear * zFar) / (zNear - zFar);
+    m[15] = 0;
   } else {
-    m.array[0] = 2 / (right - left);
-    m.array[5] = 2 / (top - bottom);
-    m.array[10] = -2 / (zFar - zNear);
-    m.array[12] = (left - right) / (right - left);
-    m.array[13] = (bottom - top) / (top - bottom);
-    m.array[14] = (zNear - zFar) / (zFar - zNear);
+    m[0] = 2 / (right - left);
+    m[5] = 2 / (top - bottom);
+    m[10] = -2 / (zFar - zNear);
+    m[12] = (left - right) / (right - left);
+    m[13] = (bottom - top) / (top - bottom);
+    m[14] = (zNear - zFar) / (zFar - zNear);
   }
 }
 
