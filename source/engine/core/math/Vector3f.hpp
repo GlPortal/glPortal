@@ -30,10 +30,7 @@ public:
   Vector3f(float x, float y, float z);
   void set(float x, float y, float z);
   void set(const Vector3f& v);
-  Vector3f* add(const Vector3f& v);
-  Vector3f* sub(const Vector3f& v);
-  Vector3f* scale(float scale);
-  Vector3f* normalise();
+  Vector3f& normalise();
 
   float length() const;
   std::string str() const;
@@ -41,10 +38,11 @@ public:
   /* Operator overloads */
   bool operator==(const Vector3f& v) const;
   bool operator!=(const Vector3f& v) const;
-  Vector3f* operator+=(const Vector3f& v);
-  Vector3f* operator-=(const Vector3f& v);
-  Vector3f* operator*=(const Vector3f& v);
-  Vector3f* operator/=(const Vector3f& v);
+  Vector3f& operator+=(const Vector3f& v);
+  Vector3f& operator-=(const Vector3f& v);
+  Vector3f& operator*=(const Vector3f& v);
+  Vector3f& operator*=(float scale);
+  Vector3f& operator/=(const Vector3f& v);
   Vector3f operator+(const Vector3f& v) const;
   Vector3f operator-(const Vector3f& v) const;
   Vector3f operator-() const;

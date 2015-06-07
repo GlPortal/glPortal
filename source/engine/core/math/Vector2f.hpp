@@ -29,10 +29,7 @@ public:
   Vector2f(float x, float y);
   void set(float x, float y);
   void set(const Vector2f& v);
-  Vector2f* add(const Vector2f& v);
-  Vector2f* sub(const Vector2f& v);
-  Vector2f* scale(float scale);
-  Vector2f* normalise();
+  Vector2f& normalise();
 
   float length() const;
   std::string str() const;
@@ -40,10 +37,11 @@ public:
   /* Operator overloads */
   bool operator==(const Vector2f& v) const;
   bool operator!=(const Vector2f& v) const;
-  Vector2f* operator+=(const Vector2f& v);
-  Vector2f* operator-=(const Vector2f& v);
-  Vector2f* operator*=(const Vector2f& v);
-  Vector2f* operator/=(const Vector2f& v);
+  Vector2f& operator+=(const Vector2f& v);
+  Vector2f& operator-=(const Vector2f& v);
+  Vector2f& operator*=(const Vector2f& v);
+  Vector2f& operator*=(float scale);
+  Vector2f& operator/=(const Vector2f& v);
   Vector2f operator+(const Vector2f& v) const;
   Vector2f operator-(const Vector2f& v) const;
   Vector2f operator-() const;

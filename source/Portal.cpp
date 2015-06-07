@@ -255,7 +255,7 @@ void Portal::placeOnWall(const BoxCollider &wall, const Vector3f &point) {
     open = true;
   }
 
-  position.add(*getDirection().scale(0.01f));
+  position += (getDirection() * 0.01f);
   mesh = MeshLoader::getMesh("Plane.obj");
 }
 

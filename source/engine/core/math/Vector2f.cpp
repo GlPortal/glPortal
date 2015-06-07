@@ -33,29 +33,11 @@ void Vector2f::set(const Vector2f& v) {
   y = v.y;
 }
 
-Vector2f* Vector2f::add(const Vector2f& v) {
-  x += v.x;
-  y += v.y;
-  return this;
-}
-
-Vector2f* Vector2f::sub(const Vector2f& v) {
-  x -= v.x;
-  y -= v.y;
-  return this;
-}
-
-Vector2f* Vector2f::scale(const float scale) {
-  x *= scale;
-  y *= scale;
-  return this;
-}
-
-Vector2f* Vector2f::normalise() {
+Vector2f& Vector2f::normalise() {
   float l = length();
   x /= l;
   y /= l;
-  return this;
+  return *this;
 }
 
 float Vector2f::length() const {
@@ -77,28 +59,34 @@ bool Vector2f::operator!=(const Vector2f& v) const {
   return x != v.x || y != v.y;
 }
 
-Vector2f* Vector2f::operator+=(const Vector2f& v) {
+Vector2f& Vector2f::operator+=(const Vector2f& v) {
   x += v.x;
   y += v.y;
-  return this;
+  return *this;
 }
 
-Vector2f* Vector2f::operator-=(const Vector2f& v) {
+Vector2f& Vector2f::operator-=(const Vector2f& v) {
   x -= v.x;
   y -= v.y;
-  return this;
+  return *this;
 }
 
-Vector2f* Vector2f::operator*=(const Vector2f& v) {
+Vector2f& Vector2f::operator*=(const Vector2f& v) {
   x *= v.x;
   y *= v.y;
-  return this;
+  return *this;
 }
 
-Vector2f* Vector2f::operator/=(const Vector2f& v) {
+Vector2f& Vector2f::operator*=(float scale) {
+  x *= scale;
+  y *= scale;
+  return *this;
+}
+
+Vector2f& Vector2f::operator/=(const Vector2f& v) {
   x /= v.x;
   y /= v.y;
-  return this;
+  return *this;
 }
 
 Vector2f Vector2f::operator+(const Vector2f& v) const {

@@ -36,33 +36,12 @@ void Vector3f::set(const Vector3f& v) {
   z = v.z;
 }
 
-Vector3f* Vector3f::add(const Vector3f& v) {
-  x += v.x;
-  y += v.y;
-  z += v.z;
-  return this;
-}
-
-Vector3f* Vector3f::sub(const Vector3f& v) {
-  x -= v.x;
-  y -= v.y;
-  z -= v.z;
-  return this;
-}
-
-Vector3f* Vector3f::scale(float scale) {
-  x *= scale;
-  y *= scale;
-  z *= scale;
-  return this;
-}
-
-Vector3f* Vector3f::normalise() {
+Vector3f& Vector3f::normalise() {
   float l = length();
   x /= l;
   y /= l;
   z /= l;
-  return this;
+  return *this;
 }
 
 float Vector3f::length() const {
@@ -84,32 +63,39 @@ bool Vector3f::operator!=(const Vector3f& v) const {
   return x != v.x || y != v.y || z != v.z;
 }
 
-Vector3f* Vector3f::operator+=(const Vector3f& v) {
+Vector3f& Vector3f::operator+=(const Vector3f& v) {
   x += v.x;
   y += v.y;
   z += v.z;
-  return this;
+  return *this;
 }
 
-Vector3f* Vector3f::operator-=(const Vector3f& v) {
+Vector3f& Vector3f::operator-=(const Vector3f& v) {
   x -= v.x;
   y -= v.y;
   z -= v.z;
-  return this;
+  return *this;
 }
 
-Vector3f* Vector3f::operator*=(const Vector3f& v) {
+Vector3f& Vector3f::operator*=(const Vector3f& v) {
   x *= v.x;
   y *= v.y;
   z *= v.z;
-  return this;
+  return *this;
 }
 
-Vector3f* Vector3f::operator/=(const Vector3f& v) {
+Vector3f& Vector3f::operator*=(float scale) {
+  x *= scale;
+  y *= scale;
+  z *= scale;
+  return *this;
+}
+
+Vector3f& Vector3f::operator/=(const Vector3f& v) {
   x /= v.x;
   y /= v.y;
   z /= v.z;
-  return this;
+  return *this;
 }
 
 Vector3f Vector3f::operator+(const Vector3f& v) const {

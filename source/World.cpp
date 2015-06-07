@@ -214,7 +214,7 @@ void World::update() {
       player.rotation.y += rotation;
       //Transform the velocity of the player
       float velocity = player.velocity.length();
-      player.velocity = *scene->orangePortal.getDirection().scale(velocity);
+      player.velocity = scene->orangePortal.getDirection() * velocity;
     }
     if (scene->orangePortal.throughPortal(playerCollider)) {
       player.position.set(scene->bluePortal.position);
@@ -222,12 +222,12 @@ void World::update() {
       player.rotation.y += rotation;
       //Transform the velocity of the player
       float velocity = player.velocity.length();
-      player.velocity = *scene->bluePortal.getDirection().scale(velocity);
+      player.velocity = scene->bluePortal.getDirection() * velocity;
     }
   }
 
   //Add velocity to the player position
-  player.position.add(player.velocity);
+  player.position += player.velocity;
 
   //Parent camera to player
   scene->camera.setPerspective();
