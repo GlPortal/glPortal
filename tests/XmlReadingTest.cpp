@@ -35,7 +35,7 @@ SUITE(XmlReading)
     XmlHelper::pushAttributeVertexToVector(lightElement, vector);
 
     bool vectorIsValid(false);
-    Vector3f resultVector = *sourceVector.sub(vector);
+    Vector3f resultVector = sourceVector - vector;
     if((resultVector.x + resultVector.y + resultVector.z) == 0 ){
       vectorIsValid = true;
     }
