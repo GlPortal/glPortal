@@ -48,22 +48,35 @@ void Player::move() {
 
   float rot = Math::toRadians(rotation.y);
   if (isAlive()){
+    Vector3f tmp_velocity;
+    tmp_velocity.x = tmp_velocity.z = 0;
+
     if (Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP)) {
-      velocity.x = -sin(rot) * speed;
-      velocity.z = -cos(rot) * speed;
+      tmp_velocity.x += -sin(rot) * speed;
+      tmp_velocity.z += -cos(rot) * speed;
     }
     if (Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN)) {
-      velocity.x = sin(rot) * speed;
-      velocity.z = cos(rot) * speed;
+      tmp_velocity.x += sin(rot) * speed;
+      tmp_velocity.z += cos(rot) * speed;
     }
     if (Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT)) {
-      velocity.x = -cos(rot) * speed;
-      velocity.z = sin(rot) * speed;
+      tmp_velocity.x += -cos(rot) * speed;
+      tmp_velocity.z += sin(rot) * speed;
     }
     if (Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT)) {
-      velocity.x = cos(rot) * speed;
-      velocity.z = -sin(rot) * speed;
+      tmp_velocity.x += cos(rot) * speed;
+      tmp_velocity.z += -sin(rot) * speed;
     }
+    if (Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP) or
+        Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN) or
+        Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT) or
+        Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT))
+    {
+      velocity.x = tmp_velocity.x;
+      velocity.z = tmp_velocity.z;
+    }
+
+
     if (Input::isKeyDown(SDL_SCANCODE_SPACE) && grounded) {
 	  std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);   
 	  SoundManager::PlaySound(Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)],this,SoundManager::PRIMARY);
