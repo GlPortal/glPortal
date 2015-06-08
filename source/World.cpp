@@ -109,7 +109,7 @@ void World::update() {
     }
     if(!portaling) {
       if (player.velocity.y < 0) {
-        if(player.velocity.y < -0.18f) {
+        if(player.velocity.y < -HURT_VELOCITY) {
           std::uniform_int_distribution<> dis(0, PLAYER_FALL_SOUND.size()-1);
           SoundManager::PlaySound(Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)], &player, SoundManager::PRIMARY);
         }

@@ -12,6 +12,7 @@ namespace glPortal {
 const Vector3f PLAYER_SIZE(0.5, 1, 0.5);
 const float RUNNING_SPEED = 0.1f;
 const float JUMP_SPEED = 0.15f;
+const float HURT_VELOCITY = 0.18f;
 
 const std::array<const std::string,2> PLAYER_PANTING_SOUND =
 {
