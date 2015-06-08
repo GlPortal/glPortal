@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <vector>
 
+#include <engine/core/math/Math.hpp>
 #include <engine/Entity.hpp>
 
 using namespace std;
@@ -50,6 +51,9 @@ void XmlHelper::extractRotation(TiXmlElement *xmlElement, Vector3f &rotation) {
   TiXmlElement *elm = xmlElement->FirstChildElement("rotation");
   if (elm) {
     pushAttributeVertexToVector(elm, rotation);
+    rotation.x = rad(rotation.x);
+    rotation.y = rad(rotation.y);
+    rotation.z = rad(rotation.z);
   } else {
     rotation.x = rotation.y = rotation.z = 0;
   }

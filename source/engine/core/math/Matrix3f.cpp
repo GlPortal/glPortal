@@ -44,8 +44,8 @@ void Matrix3f::translate(const Vector2f& v) {
 }
 
 void Matrix3f::rotate(float angle) {
-  float c = cos(Math::toRadians(angle));
-  float s = sin(Math::toRadians(angle));
+  float c = cos(angle);
+  float s = sin(angle);
 
   a[0] = c;
   a[1] = s;

@@ -44,8 +44,8 @@ void Matrix4f::translate(const Vector3f& v) {
 }
 
 void Matrix4f::rotate(float angle, float x, float y, float z) {
-  float c = cos(Math::toRadians(angle));
-  float s = sin(Math::toRadians(angle));
+  float c = cos(angle);
+  float s = sin(angle);
   float ic = 1 - c;
 
   float f0 = a[0] * ((x * x * ic) + c) + a[4] * ((x * y * ic) + (z * s)) + a[8] * ((x * z * ic) - (y * s));

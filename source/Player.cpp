@@ -17,11 +17,11 @@ void Player::mouseLook() {
   SDL_GetRelativeMouseState(&mousedx, &mousedy);
 
   // Apply mouse movement to view
-  rotation.x -= mousedy * Config::getSensitivity();
-  rotation.y -= mousedx * Config::getSensitivity();
+  rotation.x -= rad(mousedy * Config::getSensitivity());
+  rotation.y -= rad(mousedx * Config::getSensitivity());
 
   // Restrict rotation in horizontal axis
-  rotation.x = Math::clamp(rotation.x, -90.0f, 90.0f);
+  rotation.x = Math::clamp(rotation.x, rad(-90.0f), rad(90.0f));
 }
 
 void Player::move() {
@@ -41,7 +41,7 @@ void Player::move() {
   if (velocity.z < FRICTION && velocity.z > -FRICTION) {velocity.z = 0;}
   velocity.y -= World::gravity;
 
-  float rot = Math::toRadians(rotation.y);
+  float rot = rotation.y;
   if (isAlive()){
     Vector3f tmp_velocity;
     tmp_velocity.x = tmp_velocity.z = 0;

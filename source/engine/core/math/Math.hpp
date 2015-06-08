@@ -11,14 +11,6 @@ public:
   constexpr static const float DEG_TO_RAD = PI_RND / 180;
   constexpr static const float RAD_TO_DEG = 180 / PI_RND;
 
-  constexpr static float toDegrees(float radians) {
-    return radians * RAD_TO_DEG;
-  }
-
-  constexpr static float toRadians(float degrees) {
-    return degrees * DEG_TO_RAD;
-  }
-
   static Vector3f toDirection(const Vector3f &v);
   static Vector3f toEuler(const Vector3f &direction);
   
@@ -33,6 +25,14 @@ public:
     return v;
   }
 };
+
+constexpr inline float deg(float rad) {
+  return rad * Math::RAD_TO_DEG;
+}
+
+constexpr inline float rad(float deg) {
+  return deg * Math::DEG_TO_RAD;
+}
 
 } /* namespace glPortal */
 

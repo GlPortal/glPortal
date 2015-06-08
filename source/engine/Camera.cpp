@@ -1,5 +1,4 @@
 #include "Camera.hpp"
-#include <engine/core/math/Math.hpp>
 
 #include <math.h>
 #include "../Window.hpp"
@@ -18,9 +17,8 @@ void Camera::calcProj() {
   Matrix4f &m = projMatrix;
   m.setIdentity();
   if (perspective) {
-    float fovyr = Math::toRadians(fovy);
-    m[0] = (float) (1 / tan(fovyr / 2)) / aspect;
-    m[5] = (float) (1 / tan(fovyr / 2));
+    m[0] = (float) (1 / tan(fovy / 2)) / aspect;
+    m[5] = (float) (1 / tan(fovy / 2));
     m[10] = (zNear + zFar) / (zNear - zFar);
     m[11] = -1;
     m[14] = (2 * zNear * zFar) / (zNear - zFar);

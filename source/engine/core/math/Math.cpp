@@ -16,20 +16,20 @@ Vector3f Math::toEuler(const Vector3f &direction) {
   Vector3f euler;
 
   //Pitch
-  euler.x = Math::toDegrees(asin(direction.y));
+  euler.x = asin(direction.y);
 
   //Yaw
   if(direction.x <= 0 && direction.z < 0) {
-    euler.y = Math::toDegrees(atan(fabs(direction.x) / fabs(direction.z)));
+    euler.y = atan(fabs(direction.x) / fabs(direction.z));
   }
   if(direction.x < 0 && direction.z >= 0) {
-    euler.y = Math::toDegrees(atan(fabs(direction.z) / fabs(direction.x))) + 90;
+    euler.y = atan(fabs(direction.z) / fabs(direction.x)) + rad(90);
   }
   if(direction.x >= 0 && direction.z > 0) {
-    euler.y = Math::toDegrees(atan(fabs(direction.x) / fabs(direction.z))) + 180;
+    euler.y = atan(fabs(direction.x) / fabs(direction.z)) + rad(180);
   }
   if(direction.x > 0 && direction.z <= 0) {
-    euler.y = Math::toDegrees(atan(fabs(direction.z) / fabs(direction.x))) + 270;
+    euler.y = atan(fabs(direction.z) / fabs(direction.x)) + rad(270);
   }
 
   return euler;

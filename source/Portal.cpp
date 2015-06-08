@@ -6,6 +6,7 @@
 #include <assets/model/Mesh.hpp>
 
 #include <engine/BoxCollider.hpp>
+#include <engine/core/math/Math.hpp>
 
 #include <SDL2/SDL_timer.h>
 
@@ -23,7 +24,7 @@ Vector3f Portal::getDirection() {
 
 bool Portal::throughPortal(const BoxCollider &collider) const {
   if (rotation.x == 0) {
-    if (rotation.y == 90) {
+    if (rotation.y == rad(90)) {
       if (collider.position.x > position.x &&
          collider.position.x + collider.size.x/2 < position.x + scale.x &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
@@ -33,7 +34,7 @@ bool Portal::throughPortal(const BoxCollider &collider) const {
         return true;
       }
     }
-    if (rotation.y == -90) {
+    if (rotation.y == rad(-90)) {
       if (collider.position.x < position.x &&
          collider.position.x - collider.size.x/2 > position.x - scale.x &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
@@ -53,7 +54,7 @@ bool Portal::throughPortal(const BoxCollider &collider) const {
         return true;
       }
     }
-    if (rotation.y == 180) {
+    if (rotation.y == rad(180)) {
       if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
@@ -64,7 +65,7 @@ bool Portal::throughPortal(const BoxCollider &collider) const {
       }
     }
   } else {
-    if (rotation.x == -90) {
+    if (rotation.x == rad(-90)) {
       if (collider.position.x - collider.size.x/2 >= position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 <= position.x + scale.x/2 &&
          collider.position.y > position.y &&
@@ -74,7 +75,7 @@ bool Portal::throughPortal(const BoxCollider &collider) const {
         return true;
       }
     }
-    if (rotation.x == 90) {
+    if (rotation.x == rad(90)) {
       if (collider.position.x - collider.size.x/2 >= position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 <= position.x + scale.x/2 &&
          collider.position.y < position.y &&
@@ -90,7 +91,7 @@ bool Portal::throughPortal(const BoxCollider &collider) const {
 
 bool Portal::inPortal(const BoxCollider &collider) const {
   if (rotation.x == 0) {
-    if (rotation.y == 90) {
+    if (rotation.y == rad(90)) {
       if (collider.position.x + collider.size.x/2 > position.x &&
          collider.position.x + collider.size.x/2 < position.x + scale.x &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
@@ -100,7 +101,7 @@ bool Portal::inPortal(const BoxCollider &collider) const {
         return true;
       }
     }
-    if (rotation.y == -90) {
+    if (rotation.y == rad(-90)) {
       if (collider.position.x - collider.size.x/2  < position.x &&
          collider.position.x - collider.size.x/2 > position.x - scale.x &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
@@ -120,7 +121,7 @@ bool Portal::inPortal(const BoxCollider &collider) const {
         return true;
       }
     }
-    if (rotation.y == 180) {
+    if (rotation.y == rad(180)) {
       if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
          collider.position.y - collider.size.y/2 > position.y - scale.y/2 &&
@@ -131,7 +132,7 @@ bool Portal::inPortal(const BoxCollider &collider) const {
       }
     }
   } else {
-    if (rotation.x == -90) {
+    if (rotation.x == rad(-90)) {
       if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
          collider.position.y + collider.size.y/2 > position.y &&
@@ -141,7 +142,7 @@ bool Portal::inPortal(const BoxCollider &collider) const {
         return true;
       }
     }
-    if (rotation.x == 90) {
+    if (rotation.x == rad(90)) {
       if (collider.position.x - collider.size.x/2 > position.x - scale.x/2 &&
          collider.position.x + collider.size.x/2 < position.x + scale.x/2 &&
          collider.position.y - collider.size.y/2 < position.y &&
@@ -187,11 +188,11 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
 
   if (wall.size.z >= 1 && wall.size.y >= 2 && (side == 0 || side == 1)) {
     if (side == 0) {
-      rotation.y = 90;
+      rotation.y = rad(90);
       scale.set(1, 2, 1);
     }
     if (side == 1) {
-      rotation.y = -90;
+      rotation.y = rad(-90);
       scale.set(1, 2, 1);
     }
     if (position.z - scale.z/2 < wall.position.z - wall.size.z/2) {
@@ -214,7 +215,7 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
       scale.set(1, 2, 1);
     }
     if (side == 3) {
-      rotation.y = 180;
+      rotation.y = rad(180);
       scale.set(1, 2, 1);
     }
     if (position.x - scale.x/2 < wall.position.x - wall.size.x/2) {
@@ -232,13 +233,13 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
     open = true;
   }
   if (wall.size.x >= 1 && wall.size.z >= 2 && (side == 4 || side == 5)) {
-    rotation.y = std::atan2(point.x-launchPos.x, point.z-launchPos.z)*(180/3.14f);
+    rotation.y = std::atan2(point.x-launchPos.x, point.z-launchPos.z);
     if (side == 4) {
-      rotation.x = -90;
+      rotation.x = rad(-90);
       scale.set(1, 2, 2);
     }
     if (side == 5) {
-      rotation.x = 90;
+      rotation.x = rad(90);
       scale.set(1, 2, 2);
     }
     if (position.x - scale.x/2 < wall.position.x - wall.size.x/2) {

@@ -1,23 +1,24 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <engine/core/math/Math.hpp>
 #include <engine/core/math/Matrix4f.hpp>
 #include <engine/core/math/Vector3f.hpp>
-
-const float DEFAULT_FOVY = 60;
-const float DEFAULT_ASPECT = 1;
-const float DEFAULT_ZNEAR = 0.1f;
-const float DEFAULT_ZFAR = 100;
-const bool  DEFAULT_PERSPECTIVE = true;
-const float DEFAULT_TOP = 0.5f;
-const float DEFAULT_BOTTOM = -0.5f;
-const float DEFAULT_LEFT = -0.5f;
-const float DEFAULT_RIGHT = 0.5f;
 
 namespace glPortal {
 
 class Camera {
 public:
+  static constexpr const float DEFAULT_FOVY = rad(60);
+  static constexpr const float DEFAULT_ASPECT = 1;
+  static constexpr const float DEFAULT_ZNEAR = 0.1f;
+  static constexpr const float DEFAULT_ZFAR = 100;
+  static constexpr const bool  DEFAULT_PERSPECTIVE = true;
+  static constexpr const float DEFAULT_TOP = 0.5f;
+  static constexpr const float DEFAULT_BOTTOM = -0.5f;
+  static constexpr const float DEFAULT_LEFT = -0.5f;
+  static constexpr const float DEFAULT_RIGHT = 0.5f;
+
   Camera() {}
   Camera(float fovy, float aspect, float zNear, float zFar);
 

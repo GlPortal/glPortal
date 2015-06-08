@@ -99,12 +99,12 @@ void World::update() {
     bool portaling = false;
     if (scene->bluePortal.open and scene->orangePortal.open) {
       if(scene->bluePortal.inPortal(bboxY)) {
-        if(scene->bluePortal.rotation.x == -90 || scene->bluePortal.rotation.x == 90) {
+        if(scene->bluePortal.rotation.x == rad(-90) || scene->bluePortal.rotation.x == rad(90)) {
           portaling = true;
         }
       }
       if(scene->orangePortal.inPortal(bboxY)) {
-        if(scene->orangePortal.rotation.x == -90 || scene->orangePortal.rotation.x == 90) {
+        if(scene->orangePortal.rotation.x == rad(-90) || scene->orangePortal.rotation.x == rad(90)) {
           portaling = true;
         }
       }
@@ -128,12 +128,12 @@ void World::update() {
     bool portaling = false;
     if (scene->bluePortal.open and scene->orangePortal.open) {
       if(scene->bluePortal.inPortal(bboxX)) {
-        if(scene->bluePortal.rotation.x == 0 and (scene->bluePortal.rotation.y == -90 || scene->bluePortal.rotation.y == 90)) {
+        if(scene->bluePortal.rotation.x == 0 and (scene->bluePortal.rotation.y == rad(-90) || scene->bluePortal.rotation.y == rad(90))) {
           portaling = true;
         }
       }
       if(scene->orangePortal.inPortal(bboxX)) {
-        if(scene->bluePortal.rotation.x == 0 and (scene->orangePortal.rotation.y == -90 || scene->orangePortal.rotation.y == 90)) {
+        if(scene->bluePortal.rotation.x == 0 and (scene->orangePortal.rotation.y == rad(-90) || scene->orangePortal.rotation.y == rad(90))) {
           portaling = true;
         }
       }
@@ -150,12 +150,12 @@ void World::update() {
     
     if (scene->bluePortal.open and scene->orangePortal.open) {
       if(scene->bluePortal.inPortal(bboxZ)) {
-        if(scene->bluePortal.rotation.x == 0 and (scene->bluePortal.rotation.y == 0 || scene->bluePortal.rotation.y == 180)) {
+        if(scene->bluePortal.rotation.x == 0 and (scene->bluePortal.rotation.y == 0 || scene->bluePortal.rotation.y == rad(180))) {
           portaling = true;
         }
       }
       if(scene->orangePortal.inPortal(bboxZ)) {
-        if(scene->orangePortal.rotation.x == 0 and (scene->orangePortal.rotation.y == 0 || scene->orangePortal.rotation.y == 180)) {
+        if(scene->orangePortal.rotation.x == 0 and (scene->orangePortal.rotation.y == 0 || scene->orangePortal.rotation.y == rad(180))) {
           portaling = true;
         }
       }
@@ -212,7 +212,7 @@ void World::update() {
   if (scene->bluePortal.open and scene->orangePortal.open) {
     if (scene->bluePortal.throughPortal(playerCollider)) {
       player.position.set(scene->orangePortal.position);
-      float rotation = scene->orangePortal.rotation.y - scene->bluePortal.rotation.y + 180;
+      float rotation = scene->orangePortal.rotation.y - scene->bluePortal.rotation.y + rad(180);
       player.rotation.y += rotation;
       //Transform the velocity of the player
       float velocity = player.velocity.length();
@@ -220,7 +220,7 @@ void World::update() {
     }
     if (scene->orangePortal.throughPortal(playerCollider)) {
       player.position.set(scene->bluePortal.position);
-      float rotation = scene->bluePortal.rotation.y - scene->orangePortal.rotation.y + 180;
+      float rotation = scene->bluePortal.rotation.y - scene->orangePortal.rotation.y + rad(180);
       player.rotation.y += rotation;
       //Transform the velocity of the player
       float velocity = player.velocity.length();

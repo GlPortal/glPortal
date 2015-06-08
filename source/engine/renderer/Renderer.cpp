@@ -385,7 +385,7 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Portal &
   Matrix4f p2mat;
   p2mat.translate(otherPortal.position);
   p2mat.rotate(otherPortal.rotation);
-  Matrix4f rotate180; rotate180.rotate(180, 0, 1, 0);
+  Matrix4f rotate180; rotate180.rotate(rad(180), 0, 1, 0);
   Matrix4f view; cam.getViewMatrix(view);
   Matrix4f destView = view * p1mat * rotate180 * inverse(p2mat);
 
