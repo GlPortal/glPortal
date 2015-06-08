@@ -113,7 +113,11 @@ void Player::harm(int amount) {
 }
 
 void Player::kill() {
-  health = 0;
+  health = MIN_HEALTH;
+}
+
+void Player::revive() {
+  health = MAX_HEALTH;
 }
 
 void Player::setPlayingSound(bool state)

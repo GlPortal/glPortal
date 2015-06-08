@@ -82,7 +82,7 @@ void World::update() {
   // Check if player is still alive
   if (not player.isAlive()) {
     player.position.set(scene->start.position);
-    player.heal(100);
+    player.revive();
   }
 
   player.mouseLook();

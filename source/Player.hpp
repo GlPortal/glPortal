@@ -67,6 +67,7 @@ public:
   void heal(int amount);
   void harm(int amount);
   void kill();
+  void revive();
   bool getPlayingSound();
   void setPlayingSound(bool state);
   Vector3f velocity;
@@ -75,7 +76,7 @@ public:
   float speed;
 private:
   const int MAX_HEALTH = 100;
-  const int MIN_HEALTH = -100;
+  const int MIN_HEALTH = 0;
   int health = MAX_HEALTH;
   std::mt19937 generator;
   bool playingSound;
