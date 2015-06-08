@@ -109,9 +109,7 @@ void Player::heal(int amount) {
 
 void Player::harm(int amount) {
   health -= amount;
-  if (health < MIN_HEALTH) {
-    health = MIN_HEALTH;
-  }
+  health = Math::clamp(health, MIN_HEALTH, MAX_HEALTH);
 }
 
 void Player::kill() {
