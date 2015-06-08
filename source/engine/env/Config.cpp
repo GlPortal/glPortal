@@ -4,6 +4,7 @@
 #include "ConfigFileParser.hpp"
 
 #include <iostream>
+#include <stdexcept>
 
 namespace glPortal {
   const std::string Config::TRUE = "yes";
