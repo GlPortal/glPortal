@@ -85,9 +85,11 @@ void World::update() {
     player.revive();
   }
 
+  // Calculate the view and new velocity of the player
   player.mouseLook();
   player.move();
 
+  // Figure out the provisional new player position
   Vector3f pos = player.position + player.velocity;
 
   //FIXME Remake the collision system to be less faulty and ugly
