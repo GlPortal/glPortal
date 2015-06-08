@@ -18,7 +18,7 @@
 namespace glPortal {
 
 Game::Game() : closed(false) {
-  window.createFromConfig();
+  window.create("GlPortal");
   
   try {
     SoundManager::Init();
@@ -103,6 +103,8 @@ int main(int argc, char *argv[]) {
   ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   Environment::init();
   ArgumentsParser::populateConfig();
+  Config::load();
+  
   Game game;
 
   return 0;

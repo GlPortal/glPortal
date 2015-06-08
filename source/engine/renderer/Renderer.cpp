@@ -28,6 +28,7 @@
 #include <engine/core/math/Vector3f.hpp>
 
 #include <SDL2/SDL_timer.h>
+#include <algorithm>
 
 namespace glPortal {
 
@@ -144,7 +145,7 @@ void Renderer::render(const Camera &cam) {
   // Draw simplex noise
   glDepthMask(GL_FALSE);
   if (scene->orangePortal.open and scene->bluePortal.open) {
-    uint32_t dtOpen = SDL_GetTicks()-max(scene->orangePortal.openSince, scene->bluePortal.openSince);
+    uint32_t dtOpen = SDL_GetTicks()-std::max(scene->orangePortal.openSince, scene->bluePortal.openSince);
     if (dtOpen < Portal::NOISE_FADE_DELAY) {
       float al = 1-((float)dtOpen/Portal::NOISE_FADE_DELAY)*2;
       if (true or not scene->orangePortal.open) {

@@ -2,7 +2,6 @@
 #define WINDOW_HPP
 
 #include <SDL2/SDL_video.h>
-#include <engine/env/Environment.hpp>
 #include <engine/Viewport.hpp>
 #include <string>
 
@@ -10,8 +9,7 @@ namespace glPortal {
 
 class Window : public Viewport {
 public:
-  void create(const char*, int, int, bool fullscreen);
-  void createFromConfig();
+  void create(const char*);
   void setFullscreen();
   void swapBuffers();
   void getSize(int *width, int *height) const;
@@ -23,7 +21,7 @@ private:
   int height;
   SDL_Window *window;
   SDL_GLContext context;
-  ConfigFileParser *config;
+
   static const char *DEFAULT_TITLE;
   static const std::string GLEW_UNSUPPORTED_MESSAGE;
   static const std::string GLEW_INIT_ERROR_MESSAGE;

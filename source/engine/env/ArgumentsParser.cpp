@@ -22,11 +22,11 @@ void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
     {0, 0, 0, 0}
   };
   
-  while (1){
+  while (1) {
     int option_index = 0;
     argument = getopt_long (argc, argv, "v:d:h:", long_options, &option_index);
 
-    if (argument == -1){
+    if (argument == -1) {
       break;
     }
     

@@ -17,8 +17,8 @@ void Player::mouseLook() {
   SDL_GetRelativeMouseState(&mousedx, &mousedy);
 
   // Apply mouse movement to view
-  rotation.x -= mousedy * sensitivity.x;
-  rotation.y -= mousedx * sensitivity.y;
+  rotation.x -= mousedy * Config::getSensitivity();
+  rotation.y -= mousedx * Config::getSensitivity();
 
   // Restrict rotation in horizontal axis
   if (rotation.x < -90) {

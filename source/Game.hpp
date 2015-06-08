@@ -11,8 +11,6 @@ const int MAX_SKIP = 5;
 
 namespace glPortal {
 
-class ConfigFileParser;
-
 class Game {
 public:
   Game();
@@ -24,7 +22,6 @@ private:
   World world;
 
   bool closed;
-  ConfigFileParser *config;
 };
 
 } /* namespace glPortal */

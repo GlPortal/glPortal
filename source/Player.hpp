@@ -46,7 +46,6 @@ public:
   Player() {
     scale.set(PLAYER_SIZE);
 
-    sensitivity.set(0.25, 0.25);
     velocity.set(0, 0, 0);
     speed = RUNNING_SPEED;
 
@@ -72,7 +71,6 @@ public:
   Vector3f velocity;
   bool grounded;
 
-  Vector2f sensitivity;
   float speed;
 private:
   const int MAX_HEALTH = 100;
