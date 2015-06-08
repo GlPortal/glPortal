@@ -20,9 +20,14 @@ class Camera {
 public:
   Camera() {}
   Camera(float fovy, float aspect, float zNear, float zFar);
+
   void getProjMatrix(Matrix4f &m) const;
+  void setProjMatrix(const Matrix4f &m);
   void getViewMatrix(Matrix4f &m) const;
+  void setViewMatrix(const Matrix4f &m);
+
   void setFovy(float fovy);
+  float getFovy() const;
   void setAspect(float aspect);
   float getAspect() const;
   void setZNear(float zNear);
@@ -31,9 +36,20 @@ public:
   void setOrthographic();
   void setBounds(float left, float right, float bottom, float top);
 
+  Vector3f getPosition() const;
+  void setPosition(const Vector3f &p);
+  Vector3f getRotation() const;
+  void setRotation(const Vector3f &r);
+
+private:
   Vector3f position;
   Vector3f rotation;
-private:
+
+  void calcProj();
+  void calcView();
+  Matrix4f projMatrix;
+  Matrix4f viewMatrix;
+
   bool perspective = DEFAULT_PERSPECTIVE;
   float fovy    = DEFAULT_FOVY;
   float aspect  = DEFAULT_ASPECT;

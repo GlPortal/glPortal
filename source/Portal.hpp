@@ -19,7 +19,7 @@ public:
   Vector3f getDirection();
   bool throughPortal(const BoxCollider &collider) const;
   bool inPortal(const BoxCollider &collider) const;
-  void placeOnWall(const BoxCollider &wall, const Vector3f &point);
+  void placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, const Vector3f &point);
 
   Vector3f getScaleMult() const;
 

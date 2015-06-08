@@ -236,9 +236,8 @@ void World::update() {
   int vpWidth, vpHeight;
   renderer->getViewport()->getSize(&vpWidth, &vpHeight);
   scene->camera.setAspect((float)vpWidth / vpHeight);
-  scene->camera.position.set(scene->player.position);
-  scene->camera.position.y += scene->player.scale.y/2;
-  scene->camera.rotation.set(scene->player.rotation);
+  scene->camera.setPosition(scene->player.position + Vector3f(0, scene->player.scale.y/2, 0));
+  scene->camera.setRotation(scene->player.rotation);
 
   //Check if the end of the level has been reached
   float distToEnd = (scene->end.position - scene->player.position).length();
@@ -264,14 +263,14 @@ bool World::collidesWithWalls(const BoxCollider &collider) const {
 
 void World::shootPortal(int button) {
   //Shooting
-  Vector3f cameraDir = Math::toDirection(scene->camera.rotation);
+  Vector3f cameraDir = Math::toDirection(scene->camera.getRotation());
 
   //Find the closest intersection
   PhysicsEntity *closestWall = nullptr;
   float intersection = INT_MAX;
   for (unsigned int i = 0; i < scene->walls.size(); ++i) {
     PhysicsEntity &wall = scene->walls[i];
-    Ray bullet(scene->camera.position, cameraDir);
+    Ray bullet(scene->camera.getPosition(), cameraDir);
     float tNear, tFar;
     if (bullet.collides(wall, &tNear, &tFar)) {
       if (tNear < intersection) {
@@ -283,11 +282,11 @@ void World::shootPortal(int button) {
   
   if (closestWall != nullptr and (closestWall->material.portalable)) {
     BoxCollider wall(closestWall->position, closestWall->scale);
-    Vector3f ipos = scene->camera.position + (cameraDir * intersection);
+    Vector3f ipos = scene->camera.getPosition() + (cameraDir * intersection);
     Portal portal;
     portal.openSince = SDL_GetTicks();
     portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png"); 
-    portal.placeOnWall(wall, ipos);
+    portal.placeOnWall(scene->camera.getPosition(), wall, ipos);
 
     if (button == 1) {
       portal.material.diffuse = TextureLoader::getTexture("blueportal.png");

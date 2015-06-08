@@ -13,6 +13,7 @@
 
 #include "Matrix3f.hpp"
 #include "Vector3f.hpp"
+#include "Vector4f.hpp"
 #include "Math.hpp"
 
 #include <math.h>
@@ -180,6 +181,15 @@ Matrix4f Matrix4f::operator*(const Matrix4f& m) const {
   d[15] = a[3] * m[12] + a[7] * m[13] + a[11] * m[14] + a[15] * m[15];
 
   return d;
+}
+
+Vector4f Matrix4f::operator*(const Vector4f &v) const {
+  Vector4f dest;
+  dest.x = a[0] * v.x + a[4] * v.y + a[8] * v.z + a[12] * v.w;
+  dest.y = a[1] * v.x + a[5] * v.y + a[9] * v.z + a[13] * v.w;
+  dest.z = a[2] * v.x + a[6] * v.y + a[10] * v.z + a[14] * v.w;
+  dest.w = a[3] * v.x + a[7] * v.y + a[11] * v.z + a[15] * v.w;
+  return dest;
 }
 
 /* Utility functions */

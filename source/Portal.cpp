@@ -155,7 +155,7 @@ bool Portal::inPortal(const BoxCollider &collider) const {
   return false;
 }
 
-void Portal::placeOnWall(const BoxCollider &wall, const Vector3f &point) {
+void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, const Vector3f &point) {
   //Determine on what side the portal is
   //Side 0: -x, Side 1: x, Side 2: -z, Side 3: z, Side 4: -y, Side 5: y
   float dist = 1000000;
@@ -232,6 +232,7 @@ void Portal::placeOnWall(const BoxCollider &wall, const Vector3f &point) {
     open = true;
   }
   if (wall.size.x >= 1 && wall.size.z >= 2 && (side == 4 || side == 5)) {
+    rotation.y = std::atan2(point.x-launchPos.x, point.z-launchPos.z)*(180/3.14f);
     if (side == 4) {
       rotation.x = -90;
       scale.set(1, 2, 2);

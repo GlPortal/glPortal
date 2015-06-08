@@ -43,6 +43,8 @@ public:
   void renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat = nullptr);
   void setCameraInPortal(const Camera &cam, Camera &dest, const Portal &portal, const Portal &otherPortal);
   void setFont(const std::string &font, float size);
+
+  static Matrix4f clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj);
 private:
   Viewport *viewport;
   int vpWidth, vpHeight;

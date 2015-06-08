@@ -11,9 +11,11 @@ Camera::Camera(float fovy, float aspect, float zNear, float zFar) {
   this->aspect = aspect;
   this->zNear = zNear;
   this->zFar = zFar;
+  calcProj();
 }
 
-void Camera::getProjMatrix(Matrix4f &m) const {
+void Camera::calcProj() {
+  Matrix4f &m = projMatrix;
   m.setIdentity();
   if (perspective) {
     float fovyr = Math::toRadians(fovy);
@@ -33,19 +35,43 @@ void Camera::getProjMatrix(Matrix4f &m) const {
   }
 }
 
-void Camera::getViewMatrix(Matrix4f &m) const {
+
+void Camera::calcView() {
+  Matrix4f &m = viewMatrix;
   m.setIdentity();
   m.rotate(-rotation.x, 1, 0, 0);
   m.rotate(-rotation.y, 0, 1, 0);
   m.translate(negate(position));
 }
 
+void Camera::getProjMatrix(Matrix4f &m) const {
+  m = projMatrix;
+}
+
+void Camera::setProjMatrix(const Matrix4f &m) {
+  projMatrix = m;
+}
+
+void Camera::getViewMatrix(Matrix4f &m) const {
+  m = viewMatrix;
+}
+
+void Camera::setViewMatrix(const Matrix4f &m) {
+  viewMatrix = m;
+}
+
 void Camera::setFovy(float fovy) {
   this->fovy = fovy;
+  calcProj();
+}
+
+float Camera::getFovy() const {
+  return fovy;
 }
 
 void Camera::setAspect(float aspect) {
   this->aspect = aspect;
+  calcProj();
 }
 
 float Camera::getAspect() const {
@@ -54,18 +80,22 @@ float Camera::getAspect() const {
 
 void Camera::setZNear(float zNear) {
   this->zNear = zNear;
+  calcProj();
 }
 
 void Camera::setZFar(float zFar) {
   this->zFar = zFar;
+  calcProj();
 }
 
 void Camera::setPerspective() {
   this->perspective = true;
+  calcProj();
 }
 
 void Camera::setOrthographic() {
   this->perspective = false;
+  calcProj();
 }
 
 void Camera::setBounds(float left, float right, float bottom, float top) {
@@ -73,6 +103,25 @@ void Camera::setBounds(float left, float right, float bottom, float top) {
   this->right = right;
   this->bottom = bottom;
   this->top = top;
+  calcProj();
+}
+
+Vector3f Camera::getPosition() const {
+  return position;
+}
+
+void Camera::setPosition(const Vector3f &p) {
+  position = p;
+  calcView();
+}
+
+Vector3f Camera::getRotation() const {
+  return rotation;
+}
+
+void Camera::setRotation(const Vector3f &r) {
+  rotation = r;
+  calcView();
 }
 
 } /* namespace glPortal */

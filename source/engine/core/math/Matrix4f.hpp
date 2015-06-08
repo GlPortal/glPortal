@@ -19,6 +19,7 @@ namespace glPortal {
 
 class Matrix3f;
 class Vector3f;
+class Vector4f;
 
 class Matrix4f {
 public:
@@ -41,6 +42,7 @@ public:
   bool operator==(const Matrix4f& m) const;
   bool operator!=(const Matrix4f& m) const;
   Matrix4f operator*(const Matrix4f& m) const;
+  Vector4f operator*(const Vector4f&) const;
 private:
   float a[16];
 };

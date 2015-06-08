@@ -26,6 +26,7 @@
 #include <engine/core/math/Matrix3f.hpp>
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
+#include <engine/core/math/Vector4f.hpp>
 
 #include <SDL2/SDL_timer.h>
 #include <algorithm>
@@ -378,27 +379,54 @@ void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx,
 }
 
 void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Portal &portal, const Portal &otherPortal) {
-  //Set camera in other portal
-  Vector3f camPos = cam.position - portal.position;
-  Vector3f camDir = Math::toDirection(cam.rotation);
-
-  //Invert the position and rotation to be behind the portal
-  Vector3f icamPos(-camPos.x, camPos.y, -camPos.z);
-  Vector3f icamDir(-camDir.x, camDir.y, -camDir.z);
-
-  //Calculate the position and rotation of the camera relative to the other portal
-  Matrix4f mRot;
-  mRot.rotate(negate(portal.rotation));
-  mRot.rotate(otherPortal.rotation);
-
-  Vector3f rcamPos = mRot.transform(icamPos);
-  Vector3f rcamDir = mRot.transform(icamDir);
+  Matrix4f p1mat;
+  p1mat.translate(portal.position);
+  p1mat.rotate(portal.rotation);
+  Matrix4f p2mat;
+  p2mat.translate(otherPortal.position);
+  p2mat.rotate(otherPortal.rotation);
+  Matrix4f rotate180; rotate180.rotate(180, 0, 1, 0);
+  Matrix4f view; cam.getViewMatrix(view);
+  Matrix4f destView = view * p1mat * rotate180 * inverse(p2mat);
 
   dest.setPerspective();
   dest.setAspect(cam.getAspect());
-  dest.position = rcamPos + otherPortal.position;
-  dest.setZNear((otherPortal.position - dest.position).length());
-  dest.rotation = Math::toEuler(rcamDir);
+  dest.setFovy(cam.getFovy());
+  dest.setZNear((portal.position - cam.getPosition()).length());
+  //Matrix4f proj; dest.getProjMatrix(proj);
+  //dest.setProjMatrix(clipProjMat(portal, destView, proj));
+  dest.setViewMatrix(destView);
+}
+
+static float sign(float v) {
+  if (v > 0.f) return 1.f;
+  if (v < 0.f) return -1.f;
+  return 0.f;
+}
+
+Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj) {
+  Vector4f clipPlane(Math::toDirection(ent.rotation), -dot(Math::toDirection(ent.rotation), ent.position));
+  clipPlane = inverse(transpose(view)) * clipPlane;
+
+  if (clipPlane.w > 0.f)
+    return proj;
+
+  Vector4f q = inverse(proj) * Vector4f(
+    sign(clipPlane.x),
+    sign(clipPlane.y),
+    1.0f,
+    1.0f
+  );
+
+  Vector4f c = clipPlane * (2.0f / dot(clipPlane, q));
+
+  // third row = clip plane - fourth row
+  Matrix4f newProj = proj;
+  newProj[2] = c.x - newProj[3];
+  newProj[6] = c.y - newProj[7];
+  newProj[10] = c.z - newProj[11];
+  newProj[14] = c.w - newProj[15];
+  return newProj;
 }
 
 } /* namespace glPortal */
