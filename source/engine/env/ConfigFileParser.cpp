@@ -30,19 +30,17 @@ ConfigFileParser::ConfigFileParser(const std::string &filename) {
 
       if (line.length() > 0) {
         vector<std::string> strings;
-        for (unsigned int i = 0; i < line.length(); i++) {
+        for (unsigned int i = 0; i < line.length(); ++i) {
           if (line[i] == ' ') {
             strings.push_back(stringBuffer);
             stringBuffer = "";
           } else {
-            std::string character(1, line[i]);
-            const char* characterConstant = character.c_str();
-            stringBuffer.append(characterConstant);
+            stringBuffer += line[i];
           }
         }
         strings.push_back(stringBuffer);
         stringBuffer = "";
-        if(strings.size() >= 2){
+        if(strings.size() >= 2) {
           configMap[strings.at(0)] = strings.at(1);
         } else {
           throw std::runtime_error("Config parser is expecting two items per line.");
@@ -53,28 +51,29 @@ ConfigFileParser::ConfigFileParser(const std::string &filename) {
   }
 }
 
-std::string ConfigFileParser::getStringByKey(const std::string &key) {
-  try {
-    return configMap.at(key);
-  } catch (const std::out_of_range& e) {
-    throw std::invalid_argument("No such value for key.");
-  }
+const string& ConfigFileParser::getString(const string &key) {
+  return configMap.at(key);
 }
 
-int ConfigFileParser::getIntByKey(const std::string &key) {
-  return atoi(getStringByKey(key).c_str());
+void ConfigFileParser::setString(const string &key, const string &value) {
+  configMap[key] = value;
 }
 
-float ConfigFileParser::getFloatByKey(const std::string &key) {
-  float s = atof(getStringByKey(key).c_str());
+int ConfigFileParser::getInt(const string &key) {
+  return atoi(getString(key).c_str());
+}
+
+float ConfigFileParser::getFloat(const string &key) {
+  float s = atof(getString(key).c_str());
   return s;
 }
 
-void ConfigFileParser::setStringByKey(const std::string &key, const std::string &value) {
-  //configMap.erase(configMap.find(key));
-  //configMap.insert ( std::pair<std::string, std::string>(key, value) );
-  // configMap.at(key) = value;
-  configMap[key] = value;
+bool ConfigFileParser::getBool(const string &key) {
+  const string &b = getString(key);
+  if (b == "yes" || b == "true" || b == "1" || b == "on") {
+    return true;
+  }
+  return false;
 }
   
 } /* namespace glPortal */

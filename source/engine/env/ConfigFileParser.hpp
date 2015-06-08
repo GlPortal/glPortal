@@ -11,10 +11,15 @@ private:
   std::map<std::string, std::string> configMap;
 public:
   ConfigFileParser(const std::string &filename);
-  std::string getStringByKey(const std::string &key);
-  int getIntByKey(const std::string &key);
-  float getFloatByKey(const std::string &key);
-  void setStringByKey(const std::string &key, const std::string &value);
+
+  const std::string& getString(const std::string &key);
+  void setString(const std::string &key, const std::string &value);
+
+  int getInt(const std::string &key);
+
+  float getFloat(const std::string &key);
+
+  bool getBool(const std::string &key);
 };
 
 }

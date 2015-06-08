@@ -58,8 +58,8 @@ void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
 }
 void ArgumentsParser::populateConfig() {
   ConfigFileParser *config = Environment::getConfigPointer();
-  if (not(mapName == "")){
-    config->setStringByKey(Config::MAP, mapName);
+  if (mapName != ""){
+    config->setString(Config::MAP, mapName);
   }
 }
 } /* namespace glPortal */

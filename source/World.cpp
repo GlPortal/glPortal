@@ -47,10 +47,10 @@ void World::create() {
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
   try {
-    std::string map = config->getStringByKey(Config::MAP);
+    std::string map = config->getString(Config::MAP);
     loadScene(map);
     std::cout << "Custom map loaded.";
-  } catch (const std::invalid_argument& e) {
+  } catch (const std::out_of_range &e) {
     loadScene(mapList[currentLevel]);
   }
 

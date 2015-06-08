@@ -7,7 +7,6 @@ namespace glPortal {
 
 class Config {
 public:
-  static const std::string TRUE;
   static const std::string SENSITIVITY;
   static const std::string ANTIALIASING;
   static const std::string FULLSCREEN;

@@ -7,7 +7,6 @@
 #include <stdexcept>
 
 namespace glPortal {
-  const std::string Config::TRUE = "yes";
   const std::string Config::SENSITIVITY = "sensitivity";
   const std::string Config::ANTIALIASING = "antialiasing";
   const std::string Config::FULLSCREEN = "fullscreen";
@@ -30,27 +29,27 @@ namespace glPortal {
     try {
       ConfigFileParser *config = Environment::getConfigPointer();
   
-      Config::fullscreen = config->getStringByKey(Config::FULLSCREEN) == Config::TRUE;
-      Config::antialiasing = config->getStringByKey(Config::ANTIALIASING) == Config::TRUE;
-      Config::vsync = config->getStringByKey(Config::VSYNC) == Config::TRUE;
-      Config::sound = config->getStringByKey(Config::SOUND) == Config::TRUE;
-	  Config::sensitivity = config->getFloatByKey(Config::SENSITIVITY);
+      Config::fullscreen = config->getBool(Config::FULLSCREEN);
+      Config::antialiasing = config->getBool(Config::ANTIALIASING);
+      Config::vsync = config->getBool(Config::VSYNC);
+      Config::sound = config->getBool(Config::SOUND);
+      Config::sensitivity = config->getFloat(Config::SENSITIVITY);
 
-      std::string width = config->getStringByKey(Config::WIDTH);
+      std::string width = config->getString(Config::WIDTH);
       if (width == "auto") {
         Config::width = -1;
       } else {
         Config::width = std::stoi(width);
       }
 
-      std::string height = config->getStringByKey(Config::HEIGHT);
+      std::string height = config->getString(Config::HEIGHT);
       if (height == "auto") {
         Config::height = -1;
       } else {
         Config::height = std::stoi(height);
       }
-    } catch (const std::invalid_argument &e) {
-      std::cout << "Failed to load configuration due to an invalid argument" << std::endl;
+    } catch (const std::out_of_range &e) {
+      std::cout << "Failed to load configuration due to a missing config key" << std::endl;
     }
   }
 } /* namespace glPortal */
