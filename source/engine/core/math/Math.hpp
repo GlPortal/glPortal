@@ -21,6 +21,7 @@ public:
 
   static Vector3f toDirection(const Vector3f &v);
   static Vector3f toEuler(const Vector3f &direction);
+  static float clamp(float v, float low, float high);
 };
 
 } /* namespace glPortal */

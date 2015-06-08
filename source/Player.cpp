@@ -21,12 +21,7 @@ void Player::mouseLook() {
   rotation.y -= mousedx * Config::getSensitivity();
 
   // Restrict rotation in horizontal axis
-  if (rotation.x < -90) {
-    rotation.x = -90;
-  }
-  if (rotation.x > 90) {
-    rotation.x = 90;
-  }
+  rotation.x = Math::clamp(rotation.x, -90, 90);
 }
 
 void Player::move() {
