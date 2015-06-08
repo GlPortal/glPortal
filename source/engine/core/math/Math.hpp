@@ -21,7 +21,17 @@ public:
 
   static Vector3f toDirection(const Vector3f &v);
   static Vector3f toEuler(const Vector3f &direction);
-  static float clamp(float v, float low, float high);
+  
+  template <typename T>
+  static T clamp(T v, T low, T high) {
+    if (v < low) {
+      return low;
+    }
+    else if (v > high) {
+      return high;
+    }
+    return v;
+  }
 };
 
 } /* namespace glPortal */

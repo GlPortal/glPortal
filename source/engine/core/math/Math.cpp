@@ -35,14 +35,4 @@ Vector3f Math::toEuler(const Vector3f &direction) {
   return euler;
 }
 
-float Math::clamp(float v, float low, float high) {
-  if (v < low) {
-    return low;
-  }
-  else if (v > high) {
-    return high;
-  }
-  return v;
-}
-
 } /* namespace glPortal */

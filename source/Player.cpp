@@ -21,7 +21,7 @@ void Player::mouseLook() {
   rotation.y -= mousedx * Config::getSensitivity();
 
   // Restrict rotation in horizontal axis
-  rotation.x = Math::clamp(rotation.x, -90, 90);
+  rotation.x = Math::clamp(rotation.x, -90.0f, 90.0f);
 }
 
 void Player::move() {
@@ -99,17 +99,12 @@ int Player::getHealth() {
 }
 
 bool Player::isAlive() {
-  if (health > 0) {
-    return true;
-  }
-  return false;
+  return health > 0;
 }
 
 void Player::heal(int amount) {
   health += amount;
-  if (health > MAX_HEALTH) {
-    health = MAX_HEALTH;
-  }
+  health = Math::clamp(health, MIN_HEALTH, MAX_HEALTH);
 }
 
 void Player::harm(int amount) {
