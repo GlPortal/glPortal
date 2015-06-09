@@ -48,8 +48,8 @@ namespace glPortal {
       } else {
         Config::height = std::stoi(height);
       }
-    } catch (const std::out_of_range &e) {
-      std::cout << "Failed to load configuration due to a missing config key" << std::endl;
+    } catch (const ConfigFileParser::KeyNotFound &e) {
+      std::cout << "Failed to load configuration due to config key \"" << e.which() << "\" missing" << std::endl;
     }
   }
 } /* namespace glPortal */

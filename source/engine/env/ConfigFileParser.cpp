@@ -11,6 +11,14 @@ using namespace std;
 
 namespace glPortal {
 
+ConfigFileParser::KeyNotFound::KeyNotFound(const string &key)
+  : out_of_range("Key not found in configuration"), key(key) {
+}
+
+const char* ConfigFileParser::KeyNotFound::which() const {
+  return key.c_str();
+}
+
 /** @class ConfigFileParser
     @brief Parse config files
 
@@ -52,7 +60,11 @@ ConfigFileParser::ConfigFileParser(const std::string &filename) {
 }
 
 const string& ConfigFileParser::getString(const string &key) {
-  return configMap.at(key);
+  try {
+    return configMap.at(key);
+  } catch (const std::out_of_range&) {
+    throw KeyNotFound(key);
+  }
 }
 
 void ConfigFileParser::setString(const string &key, const string &value) {
