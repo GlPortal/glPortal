@@ -1,22 +1,17 @@
 #include "Input.hpp"
 
+#include <SDL2/SDL_keyboard.h>
+
 namespace glPortal {
 
-bool Input::keystates[] = { false };
+// Uses C++11's vector<bool> specialization, space-efficient (1 bool = 1 bit)
+std::vector<bool> Input::keystates(SDL_NUM_SCANCODES);
 
 void Input::keyPressed(int key, int mod) {
-  //If the key lies outside the range of our buffer, discard it
-  if (key < 0 || key >= KEY_BUFFER) {
-    return;
-  }
   keystates[key] = true;
 }
 
 void Input::keyReleased(int key, int mod) {
-  //If the key lies outside the range of our buffer, discard it
-  if (key < 0 || key >= KEY_BUFFER) {
-    return;
-  }
   keystates[key] = false;
 }
 

@@ -47,6 +47,7 @@ public:
   static float gravity;
   static float friction;
 private:
+  std::string currentScenePath;
   Renderer *renderer;
   Scene *scene;
   std::mt19937 generator;

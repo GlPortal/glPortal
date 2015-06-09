@@ -1,9 +1,9 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-namespace glPortal {
+#include <vector>
 
-const int KEY_BUFFER = 300;
+namespace glPortal {
 
 class Input {
 public:
@@ -11,7 +11,7 @@ public:
   static void keyReleased(int key, int mod);
   static bool isKeyDown(int key);
 private:
-  static bool keystates[KEY_BUFFER];
+  static std::vector<bool> keystates;
 };
 
 } /* namespace glPortal */

@@ -29,6 +29,8 @@
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
 
+#include <SDL2/SDL_keyboard.h>
+
 #include "Input.hpp"
 #include "Player.hpp"
 #include "Portal.hpp"
@@ -50,7 +52,7 @@ void World::create() {
     std::string map = config->getString(Config::MAP);
     loadScene(map);
     std::cout << "Custom map loaded.";
-  } catch (const std::out_of_range &e) {
+  } catch (const std::out_of_range& e) {
     loadScene(mapList[currentLevel]);
   }
 
@@ -67,16 +69,24 @@ void World::destroy() {
   delete scene;
 }
 
-void World::loadScene(const std::string &name) {
+void World::loadScene(const std::string &path) {
   // Delete previous scene
   delete scene;
-  scene = MapLoader::getScene(name);
+  currentScenePath = path;
+  scene = MapLoader::getScene(path);
   //play a random piece of music each team a scene is loaded
   std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
   SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
 }
 
 void World::update() {
+  if (Input::isKeyDown(SDL_SCANCODE_F5)) {
+    if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
+      // Enable reload-on-change (inotify on Linux)
+    }
+    loadScene(currentScenePath);
+  }
+
   Player &player = scene->player;
 
   // Check if player is still alive
