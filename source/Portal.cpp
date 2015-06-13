@@ -3,10 +3,11 @@
 #include <cmath>
 
 #include <assets/model/MeshLoader.hpp>
-#include <assets/model/Mesh.hpp>
 
 #include <engine/BoxCollider.hpp>
 #include <engine/core/math/Math.hpp>
+#include <engine/Entity.hpp>
+#include <engine/component/Transform.hpp>
 
 #include <SDL2/SDL_timer.h>
 
@@ -18,11 +19,16 @@ const Vector3f Portal::ORANGE_COLOR = Vector3f(1, 0.76, 0.33);
 const int Portal::NOISE_FADE_DELAY = 300;
 const int Portal::OPEN_ANIM_DURATION = 250;
 
-Vector3f Portal::getDirection() {
+Vector3f Portal::getDirection() const {
   return direction;
 }
 
 bool Portal::throughPortal(const BoxCollider &collider) const {
+  const Transform &t = entity.getComponent<Transform>();
+  const Vector3f &rotation = t.rotation;
+  const Vector3f &position = t.position;
+  const Vector3f &scale = t.scale;
+
   if (rotation.x == 0) {
     if (rotation.y == rad(90)) {
       if (collider.position.x > position.x &&
@@ -90,6 +96,11 @@ bool Portal::throughPortal(const BoxCollider &collider) const {
 }
 
 bool Portal::inPortal(const BoxCollider &collider) const {
+  const Transform &t = entity.getComponent<Transform>();
+  const Vector3f &rotation = t.rotation;
+  const Vector3f &position = t.position;
+  const Vector3f &scale = t.scale;
+
   if (rotation.x == 0) {
     if (rotation.y == rad(90)) {
       if (collider.position.x + collider.size.x/2 > position.x &&
@@ -175,7 +186,11 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
     }
   }
 
-  position.set(point);
+  Transform &t = entity.addComponent<Transform>();
+  Vector3f &rotation = t.rotation;
+  Vector3f &position = t.position;
+  Vector3f &scale = t.scale;
+  position = point;
 
   switch (side) {
   case 0: direction.set(-1, 0, 0); break;
@@ -258,7 +273,8 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
   }
 
   position += (getDirection() * 0.01f);
-  mesh = MeshLoader::getMesh("Plane.obj");
+  overlayMesh = MeshLoader::getMesh("Plane.obj");
+  stencilMesh = MeshLoader::getMesh("PortalStencil.obj");
 }
 
 Vector3f Portal::getScaleMult() const {

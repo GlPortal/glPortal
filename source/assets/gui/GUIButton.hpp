@@ -1,11 +1,9 @@
 #ifndef GUIBUTTON_HPP
 #define GUIBUTTON_HPP
 
-#include <engine/VisualEntity.hpp>
-
 namespace glPortal {
 
-class GUIButton : public VisualEntity {
+class GUIButton {
   void onClick();
 };
 

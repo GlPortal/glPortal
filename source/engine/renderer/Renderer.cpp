@@ -28,6 +28,9 @@
 #include <engine/core/math/Vector3f.hpp>
 #include <engine/core/math/Vector4f.hpp>
 
+#include <engine/component/Transform.hpp>
+#include <engine/component/MeshDrawable.hpp>
+
 #include <SDL2/SDL_timer.h>
 #include <algorithm>
 
@@ -109,33 +112,36 @@ void Renderer::render(const Camera &cam) {
   int numLightsLoc = diffuse.uni("numLights");
   glUniform1i(numLightsLoc, numLights);
 
+  if (!scene->bluePortal.hasComponent<Portal>()) {
+    scene->bluePortal.addComponent<Portal>();
+  }
+  if (!scene->orangePortal.hasComponent<Portal>()) {
+    scene->orangePortal.addComponent<Portal>();
+  }
+
   //Render portals
   renderPortal(cam, scene->bluePortal, scene->orangePortal);
   renderPortal(cam, scene->orangePortal, scene->bluePortal);
 
   // Depth buffer
-  if (scene->bluePortal.open and scene->orangePortal.open) {
+  const Portal &bP = scene->bluePortal.getComponent<Portal>();
+  const Portal &oP = scene->orangePortal.getComponent<Portal>();
+  if (bP.open and oP.open) {
     const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
 
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
     glDepthMask(GL_TRUE);
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    Matrix4f mtx;
-    mtx.translate(scene->bluePortal.position);
-    mtx.rotate(scene->bluePortal.rotation);
-    mtx.scale(scene->bluePortal.scale);
-    mtx.scale(scene->bluePortal.getScaleMult());
-
     const Mesh &portalStencil = MeshLoader::getMesh("PortalStencil.obj");
+
+    Matrix4f mtx;
+    scene->bluePortal.getComponent<Transform>().getModelMtx(mtx);
+    mtx.scale(bP.getScaleMult());
     renderMesh(cam, unshaded, mtx, portalStencil);
 
-    mtx.setIdentity();
-    mtx.translate(scene->orangePortal.position);
-    mtx.rotate(scene->orangePortal.rotation);
-    mtx.scale(scene->orangePortal.scale);
-    mtx.scale(scene->orangePortal.getScaleMult());
-
+    scene->orangePortal.getComponent<Transform>().getModelMtx(mtx);
+    mtx.scale(oP.getScaleMult());
     renderMesh(cam, unshaded, mtx, portalStencil);
 
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -145,22 +151,18 @@ void Renderer::render(const Camera &cam) {
 
   // Draw simplex noise
   glDepthMask(GL_FALSE);
-  if (scene->orangePortal.open and scene->bluePortal.open) {
-    uint32_t dtOpen = SDL_GetTicks()-std::max(scene->orangePortal.openSince, scene->bluePortal.openSince);
+  if (bP.open and oP.open) {
+    uint32_t dtOpen = SDL_GetTicks()-std::max(bP.openSince, oP.openSince);
     if (dtOpen < Portal::NOISE_FADE_DELAY) {
       float al = 1-((float)dtOpen/Portal::NOISE_FADE_DELAY)*2;
-      if (true or not scene->orangePortal.open) {
-        renderPortalNoise(cam, scene->bluePortal, al);
-      }
-      if (true or not scene->bluePortal.open) {
-        renderPortalNoise(cam, scene->orangePortal, al);
-      }
+      renderPortalNoise(cam, scene->bluePortal, al);
+      renderPortalNoise(cam, scene->orangePortal, al);
     }
   } else {
-    if (scene->orangePortal.open) {
+    if (oP.open) {
       renderPortalNoise(cam, scene->orangePortal, 1.f);
     }
-    if (scene->bluePortal.open) {
+    if (bP.open) {
       renderPortalNoise(cam, scene->bluePortal, 1.f);
     }
   }
@@ -191,34 +193,27 @@ void Renderer::render(const Camera &cam) {
 }
 
 void Renderer::renderScene(const Camera &cam) {
-  for (unsigned int i = 0; i < scene->walls.size(); i++) {
-    renderEntity(cam, scene->walls[i]);
+  for (Entity &e : scene->entities) {
+    if (e.hasComponent<MeshDrawable>()) {
+      renderEntity(cam, e);
+    }
   }
-
-  for (unsigned int i = 0; i < scene->models.size(); i++) {
-    renderEntity(cam, scene->models[i]);
-  }
-
-  for (unsigned int i = 0; i < scene->volumes.size(); i++) {
-    renderEntity(cam, scene->volumes[i]);
-  }
-
   renderEntity(cam, scene->end);
 }
 
-void Renderer::renderEntity(const Camera &cam, const VisualEntity &e) {
+void Renderer::renderEntity(const Camera &cam, const Entity &e) {
+  MeshDrawable &drawable = e.getComponent<MeshDrawable>();
   Matrix4f mtx;
-  mtx.translate(e.position);
-  mtx.rotate(e.rotation);
-  mtx.scale(e.scale);
+  e.getComponent<Transform>().getModelMtx(mtx);
   const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
-  renderMesh(cam, diffuse, mtx, e.mesh, e.material);
+  renderMesh(cam, diffuse, mtx, drawable.mesh, drawable.material);
 }
 
 void Renderer::renderPlayer(const Camera &cam) {
+  const Transform &t = scene->player.getComponent<Transform>();
   Matrix4f mtx;
-  mtx.translate(scene->player.position+Vector3f(0, -.5f, 0));
-  mtx.rotate(scene->player.rotation.y, 0, 1, 0);
+  mtx.translate(t.position+Vector3f(0, -.5f, 0));
+  mtx.rotate(t.rotation.y, 0, 1, 0);
   mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
   const Mesh &dummy = MeshLoader::getMesh("HumanToken.obj");
   const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
@@ -226,26 +221,24 @@ void Renderer::renderPlayer(const Camera &cam) {
   renderMesh(cam, diffuse, mtx, dummy, mat);
 }
 
-void Renderer::renderPortalContent(const Camera &cam, const Portal &portal) {
+void Renderer::renderPortalContent(const Camera &cam, const Entity &portal) {
   //Stencil drawing
   //Primary portal
   glStencilFunc(GL_NEVER, 1, 0xFF);
   glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
   
+  const Portal &p = portal.getComponent<Portal>();
   Matrix4f mtx;
-  mtx.translate(portal.position);
-  mtx.rotate(portal.rotation);
-  mtx.scale(portal.scale);
-  mtx.scale(portal.getScaleMult());
-  const Mesh &portalStencil = MeshLoader::getMesh("PortalStencil.obj");
-  renderMesh(cam, ShaderLoader::getShader("unshaded.frag"), mtx, portalStencil);
+  portal.getComponent<Transform>().getModelMtx(mtx);
+  mtx.scale(p.getScaleMult());
+  renderMesh(cam, ShaderLoader::getShader("unshaded.frag"), mtx, p.stencilMesh);
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glDepthMask(GL_TRUE);
 }
   
-void Renderer::renderPortal(const Camera &cam, const Portal &portal, const Portal &otherPortal) {
-  if (portal.open and otherPortal.open) {
+void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entity &otherPortal) {
+  if (portal.getComponent<Portal>().open and otherPortal.getComponent<Portal>().open) {
     glEnable(GL_STENCIL_TEST);
     glClear(GL_STENCIL_BUFFER_BIT);
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
@@ -268,25 +261,24 @@ void Renderer::renderPortal(const Camera &cam, const Portal &portal, const Porta
   }
 }
   
-void Renderer::renderPortalOverlay(const Camera &cam, const Portal &portal) {
-  if (portal.open) {
+void Renderer::renderPortalOverlay(const Camera &cam, const Entity &portal) {
+  const Portal &p = portal.getComponent<Portal>();
+  if (p.open) {
     const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
     Matrix4f mtx;
-    mtx.translate(portal.position);
-    mtx.rotate(portal.rotation);
-    mtx.scale(portal.scale);
-    mtx.scale(portal.getScaleMult());
+    portal.getComponent<Transform>().getModelMtx(mtx);
+    mtx.scale(p.getScaleMult());
 
-    renderMesh(cam, unshaded, mtx, portal.mesh, portal.material);
+    renderMesh(cam, unshaded, mtx, p.overlayMesh, p.overlayTex);
   }
 }
 
-void Renderer::renderPortalNoise(const Camera &cam, const Portal &portal, float fade) {
+void Renderer::renderPortalNoise(const Camera &cam, const Entity &portal, float fade) {
   Matrix4f mtx;
-  mtx.translate(portal.position);
-  mtx.rotate(portal.rotation);
-  mtx.scale(portal.scale);
-  mtx.scale(portal.getScaleMult());
+  portal.getComponent<Transform>().getModelMtx(mtx);
+
+  const Portal &p = portal.getComponent<Portal>();
+  mtx.scale(p.getScaleMult());
 
   const Shader &simplexTime = ShaderLoader::getShader("simplexTime.frag");
   glUseProgram(simplexTime.handle);
@@ -294,10 +286,10 @@ void Renderer::renderPortalNoise(const Camera &cam, const Portal &portal, float 
   int colorLoc = simplexTime.uni("color");
   int noiseAlphaLoc = simplexTime.uni("noiseAlpha");
   glUniform1f(timeLoc, SDL_GetTicks()/1000.f);
-  glUniform3f(colorLoc, portal.color.x, portal.color.y, portal.color.z);
+  glUniform3f(colorLoc, p.color.x, p.color.y, p.color.z);
   glUniform1f(noiseAlphaLoc, fade);
 
-  renderMesh(cam, simplexTime, mtx, portal.mesh, portal.maskTex);
+  renderMesh(cam, simplexTime, mtx, p.overlayMesh, p.maskTex);
 }
 
 void Renderer::renderText(const Camera &cam, const std::string &text, int x, int y) {
@@ -378,13 +370,15 @@ void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx,
   glBindVertexArray(0);
 }
 
-void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Portal &portal, const Portal &otherPortal) {
+void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal) {
+  Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
-  p1mat.translate(portal.position);
-  p1mat.rotate(portal.rotation);
+  p1mat.translate(p1T.position);
+  p1mat.rotate(p1T.rotation);
+  Transform &p2T = otherPortal.getComponent<Transform>();
   Matrix4f p2mat;
-  p2mat.translate(otherPortal.position);
-  p2mat.rotate(otherPortal.rotation);
+  p2mat.translate(p2T.position);
+  p2mat.rotate(p2T.rotation);
   Matrix4f rotate180; rotate180.rotate(rad(180), 0, 1, 0);
   Matrix4f view; cam.getViewMatrix(view);
   Matrix4f destView = view * p1mat * rotate180 * inverse(p2mat);
@@ -392,7 +386,7 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Portal &
   dest.setPerspective();
   dest.setAspect(cam.getAspect());
   dest.setFovy(cam.getFovy());
-  dest.setZNear((portal.position - cam.getPosition()).length());
+  dest.setZNear((p1T.position - cam.getPosition()).length());
   //Matrix4f proj; dest.getProjMatrix(proj);
   //dest.setProjMatrix(clipProjMat(portal, destView, proj));
   dest.setViewMatrix(destView);
@@ -405,7 +399,8 @@ static float sign(float v) {
 }
 
 Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj) {
-  Vector4f clipPlane(Math::toDirection(ent.rotation), -dot(Math::toDirection(ent.rotation), ent.position));
+  const Transform &t = ent.getComponent<Transform>();
+  Vector4f clipPlane(Math::toDirection(t.rotation), -dot(Math::toDirection(t.rotation), t.position));
   clipPlane = inverse(transpose(view)) * clipPlane;
 
   if (clipPlane.w > 0.f)

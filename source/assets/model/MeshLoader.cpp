@@ -14,6 +14,7 @@
 #include "engine/Entity.hpp"
 #include "engine/core/math/Vector2f.hpp"
 #include "engine/core/math/Vector3f.hpp"
+#include <engine/component/Transform.hpp>
 #include <cstdio>
 
 namespace glPortal {
@@ -123,7 +124,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh *mesh) {
   return m;
 }
 
-Mesh MeshLoader::getPortalBox(Entity wall) {
+Mesh MeshLoader::getPortalBox(const Entity &wall) {
   Mesh mesh;
 
   GLuint vao;
@@ -161,15 +162,20 @@ Mesh MeshLoader::getPortalBox(Entity wall) {
   glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
   glEnableVertexAttribArray(0);
 
+  const Transform &t = wall.getComponent<Transform>();
+  const Vector3f &rotation = t.rotation;
+  const Vector3f &position = t.position;
+  const Vector3f &scale = t.scale;
+
   //Texture coordinates
   Vector2f texCoords[8] = {Vector2f(0, 0),
-                          Vector2f(wall.scale.x, 0),
-                          Vector2f(wall.scale.z, 0),
-                          Vector2f(0, wall.scale.y),
-                          Vector2f(0, wall.scale.z),
-                          Vector2f(wall.scale.x, wall.scale.y),
-                          Vector2f(wall.scale.x, wall.scale.z),
-                          Vector2f(wall.scale.z, wall.scale.y)};
+                          Vector2f(scale.x, 0),
+                          Vector2f(scale.z, 0),
+                          Vector2f(0, scale.y),
+                          Vector2f(0, scale.z),
+                          Vector2f(scale.x, scale.y),
+                          Vector2f(scale.x, scale.z),
+                          Vector2f(scale.z, scale.y)};
 
   float ti[36] = {0,3,5,0,5,1, 0,3,7,0,7,2, 0,3,5,0,5,1, 0,3,7,0,7,2, 0,4,6,0,6,1, 0,4,6,0,6,1};
   float textureBuffer[36 * 2];

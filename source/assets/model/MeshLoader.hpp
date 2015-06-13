@@ -14,7 +14,7 @@ class Entity;
 class MeshLoader {
 public:
   static Mesh& getMesh(const std::string &path);
-  static Mesh getPortalBox(const Entity awall);
+  static Mesh getPortalBox(const Entity &wall);
   static Mesh getSubPlane(int x, int y, int width, int height, int w, int h);
 private:
   static Mesh uploadMesh(const aiMesh *mesh);

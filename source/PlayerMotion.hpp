@@ -2,6 +2,7 @@
 #define PLAYER_HPP
 
 #include <engine/Entity.hpp>
+#include <engine/component/Transform.hpp>
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
 #include <array>
@@ -42,18 +43,18 @@ const std::array<const std::string,6> PLAYER_FOOT_SOUND =
   "/audio/sfx/character/fem_foot_6.ogg"
 };
 
-class Player: public Entity {
+class PlayerMotion : public Component {
 public:
-  Player() {
-    scale.set(PLAYER_SIZE);
+  PlayerMotion(Entity &ent) :
+    Component(ent) {
+    entity.getComponent<Transform>().scale = PLAYER_SIZE;
 
     velocity.set(0, 0, 0);
     speed = RUNNING_SPEED;
 
     grounded = true;
     std::random_device rd;
-	  generator =  std::mt19937(rd());
-    playingSound = false;
+    generator =  std::mt19937(rd());
     stepCounter = 0.0f;
   }
 
@@ -61,25 +62,12 @@ public:
   void mouseLook();
   void move();
 
-  // Health
-  int getHealth();
-  bool isAlive();
-  void heal(int amount);
-  void harm(int amount);
-  void kill();
-  void revive();
-  bool getPlayingSound();
-  void setPlayingSound(bool state);
   Vector3f velocity;
   bool grounded;
 
   float speed;
 private:
-  const int MAX_HEALTH = 100;
-  const int MIN_HEALTH = 0;
-  int health = MAX_HEALTH;
   std::mt19937 generator;
-  bool playingSound;
   float stepCounter;
 };
 

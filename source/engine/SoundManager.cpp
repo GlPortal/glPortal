@@ -39,11 +39,7 @@ void SoundManager::PlayMusic(const std::string &filename) {
   }
 }
 
-void SoundManager::PlaySound(const std::string &filename, Player *p, SoundType type) {
-  if (p->getPlayingSound() == true and type == PRIMARY) {
-    return;
-  }
-
+void SoundManager::PlaySound(const std::string &filename, const Entity &source) {
   Mix_Chunk *sound = Mix_LoadWAV(filename.c_str());
   if (sound == nullptr) {
     printf("Failed to load Sound: SDL_mixer Error: %s\n", Mix_GetError());
@@ -59,27 +55,21 @@ void SoundManager::PlaySound(const std::string &filename, Player *p, SoundType t
     return;
   }
 
-  if (type == PRIMARY) {
-    p->setPlayingSound(true);
-  }
-
   SoundInfo &info = sounds[channel];
   info.chunk = sound;
-  info.type = type;
 }
 
-void SoundManager::Update(Player *p) {
+void SoundManager::Update(const Entity &listener) {
   std::vector<int> erase_list;
 
   for (auto sound : sounds) {
     if (not Mix_Playing(sound.first)) {
-      p->setPlayingSound(false);
       Mix_FreeChunk(sound.second.chunk);
       erase_list.push_back(sound.first);
     }
   }
 
-  for (auto key: erase_list) {
+  for (auto key : erase_list) {
     sounds.erase(key);
   }
 }

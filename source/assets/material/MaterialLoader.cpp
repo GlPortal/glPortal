@@ -1,6 +1,6 @@
 #include "MaterialLoader.hpp"
 #include <assets/texture/TextureLoader.hpp>
-#include <env/Environment.hpp>
+#include <engine/env/Environment.hpp>
 #include <tinyxml.h>
 
 namespace glPortal {

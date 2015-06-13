@@ -9,10 +9,15 @@
 #include <assets/map/XmlHelper.hpp>
 #include <engine/env/Environment.hpp>
 #include <engine/BoxCollider.hpp>
-#include <engine/volumes/Volume.hpp>
-#include <engine/trigger/Trigger.hpp>
 #include <engine/Light.hpp>
 #include <engine/core/math/Vector3f.hpp>
+
+#include <engine/component/Transform.hpp>
+#include <engine/component/MeshDrawable.hpp>
+#include <engine/component/AACollisionBox.hpp>
+#include <engine/component/Trigger.hpp>
+#include <engine/component/Health.hpp>
+#include "../../PlayerMotion.hpp"
 
 #include <assets/scene/Scene.hpp>
 #include <assets/model/Mesh.hpp>
@@ -22,8 +27,6 @@
 #include <assets/model/MeshLoader.hpp>
 #include <assets/texture/TextureLoader.hpp>
 #include <assets/material/MaterialLoader.hpp>
-
-#include "Player.hpp"
 
 using namespace std;
 
@@ -40,6 +43,9 @@ namespace glPortal {
  */
 Scene* MapLoader::getScene(const std::string &path) {
   scene = new Scene();
+  scene->player.addComponent<Transform>();
+  scene->player.addComponent<PlayerMotion>();
+  scene->player.addComponent<Health>();
 
   TiXmlDocument doc(Environment::getDataDir() + "/maps/" + path + ".xml");
   bool loaded = doc.LoadFile();
@@ -96,10 +102,13 @@ void MapLoader::extractSpawn() {
   TiXmlElement *spawnElement = rootHandle.FirstChild("spawn").ToElement();
 
   if (spawnElement) {
-    XmlHelper::extractPosition(spawnElement, scene->start.position);
-    XmlHelper::extractRotation(spawnElement, scene->start.rotation);
-    scene->player.position.set(scene->start.position);
-    scene->player.rotation.set(scene->start.rotation);
+    scene->start.clearComponents();
+    Transform &t = scene->start.addComponent<Transform>();
+    XmlHelper::extractPosition(spawnElement, t.position);
+    XmlHelper::extractRotation(spawnElement, t.rotation);
+    Transform &pt = scene->player.getComponent<Transform>();
+    pt.position = t.position;
+    pt.rotation = t.rotation;
   } else {
     throw std::runtime_error("No spawn position defined.");
   }
@@ -139,12 +148,14 @@ void MapLoader::extractDoor() {
   TiXmlElement *endElement = rootHandle.FirstChild("end").ToElement();
 
   if (endElement) {
-    VisualEntity door;
-    XmlHelper::extractPosition(endElement, door.position);
-    XmlHelper::extractRotation(endElement, door.rotation);
-    door.material = MaterialLoader::fromTexture("Door.png");
-    door.mesh = MeshLoader::getMesh("Door.obj");
-    scene->end = door;
+    Entity &door = scene->end;
+    door.clearComponents();
+    Transform &t = door.addComponent<Transform>();
+    XmlHelper::extractPosition(endElement, t.position);
+    XmlHelper::extractRotation(endElement, t.rotation);
+    MeshDrawable &m = door.addComponent<MeshDrawable>();
+    m.material = MaterialLoader::fromTexture("Door.png");
+    m.mesh = MeshLoader::getMesh("Door.obj");
   }
 }
 
@@ -153,19 +164,21 @@ void MapLoader::extractWalls() {
 
   if (wallBoxElement) {
     do {
-      scene->walls.emplace_back();
-      PhysicsEntity &wall = scene->walls.back();
-      
-      XmlHelper::extractPosition(wallBoxElement, wall.position);
-      XmlHelper::extractRotation(wallBoxElement, wall.rotation);
-      XmlHelper::extractScale(wallBoxElement, wall.scale);
+      scene->entities.emplace_back();
+      Entity &wall = scene->entities.back();
+
+      Transform &t = wall.addComponent<Transform>();
+      XmlHelper::extractPosition(wallBoxElement, t.position);
+      XmlHelper::extractRotation(wallBoxElement, t.rotation);
+      XmlHelper::extractScale(wallBoxElement, t.scale);
 
       int mid = -1;
       wallBoxElement->QueryIntAttribute("mid", &mid);
-      wall.material = scene->materials[mid];
-      wall.material.scaleU = wall.material.scaleV = 2.f;
-      wall.mesh = MeshLoader::getPortalBox(wall);
-      wall.physBody = BoxCollider::generateCage(wall);
+      MeshDrawable &m = wall.addComponent<MeshDrawable>();
+      m.material = scene->materials[mid];
+      m.material.scaleU = m.material.scaleV = 2.f;
+      m.mesh = MeshLoader::getPortalBox(wall);
+      wall.addComponent<AACollisionBox>().box = BoxCollider::generateCage(wall);
     } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != nullptr);
   }
 }
@@ -175,14 +188,17 @@ void MapLoader::extractAcids() {
   
   if (acidElement) {
     do {
-      scene->volumes.emplace_back("acid");
-      Volume &acid = scene->volumes.back();
-      
-      acid.material.diffuse = TextureLoader::getTexture("acid.png");
-      acid.mesh = MeshLoader::getPortalBox(acid);
-      acid.physBody = BoxCollider::generateCage(acid);
-      XmlHelper::extractPosition(acidElement, acid.position);
-      XmlHelper::extractScale(acidElement, acid.scale);
+      scene->entities.emplace_back();
+      Entity &acid = scene->entities.back();
+
+      Transform &t = acid.addComponent<Transform>();
+      XmlHelper::extractPosition(acidElement, t.position);
+      XmlHelper::extractScale(acidElement, t.scale);
+
+      MeshDrawable &m = acid.addComponent<MeshDrawable>();
+      m.material.diffuse = TextureLoader::getTexture("acid.png");
+      m.mesh = MeshLoader::getPortalBox(acid);
+      acid.addComponent<AACollisionBox>().box = BoxCollider::generateCage(acid);
     } while ((acidElement = acidElement->NextSiblingElement("acid")) != nullptr);
   }
 }
@@ -192,15 +208,15 @@ void MapLoader::extractTriggers() {
 
   if (triggerElement) {
     do {
-      scene->triggers.emplace_back();
-      Trigger &trigger = scene->triggers.back();
+      scene->entities.emplace_back();
+      Entity &trigger = scene->entities.back();
 
-      if (triggerElement) {
-        triggerElement->QueryStringAttribute("type", &trigger.type);
-      }
+      Transform &t = trigger.addComponent<Transform>();
+      XmlHelper::extractPosition(triggerElement, t.position);
+      XmlHelper::extractScale(triggerElement, t.scale);
       
-      XmlHelper::extractPosition(triggerElement, trigger.position);
-      XmlHelper::extractScale(triggerElement, trigger.scale);
+      Trigger &tgr = trigger.addComponent<Trigger>();
+      triggerElement->QueryStringAttribute("type", &tgr.type);
 
     } while ((triggerElement = triggerElement->NextSiblingElement("trigger")) != nullptr);
   }
@@ -217,17 +233,21 @@ void MapLoader::extractModels() {
       modelElement->QueryStringAttribute("mesh", &mesh);
       XmlHelper::pushAttributeVertexToVector(modelElement, modelPos);
 
-      scene->models.emplace_back();
-      VisualEntity &model = scene->models.back();
-      XmlHelper::extractPosition(modelElement, model.position);
-      XmlHelper::extractRotation(modelElement, model.rotation);
-      model.material = MaterialLoader::fromTexture(texture);
-      model.mesh = MeshLoader::getMesh(mesh);
+      scene->entities.emplace_back();
+      Entity &model = scene->entities.back();
+      Transform &t = model.addComponent<Transform>();
+      XmlHelper::extractPosition(modelElement, t.position);
+      XmlHelper::extractRotation(modelElement, t.rotation);
+      MeshDrawable &m = model.addComponent<MeshDrawable>();
+      m.material = MaterialLoader::fromTexture(texture);
+      m.mesh = MeshLoader::getMesh(mesh);
     } while ((modelElement = modelElement->NextSiblingElement("model")) != nullptr);
   }
 }
 
 void MapLoader::extractButtons() {
+  // FIXME
+#if 0
   TiXmlElement *textureElement = rootHandle.FirstChild("texture").ToElement();
   string texturePath("none");
   string surfaceType("none");
@@ -259,5 +279,6 @@ void MapLoader::extractButtons() {
       texturePath = "none";
     } while ((textureElement = textureElement->NextSiblingElement("texture")) != nullptr);
   }
+#endif
 }
 } /* namespace glPortal */

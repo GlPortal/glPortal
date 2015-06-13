@@ -1,9 +1,8 @@
-include_directories(lib engine ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(${EXE_NAME} 
   Game.cpp
   Portal.cpp
-  engine/Entity.cpp
   engine/Ray.cpp
   engine/SoundManager.cpp
   engine/core/math/Vector4f.cpp
@@ -17,8 +16,7 @@ add_executable(${EXE_NAME}
   util/sdl/Fps.cpp
   engine/BoxCollider.cpp
   World.cpp Window.cpp
-  Player.cpp
-  engine/trigger/Trigger.cpp
+  PlayerMotion.cpp
   engine/Camera.cpp
   Input.cpp engine/renderer/Renderer.cpp
   assets/material/MaterialLoader.cpp
@@ -37,6 +35,8 @@ add_executable(${EXE_NAME}
   engine/env/ConfigFileParser.cpp
   engine/env/Config.cpp
   engine/core/file/Path.cpp
+  engine/component/Health.cpp
+  engine/component/Transform.cpp
   )
 target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
 install(TARGETS ${EXE_NAME} DESTINATION bin)

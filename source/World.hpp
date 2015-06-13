@@ -27,7 +27,6 @@ const std::array<const std::string,3> MUSIC_PLAYLIST =
   "/audio/music/track3.ogg"
 };
 
-class Player;
 class Window;
 
 class World {
@@ -42,7 +41,7 @@ public:
   void shootPortal(int button);
   bool collides(const Vector3f &ro, const Vector3f &rd, const Entity &e, float *tNear, float *tFar);
   void render();
-  Player* getPlayer();
+  Entity& getPlayer();
 
   static float gravity;
   static float friction;

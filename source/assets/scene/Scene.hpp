@@ -3,33 +3,29 @@
 
 #include <vector>
 #include <map>
+#include <list>
 
 #include <assets/gui/GUIButton.hpp>
 #include <assets/material/Material.hpp>
 #include "engine/Camera.hpp"
 #include "engine/Light.hpp"
-#include "engine/volumes/Volume.hpp"
-#include "engine/trigger/Trigger.hpp"
-#include "Player.hpp"
 #include "Portal.hpp"
 
 namespace glPortal {
 
 class Scene {
 public:
-  Player player;
+  Entity player;
   Camera camera;
   std::map<int, Material> materials;
-  std::vector<PhysicsEntity> walls;
-  std::vector<Volume> volumes;
-  std::vector<Trigger> triggers;
+  std::list<Entity> entities;
   std::vector<Light> lights;
-  std::vector<VisualEntity> models;
   std::vector<GUIButton> buttons;
-  Portal bluePortal;
-  Portal orangePortal;
-  VisualEntity start;
-  VisualEntity end;
+  // FIXME: remove us!
+  Entity bluePortal;
+  Entity orangePortal;
+  Entity start;
+  Entity end;
 };
 
 } /* namespace glPortal */

@@ -1,17 +1,21 @@
 #include "Ray.hpp"
 
 #include "Entity.hpp"
+#include <engine/component/Transform.hpp>
 #include <climits>
 
 namespace glPortal {
 
-bool Ray::collides(const Entity &e, float *tNear, float *tFar) {
-  float min[3] = {e.position.x - e.scale.x / 2,
-                  e.position.y - e.scale.y / 2,
-                  e.position.z - e.scale.z / 2};
-  float max[3] = {e.position.x + e.scale.x / 2,
-                  e.position.y + e.scale.y / 2,
-                  e.position.z + e.scale.z / 2};
+bool Ray::collides(const BoxCollider &c, float *tNear, float *tFar) {
+  const Vector3f &position = c.position;
+  const Vector3f &scale = c.size;
+
+  float min[3] = {position.x - scale.x / 2,
+                  position.y - scale.y / 2,
+                  position.z - scale.z / 2};
+  float max[3] = {position.x + scale.x / 2,
+                  position.y + scale.y / 2,
+                  position.z + scale.z / 2};
 
   float ro[3] = { origin.x, origin.y, origin.z };
   float rd[3] = { direction.x, direction.y, direction.z };
