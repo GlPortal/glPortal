@@ -46,6 +46,7 @@ public:
   static float gravity;
   static float friction;
 private:
+  bool wasF5Down;
   std::string currentScenePath;
   Renderer *renderer;
   Scene *scene;

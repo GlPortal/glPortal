@@ -82,15 +82,22 @@ void World::loadScene(const std::string &path) {
   //play a random piece of music each team a scene is loaded
   std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
   SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
+  // TODO: do this elsewhere.
+  scene->bluePortal.addComponent<Transform>();
+  scene->bluePortal.addComponent<Portal>();
+  scene->orangePortal.addComponent<Transform>();
+  scene->orangePortal.addComponent<Portal>();
 }
 
 void World::update() {
-  if (Input::isKeyDown(SDL_SCANCODE_F5)) {
+  // If F5 released, reload the scene
+  if (wasF5Down and not Input::isKeyDown(SDL_SCANCODE_F5)) {
     if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
       // Enable reload-on-change (inotify on Linux)
     }
     loadScene(currentScenePath);
   }
+  wasF5Down = Input::isKeyDown(SDL_SCANCODE_F5);
 
   Entity &player = scene->player;
   Health &plrHealth = player.getComponent<Health>();
