@@ -37,7 +37,7 @@ void Window::create(const char *title) {
 
   SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-  if (Config::hasAntialiasing) {
+  if (Config::hasAntialiasing()) {
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
   }
