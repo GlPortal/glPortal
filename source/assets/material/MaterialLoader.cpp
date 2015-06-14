@@ -1,6 +1,7 @@
 #include "MaterialLoader.hpp"
 #include <assets/texture/TextureLoader.hpp>
 #include <engine/env/Environment.hpp>
+#include <engine/env/System.hpp>
 #include <tinyxml.h>
 
 namespace glPortal {
@@ -28,7 +29,7 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
     diffE->QueryStringAttribute("path", &diffP);
     if (diffP.length() > 0) {
       diffP = dir + "/" + diffP;
-      printf("%s\n", diffP.c_str());
+      System::Log(Debug) << mat.name << ": load " << diffP;
       mat.diffuse = TextureLoader::getTexture(diffP);
     }
   } else {
@@ -41,7 +42,7 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
     normE->QueryStringAttribute("path", &normP);
     if (normP.length() > 0) {
       normP = dir + "/" + normP;
-      printf("%s\n", normP.c_str());
+      System::Log(Debug) << mat.name << ": load " << normP;
       mat.normal = TextureLoader::getTexture(normP);
     }
   } else {
@@ -54,7 +55,7 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
     specE->QueryStringAttribute("path", &specP);
     if (specP.length() > 0) {
       specP = dir + "/" + specP;
-      printf("%s\n", specP.c_str());
+      System::Log(Debug) << mat.name << ": load " << specP;
       mat.specular = TextureLoader::getTexture(specP);
     }
     specE->QueryFloatAttribute("shininess", &mat.shininess);

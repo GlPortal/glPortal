@@ -21,7 +21,7 @@ public:
   T& addComponent(TArgs&&... mArgs) {
     static_assert(std::is_base_of<Component, T>::value, "T must be a Component");
     if (hasComponent<T>()) {
-      System::log("");
+      System::Log() << "Overwriting a " << typeid(T).name() << " component";
     }
     T* result(new T(*this, std::forward<TArgs>(mArgs)...));
     Component::TypeId id = Component::getTypeId<T>();

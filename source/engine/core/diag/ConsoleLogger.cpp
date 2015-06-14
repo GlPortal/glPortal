@@ -4,7 +4,11 @@
 
 namespace glPortal {
 
-void ConsoleLogger::log(const std::string &message) {
+const char* ConsoleLogger::getName() const {
+  return "Console logger";
+}
+
+void ConsoleLogger::log(const std::string &message, LogLevel lvl) {
   std::cout << message << std::endl;
 }
 

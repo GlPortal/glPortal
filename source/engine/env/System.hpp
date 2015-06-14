@@ -2,15 +2,24 @@
 #define SYSTEM_HPP
 
 #include <string>
+#include <memory>
 #include <engine/core/diag/ConsoleLogger.hpp>
+#include <engine/core/diag/LogInput.hpp>
 
 namespace glPortal {
 
 class System {
 private:
-  static ConsoleLogger logger;
+  static std::unique_ptr<Logger> logger;
+
 public:
-  static void log(const std::string &message);
+  struct _Log {
+    LogInput operator()();
+    LogInput operator()(LogLevel);
+  };
+  static _Log Log;
+
+  static void Init();
 };
 
 } /* namespace glPortal */

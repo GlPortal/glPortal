@@ -2,6 +2,7 @@
 
 #include "Environment.hpp"
 #include "ConfigFileParser.hpp"
+#include "System.hpp"
 
 #include <iostream>
 #include <stdexcept>
@@ -49,7 +50,7 @@ namespace glPortal {
         Config::height = std::stoi(height);
       }
     } catch (const ConfigFileParser::KeyNotFound &e) {
-      std::cout << "Failed to load configuration due to config key \"" << e.which() << "\" missing" << std::endl;
+      System::Log(Error) << "Failed to load configuration due to config key \"" << e.which() << "\" missing";
     }
   }
 } /* namespace glPortal */

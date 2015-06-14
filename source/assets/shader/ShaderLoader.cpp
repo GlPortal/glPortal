@@ -3,7 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "engine/env/Environment.hpp"
+#include <engine/env/Environment.hpp>
+#include <engine/env/System.hpp>
 
 namespace {
   const int LOG_SIZE = 1024;
@@ -36,13 +37,13 @@ Shader& ShaderLoader::getShader(const std::string &path) {
   GLint success = 0;
   glGetProgramiv(shader, GL_LINK_STATUS, &success);
   if (success == GL_TRUE) {
-    std::cout << "Shader program linked successfully" << std::endl;
+    System::Log(Debug) << fpath << ": program linked";
   } else {
     GLint logSize = 0;
     glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &logSize);
     char* log = (char*)malloc(logSize);
     glGetProgramInfoLog(shader, logSize, NULL, log);
-    std::cout << "Failed linking " << fpath << ":\n" << log << std::endl;
+    System::Log(Error) << fpath << ": linking failed:\n" << log;
     free(log);
   }
 
@@ -51,13 +52,13 @@ Shader& ShaderLoader::getShader(const std::string &path) {
   //Error checking
   glGetProgramiv(shader, GL_VALIDATE_STATUS, &success);
   if (success == GL_TRUE) {
-    std::cout << "Shader program validated successfully" << std::endl;
+    System::Log(Debug) << fpath << ": progam validated";
   } else {
     GLint logSize = 0;
     glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &logSize);
     char* log = (char*)malloc(logSize);
     glGetProgramInfoLog(shader, logSize, NULL, log);
-    std::cout << "Failed to validate " << fpath << ":\n" << log << std::endl;
+    System::Log(Error) << fpath << ": validation failed:\n" << log;
     free(log);
   }
 
@@ -69,9 +70,9 @@ Shader& ShaderLoader::getShader(const std::string &path) {
 }
 
 int ShaderLoader::loadShader(const std::string &path, GLenum type) {
-  std::ifstream file(path.c_str());
+  std::ifstream file(path);
   if (not file.is_open()) {
-    std::cout << "Could not find file" << path << std::endl;
+    System::Log(Error) << "Could not find shader file " << path;
   }
   std::string str;
   std::string file_contents;
@@ -91,26 +92,25 @@ int ShaderLoader::loadShader(const std::string &path, GLenum type) {
 
   if (success == GL_TRUE) {
     if (type == GL_VERTEX_SHADER) {
-      std::cout << "Vertex shader compiled successfully" << std::endl;
+      System::Log(Debug) << path << ": vertex shader compiled";
     }
     if (type == GL_FRAGMENT_SHADER) {
-      std::cout << "Fragment shader compiled successfully" << std::endl;
+      System::Log(Debug) << path << ": fragment shader compiled";
     }
   } else {
-    if (type == GL_VERTEX_SHADER) {
-      std::cout << "Vertex shader compilation failed" << std::endl;
-    }
-    if (type == GL_FRAGMENT_SHADER) {
-      std::cout << "Fragment shader compilation failed" << std::endl;
-    }
-    
     GLint logSize = 0;
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logSize);
 
     char* log = (char*)malloc(logSize);
     glGetShaderInfoLog(shader, logSize, &logSize, log);
 
-    std::cout << log << std::endl;
+    if (type == GL_VERTEX_SHADER) {
+      System::Log(Error) << path << ": vertex shader compilation failed:\n" << log;
+    }
+    if (type == GL_FRAGMENT_SHADER) {
+      System::Log(Error) << path << ": fragment shader compilation failed:\n" << log;
+    }
+
     free(log);
     glDeleteShader(shader);
   }

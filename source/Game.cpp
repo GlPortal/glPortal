@@ -27,7 +27,7 @@ Game::Game() : closed(false) {
     update();
   }
   catch (std::runtime_error &e) {
-    System::log(std::string("Runtime Error: " + std::string(e.what())));
+    System::Log(Error) << "Runtime Error: " << e.what();
   }
 }
 
@@ -100,6 +100,7 @@ using namespace glPortal;
 Window window;
 
 int main(int argc, char *argv[]) {
+  System::Init();
   ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   Environment::init();
   ArgumentsParser::populateConfig();

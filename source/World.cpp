@@ -56,7 +56,7 @@ void World::create() {
   try {
     std::string map = config->getString(Config::MAP);
     loadScene(map);
-    std::cout << "Custom map loaded.";
+    System::Log(Info) << "Custom map loaded";
   } catch (const std::out_of_range& e) {
     loadScene(mapList[currentLevel]);
   }

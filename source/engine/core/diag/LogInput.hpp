@@ -1,0 +1,43 @@
+#ifndef LOGINPUT_HPP
+#define LOGINPUT_HPP
+
+#include <string>
+#include "Logger.hpp"
+
+namespace glPortal {
+
+class LogInput {
+protected:
+  Logger &sink;
+  LogLevel lvl;
+  std::string buf;
+
+public:
+  LogInput(Logger &sink, LogLevel lvl);
+  ~LogInput();
+
+  LogInput(const LogInput&) = delete;
+  LogInput& operator=(const LogInput&) = delete;
+
+  LogInput(LogInput&&);
+  LogInput& operator=(LogInput&&) = delete;
+
+  LogInput& operator<<(const char*);
+  LogInput& operator<<(const std::string&);
+  LogInput& operator<<(char);
+  LogInput& operator<<(uint8_t);
+  LogInput& operator<<(int8_t);
+  LogInput& operator<<(uint16_t);
+  LogInput& operator<<(int16_t);
+  LogInput& operator<<(uint32_t);
+  LogInput& operator<<(int32_t);
+  LogInput& operator<<(uint64_t);
+  LogInput& operator<<(int64_t);
+  LogInput& operator<<(float);
+  LogInput& operator<<(double);
+  LogInput& operator<<(const void*);
+};
+
+} /* namespace glPortal */
+
+#endif /* LOGINPUT_HPP */
