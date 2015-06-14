@@ -19,7 +19,8 @@ add_executable(${EXE_NAME}
   World.cpp Window.cpp
   PlayerMotion.cpp
   engine/Camera.cpp
-  Input.cpp engine/renderer/Renderer.cpp
+  Input.cpp
+  engine/renderer/Renderer.cpp
   assets/material/MaterialLoader.cpp
   assets/map/MapLoader.cpp
   assets/map/MapListLoader.cpp
@@ -38,6 +39,7 @@ add_executable(${EXE_NAME}
   engine/core/file/Path.cpp
   engine/component/Health.cpp
   engine/component/Transform.cpp
+  engine/component/SoundSource.cpp
   )
 target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
 install(TARGETS ${EXE_NAME} DESTINATION bin)

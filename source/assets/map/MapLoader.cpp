@@ -17,6 +17,8 @@
 #include <engine/component/AACollisionBox.hpp>
 #include <engine/component/Trigger.hpp>
 #include <engine/component/Health.hpp>
+#include <engine/component/SoundSource.hpp>
+#include <engine/component/SoundListener.hpp>
 #include "../../PlayerMotion.hpp"
 
 #include <assets/scene/Scene.hpp>
@@ -43,9 +45,12 @@ namespace glPortal {
  */
 Scene* MapLoader::getScene(const std::string &path) {
   scene = new Scene();
+  // FIXME: shall we init player here? Probably not, and do it ONCE.
   scene->player.addComponent<Transform>();
   scene->player.addComponent<PlayerMotion>();
   scene->player.addComponent<Health>();
+  scene->player.addComponent<SoundSource>();
+  scene->player.addComponent<SoundListener>();
 
   TiXmlDocument doc(Environment::getDataDir() + "/maps/" + path + ".xml");
   bool loaded = doc.LoadFile();

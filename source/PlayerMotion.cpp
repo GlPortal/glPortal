@@ -2,9 +2,9 @@
 
 #include <engine/core/math/Math.hpp>
 #include <engine/core/math/Vector2f.hpp>
-#include <engine/SoundManager.hpp>
 #include <engine/env/Environment.hpp>
 #include <engine/component/Health.hpp>
+#include <engine/component/SoundSource.hpp>
 #include <Input.hpp>
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_keyboard.h>
@@ -78,8 +78,9 @@ void PlayerMotion::move() {
 
 
     if (Input::isKeyDown(SDL_SCANCODE_SPACE) && grounded) {
-      std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);   
-      SoundManager::PlaySound(Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)], entity);
+      std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);
+      entity.getComponent<SoundSource>().playSound(
+        Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)]);
       grounded = false;
       velocity.y = JUMP_SPEED;
     }
@@ -91,7 +92,8 @@ void PlayerMotion::move() {
       if(stepCounter>=2.5f)
       {
         std::uniform_int_distribution<> dis(0, PLAYER_FOOT_SOUND.size()-1);   
-        SoundManager::PlaySound(Environment::getDataDir() + PLAYER_FOOT_SOUND[dis(generator)], entity);
+        entity.getComponent<SoundSource>().playSound(
+          Environment::getDataDir() + PLAYER_FOOT_SOUND[dis(generator)]);
         stepCounter-=2.5f;
       }
     }

@@ -29,6 +29,7 @@
 #include <engine/component/Trigger.hpp>
 #include <engine/component/AACollisionBox.hpp>
 #include <engine/component/MeshDrawable.hpp>
+#include <engine/component/SoundSource.hpp>
 #include "PlayerMotion.hpp"
 
 #include <engine/core/math/Math.hpp>
@@ -144,9 +145,9 @@ void World::update() {
       if (plrMotion.velocity.y < 0) {
         if(plrMotion.velocity.y < -HURT_VELOCITY) {
           std::uniform_int_distribution<> dis(0, PLAYER_FALL_SOUND.size()-1);
-          SoundManager::PlaySound(Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)], player);
+          player.getComponent<SoundSource>().playSound(
+            Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)]);
         }
-
         plrMotion.grounded = true;
       }
       plrMotion.velocity.y = 0;
