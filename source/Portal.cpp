@@ -187,7 +187,7 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
     }
   }
 
-  Transform &t = entity.addComponent<Transform>();
+  Transform &t = entity.getComponent<Transform>();
   Vector3f &rotation = t.rotation;
   Vector3f &position = t.position;
   Vector3f &scale = t.scale;

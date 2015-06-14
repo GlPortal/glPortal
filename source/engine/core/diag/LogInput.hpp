@@ -28,6 +28,8 @@ public:
 
   LogInput& operator<<(const char*);
   LogInput& operator<<(const std::string&);
+
+  LogInput& operator<<(bool);
   LogInput& operator<<(char);
   LogInput& operator<<(uint8_t);
   LogInput& operator<<(int8_t);

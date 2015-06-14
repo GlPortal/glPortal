@@ -7,11 +7,12 @@
 
 #include <assets/gui/GUIButton.hpp>
 #include <assets/material/Material.hpp>
-#include "engine/Camera.hpp"
-#include "engine/Light.hpp"
+#include <engine/Camera.hpp>
 #include "Portal.hpp"
 
 namespace glPortal {
+
+typedef std::pair<Entity*, Entity*> EntityPair;
 
 class Scene {
 public:
@@ -19,11 +20,9 @@ public:
   Camera camera;
   std::map<int, Material> materials;
   std::list<Entity> entities;
-  std::vector<Light> lights;
+  std::vector<EntityPair> portalPairs;
   std::vector<GUIButton> buttons;
   // FIXME: remove us!
-  Entity bluePortal;
-  Entity orangePortal;
   Entity start;
   Entity end;
 };

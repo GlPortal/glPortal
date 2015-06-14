@@ -9,7 +9,6 @@
 #include <assets/map/XmlHelper.hpp>
 #include <engine/env/Environment.hpp>
 #include <engine/BoxCollider.hpp>
-#include <engine/Light.hpp>
 #include <engine/core/math/Vector3f.hpp>
 
 #include <engine/component/Transform.hpp>
@@ -19,6 +18,7 @@
 #include <engine/component/Health.hpp>
 #include <engine/component/SoundSource.hpp>
 #include <engine/component/SoundListener.hpp>
+#include <engine/component/LightSource.hpp>
 #include "../../PlayerMotion.hpp"
 
 #include <assets/scene/Scene.hpp>
@@ -138,13 +138,15 @@ void MapLoader::extractLights() {
     lightElement->QueryFloatAttribute("energy", &energy);
     lightElement->QueryFloatAttribute("specular", &specular);
 
-    scene->lights.emplace_back();
-    Light &light = scene->lights.back();
-    light.position.set(lightPos.x, lightPos.y, lightPos.z);
-    light.color.set(lightColor.x, lightColor.y, lightColor.z);
-    light.distance = distance;
-    light.energy = energy;
-    light.specular = specular;
+    scene->entities.emplace_back();
+    Entity &light = scene->entities.back();
+    Transform &t = light.addComponent<Transform>();
+    t.position = lightPos;
+    LightSource &ls = light.addComponent<LightSource>();
+    ls.color = lightColor;
+    ls.distance = distance;
+    ls.energy = energy;
+    ls.specular = specular;
   } while ((lightElement = lightElement->NextSiblingElement("light")) != nullptr);
 }
 

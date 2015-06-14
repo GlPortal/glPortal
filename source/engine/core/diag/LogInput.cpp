@@ -32,6 +32,12 @@ LogInput& LogInput::operator<<(const std::string &s) {
   return *this;
 }
 
+
+LogInput& LogInput::operator<<(bool b) {
+  buf.append(b ? "true" : "false");
+  return *this;
+}
+
 LogInput& LogInput::operator<<(char c) {
   buf.push_back(c);
   return *this;
@@ -98,14 +104,17 @@ LogInput& LogInput::operator<<(const void *ptr) {
 
 LogInput& LogInput::operator<<(const Vector2f &v) {
   *this << '(' << v.x << ", " << v.y << ')';
+  return *this;
 }
 
 LogInput& LogInput::operator<<(const Vector3f &v) {
   *this << '(' << v.x << ", " << v.y << ", " << v.z << ')';
+  return *this;
 }
 
 LogInput& LogInput::operator<<(const Vector4f &v) {
   *this << '(' << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ')';
+  return *this;
 }
 
 } /* namespace glPortal */

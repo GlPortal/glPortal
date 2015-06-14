@@ -21,8 +21,7 @@ protected:
 
 public:
   using TypeId = ComponentTypeId;
-  static constexpr TypeId MaxCount = 64;
-  static constexpr size_t MaxCountBits = MaxCount >> 3;
+  static constexpr TypeId MaxId = 32;
 
   template<typename T> inline static TypeId getTypeId() {
     static_assert(std::is_base_of<Component, T>::value, "T must be a Component");
@@ -43,7 +42,6 @@ public:
 
 inline ComponentTypeId getNewId() {
   static ComponentTypeId lastId(0);
-  assert(lastId < Component::MaxCount);
   return lastId++;
 }
 

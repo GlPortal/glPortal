@@ -16,7 +16,6 @@
 #include <assets/material/MaterialLoader.hpp>
 
 #include <engine/Camera.hpp>
-#include <engine/Light.hpp>
 #include <engine/Viewport.hpp>
 
 #include <Window.hpp>
@@ -30,6 +29,7 @@
 
 #include <engine/component/Transform.hpp>
 #include <engine/component/MeshDrawable.hpp>
+#include <engine/component/LightSource.hpp>
 #include <Game.hpp>
 
 #include <SDL2/SDL_timer.h>
@@ -86,92 +86,103 @@ void Renderer::render(const Camera &cam) {
   const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
   glUseProgram(diffuse.handle);
 
-  //Lights
-  for (unsigned int i = 0; i < scene->lights.size(); i++) {
-    const Light &light = scene->lights[i];
+  /* Lights */ {
+    int numLights = 0;
+    for (const Entity &e : scene->entities) {
+      if (not e.hasComponent<LightSource>()) {
+        continue;
+      }
+      char attribute[30];
+      snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].position");
+      int lightPos = diffuse.uni(attribute);
+      snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].color");
+      int lightColor = diffuse.uni(attribute);
+      snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].distance");
+      int lightDistance = diffuse.uni(attribute);
+      snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].energy");
+      int lightEnergy = diffuse.uni(attribute);
+      snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].specular");
+      int lightSpecular = diffuse.uni(attribute);
 
-    char attribute[30];
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].position");
-    int lightPos = diffuse.uni(attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].color");
-    int lightColor = diffuse.uni(attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].distance");
-    int lightDistance = diffuse.uni(attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].energy");
-    int lightEnergy = diffuse.uni(attribute);
-    snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", i, "].specular");
-    int lightSpecular = diffuse.uni(attribute);
+      const Transform &t = e.getComponent<Transform>();
+      const LightSource &ls = e.getComponent<LightSource>();
+      glUniform3f(lightPos, t.position.x, t.position.y, t.position.z);
+      glUniform3f(lightColor, ls.color.x, ls.color.y, ls.color.z);
+      glUniform1f(lightDistance, ls.distance);
+      glUniform1f(lightEnergy, ls.energy);
+      glUniform1f(lightSpecular, ls.specular);
 
-    glUniform3f(lightPos, light.position.x, light.position.y, light.position.z);
-    glUniform3f(lightColor, light.color.x, light.color.y, light.color.z);
-    glUniform1f(lightDistance, light.distance);
-    glUniform1f(lightEnergy, light.energy);
-    glUniform1f(lightSpecular, light.specular);
+      ++numLights;
+    }
+    int numLightsLoc = diffuse.uni("numLights");
+    glUniform1i(numLightsLoc, numLights);
   }
 
-  int numLights = scene->lights.size();
-  int numLightsLoc = diffuse.uni("numLights");
-  glUniform1i(numLightsLoc, numLights);
+  /* Portals, pass 1 */
+  for (EntityPair &p : scene->portalPairs) {
+    Entity &pEnt1 = *p.first,
+           &pEnt2 = *p.second;
+    Portal &portal1 = pEnt1.getComponent<Portal>(),
+           &portal2 = pEnt2.getComponent<Portal>();
 
-  if (!scene->bluePortal.hasComponent<Portal>()) {
-    scene->bluePortal.addComponent<Portal>();
-  }
-  if (!scene->orangePortal.hasComponent<Portal>()) {
-    scene->orangePortal.addComponent<Portal>();
-  }
+    // Render portals
+    renderPortal(cam, pEnt1, pEnt2);
+    renderPortal(cam, pEnt2, pEnt1);
+    // Depth buffer
+    if (portal1.open and portal2.open) {
+      const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
 
-  //Render portals
-  renderPortal(cam, scene->bluePortal, scene->orangePortal);
-  renderPortal(cam, scene->orangePortal, scene->bluePortal);
+      glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+      glDepthMask(GL_TRUE);
+      glClear(GL_DEPTH_BUFFER_BIT);
 
-  // Depth buffer
-  const Portal &bP = scene->bluePortal.getComponent<Portal>();
-  const Portal &oP = scene->orangePortal.getComponent<Portal>();
-  if (bP.open and oP.open) {
-    const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
+      const Mesh &portalStencil = MeshLoader::getMesh("PortalStencil.obj");
 
-    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-    glDepthMask(GL_TRUE);
-    glClear(GL_DEPTH_BUFFER_BIT);
+      Matrix4f mtx;
+      pEnt1.getComponent<Transform>().getModelMtx(mtx);
+      mtx.scale(portal1.getScaleMult());
+      renderMesh(cam, unshaded, mtx, portalStencil);
 
-    const Mesh &portalStencil = MeshLoader::getMesh("PortalStencil.obj");
+      pEnt2.getComponent<Transform>().getModelMtx(mtx);
+      mtx.scale(portal2.getScaleMult());
+      renderMesh(cam, unshaded, mtx, portalStencil);
 
-    Matrix4f mtx;
-    scene->bluePortal.getComponent<Transform>().getModelMtx(mtx);
-    mtx.scale(bP.getScaleMult());
-    renderMesh(cam, unshaded, mtx, portalStencil);
-
-    scene->orangePortal.getComponent<Transform>().getModelMtx(mtx);
-    mtx.scale(oP.getScaleMult());
-    renderMesh(cam, unshaded, mtx, portalStencil);
-
-    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+      glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    }
   }
 
   renderScene(cam);
 
-  // Draw simplex noise
+  /* Portals, pass 2 */
   glDepthMask(GL_FALSE);
-  if (bP.open and oP.open) {
-    uint32_t dtOpen = SDL_GetTicks()-std::max(bP.openSince, oP.openSince);
-    if (dtOpen < Portal::NOISE_FADE_DELAY) {
-      float al = 1-((float)dtOpen/Portal::NOISE_FADE_DELAY)*2;
-      renderPortalNoise(cam, scene->bluePortal, al);
-      renderPortalNoise(cam, scene->orangePortal, al);
+  for (EntityPair &p : scene->portalPairs) {
+    Entity &pEnt1 = *p.first,
+           &pEnt2 = *p.second;
+    Portal &portal1 = pEnt1.getComponent<Portal>(),
+           &portal2 = pEnt2.getComponent<Portal>();
+
+    // Draw simplex noise
+    if (portal1.open and portal2.open) {
+      uint32_t dtOpen = SDL_GetTicks()-std::max(portal1.openSince, portal2.openSince);
+      if (dtOpen < Portal::NOISE_FADE_DELAY) {
+        float al = 1-((float)dtOpen/Portal::NOISE_FADE_DELAY)*2;
+        renderPortalNoise(cam, pEnt1, al);
+        renderPortalNoise(cam, pEnt2, al);
+      }
+    } else {
+      if (portal1.open) {
+        renderPortalNoise(cam, pEnt1, 1.f);
+      }
+      if (portal2.open) {
+        renderPortalNoise(cam, pEnt2, 1.f);
+      }
     }
-  } else {
-    if (oP.open) {
-      renderPortalNoise(cam, scene->orangePortal, 1.f);
-    }
-    if (bP.open) {
-      renderPortalNoise(cam, scene->bluePortal, 1.f);
-    }
+    
+    // Draw overlays
+    renderPortalOverlay(cam, pEnt1);
+    renderPortalOverlay(cam, pEnt2);
   }
   glDepthMask(GL_TRUE);
-
-  // Draw overlays
-  renderPortalOverlay(cam, scene->bluePortal);
-  renderPortalOverlay(cam, scene->orangePortal);
 
   //Draw GUI
   glClear(GL_DEPTH_BUFFER_BIT);
@@ -266,10 +277,11 @@ void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entit
 
     Camera portalCam;
     setCameraInPortal(cam, portalCam, portal, otherPortal);
+    // TODO: rework to allow recursive rendering, and draw other portal pairs
     renderPlayer(portalCam);
     renderScene(portalCam);
-    renderPortalOverlay(portalCam, scene->bluePortal);
-    renderPortalOverlay(portalCam, scene->orangePortal);
+    renderPortalOverlay(portalCam, portal);
+    renderPortalOverlay(portalCam, otherPortal);
 
     glDisable(GL_STENCIL_TEST);
   }

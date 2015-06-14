@@ -19,7 +19,6 @@
 #include <engine/renderer/Renderer.hpp>
 #include <engine/env/Environment.hpp>
 #include <engine/BoxCollider.hpp>
-#include <engine/Light.hpp>
 #include <engine/Ray.hpp>
 #include <engine/Camera.hpp>
 #include <engine/SoundManager.hpp>
@@ -30,6 +29,7 @@
 #include <engine/component/AACollisionBox.hpp>
 #include <engine/component/MeshDrawable.hpp>
 #include <engine/component/SoundSource.hpp>
+#include <engine/component/LightSource.hpp>
 #include "PlayerMotion.hpp"
 
 #include <engine/core/math/Math.hpp>
@@ -83,11 +83,6 @@ void World::loadScene(const std::string &path) {
   //play a random piece of music each team a scene is loaded
   std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
   SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
-  // TODO: do this elsewhere.
-  scene->bluePortal.addComponent<Transform>();
-  scene->bluePortal.addComponent<Portal>();
-  scene->orangePortal.addComponent<Transform>();
-  scene->orangePortal.addComponent<Portal>();
 }
 
 void World::update() {
@@ -121,23 +116,26 @@ void World::update() {
 
   //FIXME Remake the collision system to be less faulty and ugly
   // ^ A.K.A. Bullet physics engine
-  const Portal &bP = scene->bluePortal.getComponent<Portal>();
-  const Transform &bPT = scene->bluePortal.getComponent<Transform>();
-  const Portal &oP = scene->orangePortal.getComponent<Portal>();
-  const Transform &oPT = scene->orangePortal.getComponent<Transform>();
+
   //Y collision
   BoxCollider bboxY(Vector3f(plrTform.position.x, pos.y, plrTform.position.z), plrTform.scale);
   if (collidesWithWalls(bboxY)) {
     bool portaling = false;
-    if (bP.open and oP.open) {
-      if(bP.inPortal(bboxY)) {
-        if(bPT.rotation.x == rad(-90) || bPT.rotation.x == rad(90)) {
-          portaling = true;
+    for (const EntityPair &p : scene->portalPairs) {
+      const Portal &portal1 = p.first->getComponent<Portal>(),
+                   &portal2 = p.second->getComponent<Portal>();
+      if (portal1.open and portal2.open) {
+        const Transform &p1Tform = p.first->getComponent<Transform>(),
+                        &p2Tform = p.second->getComponent<Transform>();
+        if (portal1.inPortal(bboxY)) {
+          if (p1Tform.rotation.x == rad(-90) || p1Tform.rotation.x == rad(90)) {
+            portaling = true;
+          }
         }
-      }
-      if(oP.inPortal(bboxY)) {
-        if(oPT.rotation.x == rad(-90) || oPT.rotation.x == rad(90)) {
-          portaling = true;
+        if (portal2.inPortal(bboxY)) {
+          if (p2Tform.rotation.x == rad(-90) || p2Tform.rotation.x == rad(90)) {
+            portaling = true;
+          }
         }
       }
     }
@@ -158,15 +156,21 @@ void World::update() {
   BoxCollider bboxX(Vector3f(pos.x, plrTform.position.y, plrTform.position.z), plrTform.scale);
   if (collidesWithWalls(bboxX)) {
     bool portaling = false;
-    if (bP.open and oP.open) {
-      if(bP.inPortal(bboxX)) {
-        if(bPT.rotation.x == 0 and (bPT.rotation.y == rad(-90) || bPT.rotation.y == rad(90))) {
-          portaling = true;
+    for (const EntityPair &p : scene->portalPairs) {
+      const Portal &portal1 = p.first->getComponent<Portal>(),
+                   &portal2 = p.second->getComponent<Portal>();
+      if (portal1.open and portal2.open) {
+        const Transform &p1Tform = p.first->getComponent<Transform>(),
+                        &p2Tform = p.second->getComponent<Transform>();
+        if (portal1.inPortal(bboxX)) {
+          if (p1Tform.rotation.x == 0 and (p1Tform.rotation.y == rad(-90) || p1Tform.rotation.y == rad(90))) {
+            portaling = true;
+          }
         }
-      }
-      if(oP.inPortal(bboxX)) {
-        if(bPT.rotation.x == 0 and (oPT.rotation.y == rad(-90) || oPT.rotation.y == rad(90))) {
-          portaling = true;
+        if (portal2.inPortal(bboxX)) {
+          if (p2Tform.rotation.x == 0 and (p2Tform.rotation.y == rad(-90) || p2Tform.rotation.y == rad(90))) {
+            portaling = true;
+          }
         }
       }
     }
@@ -179,16 +183,21 @@ void World::update() {
   BoxCollider bboxZ(Vector3f(plrTform.position.x, plrTform.position.y, pos.z), plrTform.scale);
   if (collidesWithWalls(bboxZ)) {
     bool portaling = false;
-    
-    if (bP.open and oP.open) {
-      if(bP.inPortal(bboxZ)) {
-        if(bPT.rotation.x == 0 and (bPT.rotation.y == 0 || bPT.rotation.y == rad(180))) {
-          portaling = true;
+    for (const EntityPair &p : scene->portalPairs) {
+      const Portal &portal1 = p.first->getComponent<Portal>(),
+                   &portal2 = p.second->getComponent<Portal>();
+      if (portal1.open and portal2.open) {
+        const Transform &p1Tform = p.first->getComponent<Transform>(),
+                        &p2Tform = p.second->getComponent<Transform>();
+        if (portal1.inPortal(bboxZ)) {
+          if (p1Tform.rotation.x == 0 and (p1Tform.rotation.y == 0 || p1Tform.rotation.y == rad(180))) {
+            portaling = true;
+          }
         }
-      }
-      if(oP.inPortal(bboxZ)) {
-        if(oPT.rotation.x == 0 and (oPT.rotation.y == 0 || oPT.rotation.y == rad(180))) {
-          portaling = true;
+        if (portal2.inPortal(bboxZ)) {
+          if (p2Tform.rotation.x == 0 and (p2Tform.rotation.y == 0 || p2Tform.rotation.y == rad(180))) {
+            portaling = true;
+          }
         }
       }
     }
@@ -232,24 +241,30 @@ void World::update() {
 
   pos = plrTform.position + plrMotion.velocity;
 
-  //Check if the player is moving through a portal
+  // Check if the player is moving through a portal
   BoxCollider playerCollider(pos, plrTform.scale);
-  if (bP.open and oP.open) {
-    if (bP.throughPortal(playerCollider)) {
-      plrTform.position.set(oPT.position);
-      float rotation = oPT.rotation.y - bPT.rotation.y + rad(180);
-      plrTform.rotation.y += rotation;
-      //Transform the velocity of the player
-      float velocity = plrMotion.velocity.length();
-      plrMotion.velocity = oP.getDirection() * velocity;
-    }
-    if (oP.throughPortal(playerCollider)) {
-      plrTform.position.set(bPT.position);
-      float rotation = bPT.rotation.y - oPT.rotation.y + rad(180);
-      plrTform.rotation.y += rotation;
-      //Transform the velocity of the player
-      float velocity = plrMotion.velocity.length();
-      plrMotion.velocity = bP.getDirection() * velocity;
+  for (EntityPair &p : scene->portalPairs) {
+    Portal &portal1 = p.first->getComponent<Portal>(),
+            &portal2 = p.second->getComponent<Portal>();
+    Transform &p1Tform = p.first->getComponent<Transform>(),
+              &p2Tform = p.second->getComponent<Transform>();
+    if (portal1.open and portal2.open) {
+      if (portal1.throughPortal(playerCollider)) {
+        plrTform.position = p2Tform.position;
+        float rotation = p2Tform.rotation.y - p1Tform.rotation.y + rad(180);
+        plrTform.rotation.y += rotation;
+        // Transform the velocity of the player
+        float velocity = plrMotion.velocity.length();
+        plrMotion.velocity = portal2.getDirection() * velocity;
+      }
+      if (portal2.throughPortal(playerCollider)) {
+        plrTform.position = p1Tform.position;
+        float rotation = p1Tform.rotation.y - p2Tform.rotation.y + rad(180);
+        plrTform.rotation.y += rotation;
+        // Transform the velocity of the player
+        float velocity = plrMotion.velocity.length();
+        plrMotion.velocity = portal1.getDirection() * velocity;
+      }
     }
   }
 
@@ -306,28 +321,29 @@ void World::shootPortal(int button) {
     }
   }
 
+  EntityPair &pPair = getPortalPair(0);
   // TODO: material in separate Component, + 1 mat per face
   if (closestWall != nullptr and (closestWall->getComponent<MeshDrawable>().material.portalable)) {
     Vector3f ipos = scene->camera.getPosition() + (cameraDir * intersection);
-    Entity &pEnt = (button == 1) ? scene->bluePortal : scene->orangePortal;
-    pEnt.clearComponents();
-    Portal &portal = pEnt.addComponent<Portal>();
+    Entity &pEnt = (button == 1) ? *pPair.first : *pPair.second;
+    Portal &portal = pEnt.getComponent<Portal>();
     portal.openSince = SDL_GetTicks();
     portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png"); 
     portal.placeOnWall(scene->camera.getPosition(), closestWall->getComponent<AACollisionBox>().box, ipos);
+    //LightSource &pLight = pEnt.getComponent<LightSource>();
 
     if (button == 1) {
       portal.overlayTex.diffuse = TextureLoader::getTexture("blueportal.png");
-      portal.color = Portal::BLUE_COLOR;
+      portal.color /*= pLight.color*/ = Portal::BLUE_COLOR;
     } else {
       portal.overlayTex.diffuse = TextureLoader::getTexture("orangeportal.png");
-      portal.color = Portal::ORANGE_COLOR;
+      portal.color /*= pLight.color*/ = Portal::ORANGE_COLOR;
     }
   } else {
     if (button == 1) {
-      scene->bluePortal.getComponent<Portal>().open = false;
+      pPair.first->getComponent<Portal>().open = false;
     } else {
-      scene->orangePortal.getComponent<Portal>().open = false;
+      pPair.second->getComponent<Portal>().open = false;
     }
   }
 }
@@ -339,6 +355,30 @@ void World::render() {
 
 Entity& World::getPlayer() {
   return scene->player;
+}
+
+EntityPair& World::getPortalPair(int n) const {
+  int pairCount = scene->portalPairs.size();
+  if (pairCount <= n) {
+    scene->portalPairs.reserve(n + 1);
+    // Instantiate and initalize every non-extsing yet portal pair
+    for (int i = pairCount; i <= n; ++i) {
+      scene->entities.emplace_back();
+      Entity &pEnt1 = scene->entities.back();
+      scene->entities.emplace_back();
+      Entity &pEnt2 = scene->entities.back();
+      pEnt1.addComponent<Transform>();
+      pEnt1.addComponent<Portal>();
+      //LightSource &ls1 = pEnt1.addComponent<LightSource>();
+      pEnt2.addComponent<Transform>();
+      pEnt2.addComponent<Portal>();
+      /*LightSource &ls2 = pEnt2.addComponent<LightSource>();
+      ls1.energy = ls2.energy = 5;
+      ls1.distance = ls2.distance = 1.3f;*/
+      scene->portalPairs.emplace_back(&pEnt1, &pEnt2);
+    }
+  }
+  return scene->portalPairs.at(n);
 }
 
 } /* namespace glPortal */

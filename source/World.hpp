@@ -1,12 +1,13 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
-#include "engine/env/ConfigFileParser.hpp"
-#include "engine/env/Config.hpp"
 #include <string>
 #include <vector>
 #include <random>
 #include <array>
+#include <assets/scene/Scene.hpp>
+#include <engine/env/ConfigFileParser.hpp>
+#include <engine/env/Config.hpp>
 
 namespace glPortal {
 
@@ -42,6 +43,7 @@ public:
   bool collides(const Vector3f &ro, const Vector3f &rd, const Entity &e, float *tNear, float *tFar);
   void render();
   Entity& getPlayer();
+  EntityPair& getPortalPair(int n) const;
 
   static float gravity;
   static float friction;
