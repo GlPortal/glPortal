@@ -45,33 +45,35 @@ void PlayerMotion::move() {
   velocity.y -= World::gravity;
 
   float rot = entity.getComponent<Transform>().rotation.y;
-  if (entity.getComponent<Health>().isAlive()){
-    Vector3f tmp_velocity;
-    tmp_velocity.x = tmp_velocity.z = 0;
+  if (entity.getComponent<Health>().isAlive()) {
+    Vector3f tmpVel;
+    tmpVel.x = tmpVel.z = 0;
 
     if (Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP)) {
-      tmp_velocity.x += -sin(rot) * speed;
-      tmp_velocity.z += -cos(rot) * speed;
+      tmpVel.x += -sin(rot);
+      tmpVel.z += -cos(rot);
     }
     if (Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN)) {
-      tmp_velocity.x += sin(rot) * speed;
-      tmp_velocity.z += cos(rot) * speed;
+      tmpVel.x += sin(rot);
+      tmpVel.z += cos(rot);
     }
     if (Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT)) {
-      tmp_velocity.x += -cos(rot) * speed;
-      tmp_velocity.z += sin(rot) * speed;
+      tmpVel.x += -cos(rot);
+      tmpVel.z += sin(rot);
     }
     if (Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT)) {
-      tmp_velocity.x += cos(rot) * speed;
-      tmp_velocity.z += -sin(rot) * speed;
+      tmpVel.x += cos(rot);
+      tmpVel.z += -sin(rot);
     }
+    tmpVel.normalise();
+    tmpVel *= speed;
     if (Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP) or
         Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN) or
         Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT) or
         Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT))
     {
-      velocity.x = tmp_velocity.x;
-      velocity.z = tmp_velocity.z;
+      velocity.x = tmpVel.x;
+      velocity.z = tmpVel.z;
     }
 
 

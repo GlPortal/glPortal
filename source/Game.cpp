@@ -15,7 +15,10 @@
 #include <util/sdl/Fps.hpp>
 #include "Input.hpp"
 #include <SDL.h>
+
 namespace glPortal {
+
+Fps Game::fps;
 
 Game::Game() : closed(false) {
   window.create("GlPortal");
@@ -35,11 +38,9 @@ void Game::update() {
   SDL_Event event;
   int skipped;
   unsigned int nextUpdate = SDL_GetTicks();
-  Fps fps;
-  
+
   while (not closed) {
     skipped = 0;
-    fps.getFps();
     //Update the game if it is time
     while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
       while (SDL_PollEvent(&event)) {

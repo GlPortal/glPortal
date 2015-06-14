@@ -3,6 +3,7 @@
 
 #include "Window.hpp"
 #include "World.hpp"
+#include "util/sdl/Fps.hpp"
 #include <SDL2/SDL_events.h>
 
 const int UPDATE_RATE = 50;
@@ -13,6 +14,9 @@ namespace glPortal {
 
 class Game {
 public:
+  // FIXME: make non-static
+  static Fps fps;
+
   Game();
   void update();
   void close();

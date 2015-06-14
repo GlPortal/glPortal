@@ -29,6 +29,7 @@ public:
   void setScene(Scene *scene);
 
   void render(const Camera &cam);
+  void renderUI(const Camera &cam);
   void renderScene(const Camera &cam);
   void renderEntity(const Camera &cam, const Entity &e);
   void renderPlayer(const Camera &cam);

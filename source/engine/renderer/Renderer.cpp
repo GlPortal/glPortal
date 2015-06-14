@@ -30,6 +30,7 @@
 
 #include <engine/component/Transform.hpp>
 #include <engine/component/MeshDrawable.hpp>
+#include <Game.hpp>
 
 #include <SDL2/SDL_timer.h>
 #include <algorithm>
@@ -177,19 +178,26 @@ void Renderer::render(const Camera &cam) {
   Camera orthoCam;
   orthoCam.setOrthographic();
   orthoCam.setBounds(0, vpWidth, 0, vpHeight);
+  renderUI(orthoCam);
+}
 
-  //Crosshair
+void Renderer::renderUI(const Camera &cam) {
+  // Crosshair
   Matrix4f crosshairMtx;
   crosshairMtx.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
   crosshairMtx.scale(Vector3f(80, 80, 1));
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   const Material &mat = MaterialLoader::fromTexture("Reticle.png");
   const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
-  renderMesh(orthoCam, unshaded, crosshairMtx, mesh, mat);
+  renderMesh(cam, unshaded, crosshairMtx, mesh, mat);
 
-  //Text
+  // Title
   setFont("Adobe", 1.5f);
-  renderText(orthoCam, "GlPortal", 25, vpHeight - 75);
+  renderText(cam, "GlPortal", 25, vpHeight - 75);
+
+  // FPS counter
+  setFont("Adobe", .5f);
+  renderText(cam, std::string("FPS: ") + std::to_string(Game::fps.getFps()), 10, vpHeight - 25);
 }
 
 void Renderer::renderScene(const Camera &cam) {

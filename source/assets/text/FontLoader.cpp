@@ -32,16 +32,16 @@ Font FontLoader::loadFont(const std::string &path, const std::string &name) {
   for(std::string line; getline(input, line);) {
     stringstream stream(line);
 
-    if(line.length() > 0) {
+    if (line.length() > 0) {
       std::string tokens[9];
 
-      for(int i = 0; i < 9; i++) {
+      for (int i = 0; i < 9; i++) {
         stream >> tokens[i];
       }
 
-      if(tokens[0] == "char") {
+      if (tokens[0] == "char") {
         //Delete all the letters from the tokens
-        for(int i = 1; i < 9; i++) {
+        for (int i = 1; i < 9; ++i) {
           //Find the start of the digits
           int pos = tokens[i].find('=', 0) + 1;
           //Erase the rest
@@ -49,14 +49,14 @@ Font FontLoader::loadFont(const std::string &path, const std::string &name) {
         }
 
         Letter letter;
-        int id = atoi(tokens[1].c_str());
-        letter.x = atoi(tokens[2].c_str());
-        letter.y = atoi(tokens[3].c_str());
-        letter.width = atoi(tokens[4].c_str());
-        letter.height = atoi(tokens[5].c_str());
-        letter.xOffset = atof(tokens[6].c_str());
-        letter.yOffset = atof(tokens[7].c_str());
-        letter.advance = atof(tokens[8].c_str());
+        int id = std::stoi(tokens[1]);
+        letter.x = std::stoi(tokens[2]);
+        letter.y = std::stoi(tokens[3]);
+        letter.width = std::stoi(tokens[4]);
+        letter.height = std::stoi(tokens[5]);
+        letter.xOffset = std::stof(tokens[6]);
+        letter.yOffset = std::stof(tokens[7]);
+        letter.advance = std::stof(tokens[8]);
 
         //Load the mesh
         Texture texture = TextureLoader::getTexture(name + ".png");
