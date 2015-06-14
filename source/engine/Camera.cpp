@@ -81,9 +81,17 @@ void Camera::setZNear(float zNear) {
   calcProj();
 }
 
+float Camera::getZNear() const {
+  return zNear;
+}
+
 void Camera::setZFar(float zFar) {
   this->zFar = zFar;
   calcProj();
+}
+
+float Camera::getZFar() const {
+  return zFar;
 }
 
 void Camera::setPerspective() {

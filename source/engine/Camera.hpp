@@ -32,7 +32,9 @@ public:
   void setAspect(float aspect);
   float getAspect() const;
   void setZNear(float zNear);
+  float getZNear() const;
   void setZFar(float zFar);
+  float getZFar() const;
   void setPerspective();
   void setOrthographic();
   void setBounds(float left, float right, float bottom, float top);

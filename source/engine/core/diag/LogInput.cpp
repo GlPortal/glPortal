@@ -1,6 +1,9 @@
 #include "LogInput.hpp"
 #include <iomanip>
 #include <sstream>
+#include <engine/core/math/Vector2f.hpp>
+#include <engine/core/math/Vector3f.hpp>
+#include <engine/core/math/Vector4f.hpp>
 
 namespace glPortal {
 
@@ -90,6 +93,19 @@ LogInput& LogInput::operator<<(const void *ptr) {
   os << "0x" << std::setfill('0') << std::setw(sizeof(ptr) * 2) << std::hex << (uint64_t)ptr;
   buf.append(hbuf.str());
   return *this;
+}
+
+
+LogInput& LogInput::operator<<(const Vector2f &v) {
+  *this << '(' << v.x << ", " << v.y << ')';
+}
+
+LogInput& LogInput::operator<<(const Vector3f &v) {
+  *this << '(' << v.x << ", " << v.y << ", " << v.z << ')';
+}
+
+LogInput& LogInput::operator<<(const Vector4f &v) {
+  *this << '(' << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ')';
 }
 
 } /* namespace glPortal */

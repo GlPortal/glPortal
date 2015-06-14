@@ -6,6 +6,10 @@
 
 namespace glPortal {
 
+class Vector2f;
+class Vector3f;
+class Vector4f;
+
 class LogInput {
 protected:
   Logger &sink;
@@ -36,6 +40,10 @@ public:
   LogInput& operator<<(float);
   LogInput& operator<<(double);
   LogInput& operator<<(const void*);
+
+  LogInput& operator<<(const Vector2f&);
+  LogInput& operator<<(const Vector3f&);
+  LogInput& operator<<(const Vector4f&);
 };
 
 } /* namespace glPortal */

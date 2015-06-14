@@ -14,6 +14,7 @@ public:
   Transform(Entity &ent) :
     Component(ent), scale(1, 1, 1) {}
 
+  void applyModelMtx(Matrix4f&) const;
   void getModelMtx(Matrix4f&) const;
 };
 

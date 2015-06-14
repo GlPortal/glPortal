@@ -16,6 +16,7 @@ public:
   static const Vector3f ORANGE_COLOR;
   static const int NOISE_FADE_DELAY;
   static const int OPEN_ANIM_DURATION;
+  static const float SURFACE_OFFSET;
 
   Portal(Entity &ent) : Component(ent), open(false) {}
   Vector3f getDirection() const;

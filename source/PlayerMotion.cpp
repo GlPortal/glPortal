@@ -47,8 +47,6 @@ void PlayerMotion::move() {
   float rot = entity.getComponent<Transform>().rotation.y;
   if (entity.getComponent<Health>().isAlive()) {
     Vector3f tmpVel;
-    tmpVel.x = tmpVel.z = 0;
-
     if (Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP)) {
       tmpVel.x += -sin(rot);
       tmpVel.z += -cos(rot);
@@ -65,7 +63,10 @@ void PlayerMotion::move() {
       tmpVel.x += cos(rot);
       tmpVel.z += -sin(rot);
     }
-    tmpVel.normalise();
+    float tmpVelLen = tmpVel.length();
+    if (tmpVelLen > 0) {
+      tmpVel.normalise();
+    }
     tmpVel *= speed;
     if (Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP) or
         Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN) or

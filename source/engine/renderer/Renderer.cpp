@@ -237,7 +237,13 @@ void Renderer::renderPortalContent(const Camera &cam, const Entity &portal) {
   
   const Portal &p = portal.getComponent<Portal>();
   Matrix4f mtx;
-  portal.getComponent<Transform>().getModelMtx(mtx);
+  mtx.translate(p.getDirection() * -cam.getZNear());
+  portal.getComponent<Transform>().applyModelMtx(mtx);
+  mtx.scale(p.getScaleMult());
+  renderMesh(cam, ShaderLoader::getShader("unshaded.frag"), mtx, p.stencilMesh);
+
+  mtx.setIdentity();
+  portal.getComponent<Transform>().applyModelMtx(mtx);
   mtx.scale(p.getScaleMult());
   renderMesh(cam, ShaderLoader::getShader("unshaded.frag"), mtx, p.stencilMesh);
 
