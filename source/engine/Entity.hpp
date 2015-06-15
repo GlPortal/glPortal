@@ -3,7 +3,7 @@
 
 #include <type_traits>
 #include <memory>
-
+#include <array>
 #include <engine/component/Component.hpp>
 #include <engine/env/System.hpp>
 
