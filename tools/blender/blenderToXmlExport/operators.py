@@ -2,7 +2,7 @@ import bpy
 import os
 import string
 import re
-
+from .paths import *
 from .operatorHelpers import *
         
 class addDoor(bpy.types.Operator):
@@ -11,7 +11,7 @@ class addDoor(bpy.types.Operator):
     bl_options = {"UNDO"}
     
     def execute(self, context):
-        realpath = os.path.expanduser("~/.glportal/data/meshes/Door.obj")
+        realpath = os.path.expanduser(Paths.GLPORTAL_DATA_DIR + "meshes/Door.obj")
         bpy.ops.import_scene.obj(filepath=realpath)
         bpy.ops.transform.translate(value=(bpy.context.scene.cursor_location))
         bpy.types.Object.glpType = bpy.props.StringProperty()
@@ -20,13 +20,13 @@ class addDoor(bpy.types.Operator):
             object.glpTypes = "door" 
         return {'FINISHED'}
     
-class addDoor(bpy.types.Operator):
+class addLamp(bpy.types.Operator):
     bl_idname = "wm.add_lamp"
     bl_label = "Add a lamp."
     bl_options = {"UNDO"}
     
     def execute(self, context):
-        realpath = os.path.expanduser("~/.glportal/data/meshes/Lamp.obj")
+        realpath = os.path.expanduser(Paths.GLPORTAL_DATA_DIR + "meshes/Lamp.obj")
         bpy.ops.import_scene.obj(filepath=realpath)
         bpy.ops.transform.translate(value=(bpy.context.scene.cursor_location))
         bpy.types.Object.glpType = bpy.props.StringProperty()
@@ -41,7 +41,7 @@ class addButton(bpy.types.Operator):
     bl_options = {"UNDO"}
     
     def execute(self, context):
-        realpath = os.path.expanduser("~/.glportal/data/meshes/Button.obj")
+        realpath = os.path.expanduser(Paths.GLPORTAL_DATA_DIR + "meshes/Button.obj")
         bpy.ops.import_scene.obj(filepath=realpath)
         bpy.ops.transform.translate(value=(bpy.context.scene.cursor_location))
         bpy.types.Object.glpType = bpy.props.StringProperty()
@@ -56,7 +56,7 @@ class setPortable(bpy.types.Operator):
     bl_options = {"UNDO"}
     
     def execute(self, context):
-        mat = getMaterial('~/.glportal/data/textures/wall.png', (1, 1, 1))
+        mat = getMaterial(Paths.GLPORTAL_DATA_DIR + 'textures/wall.png', (1, 1, 1))
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
@@ -75,7 +75,7 @@ class setWall(bpy.types.Operator):
     bl_options = {"UNDO"}
     
     def execute(self, context):
-        mat = getMaterial('~/.glportal/data/textures/tiles.png', (0.2, 0.2, 0.2))
+        mat = getMaterial(Paths.GLPORTAL_DATA_DIR + 'textures/tiles.png', (0.2, 0.2, 0.2))
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
