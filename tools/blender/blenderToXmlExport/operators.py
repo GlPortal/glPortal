@@ -7,7 +7,7 @@ from .operatorHelpers import *
         
 class addDoor(bpy.types.Operator):
     bl_idname = "wm.add_door"
-    bl_label = "Mark the selection as door."
+    bl_label = "Add a door."
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -19,7 +19,37 @@ class addDoor(bpy.types.Operator):
         if object:
             object.glpTypes = "door" 
         return {'FINISHED'}
-
+    
+class addDoor(bpy.types.Operator):
+    bl_idname = "wm.add_lamp"
+    bl_label = "Add a lamp."
+    bl_options = {"UNDO"}
+    
+    def execute(self, context):
+        realpath = os.path.expanduser("~/.glportal/data/meshes/Lamp.obj")
+        bpy.ops.import_scene.obj(filepath=realpath)
+        bpy.ops.transform.translate(value=(bpy.context.scene.cursor_location))
+        bpy.types.Object.glpType = bpy.props.StringProperty()
+        object = bpy.context.active_object
+        if object:
+            object.glpTypes = "lamp" 
+        return {'FINISHED'}
+    
+class addButton(bpy.types.Operator):
+    bl_idname = "wm.add_button"
+    bl_label = "Add a button."
+    bl_options = {"UNDO"}
+    
+    def execute(self, context):
+        realpath = os.path.expanduser("~/.glportal/data/meshes/Button.obj")
+        bpy.ops.import_scene.obj(filepath=realpath)
+        bpy.ops.transform.translate(value=(bpy.context.scene.cursor_location))
+        bpy.types.Object.glpType = bpy.props.StringProperty()
+        object = bpy.context.active_object
+        if object:
+            object.glpTypes = "button" 
+        return {'FINISHED'}
+    
 class setPortable(bpy.types.Operator):
     bl_idname = "wm.set_portable"
     bl_label = "Mark the selection as portable."

@@ -30,3 +30,12 @@ class GlPortalCreationPanel(bpy.types.Panel):
         col.operator("wm.add_death", text="Death", icon='MESH_CUBE')
         col.operator("wm.add_radiation", text="Radiation", icon='MESH_CUBE')
         col.operator("wm.add_win", text="Win", icon='MESH_CUBE')
+
+        layout.label("Models:")
+        row = layout.row()
+        split = layout.split()
+        col = split.column(align=True)
+        col.operator("wm.add_door", text="Door", icon='MESH_CUBE')
+        col.operator("wm.add_lamp", text="Lamp", icon='MESH_CUBE')
+        col.operator("wm.add_button", text="Button", icon='MESH_CUBE')
+        
