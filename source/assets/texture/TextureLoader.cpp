@@ -59,6 +59,7 @@ Texture TextureLoader::getTexture(std::string path) {
   int width, height, bytes;
   unsigned char *data = stbi_load((Environment::getDataDir() + "/textures/" + path).c_str(), &width, &height, &bytes, 0);
   Texture texture = uploadTexture(data, width, height, bytes);
+  stbi_image_free(data);
   texture.width = width;
   texture.height = height;
   textureCache.insert(std::pair<std::string, Texture>(path, texture));

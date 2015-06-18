@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <memory>
 #include <engine/env/Environment.hpp>
 #include <engine/env/System.hpp>
 
@@ -41,10 +42,9 @@ Shader& ShaderLoader::getShader(const std::string &path) {
   } else {
     GLint logSize = 0;
     glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &logSize);
-    char* log = (char*)malloc(logSize);
-    glGetProgramInfoLog(shader, logSize, NULL, log);
-    System::Log(Error) << fpath << ": linking failed:\n" << log;
-    free(log);
+    std::unique_ptr<char> log(new char[logSize]);
+    glGetProgramInfoLog(shader, logSize, NULL, log.get());
+    System::Log(Error) << fpath << ": linking failed:\n" << log.get();
   }
 
   glValidateProgram(shader);
@@ -56,10 +56,9 @@ Shader& ShaderLoader::getShader(const std::string &path) {
   } else {
     GLint logSize = 0;
     glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &logSize);
-    char* log = (char*)malloc(logSize);
-    glGetProgramInfoLog(shader, logSize, NULL, log);
-    System::Log(Error) << fpath << ": validation failed:\n" << log;
-    free(log);
+    std::unique_ptr<char> log(new char[logSize]);
+    glGetProgramInfoLog(shader, logSize, NULL, log.get());
+    System::Log(Error) << fpath << ": validation failed:\n" << log.get();
   }
 
   Shader s;
@@ -101,17 +100,16 @@ int ShaderLoader::loadShader(const std::string &path, GLenum type) {
     GLint logSize = 0;
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logSize);
 
-    char* log = (char*)malloc(logSize);
-    glGetShaderInfoLog(shader, logSize, &logSize, log);
+    std::unique_ptr<char> log(new char[logSize]);
+    glGetShaderInfoLog(shader, logSize, &logSize, log.get());
 
     if (type == GL_VERTEX_SHADER) {
-      System::Log(Error) << path << ": vertex shader compilation failed:\n" << log;
+      System::Log(Error) << path << ": vertex shader compilation failed:\n" << log.get();
     }
     if (type == GL_FRAGMENT_SHADER) {
-      System::Log(Error) << path << ": fragment shader compilation failed:\n" << log;
+      System::Log(Error) << path << ": fragment shader compilation failed:\n" << log.get();
     }
 
-    free(log);
     glDeleteShader(shader);
   }
 
