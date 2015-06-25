@@ -38,6 +38,7 @@
 
 #include <SDL2/SDL_keyboard.h>
 
+#include "Editor.hpp"
 #include "Input.hpp"
 #include "Portal.hpp"
 #include "Window.hpp"
@@ -47,11 +48,14 @@ namespace glPortal {
 float World::gravity = GRAVITY;
 float World::friction = FRICTION;
 
-World::World() : scene(nullptr) {
+World::World() :
+  scene(nullptr),
+  isEditorShown(false) {
   config = Environment::getConfigPointer();
 }
 
 void World::create() {
+  editor = new Editor(*this);
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
   try {
@@ -71,6 +75,7 @@ void World::setRendererWindow(Window *win) {
 }
 
 void World::destroy() {
+  delete editor;
   delete renderer;
   delete scene;
 }
@@ -94,6 +99,11 @@ void World::update() {
     loadScene(currentScenePath);
   }
   wasF5Down = Input::isKeyDown(SDL_SCANCODE_F5);
+  // If Tab released, toggle editor
+  if (wasTabDown and not Input::isKeyDown(SDL_SCANCODE_TAB)) {
+    isEditorShown = !isEditorShown;
+  }
+  wasTabDown = Input::isKeyDown(SDL_SCANCODE_F5);
 
   Entity &player = scene->player;
   Health &plrHealth = player.getComponent<Health>();
@@ -351,6 +361,9 @@ void World::shootPortal(int button) {
 void World::render() {
   renderer->setScene(scene);
   renderer->render(scene->camera);
+  if (isEditorShown) {
+    editor->renderUI();
+  }
 }
 
 Entity& World::getPlayer() {

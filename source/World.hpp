@@ -29,13 +29,19 @@ const std::array<const std::string,3> MUSIC_PLAYLIST =
 };
 
 class Window;
+class Editor;
 
 class World {
+private:
+  friend Editor;
+
 public:
   World();
   void create();
-  void setRendererWindow(Window*);
   void destroy();
+
+  void setRendererWindow(Window*);
+
   void update();
   void loadScene(const std::string &path);
   bool collidesWithWalls(const BoxCollider &collider) const;
@@ -48,9 +54,11 @@ public:
   static float gravity;
   static float friction;
 private:
-  bool wasF5Down;
+  bool wasF5Down, wasTabDown;
+  bool isEditorShown;
   std::string currentScenePath;
   Renderer *renderer;
+  Editor *editor;
   Scene *scene;
   std::mt19937 generator;
   std::vector<std::string> mapList;

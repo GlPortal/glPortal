@@ -71,8 +71,8 @@ void Window::create(const char *title) {
   // Allows unbound framerate if vsync is disabled
   SDL_GL_SetSwapInterval(Config::hasVsync() ? 1 : 0);
 
-  //Lock cursor in the middle of the screen
-  SDL_SetRelativeMouseMode(SDL_TRUE);
+  // Lock cursor in the middle of the screen
+  lockMouse();
 }
 
 void Window::setFullscreen() {
@@ -93,6 +93,14 @@ void Window::close() {
   window = nullptr;
 
   SDL_Quit();
+}
+
+void Window::lockMouse() {
+  SDL_SetRelativeMouseMode(SDL_TRUE);
+}
+
+void Window::unlockMouse() {
+  SDL_SetRelativeMouseMode(SDL_FALSE);
 }
 
 } /* namespace glPortal */

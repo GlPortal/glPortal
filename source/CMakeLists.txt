@@ -1,8 +1,13 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(${EXE_NAME} 
+add_executable(${EXE_NAME}
+  Editor.cpp
   Game.cpp
+  Input.cpp
+  PlayerMotion.cpp
   Portal.cpp
+  World.cpp
+  Window.cpp
   engine/Ray.cpp
   engine/SoundManager.cpp
   engine/core/math/Vector4f.cpp
@@ -16,10 +21,7 @@ add_executable(${EXE_NAME}
   engine/core/diag/LogInput.cpp
   util/sdl/Fps.cpp
   engine/BoxCollider.cpp
-  World.cpp Window.cpp
-  PlayerMotion.cpp
   engine/Camera.cpp
-  Input.cpp
   engine/renderer/Renderer.cpp
   assets/material/MaterialLoader.cpp
   assets/map/MapLoader.cpp
