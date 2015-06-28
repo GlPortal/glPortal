@@ -160,7 +160,7 @@ void MapLoader::extractDoor() {
     XmlHelper::extractPosition(endElement, t.position);
     XmlHelper::extractRotation(endElement, t.rotation);
     MeshDrawable &m = door.addComponent<MeshDrawable>();
-    m.material = MaterialLoader::fromTexture("Door.png");
+    m.material = MaterialLoader::loadFromXML("door/door");
     m.mesh = MeshLoader::getMesh("Door.obj");
   }
 }

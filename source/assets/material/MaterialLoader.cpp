@@ -16,7 +16,8 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
   TiXmlElement *root = docHandle.FirstChildElement().ToElement();
   TiXmlHandle rootH(root);
 
-  std::string name; root->QueryStringAttribute("name", &name);
+  std::string name;
+  root->QueryStringAttribute("name", &name);
 
   Material mat;
 
