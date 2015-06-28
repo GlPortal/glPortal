@@ -14,6 +14,9 @@ public:
   void swapBuffers();
   void getSize(int *width, int *height) const;
   void close();
+
+  void lockMouse();
+  void unlockMouse();
   
 private:
   void initGlew();
