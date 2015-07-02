@@ -203,11 +203,11 @@ void Renderer::renderUI(const Camera &cam) {
   renderMesh(cam, unshaded, crosshairMtx, mesh, mat);
 
   // Title
-  setFont("Adobe", 1.5f);
+  setFont("Pacaya", 1.5f);
   renderText(cam, "GlPortal", 25, vpHeight - 75);
 
   // FPS counter
-  setFont("Adobe", .5f);
+  setFont("Pacaya", 0.5f);
   renderText(cam, std::string("FPS: ") + std::to_string(Game::fps.getFps()), 10, vpHeight - 25);
 }
 
@@ -321,7 +321,7 @@ void Renderer::renderPortalNoise(const Camera &cam, const Entity &portal, float 
 void Renderer::renderText(const Camera &cam, const std::string &text, int x, int y) {
   glClear(GL_DEPTH_BUFFER_BIT);
 
-  const Material &mat = MaterialLoader::fromTexture("Adobe.png");
+  const Material &mat = MaterialLoader::fromTexture("Pacaya.png");
   const Shader &sh = ShaderLoader::getShader("text.frag");
 
   Vector2f position(x, y);
