@@ -2,7 +2,10 @@
 #include <assets/texture/TextureLoader.hpp>
 #include <engine/env/Environment.hpp>
 #include <engine/env/System.hpp>
-#include <tinyxml.h>
+#include <tinyxml2.h>
+#include <cstdio>
+
+using namespace tinyxml2;
 
 namespace glPortal {
 
@@ -10,24 +13,28 @@ std::map<std::string, Material> MaterialLoader::materialCache = {};
 
 const Material MaterialLoader::loadFromXML(const std::string &path) {
   std::string dir = path.substr(0, path.find_last_of("/\\"));
-  TiXmlDocument doc(Environment::getDataDir() + "/textures/" + path + ".gmd");
-  doc.LoadFile();
-  TiXmlHandle docHandle(&doc);
-  TiXmlElement *root = docHandle.FirstChildElement().ToElement();
-  TiXmlHandle rootH(root);
+  XMLDocument doc;
+  XMLError error = doc.LoadFile((Environment::getDataDir() + "/textures/" + path + ".gmd").c_str());
 
-  std::string name;
-  root->QueryStringAttribute("name", &name);
+  if (error != XML_NO_ERROR) {
+    printf("Error #%d occurred while loading material %s\n", doc.ErrorID(), path.c_str());
+  }
+
+  XMLHandle docHandle(&doc);
+  XMLElement *root = docHandle.FirstChildElement().ToElement();
+  XMLHandle rootH(root);
+
+  std::string name = root->Attribute("name");
+  std::string fancyname = root->Attribute("fancyname");
 
   Material mat;
 
   mat.name = name;
-  root->QueryStringAttribute("fancyname", &mat.fancyname);
+  mat.fancyname = fancyname;
 
-  TiXmlElement *diffE = rootH.FirstChildElement("diffuse").ToElement();
+  XMLElement *diffE = rootH.FirstChildElement("diffuse").ToElement();
   if (diffE) {
-    std::string diffP("");
-    diffE->QueryStringAttribute("path", &diffP);
+    std::string diffP = diffE->Attribute("path");
     if (diffP.length() > 0) {
       diffP = dir + "/" + diffP;
       System::Log(Debug) << mat.name << ": load " << diffP;
@@ -37,10 +44,9 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
     mat.diffuse = TextureLoader::getEmptyDiffuse();
   }
 
-  TiXmlElement *normE = rootH.FirstChildElement("normal").ToElement();
+  XMLElement *normE = rootH.FirstChildElement("normal").ToElement();
   if (normE) {
-    std::string normP("");
-    normE->QueryStringAttribute("path", &normP);
+    std::string normP = normE->Attribute("path");
     if (normP.length() > 0) {
       normP = dir + "/" + normP;
       System::Log(Debug) << mat.name << ": load " << normP;
@@ -50,10 +56,9 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
     mat.normal = TextureLoader::getEmptyNormal();
   }
 
-  TiXmlElement *specE = rootH.FirstChildElement("specular").ToElement();
+  XMLElement *specE = rootH.FirstChildElement("specular").ToElement();
   if (specE) {
-    std::string specP("");
-    specE->QueryStringAttribute("path", &specP);
+    std::string specP = specE->Attribute("path");
     if (specP.length() > 0) {
       specP = dir + "/" + specP;
       System::Log(Debug) << mat.name << ": load " << specP;
@@ -64,7 +69,7 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
     mat.specular = TextureLoader::getEmptySpecular();
   }
 
-  TiXmlElement *portalE = rootH.FirstChildElement("portal").ToElement();
+  XMLElement *portalE = rootH.FirstChildElement("portal").ToElement();
   if (portalE) {
     portalE->QueryBoolAttribute("able", &mat.portalable);
     portalE->QueryBoolAttribute("bump", &mat.portalBump);

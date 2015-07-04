@@ -2,7 +2,9 @@
 #define MAPLOADER_HPP
 
 #include <string>
-#include <tinyxml.h>
+#include <tinyxml2.h>
+
+using namespace tinyxml2;
 
 namespace glPortal {
 class Entity;
@@ -13,7 +15,7 @@ class MapLoader {
 public:
   static Scene* getScene(const std::string &path);
   static Scene* scene;
-  static TiXmlHandle rootHandle;
+  static XMLHandle rootHandle;
 private:
   static Mesh getBox(const Entity &wall);
   static void extractMaterials();

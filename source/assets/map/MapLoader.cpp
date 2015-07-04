@@ -1,6 +1,5 @@
 #include "MapLoader.hpp"
 
-#include <tinyxml.h>
 #include <iostream>
 #include <cstdio>
 #include <stdexcept>
@@ -38,7 +37,7 @@ namespace glPortal {
  */
 
   Scene* MapLoader::scene;
-  TiXmlHandle MapLoader::rootHandle = TiXmlHandle(0);
+  XMLHandle MapLoader::rootHandle = XMLHandle(0);
 
 /**
  * Get a scene from a map file in XML format.
@@ -52,13 +51,13 @@ Scene* MapLoader::getScene(const std::string &path) {
   scene->player.addComponent<SoundSource>();
   scene->player.addComponent<SoundListener>();
 
-  TiXmlDocument doc(Environment::getDataDir() + "/maps/" + path + ".xml");
-  bool loaded = doc.LoadFile();
+  XMLDocument doc;
+  XMLError error = doc.LoadFile((Environment::getDataDir() + "/maps/" + path + ".xml").c_str());
 
-  if (loaded) {
-    TiXmlHandle docHandle(&doc);
-    TiXmlElement *element = docHandle.FirstChildElement().ToElement();
-    rootHandle = TiXmlHandle(element);
+  if (error == XML_NO_ERROR) {
+    XMLHandle docHandle(&doc);
+    XMLElement *element = docHandle.FirstChildElement().ToElement();
+    rootHandle = XMLHandle(element);
 
     extractMaterials();
     extractSpawn();
@@ -76,10 +75,10 @@ Scene* MapLoader::getScene(const std::string &path) {
 }
 
 void MapLoader::extractMaterials() {
-  TiXmlElement *matIdxElm = rootHandle.FirstChild("materials").ToElement();
+  XMLElement *matIdxElm = rootHandle.FirstChildElement("materials").ToElement();
 
   if (matIdxElm) {
-    TiXmlElement *matElm = matIdxElm->FirstChildElement("mat");
+    XMLElement *matElm = matIdxElm->FirstChildElement("mat");
     if (matElm) {
       do {
         int mid = -1;
@@ -87,8 +86,7 @@ void MapLoader::extractMaterials() {
         if (mid == -1) {
           continue; // Ignore, no good Material ID bound to it
         }
-        std::string name("");
-        matElm->QueryStringAttribute("name", &name);
+        std::string name = matElm->Attribute("name");
         if (name.length() > 0) {
           scene->materials[mid] = MaterialLoader::getMaterial(name);
         } else {
@@ -103,7 +101,7 @@ void MapLoader::extractMaterials() {
  * Extract a spawn element containing its rotation and position elements
  */
 void MapLoader::extractSpawn() {
-  TiXmlElement *spawnElement = rootHandle.FirstChild("spawn").ToElement();
+  XMLElement *spawnElement = rootHandle.FirstChildElement("spawn").ToElement();
 
   if (spawnElement) {
     scene->start.clearComponents();
@@ -125,7 +123,7 @@ void MapLoader::extractLights() {
   Vector3f lightPos;
   Vector3f lightColor;
   float distance, energy, specular;
-  TiXmlElement* lightElement = rootHandle.FirstChild("light").ToElement();
+  XMLElement* lightElement = rootHandle.FirstChildElement("light").ToElement();
 
   do {
     XmlHelper::pushAttributeVertexToVector(lightElement, lightPos);
@@ -151,7 +149,7 @@ void MapLoader::extractLights() {
 }
 
 void MapLoader::extractDoor() {
-  TiXmlElement *endElement = rootHandle.FirstChild("end").ToElement();
+  XMLElement *endElement = rootHandle.FirstChildElement("end").ToElement();
 
   if (endElement) {
     Entity &door = scene->end;
@@ -166,7 +164,7 @@ void MapLoader::extractDoor() {
 }
 
 void MapLoader::extractWalls() {
-  TiXmlElement *wallBoxElement = rootHandle.FirstChildElement("wall").ToElement();
+  XMLElement *wallBoxElement = rootHandle.FirstChildElement("wall").ToElement();
 
   if (wallBoxElement) {
     do {
@@ -190,7 +188,7 @@ void MapLoader::extractWalls() {
 }
 
 void MapLoader::extractAcids() {
-  TiXmlElement *acidElement = rootHandle.FirstChild("acid").ToElement();
+  XMLElement *acidElement = rootHandle.FirstChildElement("acid").ToElement();
   
   if (acidElement) {
     do {
@@ -210,7 +208,7 @@ void MapLoader::extractAcids() {
 }
 
 void MapLoader::extractTriggers() {
-  TiXmlElement *triggerElement = rootHandle.FirstChild("trigger").ToElement();
+  XMLElement *triggerElement = rootHandle.FirstChildElement("trigger").ToElement();
 
   if (triggerElement) {
     do {
@@ -222,8 +220,7 @@ void MapLoader::extractTriggers() {
       XmlHelper::extractScale(triggerElement, t.scale);
       
       Trigger &tgr = trigger.addComponent<Trigger>();
-      triggerElement->QueryStringAttribute("type", &tgr.type);
-
+      tgr.type = triggerElement->Attribute("type");
     } while ((triggerElement = triggerElement->NextSiblingElement("trigger")) != nullptr);
   }
 }
@@ -232,11 +229,11 @@ void MapLoader::extractModels() {
   Vector3f modelPos;
   string texture("none");
   string mesh("none");
-  TiXmlElement *modelElement = rootHandle.FirstChild("model").ToElement();
+  XMLElement *modelElement = rootHandle.FirstChildElement("model").ToElement();
   if (modelElement){
     do {
-      modelElement->QueryStringAttribute("texture", &texture);
-      modelElement->QueryStringAttribute("mesh", &mesh);
+      texture = modelElement->Attribute("texture");
+      mesh = modelElement->Attribute("mesh");
       XmlHelper::pushAttributeVertexToVector(modelElement, modelPos);
 
       scene->entities.emplace_back();
@@ -254,7 +251,7 @@ void MapLoader::extractModels() {
 void MapLoader::extractButtons() {
   // FIXME
 #if 0
-  TiXmlElement *textureElement = rootHandle.FirstChild("texture").ToElement();
+  XMLElement *textureElement = rootHandle.FirstChild("texture").ToElement();
   string texturePath("none");
   string surfaceType("none");
   Vector2f position;
@@ -264,7 +261,7 @@ void MapLoader::extractButtons() {
     do {
       textureElement->QueryStringAttribute("source", &texturePath);
       textureElement->QueryStringAttribute("type", &surfaceType);
-      TiXmlElement *buttonElement = textureElement->FirstChildElement("GUIbutton");
+      XMLElement *buttonElement = textureElement->FirstChildElement("GUIbutton");
 
       if (buttonElement) {
         do {
