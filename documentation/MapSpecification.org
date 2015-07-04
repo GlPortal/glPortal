@@ -8,17 +8,29 @@ A map starts with the xml declaration and the map tag.
 [...]
 </map>
 #+END_SRC
+** Materials section
+Binds materials, either loaded, defined inline, or both (overrides) to a material id (~mid~).
+The ~name~ tag defines the path where to load the material definition file, if any, without extension.
+#+BEGIN_SRC xml
+<materials>
+	<mat mid="1" name="concrete/wall00"/>
+	<mat mid="2" name="metal/tiles00x3"/>
+</materials>
+#+END_SRC
+
 *** Position
 Denotes a position in 3D. 
 Attributes float x, float y, float z.
 #+BEGIN_SRC xml
 <position x="2.5" y="1" z="5"/>
 #+END_SRC
+
 *** Rotation
 Attributes degree int x, int y, int z.
 #+BEGIN_SRC xml
 <rotation x="0" y="-90" z="0"/>
 #+END_SRC
+
 ** Spawn Position
 #+BEGIN_SRC xml
 <spawn>
@@ -36,6 +48,7 @@ End position is deprecated and will be replaced by the end_map trigger in the fu
 </end>
 #+END_SRC
 
+#+BEGIN_COMMENT
 ** Model
 #+BEGIN_SRC xml
 <model mesh="door" texture="door">
@@ -43,6 +56,18 @@ End position is deprecated and will be replaced by the end_map trigger in the fu
 	<rotation x="0" y="90" z="0"/>
 </model>
 #+END_SRC
+#+END_COMMENT
+
+** Wall
+Defines a wall. Surface properties (visual, portalability, ...) are defined by its material, referenced by its ~mid~ field.
+#+BEGIN_SRC xml
+<wall mid="2">
+	<position x="25" y="0" z="5"/>
+	<rotation x="0" y="90" z="0"/>
+	<scale x="1.0" y="4.0" z="4.0"/>
+</wall>
+#+END_SRC
+
 * Example file
 #+BEGIN_SRC xml
 <?xml version="1.0" ?>
