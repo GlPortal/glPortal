@@ -1,11 +1,13 @@
 * Quick note if you are compiling for the first time
-Well done. You did make the right decission. And it should not even be hard.
+Well done. You did make the right decision. And it should not even be hard.
 * Satisfy dependencies
 You are going to need cmake, make and gcc in order to be able to compile C++ 
 sources on your system at all. It is impossible to predict how the packages
 are called by your package manager but in my experience they are called exactly
 that. So in Ubuntu and Debian for example you would just enter:
+#+BEGIN_SRC bash
 apt-get install cmake make gcc
+#+END_SRC
 
 Remember, you have to be root, so you might want to prefix sudo, or do sudo su first 
 or just su if you are on debian.
@@ -22,35 +24,54 @@ since you want to install the files for development there is a dev in the name.
 Pretty much like libfoo-dev for most libraries.
 
 So for example to satisfy the dependencies in debian type the following to install all dependencies:
-apt-get install libglew-dev libgl1-mesa-dev libglew-dev libsdl2-mixer-dev libassimp-dev
+
+#+BEGIN_SRC bash
+apt-get install libglew-dev libgl1-mesa-dev libsdl2-dev libsdl2-mixer-dev libassimp-dev
+#+END_SRC
 
 See how libgl1-mesa-dev does not play by the rules? There are reasons for that, which we do not care about.
 
 You also need an additional library which may or may not go by the name libfreeimage-dev.
+
 * Building the binary
 Get the source code by downloading a release https://github.com/GlPortal/glPortal/releases
-or after installing git with either of the following commands
-stable: git clone https://github.com/hhirsch/glPortal.git 
-development: git clone https://github.com/GlPortal/glPortal.git
+or after installing git with either of the following commands\\
+
+*** Stable:
+#+BEGIN_SRC bash
+git clone https://github.com/hhirsch/glPortal.git
+#+END_SRC
+*** Development:
+#+BEGIN_SRC bash
+git clone https://github.com/GlPortal/glPortal.git
+#+END_SRC
 Make sure to check the README.org and COMPILE.org from the release you downloaded in case
 there are differences in the compile workflow for it.
 
-After checking out the repo using git, fetch the assets:
-git submodule init 
+After checking out the repo using git, fetch the assets:  
+#+BEGIN_SRC bash
+git submodule init
 git submodule update --depth 1
+#+END_SRC
 
-Then in the root directory of the downloaded source type
+Then in the root directory of the downloaded source type:
+#+BEGIN_SRC bash
 cmake ./
+#+END_SRC
 
 Now if this throws an error you have to fix something first. If you don't manage to fix the error, use the
 bugtracker https://github.com/hhirsch/glPortal/issues to report what you did, and what error you got.
 
 If the command did not produce an error, you can build the binary by typing in:
-make 
+#+BEGIN_SRC bash
+make
+#+END_SRC
 in the root directory of the downloaded source.
 
 If this produces no error you have built the binary and should be able to start GlPortal by typing in:
+#+BEGIN_SRC bash
 make run
+#+END_SRC
 
 If you get errors try running cmake source again. 
 * Keep me posted
