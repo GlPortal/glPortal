@@ -92,25 +92,21 @@ void Renderer::render(const Camera &cam) {
       if (not e.hasComponent<LightSource>()) {
         continue;
       }
-      char attribute[30];
-      snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].position");
-      int lightPos = diffuse.uni(attribute);
-      snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].color");
-      int lightColor = diffuse.uni(attribute);
-      snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].distance");
-      int lightDistance = diffuse.uni(attribute);
-      snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].energy");
-      int lightEnergy = diffuse.uni(attribute);
-      snprintf(attribute, sizeof(attribute), "%s%d%s", "lights[", numLights, "].specular");
-      int lightSpecular = diffuse.uni(attribute);
+
+      std::string index = std::to_string(numLights);
+      std::string position = "lights[" + index + "].position";
+      std::string color = "lights[" + index + "].color";
+      std::string distance = "lights[" + index + "].distance";
+      std::string energy = "lights[" + index + "].energy";
+      std::string specular = "lights[" + index + "].specular";
 
       const Transform &t = e.getComponent<Transform>();
       const LightSource &ls = e.getComponent<LightSource>();
-      glUniform3f(lightPos, t.position.x, t.position.y, t.position.z);
-      glUniform3f(lightColor, ls.color.x, ls.color.y, ls.color.z);
-      glUniform1f(lightDistance, ls.distance);
-      glUniform1f(lightEnergy, ls.energy);
-      glUniform1f(lightSpecular, ls.specular);
+      glUniform3f(diffuse.uni(position.c_str()), t.position.x, t.position.y, t.position.z);
+      glUniform3f(diffuse.uni(color.c_str()), ls.color.x, ls.color.y, ls.color.z);
+      glUniform1f(diffuse.uni(distance.c_str()), ls.distance);
+      glUniform1f(diffuse.uni(energy.c_str()), ls.energy);
+      glUniform1f(diffuse.uni(specular.c_str()), ls.specular);
 
       ++numLights;
     }
