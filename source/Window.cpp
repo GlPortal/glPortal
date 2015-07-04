@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <cstdlib>
-#include "engine/env/Config.hpp"
+#include <engine/env/Config.hpp>
 #include <stdexcept>
 #include <iostream>
+#include <engine/env/System.hpp>
 
 namespace glPortal {
 
@@ -23,11 +24,11 @@ void Window::initGlew() {
   GLuint glewInitReturnValue = glewInit();
 
   if (glewInitReturnValue != GLEW_OK) {
-    std::cout << GLEW_INIT_ERROR_MESSAGE << " " <<  glewGetErrorString(glewInitReturnValue) << std::endl;
+    System::Log() << GLEW_INIT_ERROR_MESSAGE << " " <<  glewGetErrorString(glewInitReturnValue);
     std::exit(1);
   }
   if (not GLEW_VERSION_2_1) {
-    std::cout << GLEW_UNSUPPORTED_MESSAGE << std::endl;
+    System::Log() << GLEW_UNSUPPORTED_MESSAGE;
     std::exit(1);
   }
 }
