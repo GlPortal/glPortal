@@ -51,12 +51,18 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
         dir = os.path.dirname(self.filepath)
         objects = context.scene.objects
         root = tree.Element("map")
-        textureElement = tree.SubElement(root, "texture")
-        textureElement.set("source", "tiles.png")
+        
+        # Materials
+        materialElement = tree.SubElement(root, "materials")
+        material1 = tree.SubElement(materialElement, "mat")
+        material2 = tree.SubElement(materialElement, "mat")
+        
+        material1.set("mid", "1")
+        material1.set("name", "concrete/wall00")
+        material2.set("mid", "2")
+        material2.set("name", "metal/tiles00x3")
 
-        textureWallElement = tree.SubElement(root, "texture")
-        textureWallElement.set("source", "wall.png")
-
+        # Exporting
         for object in objects:
             object.select = False
         for object in objects:
@@ -82,9 +88,11 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
                 elif type == "wall":
                     print(object.glpWallTypes)
                     if object.glpWallTypes == "portable":
-                        boxElement = tree.SubElement(textureWallElement, "wall")
+                        boxElement = tree.SubElement(root, "wall")
+                        boxElement.set("mid", "1")
                     else:
-                        boxElement = tree.SubElement(textureElement, "wall")
+                        boxElement = tree.SubElement(root, "wall")
+                        boxElement.set("mid", "2")
                 elif type == "volume":
                     print(object.glpVolumeTypes)
                     if object.glpVolumeTypes == "acid":
