@@ -22,8 +22,14 @@ compiler:
 
 before_script:
 - mkdir build && cd build
+
 script:
 - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install ..
 - make install -j4
 - make tests -j4
 - ctest -j4
+
+notifications:
+  irc: "irc.freenode.com##glportal"
+  use_notice: true
+  skip_join: true
