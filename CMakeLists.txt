@@ -32,8 +32,6 @@ find_package(TinyXML2 REQUIRED)
 include_directories(${TINYXML2_INCLUDE_DIR})
 list(APPEND PORTAL_LIBRARIES ${TINYXML2_LIBRARIES} )
 
-
-
 set(PORTAL_TEST_LIBRARIES ${PORTAL_LIBRARIES})
 
 add_subdirectory(data)
