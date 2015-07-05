@@ -14,7 +14,6 @@
 #include <engine/SoundManager.hpp>
 #include <util/sdl/Fps.hpp>
 #include "Input.hpp"
-#include <SDL.h>
 
 namespace glPortal {
 
