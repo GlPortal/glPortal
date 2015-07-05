@@ -4,11 +4,12 @@ git:
   submodules: false
 
 before_install:
+- sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
 - sudo add-apt-repository -y ppa:zoogie/sdl2-snapshots
 - sudo add-apt-repository -y ppa:openrave/release
 - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 - sudo apt-get -qq update
-- sudo apt-get -qq install libtinyxml-dev libglew-dev libunittest++-dev libsdl2-mixer-dev assimp-dev g++-4.8
+- sudo apt-get -qq install libtinyxml2-dev libglew-dev libunittest++-dev libsdl2-mixer-dev assimp-dev g++-4.8
 - sudo ln -sf /usr/bin/g++-4.8 /usr/bin/g++
 - sudo ln -sf /usr/lib/libassimp3.0.so /usr/lib/libassimp.so
 - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
