@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include <vector>
+#include <string>
 
 #include <assets/model/MeshLoader.hpp>
 #include <assets/texture/TextureLoader.hpp>

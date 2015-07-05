@@ -1,11 +1,13 @@
 #include "ArgumentsParser.hpp"
 #include "Environment.hpp"
 
+#include <cstdlib>
 #include <stdexcept>
 #include <string>
 #include <getopt.h>
-#include <engine/core/file/Path.hpp>
 #include <iostream>
+
+#include <engine/core/file/Path.hpp>
 #include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Config.hpp"
 
