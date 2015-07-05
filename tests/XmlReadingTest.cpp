@@ -1,5 +1,5 @@
 #include <unittest++/UnitTest++.h>
-#include <tinyxml.h>
+#include <tinyxml2.h>
 #include <engine/core/math/Vector3f.hpp>
 #include <assets/map/XmlHelper.hpp>
 #include <stdexcept>
@@ -9,19 +9,18 @@ using namespace std;
 
 struct XmlReadingFixtures
 {
-    Vector3f sourceVector;
-    Vector3f vector;
-    TiXmlDocument doc;
-    TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
-    TiXmlElement * lightElement = new TiXmlElement( "light" );
+  Vector3f sourceVector;
+  Vector3f vector;
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLElement * lightElement;
 
   XmlReadingFixtures() {
+    doc.NewDeclaration("1.0");
+    lightElement = doc.NewElement("light"); 	
     sourceVector = Vector3f(155, 266, 377);
     lightElement->SetAttribute("x", sourceVector.x);
     lightElement->SetAttribute("y", sourceVector.y);
     lightElement->SetAttribute("z", sourceVector.z);
-    doc.LinkEndChild(decl);
-    doc.LinkEndChild(lightElement);
   }
   
   ~XmlReadingFixtures() {}
@@ -43,7 +42,7 @@ SUITE(XmlReading)
   }
 
   TEST_FIXTURE(XmlReadingFixtures, extractMissingAttributeFromXml){
-    lightElement->RemoveAttribute("z");
+    lightElement->DeleteAttribute("z");
     CHECK_THROW(XmlHelper::pushAttributeVertexToVector(lightElement, vector), runtime_error); 
   }
 }
