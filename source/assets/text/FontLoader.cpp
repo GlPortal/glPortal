@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <cstdio>
+#include <string>
 
 #include <assets/model/MeshLoader.hpp>
 #include <assets/texture/TextureLoader.hpp>

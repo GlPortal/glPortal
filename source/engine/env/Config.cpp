@@ -4,6 +4,7 @@
 #include "ConfigFileParser.hpp"
 #include "System.hpp"
 
+#include <string>
 #include <iostream>
 #include <stdexcept>
 

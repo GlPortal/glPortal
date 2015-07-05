@@ -1,5 +1,7 @@
 #include "SoundManager.hpp"
 
+#include <cstdio>
+
 namespace glPortal {
 Mix_Music *SoundManager::music = nullptr;
 std::map<int, SoundManager::SoundInfo> SoundManager::sounds = {};

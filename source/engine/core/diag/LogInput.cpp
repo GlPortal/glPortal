@@ -1,6 +1,8 @@
 #include "LogInput.hpp"
 #include <iomanip>
 #include <sstream>
+#include <string>
+
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
 #include <engine/core/math/Vector4f.hpp>
