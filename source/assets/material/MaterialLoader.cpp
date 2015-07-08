@@ -69,10 +69,9 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
     mat.specular = TextureLoader::getEmptySpecular();
   }
 
-  XMLElement *portalE = rootH.FirstChildElement("portal").ToElement();
-  if (portalE) {
-    portalE->QueryBoolAttribute("able", &mat.portalable);
-    portalE->QueryBoolAttribute("bump", &mat.portalBump);
+  XMLElement *surfaceE = rootH.FirstChildElement("surface").ToElement();
+  if (surfaceE) {
+    surfaceE->QueryBoolAttribute("portalable", &mat.portalable);
   }
 
   // TODO
