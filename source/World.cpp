@@ -63,7 +63,7 @@ void World::create() {
     loadScene(map);
     System::Log(Info) << "Custom map loaded";
   } catch (const std::out_of_range& e) {
-    printf("No custom map found loading default map.\n");
+    System::Log(Info) << "No custom map found loading default map.";
     loadScene(mapList[currentLevel]);
   }
 
