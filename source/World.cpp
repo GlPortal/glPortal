@@ -68,7 +68,7 @@ void World::create() {
   }
 
   std::random_device rd;
-  generator =  std::mt19937(rd());
+  generator = std::mt19937(rd());
 }
 
 void World::setRendererWindow(Window *win) {
