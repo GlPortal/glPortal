@@ -200,11 +200,11 @@ void Renderer::renderUI(const Camera &cam) {
   renderMesh(cam, unshaded, crosshairMtx, mesh, mat);
 
   // Title
-  setFont("Pacaya", 0.375f);
+  setFont("Pacaya", 1.5f);
   renderText(cam, "GlPortal", 25, vpHeight - 75);
 
   // FPS counter
-  setFont("Pacaya", 0.8f);
+  setFont("Pacaya", 0.5f);
   renderText(cam, std::string("FPS: ") + std::to_string(Game::fps.getFps()), 10, vpHeight - 25);
 }
 
