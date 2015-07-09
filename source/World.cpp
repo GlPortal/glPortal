@@ -162,6 +162,8 @@ void World::update() {
       }
       plrMotion.velocity.y = 0;
     }
+  } else {
+    plrMotion.grounded = false;
   }
 
   //X collision
