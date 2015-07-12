@@ -43,6 +43,7 @@
 #include "Input.hpp"
 #include "Portal.hpp"
 #include "Window.hpp"
+#include "WorldHelper.hpp"
 
 namespace glPortal {
 
@@ -127,31 +128,13 @@ void World::update() {
   // Figure out the provisional new player position
   Vector3f pos = plrTform.position + plrMotion.velocity;
 
-  //FIXME Remake the collision system to be less faulty and ugly
-  // ^ A.K.A. Bullet physics engine
-
   //Y collision
   BoxCollider bboxY(Vector3f(plrTform.position.x, pos.y, plrTform.position.z), plrTform.scale);
+  
   if (collidesWithWalls(bboxY)) {
     bool portaling = false;
-    for (const EntityPair &p : scene->portalPairs) {
-      const Portal &portal1 = p.first->getComponent<Portal>(),
-                   &portal2 = p.second->getComponent<Portal>();
-      if (portal1.open and portal2.open) {
-        const Transform &p1Tform = p.first->getComponent<Transform>(),
-                        &p2Tform = p.second->getComponent<Transform>();
-        if (portal1.inPortal(bboxY)) {
-          if (p1Tform.rotation.x == rad(-90) || p1Tform.rotation.x == rad(90)) {
-            portaling = true;
-          }
-        }
-        if (portal2.inPortal(bboxY)) {
-          if (p2Tform.rotation.x == rad(-90) || p2Tform.rotation.x == rad(90)) {
-            portaling = true;
-          }
-        }
-      }
-    }
+    portaling = WorldHelper::isPlayerPortalingY(bboxY, &player, scene);
+
     if(!portaling) {
       if (plrMotion.velocity.y < 0) {
         if(plrMotion.velocity.y < -HURT_VELOCITY) {
