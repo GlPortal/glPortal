@@ -11,7 +11,9 @@ namespace glPortal {
 
 class WorldHelper {
 public:
+  static bool isPlayerPortalingX(BoxCollider &box, Entity *player, Scene *scene);
   static bool isPlayerPortalingY(BoxCollider &box, Entity *player, Scene *scene);
+  static bool isPlayerPortalingZ(BoxCollider &box, Entity *player, Scene *scene);
 };
 
 } /* namespace glPortal */
