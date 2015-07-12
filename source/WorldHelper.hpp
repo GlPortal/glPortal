@@ -14,6 +14,7 @@ public:
   static bool isPlayerPortalingX(BoxCollider &box, Entity *player, Scene *scene);
   static bool isPlayerPortalingY(BoxCollider &box, Entity *player, Scene *scene);
   static bool isPlayerPortalingZ(BoxCollider &box, Entity *player, Scene *scene);
+  static void shootPortal(int button, Scene *scene);
 };
 
 } /* namespace glPortal */
