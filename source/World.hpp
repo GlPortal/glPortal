@@ -49,7 +49,6 @@ public:
   bool collides(const Vector3f &ro, const Vector3f &rd, const Entity &e, float *tNear, float *tFar);
   void render();
   Entity& getPlayer();
-  EntityPair& getPortalPair(int n) const;
 
   static float gravity;
   static float friction;

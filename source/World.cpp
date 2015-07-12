@@ -11,6 +11,7 @@
 #include <assets/map/MapListLoader.hpp>
 #include <assets/model/MeshLoader.hpp>
 #include <assets/texture/TextureLoader.hpp>
+#include <assets/scene/SceneHelper.hpp>
 
 #include <assets/scene/Scene.hpp>
 #include <assets/model/Mesh.hpp>
@@ -335,7 +336,7 @@ void World::shootPortal(int button) {
     }
   }
 
-  EntityPair &pPair = getPortalPair(0);
+  EntityPair &pPair = SceneHelper::getPortalPairFromScene(0, scene);
   // TODO: material in separate Component, + 1 mat per face
   if (closestWall != nullptr and (closestWall->getComponent<MeshDrawable>().material.portalable)) {
     Vector3f ipos = scene->camera.getPosition() + (cameraDir * intersection);
@@ -372,30 +373,6 @@ void World::render() {
 
 Entity& World::getPlayer() {
   return scene->player;
-}
-
-EntityPair& World::getPortalPair(int n) const {
-  int pairCount = scene->portalPairs.size();
-  if (pairCount <= n) {
-    scene->portalPairs.reserve(n + 1);
-    // Instantiate and initalize every non-extsing yet portal pair
-    for (int i = pairCount; i <= n; ++i) {
-      scene->entities.emplace_back();
-      Entity &pEnt1 = scene->entities.back();
-      scene->entities.emplace_back();
-      Entity &pEnt2 = scene->entities.back();
-      pEnt1.addComponent<Transform>();
-      pEnt1.addComponent<Portal>();
-      //LightSource &ls1 = pEnt1.addComponent<LightSource>();
-      pEnt2.addComponent<Transform>();
-      pEnt2.addComponent<Portal>();
-      /*LightSource &ls2 = pEnt2.addComponent<LightSource>();
-      ls1.energy = ls2.energy = 5;
-      ls1.distance = ls2.distance = 1.3f;*/
-      scene->portalPairs.emplace_back(&pEnt1, &pEnt2);
-    }
-  }
-  return scene->portalPairs.at(n);
 }
 
 } /* namespace glPortal */
