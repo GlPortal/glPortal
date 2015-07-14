@@ -124,5 +124,13 @@ bool WorldHelper::isPlayerPortalingZ(BoxCollider &box, Entity *player, Scene *sc
   }
   return portaling;
 }
+
+/* Hide portals, used when player died */
+bool WorldHelper::hidePortals(Scene *scene) {
+  EntityPair &pPair = SceneHelper::getPortalPairFromScene(0, scene);
+
+  pPair.first->getComponent<Portal>().open = false;
+  pPair.second->getComponent<Portal>().open = false;
+}
 } /* namespace glPortal */
   

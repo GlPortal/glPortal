@@ -118,6 +118,7 @@ void World::update() {
   if (not plrHealth.isAlive()) {
     plrTform.position = scene->start.getComponent<Transform>().position;
     plrHealth.revive();
+    WorldHelper::hidePortals(scene);
   }
 
   // Calculate the view and new velocity of the player
