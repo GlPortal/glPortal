@@ -126,7 +126,7 @@ bool WorldHelper::isPlayerPortalingZ(BoxCollider &box, Entity *player, Scene *sc
 }
 
 /* Hide portals, used when player died */
-bool WorldHelper::hidePortals(Scene *scene) {
+void WorldHelper::hidePortals(Scene *scene) {
   EntityPair &pPair = SceneHelper::getPortalPairFromScene(0, scene);
 
   pPair.first->getComponent<Portal>().open = false;
