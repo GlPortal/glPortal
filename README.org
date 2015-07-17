@@ -15,6 +15,7 @@ Chat with us at irc.freenode.org in the channel ##glportal.
 - Stephan Vedder
 - Xantares
 - Dorian Wouters
+- Juraj Oravec
 ** Graphics
 - Urpo Lankinen - Bitmap Font
 - Kuronus for Blendswap - FPS Hands rigged (added portal egg)
