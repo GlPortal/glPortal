@@ -200,7 +200,7 @@ void MapLoader::extractAcids() {
       XmlHelper::extractScale(acidElement, t.scale);
 
       MeshDrawable &m = acid.addComponent<MeshDrawable>();
-      m.material.diffuse = TextureLoader::getTexture("acid.png");
+      m.material = MaterialLoader::loadFromXML("fluid/acid00");
       m.mesh = MeshLoader::getPortalBox(acid);
       acid.addComponent<AACollisionBox>().box = BoxCollider::generateCage(acid);
     } while ((acidElement = acidElement->NextSiblingElement("acid")) != nullptr);
