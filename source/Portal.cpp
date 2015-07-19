@@ -30,6 +30,7 @@ bool Portal::throughPortal(const BoxCollider &collider) const {
 }
 
 bool Portal::inPortal(const BoxCollider &collider) const {
+  
   return PortalHelper::isInPortal(entity, collider);
 }
 
