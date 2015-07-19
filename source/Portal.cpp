@@ -8,7 +8,7 @@
 #include <engine/core/math/Math.hpp>
 #include <engine/Entity.hpp>
 #include <engine/component/Transform.hpp>
-
+#include <PortalHelper.hpp>
 #include <SDL2/SDL_timer.h>
 
 namespace glPortal {
@@ -173,12 +173,9 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
   //Side 0: -x, Side 1: x, Side 2: -z, Side 3: z, Side 4: -y, Side 5: y
   float dist = 1000000;
   int side = 0;
-  float distances[6] = {(float) fabs(point.x - (wall.position.x - wall.size.x / 2)),
-                        (float) fabs(point.x - (wall.position.x + wall.size.x / 2)),
-                        (float) fabs(point.z - (wall.position.z - wall.size.z / 2)),
-                        (float) fabs(point.z - (wall.position.z + wall.size.z / 2)),
-                        (float) fabs(point.y - (wall.position.y - wall.size.y / 2)),
-                        (float) fabs(point.y - (wall.position.y + wall.size.y / 2))};
+
+  float *distances;
+  distances = PortalHelper::getDistancesForPoint(point, wall);
 
   for (int i = 0; i < 6; i++) {
     if (distances[i] < dist) {
@@ -194,12 +191,12 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
   position = point;
 
   switch (side) {
-  case 0: direction.set(-1, 0, 0); break;
-  case 1: direction.set(1, 0, 0); break;
-  case 2: direction.set(0, 0, -1); break;
-  case 3: direction.set(0, 0, 1); break;
-  case 4: direction.set(0, -1, 0); break;
-  case 5: direction.set(0, 1, 0); break;
+  case 0: direction.set(-1,  0,  0); break;
+  case 1: direction.set( 1,  0,  0); break;
+  case 2: direction.set( 0,  0, -1); break;
+  case 3: direction.set( 0,  0,  1); break;
+  case 4: direction.set( 0, -1,  0); break;
+  case 5: direction.set( 0,  1,  0); break;
   }
 
   if (wall.size.z >= 1 && wall.size.y >= 2 && (side == 0 || side == 1)) {

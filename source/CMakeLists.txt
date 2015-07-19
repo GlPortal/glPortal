@@ -44,6 +44,7 @@ add_executable(${EXE_NAME}
   engine/component/SoundSource.cpp
   assets/scene/SceneHelper.cpp
   WorldHelper.cpp
+  PortalHelper.cpp
   )
 target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
 install(TARGETS ${EXE_NAME} DESTINATION bin)
