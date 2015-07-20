@@ -21,7 +21,7 @@ Fps Game::fps;
 
 Game::Game() : closed(false) {
   window.create("GlPortal");
-  
+
   try {
     SoundManager::Init();
     world.create();
@@ -45,7 +45,7 @@ void Game::update() {
       while (SDL_PollEvent(&event)) {
         handleEvent(event);
       }
-      
+
       SoundManager::Update(world.getPlayer());
       world.update();
       nextUpdate += SKIP_TIME;
@@ -70,9 +70,9 @@ void Game::handleEvent(const SDL_Event &event) {
   if (event.type == SDL_KEYDOWN) {
     int key = event.key.keysym.scancode;
     int mod = event.key.keysym.mod;
-    
+
     Input::keyPressed(key, mod);
-    
+
     if (key == SDL_SCANCODE_Q) {
       close();
     }
@@ -80,7 +80,7 @@ void Game::handleEvent(const SDL_Event &event) {
   if (event.type == SDL_KEYUP) {
     int key = event.key.keysym.scancode;
     int mod = event.key.keysym.mod;
-    
+
     Input::keyReleased(key, mod);
   }
   if (event.type == SDL_MOUSEBUTTONDOWN) {
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
   Environment::init();
   ArgumentsParser::populateConfig();
   Config::load();
-  
+
   Game game;
 
   return 0;

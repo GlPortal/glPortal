@@ -40,8 +40,12 @@ void PlayerMotion::move() {
   if (velocity.z <= -FRICTION) {
     velocity.z += FRICTION;
   }
-  if (velocity.x < FRICTION && velocity.x > -FRICTION) {velocity.x = 0;}
-  if (velocity.z < FRICTION && velocity.z > -FRICTION) {velocity.z = 0;}
+  if (velocity.x < FRICTION && velocity.x > -FRICTION) {
+    velocity.x = 0;
+  }
+  if (velocity.z < FRICTION && velocity.z > -FRICTION) {
+    velocity.z = 0;
+  }
   velocity.y -= World::gravity;
 
   float rot = entity.getComponent<Transform>().rotation.y;
@@ -86,13 +90,12 @@ void PlayerMotion::move() {
       velocity.y = JUMP_SPEED;
     }
 
-    if(grounded)
-    {
+    if (grounded) {
       stepCounter += abs(velocity.x);
       stepCounter += abs(velocity.z);
-      if(stepCounter>=2.5f)
-      {
-        std::uniform_int_distribution<> dis(0, PLAYER_FOOT_SOUND.size()-1);   
+
+      if(stepCounter>=2.5f) {
+        std::uniform_int_distribution<> dis(0, PLAYER_FOOT_SOUND.size()-1);
         entity.getComponent<SoundSource>().playSound(
           Environment::getDataDir() + PLAYER_FOOT_SOUND[dis(generator)]);
         stepCounter-=2.5f;

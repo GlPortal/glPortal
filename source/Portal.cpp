@@ -25,7 +25,6 @@ Vector3f Portal::getDirection() const {
 }
 
 bool Portal::throughPortal(const BoxCollider &collider) const {
-
   return PortalHelper::goesThroughPortal(entity, collider);
 }
 
