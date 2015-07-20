@@ -47,12 +47,6 @@ namespace glPortal {
       portal.overlayTex.diffuse = TextureLoader::getTexture("orangeportal.png");
       portal.color /*= pLight.color*/ = Portal::ORANGE_COLOR;
     }
-  } else {
-    if (button == 1) {
-      pPair.first->getComponent<Portal>().open = false;
-    } else {
-      pPair.second->getComponent<Portal>().open = false;
-    }
   }
 }
   

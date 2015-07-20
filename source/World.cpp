@@ -118,7 +118,7 @@ void World::update() {
   if (not plrHealth.isAlive()) {
     plrTform.position = scene->start.getComponent<Transform>().position;
     plrHealth.revive();
-    WorldHelper::hidePortals(scene);
+    hidePortals();
   }
 
   // Calculate the view and new velocity of the player
@@ -279,6 +279,10 @@ void World::render() {
 
 Entity& World::getPlayer() {
   return scene->player;
+}
+
+void World::hidePortals() {
+  WorldHelper::hidePortals(scene);
 }
 
 } /* namespace glPortal */

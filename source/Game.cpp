@@ -90,6 +90,9 @@ void Game::handleEvent(const SDL_Event &event) {
     if (event.button.button == SDL_BUTTON_RIGHT) {
       world.shootPortal(2);
     }
+    if (event.button.button == SDL_BUTTON_MIDDLE) {
+      world.hidePortals();
+    }
   }
 }
 
