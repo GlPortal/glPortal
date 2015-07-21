@@ -8,7 +8,7 @@
 #include <SDL2/SDL_timer.h>
 
 namespace glPortal {
-  void WorldHelper::shootPortal(int button, Scene *scene) {
+void WorldHelper::shootPortal(int button, Scene *scene) {
   //Shooting
   Vector3f cameraDir = Math::toDirection(scene->camera.getRotation());
 
@@ -49,7 +49,7 @@ namespace glPortal {
     }
   }
 }
-  
+
 bool WorldHelper::isPlayerPortalingX(BoxCollider &box, Entity *player, Scene *scene) {
   bool portaling = false;
   for (const EntityPair &p : scene->portalPairs) {
@@ -72,7 +72,7 @@ bool WorldHelper::isPlayerPortalingX(BoxCollider &box, Entity *player, Scene *sc
   }
   return portaling;
 }
-  
+
 bool WorldHelper::isPlayerPortalingY(BoxCollider &box, Entity *player, Scene *scene) {
   bool portaling = false;
   for (const EntityPair &p : scene->portalPairs) {
@@ -95,7 +95,7 @@ bool WorldHelper::isPlayerPortalingY(BoxCollider &box, Entity *player, Scene *sc
   }
   return portaling;
 }
-  
+
 bool WorldHelper::isPlayerPortalingZ(BoxCollider &box, Entity *player, Scene *scene) {
   bool portaling = false;
   for (const EntityPair &p : scene->portalPairs) {
@@ -119,7 +119,6 @@ bool WorldHelper::isPlayerPortalingZ(BoxCollider &box, Entity *player, Scene *sc
   return portaling;
 }
 
-/* Hide portals, used when player died */
 void WorldHelper::hidePortals(Scene *scene) {
   EntityPair &pPair = SceneHelper::getPortalPairFromScene(0, scene);
 
@@ -127,4 +126,3 @@ void WorldHelper::hidePortals(Scene *scene) {
   pPair.second->getComponent<Portal>().open = false;
 }
 } /* namespace glPortal */
-  

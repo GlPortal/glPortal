@@ -10,7 +10,7 @@ float* PortalHelper::getDistancesForPoint(const Vector3f &point, const BoxCollid
   float y = point.y;
   float z = point.z;
   float *distances = new float[6];
-  
+
   distances[0] = getDistanceFromCoordinates(x, position.x - size.x / 2);
   distances[1] = getDistanceFromCoordinates(x, position.x + size.x / 2);
   distances[2] = getDistanceFromCoordinates(z, position.z - size.z / 2);
@@ -29,7 +29,7 @@ bool PortalHelper::goesThroughPortal(const Entity &entity, const BoxCollider &co
   const Vector3f &rotation = t.rotation;
   const Vector3f &position = t.position;
   const Vector3f &scale = t.scale;
-  
+
   if (rotation.x == 0) {
     if (rotation.y == rad(90)) {
       if (collider.position.x > position.x &&
@@ -168,4 +168,3 @@ bool PortalHelper::isInPortal(const Entity &entity, const BoxCollider &collider)
   return false;
 } 
 } /* namespace glPortal */
-  
