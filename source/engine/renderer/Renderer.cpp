@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+#include <epoxy/gl.h>
+
 #include <assets/model/MeshLoader.hpp>
 #include <assets/texture/TextureLoader.hpp>
 #include <assets/text/FontLoader.hpp>

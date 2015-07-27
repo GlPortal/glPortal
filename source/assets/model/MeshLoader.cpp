@@ -1,14 +1,14 @@
 #include "MeshLoader.hpp"
 
+#include <stdlib.h>
+#include <utility>
+#include <vector>
 #include <assimp/Importer.hpp>
 #include <assimp/mesh.h>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 #include <assimp/vector3.h>
-#include <GL/glew.h>
-#include <stdlib.h>
-#include <utility>
-#include <vector>
+#include <epoxy/gl.h>
 
 #include "engine/env/Environment.hpp"
 #include "engine/Entity.hpp"

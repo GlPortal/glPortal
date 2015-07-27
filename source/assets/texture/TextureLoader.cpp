@@ -1,7 +1,7 @@
 #include "TextureLoader.hpp"
 
-#include <GL/glew.h>
 #include <utility>
+#include <epoxy/gl.h>
 
 #include "engine/env/Environment.hpp"
 #include "engine/stb_image.c"

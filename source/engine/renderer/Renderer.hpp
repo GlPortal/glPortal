@@ -1,7 +1,6 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
-#include <GL/glew.h>
 #include <string>
 
 #include <assets/scene/Scene.hpp>
