@@ -1,9 +1,9 @@
 #ifndef SHADERLOADER_HPP
 #define SHADERLOADER_HPP
 
-#include <GL/glew.h>
 #include <string>
 #include <map>
+#include <epoxy/gl.h>
 
 #include <assets/shader/Shader.hpp>
 

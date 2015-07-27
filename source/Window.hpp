@@ -19,15 +19,13 @@ public:
   void unlockMouse();
   
 private:
-  void initGlew();
+  void initEpoxy();
   int width;
   int height;
   SDL_Window *window;
   SDL_GLContext context;
 
   static const char *DEFAULT_TITLE;
-  static const std::string GLEW_UNSUPPORTED_MESSAGE;
-  static const std::string GLEW_INIT_ERROR_MESSAGE;
   static const int DEFAULT_WIDTH, DEFAULT_HEIGHT;
 };
 

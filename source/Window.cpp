@@ -1,6 +1,6 @@
 #include "Window.hpp"
 
-#include <GL/glew.h>
+#include <epoxy/gl.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <cstdlib>
@@ -14,23 +14,9 @@ namespace glPortal {
 const int Window::DEFAULT_WIDTH = 800;
 const int Window::DEFAULT_HEIGHT = 600;
 const char* Window::DEFAULT_TITLE = "GlPortal";
-const std::string Window::GLEW_UNSUPPORTED_MESSAGE =
-  "Your hardware does not support GLEW 2.1 API\n";
-const std::string Window::GLEW_INIT_ERROR_MESSAGE =
-  "Error initializing GLEW.";
 
-void Window::initGlew() {
-  glewExperimental = GL_TRUE;
-  GLuint glewInitReturnValue = glewInit();
-
-  if (glewInitReturnValue != GLEW_OK) {
-    System::Log() << GLEW_INIT_ERROR_MESSAGE << " " <<  glewGetErrorString(glewInitReturnValue);
-    std::exit(1);
-  }
-  if (not GLEW_VERSION_2_1) {
-    System::Log() << GLEW_UNSUPPORTED_MESSAGE;
-    std::exit(1);
-  }
+void Window::initEpoxy() {
+  System::Log() << "GL " << epoxy_gl_version();
 }
 
 void Window::create(const char *title) {
@@ -64,7 +50,7 @@ void Window::create(const char *title) {
 
   context = SDL_GL_CreateContext(window);
 
-  this->initGlew();
+  this->initEpoxy();
 
   this->width = width;
   this->height = height;

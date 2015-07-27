@@ -1,7 +1,7 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
 
-#include <GL/glew.h>
+#include <epoxy/gl.h>
 
 namespace glPortal {
 
