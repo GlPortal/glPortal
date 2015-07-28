@@ -13,6 +13,9 @@
 
 namespace glPortal {
 
+static const float FRICTION = 0.001;
+static const float MIN_SPEED_ON_AXIS = FRICTION;
+
 // Movement
 void PlayerMotion::mouseLook() {
   int mousedx, mousedy;
@@ -27,43 +30,55 @@ void PlayerMotion::mouseLook() {
   rotation.x = Math::clamp(rotation.x, rad(-90.0f), rad(90.0f));
 }
 
-void PlayerMotion::move() {
-  if (velocity.x >= FRICTION) {
-    velocity.x -= FRICTION;
-  }
-  if (velocity.x <= -FRICTION) {
-    velocity.x += FRICTION;
-  }
-  if (velocity.z >= FRICTION) {
-    velocity.z -= FRICTION;
-  }
-  if (velocity.z <= -FRICTION) {
-    velocity.z += FRICTION;
-  }
-  if (velocity.x < FRICTION && velocity.x > -FRICTION) {
-    velocity.x = 0;
-  }
-  if (velocity.z < FRICTION && velocity.z > -FRICTION) {
-    velocity.z = 0;
-  }
-  velocity.y -= World::gravity;
+void PlayerMotion::move(float dtime) {
+  bool movingFwd     = Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP),
+       movingBack    = Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN),
+       strafingLeft  = Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT),
+       strafingRight = Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT);
 
-  float rot = entity.getComponent<Transform>().rotation.y;
+  if (velocity.x <= MIN_SPEED_ON_AXIS and velocity.x >= -MIN_SPEED_ON_AXIS) {
+    velocity.x = 0;
+  } else {
+    velocity.x *= std::pow(FRICTION, dtime);
+  }
+  if (velocity.z <= MIN_SPEED_ON_AXIS and velocity.z >= -MIN_SPEED_ON_AXIS) {
+    velocity.z = 0;
+  } else {
+    velocity.z *= std::pow(FRICTION, dtime);
+  }
+  if (velocity.y <= MIN_SPEED_ON_AXIS and velocity.y >= -MIN_SPEED_ON_AXIS) {
+    velocity.y = 0;
+  } else {
+    velocity.y *= std::pow(FRICTION, dtime);
+  }
+  if (not flying) {
+    velocity.y -= World::gravity;
+  }
+
+  Transform &tform = entity.getComponent<Transform>();
+  float rot = tform.rotation.y;
   if (entity.getComponent<Health>().isAlive()) {
     Vector3f tmpVel;
-    if (Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP)) {
-      tmpVel.x += -sin(rot);
-      tmpVel.z += -cos(rot);
+    double yMult = flying ? cos(tform.rotation.x) : 1;
+    if (movingFwd) {
+      tmpVel.x -= sin(rot) * yMult;
+      tmpVel.z -= cos(rot) * yMult;
+      if (flying) {
+        tmpVel.y += sin(tform.rotation.x);
+      }
     }
-    if (Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN)) {
-      tmpVel.x += sin(rot);
-      tmpVel.z += cos(rot);
+    if (movingBack) {
+      tmpVel.x += sin(rot) * yMult;
+      tmpVel.z += cos(rot) * yMult;
+      if (flying) {
+        tmpVel.y -= sin(tform.rotation.x);
+      }
     }
-    if (Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT)) {
+    if (strafingLeft) {
       tmpVel.x += -cos(rot);
       tmpVel.z += sin(rot);
     }
-    if (Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT)) {
+    if (strafingRight) {
       tmpVel.x += cos(rot);
       tmpVel.z += -sin(rot);
     }
@@ -72,13 +87,12 @@ void PlayerMotion::move() {
       tmpVel.normalise();
     }
     tmpVel *= speed;
-    if (Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP) or
-        Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN) or
-        Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT) or
-        Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT))
-    {
+    if (movingFwd or movingBack or strafingLeft or strafingRight) {
       velocity.x = tmpVel.x;
       velocity.z = tmpVel.z;
+      if (flying) {
+        velocity.y = tmpVel.y;
+      }
     }
 
 

@@ -19,7 +19,6 @@ class Vector3f;
 class SoundManager;
 
 const float GRAVITY = 0.01;
-const float FRICTION = 0.01;
 
 const std::array<const std::string,3> MUSIC_PLAYLIST =
 {
@@ -52,8 +51,8 @@ public:
   void hidePortals();
 
   static float gravity;
-  static float friction;
 private:
+  uint32_t lastUpdateTime;
   bool wasF5Down = false;
   bool wasTabDown = false;
   bool isEditorShown;
