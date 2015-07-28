@@ -15,6 +15,7 @@ public:
   static const std::string SOUND;
   static const std::string MAP;
   static const std::string VSYNC;
+  static const std::string HIDE_PORTALS_BY_CLICK;
 
   static void load();
   static unsigned int getWidth() { return Config::width; }
@@ -24,6 +25,7 @@ public:
   static bool hasAntialiasing() { return Config::antialiasing; }
   static bool hasSound() { return Config::sound; }
   static bool hasVsync() { return Config::vsync; }
+  static bool isHidePortalsByClick() { return Config::hide_portals_by_click; }
 private:
   static unsigned int width;
   static unsigned int height;
@@ -33,6 +35,7 @@ private:
   static bool sound;
   static bool vsync;
   static std::string map;
+  static bool hide_portals_by_click;
 };
 
 } /* namespace glPortal */
