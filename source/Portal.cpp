@@ -64,6 +64,7 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
   }
 
   if (wall.size.z >= 1 && wall.size.y >= 2 && (side == 0 || side == 1)) {
+    rotation.x = 0;
     if (side == 0) {
       rotation.y = rad(90);
       scale.set(1, 2, 1);
@@ -87,6 +88,7 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
     open = true;
   }
   if (wall.size.x >= 1 && wall.size.y >= 2 && (side == 2 || side == 3)) {
+    rotation.x = 0;
     if (side == 2) {
       rotation.y = 0;
       scale.set(1, 2, 1);
