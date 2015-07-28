@@ -18,7 +18,7 @@ class BoxCollider;
 class Vector3f;
 class SoundManager;
 
-const float GRAVITY = 0.01;
+const float GRAVITY = 0.5;
 
 const std::array<const std::string,3> MUSIC_PLAYLIST =
 {

@@ -46,13 +46,16 @@ void PlayerMotion::move(float dtime) {
   } else {
     velocity.z *= std::pow(FRICTION, dtime);
   }
-  if (velocity.y <= MIN_SPEED_ON_AXIS and velocity.y >= -MIN_SPEED_ON_AXIS) {
-    velocity.y = 0;
-  } else {
-    velocity.y *= std::pow(FRICTION, dtime);
-  }
-  if (not flying) {
-    velocity.y -= World::gravity;
+  if (not grounded) {
+    if (flying) {
+      if (velocity.y <= MIN_SPEED_ON_AXIS and velocity.y >= -MIN_SPEED_ON_AXIS) {
+        velocity.y = 0;
+      } else {
+        velocity.y *= std::pow(FRICTION, dtime);
+      }
+    } else {
+      velocity.y -= World::gravity * dtime;
+    }
   }
 
   Transform &tform = entity.getComponent<Transform>();
