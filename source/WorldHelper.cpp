@@ -38,14 +38,14 @@ void WorldHelper::shootPortal(int button, Scene *scene) {
     portal.openSince = SDL_GetTicks();
     portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png"); 
     portal.placeOnWall(scene->camera.getPosition(), closestWall->getComponent<AACollisionBox>().box, ipos);
-    //LightSource &pLight = pEnt.getComponent<LightSource>();
+    LightSource &pLight = pEnt.getComponent<LightSource>();
 
     if (button == 1) {
       portal.overlayTex.diffuse = TextureLoader::getTexture("blueportal.png");
-      portal.color /*= pLight.color*/ = Portal::BLUE_COLOR;
+      portal.color = pLight.color = Portal::BLUE_COLOR;
     } else {
       portal.overlayTex.diffuse = TextureLoader::getTexture("orangeportal.png");
-      portal.color /*= pLight.color*/ = Portal::ORANGE_COLOR;
+      portal.color = pLight.color = Portal::ORANGE_COLOR;
     }
   }
 }
