@@ -36,7 +36,7 @@ ConfigFileParser::ConfigFileParser(const std::string &filename) {
       std::getline(file, line);
       std::stringstream stringStream(line);
 
-      if (line.length() > 0) {
+      if (line.length() > 0 and line[0] != '#') {
         vector<std::string> strings;
         for (unsigned int i = 0; i < line.length(); ++i) {
           if (line[i] == ' ') {
@@ -87,6 +87,5 @@ bool ConfigFileParser::getBool(const string &key) {
   }
   return false;
 }
-  
-} /* namespace glPortal */
 
+} /* namespace glPortal */

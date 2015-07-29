@@ -17,6 +17,7 @@ namespace glPortal {
   const std::string Config::SOUND = "sound";
   const std::string Config::MAP = "map";
   const std::string Config::VSYNC = "vsync";
+  const std::string Config::HIDE_PORTALS_BY_CLICK = "hide_portals_by_click";
 
   unsigned int Config::width = 1024;
   unsigned int Config::height = 768;
@@ -26,16 +27,18 @@ namespace glPortal {
   bool Config::sound = true;
   bool Config::vsync = true;
   std::string Config::map = "n1.xml";
+  bool Config::hide_portals_by_click = true;
 
   void Config::load() {
     try {
       ConfigFileParser *config = Environment::getConfigPointer();
-  
+
       Config::fullscreen = config->getBool(Config::FULLSCREEN);
       Config::antialiasing = config->getBool(Config::ANTIALIASING);
       Config::vsync = config->getBool(Config::VSYNC);
       Config::sound = config->getBool(Config::SOUND);
       Config::sensitivity = config->getFloat(Config::SENSITIVITY);
+      Config::hide_portals_by_click = config->getBool(Config::HIDE_PORTALS_BY_CLICK);
 
       std::string width = config->getString(Config::WIDTH);
       if (width == "auto") {
@@ -55,4 +58,3 @@ namespace glPortal {
     }
   }
 } /* namespace glPortal */
-

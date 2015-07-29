@@ -46,7 +46,9 @@ const std::array<const std::string,6> PLAYER_FOOT_SOUND =
 class PlayerMotion : public Component {
 public:
   PlayerMotion(Entity &ent) :
-    Component(ent) {
+    Component(ent),
+    flying(false),
+    noclip(false) {
     entity.getComponent<Transform>().scale = PLAYER_SIZE;
 
     velocity.set(0, 0, 0);
@@ -60,10 +62,11 @@ public:
 
   // Movement
   void mouseLook();
-  void move();
+  void move(float dtime);
 
   Vector3f velocity;
   bool grounded;
+  bool flying, noclip;
 
   float speed;
 private:

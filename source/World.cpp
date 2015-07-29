@@ -48,7 +48,6 @@
 namespace glPortal {
 
 float World::gravity = GRAVITY;
-float World::friction = FRICTION;
 
 World::World() :
   scene(nullptr),
@@ -60,6 +59,7 @@ void World::create() {
   editor = new Editor(*this);
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
+  lastUpdateTime = SDL_GetTicks();
   try {
     std::string map = config->getString(Config::MAP);
     loadScene(map);
@@ -94,6 +94,9 @@ void World::loadScene(const std::string &path) {
 }
 
 void World::update() {
+  uint32_t updateTime = SDL_GetTicks();
+  float dtime = (updateTime-lastUpdateTime)/1000.f;
+
   // If F5 released, reload the scene
   if (wasF5Down and not Input::isKeyDown(SDL_SCANCODE_F5)) {
     if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
@@ -124,7 +127,7 @@ void World::update() {
   // Calculate the view and new velocity of the player
   // FIXME: don't do this here, let a manager handle
   plrMotion.mouseLook();
-  plrMotion.move();
+  plrMotion.move(dtime);
 
   // Figure out the provisional new player position
   Vector3f pos = plrTform.position + plrMotion.velocity;
@@ -136,7 +139,7 @@ void World::update() {
     bool portaling = false;
     portaling = WorldHelper::isPlayerPortalingY(bboxY, &player, scene);
 
-    if(!portaling) {
+    if (not portaling and not plrMotion.noclip) {
       if (plrMotion.velocity.y < 0) {
         if(plrMotion.velocity.y < -HURT_VELOCITY) {
           std::uniform_int_distribution<> dis(0, PLAYER_FALL_SOUND.size()-1);
@@ -156,7 +159,7 @@ void World::update() {
   if (collidesWithWalls(bboxX)) {
     bool portaling = false;
     portaling = WorldHelper::isPlayerPortalingX(bboxX, &player, scene);
-    if(!portaling) {
+    if (not portaling and not plrMotion.noclip) {
       plrMotion.velocity.x = 0;
     }
   }
@@ -166,7 +169,7 @@ void World::update() {
   if (collidesWithWalls(bboxZ)) {
     bool portaling = false;
     portaling = WorldHelper::isPlayerPortalingZ(bboxZ, &player, scene);
-    if(!portaling) {
+    if (not portaling and not plrMotion.noclip) {
       plrMotion.velocity.z = 0;
     }
   }
@@ -252,6 +255,8 @@ void World::update() {
     }
     loadScene(mapList[currentLevel]);
   }
+
+  lastUpdateTime = updateTime;
 }
 
 bool World::collidesWithWalls(const BoxCollider &collider) const {
