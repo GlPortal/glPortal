@@ -10,7 +10,6 @@ float* PortalHelper::getDistancesForPoint(const Vector3f &point, const BoxCollid
   float y = point.y;
   float z = point.z;
   float *distances = new float[6];
-
   distances[0] = getDistanceFromCoordinates(x, position.x - size.x / 2);
   distances[1] = getDistanceFromCoordinates(x, position.x + size.x / 2);
   distances[2] = getDistanceFromCoordinates(z, position.z - size.z / 2);
