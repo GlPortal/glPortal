@@ -2,6 +2,7 @@
 #define ENVIRONMENT_HPP
 
 #include <string>
+#include <engine/core/event/Dispatcher.hpp>
 
 using namespace std;
 
@@ -13,6 +14,7 @@ private:
   static ConfigFileParser *config;
   static std::string datadir;
 public:
+  static Dispatcher dispatcher;
   static void init();
   static ConfigFileParser& getConfig();
   static ConfigFileParser* getConfigPointer();

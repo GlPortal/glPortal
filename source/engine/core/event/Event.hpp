@@ -2,6 +2,12 @@
 #define EVENT_HPP
 
 namespace glPortal {
-enum class Event { loadScene, loadGame };
+
+enum class Event {
+  loadScene,
+  loadGame
+};
+
 } /* namespace glPortal */
+
 #endif /* EVENT_HPP */

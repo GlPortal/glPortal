@@ -7,20 +7,23 @@
 
 using namespace glPortal;
 
-struct DispatcherFixtures
-{
+// Fix, since we 1. don't compile Observer.cpp and 2. don't want to go into the C++ dependency
+// hell it implies (references Environment).
+Observer::~Observer() {
+}
+
+struct DispatcherFixtures {
   Dispatcher dispatcher;
   bool flag;
   DispatcherFixtures() {
     flag = false;
     Dispatcher dispatcher;
-    Observer observer = FlagObserver(flag, true);
-    dispatcher.addObserver(Event::loadScene, observer);
+    FlagObserver observer(flag, true);
+    dispatcher.addObserver(Event::loadScene, &observer);
     dispatcher.dispatch(Event::loadScene);
   }
   
   ~DispatcherFixtures() {}
-  
 };
  
 

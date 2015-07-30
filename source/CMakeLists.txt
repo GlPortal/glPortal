@@ -19,6 +19,9 @@ add_executable(${EXE_NAME}
   engine/core/diag/Logger.cpp
   engine/core/diag/ConsoleLogger.cpp
   engine/core/diag/LogInput.cpp
+  engine/core/event/Dispatcher.cpp
+  engine/core/event/FlagObserver.cpp
+  engine/core/event/Observer.cpp
   util/sdl/Fps.cpp
   engine/BoxCollider.cpp
   engine/Camera.cpp

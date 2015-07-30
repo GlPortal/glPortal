@@ -9,11 +9,14 @@ namespace glPortal {
 
 class Dispatcher {
 private:
-  std::map<Event, std::vector<Observer> > eventObserverMap = {};
+  std::map<Event, std::vector<Observer*>> eventObserverMap;
+
 public:
   Dispatcher();
   void dispatch(Event event);
-  void addObserver(Event event, Observer observer);
+  void addObserver(Event event, Observer *observer);
+  void removeObserver(Event event, Observer *observer);
+  void removeObserver(Observer *observer);
 };
 
 } /* namespace glPortal */

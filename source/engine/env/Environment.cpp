@@ -7,6 +7,9 @@
 #include <iostream>
 
 namespace glPortal {
+
+Dispatcher Environment::dispatcher;
+
 std::string Environment::datadir = "";
 ConfigFileParser *Environment::config = nullptr;
 

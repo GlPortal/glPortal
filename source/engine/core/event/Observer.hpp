@@ -2,9 +2,13 @@
 #define OBSERVER_HPP
 
 namespace glPortal {
+
 class Observer {
- public:
+public:
+  ~Observer();
   virtual void execute(){};
-};  
+};
+
 }
+
 #endif /* OBSERVER_HPP */
