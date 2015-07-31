@@ -1,5 +1,6 @@
-# This file defines the set of scripts (rules) that should be executed
-# glportal specific rules
+# Config file for vera++
+
+# This file defines the set of rules that the code should be tested for
 # For an explaination of the rules go to https://bitbucket.org/verateam/vera/wiki/Rules
 # Copy this file to /usr/local/lib/vera++/profiles/default to make it your default
 
