@@ -19,7 +19,7 @@ struct DispatcherFixtures {
     flag = false;
     Dispatcher dispatcher;
     FlagObserver observer(flag, true);
-    dispatcher.addObserver(Event::loadScene, &observer);
+    dispatcher.addObserver(Event::loadScene, observer);
     dispatcher.dispatch(Event::loadScene);
   }
   

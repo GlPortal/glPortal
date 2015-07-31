@@ -15,8 +15,17 @@ public:
   Dispatcher();
   void dispatch(Event event);
   void addObserver(Event event, Observer *observer);
+  inline void addObserver(Event event, Observer &observer) {
+    addObserver(event, &observer);
+  }
   void removeObserver(Event event, Observer *observer);
+  inline void removeObserver(Event event, Observer &observer) {
+    removeObserver(event, &observer);
+  }
   void removeObserver(Observer *observer);
+  inline void removeObserver(Observer &observer) {
+    removeObserver(&observer);
+  }
 };
 
 } /* namespace glPortal */
