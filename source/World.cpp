@@ -49,7 +49,26 @@ namespace glPortal {
 
 float World::gravity = GRAVITY;
 
+World::Physics::Physics(World &parent) :
+  parent(parent),
+  broadphase(new btDbvtBroadphase()),
+  collisionConfiguration(new btDefaultCollisionConfiguration()),
+  dispatcher(new btCollisionDispatcher(collisionConfiguration)),
+  solver(new btSequentialImpulseConstraintSolver),
+  world(new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration)) {
+  world->setGravity(btVector3(0, -World::gravity, 0));
+}
+
+World::Physics::~Physics() {
+  delete world;
+  delete solver;
+  delete dispatcher;
+  delete collisionConfiguration;
+  delete broadphase;
+}
+
 World::World() :
+  physics(*this),
   scene(nullptr),
   isEditorShown(false) {
   config = Environment::getConfigPointer();
