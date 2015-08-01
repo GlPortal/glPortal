@@ -3,8 +3,8 @@
 
 #include <string>
 #include <vector>
-#include <random>
 #include <array>
+#include <random>
 
 #include <assets/scene/Scene.hpp>
 #include <engine/env/ConfigFileParser.hpp>
@@ -21,13 +21,6 @@ class Vector3f;
 class SoundManager;
 
 const float GRAVITY = 0.5;
-
-const std::array<const std::string,3> MUSIC_PLAYLIST =
-{
-  "/audio/music/track1.ogg",
-  "/audio/music/track2.ogg",
-  "/audio/music/track3.ogg"
-};
 
 class Window;
 class Editor;

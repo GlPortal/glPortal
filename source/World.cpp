@@ -22,7 +22,6 @@
 #include <engine/BoxCollider.hpp>
 #include <engine/Ray.hpp>
 #include <engine/Camera.hpp>
-#include <engine/SoundManager.hpp>
 
 #include <engine/component/Health.hpp>
 #include <engine/component/Transform.hpp>
@@ -93,9 +92,6 @@ void World::loadScene(const std::string &path) {
   phys.setScene(scene);
   scene->physics.setGravity(0, -gravity, 0);
 
-  //play a random piece of music each time a scene is loaded
-  std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
-  SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
   Environment::dispatcher.dispatch(Event::loadScene);
 }
 
