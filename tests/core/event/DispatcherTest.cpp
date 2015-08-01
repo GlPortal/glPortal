@@ -4,23 +4,29 @@
 #include <engine/core/event/observer/FlagObserver.hpp>
 #include <engine/core/event/Event.hpp>
 #include <stdexcept>
+#include <functional>
 
 using namespace glPortal;
 
+Dispatcher dispatcher;
+
 // Fix, since we 1. don't compile Observer.cpp and 2. don't want to go into the C++ dependency
 // hell it implies (references Environment).
+void Observer::observe(Event event, const std::function<void()> &method) {
+  observing.push_back(dispatcher.addObserver(event, method));
+}
 Observer::~Observer() {
+  for (Dispatcher::CallbackPointer &ptr : observing) {
+    dispatcher.removeObserver(ptr);
+  }
 }
 
 struct DispatcherFixtures {
-  Dispatcher dispatcher;
   bool flag;
   DispatcherFixtures() {
     flag = false;
-    Dispatcher dispatcher;
     FlagObserver observer(flag, true);
-    std::function<void()> function = std::bind(&Observer::execute, observer);
-    dispatcher.addObserver(Event::loadScene, function);
+    observer.observe(Event::loadScene, std::bind(&FlagObserver::execute, observer));
     dispatcher.dispatch(Event::loadScene);
   }
   
