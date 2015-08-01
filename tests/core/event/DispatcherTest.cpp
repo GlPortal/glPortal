@@ -19,7 +19,8 @@ struct DispatcherFixtures {
     flag = false;
     Dispatcher dispatcher;
     FlagObserver observer(flag, true);
-    dispatcher.addObserver(Event::loadScene, observer);
+    std::function<void()> function = std::bind(&Observer::execute, observer);
+    dispatcher.addObserver(Event::loadScene, function);
     dispatcher.dispatch(Event::loadScene);
   }
   

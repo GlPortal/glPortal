@@ -4,7 +4,7 @@
 namespace glPortal {
 
 Observer::~Observer() {
-  Environment::dispatcher.removeObserver(this);
+  //  Environment::dispatcher.removeObserver(this);
 }
 
 }
