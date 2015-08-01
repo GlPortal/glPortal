@@ -13,8 +13,9 @@ void Dispatcher::dispatch(Event event) {
   it = eventObserverMap.find(event);
   if (it != eventObserverMap.end()){
     std::vector<std::function<void()>> &observers = it->second;
-    for (auto& f : observers)
+    for (auto& f : observers) {
       f();
+    }
   }
 }
 
