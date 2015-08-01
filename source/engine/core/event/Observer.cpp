@@ -3,8 +3,14 @@
 
 namespace glPortal {
 
+void Observer::observe(Event event, const std::function<void()> &method) {
+  observing.push_back(Environment::dispatcher.addObserver(event, method));
+}
+
 Observer::~Observer() {
-  //  Environment::dispatcher.removeObserver(this);
+  for (Dispatcher::CallbackPointer &ptr : observing) {
+    Environment::dispatcher.removeObserver(ptr);
+  }
 }
 
 }
