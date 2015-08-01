@@ -25,7 +25,6 @@ struct DispatcherFixtures {
   
   ~DispatcherFixtures() {}
 };
- 
 
 SUITE(DispatcherTest)
 {
