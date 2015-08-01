@@ -5,6 +5,9 @@
 #include <vector>
 #include <random>
 #include <array>
+
+#include <bullet/btBulletDynamicsCommon.h>
+
 #include <assets/scene/Scene.hpp>
 #include <engine/env/ConfigFileParser.hpp>
 #include <engine/env/Config.hpp>
@@ -35,6 +38,17 @@ private:
   friend Editor;
 
 public:
+  struct Physics {
+    World &parent;
+    btBroadphaseInterface *broadphase;
+    btDefaultCollisionConfiguration *collisionConfiguration;
+    btCollisionDispatcher *dispatcher;
+    btSequentialImpulseConstraintSolver *solver;
+    btDiscreteDynamicsWorld *world;
+    Physics(World &parent);
+    ~Physics();
+  } physics;
+
   World();
   void create();
   void destroy();

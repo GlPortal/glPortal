@@ -33,6 +33,10 @@ find_package(TinyXML2 REQUIRED)
 include_directories(${TINYXML2_INCLUDE_DIR})
 list(APPEND PORTAL_LIBRARIES ${TINYXML2_LIBRARIES} )
 
+find_package(Bullet 2.82 REQUIRED)
+include_directories(${BULLET_INCLUDE_DIR})
+list(APPEND PORTAL_LIBRARIES ${BULLET_LIBRARIES})
+
 set(PORTAL_TEST_LIBRARIES ${PORTAL_LIBRARIES})
 
 add_subdirectory(data)
