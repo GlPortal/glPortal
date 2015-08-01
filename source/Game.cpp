@@ -12,6 +12,9 @@
 #include "engine/env/ArgumentsParser.hpp"
 #include <engine/env/System.hpp>
 #include <engine/SoundManager.hpp>
+#include <engine/core/event/Observer.hpp>
+#include <engine/core/event/Dispatcher.hpp>
+#include <engine/core/event/observer/MusicObserver.hpp>
 #include <util/sdl/Fps.hpp>
 #include "Input.hpp"
 
@@ -20,6 +23,8 @@ namespace glPortal {
 Fps Game::fps;
 
 Game::Game() : closed(false) {
+  MusicObserver musicObserver;
+  musicObserver.addCallback(Event::loadScene, std::bind(&MusicObserver::loadMap, musicObserver));
   window.create("GlPortal");
 
   try {

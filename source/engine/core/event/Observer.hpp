@@ -11,7 +11,7 @@ private:
   std::vector<Dispatcher::CallbackPointer> observing;
 
 public:
-  void observe(Event event, const std::function<void()> &method);
+  void addCallback(Event event, const std::function<void()> &method);
   ~Observer();
 };
 

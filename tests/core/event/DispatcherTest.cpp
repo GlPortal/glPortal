@@ -12,7 +12,7 @@ Dispatcher dispatcher;
 
 // Fix, since we 1. don't compile Observer.cpp and 2. don't want to go into the C++ dependency
 // hell it implies (references Environment).
-void Observer::observe(Event event, const std::function<void()> &method) {
+void Observer::addCallback(Event event, const std::function<void()> &method) {
   observing.push_back(dispatcher.addObserver(event, method));
 }
 Observer::~Observer() {
@@ -26,7 +26,7 @@ struct DispatcherFixtures {
   DispatcherFixtures() {
     flag = false;
     FlagObserver observer(flag, true);
-    observer.observe(Event::loadScene, std::bind(&FlagObserver::execute, observer));
+    observer.addCallback(Event::loadScene, std::bind(&FlagObserver::execute, observer));
     dispatcher.dispatch(Event::loadScene);
   }
   
