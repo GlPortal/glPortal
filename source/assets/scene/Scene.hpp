@@ -3,13 +3,13 @@
 
 #include <vector>
 #include <map>
-#include <list>
 
 #include <bullet/btBulletDynamicsCommon.h>
 
 #include <assets/gui/GUIButton.hpp>
 #include <assets/material/Material.hpp>
 #include <engine/Camera.hpp>
+#include <engine/EntityManager.hpp>
 
 #include "Portal.hpp"
 
@@ -31,15 +31,14 @@ public:
     ~Physics();
   } physics;
 
-  Entity player;
+  Entity *player;
   Camera camera;
   std::map<int, Material> materials;
-  std::list<Entity> entities;
+  EntityManager entities;
   std::vector<EntityPair> portalPairs;
-  std::vector<GUIButton> buttons;
   // FIXME: remove us!
-  Entity start;
-  Entity end;
+  Entity *start;
+  Entity *end;
 
   Scene();
 };

@@ -1,19 +1,19 @@
 #ifndef ENTITY_MANAGER_HPP
 #define ENTITY_MANAGER_HPP
 
-#include <array>
-#include <memory>
 #include <list>
-#include "component/Component.hpp"
 #include "Entity.hpp"
 
 namespace glPortal {
 
-class EntityManager {
-  std::list<std::unique_ptr<Entity>> entities;
+class Scene;
 
+class EntityManager : public std::list<Entity> {
 public:
-  
+  Scene &scene;
+  EntityManager(Scene &scene);
+
+  Entity& create();
 };
 
 } /* namespace glPortal */

@@ -6,7 +6,6 @@
 #include <vector>
 
 #include <engine/core/math/Math.hpp>
-#include <engine/Entity.hpp>
 
 using namespace std;
 

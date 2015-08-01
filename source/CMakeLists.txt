@@ -3,6 +3,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(${EXE_NAME}
   engine/BoxCollider.cpp
   engine/Camera.cpp
+  engine/EntityManager.cpp
   engine/Ray.cpp
   engine/SoundManager.cpp
   assets/gui/GUIButton.cpp

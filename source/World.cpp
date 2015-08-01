@@ -114,14 +114,14 @@ void World::update() {
   }
   wasTabDown = Input::isKeyDown(SDL_SCANCODE_F5);
 
-  Entity &player = scene->player;
+  Entity &player = *scene->player;
   Health &plrHealth = player.getComponent<Health>();
   Transform &plrTform = player.getComponent<Transform>();
   PlayerMotion &plrMotion = player.getComponent<PlayerMotion>();
 
   // Check if player is still alive
   if (not plrHealth.isAlive()) {
-    plrTform.position = scene->start.getComponent<Transform>().position;
+    plrTform.position = scene->start->getComponent<Transform>().position;
     plrHealth.revive();
     hidePortals();
   }
@@ -252,7 +252,7 @@ void World::update() {
   scene->camera.setRotation(plrTform.rotation);
 
   //Check if the end of the level has been reached
-  float distToEnd = (scene->end.getComponent<Transform>().position - plrTform.position).length();
+  float distToEnd = (scene->end->getComponent<Transform>().position - plrTform.position).length();
   if (distToEnd < 1) {
     if (currentLevel + 1 < mapList.size()) {
       currentLevel++;
@@ -287,7 +287,7 @@ void World::render() {
 }
 
 Entity& World::getPlayer() {
-  return scene->player;
+  return *scene->player;
 }
 
 void World::hidePortals() {

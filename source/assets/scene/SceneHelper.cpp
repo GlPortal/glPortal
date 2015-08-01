@@ -8,10 +8,8 @@ EntityPair& SceneHelper::getPortalPairFromScene(int n, Scene *scene) {
     scene->portalPairs.reserve(n + 1);
     // Instantiate and initalize new portal pairs
     for (int i = pairCount; i <= n; ++i) {
-      scene->entities.emplace_back();
-      Entity &pEnt1 = scene->entities.back();
-      scene->entities.emplace_back();
-      Entity &pEnt2 = scene->entities.back();
+      Entity &pEnt1 = scene->entities.create();
+      Entity &pEnt2 = scene->entities.create();
       pEnt1.addComponent<Transform>();
       pEnt1.addComponent<Portal>();
       LightSource &ls1 = pEnt1.addComponent<LightSource>();

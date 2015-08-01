@@ -216,7 +216,7 @@ void Renderer::renderScene(const Camera &cam) {
       renderEntity(cam, e);
     }
   }
-  renderEntity(cam, scene->end);
+  renderEntity(cam, *scene->end);
 }
 
 void Renderer::renderEntity(const Camera &cam, const Entity &e) {
@@ -228,7 +228,7 @@ void Renderer::renderEntity(const Camera &cam, const Entity &e) {
 }
 
 void Renderer::renderPlayer(const Camera &cam) {
-  const Transform &t = scene->player.getComponent<Transform>();
+  const Transform &t = scene->player->getComponent<Transform>();
   Matrix4f mtx;
   mtx.translate(t.position+Vector3f(0, -.5f, 0));
   mtx.rotate(t.rotation.y, 0, 1, 0);

@@ -14,11 +14,8 @@
 #include <engine/component/MeshDrawable.hpp>
 #include <engine/component/AACollisionBox.hpp>
 #include <engine/component/Trigger.hpp>
-#include <engine/component/Health.hpp>
 #include <engine/component/SoundSource.hpp>
-#include <engine/component/SoundListener.hpp>
 #include <engine/component/LightSource.hpp>
-#include "../../PlayerMotion.hpp"
 
 #include <assets/scene/Scene.hpp>
 #include <assets/model/Mesh.hpp>
@@ -43,13 +40,7 @@ namespace glPortal {
  * Get a scene from a map file in XML format.
  */
 Scene* MapLoader::getScene(const std::string &path) {
-  scene = new Scene();
-  // FIXME: shall we init player here? Probably not, and do it ONCE.
-  scene->player.addComponent<Transform>();
-  scene->player.addComponent<PlayerMotion>();
-  scene->player.addComponent<Health>();
-  scene->player.addComponent<SoundSource>();
-  scene->player.addComponent<SoundListener>();
+  scene = new Scene;
 
   XMLDocument doc;
   XMLError error = doc.LoadFile((Environment::getDataDir() + "/maps/" + path + ".xml").c_str());
@@ -104,11 +95,11 @@ void MapLoader::extractSpawn() {
   XMLElement *spawnElement = rootHandle.FirstChildElement("spawn").ToElement();
 
   if (spawnElement) {
-    scene->start.clearComponents();
-    Transform &t = scene->start.addComponent<Transform>();
+    scene->start = &scene->entities.create();
+    Transform &t = scene->start->addComponent<Transform>();
     XmlHelper::extractPosition(spawnElement, t.position);
     XmlHelper::extractRotation(spawnElement, t.rotation);
-    Transform &pt = scene->player.getComponent<Transform>();
+    Transform &pt = scene->player->getComponent<Transform>();
     pt.position = t.position;
     pt.rotation = t.rotation;
   } else {
@@ -136,8 +127,7 @@ void MapLoader::extractLights() {
     lightElement->QueryFloatAttribute("energy", &energy);
     lightElement->QueryFloatAttribute("specular", &specular);
 
-    scene->entities.emplace_back();
-    Entity &light = scene->entities.back();
+    Entity &light = scene->entities.create();
     Transform &t = light.addComponent<Transform>();
     t.position = lightPos;
     LightSource &ls = light.addComponent<LightSource>();
@@ -152,7 +142,8 @@ void MapLoader::extractDoor() {
   XMLElement *endElement = rootHandle.FirstChildElement("end").ToElement();
 
   if (endElement) {
-    Entity &door = scene->end;
+    Entity &door = scene->entities.create();
+    scene->end = &door;
     door.clearComponents();
     Transform &t = door.addComponent<Transform>();
     XmlHelper::extractPosition(endElement, t.position);
@@ -168,8 +159,7 @@ void MapLoader::extractWalls() {
 
   if (wallBoxElement) {
     do {
-      scene->entities.emplace_back();
-      Entity &wall = scene->entities.back();
+      Entity &wall = scene->entities.create();
 
       Transform &t = wall.addComponent<Transform>();
       XmlHelper::extractPosition(wallBoxElement, t.position);
@@ -192,8 +182,7 @@ void MapLoader::extractAcids() {
   
   if (acidElement) {
     do {
-      scene->entities.emplace_back();
-      Entity &acid = scene->entities.back();
+      Entity &acid = scene->entities.create();
 
       Transform &t = acid.addComponent<Transform>();
       XmlHelper::extractPosition(acidElement, t.position);
@@ -212,8 +201,7 @@ void MapLoader::extractTriggers() {
 
   if (triggerElement) {
     do {
-      scene->entities.emplace_back();
-      Entity &trigger = scene->entities.back();
+      Entity &trigger = scene->entities.create();
 
       Transform &t = trigger.addComponent<Transform>();
       XmlHelper::extractPosition(triggerElement, t.position);
@@ -236,8 +224,7 @@ void MapLoader::extractModels() {
       mesh = modelElement->Attribute("mesh");
       XmlHelper::pushAttributeVertexToVector(modelElement, modelPos);
 
-      scene->entities.emplace_back();
-      Entity &model = scene->entities.back();
+      Entity &model = scene->entities.create();
       Transform &t = model.addComponent<Transform>();
       XmlHelper::extractPosition(modelElement, t.position);
       XmlHelper::extractRotation(modelElement, t.rotation);

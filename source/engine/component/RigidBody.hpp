@@ -3,6 +3,9 @@
 
 #include "Component.hpp"
 #include <bullet/btBulletDynamicsCommon.h>
+#include <engine/Entity.hpp>
+#include <engine/EntityManager.hpp>
+#include <assets/scene/Scene.hpp>
 
 namespace glPortal {
 
@@ -15,6 +18,11 @@ public:
 
   RigidBody(Entity &ent) :
     Component(ent) {
+    entity.manager.scene.physics.world->addRigidBody(body);
+  }
+
+  ~RigidBody() {
+    entity.manager.scene.physics.world->removeRigidBody(body);
   }
 };
 

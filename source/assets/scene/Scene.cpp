@@ -1,4 +1,9 @@
 #include "Scene.hpp"
+#include <engine/component/Transform.hpp>
+#include <engine/component/Health.hpp>
+#include <engine/component/SoundSource.hpp>
+#include <engine/component/SoundListener.hpp>
+#include "../../PlayerMotion.hpp"
 
 namespace glPortal {
 
@@ -24,7 +29,14 @@ Scene::Physics::~Physics() {
 }
 
 Scene::Scene() : 
-  physics(*this) {
+  physics(*this),
+  entities(*this) {
+  player = &entities.create();
+  player->addComponent<Transform>();
+  player->addComponent<PlayerMotion>();
+  player->addComponent<Health>();
+  player->addComponent<SoundSource>();
+  player->addComponent<SoundListener>();
 }
 
 } /* namespace glPortal */

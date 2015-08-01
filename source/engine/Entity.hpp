@@ -9,9 +9,14 @@
 
 namespace glPortal {
 
+class EntityManager;
+
 class Entity {
 public:
-  Entity() {}
+  EntityManager &manager;
+  Entity(EntityManager &manager) : 
+    manager(manager) {
+  }
 
   std::array<std::unique_ptr<Component>, Component::MaxId> components;
 
