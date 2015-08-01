@@ -1,6 +1,7 @@
 #ifndef FLAG_OBSERVER_HPP
 #define FLAG_OBSERVER_HPP
-#include "Observer.hpp"
+
+#include <engine/core/event/Observer.hpp>
 
 namespace glPortal {
 
