@@ -36,6 +36,7 @@
 #include <engine/core/math/Math.hpp>
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
+#include <engine/core/event/Dispatcher.hpp>
 
 #include <SDL2/SDL_keyboard.h>
 
@@ -91,6 +92,7 @@ void World::loadScene(const std::string &path) {
   //play a random piece of music each time a scene is loaded
   std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
   SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
+  Environment::dispatcher.dispatch(Event::loadScene);
 }
 
 void World::update() {
