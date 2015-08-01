@@ -16,7 +16,8 @@ void Dispatcher::dispatch(Event event) {
   }
 }
 
-Dispatcher::CallbackPointer Dispatcher::addObserver(Event event, const std::function<void()> &method) {
+Dispatcher::CallbackPointer Dispatcher::addObserver(Event event,
+                                                    const std::function<void()> &method) {
   ObserverMap::iterator it;
   it = eventObserverMap.find(event);
   if (it != eventObserverMap.end()){
