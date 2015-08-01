@@ -49,27 +49,7 @@
 namespace glPortal {
 
 float World::gravity = GRAVITY;
-
-World::Physics::Physics(World &parent) :
-  parent(parent),
-  broadphase(new btDbvtBroadphase()),
-  collisionConfiguration(new btDefaultCollisionConfiguration()),
-  dispatcher(new btCollisionDispatcher(collisionConfiguration)),
-  solver(new btSequentialImpulseConstraintSolver),
-  world(new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration)) {
-  world->setGravity(btVector3(0, -World::gravity, 0));
-}
-
-World::Physics::~Physics() {
-  delete world;
-  delete solver;
-  delete dispatcher;
-  delete collisionConfiguration;
-  delete broadphase;
-}
-
 World::World() :
-  physics(*this),
   scene(nullptr),
   isEditorShown(false) {
   config = Environment::getConfigPointer();
@@ -108,6 +88,11 @@ void World::loadScene(const std::string &path) {
   delete scene;
   currentScenePath = path;
   scene = MapLoader::getScene(path);
+
+  // FIXME Shall we do this here? Likely not.
+  phys.setScene(scene);
+  scene->physics.setGravity(0, -gravity, 0);
+
   //play a random piece of music each time a scene is loaded
   std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
   SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
@@ -149,6 +134,8 @@ void World::update() {
   // FIXME: don't do this here, let a manager handle
   plrMotion.mouseLook();
   plrMotion.move(dtime);
+
+  phys.update(dtime);
 
   // Figure out the provisional new player position
   Vector3f pos = plrTform.position + plrMotion.velocity;

@@ -15,7 +15,6 @@ public:
 
   RigidBody(Entity &ent) :
     Component(ent) {
-    // TODO: add body to world simulation (bind Entities to their World and use reference?)
   }
 };
 

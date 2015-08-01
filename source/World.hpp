@@ -6,11 +6,10 @@
 #include <random>
 #include <array>
 
-#include <bullet/btBulletDynamicsCommon.h>
-
 #include <assets/scene/Scene.hpp>
 #include <engine/env/ConfigFileParser.hpp>
 #include <engine/env/Config.hpp>
+#include <engine/system/PhysicsSystem.hpp>
 
 namespace glPortal {
 
@@ -38,17 +37,6 @@ private:
   friend Editor;
 
 public:
-  struct Physics {
-    World &parent;
-    btBroadphaseInterface *broadphase;
-    btDefaultCollisionConfiguration *collisionConfiguration;
-    btCollisionDispatcher *dispatcher;
-    btSequentialImpulseConstraintSolver *solver;
-    btDiscreteDynamicsWorld *world;
-    Physics(World &parent);
-    ~Physics();
-  } physics;
-
   World();
   void create();
   void destroy();
@@ -74,6 +62,8 @@ private:
   Renderer *renderer;
   Editor *editor;
   Scene *scene;
+  // FIXME: now, aggregating all of this in here is more like patchwork rather than coding
+  PhysicsSystem phys;
   std::mt19937 generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;
