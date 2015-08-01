@@ -1,6 +1,7 @@
 #ifndef MUSIC_OBSERVER_HPP
 #define MUSIC_OBSERVER_HPP
-#include "Observer.hpp"
+
+#include <engine/core/event/Observer.hpp>
 
 namespace glPortal {
 
