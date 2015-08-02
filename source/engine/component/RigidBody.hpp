@@ -25,7 +25,7 @@ public:
     Transform &tform = entity.getComponent<Transform>();
     motionState.setWorldTransform(
       btTransform(btQuaternion(tform.rotation.x, tform.rotation.y, tform.rotation.z),
-      tform.position));
+        tform.position));
     btRigidBody::btRigidBodyConstructionInfo ci(mass, &motionState, shape.get());
     body = new btRigidBody(ci);
     entity.manager.scene.physics.world->addRigidBody(body);

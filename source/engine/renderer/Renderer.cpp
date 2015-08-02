@@ -368,6 +368,9 @@ void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx,
 
   glUniformMatrix4fv(sh.uni("modelMatrix"), 1, false, mdlMtx.toArray());
 
+  // Per-vertex color multiplier
+  glVertexAttrib4f(4, 1, 1, 1, 1);
+
   glBindVertexArray(mesh.handle);
   if (mat) {
     int tiling = sh.uni("tiling");

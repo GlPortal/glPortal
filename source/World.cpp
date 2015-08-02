@@ -90,7 +90,8 @@ void World::loadScene(const std::string &path) {
 
   // FIXME Shall we do this here? Likely not.
   phys.setScene(scene);
-  scene->physics.setGravity(0, -gravity, 0);
+  scene->physics.world->setDebugDrawer(&pdd);
+  scene->physics.setGravity(0, -9.8, 0);
 
   Environment::dispatcher.dispatch(Event::loadScene);
 }
@@ -266,6 +267,8 @@ void World::shootPortal(int button) {
 void World::render() {
   renderer->setScene(scene);
   renderer->render(scene->camera);
+  scene->physics.world->debugDrawWorld();
+  pdd.render(scene->camera);
   if (isEditorShown) {
     editor->renderUI();
   }

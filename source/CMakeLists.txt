@@ -32,6 +32,7 @@ add_executable(${EXE_NAME}
   engine/core/event/observer/FlagObserver.cpp
   engine/core/event/observer/MusicObserver.cpp
   engine/core/event/Observer.cpp
+  engine/core/gl/VBO.cpp
   engine/component/Health.cpp
   engine/component/Transform.cpp
   engine/component/SoundSource.cpp
@@ -40,6 +41,7 @@ add_executable(${EXE_NAME}
   engine/env/System.cpp
   engine/env/ConfigFileParser.cpp
   engine/env/Config.cpp
+  engine/physics/PhysicsDebugDraw.cpp
   engine/renderer/Renderer.cpp
   engine/system/PhysicsSystem.cpp
   util/sdl/Fps.cpp

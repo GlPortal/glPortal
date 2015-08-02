@@ -19,13 +19,16 @@ void PhysicsSystem::update(float dtime) {
     if (time < 1) {
       time += dtime;
     } else {
-      Entity &e = scene->entities.create();
-      Transform &t = e.addComponent<Transform>();
-      t.position.x = 10; t.position.y = 6; t.position.z = 5;
-      MeshDrawable &m = e.addComponent<MeshDrawable>();
-      m.material = MaterialLoader::fromTexture("HumanToken.png");
-      m.mesh = MeshLoader::getMesh("Cube.obj");
-      e.addComponent<RigidBody>(1, std::make_shared<btBoxShape>(btVector3(.5, .5, .5)));
+      Vector3f posz[3] = {Vector3f(10.6, 6, 5), Vector3f(10, 5, 5), Vector3f(10, 4, 5.6)};
+      for (const Vector3f &pos : posz) {
+        Entity &e = scene->entities.create();
+        Transform &t = e.addComponent<Transform>();
+        t.position = pos;
+        MeshDrawable &m = e.addComponent<MeshDrawable>();
+        m.material = MaterialLoader::fromTexture("HumanToken.png");
+        m.mesh = MeshLoader::getMesh("Cube.obj");
+        e.addComponent<RigidBody>(1, std::make_shared<btBoxShape>(btVector3(.5, .5, .5)));
+      }
       spawned = true;
     }
   }
@@ -41,6 +44,9 @@ void PhysicsSystem::update(float dtime) {
         t.position.x = origin.getX();
         t.position.y = origin.getY();
         t.position.z = origin.getZ();
+        t.rotation.x = trans.getRotation().getX();
+        t.rotation.y = trans.getRotation().getY();
+        t.rotation.z = trans.getRotation().getZ();
       }
     }
   }

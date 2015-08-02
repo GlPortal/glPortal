@@ -9,6 +9,7 @@
 #include <assets/scene/Scene.hpp>
 #include <engine/env/ConfigFileParser.hpp>
 #include <engine/env/Config.hpp>
+#include <engine/physics/PhysicsDebugDraw.hpp>
 #include <engine/system/PhysicsSystem.hpp>
 
 namespace glPortal {
@@ -54,6 +55,7 @@ private:
   Scene *scene;
   // FIXME: now, aggregating all of this in here is more like patchwork rather than coding
   PhysicsSystem phys;
+  PhysicsDebugDraw pdd;
   std::mt19937 generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;
