@@ -11,7 +11,9 @@ class GameController {
 public:
   GameController(Game *game);
   void handleInput();
-  void handleEvent(const SDL_Event &event);
+  void recordKeyEvent(const SDL_Event &event);
+  void handleMouseEvent(const SDL_Event &event);
+  void handleKeyInput();
 private:
   World *world;
   Game *game;
