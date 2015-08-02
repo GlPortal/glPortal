@@ -174,7 +174,8 @@ void MapLoader::extractWalls() {
       m.material = scene->materials[mid];
       m.material.scaleU = m.material.scaleV = 2.f;
       m.mesh = MeshLoader::getPortalBox(wall);
-      wall.addComponent<RigidBody>(0, std::make_shared<btBoxShape>(btVector3(t.scale.x/2, t.scale.y/2, t.scale.z/2)));
+      wall.addComponent<RigidBody>
+        (0, std::make_shared<btBoxShape>(btVector3(t.scale.x/2, t.scale.y/2, t.scale.z/2)));
       wall.addComponent<AACollisionBox>().box = BoxCollider::generateCage(wall);
     } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != nullptr);
   }
