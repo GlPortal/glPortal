@@ -19,7 +19,12 @@ namespace glPortal {
 
 class Vector2f {
 public:
-  float x, y;
+  union {
+    float x, r, s, u;
+  };
+  union {
+    float y, g, t, v;
+  };
 
   static const Vector2f ZERO;
   static const Vector2f UP;

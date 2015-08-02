@@ -12,6 +12,7 @@
 #include "Vector3f.hpp"
 #include <cmath>
 #include <sstream>
+#include <bullet/LinearMath/btVector3.h>
 
 namespace glPortal {
 
@@ -120,6 +121,10 @@ Vector3f Vector3f::operator*(float scale) const {
 
 Vector3f Vector3f::operator/(float divisor) const {
   return Vector3f(x / divisor, y / divisor, z / divisor);
+}
+
+Vector3f::operator btVector3() const {
+  return btVector3(x, y, z);
 }
 
 /* Utility functions */
