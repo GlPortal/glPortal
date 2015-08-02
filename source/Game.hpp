@@ -11,7 +11,7 @@ const int SKIP_TIME = 1000 / UPDATE_RATE;
 const int MAX_SKIP = 5;
 
 namespace glPortal {
-
+class GameController;
 class Game {
 public:
   // FIXME: make non-static
@@ -20,11 +20,11 @@ public:
   Game();
   void update();
   void close();
-  void handleEvent(const SDL_Event &event);
+  World* getWorld();
 private:
   Window window;
   World world;
-
+  GameController *controller;
   bool closed;
 };
 

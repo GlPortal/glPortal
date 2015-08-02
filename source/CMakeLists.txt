@@ -45,6 +45,7 @@ add_executable(${EXE_NAME}
   util/sdl/Fps.cpp
   Editor.cpp
   Game.cpp
+  GameController.cpp
   Input.cpp
   PlayerMotion.cpp
   Portal.cpp

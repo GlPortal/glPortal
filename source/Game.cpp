@@ -17,16 +17,18 @@
 #include <engine/core/event/observer/MusicObserver.hpp>
 #include <util/sdl/Fps.hpp>
 #include "Input.hpp"
+#include "GameController.hpp"
 
 namespace glPortal {
 
 Fps Game::fps;
 
 Game::Game() : closed(false) {
+  controller = new GameController(this);
   MusicObserver musicObserver;
   musicObserver.addCallback(Event::loadScene, std::bind(&MusicObserver::loadMap, musicObserver));
   window.create("GlPortal");
-
+  
   try {
     SoundManager::Init();
     world.create();
@@ -38,6 +40,10 @@ Game::Game() : closed(false) {
   }
 }
 
+World* Game::getWorld() {
+  return &world;
+}  
+  
 void Game::update() {
   SDL_Event event;
   int skipped;
@@ -47,10 +53,8 @@ void Game::update() {
     skipped = 0;
     //Update the game if it is time
     while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
-      while (SDL_PollEvent(&event)) {
-        handleEvent(event);
-      }
-
+      controller->handleInput();
+      
       SoundManager::Update(world.getPlayer());
       world.update();
       nextUpdate += SKIP_TIME;
@@ -62,45 +66,12 @@ void Game::update() {
   }
   world.destroy();
   window.close();
+  delete(controller);
 }
 
 void Game::close() {
   closed = true;
 }
-
-void Game::handleEvent(const SDL_Event &event) {
-  if (event.type == SDL_QUIT) {
-    closed = 1;
-  }
-  if (event.type == SDL_KEYDOWN) {
-    int key = event.key.keysym.scancode;
-    int mod = event.key.keysym.mod;
-
-    Input::keyPressed(key, mod);
-
-    if (key == SDL_SCANCODE_Q) {
-      close();
-    }
-  }
-  if (event.type == SDL_KEYUP) {
-    int key = event.key.keysym.scancode;
-    int mod = event.key.keysym.mod;
-
-    Input::keyReleased(key, mod);
-  }
-  if (event.type == SDL_MOUSEBUTTONDOWN) {
-    if (event.button.button == SDL_BUTTON_LEFT) {
-      world.shootPortal(1);
-    }
-    if (event.button.button == SDL_BUTTON_RIGHT) {
-      world.shootPortal(2);
-    }
-    if (event.button.button == SDL_BUTTON_MIDDLE  and Config::isHidePortalsByClick()) {
-      world.hidePortals();
-    }
-  }
-}
-
 } /* namespace glPortal */
 
 using namespace glPortal;
