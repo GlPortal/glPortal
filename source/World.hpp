@@ -42,15 +42,14 @@ public:
   void render();
   Entity& getPlayer();
   void hidePortals();
-
+  bool isEditorShown;
+  std::string currentScenePath;
   static float gravity;
 private:
   double gameTime;
   uint32_t lastUpdateTime;
   bool wasF5Down = false;
   bool wasTabDown = false;
-  bool isEditorShown;
-  std::string currentScenePath;
   Renderer *renderer;
   Editor *editor;
   Scene *scene;

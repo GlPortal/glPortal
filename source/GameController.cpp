@@ -5,7 +5,6 @@
 #include <cstdio>
 #include <iostream>
 
-#include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
 #include "engine/env/ArgumentsParser.hpp"
 #include <engine/env/System.hpp>
@@ -57,7 +56,7 @@ void GameController::handleEvent(const SDL_Event &event) {
     if (event.button.button == SDL_BUTTON_RIGHT) {
       world->shootPortal(2);
     }
-    if (event.button.button == SDL_BUTTON_MIDDLE  and Config::isHidePortalsByClick()) {
+    if (event.button.button == SDL_BUTTON_MIDDLE  and Environment::getConfig().isHidePortalsByClick()) {
       world->hidePortals();
     }
   }

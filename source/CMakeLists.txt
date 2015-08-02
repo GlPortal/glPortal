@@ -48,6 +48,7 @@ add_executable(${EXE_NAME}
   engine/component/Transform.cpp
   engine/component/SoundSource.cpp
   assets/scene/SceneHelper.cpp
+  GameController.cpp
   WorldHelper.cpp
   PortalHelper.cpp
   )
