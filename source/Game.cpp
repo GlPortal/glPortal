@@ -15,7 +15,6 @@
 #include <engine/core/event/Dispatcher.hpp>
 #include <engine/core/event/observer/MusicObserver.hpp>
 #include <util/sdl/Fps.hpp>
-#include "Input.hpp"
 #include "GameController.hpp"
 
 namespace glPortal {
