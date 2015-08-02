@@ -28,7 +28,7 @@ Game::Game() : closed(false) {
   MusicObserver musicObserver;
   musicObserver.addCallback(Event::loadScene, std::bind(&MusicObserver::loadMap, musicObserver));
   window.create("GlPortal");
-  
+
   try {
     SoundManager::Init();
     world.create();
@@ -42,8 +42,8 @@ Game::Game() : closed(false) {
 
 World* Game::getWorld() {
   return &world;
-}  
-  
+}
+
 void Game::update() {
   SDL_Event event;
   int skipped;
@@ -54,7 +54,7 @@ void Game::update() {
     //Update the game if it is time
     while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
       controller->handleInput();
-      
+
       SoundManager::Update(world.getPlayer());
       world.update();
       nextUpdate += SKIP_TIME;
@@ -66,7 +66,7 @@ void Game::update() {
   }
   world.destroy();
   window.close();
-  delete(controller);
+  delete (controller);
 }
 
 void Game::close() {
