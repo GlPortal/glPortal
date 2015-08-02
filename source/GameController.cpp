@@ -36,7 +36,7 @@ void GameController::recordKeyEvent(const SDL_Event &event) {
   if (event.type == SDL_QUIT) {
     game->close();
   }
-  
+
   if (event.type == SDL_KEYDOWN) {
     int key = event.key.keysym.scancode;
     int mod = event.key.keysym.mod;
@@ -53,13 +53,13 @@ void GameController::recordKeyEvent(const SDL_Event &event) {
 
     Input::keyReleased(key, mod);
   }
-}  
-  
+}
+
 void GameController::handleKeyInput() {
   if (Input::isKeyDown(SDL_SCANCODE_F1)) {
     world->isDebugEnabled = not world->isDebugEnabled;
   }
-    
+
   // If F5 released, reload the scene
   if (wasF5Down and not Input::isKeyDown(SDL_SCANCODE_F5)) {
     if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
@@ -77,7 +77,7 @@ void GameController::handleKeyInput() {
 
 }
 
-void GameController::handleMouseEvent(const SDL_Event &event) {  
+void GameController::handleMouseEvent(const SDL_Event &event) {
   if (event.type == SDL_MOUSEBUTTONDOWN) {
     if (event.button.button == SDL_BUTTON_LEFT) {
       world->shootPortal(1);
@@ -89,5 +89,5 @@ void GameController::handleMouseEvent(const SDL_Event &event) {
       world->hidePortals();
     }
   }
-}  
+}
 }
