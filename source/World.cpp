@@ -98,22 +98,7 @@ void World::loadScene(const std::string &path) {
 void World::update() {
   uint32_t updateTime = SDL_GetTicks();
   float dtime = (updateTime-lastUpdateTime)/1000.f;
-
-  // If F5 released, reload the scene
-  if (wasF5Down and not Input::isKeyDown(SDL_SCANCODE_F5)) {
-    if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
-      // Enable reload-on-change (inotify on Linux)
-    }
-
-    loadScene(currentScenePath);
-  }
-  wasF5Down = Input::isKeyDown(SDL_SCANCODE_F5);
-  // If Tab released, toggle editor
-  if (wasTabDown and not Input::isKeyDown(SDL_SCANCODE_TAB)) {
-    isEditorShown = not isEditorShown;
-  }
-  wasTabDown = Input::isKeyDown(SDL_SCANCODE_F5);
-
+  
   Entity &player = *scene->player;
   Health &plrHealth = player.getComponent<Health>();
   Transform &plrTform = player.getComponent<Transform>();

@@ -44,14 +44,11 @@ public:
   void render();
   Entity& getPlayer();
   void hidePortals();
-
   static float gravity;
-private:
-  uint32_t lastUpdateTime;
-  bool wasF5Down = false;
-  bool wasTabDown = false;
   bool isEditorShown;
   std::string currentScenePath;
+private:
+  uint32_t lastUpdateTime;
   Renderer *renderer;
   Editor *editor;
   Scene *scene;
