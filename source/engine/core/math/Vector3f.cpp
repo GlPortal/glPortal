@@ -37,10 +37,10 @@ void Vector3f::set(const Vector3f& v) {
 }
 
 Vector3f& Vector3f::normalise() {
-  float l = length();
-  x /= l;
-  y /= l;
-  z /= l;
+  float len = length();
+  x /= len;
+  y /= len;
+  z /= len;
   return *this;
 }
 
@@ -140,8 +140,8 @@ Vector3f negate(const Vector3f& v) {
 }
 
 Vector3f normalise(const Vector3f& v) {
-  float l = v.length();
-  return Vector3f(v.x / l, v.y / l, v.z / l);
+  float len = v.length();
+  return Vector3f(v.x / len, v.y / len, v.z / len);
 }
 
 } /* namespace glPortal */
