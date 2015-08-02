@@ -12,8 +12,9 @@ class Transform : public Component {
 public:
   Vector3f position, scale;
   // URGENT TODO: sort out this angle specification mess
-  /*[[deprecated("Euler angles suffers from multiple issues, use Quaternions instead")]]*/ Vector3f rotation;
-  Vector4f quat;
+  /*[[deprecated("Euler angles suffers from multiple issues, use Quaternions instead")]]*/
+  Vector3f rotation;
+  //Vector4f quat;
 
   Transform(Entity &ent) :
     Component(ent), scale(1, 1, 1) {}

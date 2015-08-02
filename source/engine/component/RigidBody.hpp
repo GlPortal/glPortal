@@ -14,6 +14,7 @@ namespace glPortal {
 class RigidBody : public Component {
 public:
   std::shared_ptr<btCollisionShape> shape;
+  btDefaultMotionState motionState;
   btRigidBody *body;
 
   RigidBody(Entity &ent, float mass, const std::shared_ptr<btCollisionShape> &collisionshape) :
@@ -22,7 +23,9 @@ public:
       entity.addComponent<Transform>();
     }
     Transform &tform = entity.getComponent<Transform>();
-    btDefaultMotionState motionState(btTransform(tform.quat, tform.position));
+    motionState.setWorldTransform(
+      btTransform(btQuaternion(tform.rotation.x, tform.rotation.y, tform.rotation.z),
+      tform.position));
     btRigidBody::btRigidBodyConstructionInfo ci(mass, &motionState, shape.get());
     body = new btRigidBody(ci);
     entity.manager.scene.physics.world->addRigidBody(body);
