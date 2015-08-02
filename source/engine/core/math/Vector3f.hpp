@@ -15,11 +15,21 @@
 
 #include <string>
 
+class btVector3;
+
 namespace glPortal {
 
 class Vector3f {
 public:
-  float x, y, z;
+  union {
+    float x, r, s;
+  };
+  union {
+    float y, g, t;
+  };
+  union {
+    float z, b, u;
+  };
 
   static const Vector3f ZERO;
   static const Vector3f FORWARD;
@@ -49,6 +59,7 @@ public:
   Vector3f operator*(const Vector3f& v) const;
   Vector3f operator*(float scale) const;
   Vector3f operator/(float divisor) const;
+  operator btVector3() const;
 };
 
 /* Utility functions */

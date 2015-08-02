@@ -12,6 +12,7 @@
 #include "Vector3f.hpp"
 #include <cmath>
 #include <sstream>
+#include <bullet/LinearMath/btVector3.h>
 
 namespace glPortal {
 
@@ -37,10 +38,10 @@ void Vector3f::set(const Vector3f& v) {
 }
 
 Vector3f& Vector3f::normalise() {
-  float len = length();
-  x /= len;
-  y /= len;
-  z /= len;
+  float l = length();
+  x /= l;
+  y /= l;
+  z /= l;
   return *this;
 }
 
@@ -122,6 +123,10 @@ Vector3f Vector3f::operator/(float divisor) const {
   return Vector3f(x / divisor, y / divisor, z / divisor);
 }
 
+Vector3f::operator btVector3() const {
+  return btVector3(x, y, z);
+}
+
 /* Utility functions */
 float dot(const Vector3f& v1, const Vector3f& v2) {
   return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
@@ -140,8 +145,8 @@ Vector3f negate(const Vector3f& v) {
 }
 
 Vector3f normalise(const Vector3f& v) {
-  float len = v.length();
-  return Vector3f(v.x / len, v.y / len, v.z / len);
+  float l = v.length();
+  return Vector3f(v.x / l, v.y / l, v.z / l);
 }
 
 } /* namespace glPortal */

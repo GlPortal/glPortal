@@ -3,6 +3,9 @@
 
 #include <cmath>
 
+class btVector4;
+class btQuaternion;
+
 namespace glPortal {
 
 struct Vector2f;
@@ -89,6 +92,9 @@ struct Vector4f {
     x -= v.x; y -= v.y; z -= v.z; w -= v.w;
     return *this;
   }
+
+  operator btVector4() const;
+  operator btQuaternion() const;
 };
 
 inline float length(const Vector4f &v) {
