@@ -1,6 +1,5 @@
 #include "Game.hpp"
 
-#include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_timer.h>
 #include <stdexcept>
 #include <string>
@@ -45,7 +44,6 @@ World* Game::getWorld() {
 }
 
 void Game::update() {
-  SDL_Event event;
   int skipped;
   unsigned int nextUpdate = SDL_GetTicks();
 
