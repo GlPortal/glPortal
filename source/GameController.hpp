@@ -15,6 +15,8 @@ public:
 private:
   World *world;
   Game *game;
+  bool wasF5Down = false;
+  bool wasTabDown = false;
 };
 
 } /* namespace glPortal */
