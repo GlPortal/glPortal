@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <iostream>
 
+#include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
 #include "engine/env/ArgumentsParser.hpp"
 #include <engine/env/System.hpp>
@@ -25,17 +26,14 @@ GameController::GameController(Game *game) {
 void GameController::handleInput() {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
-    recordKeyEvent(event);
-    handleMouseEvent(event);
-    handleKeyInput();
+    handleEvent(event);
   }
 }
 
-void GameController::recordKeyEvent(const SDL_Event &event) {
+void GameController::handleEvent(const SDL_Event &event) {
   if (event.type == SDL_QUIT) {
     game->close();
   }
-
   if (event.type == SDL_KEYDOWN) {
     int key = event.key.keysym.scancode;
     int mod = event.key.keysym.mod;
@@ -52,31 +50,6 @@ void GameController::recordKeyEvent(const SDL_Event &event) {
 
     Input::keyReleased(key, mod);
   }
-}
-
-void GameController::handleKeyInput() {
-  if (Input::isKeyDown(SDL_SCANCODE_F1)) {
-    world->isPhysicsDebugEnabled = not world->isPhysicsDebugEnabled;
-  }
-
-  // If F5 released, reload the scene
-  if (wasF5Down and not Input::isKeyDown(SDL_SCANCODE_F5)) {
-    if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
-      // Enable reload-on-change (inotify on Linux)
-    }
-
-    world->loadScene(world->currentScenePath);
-  }
-  wasF5Down = Input::isKeyDown(SDL_SCANCODE_F5);
-  // If Tab released, toggle editor
-  if (wasTabDown and not Input::isKeyDown(SDL_SCANCODE_TAB)) {
-    world->isEditorShown = not world->isEditorShown;
-  }
-  wasTabDown = Input::isKeyDown(SDL_SCANCODE_F5);
-
-}
-
-void GameController::handleMouseEvent(const SDL_Event &event) {
   if (event.type == SDL_MOUSEBUTTONDOWN) {
     if (event.button.button == SDL_BUTTON_LEFT) {
       world->shootPortal(1);
@@ -84,7 +57,7 @@ void GameController::handleMouseEvent(const SDL_Event &event) {
     if (event.button.button == SDL_BUTTON_RIGHT) {
       world->shootPortal(2);
     }
-    if (event.button.button == SDL_BUTTON_MIDDLE  and Environment::getConfig().isHidePortalsByClick()) {
+    if (event.button.button == SDL_BUTTON_MIDDLE  and Config::isHidePortalsByClick()) {
       world->hidePortals();
     }
   }
