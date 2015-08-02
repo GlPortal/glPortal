@@ -47,6 +47,7 @@ public:
   void hidePortals();
   static float gravity;
   bool isEditorShown;
+  bool isDebugEnabled = false;
   std::string currentScenePath;
 private:
   uint32_t lastUpdateTime;

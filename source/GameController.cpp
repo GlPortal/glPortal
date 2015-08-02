@@ -50,6 +50,11 @@ void GameController::handleEvent(const SDL_Event &event) {
 
     Input::keyReleased(key, mod);
   }
+
+  if (Input::isKeyDown(SDL_SCANCODE_F1)) {
+    world->isDebugEnabled = not world->isDebugEnabled;
+  }
+  
   if (event.type == SDL_MOUSEBUTTONDOWN) {
     if (event.button.button == SDL_BUTTON_LEFT) {
       world->shootPortal(1);

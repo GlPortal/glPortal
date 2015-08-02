@@ -267,7 +267,9 @@ void World::shootPortal(int button) {
 void World::render() {
   renderer->setScene(scene);
   renderer->render(scene->camera);
-  scene->physics.world->debugDrawWorld();
+  if (isDebugEnabled) {
+    scene->physics.world->debugDrawWorld();
+  }
   pdd.render(scene->camera);
   if (isEditorShown) {
     editor->renderUI();
