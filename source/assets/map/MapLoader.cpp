@@ -100,10 +100,11 @@ void MapLoader::extractSpawn() {
     scene->start = &scene->entities.create();
     Transform &t = scene->start->addComponent<Transform>();
     XmlHelper::extractPosition(spawnElement, t.position);
-    XmlHelper::extractRotation(spawnElement, t.rotation);
+    Vector3f eulerOrient;
+    XmlHelper::extractRotation(spawnElement, eulerOrient);
     Transform &pt = scene->player->getComponent<Transform>();
     pt.position = t.position;
-    pt.rotation = t.rotation;
+    pt.orientation.fromEuler(eulerOrient);
   } else {
     throw std::runtime_error("No spawn position defined.");
   }
@@ -149,7 +150,9 @@ void MapLoader::extractDoor() {
     door.clearComponents();
     Transform &t = door.addComponent<Transform>();
     XmlHelper::extractPosition(endElement, t.position);
-    XmlHelper::extractRotation(endElement, t.rotation);
+    Vector3f eulerOrient;
+    XmlHelper::extractRotation(endElement, eulerOrient);
+    t.orientation.fromEuler(eulerOrient);
     MeshDrawable &m = door.addComponent<MeshDrawable>();
     m.material = MaterialLoader::loadFromXML("door/door");
     m.mesh = MeshLoader::getMesh("Door.obj");
@@ -165,7 +168,9 @@ void MapLoader::extractWalls() {
 
       Transform &t = wall.addComponent<Transform>();
       XmlHelper::extractPosition(wallBoxElement, t.position);
-      XmlHelper::extractRotation(wallBoxElement, t.rotation);
+      Vector3f eulerOrient;
+      XmlHelper::extractRotation(wallBoxElement, eulerOrient);
+      t.orientation.fromEuler(eulerOrient);
       XmlHelper::extractScale(wallBoxElement, t.scale);
 
       int mid = -1;
@@ -231,7 +236,9 @@ void MapLoader::extractModels() {
       Entity &model = scene->entities.create();
       Transform &t = model.addComponent<Transform>();
       XmlHelper::extractPosition(modelElement, t.position);
-      XmlHelper::extractRotation(modelElement, t.rotation);
+      Vector3f eulerOrient;
+      XmlHelper::extractRotation(modelElement, eulerOrient);
+      t.orientation.fromEuler(eulerOrient);
       MeshDrawable &m = model.addComponent<MeshDrawable>();
       m.material = MaterialLoader::fromTexture(texture);
       m.mesh = MeshLoader::getMesh(mesh);

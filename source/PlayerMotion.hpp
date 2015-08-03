@@ -64,7 +64,7 @@ public:
   void mouseLook();
   void move(float dtime);
 
-  Vector3f velocity;
+  Vector3f velocity, rotation;
   bool grounded;
   bool flying, noclip;
 

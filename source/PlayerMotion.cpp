@@ -22,7 +22,7 @@ void PlayerMotion::mouseLook() {
   SDL_GetRelativeMouseState(&mousedx, &mousedy);
 
   // Apply mouse movement to view
-  Vector3f &rotation = entity.getComponent<Transform>().rotation;
+  //Vector3f &rotation = entity.getComponent<Transform>().rotation;
   rotation.x -= rad(mousedy * Config::getSensitivity());
   rotation.y -= rad(mousedx * Config::getSensitivity());
 
@@ -58,23 +58,22 @@ void PlayerMotion::move(float dtime) {
     }
   }
 
-  Transform &tform = entity.getComponent<Transform>();
-  float rot = tform.rotation.y;
+  float rot = rotation.y;
   if (entity.getComponent<Health>().isAlive()) {
     Vector3f tmpVel;
-    double yMult = flying ? cos(tform.rotation.x) : 1;
+    double yMult = flying ? cos(rotation.x) : 1;
     if (movingFwd) {
       tmpVel.x -= sin(rot) * yMult;
       tmpVel.z -= cos(rot) * yMult;
       if (flying) {
-        tmpVel.y += sin(tform.rotation.x);
+        tmpVel.y += sin(rotation.x);
       }
     }
     if (movingBack) {
       tmpVel.x += sin(rot) * yMult;
       tmpVel.z += cos(rot) * yMult;
       if (flying) {
-        tmpVel.y -= sin(tform.rotation.x);
+        tmpVel.y -= sin(rotation.x);
       }
     }
     if (strafingLeft) {

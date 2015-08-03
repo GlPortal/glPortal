@@ -200,7 +200,7 @@ void World::update() {
   pos = plrTform.position + plrMotion.velocity;
 
   // Check if the player is moving through a portal
-  BoxCollider playerCollider(pos, plrTform.scale);
+  BoxCollider playerCollider(pos, plrTform.scale);/* TODO reimplement with Bullet
   for (EntityPair &p : scene->portalPairs) {
     Portal &portal1 = p.first->getComponent<Portal>(),
             &portal2 = p.second->getComponent<Portal>();
@@ -224,7 +224,7 @@ void World::update() {
         plrMotion.velocity = portal1.getDirection() * velocity;
       }
     }
-  }
+  }*/
 
   //Add velocity to the player position
   plrTform.position += plrMotion.velocity;
@@ -235,7 +235,7 @@ void World::update() {
   renderer->getViewport()->getSize(&vpWidth, &vpHeight);
   scene->camera.setAspect((float)vpWidth / vpHeight);
   scene->camera.setPosition(plrTform.position + Vector3f(0, plrTform.scale.y/2, 0));
-  scene->camera.setRotation(plrTform.rotation);
+  scene->camera.setRotation(plrMotion.rotation);
 
   //Check if the end of the level has been reached
   float distToEnd = (scene->end->getComponent<Transform>().position - plrTform.position).length();

@@ -24,10 +24,6 @@ Vector3f Portal::getDirection() const {
   return direction;
 }
 
-bool Portal::throughPortal(const BoxCollider &collider) const {
-  return PortalHelper::goesThroughPortal(entity, collider);
-}
-
 bool Portal::inPortal(const BoxCollider &collider) const {
   
   return PortalHelper::isInPortal(entity, collider);
@@ -50,7 +46,7 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
   }
 
   Transform &t = entity.getComponent<Transform>();
-  Vector3f &rotation = t.rotation;
+  Quaternion &orientation = t.orientation;
   Vector3f &position = t.position;
   Vector3f &scale = t.scale;
   position = point;
@@ -65,13 +61,11 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
   }
 
   if (wall.size.z >= 1 && wall.size.y >= 2 && (side == 0 || side == 1)) {
-    rotation.x = 0;
     if (side == 0) {
-      rotation.y = rad(90);
+      orientation.fromAxAngle(0, 1, 0, rad(90));
       scale.set(1, 2, 1);
-    }
-    if (side == 1) {
-      rotation.y = rad(-90);
+    } else if (side == 1) {
+      orientation.fromAxAngle(0, 1, 0, rad(-90));
       scale.set(1, 2, 1);
     }
     if (position.z - scale.z/2 < wall.position.z - wall.size.z/2) {
@@ -89,13 +83,11 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
     open = true;
   }
   if (wall.size.x >= 1 && wall.size.y >= 2 && (side == 2 || side == 3)) {
-    rotation.x = 0;
     if (side == 2) {
-      rotation.y = 0;
+      orientation.fromAxAngle(0, 1, 0, 0);
       scale.set(1, 2, 1);
-    }
-    if (side == 3) {
-      rotation.y = rad(180);
+    } else if (side == 3) {
+      orientation.fromAxAngle(0, 1, 0, rad(180));
       scale.set(1, 2, 1);
     }
     if (position.x - scale.x/2 < wall.position.x - wall.size.x/2) {
@@ -113,13 +105,14 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
     open = true;
   }
   if (wall.size.x >= 1 && wall.size.z >= 2 && (side == 4 || side == 5)) {
-    rotation.y = std::atan2(point.x-launchPos.x, point.z-launchPos.z);
+    orientation.fromAxAngle(0, 1, 0, rad(90));
+    float yRot = std::atan2(point.x-launchPos.x, point.z-launchPos.z);
     if (side == 4) {
-      rotation.x = rad(-90);
+      orientation.fromEuler(rad(-90), yRot, 0);
       scale.set(1, 2, 2);
     }
     if (side == 5) {
-      rotation.x = rad(90);
+      orientation.fromEuler(rad(90), yRot, 0);
       scale.set(1, 2, 2);
     }
     if (position.x - scale.x/2 < wall.position.x - wall.size.x/2) {

@@ -20,7 +20,6 @@ public:
 
   Portal(Entity &ent) : Component(ent), open(false) {}
   Vector3f getDirection() const;
-  bool throughPortal(const BoxCollider &collider) const;
   bool inPortal(const BoxCollider &collider) const;
   void placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, const Vector3f &point);
 

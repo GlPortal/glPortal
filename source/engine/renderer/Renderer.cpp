@@ -231,7 +231,7 @@ void Renderer::renderPlayer(const Camera &cam) {
   const Transform &t = scene->player->getComponent<Transform>();
   Matrix4f mtx;
   mtx.translate(t.position+Vector3f(0, -.5f, 0));
-  mtx.rotate(t.rotation.y, 0, 1, 0);
+  mtx.rotate(t.orientation);
   mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
   const Mesh &dummy = MeshLoader::getMesh("HumanToken.obj");
   const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
@@ -402,11 +402,11 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &
   Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
   p1mat.translate(p1T.position);
-  p1mat.rotate(p1T.rotation);
+  p1mat.rotate(p1T.orientation);
   Transform &p2T = otherPortal.getComponent<Transform>();
   Matrix4f p2mat;
   p2mat.translate(p2T.position);
-  p2mat.rotate(p2T.rotation);
+  p2mat.rotate(p2T.orientation);
   Matrix4f rotate180; rotate180.rotate(rad(180), 0, 1, 0);
   Matrix4f view; cam.getViewMatrix(view);
   Matrix4f destView = view * p1mat * rotate180 * inverse(p2mat);
@@ -427,6 +427,7 @@ static float sign(float v) {
 }
 
 Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj) {
+/*
   const Transform &t = ent.getComponent<Transform>();
   Vector4f clipPlane(Math::toDirection(t.rotation), -dot(Math::toDirection(t.rotation), t.position));
   clipPlane = inverse(transpose(view)) * clipPlane;
@@ -450,6 +451,7 @@ Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Ma
   newProj[10] = c.z - newProj[11];
   newProj[14] = c.w - newProj[15];
   return newProj;
+*/
 }
 
 } /* namespace glPortal */

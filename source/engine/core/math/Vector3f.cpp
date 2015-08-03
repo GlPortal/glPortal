@@ -127,6 +127,11 @@ Vector3f::operator btVector3() const {
   return btVector3(x, y, z);
 }
 
+Vector3f& Vector3f::operator=(const btVector3 &v) {
+  x = v.x(); y = v.y(); z = v.z();
+  return *this;
+}
+
 /* Utility functions */
 float dot(const Vector3f& v1, const Vector3f& v2) {
   return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;

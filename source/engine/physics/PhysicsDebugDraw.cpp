@@ -30,6 +30,12 @@ void PhysicsDebugDraw::drawLine(const btVector3 &from, const btVector3 &to, cons
   points.emplace_back(PtData{to.x(), to.y(), to.z(), color.x(), color.y(), color.z()});
 }
 
+void PhysicsDebugDraw::drawLine(const btVector3& from, const btVector3& to,
+  const btVector3& fromColor, const btVector3& toColor) {
+  points.emplace_back(PtData{from.x(), from.y(), from.z(), fromColor.x(), fromColor.y(), fromColor.z()});
+  points.emplace_back(PtData{to.x(), to.y(), to.z(), toColor.x(), toColor.y(), toColor.z()});
+}
+
 void PhysicsDebugDraw::drawContactPoint(const btVector3 &PointOnB, const btVector3 &normalOnB,
   btScalar distance, int lifeTime, const btVector3 &color) {
   ;

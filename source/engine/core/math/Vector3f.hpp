@@ -22,13 +22,13 @@ namespace glPortal {
 class Vector3f {
 public:
   union {
-    float x, r, s;
+    float x, r, s, pitch;
   };
   union {
-    float y, g, t;
+    float y, g, t, yaw;
   };
   union {
-    float z, b, u;
+    float z, b, u, roll;
   };
 
   static const Vector3f ZERO;
@@ -59,7 +59,9 @@ public:
   Vector3f operator*(const Vector3f& v) const;
   Vector3f operator*(float scale) const;
   Vector3f operator/(float divisor) const;
+
   operator btVector3() const;
+  Vector3f& operator=(const btVector3&);
 };
 
 /* Utility functions */

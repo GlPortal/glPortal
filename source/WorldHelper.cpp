@@ -59,12 +59,12 @@ bool WorldHelper::isPlayerPortalingX(BoxCollider &box, Entity *player, Scene *sc
       const Transform &p1Tform = p.first->getComponent<Transform>(),
         &p2Tform = p.second->getComponent<Transform>();
       if (portal1.inPortal(box)) {
-        if (p1Tform.rotation.x == 0 and (p1Tform.rotation.y == rad(-90) || p1Tform.rotation.y == rad(90))) {
+        if (p1Tform.orientation.toAxAngle().x == 0 and (p1Tform.orientation.toAxAngle().y == rad(-90) || p1Tform.orientation.toAxAngle().y == rad(90))) {
           portaling = true;
         }
       }
       if (portal2.inPortal(box)) {
-        if (p2Tform.rotation.x == 0 and (p2Tform.rotation.y == rad(-90) || p2Tform.rotation.y == rad(90))) {
+        if (p2Tform.orientation.toAxAngle().x == 0 and (p2Tform.orientation.toAxAngle().y == rad(-90) || p2Tform.orientation.toAxAngle().y == rad(90))) {
           portaling = true;
         }
       }
@@ -82,12 +82,12 @@ bool WorldHelper::isPlayerPortalingY(BoxCollider &box, Entity *player, Scene *sc
       const Transform &p1Tform = p.first->getComponent<Transform>(),
         &p2Tform = p.second->getComponent<Transform>();
       if (portal1.inPortal(box)) {
-        if (p1Tform.rotation.x == rad(-90) || p1Tform.rotation.x == rad(90)) {
+        if (p1Tform.orientation.toAxAngle().x == rad(-90) || p1Tform.orientation.toAxAngle().x == rad(90)) {
           portaling = true;
         }
       }
       if (portal2.inPortal(box)) {
-        if (p2Tform.rotation.x == rad(-90) || p2Tform.rotation.x == rad(90)) {
+        if (p2Tform.orientation.toAxAngle().x == rad(-90) || p2Tform.orientation.toAxAngle().x == rad(90)) {
           portaling = true;
         }
       }
@@ -105,12 +105,12 @@ bool WorldHelper::isPlayerPortalingZ(BoxCollider &box, Entity *player, Scene *sc
       const Transform &p1Tform = p.first->getComponent<Transform>(),
         &p2Tform = p.second->getComponent<Transform>();
       if (portal1.inPortal(box)) {
-        if (p1Tform.rotation.x == 0 and (p1Tform.rotation.y == 0 || p1Tform.rotation.y == rad(180))) {
+        if (p1Tform.orientation.toAxAngle().x == 0 and (p1Tform.orientation.toAxAngle().y == 0 || p1Tform.orientation.toAxAngle().y == rad(180))) {
           portaling = true;
         }
       }
       if (portal2.inPortal(box)) {
-        if (p2Tform.rotation.x == 0 and (p2Tform.rotation.y == 0 || p2Tform.rotation.y == rad(180))) {
+        if (p2Tform.orientation.toAxAngle().x == 0 and (p2Tform.orientation.toAxAngle().y == 0 || p2Tform.orientation.toAxAngle().y == rad(180))) {
           portaling = true;
         }
       }

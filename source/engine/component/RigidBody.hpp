@@ -23,10 +23,10 @@ public:
       entity.addComponent<Transform>();
     }
     Transform &tform = entity.getComponent<Transform>();
-    motionState.setWorldTransform(
-      btTransform(btQuaternion(tform.rotation.x, tform.rotation.y, tform.rotation.z),
-        tform.position));
-    btRigidBody::btRigidBodyConstructionInfo ci(mass, &motionState, shape.get());
+    motionState.setWorldTransform(btTransform(tform.orientation, tform.position));
+    btVector3 localInertia(0, 0, 0);
+    collisionshape->calculateLocalInertia(mass, localInertia);
+    btRigidBody::btRigidBodyConstructionInfo ci(mass, &motionState, shape.get(), localInertia);
     body = new btRigidBody(ci);
     entity.manager.scene.physics.world->addRigidBody(body);
   }

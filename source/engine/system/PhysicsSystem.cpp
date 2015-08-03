@@ -24,6 +24,7 @@ void PhysicsSystem::update(float dtime) {
         Entity &e = scene->entities.create();
         Transform &t = e.addComponent<Transform>();
         t.position = pos;
+        t.orientation.fromEuler(0, rad(45), 0);
         MeshDrawable &m = e.addComponent<MeshDrawable>();
         m.material = MaterialLoader::fromTexture("HumanToken.png");
         m.mesh = MeshLoader::getMesh("Cube.obj");
@@ -38,15 +39,10 @@ void PhysicsSystem::update(float dtime) {
       RigidBody &b = e.getComponent<RigidBody>();
       if (not b.body->isStaticObject()) {
         Transform &t = e.getComponent<Transform>();
-        btTransform trans;
-        b.body->getMotionState()->getWorldTransform(trans);
-        btVector3 &origin = trans.getOrigin();
-        t.position.x = origin.getX();
-        t.position.y = origin.getY();
-        t.position.z = origin.getZ();
-        t.rotation.x = trans.getRotation().getX();
-        t.rotation.y = trans.getRotation().getY();
-        t.rotation.z = trans.getRotation().getZ();
+        btTransform btTform;
+        b.body->getMotionState()->getWorldTransform(btTform);
+        t.position = btTform.getOrigin();
+        t.orientation = btTform.getRotation();
       }
     }
   }

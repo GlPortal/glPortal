@@ -163,7 +163,6 @@ Mesh MeshLoader::getPortalBox(const Entity &wall) {
   glEnableVertexAttribArray(0);
 
   const Transform &t = wall.getComponent<Transform>();
-  const Vector3f &rotation = t.rotation;
   const Vector3f &position = t.position;
   const Vector3f &scale = t.scale;
 

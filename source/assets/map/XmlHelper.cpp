@@ -1,7 +1,5 @@
 #include "XmlHelper.hpp"
 
-#include <iostream>
-#include <cstdio>
 #include <stdexcept>
 #include <vector>
 
@@ -22,13 +20,13 @@ void XmlHelper::pushAttributeVertexToVector(XMLElement *xmlElement, Vector3f &ta
     int xQueryResult = xmlElement->QueryFloatAttribute("x", &targetVector.x);
     int yQueryResult = xmlElement->QueryFloatAttribute("y", &targetVector.y);
     int zQueryResult = xmlElement->QueryFloatAttribute("z", &targetVector.z);
-    if(xQueryResult == XML_NO_ATTRIBUTE){
+    if (xQueryResult == XML_NO_ATTRIBUTE){
       throwMandatoryAttributeException("<x>");
     }
-    if(yQueryResult == XML_NO_ATTRIBUTE){
+    if (yQueryResult == XML_NO_ATTRIBUTE){
       throwMandatoryAttributeException("<y>");
     }
-    if(zQueryResult == XML_NO_ATTRIBUTE){
+    if (zQueryResult == XML_NO_ATTRIBUTE){
       throwMandatoryAttributeException("<z>");
     }
   } else {
@@ -47,12 +45,13 @@ void XmlHelper::extractPosition(XMLElement *xmlElement, Vector3f &position) {
 void XmlHelper::extractRotation(XMLElement *xmlElement, Vector3f &rotation) {
   XMLElement *elm = xmlElement->FirstChildElement("rotation");
   if (elm) {
-    pushAttributeVertexToVector(elm, rotation);
-    rotation.x = rad(rotation.x);
-    rotation.y = rad(rotation.y);
-    rotation.z = rad(rotation.z);
+    Vector3f tmpRot;
+    pushAttributeVertexToVector(elm, tmpRot);
+    rotation.pitch = rad(tmpRot.y);
+    rotation.yaw   = rad(tmpRot.x);
+    rotation.roll  = rad(tmpRot.z);
   } else {
-    rotation.x = rotation.y = rotation.z = 0;
+    rotation.pitch = rotation.yaw = rotation.roll = 0;
   }
 }
 
