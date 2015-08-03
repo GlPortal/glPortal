@@ -28,6 +28,7 @@ public:
     collisionshape->calculateLocalInertia(mass, localInertia);
     btRigidBody::btRigidBodyConstructionInfo ci(mass, &motionState, shape.get(), localInertia);
     body = new btRigidBody(ci);
+    body->setUserPointer(&entity);
     entity.manager.scene.physics.world->addRigidBody(body);
   }
 

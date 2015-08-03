@@ -5,6 +5,7 @@
 #include <engine/env/Environment.hpp>
 #include <engine/component/Health.hpp>
 #include <engine/component/SoundSource.hpp>
+#include <engine/component/RigidBody.hpp>
 #include <Input.hpp>
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_keyboard.h>
@@ -35,7 +36,13 @@ void PlayerMotion::move(float dtime) {
        movingBack    = Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN),
        strafingLeft  = Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT),
        strafingRight = Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT);
-
+       float rot = rotation.y;
+  if (movingFwd) {
+    Vector3f force; force.x -= sin(rot);
+      force.z -= cos(rot);
+    entity.getComponent<RigidBody>().body->applyCentralForce(force*4);
+  }
+#if 0
   if (velocity.x <= MIN_SPEED_ON_AXIS and velocity.x >= -MIN_SPEED_ON_AXIS) {
     velocity.x = 0;
   } else {
@@ -118,6 +125,7 @@ void PlayerMotion::move(float dtime) {
       }
     }
   }
+#endif
 }
 
 } /* namespace glPortal */

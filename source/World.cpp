@@ -121,7 +121,7 @@ void World::update() {
 
   // Figure out the provisional new player position
   Vector3f pos = plrTform.position + plrMotion.velocity;
-
+/*
   //Y collision
   BoxCollider bboxY(Vector3f(plrTform.position.x, pos.y, plrTform.position.z), plrTform.scale);
   

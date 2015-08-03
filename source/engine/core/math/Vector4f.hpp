@@ -131,11 +131,9 @@ struct Quaternion : public Vector4f {
   Vector4f toAxAngle() const;
   Matrix4f toMatrix() const;
 
+  using Vector4f::operator=;
   using Vector4f::operator btVector4;
-  using Vector4f::operator=;
-
   using Vector4f::operator btQuaternion;
-  using Vector4f::operator=;
 };
 
 inline float length(const Vector4f &v) {

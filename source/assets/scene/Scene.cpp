@@ -3,6 +3,7 @@
 #include <engine/component/Health.hpp>
 #include <engine/component/SoundSource.hpp>
 #include <engine/component/SoundListener.hpp>
+#include <engine/component/RigidBody.hpp>
 #include "../../PlayerMotion.hpp"
 
 namespace glPortal {
@@ -33,10 +34,12 @@ Scene::Scene() :
   entities(*this) {
   player = &entities.create();
   player->addComponent<Transform>();
+  player->getComponent<Transform>().position = Vector3f(2.5, 1, 5);
   player->addComponent<PlayerMotion>();
   player->addComponent<Health>();
   player->addComponent<SoundSource>();
   player->addComponent<SoundListener>();
+  player->addComponent<RigidBody>(1, std::make_shared<btCapsuleShape>(.4, 1));
 }
 
 } /* namespace glPortal */
