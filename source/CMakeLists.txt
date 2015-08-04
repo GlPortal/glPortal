@@ -32,6 +32,7 @@ add_executable(${EXE_NAME}
   engine/core/event/observer/FlagObserver.cpp
   engine/core/event/observer/MusicObserver.cpp
   engine/core/event/Observer.cpp
+  engine/core/gl/TightDataPacker.cpp
   engine/core/gl/VBO.cpp
   engine/component/Health.cpp
   engine/component/Transform.cpp

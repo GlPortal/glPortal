@@ -10,12 +10,12 @@
 #include <assimp/vector3.h>
 #include <epoxy/gl.h>
 
-#include "engine/env/Environment.hpp"
-#include "engine/Entity.hpp"
-#include "engine/core/math/Vector2f.hpp"
-#include "engine/core/math/Vector3f.hpp"
+#include <engine/env/Environment.hpp>
+#include <engine/Entity.hpp>
+#include <engine/core/math/Vector2f.hpp>
+#include <engine/core/math/Vector3f.hpp>
+#include <engine/core/gl/TightDataPacker.hpp>
 #include <engine/component/Transform.hpp>
-#include <cstdio>
 
 namespace glPortal {
 
@@ -131,112 +131,131 @@ Mesh MeshLoader::getPortalBox(const Entity &wall) {
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
 
-  //Vertices
-  Vector3f vertices[8] = {Vector3f(-0.5, -0.5f, -0.5f),
-                          Vector3f(-0.5f, -0.5f, 0.5f),
-                          Vector3f(-0.5f, 0.5f, -0.5f),
-                          Vector3f(-0.5f, 0.5f, 0.5f),
-                          Vector3f(0.5f, -0.5f, -0.5f),
-                          Vector3f(0.5f, -0.5f, 0.5f),
-                          Vector3f(0.5f, 0.5f, -0.5f),
-                          Vector3f(0.5f, 0.5f, 0.5f)};
+  /* == Static part: vertices, normals and tangents == */
 
-  mesh.vertices.resize(8);
-  for (int i = 0; i < 8; i++) {
-    mesh.vertices[i] = vertices[i];
-  }
+  constexpr unsigned int
+    coordsSize = sizeof(float)*3,
+    texcSize = sizeof(float)*2,
+    normalsSize = sizeof(int8_t)*3,
+    tangentsSize = sizeof(int8_t)*3,
+    vtxSize = coordsSize + texcSize + normalsSize + tangentsSize,
+    vboSize = vtxSize * 3 /*verts*/ * 2 /*tris*/ * 6 /*faces*/;
+  TightDataPacker data(vboSize);
 
-  float vi[36] = {3,1,5,3,5,7, 7,5,4,7,4,6, 6,4,0,6,0,2, 2,0,1,2,1,3, 2,3,7,2,7,6, 1,0,4,1,4,5};
-  float vertexBuffer[36 * 3];
-  for(int i = 0; i < 36; i++) {
-    int index = vi[i];
-    vertexBuffer[i * 3 + 0] = vertices[index].x;
-    vertexBuffer[i * 3 + 1] = vertices[index].y;
-    vertexBuffer[i * 3 + 2] = vertices[index].z;
-  }
-  //Put the vertex buffer into the VAO
-  GLuint vertexVBO;
-  glGenBuffers(1, &vertexVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36 * 3, vertexBuffer, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
-  glEnableVertexAttribArray(0);
+  static const float vertices[8][3] = {
+    {-0.5f, -0.5f, -0.5f},
+    {-0.5f, -0.5f,  0.5f},
+    {-0.5f,  0.5f, -0.5f},
+    {-0.5f,  0.5f,  0.5f},
+    { 0.5f, -0.5f, -0.5f},
+    { 0.5f, -0.5f,  0.5f},
+    { 0.5f,  0.5f, -0.5f},
+    { 0.5f,  0.5f,  0.5f}
+  };
+  static const uint8_t vi[36] = {
+    3,1,5,3,5,7, // Front
+    7,5,4,7,4,6, // Left
+    6,4,0,6,0,2, // Back
+    2,0,1,2,1,3, // Right
+    2,3,7,2,7,6, // Top
+    1,0,4,1,4,5  // Bottom
+  };
 
   const Transform &t = wall.getComponent<Transform>();
   const Vector3f &position = t.position;
   const Vector3f &scale = t.scale;
+  const float texCoords[8][2] = {
+    {0, 0},
+    {scale.x, 0},
+    {scale.z, 0},
+    {0, scale.y},
+    {0, scale.z},
+    {scale.x, scale.y},
+    {scale.x, scale.z},
+    {scale.z, scale.y}
+  };
+  static const uint8_t ti[36] = {
+    0,3,5,0,5,1,
+    0,3,7,0,7,2,
+    0,3,5,0,5,1,
+    0,3,7,0,7,2,
+    0,4,6,0,6,1,
+    0,4,6,0,6,1
+  };
 
-  //Texture coordinates
-  Vector2f texCoords[8] = {Vector2f(0, 0),
-                          Vector2f(scale.x, 0),
-                          Vector2f(scale.z, 0),
-                          Vector2f(0, scale.y),
-                          Vector2f(0, scale.z),
-                          Vector2f(scale.x, scale.y),
-                          Vector2f(scale.x, scale.z),
-                          Vector2f(scale.z, scale.y)};
+  static const int8_t normals[6][3] = {
+    { 0,  0,  1},
+    { 1,  0,  0},
+    { 0,  0, -1},
+    {-1,  0,  0},
+    { 0,  1,  0},
+    { 0, -1,  0}
+  };
+  static const uint8_t ni[36] = {
+    0,0,0,0,0,0,
+    1,1,1,1,1,1,
+    2,2,2,2,2,2,
+    3,3,3,3,3,3,
+    4,4,4,4,4,4,
+    5,5,5,5,5,5
+  };
 
-  float ti[36] = {0,3,5,0,5,1, 0,3,7,0,7,2, 0,3,5,0,5,1, 0,3,7,0,7,2, 0,4,6,0,6,1, 0,4,6,0,6,1};
-  float textureBuffer[36 * 2];
-  for(int i = 0; i < 36; i++) {
-    int index = ti[i];
-    textureBuffer[i * 2 + 0] = texCoords[index].x;
-    textureBuffer[i * 2 + 1] = texCoords[index].y;
+  static const int8_t tangents[6][3] = {
+    { 0,  1,  0},
+    { 0,  0,  1},
+    { 0, -1,  0},
+    { 0,  0, -1},
+    { 1,  0,  0},
+    {-1,  0,  0}
+  };
+  static const uint8_t tai[36] = {
+    0,0,0,0,0,0,
+    1,1,1,1,1,1,
+    2,2,2,2,2,2,
+    3,3,3,3,3,3,
+    4,4,4,4,4,4,
+    5,5,5,5,5,5
+  };
+  constexpr unsigned int
+    texCoordsOffset = coordsSize,
+    normalsOffset = texCoordsOffset + texcSize,
+    tangentsOffset = normalsOffset + normalsSize;
+  for(int i = 0; i < 36; ++i) {
+    const float *v = vertices[vi[i]];
+    data << v[0] << v[1] << v[2];
+    
+    const float *t = texCoords[ti[i]];
+    data << t[0] << t[1];
+
+    const int8_t *n = normals[ni[i]];
+    data << n[0] << n[1] << n[2];
+
+    const int8_t *ta = tangents[tai[i]];
+    data << ta[0] << ta[1] << ta[2];
   }
-  //Put the texture buffer into the VAO
-  GLuint textureVBO;
-  glGenBuffers(1, &textureVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36 * 2, textureBuffer, GL_STATIC_DRAW);
-  glVertexAttribPointer(1, 2, GL_FLOAT, 0, 0, 0);
+  mesh.vertices.resize(8);
+  for (int i = 0; i < 8; ++i) {
+    const float *v = vertices[i];
+    mesh.vertices[i] = Vector3f(v[0], v[1], v[2]);
+  }
+
+  assert(data.getSize() == vboSize);
+
+  GLuint vbo;
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, vboSize, data.getDataPtr(), GL_STATIC_DRAW);
+  // Vertices
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vtxSize, nullptr);
+  glEnableVertexAttribArray(0);
+  // Tex coords
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vtxSize, (GLvoid*)texCoordsOffset);
   glEnableVertexAttribArray(1);
-
-  //Normals
-  Vector3f normals[6] = {Vector3f(0, 0, 1),
-                         Vector3f(1, 0, 0),
-                         Vector3f(0, 0, -1),
-                         Vector3f(-1, 0, 0),
-                         Vector3f(0, 1, 0),
-                         Vector3f(0, -1, 0)};
-
-  float ni[36] = {0,0,0,0,0,0, 1,1,1,1,1,1, 2,2,2,2,2,2, 3,3,3,3,3,3, 4,4,4,4,4,4, 5,5,5,5,5,5};
-  float normalBuffer[36 * 3];
-  for(int i = 0; i < 36; i++) {
-    int index = ni[i];
-    normalBuffer[i * 3 + 0] = normals[index].x;
-    normalBuffer[i * 3 + 1] = normals[index].y;
-    normalBuffer[i * 3 + 2] = normals[index].z;
-  }
-  //Put the normal buffer into the VAO
-  GLuint normalVBO;
-  glGenBuffers(1, &normalVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36 * 3, normalBuffer, GL_STATIC_DRAW);
-  glVertexAttribPointer(2, 3, GL_FLOAT, 0, 0, 0);
+  // Normals
+  glVertexAttribPointer(2, 3, GL_BYTE, GL_FALSE, vtxSize, (GLvoid*)normalsOffset);
   glEnableVertexAttribArray(2);
-  
-  //Tangents
-  Vector3f tangents[6] = {Vector3f(0, 1, 0),
-                         Vector3f(0, 0, 1),
-                         Vector3f(0, -1, 0),
-                         Vector3f(0, 0, -1),
-                         Vector3f(1, 0, 0),
-                         Vector3f(-1, 0, 0)};
-
-  float tai[36] = {0,0,0,0,0,0, 1,1,1,1,1,1, 2,2,2,2,2,2, 3,3,3,3,3,3, 4,4,4,4,4,4, 5,5,5,5,5,5};
-  float tangentsBuffer[36 * 3];
-  for(int i = 0; i < 36; i++) {
-    int index = tai[i];
-    tangentsBuffer[i * 3 + 0] = tangents[index].x;
-    tangentsBuffer[i * 3 + 1] = tangents[index].y;
-    tangentsBuffer[i * 3 + 2] = tangents[index].z;
-  }
-  //Put the normal buffer into the VAO
-  GLuint tangentsVBO;
-  glGenBuffers(1, &tangentsVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, tangentsVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36 * 3, tangentsBuffer, GL_STATIC_DRAW);
-  glVertexAttribPointer(3, 3, GL_FLOAT, 0, 0, 0);
+  // Tangents
+  glVertexAttribPointer(3, 3, GL_BYTE, GL_FALSE, vtxSize, (GLvoid*)tangentsOffset);
   glEnableVertexAttribArray(3);
 
   //Unbind the buffers
