@@ -30,7 +30,7 @@ void WorldHelper::shootPortal(int button, Scene *scene) {
         Portal &portal = pEnt.getComponent<Portal>();
         portal.openSince = SDL_GetTicks();
         portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png"); 
-        portal.placeOnWall(scene->camera.getPosition(), closestWall->getComponent<AACollisionBox>().box, ipos);
+        portal.placeOnWall(scene->camera.getPosition(), ent.getComponent<AACollisionBox>().box, ipos);
         LightSource &pLight = pEnt.getComponent<LightSource>();
 
         if (button == 1) {
