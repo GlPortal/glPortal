@@ -18,25 +18,28 @@ void WorldHelper::shootPortal(int button, Scene *scene) {
   scene->physics.world->rayTest(btFrom, btTo, res);
 
   if (res.hasHit()) {
-    const Entity *closestWall = (Entity*)res.m_collisionObject->getUserPointer();
+    const Entity *pEnt = (Entity*)res.m_collisionObject->getUserPointer();
+    // All RigidBodies should have their pointer set, but check anyway
+    if (pEnt) {
+      const Entity &ent = *pEnt;
+      // TODO: material in separate Component, + 1 mat per face
+      if (ent.hasComponent<MeshDrawable>() and ent.getComponent<MeshDrawable>().material.portalable) {
+        EntityPair &pPair = SceneHelper::getPortalPairFromScene(0, scene);
+        Vector3f ipos(res.m_hitPointWorld);
+        Entity &pEnt = (button == 1) ? *pPair.first : *pPair.second;
+        Portal &portal = pEnt.getComponent<Portal>();
+        portal.openSince = SDL_GetTicks();
+        portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png"); 
+        portal.placeOnWall(scene->camera.getPosition(), ent.getComponent<AACollisionBox>().box, ipos);
+        LightSource &pLight = pEnt.getComponent<LightSource>();
 
-    EntityPair &pPair = SceneHelper::getPortalPairFromScene(0, scene);
-    // TODO: material in separate Component, + 1 mat per face
-    if (closestWall->getComponent<MeshDrawable>().material.portalable) {
-      Vector3f ipos(res.m_hitPointWorld);
-      Entity &pEnt = (button == 1) ? *pPair.first : *pPair.second;
-      Portal &portal = pEnt.getComponent<Portal>();
-      portal.openSince = SDL_GetTicks();
-      portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png"); 
-      portal.placeOnWall(scene->camera.getPosition(), closestWall->getComponent<AACollisionBox>().box, ipos);
-      LightSource &pLight = pEnt.getComponent<LightSource>();
-
-      if (button == 1) {
-        portal.overlayTex.diffuse = TextureLoader::getTexture("blueportal.png");
-        portal.color = pLight.color = Portal::BLUE_COLOR;
-      } else {
-        portal.overlayTex.diffuse = TextureLoader::getTexture("orangeportal.png");
-        portal.color = pLight.color = Portal::ORANGE_COLOR;
+        if (button == 1) {
+          portal.overlayTex.diffuse = TextureLoader::getTexture("blueportal.png");
+          portal.color = pLight.color = Portal::BLUE_COLOR;
+        } else {
+          portal.overlayTex.diffuse = TextureLoader::getTexture("orangeportal.png");
+          portal.color = pLight.color = Portal::ORANGE_COLOR;
+        }
       }
     }
   }
