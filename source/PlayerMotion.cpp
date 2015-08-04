@@ -35,36 +35,58 @@ void PlayerMotion::move(float dtime) {
   bool movingFwd     = Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP),
        movingBack    = Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN),
        strafingLeft  = Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT),
-       strafingRight = Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT);
-       float rot = rotation.y;
-  if (movingFwd) {
-    Vector3f force; force.x -= sin(rot);
-      force.z -= cos(rot);
-    entity.getComponent<RigidBody>().body->applyCentralForce(force*4);
+       strafingRight = Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT),
+       jumping       = Input::isKeyDown(SDL_SCANCODE_SPACE) or Input::isKeyDown(SDL_SCANCODE_BACKSPACE);
+  float rot = rotation.y;
+  Vector3f force;
+  btRigidBody &rb = *entity.getComponent<RigidBody>().body;
+  if (movingFwd or movingBack or strafingLeft or strafingRight or jumping) {
+    rb.activate();
   }
-#if 0
-  if (velocity.x <= MIN_SPEED_ON_AXIS and velocity.x >= -MIN_SPEED_ON_AXIS) {
-    velocity.x = 0;
-  } else {
-    velocity.x *= std::pow(FRICTION, dtime);
-  }
-  if (velocity.z <= MIN_SPEED_ON_AXIS and velocity.z >= -MIN_SPEED_ON_AXIS) {
-    velocity.z = 0;
-  } else {
-    velocity.z *= std::pow(FRICTION, dtime);
-  }
-  if (not grounded) {
-    if (flying) {
-      if (velocity.y <= MIN_SPEED_ON_AXIS and velocity.y >= -MIN_SPEED_ON_AXIS) {
-        velocity.y = 0;
-      } else {
-        velocity.y *= std::pow(FRICTION, dtime);
+  if (rb.isActive()) {
+    if (jumping and grounded) {
+      std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);
+        entity.getComponent<SoundSource>().playSound(
+          Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)]);
+      grounded = false;
+      force.y = 10;
+      rb.applyCentralForce(force*8);
+      force.y = 0;
+    }
+    if (movingFwd) {
+      force.x = -sin(rot);
+      force.z = -cos(rot);
+      rb.applyCentralForce(force*8);
+    }
+    if (movingBack) {
+      force.x = sin(rot);
+      force.z = cos(rot);
+      rb.applyCentralForce(force*8);
+    }
+    if (strafingLeft) {
+      force.x = -cos(rot);
+      force.z = sin(rot);
+      rb.applyCentralForce(force*8);
+    }
+    if (strafingRight) {
+      force.x = cos(rot);
+      force.z = -sin(rot);
+      rb.applyCentralForce(force*8);
+    }
+    
+    if (grounded) {
+      stepCounter += abs(velocity.x);
+      stepCounter += abs(velocity.z);
+
+      if(stepCounter>=2.5f) {
+        std::uniform_int_distribution<> dis(0, PLAYER_FOOT_SOUND.size()-1);
+        entity.getComponent<SoundSource>().playSound(
+          Environment::getDataDir() + PLAYER_FOOT_SOUND[dis(generator)]);
+        stepCounter-=2.5f;
       }
-    } else {
-      velocity.y -= World::gravity * dtime;
     }
   }
-
+#if 0
   float rot = rotation.y;
   if (entity.getComponent<Health>().isAlive()) {
     Vector3f tmpVel;
@@ -83,48 +105,6 @@ void PlayerMotion::move(float dtime) {
         tmpVel.y -= sin(rotation.x);
       }
     }
-    if (strafingLeft) {
-      tmpVel.x += -cos(rot);
-      tmpVel.z += sin(rot);
-    }
-    if (strafingRight) {
-      tmpVel.x += cos(rot);
-      tmpVel.z += -sin(rot);
-    }
-    float tmpVelLen = tmpVel.length();
-    if (tmpVelLen > 0) {
-      tmpVel.normalise();
-    }
-    tmpVel *= speed;
-    if (movingFwd or movingBack or strafingLeft or strafingRight) {
-      velocity.x = tmpVel.x;
-      velocity.z = tmpVel.z;
-      if (flying) {
-        velocity.y = tmpVel.y;
-      }
-    }
-
-
-    if ((Input::isKeyDown(SDL_SCANCODE_SPACE) || Input::isKeyDown(SDL_SCANCODE_BACKSPACE)) && grounded) {
-      std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);
-      entity.getComponent<SoundSource>().playSound(
-        Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)]);
-      grounded = false;
-      velocity.y = JUMP_SPEED;
-    }
-
-    if (grounded) {
-      stepCounter += abs(velocity.x);
-      stepCounter += abs(velocity.z);
-
-      if(stepCounter>=2.5f) {
-        std::uniform_int_distribution<> dis(0, PLAYER_FOOT_SOUND.size()-1);
-        entity.getComponent<SoundSource>().playSound(
-          Environment::getDataDir() + PLAYER_FOOT_SOUND[dis(generator)]);
-        stepCounter-=2.5f;
-      }
-    }
-  }
 #endif
 }
 

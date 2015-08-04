@@ -35,11 +35,11 @@ Scene::Scene() :
   player = &entities.create();
   player->addComponent<Transform>();
   player->getComponent<Transform>().position = Vector3f(2.5, 1, 5);
-  player->addComponent<PlayerMotion>();
   player->addComponent<Health>();
   player->addComponent<SoundSource>();
   player->addComponent<SoundListener>();
   player->addComponent<RigidBody>(1, std::make_shared<btCapsuleShape>(.4, 1));
+  player->addComponent<PlayerMotion>();
 }
 
 } /* namespace glPortal */
