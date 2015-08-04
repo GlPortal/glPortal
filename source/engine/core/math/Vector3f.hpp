@@ -60,6 +60,8 @@ public:
   Vector3f operator*(float scale) const;
   Vector3f operator/(float divisor) const;
 
+  /* Bullet interop */
+  Vector3f(const btVector3&);
   operator btVector3() const;
   Vector3f& operator=(const btVector3&);
 };

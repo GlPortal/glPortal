@@ -11,41 +11,33 @@ namespace glPortal {
 void WorldHelper::shootPortal(int button, Scene *scene) {
   //Shooting
   Vector3f cameraDir = Math::toDirection(scene->camera.getRotation());
+  btVector3 btFrom = scene->camera.getPosition();
+  btVector3 btTo = btFrom + cameraDir*10000;
+  btCollisionWorld::ClosestRayResultCallback res(btFrom, btTo);
 
-  //Find the closest intersection
-  const Entity *closestWall = nullptr;
-  float intersection = INT_MAX;
-  for (const Entity &e : scene->entities) {
-    // FIXME: Collsion + MeshDrawable isn't the sole criteria we want to check
-    if (e.hasComponent<AACollisionBox>() and e.hasComponent<MeshDrawable>()) {
-      Ray bullet(scene->camera.getPosition(), cameraDir);
-      float tNear, tFar;
-      if (bullet.collides(e.getComponent<AACollisionBox>().box, &tNear, &tFar)) {
-        if (tNear < intersection) {
-          closestWall = &e;
-          intersection = tNear;
-        }
+  scene->physics.world->rayTest(btFrom, btTo, res);
+
+  if (res.hasHit()) {
+    const Entity *closestWall = (Entity*)res.m_collisionObject->getUserPointer();
+
+    EntityPair &pPair = SceneHelper::getPortalPairFromScene(0, scene);
+    // TODO: material in separate Component, + 1 mat per face
+    if (closestWall->getComponent<MeshDrawable>().material.portalable) {
+      Vector3f ipos(res.m_hitPointWorld);
+      Entity &pEnt = (button == 1) ? *pPair.first : *pPair.second;
+      Portal &portal = pEnt.getComponent<Portal>();
+      portal.openSince = SDL_GetTicks();
+      portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png"); 
+      portal.placeOnWall(scene->camera.getPosition(), closestWall->getComponent<AACollisionBox>().box, ipos);
+      LightSource &pLight = pEnt.getComponent<LightSource>();
+
+      if (button == 1) {
+        portal.overlayTex.diffuse = TextureLoader::getTexture("blueportal.png");
+        portal.color = pLight.color = Portal::BLUE_COLOR;
+      } else {
+        portal.overlayTex.diffuse = TextureLoader::getTexture("orangeportal.png");
+        portal.color = pLight.color = Portal::ORANGE_COLOR;
       }
-    }
-  }
-
-  EntityPair &pPair = SceneHelper::getPortalPairFromScene(0, scene);
-  // TODO: material in separate Component, + 1 mat per face
-  if (closestWall != nullptr and (closestWall->getComponent<MeshDrawable>().material.portalable)) {
-    Vector3f ipos = scene->camera.getPosition() + (cameraDir * intersection);
-    Entity &pEnt = (button == 1) ? *pPair.first : *pPair.second;
-    Portal &portal = pEnt.getComponent<Portal>();
-    portal.openSince = SDL_GetTicks();
-    portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png"); 
-    portal.placeOnWall(scene->camera.getPosition(), closestWall->getComponent<AACollisionBox>().box, ipos);
-    LightSource &pLight = pEnt.getComponent<LightSource>();
-
-    if (button == 1) {
-      portal.overlayTex.diffuse = TextureLoader::getTexture("blueportal.png");
-      portal.color = pLight.color = Portal::BLUE_COLOR;
-    } else {
-      portal.overlayTex.diffuse = TextureLoader::getTexture("orangeportal.png");
-      portal.color = pLight.color = Portal::ORANGE_COLOR;
     }
   }
 }

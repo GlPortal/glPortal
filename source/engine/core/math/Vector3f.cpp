@@ -123,6 +123,12 @@ Vector3f Vector3f::operator/(float divisor) const {
   return Vector3f(x / divisor, y / divisor, z / divisor);
 }
 
+/* Bullet interop */
+
+Vector3f::Vector3f(const btVector3 &v) :
+  Vector3f(v.x(), v.y(), v.z()) {
+}
+
 Vector3f::operator btVector3() const {
   return btVector3(x, y, z);
 }
