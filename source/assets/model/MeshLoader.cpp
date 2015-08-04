@@ -323,12 +323,14 @@ Mesh MeshLoader::getSubPlane(int x, int y, int width, int height, int w, int h) 
 
   constexpr unsigned int vtxSize = 3*sizeof(int8_t) + 2*sizeof(float);
   TightDataPacker data(6*vtxSize);
-  for(int i = 0; i < 6; ++i) {
-    const int8_t *v = vertices[vi[6]];
+  for (int i = 0; i < 6; ++i) {
+    const int8_t *v = vertices[vi[i]];
     data << v[0] << v[1] << v[2];
-    const float *t = texCoords[ti[6]];
+    const float *t = texCoords[ti[i]];
     data << t[0] << t[1];
   }
+
+  assert(data.getSize() == 6*vtxSize);
 
   // Put the vertex buffer into the VAO
   GLuint vbo;
@@ -337,8 +339,8 @@ Mesh MeshLoader::getSubPlane(int x, int y, int width, int height, int w, int h) 
   glBufferData(GL_ARRAY_BUFFER, data.getSize(), data.getDataPtr(), GL_STATIC_DRAW);
   glVertexAttribPointer(0, 3, GL_BYTE, GL_FALSE, vtxSize, nullptr);
   glEnableVertexAttribArray(0);
-  glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, vtxSize, (GLvoid*)(3*sizeof(int8_t)));
-  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vtxSize, (GLvoid*)(3*sizeof(int8_t)));
+  glEnableVertexAttribArray(1);
 
   // Unbind the buffers
   glBindBuffer(GL_ARRAY_BUFFER, 0);
