@@ -57,7 +57,8 @@ Texture TextureLoader::getTexture(std::string path) {
     return it->second;
   }
   int width(0), height(0), bytes(0);
-  unsigned char *data = stbi_load((Environment::getDataDir() + "/textures/" + path).c_str(), &width, &height, &bytes, 0);
+  unsigned char *data =
+    stbi_load((Environment::getDataDir() + "/textures/" + path).c_str(), &width, &height, &bytes, 0);
   Texture texture = uploadTexture(data, width, height, bytes);
   stbi_image_free(data);
   texture.width = width;
@@ -72,10 +73,10 @@ Texture TextureLoader::uploadTexture(const unsigned char *data, int width, int h
   glGenTextures(1, &handle);
   glBindTexture(GL_TEXTURE_2D, handle);
 
-  if(bytes == 3) {
+  if (bytes == 3) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
   }
-  if(bytes == 4) {
+  if (bytes == 4) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
   }
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
