@@ -16,7 +16,7 @@ Texture TextureLoader::getEmptyDiffuse() {
   if (it != textureCache.end()) {
     return it->second;
   }
-  int width, height, bytes;
+  int width(0), height(0);
   Texture texture = uploadTexture((const unsigned char*)"\xFF\xFF\xFF", 1, 1, 3);
   texture.width = width;
   texture.height = height;
@@ -29,7 +29,7 @@ Texture TextureLoader::getEmptyNormal() {
   if (it != textureCache.end()) {
     return it->second;
   }
-  int width, height, bytes;
+  int width(0), height(0);
   Texture texture = uploadTexture((const unsigned char*)"\x7F\x7F\xFF", 1, 1, 3);
   texture.width = width;
   texture.height = height;
@@ -42,7 +42,7 @@ Texture TextureLoader::getEmptySpecular() {
   if (it != textureCache.end()) {
     return it->second;
   }
-  int width, height, bytes;
+  int width(0), height(0);
   Texture texture = uploadTexture((const unsigned char*)"\xFF\xFF\xFF", 1, 1, 3);
   texture.width = width;
   texture.height = height;
@@ -56,7 +56,7 @@ Texture TextureLoader::getTexture(std::string path) {
   if (it != textureCache.end()) {
     return it->second;
   }
-  int width, height, bytes;
+  int width(0), height(0), bytes(0);
   unsigned char *data = stbi_load((Environment::getDataDir() + "/textures/" + path).c_str(), &width, &height, &bytes, 0);
   Texture texture = uploadTexture(data, width, height, bytes);
   stbi_image_free(data);
