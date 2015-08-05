@@ -58,7 +58,8 @@ Texture TextureLoader::getTexture(std::string path) {
   }
   int width(0), height(0), bytes(0);
   unsigned char *data =
-    stbi_load((Environment::getDataDir() + "/textures/" + path).c_str(), &width, &height, &bytes, 0);
+    stbi_load((Environment::getDataDir() + "/textures/" + path).c_str(),
+              &width, &height, &bytes, 0);
   Texture texture = uploadTexture(data, width, height, bytes);
   stbi_image_free(data);
   texture.width = width;
