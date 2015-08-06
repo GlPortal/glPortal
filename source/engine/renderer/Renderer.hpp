@@ -27,7 +27,7 @@ public:
   
   void setScene(Scene *scene);
 
-  void render(const Camera &cam);
+  void render(double dtime, const Camera &cam);
   void renderUI(const Camera &cam);
   void renderScene(const Camera &cam);
   void renderEntity(const Camera &cam, const Entity &e);
@@ -45,9 +45,12 @@ public:
   void setFont(const std::string &font, float size);
 
   static Matrix4f clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj);
+
 private:
   Viewport *viewport;
   int vpWidth, vpHeight;
+
+  double time;
 
   Scene *scene;
   Font *font;

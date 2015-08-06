@@ -4,11 +4,25 @@
 #include <engine/component/RigidBody.hpp>
 #include <assets/material/MaterialLoader.hpp>
 #include <assets/model/MeshLoader.hpp>
+#include "../../PortalFilterCallback.hpp"
 
 namespace glPortal {
 
 void PhysicsSystem::setScene(Scene *scene) {
+  scene->physics.world->getPairCache()->setOverlapFilterCallback(nullptr);
+  delete filterCallback;
+
   this->scene = scene;
+  filterCallback = new PortalFilterCallback(*scene);
+  scene->physics.world->getPairCache()->setOverlapFilterCallback(filterCallback);
+}
+
+PhysicsSystem::PhysicsSystem() : 
+  filterCallback(nullptr) {
+}
+
+PhysicsSystem::~PhysicsSystem() {
+  delete filterCallback;
 }
 
 void PhysicsSystem::update(float dtime) {
@@ -33,6 +47,7 @@ void PhysicsSystem::update(float dtime) {
       spawned = true;
     }
   }
+  filterCallback->beforePhysicsStep();
   scene->physics.world->stepSimulation(dtime, 10);
   for (Entity &e : scene->entities) {
     if (e.hasComponent<RigidBody>()) {

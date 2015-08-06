@@ -57,7 +57,7 @@ void GameController::recordKeyEvent(const SDL_Event &event) {
 
 void GameController::handleKeyInput() {
   if (Input::isKeyDown(SDL_SCANCODE_F1)) {
-    world->isDebugEnabled = not world->isDebugEnabled;
+    world->isPhysicsDebugEnabled = not world->isPhysicsDebugEnabled;
   }
 
   // If F5 released, reload the scene

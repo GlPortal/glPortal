@@ -77,7 +77,8 @@ void Renderer::setFont(const std::string &font, float size) {
 }
 
 
-void Renderer::render(const Camera &cam) {
+void Renderer::render(double dtime, const Camera &cam) {
+  time += dtime;
   viewport->getSize(&vpWidth, &vpHeight);
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -162,7 +163,7 @@ void Renderer::render(const Camera &cam) {
 
     // Draw simplex noise
     if (portal1.open and portal2.open) {
-      uint32_t dtOpen = SDL_GetTicks()-std::max(portal1.openSince, portal2.openSince);
+      double dtOpen = scene->world->getTime()-std::max(portal1.openSince, portal2.openSince);
       if (dtOpen < Portal::NOISE_FADE_DELAY) {
         float al = 1-((float)dtOpen/Portal::NOISE_FADE_DELAY)*2;
         renderPortalNoise(cam, pEnt1, al);
@@ -310,7 +311,7 @@ void Renderer::renderPortalNoise(const Camera &cam, const Entity &portal, float 
   int timeLoc = simplexTime.uni("time");
   int colorLoc = simplexTime.uni("color");
   int noiseAlphaLoc = simplexTime.uni("noiseAlpha");
-  glUniform1f(timeLoc, SDL_GetTicks()/1000.f);
+  glUniform1f(timeLoc, scene->world->getTime());
   glUniform3f(colorLoc, p.color.x, p.color.y, p.color.z);
   glUniform1f(noiseAlphaLoc, fade);
 

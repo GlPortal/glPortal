@@ -66,7 +66,7 @@ public:
 
     btRigidBody &rb = *entity.getComponent<RigidBody>().body;
     rb.setAngularFactor(btVector3(0, 0, 0));
-    rb.setFriction(0.99);
+    rb.setFriction(1.5);
     /*ghostObj.reset(new btPairCachingGhostObject);
     physController.reset(new btKinematicCharacterController(ghostObj.get(), &shape, 0.2));*/
   }

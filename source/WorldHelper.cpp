@@ -1,11 +1,13 @@
 #include "WorldHelper.hpp"
-#include <assets/scene/SceneHelper.hpp>
+
 #include <climits>
+#include <SDL2/SDL_timer.h>
+#include <assets/scene/SceneHelper.hpp>
+#include <assets/texture/TextureLoader.hpp>
 #include <engine/component/AACollisionBox.hpp>
 #include <engine/component/MeshDrawable.hpp>
 #include <engine/Ray.hpp>
-#include <assets/texture/TextureLoader.hpp>
-#include <SDL2/SDL_timer.h>
+#include "World.hpp"
 
 namespace glPortal {
 void WorldHelper::shootPortal(int button, Scene *scene) {
@@ -28,7 +30,7 @@ void WorldHelper::shootPortal(int button, Scene *scene) {
         Vector3f ipos(res.m_hitPointWorld);
         Entity &pEnt = (button == 1) ? *pPair.first : *pPair.second;
         Portal &portal = pEnt.getComponent<Portal>();
-        portal.openSince = SDL_GetTicks();
+        portal.openSince = scene->world->getTime();
         portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png"); 
         portal.placeOnWall(scene->camera.getPosition(), ent.getComponent<AACollisionBox>().box, ipos);
         LightSource &pLight = pEnt.getComponent<LightSource>();

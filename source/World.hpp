@@ -37,20 +37,24 @@ public:
 
   void setRendererWindow(Window*);
 
-  void update();
+  double getTime() const;
+  void update(double dtime);
+
+  Renderer* getRenderer() const;
+  void render(double dtime);
+
   void loadScene(const std::string &path);
   bool collidesWithWalls(const BoxCollider &collider) const;
   void shootPortal(int button);
   bool collides(const Vector3f &ro, const Vector3f &rd, const Entity &e, float *tNear, float *tFar);
-  void render();
   Entity& getPlayer();
   void hidePortals();
   static float gravity;
   bool isEditorShown;
-  bool isDebugEnabled = false;
+  bool isPhysicsDebugEnabled = false;
   std::string currentScenePath;
 private:
-  uint32_t lastUpdateTime;
+  double gameTime;
   Renderer *renderer;
   Editor *editor;
   Scene *scene;

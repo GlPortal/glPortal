@@ -52,6 +52,7 @@ add_executable(${EXE_NAME}
   Input.cpp
   PlayerMotion.cpp
   Portal.cpp
+  PortalFilterCallback.cpp
   World.cpp
   Window.cpp
   WorldHelper.cpp

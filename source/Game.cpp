@@ -43,20 +43,23 @@ World* Game::getWorld() {
 }
 
 void Game::update() {
-  unsigned int nextUpdate = SDL_GetTicks();
+  unsigned int nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0, currentTime;
 
   while (not closed) {
     int skipped = 0;
+    currentTime = SDL_GetTicks();
     //Update the game if it is time
-    while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
+    while (currentTime > nextUpdate && skipped < MAX_SKIP) {
       controller->handleInput();
 
       SoundManager::Update(world.getPlayer());
-      world.update();
+      world.update((currentTime-lastUpdate)/1000.);
+      lastUpdate = currentTime;
       nextUpdate += SKIP_TIME;
       skipped++;
     }
-    world.render();
+    world.render((currentTime-lastRender)/1000.);
+    lastRender = currentTime;
     fps.countCycle();
     window.swapBuffers();
   }

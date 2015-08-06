@@ -14,8 +14,8 @@ public:
   static const int PORTAL_RANGE;
   static const Vector3f BLUE_COLOR;
   static const Vector3f ORANGE_COLOR;
-  static const int NOISE_FADE_DELAY;
-  static const int OPEN_ANIM_DURATION;
+  static const double NOISE_FADE_DELAY;
+  static const double OPEN_ANIM_DURATION;
   static const float SURFACE_OFFSET;
 
   Portal(Entity &ent) : Component(ent), open(false) {}
@@ -26,7 +26,7 @@ public:
   Vector3f getScaleMult() const;
 
   Material overlayTex, maskTex;
-  uint32_t openSince;
+  double openSince;
   Mesh overlayMesh, stencilMesh;
   Vector3f direction, color;
   bool open;

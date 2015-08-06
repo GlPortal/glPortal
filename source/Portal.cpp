@@ -8,16 +8,16 @@
 #include <engine/core/math/Math.hpp>
 #include <engine/Entity.hpp>
 #include <engine/component/Transform.hpp>
-#include <PortalHelper.hpp>
-#include <SDL2/SDL_timer.h>
+#include "PortalHelper.hpp"
+#include "World.hpp"
 
 namespace glPortal {
 
 const int Portal::PORTAL_RANGE = 1000;
 const Vector3f Portal::BLUE_COLOR = Vector3f(0.33, 0.57, 1);
 const Vector3f Portal::ORANGE_COLOR = Vector3f(1, 0.76, 0.33);
-const int Portal::NOISE_FADE_DELAY = 300;
-const int Portal::OPEN_ANIM_DURATION = 250;
+const double Portal::NOISE_FADE_DELAY = .300;
+const double Portal::OPEN_ANIM_DURATION = .250;
 const float Portal::SURFACE_OFFSET = 0.01f;
 
 Vector3f Portal::getDirection() const {
@@ -136,7 +136,8 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
 }
 
 Vector3f Portal::getScaleMult() const {
-  uint32_t delta  = SDL_GetTicks()-openSince;
+  // FIXME: writing such a long line to get time is bad
+  double delta = entity.manager.scene.world->getTime()-openSince;
   if (delta > OPEN_ANIM_DURATION)
     return Vector3f(1, 1, 1);
   float s = delta;

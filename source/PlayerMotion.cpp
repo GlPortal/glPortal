@@ -50,28 +50,28 @@ void PlayerMotion::move(float dtime) {
           Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)]);
       grounded = false;
       force.y = 10;
-      rb.applyCentralForce(force*8);
+      rb.applyCentralForce(force*16);
       force.y = 0;
     }
     if (movingFwd) {
       force.x = -sin(rot);
       force.z = -cos(rot);
-      rb.applyCentralForce(force*8);
+      rb.applyCentralForce(force*16);
     }
     if (movingBack) {
       force.x = sin(rot);
       force.z = cos(rot);
-      rb.applyCentralForce(force*8);
+      rb.applyCentralForce(force*16);
     }
     if (strafingLeft) {
       force.x = -cos(rot);
       force.z = sin(rot);
-      rb.applyCentralForce(force*8);
+      rb.applyCentralForce(force*16);
     }
     if (strafingRight) {
       force.x = cos(rot);
       force.z = -sin(rot);
-      rb.applyCentralForce(force*8);
+      rb.applyCentralForce(force*16);
     }
     
     if (grounded) {

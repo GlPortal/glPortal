@@ -43,6 +43,9 @@ void PhysicsDebugDraw::drawContactPoint(const btVector3 &PointOnB, const btVecto
 
 
 void PhysicsDebugDraw::render(const Camera &cam) {
+  if (points.size() == 0) {
+    return;
+  }
   if (not vbo) {
     vbo.reset(new VBO);
   }

@@ -50,7 +50,8 @@ namespace glPortal {
 float World::gravity = GRAVITY;
 World::World() :
   scene(nullptr),
-  isEditorShown(false) {
+  isEditorShown(false),
+  gameTime(0) {
   config = Environment::getConfigPointer();
 }
 
@@ -58,7 +59,6 @@ void World::create() {
   editor = new Editor(*this);
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
-  lastUpdateTime = SDL_GetTicks();
   try {
     std::string map = config->getString(Config::MAP);
     loadScene(map);
@@ -89,6 +89,7 @@ void World::loadScene(const std::string &path) {
   scene = MapLoader::getScene(path);
 
   // FIXME Shall we do this here? Likely not.
+  scene->world = this;
   phys.setScene(scene);
   scene->physics.world->setDebugDrawer(&pdd);
   scene->physics.setGravity(0, -9.8, 0);
@@ -96,9 +97,12 @@ void World::loadScene(const std::string &path) {
   Environment::dispatcher.dispatch(Event::loadScene);
 }
 
-void World::update() {
-  uint32_t updateTime = SDL_GetTicks();
-  float dtime = (updateTime-lastUpdateTime)/1000.f;
+double World::getTime() const {
+  return gameTime;
+}
+
+void World::update(double dtime) {
+  gameTime += dtime;
   
   Entity &player = *scene->player;
   Health &plrHealth = player.getComponent<Health>();
@@ -245,8 +249,6 @@ void World::update() {
     }
     loadScene(mapList[currentLevel]);
   }
-
-  lastUpdateTime = updateTime;
 }
 
 bool World::collidesWithWalls(const BoxCollider &collider) const {
@@ -264,10 +266,14 @@ void World::shootPortal(int button) {
   WorldHelper::shootPortal(button, scene);
 }
 
-void World::render() {
+Renderer* World::getRenderer() const {
+  return renderer;
+}
+
+void World::render(double dtime) {
   renderer->setScene(scene);
-  renderer->render(scene->camera);
-  if (isDebugEnabled) {
+  renderer->render(dtime, scene->camera);
+  if (isPhysicsDebugEnabled) {
     scene->physics.world->debugDrawWorld();
   }
   pdd.render(scene->camera);

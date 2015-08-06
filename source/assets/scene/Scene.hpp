@@ -16,6 +16,7 @@
 namespace glPortal {
 
 typedef std::pair<Entity*, Entity*> EntityPair;
+class World;
 
 class Scene {
 public:
@@ -30,6 +31,8 @@ public:
     void setGravity(float x, float y, float z);
     ~Physics();
   } physics;
+
+  World *world;
 
   Entity *player;
   Camera camera;
