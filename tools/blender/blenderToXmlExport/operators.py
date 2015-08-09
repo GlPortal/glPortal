@@ -56,7 +56,7 @@ class setPortable(bpy.types.Operator):
     bl_options = {"UNDO"}
     
     def execute(self, context):
-        mat = getMaterial(Paths.GLPORTAL_DATA_DIR + 'textures/wall.png', (1, 1, 1))
+        mat = getMaterial(Paths.GLPORTAL_DATA_DIR + 'textures/concrete/wall00.png', (1, 1, 1))
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
@@ -75,7 +75,7 @@ class setWall(bpy.types.Operator):
     bl_options = {"UNDO"}
     
     def execute(self, context):
-        mat = getMaterial(Paths.GLPORTAL_DATA_DIR + 'textures/tiles.png', (0.2, 0.2, 0.2))
+        mat = getMaterial(Paths.GLPORTAL_DATA_DIR + 'textures/metal/tiles00x3.jpg', (0.2, 0.2, 0.2))
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:

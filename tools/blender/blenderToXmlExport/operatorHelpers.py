@@ -16,7 +16,7 @@ def getMaterial(texturePath, diffuse):
     except:
         raise NameError("Cannot load image %s" % realpath)
     
-    portableWallTexture = bpy.data.textures.new('ColorTex', type = 'IMAGE')
+    portableWallTexture = bpy.data.textures.new(name = 'ColorTex', type = 'IMAGE')
     portableWallTexture.image = portableWallImage
     
     mat = bpy.data.materials.new('TexMat')
@@ -25,10 +25,12 @@ def getMaterial(texturePath, diffuse):
     # Add texture slot for color texture
     mtex = mat.texture_slots.add()
     mtex.texture = portableWallTexture
-    mtex.texture_coords = 'UV'
+    mtex.texture_coords = 'ORCO'
     mtex.use_map_color_diffuse = True 
     mtex.use_map_color_emission = True 
     mtex.emission_color_factor = 0.5
     mtex.use_map_density = True 
-    mtex.mapping = 'FLAT'
+    mtex.mapping = 'CUBE'
+    mtex.use_map_emit = True
+    mtex.emit_factor = 0.3
     return mat
