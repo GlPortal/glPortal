@@ -6,7 +6,6 @@
 #include <cstdio>
 #include <iostream>
 
-#include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
 #include "engine/env/ArgumentsParser.hpp"
 #include <engine/env/System.hpp>
@@ -82,7 +81,6 @@ int main(int argc, char *argv[]) {
   ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   Environment::init();
   ArgumentsParser::populateConfig();
-  Config::load();
 
   Game game;
 

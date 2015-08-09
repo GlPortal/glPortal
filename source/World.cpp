@@ -51,8 +51,8 @@ float World::gravity = GRAVITY;
 World::World() :
   scene(nullptr),
   isEditorShown(false),
-  gameTime(0) {
-  config = Environment::getConfigPointer();
+  gameTime(0),
+  config(Environment::getConfig()) {
 }
 
 void World::create() {
@@ -60,7 +60,7 @@ void World::create() {
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
   try {
-    std::string map = config->getString(Config::MAP);
+    std::string map = config.map;
     loadScene(map);
     System::Log(Info) << "Custom map loaded";
   } catch (const std::out_of_range& e) {

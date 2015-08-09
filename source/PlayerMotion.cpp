@@ -24,8 +24,8 @@ void PlayerMotion::mouseLook() {
 
   // Apply mouse movement to view
   //Vector3f &rotation = entity.getComponent<Transform>().rotation;
-  rotation.x -= rad(mousedy * Config::getSensitivity());
-  rotation.y -= rad(mousedx * Config::getSensitivity());
+  rotation.x -= rad(mousedy * Environment::getConfig().getSensitivity());
+  rotation.y -= rad(mousedx * Environment::getConfig().getSensitivity());
 
   // Restrict rotation in horizontal axis
   rotation.x = Math::clamp(rotation.x, rad(-90.0f), rad(90.0f));

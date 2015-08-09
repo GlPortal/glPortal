@@ -120,7 +120,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh *mesh) {
   glBufferData(GL_ARRAY_BUFFER, data.getSize(), data.getDataPtr(), GL_STATIC_DRAW);
 
   // Describe the vertex format we have
-  unsigned int offset = 0;
+  intptr_t offset = 0;
   if (hasPositions) {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vtxSize, (GLvoid*)offset);
     glEnableVertexAttribArray(0);

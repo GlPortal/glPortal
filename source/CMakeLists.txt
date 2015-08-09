@@ -40,7 +40,6 @@ add_executable(${EXE_NAME}
   engine/env/Environment.cpp
   engine/env/ArgumentsParser.cpp
   engine/env/System.cpp
-  engine/env/ConfigFileParser.cpp
   engine/env/Config.cpp
   engine/physics/PhysicsDebugDraw.cpp
   engine/renderer/Renderer.cpp

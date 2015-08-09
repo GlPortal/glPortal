@@ -7,7 +7,6 @@
 #include <random>
 
 #include <assets/scene/Scene.hpp>
-#include <engine/env/ConfigFileParser.hpp>
 #include <engine/env/Config.hpp>
 #include <engine/physics/PhysicsDebugDraw.hpp>
 #include <engine/system/PhysicsSystem.hpp>
@@ -64,7 +63,7 @@ private:
   std::mt19937 generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;
-  ConfigFileParser *config;
+  Config &config;
 };
 
 } /* namespace glPortal */
