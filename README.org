@@ -1,4 +1,3 @@
-[[https://travis-ci.org/GlPortal/glPortal][https://travis-ci.org/GlPortal/glPortal.svg?branch=master]]
 * About
 GlPortal is a puzzle game where you have to use teleportation to reach the exit.
 
