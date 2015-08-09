@@ -4,7 +4,7 @@
 namespace glPortal {
 
 Health::Health(Entity &ent) :
-  Component(ent), maxHealth(1.f) {
+  Component(ent), maxHealth(1.f), health(maxHealth) {
 }
 
 bool Health::isAlive() {
