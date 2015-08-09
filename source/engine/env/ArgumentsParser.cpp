@@ -8,7 +8,6 @@
 #include <iostream>
 
 #include <engine/core/file/Path.hpp>
-#include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Config.hpp"
 
 namespace glPortal {
@@ -65,12 +64,12 @@ void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
   }
 }
 void ArgumentsParser::populateConfig() {
-  ConfigFileParser *config = Environment::getConfigPointer();
+  Config &config = Environment::getConfig();
   if (mapName != ""){
-    config->setString(Config::MAP, mapName);
+    config.map = mapName;
   }
   if (mapPath != ""){
-    config->setString(Config::MAP_PATH, mapPath);
+    config.mapPath = mapPath;
   }  
 }
 } /* namespace glPortal */

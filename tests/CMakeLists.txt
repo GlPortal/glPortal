@@ -1,6 +1,6 @@
 include_directories(lib engine ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../source)
 add_executable(xmlReadingTest EXCLUDE_FROM_ALL XmlReadingTest.cpp ../source/engine/core/math/Vector3f.cpp ../source/assets/map/XmlHelper.cpp)
-add_executable(dispatcherTest EXCLUDE_FROM_ALL ./core/event/DispatcherTest.cpp ../source/engine/core/event/FlagObserver.cpp ../source/engine/core/event/Dispatcher.cpp)
+add_executable(dispatcherTest EXCLUDE_FROM_ALL ./core/event/DispatcherTest.cpp ../source/engine/core/event/observer/FlagObserver.cpp ../source/engine/core/event/Dispatcher.cpp)
 target_link_libraries(xmlReadingTest ${UnitTestPlusPlus_LIBRARY} ${PORTAL_TEST_LIBRARIES})
 target_link_libraries(dispatcherTest ${UnitTestPlusPlus_LIBRARY} ${PORTAL_TEST_LIBRARIES})
 add_custom_target(tests)

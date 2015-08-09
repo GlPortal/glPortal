@@ -33,6 +33,10 @@ find_package(TinyXML2 REQUIRED)
 include_directories(${TINYXML2_INCLUDE_DIR})
 list(APPEND PORTAL_LIBRARIES ${TINYXML2_LIBRARIES} )
 
+find_package(json11 REQUIRED)
+include_directories(${JSON11_INCLUDE_DIR})
+list(APPEND PORTAL_LIBRARIES ${JSON11_LIBRARY})
+
 set(PORTAL_TEST_LIBRARIES ${PORTAL_LIBRARIES})
 
 add_subdirectory(data)

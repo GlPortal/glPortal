@@ -6,7 +6,6 @@
 #include <random>
 #include <array>
 #include <assets/scene/Scene.hpp>
-#include <engine/env/ConfigFileParser.hpp>
 #include <engine/env/Config.hpp>
 
 namespace glPortal {
@@ -19,13 +18,6 @@ class Vector3f;
 class SoundManager;
 
 const float GRAVITY = 0.5;
-
-const std::array<const std::string,3> MUSIC_PLAYLIST =
-{
-  "/audio/music/track1.ogg",
-  "/audio/music/track2.ogg",
-  "/audio/music/track3.ogg"
-};
 
 class Window;
 class Editor;
@@ -53,6 +45,7 @@ public:
 
   static float gravity;
 private:
+  double gameTime;
   uint32_t lastUpdateTime;
   bool wasF5Down = false;
   bool wasTabDown = false;
@@ -64,7 +57,7 @@ private:
   std::mt19937 generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;
-  ConfigFileParser *config;
+  Config &config;
 };
 
 } /* namespace glPortal */

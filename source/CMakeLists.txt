@@ -20,8 +20,10 @@ add_executable(${EXE_NAME}
   engine/core/diag/ConsoleLogger.cpp
   engine/core/diag/LogInput.cpp
   engine/core/event/Dispatcher.cpp
-  engine/core/event/FlagObserver.cpp
+  engine/core/event/observer/FlagObserver.cpp
+  engine/core/event/observer/MusicObserver.cpp
   engine/core/event/Observer.cpp
+  engine/core/gl/TightDataPacker.cpp
   util/sdl/Fps.cpp
   engine/BoxCollider.cpp
   engine/Camera.cpp
@@ -40,7 +42,6 @@ add_executable(${EXE_NAME}
   engine/env/Environment.cpp
   engine/env/ArgumentsParser.cpp
   engine/env/System.cpp
-  engine/env/ConfigFileParser.cpp
   engine/env/Config.cpp
   engine/core/file/Path.cpp
   engine/component/Health.cpp

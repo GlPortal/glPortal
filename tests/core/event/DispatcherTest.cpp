@@ -1,7 +1,7 @@
 #include <unittest++/UnitTest++.h>
 #include <engine/core/event/Observer.hpp>
 #include <engine/core/event/Dispatcher.hpp>
-#include <engine/core/event/FlagObserver.hpp>
+#include <engine/core/event/observer/FlagObserver.hpp>
 #include <engine/core/event/Event.hpp>
 #include <stdexcept>
 

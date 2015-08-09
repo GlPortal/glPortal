@@ -22,7 +22,6 @@
 #include <engine/BoxCollider.hpp>
 #include <engine/Ray.hpp>
 #include <engine/Camera.hpp>
-#include <engine/SoundManager.hpp>
 
 #include <engine/component/Health.hpp>
 #include <engine/component/Transform.hpp>
@@ -36,6 +35,7 @@
 #include <engine/core/math/Math.hpp>
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
+#include <engine/core/event/Dispatcher.hpp>
 
 #include <SDL2/SDL_keyboard.h>
 
@@ -51,8 +51,9 @@ float World::gravity = GRAVITY;
 
 World::World() :
   scene(nullptr),
-  isEditorShown(false) {
-  config = Environment::getConfigPointer();
+  isEditorShown(false),
+  gameTime(0),
+  config(Environment::getConfig()) {
 }
 
 void World::create() {
@@ -65,30 +66,22 @@ void World::create() {
   generator = std::mt19937(rd());
 
   bool done = false;
+  std::string mapPath = config.mapPath;
+  if (mapPath.length() > 0) {
+    loadSceneFromPath(mapPath);
+    done = true;
+    return;
+  } 
+  
   try {
-    std::string mapPath = config->getString(Config::MAP_PATH);
-    if (mapPath.length() > 0) {
-      loadSceneFromPath(mapPath);
-      done = true;
-      return;
-    } 
+    std::string map = config.map;
+    loadScene(map);
     System::Log(Info) << "Custom map loaded";
   } catch (const std::out_of_range& e) {
-    System::Log(Info) << "No custom map found."; 
+    System::Log(Info) << "No custom map found loading default map.";
+    loadScene(mapList[currentLevel]);
   }
 
-  try {
-    std::string map = config->getString(Config::MAP);
-    if (map.length() > 0) {
-      loadScene(map);
-      return;
-    }
-    System::Log(Info) << "Custom map from path loaded";
-  } catch (const std::out_of_range& e) {
-    System::Log(Info) << "No custom map for path found.";
-  }
-
-  loadScene(mapList[currentLevel]);
 }
 
 void World::setRendererWindow(Window *win) {
@@ -106,39 +99,21 @@ void World::loadScene(const std::string &path) {
   delete scene;
   currentScenePath = path;
   scene = MapLoader::getScene(path);
-  //play a random piece of music each time a scene is loaded
-  std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
-  SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
+  
+  Environment::dispatcher.dispatch(Event::loadScene);
 }
 
 void World::loadSceneFromPath(const std::string &path) {
   delete scene;
   currentScenePath = path;
   scene = MapLoader::getSceneFromPath(path);
-  //play a random piece of music each time a scene is loaded
-  std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
-  SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
+  Environment::dispatcher.dispatch(Event::loadScene);
 }
-  
+
+
 void World::update() {
   uint32_t updateTime = SDL_GetTicks();
   float dtime = (updateTime-lastUpdateTime)/1000.f;
-
-  // If F5 released, reload the scene
-  if (wasF5Down and not Input::isKeyDown(SDL_SCANCODE_F5)) {
-    if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
-      // Enable reload-on-change (inotify on Linux)
-    }
-
-    loadScene(currentScenePath);
-  }
-  wasF5Down = Input::isKeyDown(SDL_SCANCODE_F5);
-  // If Tab released, toggle editor
-  if (wasTabDown and not Input::isKeyDown(SDL_SCANCODE_TAB)) {
-    isEditorShown = !isEditorShown;
-  }
-  wasTabDown = Input::isKeyDown(SDL_SCANCODE_F5);
-
   Entity &player = scene->player;
   Health &plrHealth = player.getComponent<Health>();
   Transform &plrTform = player.getComponent<Transform>();

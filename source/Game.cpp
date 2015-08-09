@@ -7,20 +7,23 @@
 #include <cstdio>
 #include <iostream>
 
-#include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
 #include "engine/env/ArgumentsParser.hpp"
 #include <engine/env/System.hpp>
-#include <engine/SoundManager.hpp>
 #include <util/sdl/Fps.hpp>
 #include "Input.hpp"
-
+#include <engine/SoundManager.hpp>
+#include <engine/core/event/Observer.hpp>
+#include <engine/core/event/Dispatcher.hpp>
+#include <engine/core/event/observer/MusicObserver.hpp>
 namespace glPortal {
 
 Fps Game::fps;
 
 Game::Game() : closed(false) {
-  window.create("GlPortal");
+   MusicObserver musicObserver;
+   musicObserver.addCallback(Event::loadScene, std::bind(&MusicObserver::loadMap, musicObserver));
+   window.create("GlPortal");
 
   try {
     SoundManager::Init();
@@ -90,7 +93,7 @@ void Game::handleEvent(const SDL_Event &event) {
     if (event.button.button == SDL_BUTTON_RIGHT) {
       world.shootPortal(2);
     }
-    if (event.button.button == SDL_BUTTON_MIDDLE  and Config::isHidePortalsByClick()) {
+    if (event.button.button == SDL_BUTTON_MIDDLE  and Environment::getConfig().isHidePortalsByClick()) {
       world.hidePortals();
     }
   }
@@ -107,7 +110,6 @@ int main(int argc, char *argv[]) {
   ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   Environment::init();
   ArgumentsParser::populateConfig();
-  Config::load();
 
   Game game;
 
