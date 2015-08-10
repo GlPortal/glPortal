@@ -108,11 +108,11 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
     orientation.fromAxAngle(0, 1, 0, rad(90));
     float yRot = std::atan2(point.x-launchPos.x, point.z-launchPos.z);
     if (side == 4) {
-      orientation.fromEuler(rad(-90), yRot, 0);
+      orientation.setFromEuler(rad(-90), yRot, 0);
       scale.set(1, 2, 2);
     }
     if (side == 5) {
-      orientation.fromEuler(rad(90), yRot, 0);
+      orientation.setFromEuler(rad(90), yRot, 0);
       scale.set(1, 2, 2);
     }
     if (position.x - scale.x/2 < wall.position.x - wall.size.x/2) {

@@ -15,6 +15,7 @@ void PhysicsSystem::setScene(Scene *scene) {
   this->scene = scene;
   filterCallback = new PortalFilterCallback(*scene);
   scene->physics.world->getPairCache()->setOverlapFilterCallback(filterCallback);
+  //scene->physics.dispatcher->setNearCallback(PortalFilterCallback::nearCallback);
 }
 
 PhysicsSystem::PhysicsSystem() : 
@@ -38,7 +39,7 @@ void PhysicsSystem::update(float dtime) {
         Entity &e = scene->entities.create();
         Transform &t = e.addComponent<Transform>();
         t.position = pos;
-        t.orientation.fromEuler(0, rad(45), 0);
+        t.orientation.setFromEuler(0, rad(45), 0);
         MeshDrawable &m = e.addComponent<MeshDrawable>();
         m.material = MaterialLoader::fromTexture("HumanToken.png");
         m.mesh = MeshLoader::getMesh("Cube.obj");

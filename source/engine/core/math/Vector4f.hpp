@@ -125,8 +125,8 @@ struct Quaternion : public Vector4f {
   void fromAxAngle(const Vector3f &a, float r);
   void fromAxAngle(const Vector4f &a);
 
-  void fromEuler(float pitch, float yaw, float roll);
-  void fromEuler(const Vector3f&);
+  void setFromEuler(float pitch, float yaw, float roll);
+  void setFromEuler(const Vector3f&);
 
   Vector4f toAxAngle() const;
   Matrix4f toMatrix() const;

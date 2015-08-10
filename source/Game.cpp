@@ -42,11 +42,11 @@ World* Game::getWorld() {
 }
 
 void Game::update() {
-  unsigned int nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0, currentTime;
+  unsigned int nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
 
   while (not closed) {
     int skipped = 0;
-    currentTime = SDL_GetTicks();
+    unsigned int currentTime = SDL_GetTicks();
     //Update the game if it is time
     while (currentTime > nextUpdate && skipped < MAX_SKIP) {
       controller->handleInput();

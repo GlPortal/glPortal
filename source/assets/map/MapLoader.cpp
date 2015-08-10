@@ -17,6 +17,7 @@
 #include <engine/component/SoundSource.hpp>
 #include <engine/component/LightSource.hpp>
 #include <engine/component/RigidBody.hpp>
+#include "../../PlayerMotion.hpp"
 
 #include <assets/scene/Scene.hpp>
 #include <assets/model/Mesh.hpp>
@@ -100,11 +101,13 @@ void MapLoader::extractSpawn() {
     scene->start = &scene->entities.create();
     Transform &t = scene->start->addComponent<Transform>();
     XmlHelper::extractPosition(spawnElement, t.position);
-    Vector3f eulerOrient;
-    XmlHelper::extractRotation(spawnElement, eulerOrient);
+    Vector3f plrRotation;
+    XmlHelper::extractRotation(spawnElement, plrRotation);
     Transform &pt = scene->player->getComponent<Transform>();
     pt.position = t.position;
-    pt.orientation.fromEuler(eulerOrient);
+    PlayerMotion &pm = scene->player->getComponent<PlayerMotion>();
+    pm.rotation.x = plrRotation.y;
+    pm.rotation.y = plrRotation.x;
   } else {
     throw std::runtime_error("No spawn position defined.");
   }
@@ -152,7 +155,7 @@ void MapLoader::extractDoor() {
     XmlHelper::extractPosition(endElement, t.position);
     Vector3f eulerOrient;
     XmlHelper::extractRotation(endElement, eulerOrient);
-    t.orientation.fromEuler(eulerOrient);
+    t.orientation.setFromEuler(eulerOrient);
     MeshDrawable &m = door.addComponent<MeshDrawable>();
     m.material = MaterialLoader::loadFromXML("door/door");
     m.mesh = MeshLoader::getMesh("Door.obj");
@@ -170,7 +173,7 @@ void MapLoader::extractWalls() {
       XmlHelper::extractPosition(wallBoxElement, t.position);
       Vector3f eulerOrient;
       XmlHelper::extractRotation(wallBoxElement, eulerOrient);
-      t.orientation.fromEuler(eulerOrient);
+      t.orientation.setFromEuler(eulerOrient);
       XmlHelper::extractScale(wallBoxElement, t.scale);
 
       int mid = -1;
@@ -238,7 +241,7 @@ void MapLoader::extractModels() {
       XmlHelper::extractPosition(modelElement, t.position);
       Vector3f eulerOrient;
       XmlHelper::extractRotation(modelElement, eulerOrient);
-      t.orientation.fromEuler(eulerOrient);
+      t.orientation.setFromEuler(eulerOrient);
       MeshDrawable &m = model.addComponent<MeshDrawable>();
       m.material = MaterialLoader::fromTexture(texture);
       m.mesh = MeshLoader::getMesh(mesh);

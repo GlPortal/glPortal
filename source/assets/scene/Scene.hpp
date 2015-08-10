@@ -44,6 +44,8 @@ public:
   Entity *end;
 
   Scene();
+  Scene(Scene&) = delete;
+  Scene(Scene&&) = delete;
 };
 
 } /* namespace glPortal */

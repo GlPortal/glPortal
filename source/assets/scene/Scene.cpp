@@ -31,6 +31,9 @@ Scene::Physics::~Physics() {
 
 Scene::Scene() : 
   physics(*this),
+  world(nullptr),
+  start(nullptr),
+  end(nullptr),
   entities(*this) {
   player = &entities.create();
   player->addComponent<Transform>();

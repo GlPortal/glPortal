@@ -73,7 +73,7 @@ void Quaternion::fromAxAngle(const Vector4f &a) {
   fromAxAngle(a.x, a.y, a.z, a.w);
 }
 
-void Quaternion::fromEuler(float p, float y, float z) {
+void Quaternion::setFromEuler(float p, float y, float z) {
   float c1 = std::cos(p/2);
   float s1 = std::sin(p/2);
   float c2 = std::cos(y/2);
@@ -94,8 +94,8 @@ void Quaternion::fromEuler(float p, float y, float z) {
   this->w *= invlen;
 }
 
-void Quaternion::fromEuler(const Vector3f &e) {
-  fromEuler(e.pitch, e.yaw, e.roll);
+void Quaternion::setFromEuler(const Vector3f &e) {
+  setFromEuler(e.pitch, e.yaw, e.roll);
 }
 
 Vector4f Quaternion::toAxAngle() const {

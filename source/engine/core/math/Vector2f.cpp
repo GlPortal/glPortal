@@ -28,7 +28,7 @@ void Vector2f::set(float x, float y) {
   this->y = y;
 }
 
-void Vector2f::set(const Vector2f& v) {
+void Vector2f::set(const Vector2f &v) {
   x = v.x;
   y = v.y;
 }

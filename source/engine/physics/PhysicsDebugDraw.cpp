@@ -6,7 +6,7 @@
 namespace glPortal {
 
 PhysicsDebugDraw::PhysicsDebugDraw() {
-  setDebugMode(btIDebugDraw::DBG_DrawWireframe); // | btIDebugDraw::DBG_DrawAabb);
+  setDebugMode(btIDebugDraw::DBG_DrawWireframe | btIDebugDraw::DBG_DrawContactPoints); // | btIDebugDraw::DBG_DrawAabb);
 }
 
 void PhysicsDebugDraw::draw3dText(const btVector3 &location, const char *textString) {
@@ -38,7 +38,7 @@ void PhysicsDebugDraw::drawLine(const btVector3& from, const btVector3& to,
 
 void PhysicsDebugDraw::drawContactPoint(const btVector3 &PointOnB, const btVector3 &normalOnB,
   btScalar distance, int lifeTime, const btVector3 &color) {
-  ;
+  drawLine(PointOnB, PointOnB+normalOnB, color);
 }
 
 

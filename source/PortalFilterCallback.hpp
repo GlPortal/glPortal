@@ -14,6 +14,7 @@ public:
   PortalFilterCallback(Scene&);
   void beforePhysicsStep();
   bool needBroadphaseCollision(btBroadphaseProxy*, btBroadphaseProxy*) const;
+  static void nearCallback(btBroadphasePair&, btCollisionDispatcher&, const btDispatcherInfo&);
 };
 
 } /* namespace glPortal */

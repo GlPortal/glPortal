@@ -20,7 +20,7 @@ void WorldHelper::shootPortal(int button, Scene *scene) {
   scene->physics.world->rayTest(btFrom, btTo, res);
 
   if (res.hasHit()) {
-    const Entity *pEnt = (Entity*)res.m_collisionObject->getUserPointer();
+    const Entity *pEnt = reinterpret_cast<Entity*>(res.m_collisionObject->getUserPointer());
     // All RigidBodies should have their pointer set, but check anyway
     if (pEnt) {
       const Entity &ent = *pEnt;

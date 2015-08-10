@@ -60,17 +60,17 @@ SUITE(QuaternionTest) {
 
   // http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/steps/index.htm
   TEST_FIXTURE(QuaternionTestFixtures, Euler_X90) {
-    quat.fromEuler(rad(90), 0, 0);
+    quat.setFromEuler(rad(90), 0, 0);
     CHECK(fuzzyEq(length(quat), 1));
     CHECK(fuzzyEq(quat, 0, 0.7071, 0, 0.7071));
   }
   TEST_FIXTURE(QuaternionTestFixtures, Euler_Y90) {
-    quat.fromEuler(0, rad(90), 0);
+    quat.setFromEuler(0, rad(90), 0);
     CHECK(fuzzyEq(length(quat), 1));
     CHECK(fuzzyEq(quat, 0, 0, 0.7071, 0.7071));
   }
   TEST_FIXTURE(QuaternionTestFixtures, Euler_XY90) {
-    quat.fromEuler(rad(90), rad(90), 0);
+    quat.setFromEuler(rad(90), rad(90), 0);
     CHECK(fuzzyEq(length(quat), 1));
     CHECK(fuzzyEq(quat, 0.5, 0.5, 0.5, 0.5));
   }

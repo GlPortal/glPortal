@@ -139,7 +139,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh *mesh) {
   if (hasTangents) {
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, vtxSize, (GLvoid*)offset);
     glEnableVertexAttribArray(3);
-    offset += sizeof(float)*3;
+    //offset += sizeof(float)*3;
   }
 
   // Unbind the buffers
