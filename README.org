@@ -1,3 +1,4 @@
+[[http://jenkins.glportal.de/job/GlPortal/][http://jenkins.glportal.de/job/GlPortal/badge/icon]]
 * About
 GlPortal is a puzzle game where you have to use teleportation to reach the exit.
 
