@@ -4,7 +4,7 @@ import string
 import re
 from .paths import *
 from .operatorHelpers import *
-        
+
 class addDoor(bpy.types.Operator):
     bl_idname = "wm.add_door"
     bl_label = "Add a door."
@@ -15,11 +15,17 @@ class addDoor(bpy.types.Operator):
         bpy.ops.import_scene.obj(filepath=realpath)
         bpy.ops.transform.translate(value=(bpy.context.scene.cursor_location))
         bpy.types.Object.glpType = bpy.props.StringProperty()
-        object = bpy.context.active_object
-        if object:
-            object.glpTypes = "door" 
+        
+        # make sure to get all imported objects
+        obj_objects = bpy.context.selected_objects[:]
+        
+        # iterate through all objects to find new
+        for object in obj_objects:
+            if object.glpTypes == "none":
+                object.glpTypes = "door"
+        
         return {'FINISHED'}
-    
+
 class addLamp(bpy.types.Operator):
     bl_idname = "wm.add_lamp"
     bl_label = "Add a lamp."
@@ -32,9 +38,9 @@ class addLamp(bpy.types.Operator):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
-            object.glpTypes = "lamp" 
+            object.glpTypes = "lamp"
         return {'FINISHED'}
-    
+
 class addButton(bpy.types.Operator):
     bl_idname = "wm.add_button"
     bl_label = "Add a button."
@@ -47,9 +53,9 @@ class addButton(bpy.types.Operator):
         bpy.types.Object.glpType = bpy.props.StringProperty()
         object = bpy.context.active_object
         if object:
-            object.glpTypes = "button" 
+            object.glpTypes = "button"
         return {'FINISHED'}
-    
+
 class setPortable(bpy.types.Operator):
     bl_idname = "wm.set_portable"
     bl_label = "Mark the selection as portable."
@@ -67,7 +73,7 @@ class setPortable(bpy.types.Operator):
                 me.materials.append(mat)
             else:
                 me.materials[0] = mat
-        return {'FINISHED'}    
+        return {'FINISHED'}
 
 class setWall(bpy.types.Operator):
     bl_idname = "wm.set_wall"
@@ -92,7 +98,7 @@ class addWall(bpy.types.Operator):
     bl_idname = "wm.add_wall"
     bl_label = "Add a wall."
     bl_options = {"UNDO"}
-
+    
     def execute(self, context):
         bpy.ops.mesh.primitive_cube_add()
         setWall.execute(self, context)
@@ -102,7 +108,7 @@ class addPortable(bpy.types.Operator):
     bl_idname = "wm.add_portable"
     bl_label = "Add a portable wall."
     bl_options = {"UNDO"}
-
+    
     def execute(self, context):
         bpy.ops.mesh.primitive_cube_add()
         setPortable.execute(self, context)

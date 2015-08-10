@@ -11,7 +11,7 @@ glpTypes = [
 
 glpWallTypes = [
     ("default" ,"Default" , "Nothing special just a painted concrete wall"),
-    ("invisible" ,"Invisible" , "Invisible (Not implemented)"),    
+    ("invisible" ,"Invisible" , "Invisible (Not implemented)"),
     ("glass" ,"Glass" , "Glass (Not implemented)"),
     ("portable" ,"Portable" , "Portable Wall")
 ]
@@ -21,8 +21,8 @@ glpVolumeTypes = [
 ]
 
 glpTriggerTypes = [
-    ("none" ,"None" , "No special property"), 
-    ("win" , "Trigger Win" , "Area triggers win"), 
+    ("none" ,"None" , "No special property"),
+    ("win" , "Trigger Win" , "Area triggers win"),
     ("death" , "Trigger Death" , "Area triggers death (Not implemented)"),
     ("radiation" , "Trigger Radiation" , "Area triggers rad (Not implemented)")
 ]
@@ -43,13 +43,13 @@ def setTriggerTypes():
     bpy.types.Object.glpTriggerTypes = EnumProperty(
         items = glpTriggerTypes,
         name = "Trigger Type"
-    )    
+    )
 
 def setWallTypes():
     bpy.types.Object.glpWallTypes = EnumProperty(
         items = glpWallTypes,
         name = "Wall Type"
-    )    
+    )
 
 setTypes()
 setVolumeTypes()

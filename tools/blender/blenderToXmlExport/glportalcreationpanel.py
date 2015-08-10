@@ -6,16 +6,16 @@ class GlPortalCreationPanel(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'TOOLS'
     bl_context = "objectmode"
-    bl_category = "Create"  
-
+    bl_category = "Create"
+    
     def draw(self, context):
         layout = self.layout
         layout.label("Object:")
         row = layout.row()
         split = layout.split()
         col = split.column(align=True)
-        col.operator("wm.add_door", text="Door", icon='MESH_CUBE')
-
+        col.operator("wm.add_door", text="Exit", icon='MESH_CUBE')
+        
         layout.label("Wall:")
         row = layout.row()
         split = layout.split()
@@ -29,13 +29,12 @@ class GlPortalCreationPanel(bpy.types.Panel):
         col = split.column(align=True)
         col.operator("wm.add_death", text="Death", icon='MESH_CUBE')
         col.operator("wm.add_radiation", text="Radiation", icon='MESH_CUBE')
-        col.operator("wm.add_win", text="Win", icon='MESH_CUBE')
-
-        layout.label("Models:")
+        col.operator("wm.add_win", text="Win (in future)", icon='MESH_CUBE')
+        
+        layout.label("Models (in future):")
         row = layout.row()
         split = layout.split()
         col = split.column(align=True)
         col.operator("wm.add_door", text="Door", icon='MESH_CUBE')
         col.operator("wm.add_lamp", text="Lamp", icon='MESH_CUBE')
         col.operator("wm.add_button", text="Button", icon='MESH_CUBE')
-        

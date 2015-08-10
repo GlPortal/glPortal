@@ -8,7 +8,7 @@ from .operatorHelpers import *
 class setAcid(bpy.types.Operator):
     bl_idname = "wm.set_acid"
     bl_label = "Mark the selection as a volume of acid."
-
+    
     def execute(self, context):
         mat = getMaterial('~/.glportal/data/textures/fluid/acid00.png', (0.2, 1.0, 0.2))
         bpy.types.Object.glpType = bpy.props.StringProperty()

@@ -14,7 +14,7 @@ class setWin(bpy.types.Operator):
         if object:
             object.glpTypes = "trigger"
             object.glpTriggerTypes = "win"
-        return {'FINISHED'}   
+        return {'FINISHED'}
 
 class addWin(bpy.types.Operator):
     bl_idname = "wm.add_win"
@@ -23,7 +23,7 @@ class addWin(bpy.types.Operator):
     def execute(self, context):
         bpy.ops.mesh.primitive_cube_add()
         setWin.execute(self, context)
-        return {'FINISHED'}    
+        return {'FINISHED'}
 
 class setDeath(bpy.types.Operator):
     bl_idname = "wm.set_death"
@@ -34,7 +34,7 @@ class setDeath(bpy.types.Operator):
         if object:
             object.glpTypes = "trigger"
             object.glpTriggerTypes = "death"
-        return {'FINISHED'}    
+        return {'FINISHED'}
 
 class addDeath(bpy.types.Operator):
     bl_idname = "wm.add_death"
@@ -43,7 +43,7 @@ class addDeath(bpy.types.Operator):
     def execute(self, context):
         bpy.ops.mesh.primitive_cube_add()
         setDeath.execute(self, context)
-        return {'FINISHED'}    
+        return {'FINISHED'}
 
 class addRadiation(bpy.types.Operator):
     bl_idname = "wm.add_radiation"

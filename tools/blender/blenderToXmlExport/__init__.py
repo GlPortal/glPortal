@@ -21,7 +21,7 @@ import re
 from .glportalcreationpanel import *
 from .glportalpanel import *
 from .glportalobjectpanel import *
-from .exportglportalformat import *    
+from .exportglportalformat import *
 from .operators import *
 from .triggerOperators import *
 from .volumeOperators import *

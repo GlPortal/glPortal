@@ -7,7 +7,7 @@ def clearGlpProperties():
         object.glpTypes = "none"
         object.glpVolumeTypes = "none"
         object.glpTriggerTypes = "none"
-        object.glpWallTypes = "none"        
+        object.glpWallTypes = "none"
 
 def getMaterial(texturePath, diffuse):
     realpath = os.path.expanduser(texturePath)
@@ -21,7 +21,7 @@ def getMaterial(texturePath, diffuse):
     
     mat = bpy.data.materials.new('TexMat')
     mat.diffuse_color = diffuse
-
+    
     # Add texture slot for color texture
     mtex = mat.texture_slots.add()
     mtex.texture = portableWallTexture

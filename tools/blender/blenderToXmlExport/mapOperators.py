@@ -15,4 +15,4 @@ class fixMap(bpy.types.Operator):
         bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY')
         bpy.ops.object.select_all(action='DESELECT')
         
-        return {'FINISHED'}    
+        return {'FINISHED'}
