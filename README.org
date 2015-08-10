@@ -1,5 +1,5 @@
 #+BEGIN_HTML
-<a href="https://jenkins.glportal.de/job/GlPortal/"><img src="https://jenkins.glportal.de/buildStatus/icon?job=GlPortal"></a>
+<a href="https://jenkins.glportal.de/job/GlPortal/"><img src="http://jenkins.glportal.de/buildStatus/icon?job=GlPortal"></a>
 #+END_HTML
 
 * About
