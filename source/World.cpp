@@ -49,9 +49,9 @@ namespace glPortal {
 
 float World::gravity = GRAVITY;
 World::World() :
-  scene(nullptr),
   isEditorShown(false),
   gameTime(0),
+  scene(nullptr),
   config(Environment::getConfig()) {
 }
 
@@ -123,9 +123,9 @@ void World::update(double dtime) {
 
   phys.update(dtime);
 
+/*
   // Figure out the provisional new player position
   Vector3f pos = plrTform.position + plrMotion.velocity;
-/*
   //Y collision
   BoxCollider bboxY(Vector3f(plrTform.position.x, pos.y, plrTform.position.z), plrTform.scale);
   
@@ -204,7 +204,7 @@ void World::update(double dtime) {
   pos = plrTform.position + plrMotion.velocity;
 
   // Check if the player is moving through a portal
-  BoxCollider playerCollider(pos, plrTform.scale);/* TODO reimplement with Bullet
+  BoxCollider playerCollider(pos, plrTform.scale);// TODO reimplement with Bullet
   for (EntityPair &p : scene->portalPairs) {
     Portal &portal1 = p.first->getComponent<Portal>(),
             &portal2 = p.second->getComponent<Portal>();

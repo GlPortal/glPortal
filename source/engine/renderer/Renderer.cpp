@@ -97,20 +97,22 @@ void Renderer::render(double dtime, const Camera &cam) {
         continue;
       }
 
-      std::string index = std::to_string(numLights);
-      std::string position = "lights[" + index + "].position";
-      std::string color = "lights[" + index + "].color";
-      std::string distance = "lights[" + index + "].distance";
-      std::string energy = "lights[" + index + "].energy";
-      std::string specular = "lights[" + index + "].specular";
-
-      const Transform &t = e.getComponent<Transform>();
-      const LightSource &ls = e.getComponent<LightSource>();
-      glUniform3f(diffuse.uni(position.c_str()), t.position.x, t.position.y, t.position.z);
-      glUniform3f(diffuse.uni(color.c_str()), ls.color.x, ls.color.y, ls.color.z);
-      glUniform1f(diffuse.uni(distance.c_str()), ls.distance);
-      glUniform1f(diffuse.uni(energy.c_str()), ls.energy);
-      glUniform1f(diffuse.uni(specular.c_str()), ls.specular);
+      LightSource &ls = e.getComponent<LightSource>();
+      if (!ls._uploaded) {
+        const Transform &t = e.getComponent<Transform>();
+        std::string index = std::to_string(numLights);
+        std::string position = "lights[" + index + "].position";
+        std::string color = "lights[" + index + "].color";
+        std::string distance = "lights[" + index + "].distance";
+        std::string energy = "lights[" + index + "].energy";
+        std::string specular = "lights[" + index + "].specular";
+        glUniform3f(diffuse.uni(position.c_str()), t.position.x, t.position.y, t.position.z);
+        glUniform3f(diffuse.uni(color.c_str()), ls.color.x, ls.color.y, ls.color.z);
+        glUniform1f(diffuse.uni(distance.c_str()), ls.distance);
+        glUniform1f(diffuse.uni(energy.c_str()), ls.energy);
+        glUniform1f(diffuse.uni(specular.c_str()), ls.specular);
+        // ls._uploaded = true;
+      }
 
       ++numLights;
     }
@@ -421,6 +423,7 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &
   dest.setViewMatrix(destView);
 }
 
+/*
 static float sign(float v) {
   if (v > 0.f) return 1.f;
   if (v < 0.f) return -1.f;
@@ -428,7 +431,6 @@ static float sign(float v) {
 }
 
 Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj) {
-/*
   const Transform &t = ent.getComponent<Transform>();
   Vector4f clipPlane(Math::toDirection(t.rotation), -dot(Math::toDirection(t.rotation), t.position));
   clipPlane = inverse(transpose(view)) * clipPlane;
@@ -452,7 +454,7 @@ Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Ma
   newProj[10] = c.z - newProj[11];
   newProj[14] = c.w - newProj[15];
   return newProj;
-*/
 }
+*/
 
 } /* namespace glPortal */

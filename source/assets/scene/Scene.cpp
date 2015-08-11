@@ -32,9 +32,9 @@ Scene::Physics::~Physics() {
 Scene::Scene() : 
   physics(*this),
   world(nullptr),
+  entities(*this),
   start(nullptr),
-  end(nullptr),
-  entities(*this) {
+  end(nullptr) {
   player = &entities.create();
   player->addComponent<Transform>();
   player->getComponent<Transform>().position = Vector3f(2.5, 1, 5);

@@ -43,6 +43,10 @@ list(APPEND PORTAL_LIBRARIES ${BULLET_LIBRARIES})
 
 set(PORTAL_TEST_LIBRARIES ${PORTAL_LIBRARIES})
 
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+  add_definitions("-Wall")
+endif ()
+
 add_subdirectory(data)
 add_subdirectory(source)
 

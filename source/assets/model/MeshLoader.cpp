@@ -192,7 +192,6 @@ Mesh MeshLoader::getPortalBox(const Entity &wall) {
   };
 
   const Transform &t = wall.getComponent<Transform>();
-  const Vector3f &position = t.position;
   const Vector3f &scale = t.scale;
   const float texCoords[8][2] = {
     {0, 0},
