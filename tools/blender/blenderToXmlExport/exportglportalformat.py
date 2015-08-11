@@ -1,4 +1,5 @@
 import bpy
+from bpy.props import *
 from bpy_extras.io_utils import ExportHelper
 import os
 import xml.etree.cElementTree as tree
@@ -8,21 +9,22 @@ import math
 import string
 from mathutils import Vector
 import re
+   
 
 def storePosition(element, object):
-    element.set("x", str(object.location[0]))
-    element.set("y", str(object.location[2]))
-    element.set("z", str(-object.location[1]))
+    element.set("x", str(round(object.location[0], 5)))
+    element.set("y", str(round(object.location[2], 5)))
+    element.set("z", str(-round(object.location[1], 5)))
 
 def storeRotation(element, object):
-    element.set("x", str(abs(math.degrees(object.rotation_euler[0]))))
-    element.set("y", str(abs(math.degrees(object.rotation_euler[2]))))
-    element.set("z", str(abs(math.degrees(-object.rotation_euler[1]))))
+    element.set("x", str(round(abs(math.degrees(object.rotation_euler[0])), 5)))
+    element.set("y", str(round(abs(math.degrees(object.rotation_euler[2])), 5)))
+    element.set("z", str(round(abs(math.degrees(-object.rotation_euler[1])), 5)))
 
 def storeScale(element, object):
-    element.set("x", str(object.dimensions[0]))
-    element.set("y", str(object.dimensions[2]))
-    element.set("z", str(object.dimensions[1]))
+    element.set("x", str(round(object.dimensions[0], 5)))
+    element.set("y", str(round(object.dimensions[2], 5)))
+    element.set("z", str(round(object.dimensions[1], 5)))
 
 def writeLampToTree(object, targetTree):
     lamp = object.data
@@ -34,18 +36,23 @@ def writeLampToTree(object, targetTree):
     lightElement = tree.SubElement(targetTree, "light")
     storePosition(lightElement, object);
     
-    lightElement.set("r", str(colorArray[0]))
-    lightElement.set("g", str(colorArray[1]))
-    lightElement.set("b", str(colorArray[2]))
+    lightElement.set("r", str(round(colorArray[0], 5)))
+    lightElement.set("g", str(round(colorArray[1], 5)))
+    lightElement.set("b", str(round(colorArray[2], 5)))
     
-    lightElement.set("distance", str(lightDistance))
-    lightElement.set("energy", str(lightEnergy))
+    lightElement.set("distance", str(round(lightDistance, 5)))
+    lightElement.set("energy", str(round(lightEnergy, 5)))
+    
+    if lamp.use_specular:
+        lightElement.set("specular", "1")
 
 class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
     bl_idname = "export_glportal_xml.xml"
     bl_label = "Export GlPortal XML"
+    bl_description = "Export to GlPortal XML file (.xml)"
     bl_options = {'PRESET'}
     filename_ext = ".xml"
+    filter_glob = StringProperty(default="*.xml", options={'HIDDEN'})
     
     def execute(self, context):
         dir = os.path.dirname(self.filepath)
@@ -72,17 +79,17 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
                 type = "None"
             if object.type == "LAMP":
                 writeLampToTree(object, root)
-            if object.type == "CAMERA":
+            elif object.type == "CAMERA":
                 boxElement = tree.SubElement(root, "spawn")
                 
                 positionElement = tree.SubElement(boxElement, "position")
                 storePosition(positionElement, object);
                 
                 rotationElement = tree.SubElement(boxElement, "rotation")
-                rotationElement.set("x", str(abs(math.degrees(object.rotation_euler[2]))))
-                rotationElement.set("y", str(abs(math.degrees(object.rotation_euler[0]) - 90)))
-                rotationElement.set("z", str(abs(math.degrees(-object.rotation_euler[1]) - 180)))
-            if object.type == "MESH" and type == "door":
+                rotationElement.set("x", str(round(abs(math.degrees(object.rotation_euler[2])), 5)))
+                rotationElement.set("y", str(round(abs(math.degrees(object.rotation_euler[0]) - 90), 5)))
+                rotationElement.set("z", str(round(abs(math.degrees(-object.rotation_euler[1]) - 180), 5)))
+            elif object.type == "MESH" and type == "door":
                 """tempotary add <end> instead of <door>"""
                 boxElement = tree.SubElement(root, "end")
                 
@@ -90,24 +97,23 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
                 storePosition(positionElement, object);
                 
                 rotationElement = tree.SubElement(boxElement, "rotation")
-                rotationElement.set("x", str(abs(math.degrees(object.rotation_euler[0]) - 90)))
-                rotationElement.set("y", str(abs(math.degrees(object.rotation_euler[2]))))
-                rotationElement.set("z", str(abs(math.degrees(-object.rotation_euler[1]))))
+                rotationElement.set("x", str(round(abs(math.degrees(object.rotation_euler[0]) - 90), 5)))
+                rotationElement.set("y", str(round(abs(math.degrees(object.rotation_euler[2])), 5)))
+                rotationElement.set("z", str(round(abs(math.degrees(-object.rotation_euler[1])), 5)))
             elif object.type == "MESH":
                 if type == "trigger":
                     boxElement = tree.SubElement(root, "trigger")
                     if object.glpTriggerTypes:
                         boxElement.set("type", object.glpTriggerTypes)
                 elif type == "wall":
-                    print(object.glpWallTypes)
+                    #print(object.glpWallTypes)
+                    boxElement = tree.SubElement(root, "wall")
                     if object.glpWallTypes == "portable":
-                        boxElement = tree.SubElement(root, "wall")
                         boxElement.set("mid", "1")
                     else:
-                        boxElement = tree.SubElement(root, "wall")
                         boxElement.set("mid", "2")
                 elif type == "volume":
-                    print(object.glpVolumeTypes)
+                    #print(object.glpVolumeTypes)
                     if object.glpVolumeTypes == "acid":
                         boxElement = tree.SubElement(root, "acid")
                  # disabled, will be enabled in the future

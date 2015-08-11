@@ -8,6 +8,7 @@ from .operatorHelpers import *
 class setAcid(bpy.types.Operator):
     bl_idname = "wm.set_acid"
     bl_label = "Mark the selection as a volume of acid."
+    bl_options = {"UNDO"}
     
     def execute(self, context):
         mat = getMaterial('~/.glportal/data/textures/fluid/acid00.png', (0.2, 1.0, 0.2))
@@ -21,4 +22,14 @@ class setAcid(bpy.types.Operator):
                 me.materials.append(mat)
             else:
                 me.materials[0] = mat
+        return {'FINISHED'}
+
+class addAcid(bpy.types.Operator):
+    bl_idname = "wm.add_acid"
+    bl_label = "Create a volume of acid."
+    bl_options = {"UNDO"}
+    
+    def execute(self, context):
+        bpy.ops.mesh.primitive_cube_add()
+        setAcid.execute(self, context)
         return {'FINISHED'}

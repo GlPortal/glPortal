@@ -8,6 +8,7 @@ from .operatorHelpers import *
 class fixMap(bpy.types.Operator):
     bl_idname = "wm.fix_map"
     bl_label = "Fixes the map before exporting."
+    bl_options = {"UNDO"}
     
     def execute(self, context):
         bpy.ops.object.select_all(action='SELECT')

@@ -4,7 +4,7 @@ from bpy.props import *
 glpTypes = [
     ("none" , "None", "No special property"),
     ("wall" , "Wall", "Wall"),
-    ("door" , "Door", "Door"),
+    ("door" , "Door", "Door"),# temporarily using as <end>
     ("volume", "Volume", "Volume"),
     ("trigger", "Trigger", "trigger")
 ]
@@ -23,7 +23,7 @@ glpVolumeTypes = [
 glpTriggerTypes = [
     ("none" ,"None" , "No special property"),
     ("win" , "Trigger Win" , "Area triggers win"),
-    ("death" , "Trigger Death" , "Area triggers death (Not implemented)"),
+    ("death" , "Trigger Death" , "Area triggers death"),
     ("radiation" , "Trigger Radiation" , "Area triggers rad (Not implemented)")
 ]
 
