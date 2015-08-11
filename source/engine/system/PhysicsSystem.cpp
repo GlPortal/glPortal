@@ -41,7 +41,7 @@ void PhysicsSystem::update(float dtime) {
         t.position = pos;
         t.orientation.setFromEuler(0, rad(45), 0);
         MeshDrawable &m = e.addComponent<MeshDrawable>();
-        m.material = MaterialLoader::fromTexture("HumanToken.png");
+        m.material = MaterialLoader::getMaterial("boxes/dev00");
         m.mesh = MeshLoader::getMesh("Cube.obj");
         e.addComponent<RigidBody>(1, std::make_shared<btBoxShape>(btVector3(.5, .5, .5)));
       }
