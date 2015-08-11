@@ -3,7 +3,6 @@ from bpy.props import *
 from bpy_extras.io_utils import ImportHelper
 import os
 import xml.etree.cElementTree as ET
-import xml.dom.minidom as minidom
 import mathutils
 import math
 import string
@@ -20,7 +19,7 @@ def deleteWorld():
         ob.select = True
         bpy.ops.object.delete()
 
-def portAble(root):
+def isPortalAble(root):
     for child in root:
         if child.tag == "materials":
             for param in child:
@@ -64,7 +63,7 @@ class ImportGlPortalFormat(bpy.types.Operator, ImportHelper):
         tree = ET.parse(realpath)
         root = tree.getroot()
         
-        portalAble = portAble(root)
+        portalAble = isPortalAble(root)
         
         for child in root:
             if child.tag == "wall":
@@ -82,7 +81,7 @@ class ImportGlPortalFormat(bpy.types.Operator, ImportHelper):
                             object.dimensions = extrackDimensions(param)
                 
                 if mid == portalAble:
-                    setPortable.execute(self, context)
+                    setPortalable.execute(self, context)
                 else:
                     setWall.execute(self, context)
             elif child.tag == "acid":

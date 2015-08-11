@@ -13,7 +13,7 @@ glpWallTypes = [
     ("default" ,"Default" , "Nothing special just a painted concrete wall"),
     ("invisible" ,"Invisible" , "Invisible (Not implemented)"),
     ("glass" ,"Glass" , "Glass (Not implemented)"),
-    ("portable" ,"Portable" , "Portable Wall")
+    ("portalable" ,"Portalable" , "Portalable Wall")
 ]
 
 glpVolumeTypes = [
@@ -22,7 +22,7 @@ glpVolumeTypes = [
 
 glpTriggerTypes = [
     ("none" ,"None" , "No special property"),
-    ("win" , "Trigger Win" , "Area triggers win"),
+    ("win" , "Trigger Win" , "Area triggers win (Not implemented)"),
     ("death" , "Trigger Death" , "Area triggers death"),
     ("radiation" , "Trigger Radiation" , "Area triggers rad (Not implemented)")
 ]

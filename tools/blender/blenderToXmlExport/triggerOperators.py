@@ -7,7 +7,8 @@ from .operatorHelpers import *
 
 class setWin(bpy.types.Operator):
     bl_idname = "wm.set_win"
-    bl_label = "Mark the selection as win trigger."
+    bl_label = "Mark as win trigger."
+    bl_description = "Mark the selection as win trigger. (Not implemented)"
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -23,7 +24,8 @@ class setWin(bpy.types.Operator):
 
 class addWin(bpy.types.Operator):
     bl_idname = "wm.add_win"
-    bl_label = "Create a win trigger."
+    bl_label = "Add win trigger"
+    bl_description = "Add a win trigger. (Not implemented)"
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -33,7 +35,8 @@ class addWin(bpy.types.Operator):
 
 class setDeath(bpy.types.Operator):
     bl_idname = "wm.set_death"
-    bl_label = "Mark the selection as death trigger."
+    bl_label = "Mark as death trigger"
+    bl_description = "Mark the selection as death trigger."
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -49,7 +52,8 @@ class setDeath(bpy.types.Operator):
 
 class addDeath(bpy.types.Operator):
     bl_idname = "wm.add_death"
-    bl_label = "Create a death trigger."
+    bl_label = "Add a death trigger"
+    bl_description = "Add a death trigger."
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -59,7 +63,8 @@ class addDeath(bpy.types.Operator):
 
 class setRadiation(bpy.types.Operator):
     bl_idname = "wm.set_radiation"
-    bl_label = "Mark the selection as radiation trigger."
+    bl_label = "Mark as radiation trigger"
+    bl_description = "Mark the selection as radiation trigger. (Not implemented)"
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -75,7 +80,8 @@ class setRadiation(bpy.types.Operator):
 
 class addRadiation(bpy.types.Operator):
     bl_idname = "wm.add_radiation"
-    bl_label = "Create a radiation trigger."
+    bl_label = "Add a radiation trigger"
+    bl_description = "Add a radiation trigger. (Not implemented)"
     bl_options = {"UNDO"}
     
     def execute(self, context):

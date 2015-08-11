@@ -108,7 +108,7 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
                 elif type == "wall":
                     #print(object.glpWallTypes)
                     boxElement = tree.SubElement(root, "wall")
-                    if object.glpWallTypes == "portable":
+                    if object.glpWallTypes == "portalable":
                         boxElement.set("mid", "1")
                     else:
                         boxElement.set("mid", "2")

@@ -20,7 +20,7 @@ class GlPortalCreationPanel(bpy.types.Panel):
         row = layout.row()
         split = layout.split()
         col = split.column(align=True)
-        col.operator("wm.add_portable", text="Portable", icon='MESH_PLANE')
+        col.operator("wm.add_portalable", text="Portalable", icon='MESH_PLANE')
         col.operator("wm.add_wall", text="Tiles", icon='MESH_PLANE')
         
         layout.label("Trigger:")
@@ -29,9 +29,9 @@ class GlPortalCreationPanel(bpy.types.Panel):
         col = split.column(align=True)
         col.operator("wm.add_death", text="Death", icon='MESH_CUBE')
         col.operator("wm.add_radiation", text="Radiation", icon='MESH_CUBE')
-        col.operator("wm.add_win", text="Win (in future)", icon='MESH_CUBE')
+        col.operator("wm.add_win", text="Win", icon='MESH_CUBE')
         
-        layout.label("Models (in future):")
+        layout.label("Models:")
         row = layout.row()
         split = layout.split()
         col = split.column(align=True)

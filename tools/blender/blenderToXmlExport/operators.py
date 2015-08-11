@@ -5,9 +5,12 @@ import re
 from .paths import *
 from .operatorHelpers import *
 
+# we are using this for <end> (exit door)
 class addDoor(bpy.types.Operator):
     bl_idname = "wm.add_door"
-    bl_label = "Add a door."
+    bl_label = "Add a door"
+#    bl_description = "Add a door." # for the future
+    bl_description = "Add an exit door (use only once)"
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -28,7 +31,8 @@ class addDoor(bpy.types.Operator):
 
 class addLamp(bpy.types.Operator):
     bl_idname = "wm.add_lamp"
-    bl_label = "Add a lamp."
+    bl_label = "Add a lamp"
+    bl_description = "Add a lamp. (Not implemented)"
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -43,7 +47,8 @@ class addLamp(bpy.types.Operator):
 
 class addButton(bpy.types.Operator):
     bl_idname = "wm.add_button"
-    bl_label = "Add a button."
+    bl_label = "Add a button"
+    bl_description = "Add a button. (Not implemented)"
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -56,9 +61,10 @@ class addButton(bpy.types.Operator):
             object.glpTypes = "button"
         return {'FINISHED'}
 
-class setPortable(bpy.types.Operator):
-    bl_idname = "wm.set_portable"
-    bl_label = "Mark the selection as portable."
+class setPortalable(bpy.types.Operator):
+    bl_idname = "wm.set_portalable"
+    bl_label = "Mark as portalable wall"
+    bl_description = "Mark the selection as portalable wall."
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -67,7 +73,7 @@ class setPortable(bpy.types.Operator):
         object = bpy.context.active_object
         if object:
             object.glpTypes = "wall"
-            object.glpWallTypes = "portable"
+            object.glpWallTypes = "portalable"
             me = object.data
             if (len(me.materials) == 0):
                 me.materials.append(mat)
@@ -77,7 +83,8 @@ class setPortable(bpy.types.Operator):
 
 class setWall(bpy.types.Operator):
     bl_idname = "wm.set_wall"
-    bl_label = "Mark the selection as portable."
+    bl_label = "Merk as metal wall"
+    bl_description = "Mark the selection as metal wall."
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -96,7 +103,8 @@ class setWall(bpy.types.Operator):
 
 class addWall(bpy.types.Operator):
     bl_idname = "wm.add_wall"
-    bl_label = "Add a wall."
+    bl_label = "Add a metal wall"
+    bl_description = "Add a metal wall."
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -104,12 +112,13 @@ class addWall(bpy.types.Operator):
         setWall.execute(self, context)
         return {'FINISHED'}
 
-class addPortable(bpy.types.Operator):
-    bl_idname = "wm.add_portable"
-    bl_label = "Add a portable wall."
+class addPortalable(bpy.types.Operator):
+    bl_idname = "wm.add_portalable"
+    bl_label = "Add a portalable wall"
+    bl_description = "Add a portalable wall."
     bl_options = {"UNDO"}
     
     def execute(self, context):
         bpy.ops.mesh.primitive_cube_add()
-        setPortable.execute(self, context)
+        setPortalable.execute(self, context)
         return {'FINISHED'}

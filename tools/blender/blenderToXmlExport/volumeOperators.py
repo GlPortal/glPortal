@@ -7,7 +7,8 @@ from .operatorHelpers import *
 
 class setAcid(bpy.types.Operator):
     bl_idname = "wm.set_acid"
-    bl_label = "Mark the selection as a volume of acid."
+    bl_label = "Mark as acid"
+    bl_description = "Mark the selection as a volume of acid."
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -26,7 +27,8 @@ class setAcid(bpy.types.Operator):
 
 class addAcid(bpy.types.Operator):
     bl_idname = "wm.add_acid"
-    bl_label = "Create a volume of acid."
+    bl_label = "Add acid"
+    bl_description = "Add a volume of acid."
     bl_options = {"UNDO"}
     
     def execute(self, context):
