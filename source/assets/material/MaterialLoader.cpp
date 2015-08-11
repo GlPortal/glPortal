@@ -99,6 +99,8 @@ const Material& MaterialLoader::fromTexture(const std::string &name) {
   Material m;
   m.name = "rawtex/" + name;
   m.diffuse = TextureLoader::getTexture(name);
+  m.normal = TextureLoader::getEmptyNormal();
+  m.specular = TextureLoader::getEmptySpecular();
   auto inserted = materialCache.insert(std::pair<std::string, Material>(m.name, m));
   // Return reference to newly inserted Material
   return inserted.first->second;
