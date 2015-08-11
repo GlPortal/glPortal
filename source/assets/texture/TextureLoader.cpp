@@ -43,7 +43,7 @@ Texture TextureLoader::getEmptySpecular() {
     return it->second;
   }
   int width(0), height(0);
-  Texture texture = uploadTexture((const unsigned char*)"\xFF\xFF\xFF", 1, 1, 3);
+  Texture texture = uploadTexture((const unsigned char*)"\x7F\x7F\x7F", 1, 1, 3);
   texture.width = width;
   texture.height = height;
   textureCache.insert(std::pair<std::string, Texture>("engine@empty/specular", texture));

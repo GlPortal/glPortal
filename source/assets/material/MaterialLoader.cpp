@@ -101,6 +101,7 @@ const Material& MaterialLoader::fromTexture(const std::string &name) {
   m.diffuse = TextureLoader::getTexture(name);
   m.normal = TextureLoader::getEmptyNormal();
   m.specular = TextureLoader::getEmptySpecular();
+  m.shininess = 1;
   auto inserted = materialCache.insert(std::pair<std::string, Material>(m.name, m));
   // Return reference to newly inserted Material
   return inserted.first->second;
