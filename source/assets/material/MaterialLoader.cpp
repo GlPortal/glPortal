@@ -70,6 +70,7 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
   }
 
   XMLElement *surfaceE = rootH.FirstChildElement("surface").ToElement();
+  mat.portalable = false;
   if (surfaceE) {
     surfaceE->QueryBoolAttribute("portalable", &mat.portalable);
   }
