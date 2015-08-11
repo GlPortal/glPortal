@@ -17,5 +17,5 @@ class GlPortalObjectPanel(bpy.types.Panel):
         layout.prop(object, "glpTypes")
         if object.glpTypes == "trigger":
             layout.prop(object, "glpTriggerTypes")
-        if object.glpTypes == "wall":
+        elif object.glpTypes == "wall":
             layout.prop(object, "glpWallTypes")

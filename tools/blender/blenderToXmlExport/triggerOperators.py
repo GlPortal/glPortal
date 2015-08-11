@@ -64,7 +64,7 @@ class addDeath(bpy.types.Operator):
 class setRadiation(bpy.types.Operator):
     bl_idname = "wm.set_radiation"
     bl_label = "Mark as radiation trigger"
-    bl_description = "Mark the selection as radiation trigger. (Not implemented)"
+    bl_description = "Mark the selection as radiation trigger."
     bl_options = {"UNDO"}
     
     def execute(self, context):
@@ -81,7 +81,7 @@ class setRadiation(bpy.types.Operator):
 class addRadiation(bpy.types.Operator):
     bl_idname = "wm.add_radiation"
     bl_label = "Add a radiation trigger"
-    bl_description = "Add a radiation trigger. (Not implemented)"
+    bl_description = "Add a radiation trigger."
     bl_options = {"UNDO"}
     
     def execute(self, context):

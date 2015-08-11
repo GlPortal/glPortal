@@ -75,9 +75,9 @@ class ImportGlPortalFormat(bpy.types.Operator, ImportHelper):
                     for param in child:
                         if param.tag == "position":
                             object.location = extrackPosition(param)
-                        if param.tag == "rotation":
+                        elif param.tag == "rotation":
                             object.rotation_euler = extrackRotation(param);
-                        if param.tag == "scale":
+                        elif param.tag == "scale":
                             object.dimensions = extrackDimensions(param)
                 
                 if mid == portalAble:
@@ -92,9 +92,9 @@ class ImportGlPortalFormat(bpy.types.Operator, ImportHelper):
                     for param in child:
                         if param.tag == "position":
                             object.location = extrackPosition(param)
-                        if param.tag == "rotation":
+                        elif param.tag == "rotation":
                             object.rotation_euler = extrackRotation(param)
-                        if param.tag == "scale":
+                        elif param.tag == "scale":
                             object.dimensions = extrackDimensions(param)
                 setAcid.execute(self, context)
             elif child.tag == "spawn":
@@ -105,7 +105,7 @@ class ImportGlPortalFormat(bpy.types.Operator, ImportHelper):
                     for param in child:
                         if param.tag == "position":
                             object.location = extrackPosition(param)
-                        if param.tag == "rotation":
+                        elif param.tag == "rotation":
                             rotation = [math.radians(float(param.get("y")) + 90),
                                         math.radians(float(param.get("z")) - 180),
                                         math.radians(float(param.get("x")))]
@@ -131,7 +131,7 @@ class ImportGlPortalFormat(bpy.types.Operator, ImportHelper):
                 for param in child:
                     if param.tag == "position":
                         location = extrackPosition(param)
-                    if param.tag == "rotation":
+                    elif param.tag == "rotation":
                         rotation = extrackRotation(param, 90);
                 
                 realpath = os.path.expanduser(Paths.GLPORTAL_DATA_DIR + "meshes/Door.obj")
@@ -148,30 +148,21 @@ class ImportGlPortalFormat(bpy.types.Operator, ImportHelper):
                         object.location = location
                         object.rotation_euler = rotation
             elif child.tag == "trigger":
-                if child.get("type") == "death":
-                    bpy.ops.mesh.primitive_cube_add()
-                    object = bpy.context.active_object
-                    if object:
-                        for param in child:
-                            if param.tag == "position":
-                                object.location = extrackPosition(param)
-                            if param.tag == "rotation":
-                                object.rotation_euler = extrackRotation(param)
-                            if param.tag == "scale":
-                                object.dimensions = extrackDimensions(param)
-                        
+                bpy.ops.mesh.primitive_cube_add()
+                object = bpy.context.active_object
+                if object:
+                    for param in child:
+                        if param.tag == "position":
+                            object.location = extrackPosition(param)
+                        elif param.tag == "rotation":
+                            object.rotation_euler = extrackRotation(param)
+                        elif param.tag == "scale":
+                            object.dimensions = extrackDimensions(param)
+                    
+                    if child.get("type") == "death":
                         setDeath.execute(self, context)
-                if child.get("type") == "radiation":
-                    bpy.ops.mesh.primitive_cube_add()
-                    object = bpy.context.active_object
-                    if object:
-                        for param in child:
-                            if param.tag == "position":
-                                object.location = extrackPosition(param)
-                            if param.tag == "rotation":
-                                object.rotation_euler = extrackRotation(param)
-                            if param.tag == "scale":
-                                object.dimensions = extrackDimensions(param)
-                        
+                    elif child.get("type") == "radiation":
                         setRadiation.execute(self, context)
+                    else:
+                        object.delete()
         return {'FINISHED'}

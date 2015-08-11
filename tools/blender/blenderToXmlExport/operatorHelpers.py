@@ -33,6 +33,6 @@ def getMaterial(texturePath, diffuse, dimensions = [1,1,1]):
     mtex.mapping = 'CUBE'
     mtex.use_map_emit = True
     mtex.emit_factor = 0.3
-    mtex.offset = [0, -0.25, 0]
+#    mtex.offset = [0, -0.25, 0]
     
     return mat

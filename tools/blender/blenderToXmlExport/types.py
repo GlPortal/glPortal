@@ -24,7 +24,7 @@ glpTriggerTypes = [
     ("none" ,"None" , "No special property"),
     ("win" , "Trigger Win" , "Area triggers win (Not implemented)"),
     ("death" , "Trigger Death" , "Area triggers death"),
-    ("radiation" , "Trigger Radiation" , "Area triggers rad (Not implemented)")
+    ("radiation" , "Trigger Radiation" , "Area triggers rad")
 ]
 
 def setTypes():

@@ -9,7 +9,6 @@ import math
 import string
 from mathutils import Vector
 import re
-   
 
 def storePosition(element, object):
     element.set("x", str(round(object.location[0], 5)))
@@ -77,6 +76,7 @@ class ExportGlPortalFormat(bpy.types.Operator, ExportHelper):
                 type = object.glpTypes
             else:
                 type = "None"
+            
             if object.type == "LAMP":
                 writeLampToTree(object, root)
             elif object.type == "CAMERA":

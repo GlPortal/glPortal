@@ -1,9 +1,9 @@
 #!BPY
 bl_info = {
     "name":         "GlPortal XML Format",
-    "author":       "Henry Hirsch",
+    "author":       "Henry Hirsch, Juraj Oravec",
     "blender":      (2, 6, 3),
-    "version":      (0, 0, 3),
+    "version":      (0, 0, 5),
     "location":     "File > Import-Export",
     "description":  "GlPortal XML Format",
     "category":     "Import-Export"
