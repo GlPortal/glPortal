@@ -14,11 +14,15 @@ find_package(CXX11 REQUIRED)
 set(CMAKE_CXX_FLAGS "${CXX11_FLAGS} ${CMAKE_CXX_FLAGS}")
 
 find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIR})
+# Don't load libGLU, that's old GL1.0 crap.
+set(PORTAL_LIBRARIES ${OPENGL_gl_LIBRARY})
+
 find_package(PkgConfig REQUIRED)
 pkg_search_module(EPOXY REQUIRED epoxy)
 find_package(UnitTestPlusPlus)
-include_directories(${OPENGL_INCLUDE_DIR} ${EPOXY_INCLUDE_DIRS})
-set(PORTAL_LIBRARIES ${OPENGL_LIBRARIES} ${EPOXY_LIBRARIES} )
+include_directories(${EPOXY_INCLUDE_DIRS})
+list(APPEND PORTAL_LIBRARIES ${EPOXY_LIBRARIES} )
 
 find_package(Assimp REQUIRED)
 include_directories(${ASSIMP_INCLUDE_DIRS})
