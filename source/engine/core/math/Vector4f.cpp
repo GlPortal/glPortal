@@ -58,7 +58,7 @@ Quaternion& Quaternion::operator*=(const Quaternion &q) {
 
 void Quaternion::fromAxAngle(const Vector3f &a, float r) {
   Vector3f na = normalise(a);
-  register float sinR2 = std::sin(r / 2);
+  float sinR2 = std::sin(r / 2);
   this->x = na.x * sinR2;
   this->y = na.y * sinR2;
   this->z = na.z * sinR2;
@@ -99,7 +99,7 @@ void Quaternion::setFromEuler(const Vector3f &e) {
 }
 
 Vector4f Quaternion::toAxAngle() const {
-  register float r = std::acos(w)*2, invSinR2 = 1/std::sin(r/2);
+  float r = std::acos(w)*2, invSinR2 = 1/std::sin(r/2);
   return Vector4f(
     x * invSinR2,
     y * invSinR2,
