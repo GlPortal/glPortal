@@ -13,8 +13,8 @@ Binds materials, either loaded, defined inline, or both (overrides) to a materia
 The ~name~ tag defines the path where to load the material definition file, if any, without extension.
 #+BEGIN_SRC xml
 <materials>
-	<mat mid="1" name="concrete/wall00"/>
-	<mat mid="2" name="metal/tiles00x3"/>
+    <mat mid="1" name="concrete/wall00"/>
+    <mat mid="2" name="metal/tiles00x3"/>
 </materials>
 #+END_SRC
 
@@ -34,8 +34,8 @@ Attributes degree int x, int y, int z.
 ** Spawn Position
 #+BEGIN_SRC xml
 <spawn>
-	<position x="2.5" y="1" z="5"/>
-	<rotation x="0" y="-90" z="0"/>
+    <position x="2.5" y="1" z="5"/>
+    <rotation x="0" y="-90" z="0"/>
 </spawn>
 #+END_SRC
 
@@ -43,8 +43,8 @@ Attributes degree int x, int y, int z.
 End position is deprecated and will be replaced by the end_map trigger in the future.
 #+BEGIN_SRC xml
 <end>
-	<position x="25" y="0" z="5"/>
-	<rotation x="0" y="90" z="0"/>
+    <position x="25" y="0" z="5"/>
+    <rotation x="0" y="90" z="0"/>
 </end>
 #+END_SRC
 
@@ -52,19 +52,34 @@ End position is deprecated and will be replaced by the end_map trigger in the fu
 ** Model
 #+BEGIN_SRC xml
 <model mesh="door" texture="door">
-	<position x="25" y="0" z="5"/>
-	<rotation x="0" y="90" z="0"/>
+    <position x="25" y="0" z="5"/>
+    <rotation x="0" y="90" z="0"/>
 </model>
 #+END_SRC
 #+END_COMMENT
+
+** Light
+Define a point light.
+***** Required attributes:
+ - Position - float x, float y, float z
+ - Color - float r, float g, float b
+ - Distance - float distance
+ - Energy - float energy
+***** Optional attributes:
+ - specular - int specular
+#+BEGIN_SRC xml
+<light x="10" y="6" z="5" r="0.9" g="0.9" b="1" distance="20" energy="5" specular="1"/>
+<light x="10" y="6" z="5" r="0.9" g="0.9" b="1" distance="20" energy="5" specular="0"/>
+<light x="10" y="6" z="5" r="0.9" g="0.9" b="1" distance="20" energy="5"/>
+#+END_SRC
 
 ** Wall
 Defines a wall. Surface properties (visual, portalability, ...) are defined by its material, referenced by its ~mid~ field.
 #+BEGIN_SRC xml
 <wall mid="2">
-	<position x="25" y="0" z="5"/>
-	<rotation x="0" y="90" z="0"/>
-	<scale x="1.0" y="4.0" z="4.0"/>
+    <position x="25" y="0" z="5"/>
+    <rotation x="0" y="90" z="0"/>
+    <scale x="1.0" y="4.0" z="4.0"/>
 </wall>
 #+END_SRC
 
@@ -72,104 +87,104 @@ Defines a wall. Surface properties (visual, portalability, ...) are defined by i
 #+BEGIN_SRC xml
 <?xml version="1.0" ?>
 <map>
-	<spawn>
-		<position x="2.5" y="1" z="5"/>
-		<rotation x="0" y="-90" z="0"/>
-	</spawn>
-	<end>
-		<position x="25" y="0" z="5"/>
-		<rotation x="0" y="90" z="0"/>
-	</end>
-	<light x="10" y="6" z="5" r="0.9" g="0.9" b="1"/>
-	
-	<texture source="wall.png">
-		<!-- Top portal wall -->
-		<wall>
-			<position x="20.25" y="6" z="5"/>
-			<scale x="0.5" y="4.0" z="4.0"/>
-		</wall>
-		<!-- Pit portal wall -->
-		<wall>
-			<position x="5.25" y="-3" z="5"/>
-			<scale x="0.5" y="4.0" z="4.0"/>
-		</wall>
-	</texture>
-	<texture source="tiles.png">
-		<!-- Back floor -->
-		<wall>
-			<position x="2.5" y="-3" z="5"/>
-			<scale x="5.0" y="6.0" z="10.0"/>
-		</wall>
-		<!-- Front floor -->
-		<wall>
-			<position x="17.5" y="-3" z="5"/>
-			<scale x="5.0" y="6.0" z="10.0"/>
-		</wall>
-		<!-- Ceiling -->
-		<wall>
-			<position x="10" y="8.5" z="5"/>
-			<scale x="20.0" y="1.0" z="10.0"/>
-		</wall>
-		<!-- Back wall -->
-		<wall>
-			<position x="0" y="4" z="5"/>
-			<scale x="2.0" y="8.0" z="10.0"/>
-		</wall>
-		<!-- Front wall left -->
-		<wall>
-			<position x="20.25" y="4" z="1.5"/>
-			<scale x="0.5" y="8.0" z="3.0"/>
-		</wall>
-		<!-- Front wall right -->
-		<wall>
-			<position x="20.5" y="4" z="8.5"/>
-			<scale x="1.0" y="8.0" z="3.0"/>
-		</wall>
-		<!-- Left wall -->
-		<wall>
-			<position x="10" y="0" z="-0.5"/>
-			<scale x="20.0" y="16.0" z="1.0"/>
-		</wall>
-		<!-- Right wall -->
-		<wall>
-			<position x="10" y="0" z="10.5"/>
-			<scale x="20.0" y="16.0" z="1.0"/>
-		</wall>
-		
-		<!-- Hall -->
-		<!-- Left wall -->
-		<wall>
-			<position x="22.75" y="2" z="2.5"/>
-			<scale x="4.5" y="4.0" z="1.0"/>
-		</wall>
-		<!-- Right wall -->
-		<wall>
-			<position x="22.75" y="2" z="7.5"/>
-			<scale x="4.5" y="4.0" z="1.0"/>
-		</wall>
-		<!-- Floor -->
-		<wall>
-			<position x="22.5" y="-3" z="5"/>
-			<scale x="5.0" y="6.0" z="4.0"/>
-		</wall>
-		<!-- Ceiling -->
-		<wall>
-			<position x="22.75" y="4.5" z="5"/>
-			<scale x="4.5" y="1.0" z="4.0"/>
-		</wall>
-		<!-- Front wall -->
-		<wall>
-			<position x="25.5" y="2" z="5"/>
-			<scale x="1.0" y="4.0" z="4.0"/>
-		</wall>
-		
-		<!-- Pit -->
-		<!-- Floor -->
-		<!-- Left wall -->
-		<wall>
-			<position x="10" y="-5.5" z="5"/>
-			<scale x="10.0" y="1.0" z="10.0"/>
-		</wall>
-	</texture>
+    <spawn>
+        <position x="2.5" y="1" z="5"/>
+        <rotation x="0" y="-90" z="0"/>
+    </spawn>
+    <end>
+        <position x="25" y="0" z="5"/>
+        <rotation x="0" y="90" z="0"/>
+    </end>
+    <light x="10" y="6" z="5" r="0.9" g="0.9" b="1" distance="20" energy="5" specular="1"/>
+
+    <texture source="wall.png">
+        <!-- Top portal wall -->
+        <wall>
+            <position x="20.25" y="6" z="5"/>
+            <scale x="0.5" y="4.0" z="4.0"/>
+        </wall>
+        <!-- Pit portal wall -->
+        <wall>
+            <position x="5.25" y="-3" z="5"/>
+            <scale x="0.5" y="4.0" z="4.0"/>
+        </wall>
+    </texture>
+    <texture source="tiles.png">
+        <!-- Back floor -->
+        <wall>
+            <position x="2.5" y="-3" z="5"/>
+            <scale x="5.0" y="6.0" z="10.0"/>
+        </wall>
+        <!-- Front floor -->
+        <wall>
+            <position x="17.5" y="-3" z="5"/>
+            <scale x="5.0" y="6.0" z="10.0"/>
+        </wall>
+        <!-- Ceiling -->
+        <wall>
+            <position x="10" y="8.5" z="5"/>
+            <scale x="20.0" y="1.0" z="10.0"/>
+        </wall>
+        <!-- Back wall -->
+        <wall>
+            <position x="0" y="4" z="5"/>
+            <scale x="2.0" y="8.0" z="10.0"/>
+        </wall>
+        <!-- Front wall left -->
+        <wall>
+            <position x="20.25" y="4" z="1.5"/>
+            <scale x="0.5" y="8.0" z="3.0"/>
+        </wall>
+        <!-- Front wall right -->
+        <wall>
+            <position x="20.5" y="4" z="8.5"/>
+            <scale x="1.0" y="8.0" z="3.0"/>
+        </wall>
+        <!-- Left wall -->
+        <wall>
+            <position x="10" y="0" z="-0.5"/>
+            <scale x="20.0" y="16.0" z="1.0"/>
+        </wall>
+        <!-- Right wall -->
+        <wall>
+            <position x="10" y="0" z="10.5"/>
+            <scale x="20.0" y="16.0" z="1.0"/>
+        </wall>
+
+        <!-- Hall -->
+        <!-- Left wall -->
+        <wall>
+            <position x="22.75" y="2" z="2.5"/>
+            <scale x="4.5" y="4.0" z="1.0"/>
+        </wall>
+        <!-- Right wall -->
+        <wall>
+            <position x="22.75" y="2" z="7.5"/>
+            <scale x="4.5" y="4.0" z="1.0"/>
+        </wall>
+        <!-- Floor -->
+        <wall>
+            <position x="22.5" y="-3" z="5"/>
+            <scale x="5.0" y="6.0" z="4.0"/>
+        </wall>
+        <!-- Ceiling -->
+        <wall>
+            <position x="22.75" y="4.5" z="5"/>
+            <scale x="4.5" y="1.0" z="4.0"/>
+        </wall>
+        <!-- Front wall -->
+        <wall>
+            <position x="25.5" y="2" z="5"/>
+            <scale x="1.0" y="4.0" z="4.0"/>
+        </wall>
+
+        <!-- Pit -->
+        <!-- Floor -->
+        <!-- Left wall -->
+        <wall>
+            <position x="10" y="-5.5" z="5"/>
+            <scale x="10.0" y="1.0" z="10.0"/>
+        </wall>
+    </texture>
 </map>
 #+END_SRC
