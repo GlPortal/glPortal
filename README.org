@@ -3,12 +3,13 @@
 #+END_HTML
 
 * About
-GlPortal is a puzzle game where you have to use teleportation to reach the exit.
+GlPortal is a modern free and open shader based 3d game and game engine with realistic physic simulation.
+It runs on all modern operating systems including GNU/Linux, Mac and Windows.
+You can find the website at http://glportal.de .
 
+* History 
 GlPortal was created by Simon Larsen in 2012 and Henry Hirsch took over development in 2013.
 In 2014 Julian Thijssen joined the development team.
-
-You can find the website at http://glportal.de .
 
 Chat with us at irc.freenode.org in the channel ##glportal.
 * Contributors
