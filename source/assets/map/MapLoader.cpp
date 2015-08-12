@@ -141,7 +141,9 @@ void MapLoader::extractLights() {
 
     lightElement->QueryFloatAttribute("distance", &distance);
     lightElement->QueryFloatAttribute("energy", &energy);
-    lightElement->QueryFloatAttribute("specular", &specular);
+    if (lightElement->QueryFloatAttribute("specular", &specular) == XML_NO_ATTRIBUTE) {
+      specular = 0;
+    }
 
     scene->entities.emplace_back();
     Entity &light = scene->entities.back();
