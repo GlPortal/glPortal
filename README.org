@@ -21,8 +21,6 @@ Chat with us at irc.freenode.org in the channel ##glportal.
 - Stephan Vedder
 - Xantares
 ** Graphics
-- Urpo Lankinen - Bitmap Font
-- Kuronus for Blendswap - FPS Hands rigged (added portal egg)
 - Jason Pulkkinen - GlPortal logo
 * Compile the source
 For instructions on how to compile the game please read COMPILE.org.
