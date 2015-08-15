@@ -13,16 +13,17 @@ Chat with us at *irc.freenode.org* in the channel *##glportal*.
 #+END_HTML
 
 * History 
-GlPortal was created by Simon Larsen in 2012 and Henry Hirsch took over development in 2013.
-In 2014 Julian Thijssen joined the development team.
+GlPortal is based on a project of Simon Larsen in 2012.
 * Contributors
 ** Programming
-- Henry Hirsch
-- Julian Thijssen
-- Dorian Wouters
-- Juraj Oravec
-- Stephan Vedder
+*** Team
+- Henry Hirsch (since 2013)
+- Julian Thijssen (since 2014)
+- Dorian Wouters (since 2014)
+- Juraj Oravec (since 2015)
+*** Mayor Contributions
 - Xantares
+- Stephan Vedder (since 2015)
 ** Graphics
 - Jason Pulkkinen - GlPortal logo
 * Compile the source
