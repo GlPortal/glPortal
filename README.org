@@ -33,4 +33,4 @@ Chat with us at irc.freenode.org in the channel ##glportal
 for questions and discussions about the development of the game.
 Report Issues to http://bugs.glportal.de .
 
-Please send me a pull request on github if you have changes.
+Please send us a pull request on github if you have changes.
