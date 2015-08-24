@@ -14,8 +14,8 @@ void PhysicsSystem::setScene(Scene *scene) {
 
   this->scene = scene;
   filterCallback = new PortalFilterCallback(*scene);
-  scene->physics.world->getPairCache()->setOverlapFilterCallback(filterCallback);
-  //scene->physics.dispatcher->setNearCallback(PortalFilterCallback::nearCallback);
+  //scene->physics.world->getPairCache()->setOverlapFilterCallback(filterCallback);
+  scene->physics.dispatcher->setNearCallback(PortalFilterCallback::nearCallback);
 }
 
 PhysicsSystem::PhysicsSystem() : 
