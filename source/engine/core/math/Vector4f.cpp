@@ -28,6 +28,13 @@ Vector4f& Vector4f::operator=(const btVector4 &v) {
   return *this;
 }
 
+bool Vector4f::fuzzyEqual(const Vector4f &v, float threshold) const {
+  return (x > v.x - threshold and x < v.x + threshold) and
+         (y > v.y - threshold and y < v.y + threshold) and
+         (z > v.z - threshold and z < v.z + threshold) and
+         (w > v.w - threshold and w < v.w + threshold);
+}
+
 Vector4f::operator btQuaternion() const {
   return btQuaternion(x, y, z, w);
 }
@@ -56,46 +63,47 @@ Quaternion& Quaternion::operator*=(const Quaternion &q) {
   return *this;
 }
 
-void Quaternion::fromAxAngle(const Vector3f &a, float r) {
-  Vector3f na = normalise(a);
+Quaternion& Quaternion::fromAxAngle(const Vector3f &a, float r) {
+  Vector3f na = normalize(a);
   float sinR2 = std::sin(r / 2);
   this->x = na.x * sinR2;
   this->y = na.y * sinR2;
   this->z = na.z * sinR2;
   this->w = std::cos(r / 2);
+  return *this;
 }
 
-void Quaternion::fromAxAngle(float x, float y, float z, float r) {
-  fromAxAngle(Vector3f(x, y, z), r);
+Quaternion& Quaternion::fromAxAngle(float x, float y, float z, float r) {
+  return fromAxAngle(Vector3f(x, y, z), r);
 }
 
-void Quaternion::fromAxAngle(const Vector4f &a) {
-  fromAxAngle(a.x, a.y, a.z, a.w);
+Quaternion& Quaternion::fromAxAngle(const Vector4f &a) {
+  return fromAxAngle(a.x, a.y, a.z, a.w);
 }
 
-void Quaternion::setFromEuler(float p, float y, float z) {
-  float c1 = std::cos(p/2);
-  float s1 = std::sin(p/2);
-  float c2 = std::cos(y/2);
-  float s2 = std::sin(y/2);
+Quaternion& Quaternion::setFromEuler(float p, float y, float r) {
+  float c1 = std::cos(y/2);
+  float s1 = std::sin(y/2);
+  float c2 = std::cos(p/2);
+  float s2 = std::sin(p/2);
   float c3 = std::cos(r/2);
   float s3 = std::sin(r/2);
-  float c1c2 = c1*c2;
-  float s1s2 = s1*s2;
-  this->x = c1c2*s3 + s1s2*c3;
-  this->y = s1*c2*c3 + c1*s2*s3;
-  this->z = c1*s2*c3 - s1*c2*s3;
-  this->w = c1c2*c3 - s1s2*s3;
+  float c1c2 = c1*c2, s1s2 = s1*s2, s1c2 = s1*c2, c1s2 = c1*s2;
+  this->w = c1c2 * c3 - s1s2 * s3;
+  this->x = s1s2 * c3 + c1c2 * s3;
+  this->y = s1c2 * c3 + c1s2 * s3;
+  this->z = c1s2 * c3 - s1c2 * s3;
   // Normalise:
   float invlen = 1/length(*this);
   this->x *= invlen;
   this->y *= invlen;
   this->z *= invlen;
   this->w *= invlen;
+  return *this;
 }
 
-void Quaternion::setFromEuler(const Vector3f &e) {
-  setFromEuler(e.pitch, e.yaw, e.roll);
+Quaternion& Quaternion::setFromEuler(const Vector3f &e) {
+  return setFromEuler(e.pitch, e.yaw, e.roll);
 }
 
 Vector4f Quaternion::toAxAngle() const {

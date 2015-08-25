@@ -52,12 +52,14 @@ public:
   Vector2f operator-() const;
   Vector2f operator*(float scale) const;
   Vector2f operator/(float divisor) const;
+
+  bool fuzzyEqual(const Vector2f&, float threshold = .02f) const;
 };
 
 /* Utility functions */
 float dot(const Vector2f& v1, const Vector2f& v2);
 Vector2f negate(const Vector2f& v);
-Vector2f normalise(const Vector2f& v);
+Vector2f normalize(const Vector2f& v);
 
 } /* namespace glPortal */
 

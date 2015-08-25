@@ -109,6 +109,11 @@ Vector2f Vector2f::operator/(float divisor) const {
   return Vector2f(x / divisor, y / divisor);
 }
 
+bool Vector2f::fuzzyEqual(const Vector2f &v, float threshold) const {
+  return (x > v.x - threshold and x < v.x + threshold) and
+         (y > v.y - threshold and y < v.y + threshold);
+}
+
 /* Utility functions */
 float dot(const Vector2f& v1, const Vector2f& v2) {
   return v1.x * v2.x + v1.y * v2.y;
@@ -118,7 +123,7 @@ Vector2f negate(const Vector2f& v) {
   return Vector2f(-v.x, -v.y);
 }
 
-Vector2f normalise(const Vector2f& v) {
+Vector2f normalize(const Vector2f& v) {
   float l = v.length();
   return Vector2f(v.x / l, v.y / l);
 }

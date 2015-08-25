@@ -123,6 +123,12 @@ Vector3f Vector3f::operator/(float divisor) const {
   return Vector3f(x / divisor, y / divisor, z / divisor);
 }
 
+bool Vector3f::fuzzyEqual(const Vector3f &v, float threshold) const {
+  return (x > v.x - threshold and x < v.x + threshold) and
+         (y > v.y - threshold and y < v.y + threshold) and
+         (z > v.z - threshold and z < v.z + threshold);
+}
+
 /* Bullet interop */
 
 Vector3f::Vector3f(const btVector3 &v) :
@@ -155,7 +161,7 @@ Vector3f negate(const Vector3f& v) {
   return Vector3f(-v.x, -v.y, -v.z);
 }
 
-Vector3f normalise(const Vector3f& v) {
+Vector3f normalize(const Vector3f& v) {
   float l = v.length();
   return Vector3f(v.x / l, v.y / l, v.z / l);
 }

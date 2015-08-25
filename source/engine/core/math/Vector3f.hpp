@@ -60,6 +60,8 @@ public:
   Vector3f operator*(float scale) const;
   Vector3f operator/(float divisor) const;
 
+  bool fuzzyEqual(const Vector3f&, float threshold = .02f) const;
+
   /* Bullet interop */
   Vector3f(const btVector3&);
   operator btVector3() const;
@@ -70,7 +72,7 @@ public:
 float dot(const Vector3f& v1, const Vector3f& v2);
 Vector3f cross(const Vector3f& v1, const Vector3f& v2);
 Vector3f negate(const Vector3f& v);
-Vector3f normalise(const Vector3f& v);
+Vector3f normalize(const Vector3f& v);
 
 } /* namespace glPortal */
 

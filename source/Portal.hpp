@@ -21,7 +21,7 @@ public:
   Portal(Entity &ent) : Component(ent), open(false) {}
   Vector3f getDirection() const;
   bool inPortal(const BoxCollider &collider) const;
-  void placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, const Vector3f &point);
+  void placeOnWall(const Vector3f &launchPos, const Vector3f &point, const Vector3f &normal);
 
   Vector3f getScaleMult() const;
 

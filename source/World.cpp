@@ -275,8 +275,8 @@ void World::render(double dtime) {
   renderer->render(dtime, scene->camera);
   if (isPhysicsDebugEnabled) {
     scene->physics.world->debugDrawWorld();
+    pdd.render(scene->camera);
   }
-  pdd.render(scene->camera);
   if (isEditorShown) {
     editor->renderUI();
   }
@@ -287,7 +287,7 @@ Entity& World::getPlayer() {
 }
 
 void World::hidePortals() {
-  WorldHelper::hidePortals(scene);
+  WorldHelper::closePortals(scene);
 }
 
 } /* namespace glPortal */

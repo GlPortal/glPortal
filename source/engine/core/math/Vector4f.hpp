@@ -94,6 +94,8 @@ struct Vector4f {
     return *this;
   }
 
+  bool fuzzyEqual(const Vector4f&, float threshold = .01f) const;
+
   operator btVector4() const;
   Vector4f& operator=(const btVector4&);
 
@@ -121,12 +123,12 @@ struct Quaternion : public Vector4f {
   Quaternion operator/(const Quaternion&) = delete;
   Quaternion& operator/=(const Quaternion&) = delete;
 
-  void fromAxAngle(float x, float y, float z, float r);
-  void fromAxAngle(const Vector3f &a, float r);
-  void fromAxAngle(const Vector4f &a);
+  Quaternion& fromAxAngle(float x, float y, float z, float r);
+  Quaternion& fromAxAngle(const Vector3f &a, float r);
+  Quaternion& fromAxAngle(const Vector4f &a);
 
-  void setFromEuler(float pitch, float yaw, float roll);
-  void setFromEuler(const Vector3f&);
+  Quaternion& setFromEuler(float pitch, float yaw, float roll);
+  Quaternion& setFromEuler(const Vector3f&);
 
   Vector4f toAxAngle() const;
   Matrix4f toMatrix() const;
