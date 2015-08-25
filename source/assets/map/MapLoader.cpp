@@ -101,13 +101,10 @@ void MapLoader::extractSpawn() {
     scene->start = &scene->entities.create();
     Transform &t = scene->start->addComponent<Transform>();
     XmlHelper::extractPosition(spawnElement, t.position);
-    Vector3f plrRotation;
-    XmlHelper::extractRotation(spawnElement, plrRotation);
+    PlayerMotion &pm = scene->player->getComponent<PlayerMotion>();
+    XmlHelper::extractRotation(spawnElement, pm.rotation);
     Transform &pt = scene->player->getComponent<Transform>();
     pt.position = t.position;
-    PlayerMotion &pm = scene->player->getComponent<PlayerMotion>();
-    pm.rotation.x = plrRotation.y;
-    pm.rotation.y = plrRotation.x;
   } else {
     throw std::runtime_error("No spawn position defined.");
   }
