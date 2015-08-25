@@ -47,8 +47,8 @@ void XmlHelper::extractRotation(XMLElement *xmlElement, Vector3f &rotation) {
   if (elm) {
     Vector3f tmpRot;
     pushAttributeVertexToVector(elm, tmpRot);
-    rotation.pitch = rad(tmpRot.y);
-    rotation.yaw   = rad(tmpRot.x);
+    rotation.pitch = rad(tmpRot.x);
+    rotation.yaw   = rad(tmpRot.y);
     rotation.roll  = rad(tmpRot.z);
   } else {
     rotation.pitch = rotation.yaw = rotation.roll = 0;
