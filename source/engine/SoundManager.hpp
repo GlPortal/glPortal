@@ -1,6 +1,6 @@
 #ifndef SOUNDMANAGER_HPP
 #define SOUNDMANAGER_HPP
- 
+
 #include <SDL2/SDL_mixer.h>
 #include <string>
 #include <map>
@@ -24,7 +24,7 @@ public:
   static void Update(const Entity &listener);
 private:
   static Mix_Music *music;
-  static std::map<int ,SoundInfo> sounds;
+  static std::map<int, SoundInfo> sounds;
 };
 
 } /* namespace glPortal */

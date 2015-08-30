@@ -3,7 +3,7 @@
 
 namespace glPortal {
 
-PortalFilterCallback::PortalFilterCallback(Scene &scene) : 
+PortalFilterCallback::PortalFilterCallback(Scene &scene) :
   scene(scene) {
 }
 
@@ -68,11 +68,12 @@ void PortalFilterCallback::nearCallback(btBroadphasePair &collisionPair,
         }
       } else {
         btScalar toi = collisionPair.m_algorithm->calculateTimeOfImpact(colObj0, colObj1, dispatchInfo, &contactPointResult);
-        if (dispatchInfo.m_timeOfImpact > toi)
+        if (dispatchInfo.m_timeOfImpact > toi) {
           dispatchInfo.m_timeOfImpact = toi;
+        }
       }
     }
   }
 }
-  
+
 } /* namespace glPortal */

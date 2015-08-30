@@ -18,7 +18,7 @@ void PhysicsSystem::setScene(Scene *scene) {
   scene->physics.dispatcher->setNearCallback(PortalFilterCallback::nearCallback);
 }
 
-PhysicsSystem::PhysicsSystem() : 
+PhysicsSystem::PhysicsSystem() :
   filterCallback(nullptr) {
 }
 

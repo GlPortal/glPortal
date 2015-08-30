@@ -263,7 +263,7 @@ void Renderer::renderPortalContent(const Camera &cam, const Entity &portal) {
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glDepthMask(GL_TRUE);
 }
-  
+
 void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entity &otherPortal) {
   if (portal.getComponent<Portal>().open and otherPortal.getComponent<Portal>().open) {
     glEnable(GL_STENCIL_TEST);
@@ -288,7 +288,7 @@ void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entit
     glDisable(GL_STENCIL_TEST);
   }
 }
-  
+
 void Renderer::renderPortalOverlay(const Camera &cam, const Entity &portal) {
   const Portal &p = portal.getComponent<Portal>();
   if (p.open) {

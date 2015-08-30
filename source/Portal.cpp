@@ -25,7 +25,7 @@ Vector3f Portal::getDirection() const {
 }
 
 bool Portal::inPortal(const BoxCollider &collider) const {
-  
+
   return PortalHelper::isInPortal(entity, collider);
 }
 
@@ -75,7 +75,7 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
     Vector3f H = normalize(from + normal);
     orientation.w = dot(from, H);
     orientation.x = from.y*H.z - from.z*H.y;
-    orientation.y = from.z*H.x - from.x*H.z; 
+    orientation.y = from.z*H.x - from.x*H.z;
     orientation.z = from.x*H.y - from.y*H.x;
   }
   open = true;
@@ -87,8 +87,9 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
 Vector3f Portal::getScaleMult() const {
   // FIXME: writing such a long line to get time is bad
   double delta = entity.manager.scene.world->getTime()-openSince;
-  if (delta > OPEN_ANIM_DURATION)
+  if (delta > OPEN_ANIM_DURATION) {
     return Vector3f(1, 1, 1);
+  }
   float s = delta;
 
   // Linear:

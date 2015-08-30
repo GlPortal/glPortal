@@ -78,7 +78,7 @@ void PlayerMotion::move(float dtime) {
       stepCounter += abs(velocity.x);
       stepCounter += abs(velocity.z);
 
-      if(stepCounter>=2.5f) {
+      if (stepCounter>=2.5f) {
         std::uniform_int_distribution<> dis(0, PLAYER_FOOT_SOUND.size()-1);
         entity.getComponent<SoundSource>().playSound(
           Environment::getDataDir() + PLAYER_FOOT_SOUND[dis(generator)]);

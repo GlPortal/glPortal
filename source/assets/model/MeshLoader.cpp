@@ -249,7 +249,7 @@ Mesh MeshLoader::getPortalBox(const Entity &wall) {
     texCoordsOffset = coordsSize,
     normalsOffset = texCoordsOffset + texcSize,
     tangentsOffset = normalsOffset + normalsSize;
-  for(int i = 0; i < 36; ++i) {
+  for (int i = 0; i < 36; ++i) {
     const float *v = vertices[vi[i]];
     data << v[0] << v[1] << v[2];
     

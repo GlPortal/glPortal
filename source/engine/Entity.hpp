@@ -14,7 +14,7 @@ class EntityManager;
 class Entity {
 public:
   EntityManager &manager;
-  Entity(EntityManager &manager) : 
+  Entity(EntityManager &manager) :
     manager(manager) {
   }
 

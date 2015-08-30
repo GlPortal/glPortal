@@ -16,7 +16,7 @@ std::string XmlHelper::invalidElementMessage("pushAttributeToVector received an 
   * Trying to pull attributes from a non-existing element is considered an exception.
   */
 void XmlHelper::pushAttributeVertexToVector(XMLElement *xmlElement, Vector3f &targetVector) {
-  if(xmlElement) {
+  if (xmlElement) {
     int xQueryResult = xmlElement->QueryFloatAttribute("x", &targetVector.x);
     int yQueryResult = xmlElement->QueryFloatAttribute("y", &targetVector.y);
     int zQueryResult = xmlElement->QueryFloatAttribute("z", &targetVector.z);

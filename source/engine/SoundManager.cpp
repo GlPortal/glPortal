@@ -78,8 +78,9 @@ void SoundManager::Destroy() {
   for (const auto sound : sounds) {
     Mix_FreeChunk(sound.second.chunk);
   }
-  if (music!=nullptr)
+  if (music!=nullptr) {
     Mix_FreeMusic(music);
+  }
   Mix_CloseAudio();
 }
 

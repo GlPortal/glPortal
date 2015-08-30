@@ -24,4 +24,3 @@ EntityPair& SceneHelper::getPortalPairFromScene(int n, Scene *scene) {
   return scene->portalPairs.at(n);
 }
 } /* namespace glPortal */
-
