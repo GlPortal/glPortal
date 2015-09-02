@@ -354,7 +354,8 @@ void Renderer::renderText(const Camera &cam, const std::string &text, int x, int
  * Renders a mesh with the specified texture
  * @param mesh The mesh to render
  */
-void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat) {
+void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh,
+                          const Material *mat) {
   glUseProgram(sh.handle);
 
   Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
@@ -401,7 +402,8 @@ void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx,
   glBindVertexArray(0);
 }
 
-void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal) {
+void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal,
+                                 const Entity &otherPortal) {
   Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
   p1mat.translate(p1T.position);

@@ -229,7 +229,7 @@ void MapLoader::extractModels() {
   string texture("none");
   string mesh("none");
   XMLElement *modelElement = rootHandle.FirstChildElement("model").ToElement();
-  if (modelElement){
+  if (modelElement) {
     do {
       texture = modelElement->Attribute("texture");
       mesh = modelElement->Attribute("mesh");
