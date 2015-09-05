@@ -59,7 +59,7 @@ void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
 }
 void ArgumentsParser::populateConfig() {
   Config &config = Environment::getConfig();
-  if (mapName != ""){
+  if (mapName != "") {
     config.map = mapName;
   }
 }

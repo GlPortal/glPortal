@@ -20,13 +20,13 @@ void XmlHelper::pushAttributeVertexToVector(XMLElement *xmlElement, Vector3f &ta
     int xQueryResult = xmlElement->QueryFloatAttribute("x", &targetVector.x);
     int yQueryResult = xmlElement->QueryFloatAttribute("y", &targetVector.y);
     int zQueryResult = xmlElement->QueryFloatAttribute("z", &targetVector.z);
-    if (xQueryResult == XML_NO_ATTRIBUTE){
+    if (xQueryResult == XML_NO_ATTRIBUTE) {
       throwMandatoryAttributeException("<x>");
     }
-    if (yQueryResult == XML_NO_ATTRIBUTE){
+    if (yQueryResult == XML_NO_ATTRIBUTE) {
       throwMandatoryAttributeException("<y>");
     }
-    if (zQueryResult == XML_NO_ATTRIBUTE){
+    if (zQueryResult == XML_NO_ATTRIBUTE) {
       throwMandatoryAttributeException("<z>");
     }
   } else {
@@ -34,7 +34,7 @@ void XmlHelper::pushAttributeVertexToVector(XMLElement *xmlElement, Vector3f &ta
   }
 }
 
-void XmlHelper::throwMandatoryAttributeException(const std::string &message){
+void XmlHelper::throwMandatoryAttributeException(const std::string &message) {
   throw runtime_error(mandatoryAttributeMessage + message);
 }
 
