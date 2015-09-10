@@ -1,5 +1,6 @@
 * Quick note if you are compiling for the first time
 Well done. You did make the right decision. And it should not even be hard.
+
 * Satisfy dependencies
 You are going to need cmake, make and gcc in order to be able to compile C++ 
 sources on your system at all. It is impossible to predict how the packages
@@ -13,7 +14,8 @@ Remember, you have to be root, so you might want to prefix sudo, or do sudo su f
 or just su if you are on debian.
 
 So at the moment of this writing you can see the libraries the project is linking to in
-CMakeList.txt. They are SDL2 SDL2_mixer GLEW GL assimp.
+CMakeList.txt. They are SDL2 SDL2_mixer GL assimp bullet epoxy.
+Dependencies will change all the time so watch the output carefuly for missing libraries.
 
 Now how will you satisfy these dependencies? No problem. You might notice that when you
 are looking for them in your package manager that you get overwhelmed by a list of possible
@@ -26,7 +28,7 @@ Pretty much like libfoo-dev for most libraries.
 So for example to satisfy the dependencies in debian type the following to install all dependencies:
 
 #+BEGIN_SRC bash
-apt-get install libglew-dev libgl1-mesa-dev libsdl2-dev libsdl2-mixer-dev libassimp-dev
+apt-get install libgl1-mesa-dev libsdl2-dev libsdl2-mixer-dev libassimp-dev
 #+END_SRC
 
 See how libgl1-mesa-dev does not play by the rules? There are reasons for that, which we do not care about.
@@ -41,6 +43,7 @@ or after installing git with either of the following commands\\
 #+BEGIN_SRC bash
 git clone https://github.com/hhirsch/glPortal.git
 #+END_SRC
+
 *** Development:
 #+BEGIN_SRC bash
 git clone https://github.com/GlPortal/glPortal.git
@@ -60,7 +63,7 @@ cmake ./
 #+END_SRC
 
 Now if this throws an error you have to fix something first. If you don't manage to fix the error, use the
-bugtracker https://github.com/hhirsch/glPortal/issues to report what you did, and what error you got.
+bugtracker https://github.com/GlPortal/glPortal/issues or http://bugs.glportal.de to report what you did, and what error you got.
 
 If the command did not produce an error, you can build the binary by typing in:
 #+BEGIN_SRC bash
@@ -74,6 +77,7 @@ make run
 #+END_SRC
 
 If you get errors try running cmake source again. 
+
 * Keep me posted
 This does not work for you? Help us figure out what we missed to make this work on 
 your system.
