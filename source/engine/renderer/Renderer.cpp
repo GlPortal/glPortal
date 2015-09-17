@@ -120,6 +120,39 @@ void Renderer::render(double dtime, const Camera &cam) {
     glUniform1i(numLightsLoc, numLights);
   }
 
+  const Shader &metal = ShaderLoader::getShader("metal.frag");
+  glUseProgram(metal.handle);
+
+  /* Lights */ {
+    int numLights = 0;
+    for (const Entity &e : scene->entities) {
+      if (not e.hasComponent<LightSource>()) {
+        continue;
+      }
+
+      LightSource &ls = e.getComponent<LightSource>();
+      if (!ls._uploaded) {
+        const Transform &t = e.getComponent<Transform>();
+        std::string index = std::to_string(numLights);
+        std::string position = "lights[" + index + "].position";
+        std::string color = "lights[" + index + "].color";
+        std::string distance = "lights[" + index + "].distance";
+        std::string energy = "lights[" + index + "].energy";
+        std::string specular = "lights[" + index + "].specular";
+        glUniform3f(metal.uni(position.c_str()), t.position.x, t.position.y, t.position.z);
+        glUniform3f(metal.uni(color.c_str()), ls.color.x, ls.color.y, ls.color.z);
+        glUniform1f(metal.uni(distance.c_str()), ls.distance);
+        glUniform1f(metal.uni(energy.c_str()), ls.energy);
+        glUniform1f(metal.uni(specular.c_str()), ls.specular);
+        // ls._uploaded = true;
+      }
+
+      ++numLights;
+    }
+    int numLightsLoc = metal.uni("numLights");
+    glUniform1i(numLightsLoc, numLights);
+  }
+
   /* Portals, pass 1 */
   for (EntityPair &p : scene->portalPairs) {
     Entity &pEnt1 = *p.first,
@@ -227,7 +260,12 @@ void Renderer::renderEntity(const Camera &cam, const Entity &e) {
   Matrix4f mtx;
   e.getComponent<Transform>().getModelMtx(mtx);
   const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
-  renderMesh(cam, diffuse, mtx, drawable.mesh, drawable.material);
+  const Shader &metal = ShaderLoader::getShader("metal.frag");
+  if (drawable.material.fancyname.compare("Metal tiles .5x") == 0) {
+    renderMesh(cam, metal, mtx, drawable.mesh, drawable.material);
+  } else {
+    renderMesh(cam, diffuse, mtx, drawable.mesh, drawable.material);
+  }
 }
 
 void Renderer::renderPlayer(const Camera &cam) {
