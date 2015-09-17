@@ -16,7 +16,6 @@ class PortalHelper {
 public:
   static float* getDistancesForPoint(const Vector3f &point, const BoxCollider &wall);
   static float getDistanceFromCoordinates(const float &contactCoordinate, const float &outerBoundCoordinate);
-  static bool goesThroughPortal(const Entity &entity, const BoxCollider &collider);
   static bool isInPortal(const Entity &entity, const BoxCollider &collider);
 };
 

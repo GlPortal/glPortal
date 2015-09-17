@@ -14,20 +14,19 @@ public:
   static const int PORTAL_RANGE;
   static const Vector3f BLUE_COLOR;
   static const Vector3f ORANGE_COLOR;
-  static const int NOISE_FADE_DELAY;
-  static const int OPEN_ANIM_DURATION;
+  static const double NOISE_FADE_DELAY;
+  static const double OPEN_ANIM_DURATION;
   static const float SURFACE_OFFSET;
 
   Portal(Entity &ent) : Component(ent), open(false) {}
   Vector3f getDirection() const;
-  bool throughPortal(const BoxCollider &collider) const;
   bool inPortal(const BoxCollider &collider) const;
-  void placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, const Vector3f &point);
+  void placeOnWall(const Vector3f &launchPos, const Vector3f &point, const Vector3f &normal);
 
   Vector3f getScaleMult() const;
 
   Material overlayTex, maskTex;
-  uint32_t openSince;
+  double openSince;
   Mesh overlayMesh, stencilMesh;
   Vector3f direction, color;
   bool open;

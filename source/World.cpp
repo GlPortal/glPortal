@@ -22,7 +22,6 @@
 #include <engine/BoxCollider.hpp>
 #include <engine/Ray.hpp>
 #include <engine/Camera.hpp>
-#include <engine/SoundManager.hpp>
 
 #include <engine/component/Health.hpp>
 #include <engine/component/Transform.hpp>
@@ -36,6 +35,7 @@
 #include <engine/core/math/Math.hpp>
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
+#include <engine/core/event/Dispatcher.hpp>
 
 #include <SDL2/SDL_keyboard.h>
 
@@ -48,20 +48,19 @@
 namespace glPortal {
 
 float World::gravity = GRAVITY;
-
 World::World() :
+  isEditorShown(false),
+  gameTime(0),
   scene(nullptr),
-  isEditorShown(false) {
-  config = Environment::getConfigPointer();
+  config(Environment::getConfig()) {
 }
 
 void World::create() {
   editor = new Editor(*this);
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
-  lastUpdateTime = SDL_GetTicks();
   try {
-    std::string map = config->getString(Config::MAP);
+    std::string map = config.map;
     loadScene(map);
     System::Log(Info) << "Custom map loaded";
   } catch (const std::out_of_range& e) {
@@ -88,38 +87,31 @@ void World::loadScene(const std::string &path) {
   delete scene;
   currentScenePath = path;
   scene = MapLoader::getScene(path);
-  //play a random piece of music each time a scene is loaded
-  std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
-  SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
+
+  // FIXME Shall we do this here? Likely not.
+  scene->world = this;
+  phys.setScene(scene);
+  scene->physics.world->setDebugDrawer(&pdd);
+  scene->physics.setGravity(0, -9.8, 0);
+
+  Environment::dispatcher.dispatch(Event::loadScene);
 }
 
-void World::update() {
-  uint32_t updateTime = SDL_GetTicks();
-  float dtime = (updateTime-lastUpdateTime)/1000.f;
+double World::getTime() const {
+  return gameTime;
+}
 
-  // If F5 released, reload the scene
-  if (wasF5Down and not Input::isKeyDown(SDL_SCANCODE_F5)) {
-    if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
-      // Enable reload-on-change (inotify on Linux)
-    }
-
-    loadScene(currentScenePath);
-  }
-  wasF5Down = Input::isKeyDown(SDL_SCANCODE_F5);
-  // If Tab released, toggle editor
-  if (wasTabDown and not Input::isKeyDown(SDL_SCANCODE_TAB)) {
-    isEditorShown = !isEditorShown;
-  }
-  wasTabDown = Input::isKeyDown(SDL_SCANCODE_F5);
-
-  Entity &player = scene->player;
+void World::update(double dtime) {
+  gameTime += dtime;
+  
+  Entity &player = *scene->player;
   Health &plrHealth = player.getComponent<Health>();
   Transform &plrTform = player.getComponent<Transform>();
   PlayerMotion &plrMotion = player.getComponent<PlayerMotion>();
 
   // Check if player is still alive
   if (not plrHealth.isAlive()) {
-    plrTform.position = scene->start.getComponent<Transform>().position;
+    plrTform.position = scene->start->getComponent<Transform>().position;
     plrHealth.revive();
     hidePortals();
   }
@@ -129,9 +121,11 @@ void World::update() {
   plrMotion.mouseLook();
   plrMotion.move(dtime);
 
+  phys.update(dtime);
+
+/*
   // Figure out the provisional new player position
   Vector3f pos = plrTform.position + plrMotion.velocity;
-
   //Y collision
   BoxCollider bboxY(Vector3f(plrTform.position.x, pos.y, plrTform.position.z), plrTform.scale);
   
@@ -141,7 +135,7 @@ void World::update() {
 
     if (not portaling and not plrMotion.noclip) {
       if (plrMotion.velocity.y < 0) {
-        if(plrMotion.velocity.y < -HURT_VELOCITY) {
+        if (plrMotion.velocity.y < -HURT_VELOCITY) {
           std::uniform_int_distribution<> dis(0, PLAYER_FALL_SOUND.size()-1);
           player.getComponent<SoundSource>().playSound(
             Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)]);
@@ -189,7 +183,7 @@ void World::update() {
           player.getComponent<Health>().kill();
           printf("Death touched\n");
         } else if (trigger.type == "win") {
-          if(currentLevel + 1 < mapList.size()) {
+          if (currentLevel + 1 < mapList.size()) {
             currentLevel++;
           }
           loadScene(mapList[currentLevel]);
@@ -210,7 +204,7 @@ void World::update() {
   pos = plrTform.position + plrMotion.velocity;
 
   // Check if the player is moving through a portal
-  BoxCollider playerCollider(pos, plrTform.scale);
+  BoxCollider playerCollider(pos, plrTform.scale);// TODO reimplement with Bullet
   for (EntityPair &p : scene->portalPairs) {
     Portal &portal1 = p.first->getComponent<Portal>(),
             &portal2 = p.second->getComponent<Portal>();
@@ -234,7 +228,7 @@ void World::update() {
         plrMotion.velocity = portal1.getDirection() * velocity;
       }
     }
-  }
+  }*/
 
   //Add velocity to the player position
   plrTform.position += plrMotion.velocity;
@@ -245,18 +239,16 @@ void World::update() {
   renderer->getViewport()->getSize(&vpWidth, &vpHeight);
   scene->camera.setAspect((float)vpWidth / vpHeight);
   scene->camera.setPosition(plrTform.position + Vector3f(0, plrTform.scale.y/2, 0));
-  scene->camera.setRotation(plrTform.rotation);
+  scene->camera.setRotation(plrMotion.rotation);
 
   //Check if the end of the level has been reached
-  float distToEnd = (scene->end.getComponent<Transform>().position - plrTform.position).length();
+  float distToEnd = (scene->end->getComponent<Transform>().position - plrTform.position).length();
   if (distToEnd < 1) {
-    if(currentLevel + 1 < mapList.size()) {
+    if (currentLevel + 1 < mapList.size()) {
       currentLevel++;
     }
     loadScene(mapList[currentLevel]);
   }
-
-  lastUpdateTime = updateTime;
 }
 
 bool World::collidesWithWalls(const BoxCollider &collider) const {
@@ -274,20 +266,28 @@ void World::shootPortal(int button) {
   WorldHelper::shootPortal(button, scene);
 }
 
-void World::render() {
+Renderer* World::getRenderer() const {
+  return renderer;
+}
+
+void World::render(double dtime) {
   renderer->setScene(scene);
-  renderer->render(scene->camera);
+  renderer->render(dtime, scene->camera);
+  if (isPhysicsDebugEnabled) {
+    scene->physics.world->debugDrawWorld();
+    pdd.render(scene->camera);
+  }
   if (isEditorShown) {
     editor->renderUI();
   }
 }
 
 Entity& World::getPlayer() {
-  return scene->player;
+  return *scene->player;
 }
 
 void World::hidePortals() {
-  WorldHelper::hidePortals(scene);
+  WorldHelper::closePortals(scene);
 }
 
 } /* namespace glPortal */

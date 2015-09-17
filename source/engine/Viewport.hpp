@@ -5,7 +5,7 @@ namespace glPortal {
 
 class Viewport {
 public:
-	virtual void getSize(int *w, int *h) const = 0;
+  virtual void getSize(int *w, int *h) const = 0;
 };
 
 } /* namespace glPortal */

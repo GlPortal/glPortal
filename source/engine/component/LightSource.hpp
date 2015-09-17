@@ -13,7 +13,16 @@ public:
   float specular;
 
   LightSource(Entity &ent) :
-    Component(ent), color(1, 1, 1), distance(1), energy(10) {}
+    Component(ent),
+    color(1, 1, 1),
+    distance(1),
+    energy(10),
+    specular(1),
+    _uploaded(false) {
+  }
+
+  // Internal
+  bool _uploaded;
 };
 
 } /* namespace glPortal */

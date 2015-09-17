@@ -33,7 +33,6 @@ void SoundManager::PlayMusic(const std::string &filename) {
   }
 
   Mix_VolumeMusic(14);
-  Mix_Fading(MIX_FADING_IN);
 
   if (Mix_PlayMusic(music, 0) == -1) {
     printf("Unable to play Ogg file: %s\n", Mix_GetError());
@@ -49,7 +48,6 @@ void SoundManager::PlaySound(const std::string &filename, const Entity &source) 
   }
 
   Mix_VolumeMusic(14);
-  Mix_Fading(MIX_FADING_IN);
   int channel = Mix_PlayChannel(-1, sound, 0);
 
   if (channel == -1) {
@@ -80,8 +78,9 @@ void SoundManager::Destroy() {
   for (const auto sound : sounds) {
     Mix_FreeChunk(sound.second.chunk);
   }
-  if (music!=nullptr)
+  if (music!=nullptr) {
     Mix_FreeMusic(music);
+  }
   Mix_CloseAudio();
 }
 

@@ -4,7 +4,7 @@ namespace glPortal {
 
 void Transform::applyModelMtx(Matrix4f &m) const {
   m.translate(position);
-  m.rotate(rotation);
+  m.rotate(orientation);
   m.scale(scale);
 }
 

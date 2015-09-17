@@ -1,31 +1,31 @@
 #ifndef DISPATCHER_HPP
 #define DISPATCHER_HPP
+#include <functional>
+#include <list>
 #include <map>
-#include <vector>
+#include <utility>
 #include "Event.hpp"
-#include "Observer.hpp"
 
 namespace glPortal {
 
+class Observer;
+
 class Dispatcher {
+public:
+  typedef std::list<std::function<void()>> CallbackList;
+  typedef std::map<Event, CallbackList> ObserverMap;
+  typedef std::pair<Event, CallbackList::iterator> CallbackPointer;
+
 private:
-  std::map<Event, std::vector<Observer*>> eventObserverMap;
+  ObserverMap eventObserverMap;
+  
+  friend Observer;
+  CallbackPointer addObserver(Event event, const std::function<void()> &method);
+  void removeObserver(CallbackPointer &ptr);
 
 public:
   Dispatcher();
   void dispatch(Event event);
-  void addObserver(Event event, Observer *observer);
-  inline void addObserver(Event event, Observer &observer) {
-    addObserver(event, &observer);
-  }
-  void removeObserver(Event event, Observer *observer);
-  inline void removeObserver(Event event, Observer &observer) {
-    removeObserver(event, &observer);
-  }
-  void removeObserver(Observer *observer);
-  inline void removeObserver(Observer &observer) {
-    removeObserver(&observer);
-  }
 };
 
 } /* namespace glPortal */

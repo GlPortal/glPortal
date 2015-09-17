@@ -3,11 +3,13 @@
 
 #include <string>
 #include <vector>
-#include <random>
 #include <array>
+#include <random>
+
 #include <assets/scene/Scene.hpp>
-#include <engine/env/ConfigFileParser.hpp>
 #include <engine/env/Config.hpp>
+#include <engine/physics/PhysicsDebugDraw.hpp>
+#include <engine/system/PhysicsSystem.hpp>
 
 namespace glPortal {
 
@@ -19,13 +21,6 @@ class Vector3f;
 class SoundManager;
 
 const float GRAVITY = 0.5;
-
-const std::array<const std::string,3> MUSIC_PLAYLIST =
-{
-  "/audio/music/track1.ogg",
-  "/audio/music/track2.ogg",
-  "/audio/music/track3.ogg"
-};
 
 class Window;
 class Editor;
@@ -41,29 +36,34 @@ public:
 
   void setRendererWindow(Window*);
 
-  void update();
+  double getTime() const;
+  void update(double dtime);
+
+  Renderer* getRenderer() const;
+  void render(double dtime);
+
   void loadScene(const std::string &path);
   bool collidesWithWalls(const BoxCollider &collider) const;
   void shootPortal(int button);
   bool collides(const Vector3f &ro, const Vector3f &rd, const Entity &e, float *tNear, float *tFar);
-  void render();
   Entity& getPlayer();
   void hidePortals();
-
   static float gravity;
-private:
-  uint32_t lastUpdateTime;
-  bool wasF5Down = false;
-  bool wasTabDown = false;
   bool isEditorShown;
+  bool isPhysicsDebugEnabled = false;
   std::string currentScenePath;
+private:
+  double gameTime;
   Renderer *renderer;
   Editor *editor;
   Scene *scene;
+  // FIXME: now, aggregating all of this in here is more like patchwork rather than coding
+  PhysicsSystem phys;
+  PhysicsDebugDraw pdd;
   std::mt19937 generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;
-  ConfigFileParser *config;
+  Config &config;
 };
 
 } /* namespace glPortal */

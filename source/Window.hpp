@@ -9,6 +9,7 @@ namespace glPortal {
 
 class Window : public Viewport {
 public:
+  Window();
   void create(const char*);
   void setFullscreen();
   void swapBuffers();

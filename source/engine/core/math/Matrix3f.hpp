@@ -26,11 +26,11 @@ public:
   /* Core */
   Matrix3f();
   void setIdentity();
-  void translate(const Vector2f& v);
+  void translate(const Vector2f &v);
   void rotate(float angle);
   void scale(float scale);
-  void scale(const Vector2f& scale);
-  Vector3f transform(const Vector3f& v) const;
+  void scale(const Vector2f &scale);
+  Vector3f transform(const Vector3f &v) const;
 
   float* toArray();
   std::string str() const;
@@ -38,9 +38,9 @@ public:
   /* Operator overloads */
   float operator[](int i) const;
   float& operator[](int i);
-  bool operator==(const Matrix3f& m) const;
-  bool operator!=(const Matrix3f& m) const;
-  Matrix3f operator*(const Matrix3f& m) const;
+  bool operator==(const Matrix3f&) const;
+  bool operator!=(const Matrix3f&) const;
+  Matrix3f operator*(const Matrix3f&) const;
 private:
   float a[9];
 };
