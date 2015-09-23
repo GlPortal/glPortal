@@ -1,20 +1,39 @@
 * Quick note if you are compiling for the first time
 Well done. You did make the right decision. And it should not even be hard.
-* Satisfy dependencies
-You are going to need cmake, make and gcc in order to be able to compile C++ 
-sources on your system at all. It is impossible to predict how the packages
-are called by your package manager but in my experience they are called exactly
-that. So in Ubuntu and Debian for example you would just enter:
+
+* Dependencies
+*Note:* Dependencies will change all the time so watch the cmake output carefuly for missing libraries.
+Check CmakeList.txt if is something missing.
+
+** List of dependencies
+- assimp
+- epoxy
+- sdl2
+- sdl2-mixer
+- bullet (v 2.82+)
+- tinyxml2
+- libgl
+- cmake /(make)/
+- make /(make)/
+- gcc /(make)/
+- pkg-config /(make)/
+- git /(download source code)/
+
+** Installing dependencies
+Remember, you have to be root, so you might want to prefix ~sudo~.
+
+*** Arch Linux
+*Note:* Package ~tinyxml2~ can be found in AUR.
 #+BEGIN_SRC bash
-apt-get install cmake make gcc
+pacman -S cmake make gcc pkg-config assimp libepoxy sdl2 sdl2-mixer bullet mesa
 #+END_SRC
 
-Remember, you have to be root, so you might want to prefix sudo, or do sudo su first 
-or just su if you are on debian.
+*** Debian 8 / Ubuntu 14.04 / Linux Mint 17.x
+#+BEGIN_SRC bash
+apt-get install cmake make gcc pkg-config libassimp-dev libepoxy-dev libsdl2-dev libsdl2-mixer-dev libbullet-dev libtinyxml2-dev libgl1-mesa-dev
+#+END_SRC
 
-So at the moment of this writing you can see the libraries the project is linking to in
-CMakeList.txt. They are SDL2 SDL2_mixer GLEW GL assimp.
-
+*** Others
 Now how will you satisfy these dependencies? No problem. You might notice that when you
 are looking for them in your package manager that you get overwhelmed by a list of possible
 installation candidates, how do you know which one is the right one?
@@ -23,57 +42,53 @@ An easy rule that applies to many libraries is that a library has the lib prefix
 since you want to install the files for development there is a dev in the name. 
 Pretty much like libfoo-dev for most libraries.
 
-So for example to satisfy the dependencies in debian type the following to install all dependencies:
+* Downloading source code
+We have several branches on git which reflects development status.
 
+** Stable
 #+BEGIN_SRC bash
-apt-get install libglew-dev libgl1-mesa-dev libsdl2-dev libsdl2-mixer-dev libassimp-dev
+git clone --depth 1 -b stable  https://github.com/GlPortal/glPortal.git
+cd glPortal
+sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+git submodule init
+git submodule update
 #+END_SRC
 
-See how libgl1-mesa-dev does not play by the rules? There are reasons for that, which we do not care about.
-
-You also need an additional library which may or may not go by the name libfreeimage-dev.
-
-* Building the binary
-Get the source code by downloading a release https://github.com/GlPortal/glPortal/releases
-or after installing git with either of the following commands\\
-
-*** Stable:
-#+BEGIN_SRC bash
-git clone https://github.com/hhirsch/glPortal.git
-#+END_SRC
-*** Development:
+** Development
 #+BEGIN_SRC bash
 git clone https://github.com/GlPortal/glPortal.git
+cd glPortal
+sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+git submodule init
+git submodule update
 #+END_SRC
+
+* Building the binary
 Make sure to check the README.org and COMPILE.org from the release you downloaded in case
 there are differences in the compile workflow for it.
 
-After checking out the repo using git, fetch the assets:  
+In the root directory of the downloaded source type:
 #+BEGIN_SRC bash
-git submodule init
-git submodule update --depth 1
-#+END_SRC
-
-Then in the root directory of the downloaded source type:
-#+BEGIN_SRC bash
-cmake ./
+mkdir build && cd build
+cmake ../
 #+END_SRC
 
 Now if this throws an error you have to fix something first. If you don't manage to fix the error, use the
-bugtracker https://github.com/hhirsch/glPortal/issues to report what you did, and what error you got.
+bugtracker https://github.com/GlPortal/glPortal/issues or http://bugs.glportal.de to report what you did, and what error you got.
 
 If the command did not produce an error, you can build the binary by typing in:
 #+BEGIN_SRC bash
 make
 #+END_SRC
-in the root directory of the downloaded source.
 
 If this produces no error you have built the binary and should be able to start GlPortal by typing in:
 #+BEGIN_SRC bash
 make run
 #+END_SRC
 
-If you get errors try running cmake source again. 
-* Keep me posted
+If you get errors try to build GlPortal again. If you don't manage to fix the error, use the
+bugtracker https://github.com/GlPortal/glPortal/issues or http://bugs.glportal.de to report what you did, and what error you got.
+
+* Keep us posted
 This does not work for you? Help us figure out what we missed to make this work on 
 your system.
