@@ -31,6 +31,7 @@ void Config::load() {
   vsync        = videoJson["vsync"].bool_value();
   width        = videoJson["width"].number_value();
   height       = videoJson["height"].number_value();
+  recursive_portal = videoJson["recursive_portal"].number_value();
 
   sound        = templateJson["sound"]["enabled"].bool_value();
 
