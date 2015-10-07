@@ -75,6 +75,32 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
     surfaceE->QueryBoolAttribute("portalable", &mat.portalable);
   }
 
+  XMLElement *scaleE = rootH.FirstChildElement("scale").ToElement();
+  if (scaleE) {
+    scaleE->QueryFloatAttribute("u", &mat.scaleU);
+    scaleE->QueryFloatAttribute("v", &mat.scaleV);
+  }
+
+  XMLElement *kindE = rootH.FirstChildElement("kind").ToElement();
+  if (kindE) {
+    mat.kind = std::string(kindE->GetText());
+  }
+
+  XMLElement *tagsE = rootH.FirstChildElement("tags").ToElement();
+  if (tagsE) {
+    std::string tagStr(tagsE->GetText());
+    size_t start = 0;
+    size_t index = tagStr.find(",", start);
+    while (index != std::string::npos) {
+      mat.tags.push_back(tagStr.substr(start, index - start));
+      start = index + 1;
+      index = tagStr.find(",", start);
+    }
+    if (start != std::string::npos) {
+      mat.tags.push_back(tagStr.substr(start));
+    }
+  }
+
   // TODO
 
   return mat;
