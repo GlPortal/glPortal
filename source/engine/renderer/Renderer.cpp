@@ -33,6 +33,7 @@
 #include <engine/component/Transform.hpp>
 #include <engine/component/MeshDrawable.hpp>
 #include <engine/component/LightSource.hpp>
+#include <engine/env/Environment.hpp>
 #include <Game.hpp>
 
 #include <SDL2/SDL_timer.h>
@@ -77,7 +78,8 @@ void Renderer::setFont(const std::string &font, float size) {
 }
 
 
-void Renderer::render(const Camera &cam) {
+void Renderer::render(double dtime, const Camera &cam) {
+  time += dtime;
   viewport->getSize(&vpWidth, &vpHeight);
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -96,24 +98,59 @@ void Renderer::render(const Camera &cam) {
         continue;
       }
 
-      std::string index = std::to_string(numLights);
-      std::string position = "lights[" + index + "].position";
-      std::string color = "lights[" + index + "].color";
-      std::string distance = "lights[" + index + "].distance";
-      std::string energy = "lights[" + index + "].energy";
-      std::string specular = "lights[" + index + "].specular";
-
-      const Transform &t = e.getComponent<Transform>();
-      const LightSource &ls = e.getComponent<LightSource>();
-      glUniform3f(diffuse.uni(position.c_str()), t.position.x, t.position.y, t.position.z);
-      glUniform3f(diffuse.uni(color.c_str()), ls.color.x, ls.color.y, ls.color.z);
-      glUniform1f(diffuse.uni(distance.c_str()), ls.distance);
-      glUniform1f(diffuse.uni(energy.c_str()), ls.energy);
-      glUniform1f(diffuse.uni(specular.c_str()), ls.specular);
+      LightSource &ls = e.getComponent<LightSource>();
+      if (!ls._uploaded) {
+        const Transform &t = e.getComponent<Transform>();
+        std::string index = std::to_string(numLights);
+        std::string position = "lights[" + index + "].position";
+        std::string color = "lights[" + index + "].color";
+        std::string distance = "lights[" + index + "].distance";
+        std::string energy = "lights[" + index + "].energy";
+        std::string specular = "lights[" + index + "].specular";
+        glUniform3f(diffuse.uni(position.c_str()), t.position.x, t.position.y, t.position.z);
+        glUniform3f(diffuse.uni(color.c_str()), ls.color.x, ls.color.y, ls.color.z);
+        glUniform1f(diffuse.uni(distance.c_str()), ls.distance);
+        glUniform1f(diffuse.uni(energy.c_str()), ls.energy);
+        glUniform1f(diffuse.uni(specular.c_str()), ls.specular);
+        // ls._uploaded = true;
+      }
 
       ++numLights;
     }
     int numLightsLoc = diffuse.uni("numLights");
+    glUniform1i(numLightsLoc, numLights);
+  }
+
+  const Shader &metal = ShaderLoader::getShader("metal.frag");
+  glUseProgram(metal.handle);
+
+  /* Lights */ {
+    int numLights = 0;
+    for (const Entity &e : scene->entities) {
+      if (not e.hasComponent<LightSource>()) {
+        continue;
+      }
+
+      LightSource &ls = e.getComponent<LightSource>();
+      if (!ls._uploaded) {
+        const Transform &t = e.getComponent<Transform>();
+        std::string index = std::to_string(numLights);
+        std::string position = "lights[" + index + "].position";
+        std::string color = "lights[" + index + "].color";
+        std::string distance = "lights[" + index + "].distance";
+        std::string energy = "lights[" + index + "].energy";
+        std::string specular = "lights[" + index + "].specular";
+        glUniform3f(metal.uni(position.c_str()), t.position.x, t.position.y, t.position.z);
+        glUniform3f(metal.uni(color.c_str()), ls.color.x, ls.color.y, ls.color.z);
+        glUniform1f(metal.uni(distance.c_str()), ls.distance);
+        glUniform1f(metal.uni(energy.c_str()), ls.energy);
+        glUniform1f(metal.uni(specular.c_str()), ls.specular);
+        // ls._uploaded = true;
+      }
+
+      ++numLights;
+    }
+    int numLightsLoc = metal.uni("numLights");
     glUniform1i(numLightsLoc, numLights);
   }
 
@@ -162,7 +199,7 @@ void Renderer::render(const Camera &cam) {
 
     // Draw simplex noise
     if (portal1.open and portal2.open) {
-      uint32_t dtOpen = SDL_GetTicks()-std::max(portal1.openSince, portal2.openSince);
+      double dtOpen = scene->world->getTime()-std::max(portal1.openSince, portal2.openSince);
       if (dtOpen < Portal::NOISE_FADE_DELAY) {
         float al = 1-((float)dtOpen/Portal::NOISE_FADE_DELAY)*2;
         renderPortalNoise(cam, pEnt1, al);
@@ -216,7 +253,7 @@ void Renderer::renderScene(const Camera &cam) {
       renderEntity(cam, e);
     }
   }
-  renderEntity(cam, scene->end);
+  renderEntity(cam, *scene->end);
 }
 
 void Renderer::renderEntity(const Camera &cam, const Entity &e) {
@@ -224,14 +261,19 @@ void Renderer::renderEntity(const Camera &cam, const Entity &e) {
   Matrix4f mtx;
   e.getComponent<Transform>().getModelMtx(mtx);
   const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
-  renderMesh(cam, diffuse, mtx, drawable.mesh, drawable.material);
+  const Shader &metal = ShaderLoader::getShader("metal.frag");
+  if (drawable.material.fancyname.compare("Metal tiles .5x") == 0) {
+    renderMesh(cam, metal, mtx, drawable.mesh, drawable.material);
+  } else {
+    renderMesh(cam, diffuse, mtx, drawable.mesh, drawable.material);
+  }
 }
 
 void Renderer::renderPlayer(const Camera &cam) {
-  const Transform &t = scene->player.getComponent<Transform>();
+  const Transform &t = scene->player->getComponent<Transform>();
   Matrix4f mtx;
   mtx.translate(t.position+Vector3f(0, -.5f, 0));
-  mtx.rotate(t.rotation.y, 0, 1, 0);
+  mtx.rotate(t.orientation);
   mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
   const Mesh &dummy = MeshLoader::getMesh("HumanToken.obj");
   const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
@@ -260,32 +302,106 @@ void Renderer::renderPortalContent(const Camera &cam, const Entity &portal) {
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glDepthMask(GL_TRUE);
 }
-  
-void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entity &otherPortal) {
+
+void Renderer::renderPortal(const Camera &cam, Entity &portal, const Entity &otherPortal) {
   if (portal.getComponent<Portal>().open and otherPortal.getComponent<Portal>().open) {
+    Transform &pt = portal.getComponent<Transform>();
+    Transform &opt = otherPortal.getComponent<Transform>();
+    Vector3f displacement = pt.position - opt.position;
+    int recursionLevel = Environment::getConfig().getRecursionLevel();
+    Camera portalCam;
+
+    Vector3f portalPosition = pt.position;
+    Quaternion portalOrientation = pt.orientation;
+    Vector3f portalScale = pt.scale;
+    Vector3f portalDir = portal.getComponent<Portal>().getDirection();
+    Vector3f otherPortalDir = otherPortal.getComponent<Portal>().getDirection();
+    float dotProduct = dot(portalDir, otherPortalDir);
+
+    if (abs(dotProduct) < 0.0001) {
+      // The two portals' direction are perpendicular to each other
+      Quaternion RotDifference = conjugate(pt.orientation * conjugate(opt.orientation));
+      displacement = toMatrix3f(RotDifference.toMatrix()).transform(displacement);
+
+      // recursionLevel is set to 1, because we can't see past 1 level
+      // when the portals are perpendicular to each other
+      recursionLevel = 1;
+
+      pt.orientation = opt.orientation;
+    } else if (dotProduct == 1.0f) {
+      // The two portals are facing the same direction
+      recursionLevel = 0;
+    }
+
+    // Render portal from the deepest recursion level up for recursionLevel > 0
+    pt.position += displacement * (float)recursionLevel;
+    for (int i = 0; i < recursionLevel; i++) {
+      glEnable(GL_STENCIL_TEST);
+      glClear(GL_STENCIL_BUFFER_BIT);
+      glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+      glDepthMask(GL_FALSE);
+
+      renderPortalContent(cam, portal);
+
+      glStencilFunc(GL_EQUAL, 1, 0xFF);
+      glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+      setCameraInPortal(cam, portalCam, portal, otherPortal);
+      renderPlayer(portalCam);
+      renderScene(portalCam);
+
+      // Restore portal to its original position, then render the overlay,
+      // so that the overlay will show up correctly
+      Vector3f tmpPosition = pt.position;
+      pt.position = portalPosition;
+      renderPortalOverlay(portalCam, portal);
+      pt.position = tmpPosition;
+
+      // Move the displaced portal one level back
+      pt.position -= displacement;
+      // The next line only matters if the portals are perpendicular to each other
+      // In all other cases, the displaced portal's orientation doesn't change
+      pt.orientation = portalOrientation;
+      setCameraInPortal(cam, portalCam, portal, otherPortal);
+      glDisable(GL_STENCIL_TEST);
+
+      // Draw a "depth lid" over the portal scene that was just rendered so that the content in the
+      // portal now have the same depth value as the surface the portal is drawn on
+      const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
+      glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+      glDepthMask(GL_TRUE);
+      glClear(GL_DEPTH_BUFFER_BIT);
+      const Mesh &portalStencil = MeshLoader::getMesh("PortalStencil.obj");
+      Matrix4f mtx;
+      // Use portal's original transform so that the depth values are consistent
+      // with the surrounding scene
+      mtx.translate(portalPosition);
+      mtx.rotate(portalOrientation);
+      mtx.scale(portalScale);
+      mtx.scale(portal.getComponent<Portal>().getScaleMult());
+      renderMesh(portalCam, unshaded, mtx, portalStencil);
+      glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    }
+
+    // Render portal at the default level
     glEnable(GL_STENCIL_TEST);
     glClear(GL_STENCIL_BUFFER_BIT);
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
     glDepthMask(GL_FALSE);
 
     renderPortalContent(cam, portal);
-    
-    //Draw the scene from the secondary portal
+
     glStencilFunc(GL_EQUAL, 1, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-    Camera portalCam;
     setCameraInPortal(cam, portalCam, portal, otherPortal);
-    // TODO: rework to allow recursive rendering, and draw other portal pairs
     renderPlayer(portalCam);
     renderScene(portalCam);
     renderPortalOverlay(portalCam, portal);
-    renderPortalOverlay(portalCam, otherPortal);
-
     glDisable(GL_STENCIL_TEST);
   }
 }
-  
+
 void Renderer::renderPortalOverlay(const Camera &cam, const Entity &portal) {
   const Portal &p = portal.getComponent<Portal>();
   if (p.open) {
@@ -310,7 +426,7 @@ void Renderer::renderPortalNoise(const Camera &cam, const Entity &portal, float 
   int timeLoc = simplexTime.uni("time");
   int colorLoc = simplexTime.uni("color");
   int noiseAlphaLoc = simplexTime.uni("noiseAlpha");
-  glUniform1f(timeLoc, SDL_GetTicks()/1000.f);
+  glUniform1f(timeLoc, scene->world->getTime());
   glUniform3f(colorLoc, p.color.x, p.color.y, p.color.z);
   glUniform1f(noiseAlphaLoc, fade);
 
@@ -351,7 +467,8 @@ void Renderer::renderText(const Camera &cam, const std::string &text, int x, int
  * Renders a mesh with the specified texture
  * @param mesh The mesh to render
  */
-void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat) {
+void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh,
+                          const Material *mat) {
   glUseProgram(sh.handle);
 
   Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
@@ -367,6 +484,9 @@ void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx,
   glUniformMatrix4fv(sh.uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.toArray());
 
   glUniformMatrix4fv(sh.uni("modelMatrix"), 1, false, mdlMtx.toArray());
+
+  // Per-vertex color multiplier
+  glVertexAttrib4f(4, 1, 1, 1, 1);
 
   glBindVertexArray(mesh.handle);
   if (mat) {
@@ -395,15 +515,16 @@ void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx,
   glBindVertexArray(0);
 }
 
-void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal) {
+void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal,
+                                 const Entity &otherPortal) {
   Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
   p1mat.translate(p1T.position);
-  p1mat.rotate(p1T.rotation);
+  p1mat.rotate(p1T.orientation);
   Transform &p2T = otherPortal.getComponent<Transform>();
   Matrix4f p2mat;
   p2mat.translate(p2T.position);
-  p2mat.rotate(p2T.rotation);
+  p2mat.rotate(p2T.orientation);
   Matrix4f rotate180; rotate180.rotate(rad(180), 0, 1, 0);
   Matrix4f view; cam.getViewMatrix(view);
   Matrix4f destView = view * p1mat * rotate180 * inverse(p2mat);
@@ -417,6 +538,7 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &
   dest.setViewMatrix(destView);
 }
 
+/*
 static float sign(float v) {
   if (v > 0.f) return 1.f;
   if (v < 0.f) return -1.f;
@@ -448,5 +570,6 @@ Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Ma
   newProj[14] = c.w - newProj[15];
   return newProj;
 }
+*/
 
 } /* namespace glPortal */

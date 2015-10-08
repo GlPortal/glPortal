@@ -20,18 +20,20 @@ namespace glPortal {
 class Matrix3f;
 class Vector3f;
 class Vector4f;
+class Quaternion;
 
 class Matrix4f {
 public:
   /* Core */
   Matrix4f();
   void setIdentity();
-  void translate(const Vector3f& v);
+  void translate(const Vector3f &v);
   void rotate(float angle, float x, float y, float z);
-  void rotate(const Vector3f& euler);
+  void rotate(const Vector3f &eulerXYZ);
+  void rotate(const Quaternion &quat);
   void scale(float scale);
-  void scale(const Vector3f& scale);
-  Vector3f transform(const Vector3f& v) const;
+  void scale(const Vector3f &scale);
+  Vector3f transform(const Vector3f &v) const;
 
   float* toArray();
   std::string str() const;
@@ -39,9 +41,9 @@ public:
   /* Operator overloads */
   float operator[](int i) const;
   float& operator[](int i);
-  bool operator==(const Matrix4f& m) const;
-  bool operator!=(const Matrix4f& m) const;
-  Matrix4f operator*(const Matrix4f& m) const;
+  bool operator==(const Matrix4f&) const;
+  bool operator!=(const Matrix4f&) const;
+  Matrix4f operator*(const Matrix4f&) const;
   Vector4f operator*(const Vector4f&) const;
 private:
   float a[16];

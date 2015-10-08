@@ -20,7 +20,7 @@ LogInput::~LogInput() {
 }
 
 LogInput::LogInput(LogInput &&o) :
-  sink(o.sink), buf(o.buf), lvl(o.lvl) {
+  sink(o.sink), lvl(o.lvl), buf(o.buf) {
   o.buf.clear();
 }
 

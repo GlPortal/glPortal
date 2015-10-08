@@ -2,16 +2,15 @@
 
 #include <stdexcept>
 #include <getopt.h>
-#include "ConfigFileParser.hpp"
 #include <engine/core/file/Path.hpp>
 #include <iostream>
 
 namespace glPortal {
 
 Dispatcher Environment::dispatcher;
+Config Environment::config;
 
 std::string Environment::datadir = "";
-ConfigFileParser *Environment::config = nullptr;
 
 /** @class Environment
     @brief Manager for environment and config
@@ -20,43 +19,23 @@ ConfigFileParser *Environment::config = nullptr;
 */
 
 void Environment::init() {
-  int argument;
-
   // default installation dir
   if (datadir.empty()) {
 #ifndef _WIN32
-    datadir = "/usr/share/glportal/data/";
+    datadir = "/usr/share/glportal/data";
 #else
-    datadir = "data/";
+    datadir = "data";
 #endif
   }
   initializeConfig();
 }
 
-ConfigFileParser& Environment::getConfig() {
-  if (config == nullptr) {
-    initializeConfig();
-  }
-
-  return *config;
-}
-
-ConfigFileParser * Environment::getConfigPointer() {
-  if (config == nullptr) {
-    initializeConfig();
-  }
-
+Config& Environment::getConfig() {
   return config;
 }
 
 void Environment::initializeConfig() {
-  try {
-    config = new ConfigFileParser(
-        Path::FromUnixPath(getDataDir() + "/private.cfg"));
-  } catch (const std::invalid_argument& e) {
-    config = new ConfigFileParser(
-        Path::FromUnixPath(getDataDir() + "/main.cfg"));
-  }
+  config.load();
 }
 
 std::string Environment::getDataDir() {

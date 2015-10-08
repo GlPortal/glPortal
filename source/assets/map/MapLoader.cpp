@@ -14,10 +14,9 @@
 #include <engine/component/MeshDrawable.hpp>
 #include <engine/component/AACollisionBox.hpp>
 #include <engine/component/Trigger.hpp>
-#include <engine/component/Health.hpp>
 #include <engine/component/SoundSource.hpp>
-#include <engine/component/SoundListener.hpp>
 #include <engine/component/LightSource.hpp>
+#include <engine/component/RigidBody.hpp>
 #include "../../PlayerMotion.hpp"
 
 #include <assets/scene/Scene.hpp>
@@ -43,13 +42,7 @@ namespace glPortal {
  * Get a scene from a map file in XML format.
  */
 Scene* MapLoader::getScene(const std::string &path) {
-  scene = new Scene();
-  // FIXME: shall we init player here? Probably not, and do it ONCE.
-  scene->player.addComponent<Transform>();
-  scene->player.addComponent<PlayerMotion>();
-  scene->player.addComponent<Health>();
-  scene->player.addComponent<SoundSource>();
-  scene->player.addComponent<SoundListener>();
+  scene = new Scene;
 
   XMLDocument doc;
   XMLError error = doc.LoadFile((Environment::getDataDir() + "/maps/" + path + ".xml").c_str());
@@ -69,7 +62,8 @@ Scene* MapLoader::getScene(const std::string &path) {
     extractTriggers();
     System::Log(Info) << "Map " << path << " loaded";
   } else {
-    System::Log(Error) << "Failed to load map " << Environment::getDataDir() << "/" << path << ".xml";
+    System::Log(Error) << "Failed to load map " << Environment::getDataDir()
+                       << "/" << path << ".xml";
   }
   return scene;
 }
@@ -104,13 +98,13 @@ void MapLoader::extractSpawn() {
   XMLElement *spawnElement = rootHandle.FirstChildElement("spawn").ToElement();
 
   if (spawnElement) {
-    scene->start.clearComponents();
-    Transform &t = scene->start.addComponent<Transform>();
+    scene->start = &scene->entities.create();
+    Transform &t = scene->start->addComponent<Transform>();
     XmlHelper::extractPosition(spawnElement, t.position);
-    XmlHelper::extractRotation(spawnElement, t.rotation);
-    Transform &pt = scene->player.getComponent<Transform>();
+    PlayerMotion &pm = scene->player->getComponent<PlayerMotion>();
+    XmlHelper::extractRotation(spawnElement, pm.rotation);
+    Transform &pt = scene->player->getComponent<Transform>();
     pt.position = t.position;
-    pt.rotation = t.rotation;
   } else {
     throw std::runtime_error("No spawn position defined.");
   }
@@ -134,10 +128,11 @@ void MapLoader::extractLights() {
 
     lightElement->QueryFloatAttribute("distance", &distance);
     lightElement->QueryFloatAttribute("energy", &energy);
-    lightElement->QueryFloatAttribute("specular", &specular);
+    if (lightElement->QueryFloatAttribute("specular", &specular) == XML_NO_ATTRIBUTE) {
+      specular = 0;
+    }
 
-    scene->entities.emplace_back();
-    Entity &light = scene->entities.back();
+    Entity &light = scene->entities.create();
     Transform &t = light.addComponent<Transform>();
     t.position = lightPos;
     LightSource &ls = light.addComponent<LightSource>();
@@ -152,11 +147,14 @@ void MapLoader::extractDoor() {
   XMLElement *endElement = rootHandle.FirstChildElement("end").ToElement();
 
   if (endElement) {
-    Entity &door = scene->end;
+    Entity &door = scene->entities.create();
+    scene->end = &door;
     door.clearComponents();
     Transform &t = door.addComponent<Transform>();
     XmlHelper::extractPosition(endElement, t.position);
-    XmlHelper::extractRotation(endElement, t.rotation);
+    Vector3f eulerOrient;
+    XmlHelper::extractRotation(endElement, eulerOrient);
+    t.orientation.setFromEuler(eulerOrient);
     MeshDrawable &m = door.addComponent<MeshDrawable>();
     m.material = MaterialLoader::loadFromXML("door/door");
     m.mesh = MeshLoader::getMesh("Door.obj");
@@ -168,12 +166,13 @@ void MapLoader::extractWalls() {
 
   if (wallBoxElement) {
     do {
-      scene->entities.emplace_back();
-      Entity &wall = scene->entities.back();
+      Entity &wall = scene->entities.create();
 
       Transform &t = wall.addComponent<Transform>();
       XmlHelper::extractPosition(wallBoxElement, t.position);
-      XmlHelper::extractRotation(wallBoxElement, t.rotation);
+      Vector3f eulerOrient;
+      XmlHelper::extractRotation(wallBoxElement, eulerOrient);
+      t.orientation.setFromEuler(eulerOrient);
       XmlHelper::extractScale(wallBoxElement, t.scale);
 
       int mid = -1;
@@ -182,6 +181,8 @@ void MapLoader::extractWalls() {
       m.material = scene->materials[mid];
       m.material.scaleU = m.material.scaleV = 2.f;
       m.mesh = MeshLoader::getPortalBox(wall);
+      wall.addComponent<RigidBody>
+        (0, std::make_shared<btBoxShape>(btVector3(t.scale.x/2, t.scale.y/2, t.scale.z/2)));
       wall.addComponent<AACollisionBox>().box = BoxCollider::generateCage(wall);
     } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != nullptr);
   }
@@ -192,8 +193,7 @@ void MapLoader::extractAcids() {
   
   if (acidElement) {
     do {
-      scene->entities.emplace_back();
-      Entity &acid = scene->entities.back();
+      Entity &acid = scene->entities.create();
 
       Transform &t = acid.addComponent<Transform>();
       XmlHelper::extractPosition(acidElement, t.position);
@@ -212,8 +212,7 @@ void MapLoader::extractTriggers() {
 
   if (triggerElement) {
     do {
-      scene->entities.emplace_back();
-      Entity &trigger = scene->entities.back();
+      Entity &trigger = scene->entities.create();
 
       Transform &t = trigger.addComponent<Transform>();
       XmlHelper::extractPosition(triggerElement, t.position);
@@ -236,11 +235,12 @@ void MapLoader::extractModels() {
       mesh = modelElement->Attribute("mesh");
       XmlHelper::pushAttributeVertexToVector(modelElement, modelPos);
 
-      scene->entities.emplace_back();
-      Entity &model = scene->entities.back();
+      Entity &model = scene->entities.create();
       Transform &t = model.addComponent<Transform>();
       XmlHelper::extractPosition(modelElement, t.position);
-      XmlHelper::extractRotation(modelElement, t.rotation);
+      Vector3f eulerOrient;
+      XmlHelper::extractRotation(modelElement, eulerOrient);
+      t.orientation.setFromEuler(eulerOrient);
       MeshDrawable &m = model.addComponent<MeshDrawable>();
       m.material = MaterialLoader::fromTexture(texture);
       m.mesh = MeshLoader::getMesh(mesh);

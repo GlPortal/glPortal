@@ -1,11 +1,11 @@
 #include "TextureLoader.hpp"
 
 #include <utility>
+#include <cstdio>
 #include <epoxy/gl.h>
 
-#include "engine/env/Environment.hpp"
-#include "engine/stb_image.c"
-#include <cstdio>
+#include <engine/env/Environment.hpp>
+#include <engine/stb_image.c>
 
 namespace glPortal {
 
@@ -16,7 +16,7 @@ Texture TextureLoader::getEmptyDiffuse() {
   if (it != textureCache.end()) {
     return it->second;
   }
-  int width, height, bytes;
+  int width(0), height(0);
   Texture texture = uploadTexture((const unsigned char*)"\xFF\xFF\xFF", 1, 1, 3);
   texture.width = width;
   texture.height = height;
@@ -29,7 +29,7 @@ Texture TextureLoader::getEmptyNormal() {
   if (it != textureCache.end()) {
     return it->second;
   }
-  int width, height, bytes;
+  int width(0), height(0);
   Texture texture = uploadTexture((const unsigned char*)"\x7F\x7F\xFF", 1, 1, 3);
   texture.width = width;
   texture.height = height;
@@ -42,8 +42,8 @@ Texture TextureLoader::getEmptySpecular() {
   if (it != textureCache.end()) {
     return it->second;
   }
-  int width, height, bytes;
-  Texture texture = uploadTexture((const unsigned char*)"\xFF\xFF\xFF", 1, 1, 3);
+  int width(0), height(0);
+  Texture texture = uploadTexture((const unsigned char*)"\x7F\x7F\x7F", 1, 1, 3);
   texture.width = width;
   texture.height = height;
   textureCache.insert(std::pair<std::string, Texture>("engine@empty/specular", texture));
@@ -56,8 +56,10 @@ Texture TextureLoader::getTexture(std::string path) {
   if (it != textureCache.end()) {
     return it->second;
   }
-  int width, height, bytes;
-  unsigned char *data = stbi_load((Environment::getDataDir() + "/textures/" + path).c_str(), &width, &height, &bytes, 0);
+  int width(0), height(0), bytes(0);
+  unsigned char *data =
+    stbi_load((Environment::getDataDir() + "/textures/" + path).c_str(),
+              &width, &height, &bytes, 0);
   Texture texture = uploadTexture(data, width, height, bytes);
   stbi_image_free(data);
   texture.width = width;
@@ -72,10 +74,10 @@ Texture TextureLoader::uploadTexture(const unsigned char *data, int width, int h
   glGenTextures(1, &handle);
   glBindTexture(GL_TEXTURE_2D, handle);
 
-  if(bytes == 3) {
+  if (bytes == 3) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
   }
-  if(bytes == 4) {
+  if (bytes == 4) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
   }
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

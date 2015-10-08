@@ -1,3 +1,5 @@
 #!/bin/sh
 cd ..;
-git pull;
+git submodule update --depth 1;
+git fetch --all;
+git reset --hard HEAD;

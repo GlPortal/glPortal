@@ -3,10 +3,14 @@
 
 #include <cmath>
 
+class btVector4;
+class btQuaternion;
+
 namespace glPortal {
 
 struct Vector2f;
 struct Vector3f;
+class Matrix4f;
 
 struct Vector4f {
   union {
@@ -89,6 +93,49 @@ struct Vector4f {
     x -= v.x; y -= v.y; z -= v.z; w -= v.w;
     return *this;
   }
+
+  bool fuzzyEqual(const Vector4f&, float threshold = .01f) const;
+
+  operator btVector4() const;
+  Vector4f& operator=(const btVector4&);
+
+  operator btQuaternion() const;
+  Vector4f& operator=(const btQuaternion&);
+};
+
+struct Quaternion : public Vector4f {
+  enum EulerOrder {
+    XYZ,
+    XZY,
+    YXZ,
+    YZX,
+    ZXY,
+    ZYX
+  };
+  using Vector4f::Vector4f;
+  Quaternion()
+    : Vector4f(0, 0, 0, 1) {}
+
+  Quaternion operator*(const Quaternion&);
+  Quaternion& operator*=(const Quaternion&);
+
+  // Quaternion multiplication isn't commutative, and so isn't division
+  Quaternion operator/(const Quaternion&) = delete;
+  Quaternion& operator/=(const Quaternion&) = delete;
+
+  Quaternion& fromAxAngle(float x, float y, float z, float r);
+  Quaternion& fromAxAngle(const Vector3f &a, float r);
+  Quaternion& fromAxAngle(const Vector4f &a);
+
+  Quaternion& setFromEuler(float pitch, float yaw, float roll);
+  Quaternion& setFromEuler(const Vector3f&);
+
+  Vector4f toAxAngle() const;
+  Matrix4f toMatrix() const;
+
+  using Vector4f::operator=;
+  using Vector4f::operator btVector4;
+  using Vector4f::operator btQuaternion;
 };
 
 inline float length(const Vector4f &v) {
@@ -100,6 +147,7 @@ inline float dot(const Vector4f &v, const Vector4f &w) {
 }
 
 Vector4f normalize(const Vector4f&);
+Quaternion conjugate(const Quaternion&);
 
 } /* namespace glPortal */
 

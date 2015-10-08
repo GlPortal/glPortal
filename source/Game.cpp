@@ -1,25 +1,29 @@
 #include "Game.hpp"
 
-#include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_timer.h>
 #include <stdexcept>
 #include <string>
 #include <cstdio>
 #include <iostream>
 
-#include "engine/env/ConfigFileParser.hpp"
 #include "engine/env/Environment.hpp"
 #include "engine/env/ArgumentsParser.hpp"
 #include <engine/env/System.hpp>
 #include <engine/SoundManager.hpp>
+#include <engine/core/event/Observer.hpp>
+#include <engine/core/event/Dispatcher.hpp>
+#include <engine/core/event/observer/MusicObserver.hpp>
 #include <util/sdl/Fps.hpp>
-#include "Input.hpp"
+#include "GameController.hpp"
 
 namespace glPortal {
 
 Fps Game::fps;
 
 Game::Game() : closed(false) {
+  controller = new GameController(this);
+  MusicObserver musicObserver;
+  musicObserver.addCallback(Event::loadScene, std::bind(&MusicObserver::loadMap, musicObserver));
   window.create("GlPortal");
 
   try {
@@ -33,69 +37,39 @@ Game::Game() : closed(false) {
   }
 }
 
+World* Game::getWorld() {
+  return &world;
+}
+
 void Game::update() {
-  SDL_Event event;
-  int skipped;
-  unsigned int nextUpdate = SDL_GetTicks();
+  unsigned int nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
 
   while (not closed) {
-    skipped = 0;
+    int skipped = 0;
+    unsigned int currentTime = SDL_GetTicks();
     //Update the game if it is time
-    while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
-      while (SDL_PollEvent(&event)) {
-        handleEvent(event);
-      }
+    while (currentTime > nextUpdate && skipped < MAX_SKIP) {
+      controller->handleInput();
 
       SoundManager::Update(world.getPlayer());
-      world.update();
+      world.update((currentTime-lastUpdate)/1000.);
+      lastUpdate = currentTime;
       nextUpdate += SKIP_TIME;
       skipped++;
     }
-    world.render();
+    world.render((currentTime-lastRender)/1000.);
+    lastRender = currentTime;
     fps.countCycle();
     window.swapBuffers();
   }
   world.destroy();
   window.close();
+  delete (controller);
 }
 
 void Game::close() {
   closed = true;
 }
-
-void Game::handleEvent(const SDL_Event &event) {
-  if (event.type == SDL_QUIT) {
-    closed = 1;
-  }
-  if (event.type == SDL_KEYDOWN) {
-    int key = event.key.keysym.scancode;
-    int mod = event.key.keysym.mod;
-
-    Input::keyPressed(key, mod);
-
-    if (key == SDL_SCANCODE_Q) {
-      close();
-    }
-  }
-  if (event.type == SDL_KEYUP) {
-    int key = event.key.keysym.scancode;
-    int mod = event.key.keysym.mod;
-
-    Input::keyReleased(key, mod);
-  }
-  if (event.type == SDL_MOUSEBUTTONDOWN) {
-    if (event.button.button == SDL_BUTTON_LEFT) {
-      world.shootPortal(1);
-    }
-    if (event.button.button == SDL_BUTTON_RIGHT) {
-      world.shootPortal(2);
-    }
-    if (event.button.button == SDL_BUTTON_MIDDLE  and Config::isHidePortalsByClick()) {
-      world.hidePortals();
-    }
-  }
-}
-
 } /* namespace glPortal */
 
 using namespace glPortal;
@@ -107,7 +81,6 @@ int main(int argc, char *argv[]) {
   ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   Environment::init();
   ArgumentsParser::populateConfig();
-  Config::load();
 
   Game game;
 

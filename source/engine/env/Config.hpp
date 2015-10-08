@@ -7,35 +7,28 @@ namespace glPortal {
 
 class Config {
 public:
-  static const std::string SENSITIVITY;
-  static const std::string ANTIALIASING;
-  static const std::string FULLSCREEN;
-  static const std::string HEIGHT;
-  static const std::string WIDTH;
-  static const std::string SOUND;
-  static const std::string MAP;
-  static const std::string VSYNC;
-  static const std::string HIDE_PORTALS_BY_CLICK;
+  void load();
+  unsigned int getWidth() { return width; }
+  unsigned int getHeight() { return height; }
+  float getSensitivity() { return sensitivity; }
+  bool isFullscreen() { return fullscreen; }
+  int getAntialiasLevel() { return antialiasing; }
+  int getRecursionLevel() { return recursive_portal; }
+  bool hasSound() { return sound; }
+  bool hasVsync() { return vsync; }
+  bool isHidePortalsByClick() { return hide_portals_by_click; }
 
-  static void load();
-  static unsigned int getWidth() { return Config::width; }
-  static unsigned int getHeight() { return Config::height; }
-  static float getSensitivity() { return Config::sensitivity; }
-  static bool isFullscreen() { return Config::fullscreen; }
-  static bool hasAntialiasing() { return Config::antialiasing; }
-  static bool hasSound() { return Config::sound; }
-  static bool hasVsync() { return Config::vsync; }
-  static bool isHidePortalsByClick() { return Config::hide_portals_by_click; }
+  std::string map;
 private:
-  static unsigned int width;
-  static unsigned int height;
-  static float sensitivity;
-  static bool antialiasing;
-  static bool fullscreen;
-  static bool sound;
-  static bool vsync;
-  static std::string map;
-  static bool hide_portals_by_click;
+  unsigned int width;
+  unsigned int height;
+  float sensitivity;
+  int antialiasing;
+  int recursive_portal;
+  bool fullscreen;
+  bool sound;
+  bool vsync;
+  bool hide_portals_by_click;
 };
 
 } /* namespace glPortal */

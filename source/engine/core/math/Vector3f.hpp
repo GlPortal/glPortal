@@ -15,11 +15,21 @@
 
 #include <string>
 
+class btVector3;
+
 namespace glPortal {
 
 class Vector3f {
 public:
-  float x, y, z;
+  union {
+    float x, r, s, pitch;
+  };
+  union {
+    float y, g, t, yaw;
+  };
+  union {
+    float z, b, u, roll;
+  };
 
   static const Vector3f ZERO;
   static const Vector3f FORWARD;
@@ -49,13 +59,20 @@ public:
   Vector3f operator*(const Vector3f& v) const;
   Vector3f operator*(float scale) const;
   Vector3f operator/(float divisor) const;
+
+  bool fuzzyEqual(const Vector3f&, float threshold = .02f) const;
+
+  /* Bullet interop */
+  Vector3f(const btVector3&);
+  operator btVector3() const;
+  Vector3f& operator=(const btVector3&);
 };
 
 /* Utility functions */
 float dot(const Vector3f& v1, const Vector3f& v2);
 Vector3f cross(const Vector3f& v1, const Vector3f& v2);
 Vector3f negate(const Vector3f& v);
-Vector3f normalise(const Vector3f& v);
+Vector3f normalize(const Vector3f& v);
 
 } /* namespace glPortal */
 
