@@ -16,6 +16,7 @@ namespace glPortal {
   const std::string Config::WIDTH = "width";
   const std::string Config::SOUND = "sound";
   const std::string Config::MAP = "map";
+  const std::string Config::MAP_PATH = "mapPath";  
   const std::string Config::VSYNC = "vsync";
   const std::string Config::HIDE_PORTALS_BY_CLICK = "hide_portals_by_click";
 

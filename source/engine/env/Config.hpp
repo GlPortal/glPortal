@@ -14,6 +14,7 @@ public:
   static const std::string WIDTH;
   static const std::string SOUND;
   static const std::string MAP;
+  static const std::string MAP_PATH;
   static const std::string VSYNC;
   static const std::string HIDE_PORTALS_BY_CLICK;
 
@@ -35,6 +36,7 @@ private:
   static bool sound;
   static bool vsync;
   static std::string map;
+  static std::string mapPath;
   static bool hide_portals_by_click;
 };
 
