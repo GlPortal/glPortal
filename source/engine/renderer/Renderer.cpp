@@ -327,13 +327,7 @@ void Renderer::renderPortal(const Camera &cam, Entity &portal, const Entity &oth
       // when the portals are perpendicular to each other
       recursionLevel = 1;
 
-      // Calculate portal's orientation at recursion level 1
-      const Vector3f from(0, 0, -1);
-      Vector3f H = normalize(from + otherPortalDir);
-      pt.orientation.w = dot(from, H);
-      pt.orientation.x = from.y*H.z - from.z*H.y;
-      pt.orientation.y = from.z*H.x - from.x*H.z;
-      pt.orientation.z = from.x*H.y - from.y*H.x;
+      pt.orientation = opt.orientation;
     } else if (dotProduct == 1.0f) {
       // The two portals are facing the same direction
       recursionLevel = 0;
