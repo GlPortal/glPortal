@@ -9,14 +9,14 @@ PortalFilterCallback::PortalFilterCallback(Scene &scene) :
 
 
 // TODO: Move to BoxCollider / AABB
-static bool testAABB(const btVector3 &amin, const btVector3 &amax,
+static bool doVolumesOverlap(const btVector3 &amin, const btVector3 &amax,
   const btVector3 &bmin, const btVector3 &bmax) {
   bool xOverlap = !(bmin.x() > amax.x() || bmax.x() < amin.x());
   bool yOverlap = !(bmin.y() > amax.y() || bmax.y() < amin.y());
   bool zOverlap = !(bmin.z() > amax.z() || bmax.z() < amin.z());
   return xOverlap and yOverlap and zOverlap;
 }
-static bool testAABB(const btVector3 &min, const btVector3 &max, const btVector3 &p) {
+static bool isPointInVolume(const btVector3 &min, const btVector3 &max, const btVector3 &p) {
   bool xIn = p.x() > min.x() && p.x() < max.x();
   bool yIn = p.y() > min.y() && p.y() < max.y();
   bool zIn = p.z() > min.z() && p.z() < max.z();
@@ -35,7 +35,7 @@ bool PortalFilterCallback::needBroadphaseCollision(btBroadphaseProxy *proxy1,
        prox2Static = true;//proxy2->isNonMoving();
   if (prox1Static xor prox2Static) {
     btBroadphaseProxy *proxMoving = prox1Static ? proxy1 : proxy2;
-    return not testAABB(proxMoving->m_aabbMin, proxMoving->m_aabbMax, clipMin, clipMax);
+    return not doVolumesOverlap(proxMoving->m_aabbMin, proxMoving->m_aabbMax, clipMin, clipMax);
   }
 }
 
@@ -62,7 +62,7 @@ void PortalFilterCallback::nearCallback(btBroadphasePair &collisionPair,
         for (int i = 0; i < contactPointResult.getPersistentManifold()->getNumContacts(); ++i) {
           const btManifoldPoint &pt = contactPointResult.getPersistentManifold()->getContactPoint(i);
           const btVector3 &cp = pt.getPositionWorldOnA();
-          if (testAABB(clipMin, clipMax, cp)) {
+          if (isPointInVolume(clipMin, clipMax, cp)) {
             contactPointResult.getPersistentManifold()->removeContactPoint(i--);
           }
         }
