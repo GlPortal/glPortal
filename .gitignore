@@ -22,3 +22,4 @@ tests/
 /html
 documentation/html/
 documentation/latex/
+external/json11/libjson11.a

@@ -12,14 +12,16 @@
 
 namespace glPortal {
 std::string ArgumentsParser::mapName = "";
+std::string ArgumentsParser::mapPath = "";
 void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
   int argument;
   
   static struct option long_options[] = {
-    {"version",  no_argument,       0, 'v'},
-    {"help",     no_argument,       0, 'h'},
-    {"datadir",  required_argument, 0, 'd'},
-    {"map",      required_argument, 0, 'm'},
+    {"version",          no_argument,       0, 'v'},
+    {"help",             no_argument,       0, 'h'},
+    {"datadir",          required_argument, 0, 'd'},
+    {"map",              required_argument, 0, 'm'},
+    {"mapFromPath",      required_argument, 0, 'p'},
     {0, 0, 0, 0}
   };
   
@@ -52,6 +54,10 @@ void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
       /// - map \n
       /// Set the map that should be loaded.
       mapName = optarg;
+    case 'p':
+      /// - mapFromPath \n
+      /// Set the map that should be loaded.
+      mapPath = optarg;      
     default:
       break;
     }
@@ -62,5 +68,8 @@ void ArgumentsParser::populateConfig() {
   if (mapName != ""){
     config.map = mapName;
   }
+  if (mapPath != ""){
+    config.mapPath = mapPath;
+  }  
 }
 } /* namespace glPortal */

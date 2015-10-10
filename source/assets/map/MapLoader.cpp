@@ -38,14 +38,12 @@ namespace glPortal {
   Scene* MapLoader::scene;
   XMLHandle MapLoader::rootHandle = XMLHandle(0);
 
-/**
- * Get a scene from a map file in XML format.
- */
-Scene* MapLoader::getScene(const std::string &path) {
+
+Scene* MapLoader::getSceneFromPath(const std::string &path) {
   scene = new Scene;
 
   XMLDocument doc;
-  XMLError error = doc.LoadFile((Environment::getDataDir() + "/maps/" + path + ".xml").c_str());
+  XMLError error = doc.LoadFile(path.c_str());
 
   if (error == XML_NO_ERROR) {
     XMLHandle docHandle(&doc);
@@ -66,6 +64,12 @@ Scene* MapLoader::getScene(const std::string &path) {
                        << "/" << path << ".xml";
   }
   return scene;
+}
+/**
+ * Get a scene from a map file in XML format.
+ */
+Scene* MapLoader::getScene(const std::string &path) {
+  return getSceneFromPath((Environment::getDataDir() + "/maps/" + path + ".xml"));
 }
 
 void MapLoader::extractMaterials() {

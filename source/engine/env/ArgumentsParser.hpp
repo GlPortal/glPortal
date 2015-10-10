@@ -10,6 +10,7 @@ namespace glPortal {
 class ArgumentsParser {
 private:
   static std::string mapName;
+  static std::string mapPath;
 public:
   static void setEnvironmentFromArgs(int argc, char **argv);
   static void populateConfig();
