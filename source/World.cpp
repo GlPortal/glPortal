@@ -61,8 +61,13 @@ void World::create() {
   renderer = new Renderer();
   lastUpdateTime = SDL_GetTicks();
   try {
+    std::string mapPath = config->getString(Config::MAP_PATH);
     std::string map = config->getString(Config::MAP);
-    loadScene(map);
+    if (mapPath.length() > 0) {
+      loadScene(mapPath);
+    } else {
+      loadScene(map);
+    }
     System::Log(Info) << "Custom map loaded";
   } catch (const std::out_of_range& e) {
     System::Log(Info) << "No custom map found loading default map.";
