@@ -64,7 +64,7 @@ void World::create() {
     std::string mapPath = config->getString(Config::MAP_PATH);
     std::string map = config->getString(Config::MAP);
     if (mapPath.length() > 0) {
-      loadScene(mapPath);
+      loadSceneFromPath(mapPath);
     } else {
       loadScene(map);
     }
@@ -98,6 +98,15 @@ void World::loadScene(const std::string &path) {
   SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
 }
 
+void World::loadSceneFromPath(const std::string &path) {
+  delete scene;
+  currentScenePath = path;
+  scene = MapLoader::getSceneFromPath(path);
+  //play a random piece of music each time a scene is loaded
+  std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
+  SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
+}
+  
 void World::update() {
   uint32_t updateTime = SDL_GetTicks();
   float dtime = (updateTime-lastUpdateTime)/1000.f;

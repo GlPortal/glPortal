@@ -43,6 +43,7 @@ public:
 
   void update();
   void loadScene(const std::string &path);
+  void loadSceneFromPath(const std::string &path);
   bool collidesWithWalls(const BoxCollider &collider) const;
   void shootPortal(int button);
   bool collides(const Vector3f &ro, const Vector3f &rd, const Entity &e, float *tNear, float *tFar);
