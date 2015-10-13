@@ -60,22 +60,35 @@ void World::create() {
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
   lastUpdateTime = SDL_GetTicks();
-  try {
-    std::string mapPath = config->getString(Config::MAP_PATH);
-    std::string map = config->getString(Config::MAP);
-    if (mapPath.length() > 0) {
-      loadSceneFromPath(mapPath);
-    } else {
-      loadScene(map);
-    }
-    System::Log(Info) << "Custom map loaded";
-  } catch (const std::out_of_range& e) {
-    System::Log(Info) << "No custom map found loading default map.";
-    loadScene(mapList[currentLevel]);
-  }
 
   std::random_device rd;
   generator = std::mt19937(rd());
+
+  bool done = false;
+  try {
+    std::string mapPath = config->getString(Config::MAP_PATH);
+    if (mapPath.length() > 0) {
+      loadSceneFromPath(mapPath);
+      done = true;
+      return;
+    } 
+    System::Log(Info) << "Custom map loaded";
+  } catch (const std::out_of_range& e) {
+    System::Log(Info) << "No custom map found."; 
+  }
+
+  try {
+    std::string map = config->getString(Config::MAP);
+    if (map.length() > 0) {
+      loadScene(map);
+      return;
+    }
+    System::Log(Info) << "Custom map from path loaded";
+  } catch (const std::out_of_range& e) {
+    System::Log(Info) << "No custom map for path found.";
+  }
+
+  loadScene(mapList[currentLevel]);
 }
 
 void World::setRendererWindow(Window *win) {

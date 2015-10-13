@@ -22,13 +22,13 @@ void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
     {"help",             no_argument,       0, 'h'},
     {"datadir",          required_argument, 0, 'd'},
     {"map",              required_argument, 0, 'm'},
-    {"mapFromPath",      required_argument, 0, 'p'},
+    {"mapfrompath",      required_argument, 0, 'p'},
     {0, 0, 0, 0}
   };
   
   while (1) {
     int option_index = 0;
-    argument = getopt_long (argc, argv, "v:d:h:", long_options, &option_index);
+    argument = getopt_long (argc, argv, "v:d:h:m:p", long_options, &option_index);
 
     if (argument == -1) {
       break;
@@ -58,7 +58,7 @@ void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
     case 'p':
       /// - mapFromPath \n
       /// Set the map that should be loaded.
-      mapPath = optarg;      
+      mapPath = optarg;
     default:
       break;
     }
