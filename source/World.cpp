@@ -179,23 +179,25 @@ void World::update(double dtime) {
       if (playerCollider.collidesWith(triggerCollider)) {
         if (trigger.type == "radiation") {
           player.getComponent<Health>().harm(.1f);
+          System::Log(Verbose) << "Radiation touched.";
         } else if (trigger.type == "death") {
           player.getComponent<Health>().kill();
-          printf("Death touched\n");
+          System::Log(Verbose) << "Death touched.";
         } else if (trigger.type == "win") {
           if (currentLevel + 1 < mapList.size()) {
             currentLevel++;
           }
           loadScene(mapList[currentLevel]);
-          printf("Win touched\n");
+          System::Log(Verbose) << "Win touched.";
         } else if (trigger.type == "map") {
-          printf("Map Trigger touched\n");
+          System::Log(Verbose) << "Map trigger touched.";
           throw __FILE__ ": Map trigger type de-implemented, please reimplement";
           //loadScene(trigger.reference);
         } else if (trigger.type == "button") {
+          System::Log(Verbose) << "Button touched.";
           printf("Button touched\n");
         } else {
-          printf("Some trigger touched: %s\n", trigger.type.c_str());
+          System::Log(Verbose) << "Other trigger touched. " << trigger.type;
         }
       }
     }
