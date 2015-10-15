@@ -17,6 +17,7 @@ class Renderer;
 class BoxCollider;
 class Vector3f;
 class SoundManager;
+class JavascriptSystem;
 
 const float GRAVITY = 0.5;
 
@@ -64,6 +65,7 @@ private:
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;
   ConfigFileParser *config;
+  JavascriptSystem *js;
 };
 
 } /* namespace glPortal */
