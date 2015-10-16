@@ -8,7 +8,7 @@
 #include <assets/text/Font.hpp>
 
 #include <engine/core/math/Matrix4f.hpp>
-
+#include <engine/renderer/UiRenderer.hpp>
 
 namespace glPortal {
 class Camera;

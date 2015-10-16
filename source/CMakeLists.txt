@@ -26,6 +26,7 @@ add_executable(${EXE_NAME}
   engine/BoxCollider.cpp
   engine/Camera.cpp
   engine/renderer/Renderer.cpp
+  engine/renderer/UiRenderer.cpp
   assets/material/MaterialLoader.cpp
   assets/map/MapLoader.cpp
   assets/map/MapListLoader.cpp

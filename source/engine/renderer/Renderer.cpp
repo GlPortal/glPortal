@@ -37,6 +37,7 @@
 
 #include <SDL2/SDL_timer.h>
 #include <algorithm>
+#include "UiRenderer.hpp"
 
 namespace glPortal {
 
@@ -208,6 +209,7 @@ void Renderer::renderUI(const Camera &cam) {
   // FPS counter
   setFont("Pacaya", 0.5f);
   renderText(cam, std::string("FPS: ") + std::to_string(Game::fps.getFps()), 10, vpHeight - 25);
+  UiRenderer::render(*this);
 }
 
 void Renderer::renderScene(const Camera &cam) {
