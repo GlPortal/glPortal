@@ -67,6 +67,12 @@ void Renderer::setScene(Scene *scene) {
   this->scene = scene;
 }
 
+Camera Renderer::getCamera() {
+  
+  return scene->camera;
+}
+
+  
 /**
  * Sets the font to use for all future text drawing until changed again
  * @param font Name of the font
@@ -78,7 +84,7 @@ void Renderer::setFont(const std::string &font, float size) {
 }
 
 
-void Renderer::render(const Camera &cam) {
+void Renderer::render() {
   viewport->getSize(&vpWidth, &vpHeight);
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -126,8 +132,8 @@ void Renderer::render(const Camera &cam) {
            &portal2 = pEnt2.getComponent<Portal>();
 
     // Render portals
-    renderPortal(cam, pEnt1, pEnt2);
-    renderPortal(cam, pEnt2, pEnt1);
+    renderPortal(camera, pEnt1, pEnt2);
+    renderPortal(camera, pEnt2, pEnt1);
     // Depth buffer
     if (portal1.open and portal2.open) {
       const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
@@ -141,17 +147,17 @@ void Renderer::render(const Camera &cam) {
       Matrix4f mtx;
       pEnt1.getComponent<Transform>().getModelMtx(mtx);
       mtx.scale(portal1.getScaleMult());
-      renderMesh(cam, unshaded, mtx, portalStencil);
+      renderMesh(camera, unshaded, mtx, portalStencil);
 
       pEnt2.getComponent<Transform>().getModelMtx(mtx);
       mtx.scale(portal2.getScaleMult());
-      renderMesh(cam, unshaded, mtx, portalStencil);
+      renderMesh(camera, unshaded, mtx, portalStencil);
 
       glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     }
   }
 
-  renderScene(cam);
+  renderScene(camera);
 
   /* Portals, pass 2 */
   glDepthMask(GL_FALSE);
@@ -166,33 +172,34 @@ void Renderer::render(const Camera &cam) {
       uint32_t dtOpen = SDL_GetTicks()-std::max(portal1.openSince, portal2.openSince);
       if (dtOpen < Portal::NOISE_FADE_DELAY) {
         float al = 1-((float)dtOpen/Portal::NOISE_FADE_DELAY)*2;
-        renderPortalNoise(cam, pEnt1, al);
-        renderPortalNoise(cam, pEnt2, al);
+        renderPortalNoise(camera, pEnt1, al);
+        renderPortalNoise(camera, pEnt2, al);
       }
     } else {
       if (portal1.open) {
-        renderPortalNoise(cam, pEnt1, 1.f);
+        renderPortalNoise(camera, pEnt1, 1.f);
       }
       if (portal2.open) {
-        renderPortalNoise(cam, pEnt2, 1.f);
+        renderPortalNoise(camera, pEnt2, 1.f);
       }
     }
     
     // Draw overlays
-    renderPortalOverlay(cam, pEnt1);
-    renderPortalOverlay(cam, pEnt2);
+    renderPortalOverlay(camera, pEnt1);
+    renderPortalOverlay(camera, pEnt2);
   }
   glDepthMask(GL_TRUE);
 
   //Draw GUI
   glClear(GL_DEPTH_BUFFER_BIT);
-  Camera orthoCam;
-  orthoCam.setOrthographic();
-  orthoCam.setBounds(0, vpWidth, 0, vpHeight);
-  renderUI(orthoCam);
+  renderUI();
 }
 
-void Renderer::renderUI(const Camera &cam) {
+void Renderer::renderUI() {
+  viewport->getSize(&vpWidth, &vpHeight);
+  Camera camera;
+  camera.setOrthographic();
+  camera.setBounds(0, vpWidth, 0, vpHeight);
   // Crosshair
   Matrix4f crosshairMtx;
   crosshairMtx.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
@@ -200,15 +207,15 @@ void Renderer::renderUI(const Camera &cam) {
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   const Material &mat = MaterialLoader::fromTexture("Reticle.png");
   const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
-  renderMesh(cam, unshaded, crosshairMtx, mesh, mat);
+  renderMesh(camera, unshaded, crosshairMtx, mesh, mat);
 
   // Title
   setFont("Pacaya", 1.5f);
-  renderText(cam, "GlPortal", 25, vpHeight - 75);
+  renderText(camera, "GlPortal", 25, vpHeight - 75);
 
   // FPS counter
   setFont("Pacaya", 0.5f);
-  renderText(cam, std::string("FPS: ") + std::to_string(Game::fps.getFps()), 10, vpHeight - 25);
+  renderText(camera, std::string("FPS: ") + std::to_string(Game::fps.getFps()), 10, vpHeight - 25);
   UiRenderer::render(*this);
 }
 

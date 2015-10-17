@@ -305,7 +305,7 @@ void World::shootPortal(int button) {
 
 void World::render() {
   renderer->setScene(scene);
-  renderer->render(scene->camera);
+  renderer->render();
   if (isEditorShown) {
     editor->renderUI();
   }

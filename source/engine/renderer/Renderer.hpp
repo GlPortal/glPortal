@@ -24,11 +24,9 @@ public:
   Renderer();
   void setViewport(Viewport *vp);
   Viewport* getViewport() const;
-  
   void setScene(Scene *scene);
-
-  void render(const Camera &cam);
-  void renderUI(const Camera &cam);
+  void render();
+  void renderUI();
   void renderScene(const Camera &cam);
   void renderEntity(const Camera &cam, const Entity &e);
   void renderPlayer(const Camera &cam);
@@ -46,6 +44,7 @@ public:
 
   static Matrix4f clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj);
 private:
+  Camera getCamera();
   Viewport *viewport;
   int vpWidth, vpHeight;
 
