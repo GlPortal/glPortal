@@ -28,7 +28,7 @@ GlPortal is based on a project by Simon Larsen in 2012.
 - Jason Pulkkinen - GlPortal logo
 
 # Compile the source
-For instructions on how to compile the game please read COMPILE.org.
+For instructions on how to compile the game please read [this](COMPILE.md).
 # Join the team
 Chat with us at irc.freenode.org in the channel [##glportal]((https://webchat.freenode.net/))
 for questions and discussions about the development of the game.
