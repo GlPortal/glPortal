@@ -10,7 +10,8 @@ Chat with us at *irc.freenode.org* in the channel [*##glportal*](https://webchat
 
 ## History 
 GlPortal is based on a project by Simon Larsen in 2012.
-## Contributors
+## Team
+Henry Hirsch, Julian Thijssen, Dorian Wouters, Juraj Oravec, Jason Pulkkinen
 [More Info](CONTRIBUTORS.md)
 ## Compile the source
 For instructions on how to compile the game please read [this](COMPILE.md).
