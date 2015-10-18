@@ -1,11 +1,11 @@
-* Quick note if you are compiling for the first time
-Well done. You did make the right decision. And it should not even be hard.
+# Quick note if you are compiling for the first time
+Well done. You made the right decision. It's not even that hard.
 
-* Dependencies
-*Note:* Dependencies will change all the time so watch the cmake output carefuly for missing libraries.
-Check CmakeList.txt if is something missing.
+# Dependencies
+**Note:** Dependencies will change all the time so watch the cmake output carefuly for missing libraries.
+Make sure to check CmakeList.txt if is something missing.
 
-** List of dependencies
+## List of dependencies
 - assimp
 - epoxy
 - sdl2
@@ -19,21 +19,21 @@ Check CmakeList.txt if is something missing.
 - pkg-config /(make)/
 - git /(download source code)/
 
-** Installing dependencies
+## Installing dependencies
 Remember, you have to be root, so you might want to prefix ~sudo~.
 
-*** Arch Linux
-*Note:* Package ~tinyxml2~ can be found in AUR.
-#+BEGIN_SRC bash
+### Arch Linux
+**Note:** Package ~tinyxml2~ can be found in AUR.
+```bash
 pacman -S cmake make gcc pkg-config assimp libepoxy sdl2 sdl2-mixer bullet mesa
-#+END_SRC
+```
 
-*** Debian 8 / Ubuntu 14.04 / Linux Mint 17.x
-#+BEGIN_SRC bash
+### Debian 8 / Ubuntu 14.04 / Linux Mint 17.x
+```bash
 apt-get install cmake make gcc pkg-config libassimp-dev libepoxy-dev libsdl2-dev libsdl2-mixer-dev libbullet-dev libtinyxml2-dev libgl1-mesa-dev
-#+END_SRC
+```
 
-*** Others
+### Others
 Now how will you satisfy these dependencies? No problem. You might notice that when you
 are looking for them in your package manager that you get overwhelmed by a list of possible
 installation candidates, how do you know which one is the right one?
@@ -42,53 +42,53 @@ An easy rule that applies to many libraries is that a library has the lib prefix
 since you want to install the files for development there is a dev in the name. 
 Pretty much like libfoo-dev for most libraries.
 
-* Downloading source code
+# Downloading source code
 We have several branches on git which reflects development status.
 
-** Stable
-#+BEGIN_SRC bash
+## Stable
+```bash
 git clone --depth 1 -b stable  https://github.com/GlPortal/glPortal.git
 cd glPortal
 sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
 git submodule init
 git submodule update
-#+END_SRC
+```
 
-** Development
-#+BEGIN_SRC bash
+## Development
+```bash
 git clone https://github.com/GlPortal/glPortal.git
 cd glPortal
 sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
 git submodule init
 git submodule update
-#+END_SRC
+```
 
-* Building the binary
+# Building the binary
 Make sure to check the README.org and COMPILE.org from the release you downloaded in case
 there are differences in the compile workflow for it.
 
 In the root directory of the downloaded source type:
-#+BEGIN_SRC bash
+```bash
 mkdir build && cd build
 cmake ../
-#+END_SRC
+```
 
 Now if this throws an error you have to fix something first. If you don't manage to fix the error, use the
 bugtracker https://github.com/GlPortal/glPortal/issues or http://bugs.glportal.de to report what you did, and what error you got.
 
 If the command did not produce an error, you can build the binary by typing in:
-#+BEGIN_SRC bash
+```bash
 make
-#+END_SRC
+```
 
 If this produces no error you have built the binary and should be able to start GlPortal by typing in:
-#+BEGIN_SRC bash
+```bash
 make run
-#+END_SRC
+```
 
 If you get errors try to build GlPortal again. If you don't manage to fix the error, use the
 bugtracker https://github.com/GlPortal/glPortal/issues or http://bugs.glportal.de to report what you did, and what error you got.
 
-* Keep us posted
-This does not work for you? Help us figure out what we missed to make this work on 
-your system.
+# Keep us posted
+Not working? No worries! Help us help you figure out what we missed to make this work on 
+your system by opening an issue.
