@@ -13,13 +13,13 @@ Read more about this wonderful concept [here](http://www.c2.com/cgi/wiki?Princip
 
 ### Preprocessor
 #### Include guards
-**Include guards** have an uppercase name reflecting the current header file name, and are terminated by ~_HPP~.
+**Include guards** have an uppercase name reflecting the current header file name, and are terminated by `_HPP`.
 
 *They are not to be prefixed or suffixed by any underscore.*
 
 In fact, all global names (that includes defines) starting with one underscore and a capital letter or two underscores 
 are reserved by the C and C++ standard. 
-As of the 2012-01-16 C++11 Working Draft, this is specified in 17.6.4.3.2/1 ~[global.names]~.
+As of the 2012-01-16 C++11 Working Draft, this is specified in 17.6.4.3.2/1 `[global.names]`.
 
 *(Yet, many developers keep using this bad practice)*
 
