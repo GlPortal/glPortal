@@ -17,7 +17,7 @@ GlPortal is based on a project of Simon Larsen in 2012.
 * Contributors
 ** Programming
 *** Team
-- Henry Hirsch (since 2013)
+- [Henry Hirsch](http://w3-net.de/) (since 2013)
 - Julian Thijssen (since 2014)
 - Dorian Wouters (since 2014)
 - Juraj Oravec (since 2015)
