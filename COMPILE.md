@@ -20,10 +20,10 @@ Make sure to check CmakeList.txt if is something missing.
 - git /(download source code)/
 
 ## Installing dependencies
-Remember, you have to be root, so you might want to prefix ~sudo~.
+Remember, you have to be root, so you might want to prefix `sudo`.
 
 ### Arch Linux
-**Note:** Package ~tinyxml2~ can be found in AUR.
+**Note:** Package `tinyxml2` can be found in AUR.
 ```bash
 pacman -S cmake make gcc pkg-config assimp libepoxy sdl2 sdl2-mixer bullet mesa
 ```
