@@ -13,11 +13,11 @@ Make sure to check CmakeList.txt if is something missing.
 - bullet (v 2.82+)
 - tinyxml2
 - libgl
-- cmake /(make)/
-- make /(make)/
-- gcc /(make)/
-- pkg-config /(make)/
-- git /(download source code)/
+- cmake *(make)*
+- make *(make)*
+- gcc *(make)*
+- pkg-config *(make)*
+- git *(download source code)*
 
 ## Installing dependencies
 Remember, you have to be root, so you might want to prefix `sudo`.
