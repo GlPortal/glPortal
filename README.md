@@ -1,4 +1,4 @@
-# GlPortal :cake:
+# GlPortal
 <a href="https://jenkins.glportal.de/job/GlPortal/"><img src="https://jenkins.glportal.de/buildStatus/icon?job=GlPortal"></a>
 
 ## About
@@ -11,25 +11,25 @@ Chat with us at *irc.freenode.org* in the channel [*##glportal*](https://webchat
 
 ## History 
 GlPortal is based on a project by Simon Larsen in 2012.
-# Contributors
-## Programming
-### Team
+## Contributors
+### Programming
+#### Team
 - [Henry Hirsch](http://w3-net.de/) (since 2013)
 - Julian Thijssen (since 2014)
 - Dorian Wouters (since 2014)
 - Juraj Oravec (since 2015)
 
 
-### Major Contributions
+#### Major Contributions
 - Xantares
 - Stephan Vedder (since 2015)
 
-### Graphics
+#### Graphics
 - Jason Pulkkinen - GlPortal logo
 
-# Compile the source
+## Compile the source
 For instructions on how to compile the game please read [this](COMPILE.md).
-# Join the team
+## Join the team
 Chat with us at irc.freenode.org in the channel [##glportal](https://webchat.freenode.net/)
 for questions and discussions about the development of the game.
 Report Issues to http://bugs.glportal.de .
