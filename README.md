@@ -5,6 +5,7 @@ It runs on all modern operating systems including GNU/Linux, Mac and Windows.
 You can find the website at http://glportal.de .
 
 Chat with us at *irc.freenode.org* in the channel [*##glportal*](https://webchat.freenode.net/).
+
 <img src="http://glportal.de/glportal.gif">
 
 ## History 
