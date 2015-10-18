@@ -1,4 +1,4 @@
-# GlPortal
+# GlPortal :cake:
 <a href="https://jenkins.glportal.de/job/GlPortal/"><img src="https://jenkins.glportal.de/buildStatus/icon?job=GlPortal"></a>
 
 ## About
@@ -30,7 +30,7 @@ GlPortal is based on a project by Simon Larsen in 2012.
 # Compile the source
 For instructions on how to compile the game please read COMPILE.org.
 # Join the team
-Chat with us at irc.freenode.org in the channel ##glportal
+Chat with us at irc.freenode.org in the channel [##glportal]((https://webchat.freenode.net/))
 for questions and discussions about the development of the game.
 Report Issues to http://bugs.glportal.de .
 
