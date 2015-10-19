@@ -196,26 +196,6 @@ void Renderer::render() {
 }
 
 void Renderer::renderUI() {
-  viewport->getSize(&vpWidth, &vpHeight);
-  Camera camera;
-  camera.setOrthographic();
-  camera.setBounds(0, vpWidth, 0, vpHeight);
-  // Crosshair
-  Matrix4f crosshairMtx;
-  crosshairMtx.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
-  crosshairMtx.scale(Vector3f(80, 80, 1));
-  const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
-  const Material &mat = MaterialLoader::fromTexture("Reticle.png");
-  const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
-  renderMesh(camera, unshaded, crosshairMtx, mesh, mat);
-
-  // Title
-  setFont("Pacaya", 1.5f);
-  renderText(camera, "GlPortal", 25, vpHeight - 75);
-
-  // FPS counter
-  setFont("Pacaya", 0.5f);
-  renderText(camera, std::string("FPS: ") + std::to_string(Game::fps.getFps()), 10, vpHeight - 25);
   UiRenderer::render(*this);
 }
 

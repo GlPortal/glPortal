@@ -43,9 +43,9 @@ public:
   void setFont(const std::string &font, float size);
 
   static Matrix4f clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj);
+  Viewport *viewport;
 private:
   Camera getCamera();
-  Viewport *viewport;
   int vpWidth, vpHeight;
 
   Scene *scene;
