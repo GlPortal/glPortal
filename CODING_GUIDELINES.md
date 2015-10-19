@@ -1,31 +1,32 @@
-* Coding Guidelines
-** Stick to the principles of Object Oriented Design
-http://www.c2.com/cgi/wiki?PrinciplesOfObjectOrientedDesign
-** Don't use anti-patterns
-** Always leave the code cleaner than you have found it
-** Conventions
-*** File encoding and line endings
+# Coding Guidelines
+### 1.) Stick to the principles of Object Oriented Design!
+Read more about this wonderful concept [here](http://www.c2.com/cgi/wiki?PrinciplesOfObjectOrientedDesign).
+### 2.) Don't use anti-patterns!
+### 3.) Always leave the code cleaner than you have found it.
+##Conventions
+### File encoding and line endings
 - The source files may be restricted to ASCII encoding, or use UTF-8 *without* *BOM* 
 (this warning specifically targets developers using Windows).
 - Line endings may be LF or CRLF, although the former is preferred. CR line endings are not valid.
-- Encoding conversion macros (~L"", _T(""), T("")~, ...) are considered a plague and will be rejected 
+- Encoding conversion macros (```L"", _T(""), T(""), …```) are considered a plague and will be rejected 
 (unless they are in platform-dependent source files which only gets compiled on those platforms).
-*** Preprocessor
-**** Include guards
-Include guards have an uppercase name reflecting the current header file name, and are terminated by ~_HPP~.
 
-They are not to be prefixed or suffixed by any underscore.
+### Preprocessor
+#### Include guards
+**Include guards** have an uppercase name reflecting the current header file name, and are terminated by `_HPP`.
+
+*They are not to be prefixed or suffixed by any underscore.*
 
 In fact, all global names (that includes defines) starting with one underscore and a capital letter or two underscores 
 are reserved by the C and C++ standard. 
-As of the 2012-01-16 C++11 Working Draft, this is specified in 17.6.4.3.2/1 ~[global.names]~.
+As of the 2012-01-16 C++11 Working Draft, this is specified in 17.6.4.3.2/1 `[global.names]`.
 
-(Yet, many developers keep using this bad practice)
+*(Yet, many developers keep using this bad practice)*
 
-As a side note for MSVC developers: no, ~#pragma once~ isn't an include guard and can't replace nor even supplement it. 
+As a side note for MSVC developers: no, ```#pragma once``` isn't an include guard and can't replace nor even supplement it. 
 Except for Windows-specific source files, any file containing it will be rejected.
-*** Indentation, whitespace and line length
-- An indentation level = two spaces. Tabs aren't a consistent identation method.
+### Indentation, whitespace and line length
+- An indentation level = two spaces. Tabs aren't considered a consistent identation method.
 - Empty lines are not to be idented, i.e. /really/ empty.
 - There may not be more than 2 consecutive empty lines.
 - Namespace blocks does not indent, nor are switch case labels.
@@ -33,7 +34,7 @@ Except for Windows-specific source files, any file containing it will be rejecte
 more spaces can be added if their count is low; else, just increase the identation level by one.
 - Trailing whitespace isn't allowed.
 - Maximum line length is 100 UTF-8 codepoints. In layman terms, 100 characters.
-     #+BEGIN_SRC cpp
+    ```cpp
 namespace glPortal {
 
 void func() {
@@ -61,11 +62,11 @@ void func() {
 }
 
 }
-     #+END_SRC
-*** Pointer and References
+     ```
+### Pointer and References
 Pointer/reference mark sticks to the *variable* name (*not* function name), 
 or when there is no variable name, to the type itself.
-     #+BEGIN_SRC cpp
+     ```cpp
 Type var1, *var2, &var3 = thing;
 Type* getPtr(Type *namedParm);
 Type& getRef(UnnamedParm*);
@@ -74,12 +75,12 @@ Type& getRef(UnnamedParm*);
 Type *idiotGetPtr(Type *namedParm);
 // because it doesn't return Type, it returns Type* !
 // Moreover the function name has nothing to do with that pointer mark on it.
-     #+END_SRC
-*** Blocks of code
-- _Always_ open a new block of code after a control structure
+    ```
+### Blocks of code
+- *Always* open a new block of code after a control structure
 - Open them on the line of the control statement
 - Put code on the next line
-     #+BEGIN_SRC cpp
+     ```cpp
 if (cond) {
   code();
 }
@@ -94,4 +95,4 @@ if (cond)
   code();
 
 if (cond) code();
-  #+END_SRC
+ ```
