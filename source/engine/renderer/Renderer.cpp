@@ -192,10 +192,6 @@ void Renderer::render() {
 
   //Draw GUI
   glClear(GL_DEPTH_BUFFER_BIT);
-  renderUI();
-}
-
-void Renderer::renderUI() {
   UiRenderer::render(*this);
 }
 

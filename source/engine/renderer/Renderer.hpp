@@ -26,7 +26,6 @@ public:
   Viewport* getViewport() const;
   void setScene(Scene *scene);
   void render();
-  void renderUI();
   void renderScene(const Camera &cam);
   void renderEntity(const Camera &cam, const Entity &e);
   void renderPlayer(const Camera &cam);
