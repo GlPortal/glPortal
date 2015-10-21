@@ -44,7 +44,7 @@ duk_ret_t JavascriptPlayer::constructor(duk_context* ctx) {
   }
   duk_push_this(ctx);
 
-  return 1;
+  return 0;
 }
 
 duk_ret_t JavascriptPlayer::PositionY(duk_context* ctx) {
@@ -90,7 +90,7 @@ duk_ret_t JavascriptPlayer::heal(duk_context* ctx) {
   Entity &player = JavascriptSystem::scene->player;
   player.getComponent<Health>().heal(heal);
 
-  return 1;
+  return 0;
 }
 
 duk_ret_t JavascriptPlayer::harm(duk_context* ctx) {
@@ -101,7 +101,7 @@ duk_ret_t JavascriptPlayer::harm(duk_context* ctx) {
   Entity &player = JavascriptSystem::scene->player;
   player.getComponent<Health>().harm(harm);
 
-  return 1;
+  return 0;
 }
 
 duk_ret_t JavascriptPlayer::kill(duk_context* ctx) {
@@ -110,7 +110,7 @@ duk_ret_t JavascriptPlayer::kill(duk_context* ctx) {
   Entity &player = JavascriptSystem::scene->player;
   player.getComponent<Health>().kill();
 
-  return 1;
+  return 0;
 }
 
 duk_ret_t JavascriptPlayer::revive(duk_context* ctx) {
@@ -119,7 +119,7 @@ duk_ret_t JavascriptPlayer::revive(duk_context* ctx) {
   Entity &player = JavascriptSystem::scene->player;
   player.getComponent<Health>().revive();
 
-  return 1;
+  return 0;
 }
 /* Health */
 
