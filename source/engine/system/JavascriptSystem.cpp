@@ -7,6 +7,8 @@
 #include <engine/component/Transform.hpp>
 #include <engine/component/Health.hpp>
 
+#include <engine/env/System.hpp>
+
 #include <engine/system/javascript/JavascriptPlayer.hpp>
 
 namespace glPortal {
@@ -39,7 +41,7 @@ JavascriptSystem::~JavascriptSystem() {
 
 void JavascriptSystem::update() {
   if (duk_peval_string(ctx, script.c_str()) != 0) {
-    printf("eval failed: %s\n", duk_safe_to_string(ctx, -1));
+    System::Log(Error) << "eval failed: " << duk_safe_to_string(ctx, -1);
   }
 }
 
