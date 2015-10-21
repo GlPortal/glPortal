@@ -26,7 +26,7 @@ JavascriptSystem::JavascriptSystem() {
   }
 
   /* add javascript objects */
-  JavaScriptPlayer::init(ctx);
+  JavascriptPlayer::init(ctx);
 
   /* add javascript global function 
   duk_push_c_function(ctx, Kill, 0);

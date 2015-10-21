@@ -13,7 +13,7 @@
 
 namespace glPortal {
 
-void JavaScriptPlayer::init(duk_context* ctx) {
+void JavascriptPlayer::init(duk_context* ctx) {
   const duk_function_list_entry PlayerMethods[] = {
     /* Health */
     {"health", health, 0},
@@ -38,7 +38,7 @@ void JavaScriptPlayer::init(duk_context* ctx) {
   duk_put_global_string(ctx, "Player");
 }
 
-duk_ret_t JavaScriptPlayer::constructor(duk_context* ctx) {
+duk_ret_t JavascriptPlayer::constructor(duk_context* ctx) {
   if (not duk_is_constructor_call(ctx)) {
     return DUK_RET_TYPE_ERROR;
   }
@@ -47,7 +47,7 @@ duk_ret_t JavaScriptPlayer::constructor(duk_context* ctx) {
   return 1;
 }
 
-duk_ret_t JavaScriptPlayer::PositionY(duk_context* ctx) {
+duk_ret_t JavascriptPlayer::PositionY(duk_context* ctx) {
   duk_push_this(ctx);
   
   Entity &player = JavascriptSystem::scene->player;
@@ -59,7 +59,7 @@ duk_ret_t JavaScriptPlayer::PositionY(duk_context* ctx) {
 }
 
 /* Health */
-duk_ret_t JavaScriptPlayer::health(duk_context* ctx) {
+duk_ret_t JavascriptPlayer::health(duk_context* ctx) {
   duk_push_this(ctx);
 
   Entity &player = JavascriptSystem::scene->player;
@@ -70,7 +70,7 @@ duk_ret_t JavaScriptPlayer::health(duk_context* ctx) {
   return 1;
 }
 
-duk_ret_t JavaScriptPlayer::isAlive(duk_context* ctx) {
+duk_ret_t JavascriptPlayer::isAlive(duk_context* ctx) {
   duk_push_this(ctx);
 
   Entity &player = JavascriptSystem::scene->player;
@@ -81,7 +81,7 @@ duk_ret_t JavaScriptPlayer::isAlive(duk_context* ctx) {
   return 1;
 }
 
-duk_ret_t JavaScriptPlayer::heal(duk_context* ctx) {
+duk_ret_t JavascriptPlayer::heal(duk_context* ctx) {
   duk_push_this(ctx);
 
   /* maybe add (float) */
@@ -93,7 +93,7 @@ duk_ret_t JavaScriptPlayer::heal(duk_context* ctx) {
   return 1;
 }
 
-duk_ret_t JavaScriptPlayer::harm(duk_context* ctx) {
+duk_ret_t JavascriptPlayer::harm(duk_context* ctx) {
   duk_push_this(ctx);
 
   float harm = duk_require_number(ctx, -3);
@@ -104,7 +104,7 @@ duk_ret_t JavaScriptPlayer::harm(duk_context* ctx) {
   return 1;
 }
 
-duk_ret_t JavaScriptPlayer::kill(duk_context* ctx) {
+duk_ret_t JavascriptPlayer::kill(duk_context* ctx) {
   duk_push_this(ctx);
 
   Entity &player = JavascriptSystem::scene->player;
@@ -113,7 +113,7 @@ duk_ret_t JavaScriptPlayer::kill(duk_context* ctx) {
   return 1;
 }
 
-duk_ret_t JavaScriptPlayer::revive(duk_context* ctx) {
+duk_ret_t JavascriptPlayer::revive(duk_context* ctx) {
   duk_push_this(ctx);
 
   Entity &player = JavascriptSystem::scene->player;
@@ -124,7 +124,7 @@ duk_ret_t JavaScriptPlayer::revive(duk_context* ctx) {
 /* Health */
 
 /* States */
-duk_ret_t JavaScriptPlayer::isGrounded(duk_context* ctx) {
+duk_ret_t JavascriptPlayer::isGrounded(duk_context* ctx) {
   duk_push_this(ctx);
 
   Entity &player = JavascriptSystem::scene->player;
@@ -135,7 +135,7 @@ duk_ret_t JavaScriptPlayer::isGrounded(duk_context* ctx) {
   return 1;
 }
 
-duk_ret_t JavaScriptPlayer::isFlying(duk_context* ctx) {
+duk_ret_t JavascriptPlayer::isFlying(duk_context* ctx) {
   duk_push_this(ctx);
 
   Entity &player = JavascriptSystem::scene->player;

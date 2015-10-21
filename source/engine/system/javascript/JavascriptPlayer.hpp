@@ -5,7 +5,7 @@
 
 namespace glPortal {
 
-class JavaScriptPlayer {
+class JavascriptPlayer {
 public:
   static void init(duk_context *ctx);
 
