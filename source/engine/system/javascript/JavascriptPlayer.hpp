@@ -13,6 +13,10 @@ public:
 
   static duk_ret_t PositionY(duk_context *ctx);
 
+  /* Movement */
+  /* Position */
+  static duk_ret_t getPosition(duk_context *ctx);
+
   /* Health */
   static duk_ret_t health(duk_context *ctx);
   static duk_ret_t isAlive(duk_context *ctx);

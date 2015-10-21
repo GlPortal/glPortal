@@ -15,6 +15,10 @@ namespace glPortal {
 
 void JavascriptPlayer::init(duk_context* ctx) {
   const duk_function_list_entry PlayerMethods[] = {
+    /* Movement */
+    /* Position */
+    {"getPosition", getPosition, 0},
+
     /* Health */
     {"health", health, 0},
     {"isAlive", isAlive, 0},
@@ -57,6 +61,29 @@ duk_ret_t JavascriptPlayer::PositionY(duk_context* ctx) {
 
   return 1;
 }
+
+/* Movement */
+/* Position */
+duk_ret_t JavascriptPlayer::getPosition(duk_context* ctx) {
+  duk_push_this(ctx);
+
+  Entity &player = JavascriptSystem::scene->player;
+  Vector3f position = player.getComponent<Transform>().position;
+
+  duk_idx_t objIndex = duk_push_object(ctx);
+
+  duk_push_number(ctx, position.x);
+  duk_put_prop_string(ctx, objIndex, "x");
+
+  duk_push_number(ctx, position.y);
+  duk_put_prop_string(ctx, objIndex, "y");
+
+  duk_push_number(ctx, position.z);
+  duk_put_prop_string(ctx, objIndex, "z");
+
+  return 1;
+}
+/* Movement */
 
 /* Health */
 duk_ret_t JavascriptPlayer::health(duk_context* ctx) {
