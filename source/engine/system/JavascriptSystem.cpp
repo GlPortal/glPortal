@@ -16,7 +16,8 @@ namespace glPortal {
 Scene* JavascriptSystem::scene;
 duk_context* JavascriptSystem::ctx;
 bool JavascriptSystem::savedBool = false;
-std::string JavascriptSystem::script = "var player = new Player(); if(player.isGrounded()) {player.kill();}";
+std::string JavascriptSystem::script = "var player = new Player(); position = player.getPosition(); if(position.y < -2) {player.kill();}";
+//std::string JavascriptSystem::script = "var player = new Player(); if(player.isGrounded()) {player.kill();}";
 //std::string JavacriptSystem::script = "Kill();";
 
 JavascriptSystem::JavascriptSystem() {
