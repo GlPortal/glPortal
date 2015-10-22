@@ -382,7 +382,7 @@ void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx,
 
 void Renderer::renderColoredMesh(const Camera &cam, Matrix4f &mdlMtx) {
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
-  const Shader &shader = ShaderLoader::getShader("red.frag");
+  const Shader &shader = ShaderLoader::getShader("color.frag");
   glUseProgram(shader.handle);
   Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
   glUniformMatrix4fv(shader.uni("projectionMatrix"), 1, false, projMatrix.toArray());
