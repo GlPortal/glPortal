@@ -22,8 +22,8 @@ void UiRenderer::render(Renderer &renderer) {
   crosshairMtx.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
   crosshairMtx.scale(Vector3f(80, 80, 1));
   Matrix4f widget;
-  widget.translate(Vector3f(vpWidth/2+12, vpHeight/2+12, -2));
-  widget.scale(Vector3f(80, 80, 1));
+  widget.translate(Vector3f(vpWidth/2+12, vpHeight-20, -2));
+  widget.scale(Vector3f(380, 80, 1));
   
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   const Material &mat = MaterialLoader::fromTexture("Reticle.png");
