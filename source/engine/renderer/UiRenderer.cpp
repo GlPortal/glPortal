@@ -21,10 +21,15 @@ void UiRenderer::render(Renderer &renderer) {
   Matrix4f crosshairMtx;
   crosshairMtx.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
   crosshairMtx.scale(Vector3f(80, 80, 1));
+  Matrix4f widget;
+  widget.translate(Vector3f(vpWidth/2+12, vpHeight/2+12, -2));
+  widget.scale(Vector3f(80, 80, 1));
+  
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   const Material &mat = MaterialLoader::fromTexture("Reticle.png");
   const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
   renderer.renderMesh(camera, unshaded, crosshairMtx, mesh, mat);
+  renderer.renderColoredMesh(camera, widget);
   // Title
   renderer.setFont("Pacaya", 1.5f);
   renderer.renderText(camera, "GlPortal", 25, vpHeight - 75);

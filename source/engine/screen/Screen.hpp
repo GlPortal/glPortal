@@ -1,5 +1,5 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef SCREEN_HPP
+#define SCREEN_HPP
 
 namespace glPortal {
 
@@ -10,4 +10,4 @@ public:
 
 } /* namespace glPortal */
 
-#endif /* CAMERA_H */
+#endif /* SCREEN_HPP */

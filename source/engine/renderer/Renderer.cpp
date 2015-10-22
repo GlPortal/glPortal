@@ -352,7 +352,8 @@ void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx,
   glUniformMatrix4fv(sh.uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.toArray());
 
   glUniformMatrix4fv(sh.uni("modelMatrix"), 1, false, mdlMtx.toArray());
-
+  // Per-vertex color multiplier
+  glVertexAttrib4f(4, 1, 1, 1, 1);
   glBindVertexArray(mesh.handle);
   if (mat) {
     int tiling = sh.uni("tiling");
@@ -380,6 +381,29 @@ void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx,
   glBindVertexArray(0);
 }
 
+void Renderer::renderColoredMesh(const Camera &cam, Matrix4f &mdlMtx) {
+  const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
+  const Shader &shader = ShaderLoader::getShader("red.frag");
+  glUseProgram(shader.handle);
+  Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
+  glUniformMatrix4fv(shader.uni("projectionMatrix"), 1, false, projMatrix.toArray());
+  Matrix4f viewMatrix; cam.getViewMatrix(viewMatrix);
+  glUniformMatrix4fv(shader.uni("viewMatrix"), 1, false, viewMatrix.toArray());
+  Matrix4f invViewMatrix = inverse(viewMatrix);
+  glUniformMatrix4fv(shader.uni("invViewMatrix"), 1, false, invViewMatrix.toArray());
+  Matrix3f mdlMtx3 = toMatrix3f(mdlMtx);
+  Matrix3f i3 = inverse(mdlMtx3);
+  Matrix4f modelTrInv4Matrix = toMatrix4f(transpose(i3));
+  glUniformMatrix4fv(shader.uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.toArray());
+
+  glUniformMatrix4fv(shader.uni("modelMatrix"), 1, false, mdlMtx.toArray());
+  glVertexAttrib4f(4, 1, 1, 1, 1);
+  glBindVertexArray(mesh.handle);
+
+  glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
+  glBindVertexArray(0);
+}
+  
 void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal) {
   Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
