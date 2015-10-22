@@ -398,6 +398,7 @@ void Renderer::renderColoredMesh(const Camera &cam, Matrix4f &mdlMtx) {
   glUniformMatrix4fv(shader.uni("modelMatrix"), 1, false, mdlMtx.toArray());
   glBindVertexArray(mesh.handle);
 
+  glUniform4f(shader.uni("color"), 1.0, 0.0, 1.0, 1.0);
   glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
   glBindVertexArray(0);
 }
