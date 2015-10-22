@@ -396,13 +396,12 @@ void Renderer::renderColoredMesh(const Camera &cam, Matrix4f &mdlMtx) {
   glUniformMatrix4fv(shader.uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.toArray());
 
   glUniformMatrix4fv(shader.uni("modelMatrix"), 1, false, mdlMtx.toArray());
-  glVertexAttrib4f(4, 1, 1, 1, 1);
   glBindVertexArray(mesh.handle);
 
   glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
   glBindVertexArray(0);
 }
-  
+
 void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal) {
   Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
