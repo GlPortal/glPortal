@@ -38,7 +38,7 @@ public:
     return renderMesh(cam, sh, mdlMtx, mesh, &mat);
   }
   void renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat = nullptr);
-  void renderColoredMesh(const Camera &cam, Matrix4f &mdlMtx);
+  void renderColoredMesh(const Camera &cam, Matrix4f &mdlMtx, Vector3f color, float alpha);
   void setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal);
   void setFont(const std::string &font, float size);
 

@@ -29,7 +29,7 @@ void UiRenderer::render(Renderer &renderer) {
   const Material &mat = MaterialLoader::fromTexture("Reticle.png");
   const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
   renderer.renderMesh(camera, unshaded, crosshairMtx, mesh, mat);
-  renderer.renderColoredMesh(camera, widget);
+  renderer.renderColoredMesh(camera, widget, Vector3f(1.0, 1.0, 1.0), 0.1);
   // Title
   renderer.setFont("Pacaya", 1.5f);
   renderer.renderText(camera, "GlPortal", 25, vpHeight - 75);

@@ -380,7 +380,7 @@ void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx,
   glBindVertexArray(0);
 }
 
-void Renderer::renderColoredMesh(const Camera &cam, Matrix4f &mdlMtx) {
+  void Renderer::renderColoredMesh(const Camera &cam, Matrix4f &mdlMtx, Vector3f color, float alpha) {
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   const Shader &shader = ShaderLoader::getShader("color.frag");
   glUseProgram(shader.handle);
@@ -398,7 +398,7 @@ void Renderer::renderColoredMesh(const Camera &cam, Matrix4f &mdlMtx) {
   glUniformMatrix4fv(shader.uni("modelMatrix"), 1, false, mdlMtx.toArray());
   glBindVertexArray(mesh.handle);
 
-  glUniform4f(shader.uni("color"), 1.0, 0.0, 1.0, 1.0);
+  glUniform4f(shader.uni("color"), color.x, color.y, color.z, alpha);
   glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
   glBindVertexArray(0);
 }
