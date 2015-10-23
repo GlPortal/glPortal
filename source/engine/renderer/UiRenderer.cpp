@@ -24,11 +24,11 @@ void UiRenderer::render(Renderer &renderer) {
   Matrix4f widget;
   widget.translate(Vector3f(vpWidth/2+12, vpHeight-20, -2));
   widget.scale(Vector3f(380, 80, 1));
-  
+
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   const Material &mat = MaterialLoader::fromTexture("Reticle.png");
-  const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
-  renderer.renderMesh(camera, unshaded, crosshairMtx, mesh, mat);
+  renderer.setShader(&ShaderLoader::getShader("unshaded.frag"));
+  renderer.renderMesh(camera, crosshairMtx, mesh, mat);
   renderer.renderColoredMesh(camera, widget);
   // Title
   renderer.setFont("Pacaya", 1.5f);

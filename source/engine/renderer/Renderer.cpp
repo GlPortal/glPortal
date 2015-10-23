@@ -67,12 +67,19 @@ void Renderer::setScene(Scene *scene) {
   this->scene = scene;
 }
 
+/**
+ * Sets the current shader for rendering
+ */
+void Renderer::setShader(Shader *shader) {
+  this->shader = shader;
+  glUseProgram(shader->handle);
+}
+
 Camera Renderer::getCamera() {
-  
   return scene->camera;
 }
 
-  
+
 /**
  * Sets the font to use for all future text drawing until changed again
  * @param font Name of the font
@@ -93,37 +100,6 @@ void Renderer::render() {
   camera.setPerspective();
   camera.setAspect((float)vpWidth / vpHeight);
 
-  const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
-  glUseProgram(diffuse.handle);
-
-  /* Lights */ {
-    int numLights = 0;
-    for (const Entity &e : scene->entities) {
-      if (not e.hasComponent<LightSource>()) {
-        continue;
-      }
-
-      std::string index = std::to_string(numLights);
-      std::string position = "lights[" + index + "].position";
-      std::string color = "lights[" + index + "].color";
-      std::string distance = "lights[" + index + "].distance";
-      std::string energy = "lights[" + index + "].energy";
-      std::string specular = "lights[" + index + "].specular";
-
-      const Transform &t = e.getComponent<Transform>();
-      const LightSource &ls = e.getComponent<LightSource>();
-      glUniform3f(diffuse.uni(position.c_str()), t.position.x, t.position.y, t.position.z);
-      glUniform3f(diffuse.uni(color.c_str()), ls.color.x, ls.color.y, ls.color.z);
-      glUniform1f(diffuse.uni(distance.c_str()), ls.distance);
-      glUniform1f(diffuse.uni(energy.c_str()), ls.energy);
-      glUniform1f(diffuse.uni(specular.c_str()), ls.specular);
-
-      ++numLights;
-    }
-    int numLightsLoc = diffuse.uni("numLights");
-    glUniform1i(numLightsLoc, numLights);
-  }
-
   /* Portals, pass 1 */
   for (EntityPair &p : scene->portalPairs) {
     Entity &pEnt1 = *p.first,
@@ -136,7 +112,7 @@ void Renderer::render() {
     renderPortal(camera, pEnt2, pEnt1);
     // Depth buffer
     if (portal1.open and portal2.open) {
-      const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
+      setShader(&ShaderLoader::getShader("unshaded.frag"));
 
       glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
       glDepthMask(GL_TRUE);
@@ -147,11 +123,11 @@ void Renderer::render() {
       Matrix4f mtx;
       pEnt1.getComponent<Transform>().getModelMtx(mtx);
       mtx.scale(portal1.getScaleMult());
-      renderMesh(camera, unshaded, mtx, portalStencil);
+      renderMesh(camera, mtx, portalStencil);
 
       pEnt2.getComponent<Transform>().getModelMtx(mtx);
       mtx.scale(portal2.getScaleMult());
-      renderMesh(camera, unshaded, mtx, portalStencil);
+      renderMesh(camera, mtx, portalStencil);
 
       glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     }
@@ -183,7 +159,7 @@ void Renderer::render() {
         renderPortalNoise(camera, pEnt2, 1.f);
       }
     }
-    
+
     // Draw overlays
     renderPortalOverlay(camera, pEnt1);
     renderPortalOverlay(camera, pEnt2);
@@ -195,7 +171,38 @@ void Renderer::render() {
   UiRenderer::render(*this);
 }
 
-void Renderer::renderScene(const Camera &cam) {
+void Renderer::renderScene(const Camera &camera) {
+  setShader(&ShaderLoader::getShader("ambient.frag"));
+  renderEntities(camera);
+
+  glEnable(GL_BLEND);
+	glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ZERO);
+  glDepthFunc(GL_LEQUAL);
+
+  setShader(&ShaderLoader::getShader("diffuse.frag"));
+  /* Lights */ {
+    for (const Entity &e : scene->entities) {
+      if (not e.hasComponent<LightSource>()) {
+        continue;
+      }
+
+      const Transform &t = e.getComponent<Transform>();
+      const LightSource &ls = e.getComponent<LightSource>();
+      glUniform3f(shader->uni("light.position"), t.position.x, t.position.y, t.position.z);
+      glUniform3f(shader->uni("light.color"), ls.color.x, ls.color.y, ls.color.z);
+      glUniform1f(shader->uni("light.distance"), ls.distance);
+      glUniform1f(shader->uni("light.energy"), ls.energy);
+      glUniform1f(shader->uni("light.specular"), ls.specular);
+
+      renderEntities(camera);
+    }
+  }
+
+  glDepthFunc(GL_LESS);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void Renderer::renderEntities(const Camera &cam) {
   for (Entity &e : scene->entities) {
     if (e.hasComponent<MeshDrawable>()) {
       renderEntity(cam, e);
@@ -208,8 +215,8 @@ void Renderer::renderEntity(const Camera &cam, const Entity &e) {
   MeshDrawable &drawable = e.getComponent<MeshDrawable>();
   Matrix4f mtx;
   e.getComponent<Transform>().getModelMtx(mtx);
-  const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
-  renderMesh(cam, diffuse, mtx, drawable.mesh, drawable.material);
+  //const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
+  renderMesh(cam, mtx, drawable.mesh, drawable.material);
 }
 
 void Renderer::renderPlayer(const Camera &cam) {
@@ -220,8 +227,9 @@ void Renderer::renderPlayer(const Camera &cam) {
   mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
   const Mesh &dummy = MeshLoader::getMesh("HumanToken.obj");
   const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
-  const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
-  renderMesh(cam, diffuse, mtx, dummy, mat);
+  setShader(&ShaderLoader::getShader("diffuse.frag"));
+
+  renderMesh(cam, mtx, dummy, mat);
 }
 
 void Renderer::renderPortalContent(const Camera &cam, const Entity &portal) {
@@ -229,23 +237,25 @@ void Renderer::renderPortalContent(const Camera &cam, const Entity &portal) {
   //Primary portal
   glStencilFunc(GL_NEVER, 1, 0xFF);
   glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
-  
+
   const Portal &p = portal.getComponent<Portal>();
   Matrix4f mtx;
   mtx.translate(p.getDirection() * -cam.getZNear());
   portal.getComponent<Transform>().applyModelMtx(mtx);
   mtx.scale(p.getScaleMult());
-  renderMesh(cam, ShaderLoader::getShader("unshaded.frag"), mtx, p.stencilMesh);
+  setShader(&ShaderLoader::getShader("unshaded.frag"));
+
+  renderMesh(cam, mtx, p.stencilMesh);
 
   mtx.setIdentity();
   portal.getComponent<Transform>().applyModelMtx(mtx);
   mtx.scale(p.getScaleMult());
-  renderMesh(cam, ShaderLoader::getShader("unshaded.frag"), mtx, p.stencilMesh);
+  renderMesh(cam, mtx, p.stencilMesh);
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glDepthMask(GL_TRUE);
 }
-  
+
 void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entity &otherPortal) {
   if (portal.getComponent<Portal>().open and otherPortal.getComponent<Portal>().open) {
     glEnable(GL_STENCIL_TEST);
@@ -254,7 +264,7 @@ void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entit
     glDepthMask(GL_FALSE);
 
     renderPortalContent(cam, portal);
-    
+
     //Draw the scene from the secondary portal
     glStencilFunc(GL_EQUAL, 1, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
@@ -270,16 +280,17 @@ void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entit
     glDisable(GL_STENCIL_TEST);
   }
 }
-  
+
 void Renderer::renderPortalOverlay(const Camera &cam, const Entity &portal) {
   const Portal &p = portal.getComponent<Portal>();
   if (p.open) {
-    const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
+    setShader(&ShaderLoader::getShader("unshaded.frag"));
+
     Matrix4f mtx;
     portal.getComponent<Transform>().getModelMtx(mtx);
     mtx.scale(p.getScaleMult());
 
-    renderMesh(cam, unshaded, mtx, p.overlayMesh, p.overlayTex);
+    renderMesh(cam, mtx, p.overlayMesh, p.overlayTex);
   }
 }
 
@@ -290,23 +301,23 @@ void Renderer::renderPortalNoise(const Camera &cam, const Entity &portal, float 
   const Portal &p = portal.getComponent<Portal>();
   mtx.scale(p.getScaleMult());
 
-  const Shader &simplexTime = ShaderLoader::getShader("simplexTime.frag");
-  glUseProgram(simplexTime.handle);
-  int timeLoc = simplexTime.uni("time");
-  int colorLoc = simplexTime.uni("color");
-  int noiseAlphaLoc = simplexTime.uni("noiseAlpha");
+  setShader(&ShaderLoader::getShader("simplexTime.frag"));
+
+  int timeLoc = shader->uni("time");
+  int colorLoc = shader->uni("color");
+  int noiseAlphaLoc = shader->uni("noiseAlpha");
   glUniform1f(timeLoc, SDL_GetTicks()/1000.f);
   glUniform3f(colorLoc, p.color.x, p.color.y, p.color.z);
   glUniform1f(noiseAlphaLoc, fade);
 
-  renderMesh(cam, simplexTime, mtx, p.overlayMesh, p.maskTex);
+  renderMesh(cam, mtx, p.overlayMesh, p.maskTex);
 }
 
 void Renderer::renderText(const Camera &cam, const std::string &text, int x, int y) {
   glClear(GL_DEPTH_BUFFER_BIT);
 
   const Material &mat = MaterialLoader::fromTexture("Pacaya.png");
-  const Shader &sh = ShaderLoader::getShader("text.frag");
+  setShader(&ShaderLoader::getShader("text.frag"));
 
   Vector2f position(x, y);
   Matrix4f mtx;
@@ -326,7 +337,7 @@ void Renderer::renderText(const Camera &cam, const std::string &text, int x, int
     mtx.scale(Vector3f(letter.width * font->size,
                       letter.height * font->size, 1));
 
-    renderMesh(cam, sh, mtx, mesh, mat);
+    renderMesh(cam, mtx, mesh, mat);
     position.x += letter.advance * font->size;
   }
 }
@@ -336,37 +347,35 @@ void Renderer::renderText(const Camera &cam, const std::string &text, int x, int
  * Renders a mesh with the specified texture
  * @param mesh The mesh to render
  */
-void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat) {
-  glUseProgram(sh.handle);
-
+void Renderer::renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat) {
   Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
-  glUniformMatrix4fv(sh.uni("projectionMatrix"), 1, false, projMatrix.toArray());
+  glUniformMatrix4fv(shader->uni("projectionMatrix"), 1, false, projMatrix.toArray());
   Matrix4f viewMatrix; cam.getViewMatrix(viewMatrix);
-  glUniformMatrix4fv(sh.uni("viewMatrix"), 1, false, viewMatrix.toArray());
+  glUniformMatrix4fv(shader->uni("viewMatrix"), 1, false, viewMatrix.toArray());
   Matrix4f invViewMatrix = inverse(viewMatrix);
-  glUniformMatrix4fv(sh.uni("invViewMatrix"), 1, false, invViewMatrix.toArray());
+  glUniformMatrix4fv(shader->uni("invViewMatrix"), 1, false, invViewMatrix.toArray());
 
   Matrix3f mdlMtx3 = toMatrix3f(mdlMtx);
   Matrix3f i3 = inverse(mdlMtx3);
   Matrix4f modelTrInv4Matrix = toMatrix4f(transpose(i3));
-  glUniformMatrix4fv(sh.uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.toArray());
+  glUniformMatrix4fv(shader->uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.toArray());
 
-  glUniformMatrix4fv(sh.uni("modelMatrix"), 1, false, mdlMtx.toArray());
+  glUniformMatrix4fv(shader->uni("modelMatrix"), 1, false, mdlMtx.toArray());
 
   glBindVertexArray(mesh.handle);
   if (mat) {
-    int tiling = sh.uni("tiling");
+    int tiling = shader->uni("tiling");
     glUniform2f(tiling, mat->scaleU, mat->scaleV);
-    glUniform1i(sh.uni("diffuse"), 0);
+    glUniform1i(shader->uni("diffuse"), 0);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mat->diffuse.handle);
-    glUniform1i(sh.uni("normalMap"), 1);
+    glUniform1i(shader->uni("normalMap"), 1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, mat->normal.handle);
-    glUniform1i(sh.uni("specularMap"), 2);
+    glUniform1i(shader->uni("specularMap"), 2);
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, mat->specular.handle);
-    glUniform1f(sh.uni("shininess"), mat->shininess);
+    glUniform1f(shader->uni("shininess"), mat->shininess);
   }
   glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
   if (mat) {
@@ -382,20 +391,20 @@ void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx,
 
 void Renderer::renderColoredMesh(const Camera &cam, Matrix4f &mdlMtx) {
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
-  const Shader &shader = ShaderLoader::getShader("red.frag");
-  glUseProgram(shader.handle);
+  setShader(&ShaderLoader::getShader("red.frag"));
+
   Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
-  glUniformMatrix4fv(shader.uni("projectionMatrix"), 1, false, projMatrix.toArray());
+  glUniformMatrix4fv(shader->uni("projectionMatrix"), 1, false, projMatrix.toArray());
   Matrix4f viewMatrix; cam.getViewMatrix(viewMatrix);
-  glUniformMatrix4fv(shader.uni("viewMatrix"), 1, false, viewMatrix.toArray());
+  glUniformMatrix4fv(shader->uni("viewMatrix"), 1, false, viewMatrix.toArray());
   Matrix4f invViewMatrix = inverse(viewMatrix);
-  glUniformMatrix4fv(shader.uni("invViewMatrix"), 1, false, invViewMatrix.toArray());
+  glUniformMatrix4fv(shader->uni("invViewMatrix"), 1, false, invViewMatrix.toArray());
   Matrix3f mdlMtx3 = toMatrix3f(mdlMtx);
   Matrix3f i3 = inverse(mdlMtx3);
   Matrix4f modelTrInv4Matrix = toMatrix4f(transpose(i3));
-  glUniformMatrix4fv(shader.uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.toArray());
+  glUniformMatrix4fv(shader->uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.toArray());
 
-  glUniformMatrix4fv(shader.uni("modelMatrix"), 1, false, mdlMtx.toArray());
+  glUniformMatrix4fv(shader->uni("modelMatrix"), 1, false, mdlMtx.toArray());
   glBindVertexArray(mesh.handle);
 
   glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
