@@ -7,11 +7,6 @@
 
 using namespace glPortal;
 
-// Fix, since we 1. don't compile Observer.cpp and 2. don't want to go into the C++ dependency
-// hell it implies (references Environment).
-Observer::~Observer() {
-}
-
 struct DispatcherFixtures {
   Dispatcher dispatcher;
   bool flag;
@@ -19,7 +14,8 @@ struct DispatcherFixtures {
     flag = false;
     Dispatcher dispatcher;
     FlagObserver observer(flag, true);
-    dispatcher.addObserver(Event::loadScene, observer);
+
+    observer.addCallback(Event::loadScene, std::bind(&FlagObserver::execute, observer));    
     dispatcher.dispatch(Event::loadScene);
   }
   

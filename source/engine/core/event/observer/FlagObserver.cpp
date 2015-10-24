@@ -1,5 +1,5 @@
 #include "FlagObserver.hpp"
-
+#include <iostream> 
 namespace glPortal {
 
 FlagObserver::FlagObserver(bool &flag, bool resultingStatus) {
@@ -8,6 +8,7 @@ FlagObserver::FlagObserver(bool &flag, bool resultingStatus) {
 }
 
 void FlagObserver::execute() {
+  std::cout << "Dicksnnnnnnnrrrrrrrrrrrrrrrrrrn";
   *flag = resultingStatus;
 }
 
