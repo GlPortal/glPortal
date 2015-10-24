@@ -1,5 +1,5 @@
 #include "FlagObserver.hpp"
-
+#include <iostream> 
 namespace glPortal {
 
 FlagObserver::FlagObserver(bool &flag, bool resultingStatus) {
