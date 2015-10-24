@@ -22,6 +22,7 @@ add_executable(${EXE_NAME}
   engine/core/event/Dispatcher.cpp
   engine/core/event/observer/FlagObserver.cpp
   engine/core/event/observer/MusicObserver.cpp
+  engine/core/state/PlayerState.cpp
   engine/core/event/Observer.cpp
   engine/core/gl/TightDataPacker.cpp
   util/sdl/Fps.cpp
