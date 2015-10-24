@@ -352,7 +352,7 @@ void Renderer::renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh,
   glUniformMatrix4fv(shader->uni("projectionMatrix"), 1, false, projMatrix.toArray());
   Matrix4f viewMatrix; cam.getViewMatrix(viewMatrix);
   glUniformMatrix4fv(shader->uni("viewMatrix"), 1, false, viewMatrix.toArray());
-  Matrix4f invViewMatrix = inverse(viewMatrix);
+  Matrix4f invViewMatrix; cam.getInvViewMatrix(invViewMatrix);
   glUniformMatrix4fv(shader->uni("invViewMatrix"), 1, false, invViewMatrix.toArray());
 
   Matrix3f mdlMtx3 = toMatrix3f(mdlMtx);

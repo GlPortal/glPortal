@@ -26,6 +26,7 @@ public:
   void setProjMatrix(const Matrix4f &m);
   void getViewMatrix(Matrix4f &m) const;
   void setViewMatrix(const Matrix4f &m);
+  void getInvViewMatrix(Matrix4f &m) const;
 
   void setFovy(float fovy);
   float getFovy() const;
@@ -52,6 +53,7 @@ private:
   void calcView();
   Matrix4f projMatrix;
   Matrix4f viewMatrix;
+  Matrix4f invViewMatrix;
 
   bool perspective = DEFAULT_PERSPECTIVE;
   float fovy    = DEFAULT_FOVY;
