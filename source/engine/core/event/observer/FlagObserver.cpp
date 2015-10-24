@@ -8,7 +8,6 @@ FlagObserver::FlagObserver(bool &flag, bool resultingStatus) {
 }
 
 void FlagObserver::execute() {
-  std::cout << "Dicksnnnnnnnrrrrrrrrrrrrrrrrrrn";
   *flag = resultingStatus;
 }
 
