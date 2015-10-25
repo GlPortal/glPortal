@@ -13,7 +13,8 @@ private:
   std::stack<HandleEventFunction> stateFunctionStack;
 public:
   PlayerState();
-  static void handleInput(Entity& player, const SDL_Event &event);
+  void handleInput(Entity& player, const SDL_Event &event);
+  static void handleInputStanding(Entity& player, const SDL_Event &event);
   static void handleInputRunning(Entity& player, const SDL_Event &event);
   static void handleInputJumping(Entity& player, const SDL_Event &event);
 };
