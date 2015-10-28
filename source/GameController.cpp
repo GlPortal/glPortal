@@ -4,6 +4,7 @@
 #include <string>
 #include <cstdio>
 #include <iostream>
+#include <memory>
 
 #include "engine/env/Environment.hpp"
 #include "engine/env/ArgumentsParser.hpp"
@@ -17,9 +18,11 @@
 
 namespace glPortal {
 
-GameController::GameController(Game *game) {
+  GameController::GameController(Game *game) {
   this->game = game;
   this->world = game->getWorld();
+  this->playerState = std::unique_ptr<PlayerState>(new PlayerState());
+  this->gameState = std::unique_ptr<GameState>(new GameState());
 }
 
 void GameController::handleInput() {
@@ -33,6 +36,10 @@ void GameController::handleEvent(const SDL_Event &event) {
   if (event.type == SDL_QUIT) {
     game->close();
   }
+
+  //  this->playerState->handleEvent(this->world->getPlayer(), event);
+  this->gameState->handleInput(*this->game);
+
   if (event.type == SDL_KEYDOWN) {
     int key = event.key.keysym.scancode;
     int mod = event.key.keysym.mod;

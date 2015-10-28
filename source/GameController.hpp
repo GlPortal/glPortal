@@ -4,6 +4,8 @@
 #include "Window.hpp"
 #include "World.hpp"
 #include <SDL2/SDL_events.h>
+#include <engine/core/state/PlayerState.hpp>
+#include <engine/core/state/GameState.hpp>
 
 namespace glPortal {
 class Game;
@@ -17,6 +19,8 @@ private:
   Game *game;
   bool wasF5Down = false;
   bool wasTabDown = false;
+  std::unique_ptr<PlayerState> playerState;
+  std::unique_ptr<GameState> gameState;
 };
 
 } /* namespace glPortal */

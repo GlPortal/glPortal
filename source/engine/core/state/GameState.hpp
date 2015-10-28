@@ -5,21 +5,21 @@
 #include <SDL2/SDL_events.h>
 
 namespace glPortal {
-typedef std::function<void (Game& game, const SDL_Event &event)> HandleEventGameFunction;
+typedef std::function<void (Game &game)> HandleGameFunction;
   
 class GameState
 {
 private:
   World *world;
-  std::stack<HandleEventGameFunction> stateFunctionStack;
+  std::stack<HandleGameFunction> stateFunctionStack;
 public:
   GameState();
-  void handleInput(Game& game, const SDL_Event &event);
-  static void handleInputRunning(Game& game, const SDL_Event &event);
-  static void handleInputPaused(Game& game, const SDL_Event &event);
-  static void handleInputSplash(Game& game, const SDL_Event &event);
-  static void handleInputMenu(Game& game, const SDL_Event &event);
-  static void handleInputGameOverScreen(Game& game, const SDL_Event &event);
-  static void handleInputWinScreen(Game& game, const SDL_Event &event);
+  void handleInput(Game &game);
+  static void handleRunning(Game &game);
+  static void handlePaused(Game &game);
+  static void handleSplash(Game &game);
+  static void handleMenu(Game &game);
+  static void handleGameOverScreen(Game &game);
+  static void handleWinScreen(Game &game);
 };
 } /* namespace glPortal */
