@@ -1,6 +1,8 @@
 <a href="https://jenkins.glportal.de/job/GlPortal/"><img src="https://jenkins.glportal.de/buildStatus/icon?job=GlPortal"></a>
 [![GlPortal on Gitter](https://badges.gitter.im/GlPortal/gitter.svg)](https://gitter.im/GlPortal/)
 # GlPortal
+
+[![Join the chat at https://gitter.im/GlPortal/glPortal](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/GlPortal/glPortal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 GlPortal is a modern free and open shader based 3d game and game engine with realistic physic simulation.
 It runs on all modern operating systems including GNU/Linux, Mac and Windows.
 You can find the website at http://glportal.de .
