@@ -9,6 +9,7 @@
 #include <assets/material/Material.hpp>
 #include <engine/Camera.hpp>
 #include "Portal.hpp"
+#include "Screen.hpp"
 
 namespace glPortal {
 
@@ -22,6 +23,7 @@ public:
   std::list<Entity> entities;
   std::vector<EntityPair> portalPairs;
   std::vector<GUIButton> buttons;
+  std::unique_ptr<Screen> screen;
   // FIXME: remove us!
   Entity start;
   Entity end;

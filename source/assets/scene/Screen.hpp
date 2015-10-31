@@ -8,8 +8,6 @@ namespace glPortal {
 class Screen {
 public:
   Screen(std::string title, std::string text);
-  Vector2f position;
-  Vector2f scale;
   std::string title;
   std::string text;
 };
