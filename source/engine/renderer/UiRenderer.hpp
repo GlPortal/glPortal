@@ -19,6 +19,7 @@ class Font;
 class UiRenderer {
 public:
   static void render(Renderer &renderer);
+  static void renderScreen(Renderer &renderer);
 };
 
 } /* namespace glPortal */

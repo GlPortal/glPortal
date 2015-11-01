@@ -45,6 +45,7 @@ public:
   bool isEditorShown;
   std::string currentScenePath;
   static float gravity;
+  Scene *scene;
 private:
   double gameTime;
   uint32_t lastUpdateTime;
@@ -52,7 +53,6 @@ private:
   bool wasTabDown = false;
   Renderer *renderer;
   Editor *editor;
-  Scene *scene;
   std::mt19937 generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;

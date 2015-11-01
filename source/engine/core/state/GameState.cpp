@@ -1,23 +1,33 @@
 #include "GameState.hpp"
+#include "../../../Input.hpp"
 #include <engine/env/Environment.hpp>
 
 namespace glPortal {
-
+const int GameState::POP_STACK  = 0;
+const int GameState::DO_NOTHING = 1;
+  
 GameState::GameState() {
   stateFunctionStack.push(&GameState::handleRunning);
   stateFunctionStack.push(&GameState::handleSplash);
-  stateFunctionStack.push(&GameState::handleMenu);
 }
 void GameState::handleInput(Game& game){
   HandleGameFunction stateFunction = stateFunctionStack.top();
-  stateFunction(game);
+  if (stateFunction(game) == GameState::POP_STACK){
+    stateFunctionStack.pop();
+  }
+  
 }
 
-void GameState::handleRunning(Game& game){}
+int GameState::handleRunning(Game& game){
+  return GameState::DO_NOTHING;;
+}
 void GameState::handlePaused(Game& game){}
-void GameState::handleSplash(Game& game){
-  
-  //  stateFunctionStack.pop();
+
+int GameState::handleSplash(Game& game){
+  if (Input::isKeyDown(SDL_SCANCODE_RETURN)){
+    game.getWorld()->scene->screen->enabled = false;
+    return GameState::POP_STACK;
+  }
 }
 void GameState::handleMenu(Game& game){}
 void GameState::handleGameOverScreen(Game& game){}

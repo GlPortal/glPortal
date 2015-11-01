@@ -90,6 +90,9 @@ void Renderer::setFont(const std::string &font, float size) {
   this->font->size = size;
 }
 
+void Renderer::setFontSize(float size) {
+  this->font->size = size;
+}
 
 void Renderer::render() {
   viewport->getSize(&vpWidth, &vpHeight);

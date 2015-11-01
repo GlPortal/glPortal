@@ -10,6 +10,8 @@ public:
   Screen(std::string title, std::string text);
   std::string title;
   std::string text;
+  bool enabled;
+  float alpha;
 };
 
 } /* namespace glPortal */

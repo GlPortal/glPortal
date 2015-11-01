@@ -5,7 +5,7 @@
 #include <SDL2/SDL_events.h>
 
 namespace glPortal {
-typedef std::function<void (Game &game)> HandleGameFunction;
+typedef std::function<int (Game &game)> HandleGameFunction;
   
 class GameState
 {
@@ -13,11 +13,13 @@ private:
   World *world;
   std::stack<HandleGameFunction> stateFunctionStack;
 public:
+  static const int POP_STACK;
+  static const int DO_NOTHING;
   GameState();
   void handleInput(Game &game);
-  static void handleRunning(Game &game);
+  static int handleRunning(Game &game);
   static void handlePaused(Game &game);
-  static void handleSplash(Game &game);
+  static int handleSplash(Game &game);
   static void handleMenu(Game &game);
   static void handleGameOverScreen(Game &game);
   static void handleWinScreen(Game &game);

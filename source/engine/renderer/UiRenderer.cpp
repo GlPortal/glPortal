@@ -30,7 +30,6 @@ void UiRenderer::render(Renderer &renderer) {
 
   renderer.setShader(&ShaderLoader::getShader("unshaded.frag"));
   renderer.renderMesh(camera, crosshairMtx, mesh, mat);
-  renderer.renderColoredMesh(camera, widget, Vector3f(1.0, 1.0, 1.0), 0.1);
 
   // Title
   renderer.setFont("Pacaya", 1.5f);
@@ -39,5 +38,24 @@ void UiRenderer::render(Renderer &renderer) {
   // FPS counter
   renderer.setFont("Pacaya", 0.5f);
   renderer.renderText(camera, std::string("FPS: ") + std::to_string(Game::fps.getFps()), 10, vpHeight - 25);
+  if(renderer.scene->screen->enabled){
+    renderScreen(renderer);
+  }
 }
+
+void UiRenderer::renderScreen(Renderer &renderer) {
+  int vpWidth, vpHeight;
+  renderer.viewport->getSize(&vpWidth, &vpHeight);
+  Camera camera;
+  camera.setOrthographic();
+  camera.setBounds(0, vpWidth, 0, vpHeight);
+  Matrix4f widget;
+  widget.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
+  widget.scale(Vector3f(vpWidth, vpHeight, 1));
+  renderer.renderColoredMesh(camera, widget, Vector3f(0, 0, 0), renderer.scene->screen->alpha);
+  renderer.setFontSize(4);
+  renderer.renderText(camera, renderer.scene->screen->title, (vpWidth/2)-250, vpHeight/2);
+  renderer.setFontSize(0.5);
+  renderer.renderText(camera, renderer.scene->screen->text, (vpWidth/2)-70, (vpHeight/2)-100);
+}  
 } /* namespace glPortal */

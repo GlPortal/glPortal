@@ -17,6 +17,7 @@ typedef std::pair<Entity*, Entity*> EntityPair;
 
 class Scene {
 public:
+  Scene();
   Entity player;
   Camera camera;
   std::map<int, Material> materials;
@@ -24,7 +25,6 @@ public:
   std::vector<EntityPair> portalPairs;
   std::vector<GUIButton> buttons;
   std::unique_ptr<Screen> screen;
-  // FIXME: remove us!
   Entity start;
   Entity end;
 };

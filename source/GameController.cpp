@@ -22,7 +22,7 @@ namespace glPortal {
   this->game = game;
   this->world = game->getWorld();
   this->playerState = std::unique_ptr<PlayerState>(new PlayerState());
-  this->gameState = std::unique_ptr<GameState>(new GameState());
+  this->gameState = std::unique_ptr<GameState>(new GameState()) ;
 }
 
 void GameController::handleInput() {
