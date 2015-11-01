@@ -1,11 +1,14 @@
+#ifndef GAME_STATE_HPP
+#define GAME_STATE_HPP
+
 #include "World.hpp"
 #include "Game.hpp"
 #include <stack>
 #include <engine/Entity.hpp>
+#include <engine/core/state/HandleGameFunction.hpp>
 #include <SDL2/SDL_events.h>
 
 namespace glPortal {
-typedef std::function<int (Game &game)> HandleGameFunction;
   
 class GameState
 {
@@ -25,3 +28,4 @@ public:
   static void handleWinScreen(Game &game);
 };
 } /* namespace glPortal */
+#endif /* GAME_STATE_HPP */
