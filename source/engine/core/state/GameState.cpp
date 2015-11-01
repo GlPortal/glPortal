@@ -3,30 +3,20 @@
 #include <engine/env/Environment.hpp>
 
 namespace glPortal {
-const int GameState::POP_STACK  = 0;
-const int GameState::DO_NOTHING = 1;
   
-GameState::GameState() {
-  stateFunctionStack.push(&GameState::handleRunning);
-  stateFunctionStack.push(&GameState::handleSplash);
-}
 void GameState::handleInput(Game& game){
-  HandleGameFunction stateFunction = stateFunctionStack.top();
-  if (stateFunction(game) == GameState::POP_STACK){
-    stateFunctionStack.pop();
-  }
-  
+  HandleGameFunction stateFunction = game.getWorld()->stateFunctionStack.top();
+  stateFunction(game);
 }
 
-int GameState::handleRunning(Game& game){
-  return GameState::DO_NOTHING;;
+void GameState::handleRunning(Game& game){
 }
 void GameState::handlePaused(Game& game){}
 
-int GameState::handleSplash(Game& game){
+void GameState::handleSplash(Game& game){
   if (Input::isKeyDown(SDL_SCANCODE_RETURN)){
     game.getWorld()->scene->screen->enabled = false;
-    return GameState::POP_STACK;
+    game.getWorld()->stateFunctionStack.pop();
   }
 }
 void GameState::handleMenu(Game& game){}

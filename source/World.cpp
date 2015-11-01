@@ -36,6 +36,7 @@
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
 #include <engine/core/event/Dispatcher.hpp>
+#include <engine/core/state/GameState.hpp>
 
 #include <SDL2/SDL_keyboard.h>
 
@@ -54,6 +55,8 @@ World::World() :
   isEditorShown(false),
   gameTime(0),
   config(Environment::getConfig()) {
+  stateFunctionStack.push(&GameState::handleRunning);
+  stateFunctionStack.push(&GameState::handleSplash);
 }
 
 void World::create() {

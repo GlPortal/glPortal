@@ -4,9 +4,11 @@
 #include <string>
 #include <vector>
 #include <random>
+#include <stack>
 #include <array>
 #include <assets/scene/Scene.hpp>
 #include <engine/env/Config.hpp>
+#include <engine/core/state/HandleGameFunction.hpp>
 
 namespace glPortal {
 
@@ -30,9 +32,7 @@ public:
   World();
   void create();
   void destroy();
-
   void setRendererWindow(Window*);
-
   void update();
   void loadScene(const std::string &path);
   void loadSceneFromPath(const std::string &path);
@@ -46,6 +46,7 @@ public:
   std::string currentScenePath;
   static float gravity;
   Scene *scene;
+  std::stack<HandleGameFunction> stateFunctionStack;  
 private:
   double gameTime;
   uint32_t lastUpdateTime;
