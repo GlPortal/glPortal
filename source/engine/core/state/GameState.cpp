@@ -10,8 +10,20 @@ void GameState::handleInput(Game& game){
 }
 
 void GameState::handleRunning(Game& game){
+  if (Input::isKeyDown(SDL_SCANCODE_ESCAPE)){
+    game.getWorld()->scene->screen->enabled = true;
+    game.getWorld()->scene->screen->title = "Pause";
+    game.getWorld()->scene->screen->text  = "Press escape to continue playing.";
+    game.getWorld()->stateFunctionStack.push(&GameState::handlePaused);
+  }
 }
-void GameState::handlePaused(Game& game){}
+
+void GameState::handlePaused(Game& game){
+  if (Input::isKeyDown(SDL_SCANCODE_ESCAPE)){
+    game.getWorld()->scene->screen->enabled = false;
+    game.getWorld()->stateFunctionStack.pop();
+  }
+}
 
 void GameState::handleSplash(Game& game){
   if (Input::isKeyDown(SDL_SCANCODE_RETURN)){
