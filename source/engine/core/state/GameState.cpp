@@ -10,6 +10,7 @@ void GameState::handleInput(Game& game){
 }
 
 void GameState::handleRunning(Game& game){
+  game.getWorld()->scene->screen->enabled = false;
   if (Input::isKeyDown(SDL_SCANCODE_ESCAPE)){
     game.getWorld()->scene->screen->enabled = true;
     game.getWorld()->scene->screen->title = "Pause";
