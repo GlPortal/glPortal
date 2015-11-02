@@ -94,6 +94,10 @@ void Renderer::setFontSize(float size) {
   this->font->size = size;
 }
 
+int Renderer::getTextWidth(std::string text) {
+  return this->font->getStringLength(text);
+}
+  
 void Renderer::render() {
   viewport->getSize(&vpWidth, &vpHeight);
 

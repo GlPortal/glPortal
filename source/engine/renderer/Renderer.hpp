@@ -45,6 +45,7 @@ public:
   void setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal);
   void setFont(const std::string &font, float size);
   void setFontSize(float size);
+  int getTextWidth(std::string text);
   static Matrix4f clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj);
   Viewport *viewport;
   Scene *scene;

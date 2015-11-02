@@ -54,8 +54,8 @@ void UiRenderer::renderScreen(Renderer &renderer) {
   widget.scale(Vector3f(vpWidth, vpHeight, 1));
   renderer.renderColoredMesh(camera, widget, Vector3f(0, 0, 0), renderer.scene->screen->alpha);
   renderer.setFontSize(4);
-  renderer.renderText(camera, renderer.scene->screen->title, (vpWidth/2)-250, vpHeight/2);
+  renderer.renderText(camera, renderer.scene->screen->title, (vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->title)/2), vpHeight/2);
   renderer.setFontSize(0.5);
-  renderer.renderText(camera, renderer.scene->screen->text, (vpWidth/2)-70, (vpHeight/2)-100);
+  renderer.renderText(camera, renderer.scene->screen->text, (vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->text)/2), (vpHeight/2)-100);
 }  
 } /* namespace glPortal */
