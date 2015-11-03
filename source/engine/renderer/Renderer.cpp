@@ -182,7 +182,6 @@ void Renderer::renderScene(const Camera &camera) {
   setShader(&ShaderLoader::getShader("ambient.frag"));
   renderEntities(camera);
 
-  glEnable(GL_BLEND);
 	glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ZERO);
   glDepthFunc(GL_LEQUAL);
 
