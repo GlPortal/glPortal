@@ -13,7 +13,7 @@ public:
 
   static Vector3f toDirection(const Vector3f &v);
   static Vector3f toEuler(const Vector3f &direction);
-  
+
   template <typename T>
   static T clamp(T v, T low, T high) {
     if (v < low) {
@@ -32,6 +32,12 @@ constexpr inline float deg(float rad) {
 
 constexpr inline float rad(float deg) {
   return deg * Math::DEG_TO_RAD;
+}
+
+static float sign(float v) {
+  if (v > 0.f) return 1.f;
+  if (v < 0.f) return -1.f;
+  return 0.f;
 }
 
 } /* namespace glPortal */

@@ -422,12 +422,6 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &
   dest.setViewMatrix(destView);
 }
 
-static float sign(float v) {
-  if (v > 0.f) return 1.f;
-  if (v < 0.f) return -1.f;
-  return 0.f;
-}
-
 Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj) {
   const Transform &t = ent.getComponent<Transform>();
   Vector4f clipPlane(Math::toDirection(t.rotation), -dot(Math::toDirection(t.rotation), t.position));
