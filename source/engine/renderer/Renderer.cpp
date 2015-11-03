@@ -195,6 +195,11 @@ void Renderer::renderScene(const Camera &camera) {
 
       const Transform &t = e.getComponent<Transform>();
       const LightSource &ls = e.getComponent<LightSource>();
+
+      if (!ls.enabled) {
+        continue;
+      }
+
       glUniform3f(shader->uni("light.position"), t.position.x, t.position.y, t.position.z);
       glUniform3f(shader->uni("light.color"), ls.color.x, ls.color.y, ls.color.z);
       glUniform1f(shader->uni("light.distance"), ls.distance);
@@ -234,7 +239,7 @@ void Renderer::renderPlayer(const Camera &cam) {
   mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
   const Mesh &dummy = MeshLoader::getMesh("HumanToken.obj");
   const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
-  
+
   setShader(&ShaderLoader::getShader("ambient.frag"));
   renderMesh(cam, mtx, dummy, mat);
 }

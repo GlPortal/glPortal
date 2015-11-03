@@ -8,6 +8,7 @@
 #include <engine/core/math/Math.hpp>
 #include <engine/Entity.hpp>
 #include <engine/component/Transform.hpp>
+#include <engine/component/LightSource.hpp>
 #include <PortalHelper.hpp>
 #include <SDL2/SDL_timer.h>
 
@@ -29,7 +30,6 @@ bool Portal::throughPortal(const BoxCollider &collider) const {
 }
 
 bool Portal::inPortal(const BoxCollider &collider) const {
-  
   return PortalHelper::isInPortal(entity, collider);
 }
 
@@ -136,6 +136,9 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
     }
     open = true;
   }
+
+  // Enabled the light
+  entity.getComponent<LightSource>().enabled = true;
 
   position += (getDirection() * SURFACE_OFFSET);
   overlayMesh = MeshLoader::getMesh("Plane.obj");
