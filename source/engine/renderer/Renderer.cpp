@@ -97,7 +97,7 @@ void Renderer::setFontSize(float size) {
 int Renderer::getTextWidth(std::string text) {
   return this->font->getStringLength(text);
 }
-  
+
 void Renderer::render() {
   viewport->getSize(&vpWidth, &vpHeight);
 
@@ -234,8 +234,8 @@ void Renderer::renderPlayer(const Camera &cam) {
   mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
   const Mesh &dummy = MeshLoader::getMesh("HumanToken.obj");
   const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
-  setShader(&ShaderLoader::getShader("diffuse.frag"));
-
+  
+  setShader(&ShaderLoader::getShader("ambient.frag"));
   renderMesh(cam, mtx, dummy, mat);
 }
 
