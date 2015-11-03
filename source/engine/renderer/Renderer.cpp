@@ -226,7 +226,7 @@ void Renderer::renderEntity(const Camera &cam, const Entity &e) {
   MeshDrawable &drawable = e.getComponent<MeshDrawable>();
   Matrix4f mtx;
   e.getComponent<Transform>().getModelMtx(mtx);
-  //const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
+
   renderMesh(cam, mtx, drawable.mesh, drawable.material);
 }
 
@@ -397,29 +397,6 @@ void Renderer::renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh,
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, 0);
   }
-  glBindVertexArray(0);
-}
-
-  void Renderer::renderColoredMesh(const Camera &cam, Matrix4f &mdlMtx, Vector3f color, float alpha) {
-  const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
-
-  setShader(&ShaderLoader::getShader("color.frag"));
-  Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
-  glUniformMatrix4fv(shader->uni("projectionMatrix"), 1, false, projMatrix.toArray());
-  Matrix4f viewMatrix; cam.getViewMatrix(viewMatrix);
-  glUniformMatrix4fv(shader->uni("viewMatrix"), 1, false, viewMatrix.toArray());
-  Matrix4f invViewMatrix = inverse(viewMatrix);
-  glUniformMatrix4fv(shader->uni("invViewMatrix"), 1, false, invViewMatrix.toArray());
-  Matrix3f mdlMtx3 = toMatrix3f(mdlMtx);
-  Matrix3f i3 = inverse(mdlMtx3);
-  Matrix4f modelTrInv4Matrix = toMatrix4f(transpose(i3));
-  glUniformMatrix4fv(shader->uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.toArray());
-
-  glUniformMatrix4fv(shader->uni("modelMatrix"), 1, false, mdlMtx.toArray());
-  glBindVertexArray(mesh.handle);
-
-  glUniform4f(shader->uni("color"), color.x, color.y, color.z, alpha);
-  glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
   glBindVertexArray(0);
 }
 

@@ -52,10 +52,14 @@ void UiRenderer::renderScreen(Renderer &renderer) {
   Matrix4f widget;
   widget.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
   widget.scale(Vector3f(vpWidth, vpHeight, 1));
-  renderer.renderColoredMesh(camera, widget, Vector3f(0, 0, 0), renderer.scene->screen->alpha);
+  const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
+  renderer.setShader(&ShaderLoader::getShader("color.frag"));
+  glUniform4f(renderer.shader->uni("color"), 0, 0, 0, renderer.scene->screen->alpha);
+  renderer.renderMesh(camera, widget, mesh, nullptr);
+
   renderer.setFontSize(4);
   renderer.renderText(camera, renderer.scene->screen->title, (vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->title)/2), vpHeight/2);
   renderer.setFontSize(0.5);
   renderer.renderText(camera, renderer.scene->screen->text, (vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->text)/2), (vpHeight/2)-100);
-}  
+}
 } /* namespace glPortal */

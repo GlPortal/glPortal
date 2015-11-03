@@ -41,7 +41,6 @@ public:
   }
 
   void renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat = nullptr);
-  void renderColoredMesh(const Camera &cam, Matrix4f &mdlMtx, Vector3f color, float alpha);
   void setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal);
   void setFont(const std::string &font, float size);
   void setFontSize(float size);
@@ -49,11 +48,11 @@ public:
   static Matrix4f clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj);
   Viewport *viewport;
   Scene *scene;
+  Shader *shader;
 private:
   Camera getCamera();
   int vpWidth, vpHeight;
 
-  Shader *shader;
   Font *font;
   int portalDepth;
 };
