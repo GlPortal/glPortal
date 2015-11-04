@@ -182,6 +182,8 @@ void Renderer::renderScene(const Camera &camera) {
   setShader(&ShaderLoader::getShader("ambient.frag"));
   renderEntities(camera);
 
+  // Set the light blending to additive, and depth testing to less or equal
+  // in order to draw multiple layers of light over our ambient image
 	glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ZERO);
   glDepthFunc(GL_LEQUAL);
 
@@ -209,10 +211,15 @@ void Renderer::renderScene(const Camera &camera) {
     }
   }
 
+  // Set the blending and depth function back to their normal values
   glDepthFunc(GL_LESS);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+/**
+ * Renders all the entities in the scene regardless of shading
+ * @param cam The camera from which we look at the scene
+ */
 void Renderer::renderEntities(const Camera &cam) {
   for (Entity &e : scene->entities) {
     if (e.hasComponent<MeshDrawable>()) {
@@ -222,6 +229,11 @@ void Renderer::renderEntities(const Camera &cam) {
   renderEntity(cam, scene->end);
 }
 
+/**
+ * Renders a single entity regardless of shading
+ * @param cam The camera from which we look at the entity
+ * @param e   The entity to render
+ */
 void Renderer::renderEntity(const Camera &cam, const Entity &e) {
   MeshDrawable &drawable = e.getComponent<MeshDrawable>();
   Matrix4f mtx;
@@ -230,6 +242,10 @@ void Renderer::renderEntity(const Camera &cam, const Entity &e) {
   renderMesh(cam, mtx, drawable.mesh, drawable.material);
 }
 
+/**
+ * Renders the player character using ambient shading
+ * @param cam The camera from which we look at the player
+ */
 void Renderer::renderPlayer(const Camera &cam) {
   const Transform &t = scene->player.getComponent<Transform>();
   Matrix4f mtx;
@@ -243,43 +259,53 @@ void Renderer::renderPlayer(const Camera &cam) {
   renderMesh(cam, mtx, dummy, mat);
 }
 
-void Renderer::renderPortalContent(const Camera &cam, const Entity &portal) {
-  //Stencil drawing
-  //Primary portal
+/**
+ * Renders the portal into the stencil buffer
+ * @param cam    The camera from which we look at the portal
+ * @param portal The entity that has the portal component
+ */
+void Renderer::renderPortalStencil(const Camera &cam, const Entity &portal) {
+  glClear(GL_STENCIL_BUFFER_BIT);
+
+  // Disable writing to the color and depth buffer
+  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+  glDepthMask(GL_FALSE);
+
+  // Set the stencil function to always fail
   glStencilFunc(GL_NEVER, 1, 0xFF);
+  // Replace all stencil pixel where we draw with 1
   glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
 
   const Portal &p = portal.getComponent<Portal>();
   Matrix4f mtx;
-  mtx.translate(p.getDirection() * -cam.getZNear());
   portal.getComponent<Transform>().applyModelMtx(mtx);
   mtx.scale(p.getScaleMult());
+
   setShader(&ShaderLoader::getShader("unshaded.frag"));
-
   renderMesh(cam, mtx, p.stencilMesh);
 
-  mtx.setIdentity();
-  portal.getComponent<Transform>().applyModelMtx(mtx);
-  mtx.scale(p.getScaleMult());
-  renderMesh(cam, mtx, p.stencilMesh);
-
+  // Enable writing to the color and depth buffer again
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glDepthMask(GL_TRUE);
 }
 
+/**
+ * Renders a full portal and its content
+ * @param cam         The camera from which we look at the camera
+ * @param portal      The portal to render
+ * @param otherPortal The other portal necessary for placing the camera correctly
+ */
 void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entity &otherPortal) {
   if (portal.getComponent<Portal>().open and otherPortal.getComponent<Portal>().open) {
     glEnable(GL_STENCIL_TEST);
-    glClear(GL_STENCIL_BUFFER_BIT);
-    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-    glDepthMask(GL_FALSE);
 
-    renderPortalContent(cam, portal);
+    renderPortalStencil(cam, portal);
 
-    //Draw the scene from the secondary portal
+    // Set the stencil function so we only render on the stencil
     glStencilFunc(GL_EQUAL, 1, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
+    // Draw the whole scene onto the stencil containing the player and recursive portal overlays
     Camera portalCam;
     setCameraInPortal(cam, portalCam, portal, otherPortal);
     // TODO: rework to allow recursive rendering, and draw other portal pairs
@@ -292,6 +318,11 @@ void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entit
   }
 }
 
+/**
+ * Render the glowing circle around the portal
+ * @param cam    The camera from which we look at the portal
+ * @param portal The portal on which to draw the overlay
+ */
 void Renderer::renderPortalOverlay(const Camera &cam, const Entity &portal) {
   const Portal &p = portal.getComponent<Portal>();
   if (p.open) {
@@ -305,6 +336,12 @@ void Renderer::renderPortalOverlay(const Camera &cam, const Entity &portal) {
   }
 }
 
+/**
+ * Renders the simplex noise in the portal if only one portal is active
+ * @param cam    The camera from which we look at the portal
+ * @param portal The portal in which to draw the noise
+ * @param fade   The fade factor with which to multiply the noise
+ */
 void Renderer::renderPortalNoise(const Camera &cam, const Entity &portal, float fade) {
   Matrix4f mtx;
   portal.getComponent<Transform>().getModelMtx(mtx);
@@ -324,9 +361,18 @@ void Renderer::renderPortalNoise(const Camera &cam, const Entity &portal, float 
   renderMesh(cam, mtx, p.overlayMesh, p.maskTex);
 }
 
+/**
+ * Renders a string to the screen using signed-distance field text rendering.
+ * The text is rendered in the font that is currently set with setFont().
+ * @param cam  The camera from which we look at the text
+ * @param text The text to render
+ * @param x    The x-coordinate of the top left corner of the text in window coordinates
+ * @param y    The y-coordinate of the top left corner of the text in window coordinates
+ */
 void Renderer::renderText(const Camera &cam, const std::string &text, int x, int y) {
   glClear(GL_DEPTH_BUFFER_BIT);
 
+  // FIXME This should be determined by the currently set font
   const Material &mat = MaterialLoader::fromTexture("Pacaya.png");
   setShader(&ShaderLoader::getShader("text.frag"));
 
@@ -353,10 +399,13 @@ void Renderer::renderText(const Camera &cam, const std::string &text, int x, int
   }
 }
 
-
 /**
- * Renders a mesh with the specified texture
- * @param mesh The mesh to render
+ * Renders a mesh with the specified material and transform determined by the
+ * given modelMatrix.
+ * @param cam    The camera from which we look at the mesh
+ * @param mdlMtx The model matrix determining the position, rotation and scale of the mesh
+ * @param mesh   The mesh to render
+ * @param mat    The material to render the mesh with
  */
 void Renderer::renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat) {
   Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
@@ -400,6 +449,13 @@ void Renderer::renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh,
   glBindVertexArray(0);
 }
 
+/**
+ * Set the camera in the portal so rendering from that portal is possible
+ * @param cam         The camera from which we look at the portal
+ * @param dest        The camera to move inside the portal and point in the right direction
+ * @param portal      The portal in which to place the camera
+ * @param otherPortal The counterpart of the portal
+ */
 void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal) {
   Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
@@ -422,6 +478,9 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &
   dest.setViewMatrix(destView);
 }
 
+/**
+ * TODO Documentation required.
+ */
 Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj) {
   const Transform &t = ent.getComponent<Transform>();
   Vector4f clipPlane(Math::toDirection(t.rotation), -dot(Math::toDirection(t.rotation), t.position));

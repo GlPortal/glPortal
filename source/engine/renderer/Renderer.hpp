@@ -31,7 +31,7 @@ public:
   void renderEntities(const Camera &cam);
   void renderEntity(const Camera &cam, const Entity &e);
   void renderPlayer(const Camera &cam);
-  void renderPortalContent(const Camera &cam, const Entity &portal);
+  void renderPortalStencil(const Camera &cam, const Entity &portal);
   void renderPortal(const Camera &cam, const Entity &portal, const Entity &otherPortal);
   void renderPortalOverlay(const Camera &cam, const Entity &portal);
   void renderPortalNoise(const Camera &cam, const Entity &portal, float fade);
