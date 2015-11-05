@@ -45,10 +45,10 @@ World* Game::getWorld() {
   
 void Game::update() {
   SDL_Event event;
-  int skipped;
   unsigned int nextUpdate = SDL_GetTicks();
 
   while (not closed) {
+    int skipped;
     skipped = 0;
     //Update the game if it is time
     while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
