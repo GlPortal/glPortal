@@ -16,7 +16,7 @@ void WorldHelper::shootPortal(int button, Scene *scene) {
   const Entity *closestWall = nullptr;
   float intersection = INT_MAX;
   for (const Entity &e : scene->entities) {
-    // FIXME: Collsion + MeshDrawable isn't the sole criteria we want to check
+    // FIXME: Collision + MeshDrawable isn't the sole criteria we want to check
     if (e.hasComponent<AACollisionBox>() and e.hasComponent<MeshDrawable>()) {
       Ray bullet(scene->camera.getPosition(), cameraDir);
       float tNear, tFar;
@@ -36,7 +36,7 @@ void WorldHelper::shootPortal(int button, Scene *scene) {
     Entity &pEnt = (button == 1) ? *pPair.first : *pPair.second;
     Portal &portal = pEnt.getComponent<Portal>();
     portal.openSince = SDL_GetTicks();
-    portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png"); 
+    portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png");
     portal.placeOnWall(scene->camera.getPosition(), closestWall->getComponent<AACollisionBox>().box, ipos);
     LightSource &pLight = pEnt.getComponent<LightSource>();
 

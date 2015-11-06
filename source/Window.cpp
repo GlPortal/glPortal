@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <cstdlib>
-#include <engine/env/Config.hpp>
 #include <stdexcept>
 #include <iostream>
+#include <engine/env/Environment.hpp>
 #include <engine/env/System.hpp>
 
 namespace glPortal {
@@ -24,24 +24,24 @@ void Window::create(const char *title) {
 
   SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-  if (Config::hasAntialiasing()) {
+  if (Environment::getConfig().getAntialiasLevel() > 0) {
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, Environment::getConfig().getAntialiasLevel());
   }
   
   int flags = SDL_WINDOW_OPENGL;
-  if (Config::isFullscreen()) {
+  if (Environment::getConfig().isFullscreen()) {
     flags |= SDL_WINDOW_BORDERLESS;
   }
 
   SDL_DisplayMode dispMode = {SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0};
   SDL_GetDesktopDisplayMode(0, &dispMode);
-  int width = Config::getWidth();
-  int height = Config::getHeight();
-  if (width == -1) {
+  int width = Environment::getConfig().getWidth();
+  int height = Environment::getConfig().getHeight();
+  if (width == 0) {
     width = dispMode.w;
   }
-  if (height == -1) {
+  if (height == 0) {
     height = dispMode.h;
   }
 
@@ -50,13 +50,13 @@ void Window::create(const char *title) {
 
   context = SDL_GL_CreateContext(window);
 
-  this->initEpoxy();
+  initEpoxy();
 
   this->width = width;
   this->height = height;
 
   // Allows unbound framerate if vsync is disabled
-  SDL_GL_SetSwapInterval(Config::hasVsync() ? 1 : 0);
+  SDL_GL_SetSwapInterval(Environment::getConfig().hasVsync() ? 1 : 0);
 
   // Lock cursor in the middle of the screen
   lockMouse();

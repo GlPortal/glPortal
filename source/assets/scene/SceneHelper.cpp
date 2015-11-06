@@ -18,6 +18,7 @@ EntityPair& SceneHelper::getPortalPairFromScene(int n, Scene *scene) {
       pEnt2.addComponent<Transform>();
       pEnt2.addComponent<Portal>();
       LightSource &ls2 = pEnt2.addComponent<LightSource>();
+      ls1.enabled = ls2.enabled = false;
       ls1.energy = ls2.energy = 5;
       ls1.distance = ls2.distance = 1.3f;
       scene->portalPairs.emplace_back(&pEnt1, &pEnt2);
@@ -26,4 +27,3 @@ EntityPair& SceneHelper::getPortalPairFromScene(int n, Scene *scene) {
   return scene->portalPairs.at(n);
 }
 } /* namespace glPortal */
-

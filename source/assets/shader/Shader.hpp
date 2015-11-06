@@ -3,14 +3,16 @@
 
 #include <epoxy/gl.h>
 #include <string>
+#include <map>
 
 namespace glPortal {
 
 class Shader {
 public:
   int handle;
-  GLint uni(const char*) const;
-  GLint uni(const std::string&) const;
+  GLint uni(const std::string&);
+private:
+  std::map<std::string, GLint> locationMap;
 };
 
 } /* namespace glPortal */

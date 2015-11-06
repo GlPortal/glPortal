@@ -33,6 +33,10 @@ find_package(TinyXML2 REQUIRED)
 include_directories(${TINYXML2_INCLUDE_DIR})
 list(APPEND PORTAL_LIBRARIES ${TINYXML2_LIBRARIES} )
 
+find_package(json11 REQUIRED)
+include_directories(${JSON11_INCLUDE_DIR})
+list(APPEND PORTAL_LIBRARIES ${JSON11_LIBRARY})
+
 find_package(Duktape REQUIRED)
 include_directories(${DUKTAPE_INCLUDE_DIR})
 list(APPEND PORTAL_LIBRARIES ${DUKTAPE_LIBRARIES})

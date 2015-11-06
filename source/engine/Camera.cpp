@@ -40,6 +40,7 @@ void Camera::calcView() {
   m.rotate(-rotation.x, 1, 0, 0);
   m.rotate(-rotation.y, 0, 1, 0);
   m.translate(negate(position));
+  invViewMatrix = inverse(m);
 }
 
 void Camera::getProjMatrix(Matrix4f &m) const {
@@ -56,6 +57,10 @@ void Camera::getViewMatrix(Matrix4f &m) const {
 
 void Camera::setViewMatrix(const Matrix4f &m) {
   viewMatrix = m;
+}
+
+void Camera::getInvViewMatrix(Matrix4f &m) const {
+  m = invViewMatrix;
 }
 
 void Camera::setFovy(float fovy) {

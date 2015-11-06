@@ -1,5 +1,5 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+#ifndef PLAYER_MOTION_HPP
+#define PLAYER_MOTION_HPP
 
 #include <engine/Entity.hpp>
 #include <engine/component/Transform.hpp>
@@ -76,4 +76,4 @@ private:
 
 } /* namespace glPortal */
 
-#endif /* PLAYER_HPP */
+#endif /* PLAYER_MOTION_HPP */

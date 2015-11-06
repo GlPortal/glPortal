@@ -38,7 +38,7 @@
 #include <engine/core/math/Vector3f.hpp>
 
 #include <engine/system/JavascriptSystem.hpp>
-
+#include <engine/core/state/GameState.hpp>
 #include <SDL2/SDL_keyboard.h>
 
 #include "Editor.hpp"
@@ -53,8 +53,11 @@ float World::gravity = GRAVITY;
 
 World::World() :
   scene(nullptr),
-  isEditorShown(false) {
-  config = Environment::getConfigPointer();
+  isEditorShown(false),
+  gameTime(0),
+  config(Environment::getConfig()) {
+  stateFunctionStack.push(&GameState::handleRunning);
+  stateFunctionStack.push(&GameState::handleSplash);
 }
 
 void World::create() {
@@ -63,8 +66,20 @@ void World::create() {
   renderer = new Renderer();
   js = new JavascriptSystem();
   lastUpdateTime = SDL_GetTicks();
+
+  std::random_device rd;
+  generator = std::mt19937(rd());
+
+  bool done = false;
+  std::string mapPath = config.mapPath;
+  if (mapPath.length() > 0) {
+    loadSceneFromPath(mapPath);
+    done = true;
+    return;
+  } 
+  
   try {
-    std::string map = config->getString(Config::MAP);
+    std::string map = config.map;
     loadScene(map);
     System::Log(Info) << "Custom map loaded";
   } catch (const std::out_of_range& e) {
@@ -72,8 +87,6 @@ void World::create() {
     loadScene(mapList[currentLevel]);
   }
 
-  std::random_device rd;
-  generator = std::mt19937(rd());
 }
 
 void World::setRendererWindow(Window *win) {
@@ -92,34 +105,21 @@ void World::loadScene(const std::string &path) {
   delete scene;
   currentScenePath = path;
   scene = MapLoader::getScene(path);
-  js->setScene(scene);
-
-  //play a random piece of music each time a scene is loaded
-  std::uniform_int_distribution<> dis(0, MUSIC_PLAYLIST.size()-1);
-  SoundManager::PlayMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
+  
+  Environment::dispatcher.dispatch(Event::loadScene);
 }
+
+void World::loadSceneFromPath(const std::string &path) {
+  delete scene;
+  currentScenePath = path;
+  scene = MapLoader::getSceneFromPath(path);
+  Environment::dispatcher.dispatch(Event::loadScene);
+}
+
 
 void World::update() {
   uint32_t updateTime = SDL_GetTicks();
   float dtime = (updateTime-lastUpdateTime)/1000.f;
-
-  // If F5 released, reload the scene
-  if (wasF5Down and not Input::isKeyDown(SDL_SCANCODE_F5)) {
-    if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
-      // Enable reload-on-change (inotify on Linux)
-    }
-
-    loadScene(currentScenePath);
-  }
-  wasF5Down = Input::isKeyDown(SDL_SCANCODE_F5);
-  // If Tab released, toggle editor
-  if (wasTabDown and not Input::isKeyDown(SDL_SCANCODE_TAB)) {
-    isEditorShown = !isEditorShown;
-  }
-  wasTabDown = Input::isKeyDown(SDL_SCANCODE_F5);
-
-  js->update();
-
   Entity &player = scene->player;
   Health &plrHealth = player.getComponent<Health>();
   Transform &plrTform = player.getComponent<Transform>();
@@ -193,23 +193,25 @@ void World::update() {
       if (playerCollider.collidesWith(triggerCollider)) {
         if (trigger.type == "radiation") {
           player.getComponent<Health>().harm(.1f);
+          System::Log(Verbose) << "Radiation touched.";
         } else if (trigger.type == "death") {
           player.getComponent<Health>().kill();
-          printf("Death touched\n");
+          System::Log(Verbose) << "Death touched.";
         } else if (trigger.type == "win") {
           if(currentLevel + 1 < mapList.size()) {
             currentLevel++;
           }
           loadScene(mapList[currentLevel]);
-          printf("Win touched\n");
+          System::Log(Verbose) << "Win touched.";
         } else if (trigger.type == "map") {
-          printf("Map Trigger touched\n");
+          System::Log(Verbose) << "Map trigger touched.";
           throw __FILE__ ": Map trigger type de-implemented, please reimplement";
           //loadScene(trigger.reference);
         } else if (trigger.type == "button") {
+          System::Log(Verbose) << "Button touched.";
           printf("Button touched\n");
         } else {
-          printf("Some trigger touched: %s\n", trigger.type.c_str());
+          System::Log(Verbose) << "Other trigger touched. " << trigger.type;
         }
       }
     }
@@ -284,7 +286,7 @@ void World::shootPortal(int button) {
 
 void World::render() {
   renderer->setScene(scene);
-  renderer->render(scene->camera);
+  renderer->render();
   if (isEditorShown) {
     editor->renderUI();
   }

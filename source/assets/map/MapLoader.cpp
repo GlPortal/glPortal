@@ -42,7 +42,7 @@ namespace glPortal {
 /**
  * Get a scene from a map file in XML format.
  */
-Scene* MapLoader::getScene(const std::string &path) {
+Scene* MapLoader::getSceneFromPath(const std::string &path) {
   scene = new Scene();
   // FIXME: shall we init player here? Probably not, and do it ONCE.
   scene->player.addComponent<Transform>();
@@ -52,7 +52,7 @@ Scene* MapLoader::getScene(const std::string &path) {
   scene->player.addComponent<SoundListener>();
 
   XMLDocument doc;
-  XMLError error = doc.LoadFile((Environment::getDataDir() + "/maps/" + path + ".xml").c_str());
+  XMLError error = doc.LoadFile(path.c_str());
 
   if (error == XML_NO_ERROR) {
     XMLHandle docHandle(&doc);
@@ -69,9 +69,16 @@ Scene* MapLoader::getScene(const std::string &path) {
     extractTriggers();
     System::Log(Info) << "Map " << path << " loaded";
   } else {
-    System::Log(Error) << "Failed to load map " << Environment::getDataDir() << "/" << path << ".xml";
+    System::Log(Error) << "Failed to load map " << Environment::getDataDir()
+                       << "/" << path << ".xml";
   }
   return scene;
+}
+/**
+ * Get a scene from a map file in XML format.
+ */
+Scene* MapLoader::getScene(const std::string &path) {
+  return getSceneFromPath((Environment::getDataDir() + "/maps/" + path + ".xml"));
 }
 
 void MapLoader::extractMaterials() {
@@ -134,7 +141,9 @@ void MapLoader::extractLights() {
 
     lightElement->QueryFloatAttribute("distance", &distance);
     lightElement->QueryFloatAttribute("energy", &energy);
-    lightElement->QueryFloatAttribute("specular", &specular);
+    if (lightElement->QueryFloatAttribute("specular", &specular) == XML_NO_ATTRIBUTE) {
+      specular = 0;
+    }
 
     scene->entities.emplace_back();
     Entity &light = scene->entities.back();

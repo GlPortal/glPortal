@@ -8,7 +8,7 @@
 #include <assets/text/Font.hpp>
 
 #include <engine/core/math/Matrix4f.hpp>
-
+#include <engine/renderer/UiRenderer.hpp>
 
 namespace glPortal {
 class Camera;
@@ -24,32 +24,35 @@ public:
   Renderer();
   void setViewport(Viewport *vp);
   Viewport* getViewport() const;
-  
   void setScene(Scene *scene);
-
-  void render(const Camera &cam);
-  void renderUI(const Camera &cam);
+  void setShader(Shader *scene);
+  void render();
   void renderScene(const Camera &cam);
+  void renderEntities(const Camera &cam);
   void renderEntity(const Camera &cam, const Entity &e);
   void renderPlayer(const Camera &cam);
-  void renderPortalContent(const Camera &cam, const Entity &portal);
+  void renderPortalStencil(const Camera &cam, const Entity &portal);
   void renderPortal(const Camera &cam, const Entity &portal, const Entity &otherPortal);
   void renderPortalOverlay(const Camera &cam, const Entity &portal);
   void renderPortalNoise(const Camera &cam, const Entity &portal, float fade);
   void renderText(const Camera &cam, const std::string &text, int x, int y);
-  void renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh, const Material &mat) {
-    return renderMesh(cam, sh, mdlMtx, mesh, &mat);
+  void renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh, const Material &mat) {
+    return renderMesh(cam, mdlMtx, mesh, &mat);
   }
-  void renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat = nullptr);
+
+  void renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat = nullptr);
   void setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal);
   void setFont(const std::string &font, float size);
-
+  void setFontSize(float size);
+  int getTextWidth(std::string text);
   static Matrix4f clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj);
-private:
   Viewport *viewport;
+  Scene *scene;
+  Shader *shader;
+private:
+  Camera getCamera();
   int vpWidth, vpHeight;
 
-  Scene *scene;
   Font *font;
   int portalDepth;
 };

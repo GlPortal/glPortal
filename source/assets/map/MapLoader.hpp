@@ -13,6 +13,7 @@ class Scene;
 
 class MapLoader {
 public:
+  static Scene* getSceneFromPath(const std::string &path);
   static Scene* getScene(const std::string &path);
   static Scene* scene;
   static XMLHandle rootHandle;

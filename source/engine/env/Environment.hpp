@@ -3,21 +3,21 @@
 
 #include <string>
 #include <engine/core/event/Dispatcher.hpp>
+#include <engine/env/Config.hpp>
 
 using namespace std;
 
 namespace glPortal {
-class ConfigFileParser;
 
 class Environment {
 private:
-  static ConfigFileParser *config;
+  static Config config;
   static std::string datadir;
+
 public:
   static Dispatcher dispatcher;
   static void init();
-  static ConfigFileParser& getConfig();
-  static ConfigFileParser* getConfigPointer();
+  static Config& getConfig();
   static void initializeConfig();
   static std::string getDataDir();
   static void setDataDir(const std::string &string);
