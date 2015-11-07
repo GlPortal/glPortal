@@ -194,8 +194,11 @@ void World::update() {
         } else if (trigger.type == "win") {
           if(currentLevel + 1 < mapList.size()) {
             currentLevel++;
+            loadScene(mapList[currentLevel]);
+          } else {
+            scene->screen->enabled = true;
           }
-          loadScene(mapList[currentLevel]);
+
           System::Log(Verbose) << "Win touched.";
         } else if (trigger.type == "map") {
           System::Log(Verbose) << "Map trigger touched.";
@@ -256,8 +259,12 @@ void World::update() {
   if (distToEnd < 1) {
     if(currentLevel + 1 < mapList.size()) {
       currentLevel++;
+      loadScene(mapList[currentLevel]);
+    } else {
+      scene->screen->enabled = true;
+      scene->screen->title   = "Game Over";
+      scene->screen->text    = "Hit q to quit the game.";
     }
-    loadScene(mapList[currentLevel]);
   }
 
   lastUpdateTime = updateTime;
