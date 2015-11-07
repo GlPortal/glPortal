@@ -284,9 +284,6 @@ void World::shootPortal(int button) {
 
 void World::render() {
   renderer->render();
-  if (isEditorShown) {
-    editor->renderUI();
-  }
 }
 
 Entity& World::getPlayer() {
