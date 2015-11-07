@@ -74,8 +74,8 @@ void World::create() {
     loadSceneFromPath(mapPath);
     done = true;
     return;
-  } 
-  
+  }
+
   try {
     std::string map = config.map;
     loadScene(map);
@@ -102,8 +102,9 @@ void World::loadScene(const std::string &path) {
   delete scene;
   currentScenePath = path;
   scene = MapLoader::getScene(path);
-  
+
   Environment::dispatcher.dispatch(Event::loadScene);
+  renderer->setScene(scene);
 }
 
 void World::loadSceneFromPath(const std::string &path) {
@@ -111,8 +112,8 @@ void World::loadSceneFromPath(const std::string &path) {
   currentScenePath = path;
   scene = MapLoader::getSceneFromPath(path);
   Environment::dispatcher.dispatch(Event::loadScene);
+  renderer->setScene(scene);
 }
-
 
 void World::update() {
   uint32_t updateTime = SDL_GetTicks();
@@ -139,7 +140,7 @@ void World::update() {
 
   //Y collision
   BoxCollider bboxY(Vector3f(plrTform.position.x, pos.y, plrTform.position.z), plrTform.scale);
-  
+
   if (collidesWithWalls(bboxY)) {
     bool portaling = false;
     portaling = WorldHelper::isPlayerPortalingY(bboxY, &player, scene);
@@ -282,7 +283,6 @@ void World::shootPortal(int button) {
 }
 
 void World::render() {
-  renderer->setScene(scene);
   renderer->render();
   if (isEditorShown) {
     editor->renderUI();
