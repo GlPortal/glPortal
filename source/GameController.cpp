@@ -67,7 +67,7 @@ void GameController::handleEvent(const SDL_Event &event) {
       world->hidePortals();
     }
   }
-  
+
   // If F5 released, reload the scene
   if (wasF5Down and not Input::isKeyDown(SDL_SCANCODE_F5)) {
     if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
@@ -77,10 +77,6 @@ void GameController::handleEvent(const SDL_Event &event) {
     world->loadScene(world->currentScenePath);
   }
   wasF5Down = Input::isKeyDown(SDL_SCANCODE_F5);
-  // If Tab released, toggle editor
-  if (wasTabDown and not Input::isKeyDown(SDL_SCANCODE_TAB)) {
-    world->isEditorShown = not world->isEditorShown;
-  }
   wasTabDown = Input::isKeyDown(SDL_SCANCODE_F5);
 
 }

@@ -24,9 +24,6 @@ const float GRAVITY = 0.5;
 class Window;
 
 class World {
-private:
-  friend Editor;
-
 public:
   World();
   void create();
@@ -41,7 +38,6 @@ public:
   void render();
   Entity& getPlayer();
   void hidePortals();
-  bool isEditorShown;
   std::string currentScenePath;
   static float gravity;
   Scene *scene;

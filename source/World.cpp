@@ -40,7 +40,6 @@
 
 #include <SDL2/SDL_keyboard.h>
 
-#include "Editor.hpp"
 #include "Input.hpp"
 #include "Portal.hpp"
 #include "Window.hpp"
@@ -52,7 +51,6 @@ float World::gravity = GRAVITY;
 
 World::World() :
   scene(nullptr),
-  isEditorShown(false),
   gameTime(0),
   config(Environment::getConfig()) {
   stateFunctionStack.push(&GameState::handleRunning);
@@ -60,7 +58,6 @@ World::World() :
 }
 
 void World::create() {
-  editor = new Editor(*this);
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
   lastUpdateTime = SDL_GetTicks();
@@ -92,7 +89,6 @@ void World::setRendererWindow(Window *win) {
 }
 
 void World::destroy() {
-  delete editor;
   delete renderer;
   delete scene;
 }
