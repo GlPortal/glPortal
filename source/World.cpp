@@ -143,7 +143,7 @@ void World::update() {
 
     if (not portaling and not plrMotion.noclip) {
       if (plrMotion.velocity.y < 0) {
-        if(plrMotion.velocity.y < -HURT_VELOCITY) {
+        if (plrMotion.velocity.y < -HURT_VELOCITY) {
           std::uniform_int_distribution<> dis(0, PLAYER_FALL_SOUND.size()-1);
           player.getComponent<SoundSource>().playSound(
             Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)]);
@@ -192,7 +192,7 @@ void World::update() {
           player.getComponent<Health>().kill();
           System::Log(Verbose) << "Death touched.";
         } else if (trigger.type == "win") {
-          if(currentLevel + 1 < mapList.size()) {
+          if (currentLevel + 1 < mapList.size()) {
             currentLevel++;
             loadScene(mapList[currentLevel]);
           } else {
@@ -257,7 +257,7 @@ void World::update() {
   //Check if the end of the level has been reached
   float distToEnd = (scene->end.getComponent<Transform>().position - plrTform.position).length();
   if (distToEnd < 1) {
-    if(currentLevel + 1 < mapList.size()) {
+    if (currentLevel + 1 < mapList.size()) {
       currentLevel++;
       loadScene(mapList[currentLevel]);
     } else {
