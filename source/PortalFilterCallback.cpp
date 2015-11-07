@@ -3,39 +3,53 @@
 
 namespace glPortal {
 
+std::vector<Entity*> PortalFilterCallback::portals;
+
 PortalFilterCallback::PortalFilterCallback(Scene &scene) : 
   scene(scene) {
 }
 
+class ContactResultHolder : public btCollisionWorld::ContactResultCallback {
+public:
+  bool collides = false;
+  btScalar addSingleResult(btManifoldPoint&, const btCollisionObjectWrapper*, int, int,
+    const btCollisionObjectWrapper*, int, int) {
+    collides = true;
+    return 0;
+  }
+};
 
-// TODO: Move to BoxCollider / AABB
-static bool doVolumesOverlap(const btVector3 &amin, const btVector3 &amax,
-  const btVector3 &bmin, const btVector3 &bmax) {
-  bool xOverlap = !(bmin.x() > amax.x() || bmax.x() < amin.x());
-  bool yOverlap = !(bmin.y() > amax.y() || bmax.y() < amin.y());
-  bool zOverlap = !(bmin.z() > amax.z() || bmax.z() < amin.z());
-  return xOverlap and yOverlap and zOverlap;
+static bool isCollisionSubtracted(const btVector3 &p) {
+  if (PortalFilterCallback::portals.size() > 0) {
+    ContactResultHolder cb;
+    btDefaultMotionState ms;
+    ms.setWorldTransform(btTransform(btQuaternion(), p));
+    btSphereShape sh(0);
+    btRigidBody::btRigidBodyConstructionInfo ci(0, &ms, &sh, btVector3(0, 0, 0));
+    btRigidBody rb(ci);
+    for (Entity *pEnt : PortalFilterCallback::portals) {
+      Portal &pComp = pEnt->getComponent<Portal>();
+      if (pComp.open and pComp.uncollider) {
+        pEnt->manager.scene.physics.world->contactPairTest(
+          pComp.uncollider.get(),
+          &rb,
+          cb);
+        return cb.collides;
+      }
+    }
+  }
+  return false;
 }
-static bool isPointInVolume(const btVector3 &min, const btVector3 &max, const btVector3 &p) {
-  bool xIn = p.x() > min.x() && p.x() < max.x();
-  bool yIn = p.y() > min.y() && p.y() < max.y();
-  bool zIn = p.z() > min.z() && p.z() < max.z();
-  return xIn and yIn and zIn;
-}
-
-static const btVector3 clipMin(2, 0, -1), clipMax(3, 2, 1);
 
 void PortalFilterCallback::beforePhysicsStep() {
-  scene.physics.world->getDebugDrawer()->drawBox(clipMin, clipMax, btVector3(1, .5, 0));
-}
-
-bool PortalFilterCallback::needBroadphaseCollision(btBroadphaseProxy *proxy1,
-  btBroadphaseProxy* proxy2) const {
-  bool prox1Static = false, // proxy1->isNonMoving(),
-       prox2Static = true;//proxy2->isNonMoving();
-  if (prox1Static xor prox2Static) {
-    btBroadphaseProxy *proxMoving = prox1Static ? proxy1 : proxy2;
-    return not doVolumesOverlap(proxMoving->m_aabbMin, proxMoving->m_aabbMax, clipMin, clipMax);
+  for (Entity *pEnt : PortalFilterCallback::portals) {
+    Portal &pComp = pEnt->getComponent<Portal>();
+    if (pComp.open and pComp.uncollider) {
+      btVector3 ext = ((btBoxShape*)(pComp.uncolliderShape.get()))
+        ->getHalfExtentsWithoutMargin();
+      scene.physics.world->getDebugDrawer()->drawBox(-ext, ext,
+        pComp.uncollider->getWorldTransform(), btVector3(1, .5, 0));
+    }
   }
 }
 
@@ -62,7 +76,7 @@ void PortalFilterCallback::nearCallback(btBroadphasePair &collisionPair,
         for (int i = 0; i < contactPointResult.getPersistentManifold()->getNumContacts(); ++i) {
           const btManifoldPoint &pt = contactPointResult.getPersistentManifold()->getContactPoint(i);
           const btVector3 &cp = pt.getPositionWorldOnA();
-          if (isPointInVolume(clipMin, clipMax, cp)) {
+          if (isCollisionSubtracted(cp)) {
             contactPointResult.getPersistentManifold()->removeContactPoint(i--);
           }
         }

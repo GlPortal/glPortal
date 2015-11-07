@@ -20,6 +20,10 @@ const double Portal::NOISE_FADE_DELAY = .300;
 const double Portal::OPEN_ANIM_DURATION = .250;
 const float Portal::SURFACE_OFFSET = 0.01f;
 
+Portal::Portal(Entity &ent)  : Component(ent), open(false) {
+  uncolliderMotionState.reset(new btDefaultMotionState);
+}
+
 Vector3f Portal::getDirection() const {
   return direction;
 }
@@ -78,6 +82,12 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
     orientation.y = from.z*H.x - from.x*H.z; 
     orientation.z = from.x*H.y - from.y*H.x;
   }
+
+  uncolliderMotionState->setWorldTransform(btTransform(orientation, position));
+  uncolliderShape.reset(new btBoxShape(scale/2));
+  btRigidBody::btRigidBodyConstructionInfo ci(0, uncolliderMotionState.get(), uncolliderShape.get(), btVector3(0, 0, 0));
+  uncollider.reset(new btRigidBody(ci));
+
   open = true;
   position += (getDirection() * SURFACE_OFFSET);
   overlayMesh = MeshLoader::getMesh("Plane.obj");
@@ -85,7 +95,6 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
 }
 
 Vector3f Portal::getScaleMult() const {
-  // FIXME: writing such a long line to get time is bad
   double delta = entity.manager.scene.world->getTime()-openSince;
   if (delta > OPEN_ANIM_DURATION)
     return Vector3f(1, 1, 1);

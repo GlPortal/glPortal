@@ -6,14 +6,15 @@
 
 namespace glPortal {
 
-class PortalFilterCallback : public btOverlapFilterCallback {
+class PortalFilterCallback {
 private:
   Scene &scene;
 
 public:
+  static std::vector<Entity*> portals;
+
   PortalFilterCallback(Scene&);
   void beforePhysicsStep();
-  bool needBroadphaseCollision(btBroadphaseProxy*, btBroadphaseProxy*) const;
   static void nearCallback(btBroadphasePair&, btCollisionDispatcher&, const btDispatcherInfo&);
 };
 

@@ -122,52 +122,7 @@ void World::update(double dtime) {
   plrMotion.move(dtime);
 
   phys.update(dtime);
-
 /*
-  // Figure out the provisional new player position
-  Vector3f pos = plrTform.position + plrMotion.velocity;
-  //Y collision
-  BoxCollider bboxY(Vector3f(plrTform.position.x, pos.y, plrTform.position.z), plrTform.scale);
-  
-  if (collidesWithWalls(bboxY)) {
-    bool portaling = false;
-    portaling = WorldHelper::isPlayerPortalingY(bboxY, &player, scene);
-
-    if (not portaling and not plrMotion.noclip) {
-      if (plrMotion.velocity.y < 0) {
-        if (plrMotion.velocity.y < -HURT_VELOCITY) {
-          std::uniform_int_distribution<> dis(0, PLAYER_FALL_SOUND.size()-1);
-          player.getComponent<SoundSource>().playSound(
-            Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)]);
-        }
-        plrMotion.grounded = true;
-      }
-      plrMotion.velocity.y = 0;
-    }
-  } else {
-    plrMotion.grounded = false;
-  }
-
-  //X collision
-  BoxCollider bboxX(Vector3f(pos.x, plrTform.position.y, plrTform.position.z), plrTform.scale);
-  if (collidesWithWalls(bboxX)) {
-    bool portaling = false;
-    portaling = WorldHelper::isPlayerPortalingX(bboxX, &player, scene);
-    if (not portaling and not plrMotion.noclip) {
-      plrMotion.velocity.x = 0;
-    }
-  }
-
-  //Z collision
-  BoxCollider bboxZ(Vector3f(plrTform.position.x, plrTform.position.y, pos.z), plrTform.scale);
-  if (collidesWithWalls(bboxZ)) {
-    bool portaling = false;
-    portaling = WorldHelper::isPlayerPortalingZ(bboxZ, &player, scene);
-    if (not portaling and not plrMotion.noclip) {
-      plrMotion.velocity.z = 0;
-    }
-  }
-
   for (Entity &e : scene->entities) {
     // Trigger
     if (e.hasComponent<Trigger>()) {

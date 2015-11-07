@@ -1,6 +1,8 @@
 #ifndef PORTAL_HPP
 #define PORTAL_HPP
 
+#include <bullet/BulletCollision/btBulletCollisionCommon.h>
+
 #include <engine/component/Component.hpp>
 #include <engine/core/math/Vector3f.hpp>
 #include <engine/BoxCollider.hpp>
@@ -18,7 +20,7 @@ public:
   static const double OPEN_ANIM_DURATION;
   static const float SURFACE_OFFSET;
 
-  Portal(Entity &ent) : Component(ent), open(false) {}
+  Portal(Entity &ent);
   Vector3f getDirection() const;
   bool inPortal(const BoxCollider &collider) const;
   void placeOnWall(const Vector3f &launchPos, const Vector3f &point, const Vector3f &normal);
@@ -30,6 +32,9 @@ public:
   Mesh overlayMesh, stencilMesh;
   Vector3f direction, color;
   bool open;
+  std::unique_ptr<btDefaultMotionState> uncolliderMotionState;
+  std::unique_ptr<btCollisionShape> uncolliderShape;
+  std::unique_ptr<btCollisionObject> uncollider;
 };
 
 } /* namespace glPortal */
