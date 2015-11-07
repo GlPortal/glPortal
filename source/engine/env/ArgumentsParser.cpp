@@ -13,7 +13,7 @@
 namespace glPortal {
 std::string ArgumentsParser::mapName = "";
 std::string ArgumentsParser::mapPath = "";
-void ArgumentsParser::setEnvironmentFromArgs(int argc, char **argv) {
+void ArgumentsParser::setEnvironmentFromArgs(const int argc, char **argv) {
   
   static struct option long_options[] = {
     {"version",          no_argument,       0, 'v'},

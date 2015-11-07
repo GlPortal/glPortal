@@ -77,7 +77,7 @@ using namespace glPortal;
 
 Window window;
 
-int main(int argc, char *argv[]) {
+int main(const int argc, char *argv[]) {
   System::Init();
   ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   Environment::init();
