@@ -20,6 +20,7 @@ class UiRenderer {
 public:
   static void render(Renderer &renderer);
   static void renderScreen(Renderer &renderer);
+  static void renderHand(Renderer &renderer);
 };
 
 } /* namespace glPortal */

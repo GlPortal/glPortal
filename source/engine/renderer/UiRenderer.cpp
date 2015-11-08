@@ -41,6 +41,7 @@ void UiRenderer::render(Renderer &renderer) {
   if(renderer.scene->screen->enabled){
     renderScreen(renderer);
   }
+  renderHand(renderer);
 }
 
 void UiRenderer::renderScreen(Renderer &renderer) {
@@ -62,4 +63,20 @@ void UiRenderer::renderScreen(Renderer &renderer) {
   renderer.setFontSize(0.5);
   renderer.renderText(camera, renderer.scene->screen->text, (vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->text)/2), (vpHeight/2)-100);
 }
+
+void UiRenderer::renderHand(Renderer &renderer) {
+  int vpWidth, vpHeight;
+  renderer.viewport->getSize(&vpWidth, &vpHeight);
+  Camera camera;
+  camera.setOrthographic();
+  camera.setBounds(0, vpWidth, 0, vpHeight);
+  Matrix4f widget;
+  widget.translate(Vector3f(vpWidth-400, 200, -2));
+  widget.scale(Vector3f(vpWidth/2, vpHeight/2, 1));
+  const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
+  const Material &mat = MaterialLoader::fromTexture("hand.png");
+  renderer.setShader(&ShaderLoader::getShader("unshaded.frag"));
+  glUniform4f(renderer.shader->uni("color"), 0, 0, 0, renderer.scene->screen->alpha);
+  renderer.renderMesh(camera, widget, mesh, mat);
+}  
 } /* namespace glPortal */
