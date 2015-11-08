@@ -37,8 +37,11 @@ void UiRenderer::render(Renderer &renderer) {
 
   // FPS counter
   renderer.setFont("Pacaya", 0.5f);
-  renderer.renderText(camera, std::string("FPS: ") + std::to_string(Game::fps.getFps()), 10, vpHeight - 25);
-  if(renderer.scene->screen->enabled){
+  renderer.renderText(camera,
+                      std::string("FPS: ") + std::to_string(Game::fps.getFps()),
+                      10,
+                      vpHeight - 25);
+  if (renderer.scene->screen->enabled){
     renderScreen(renderer);
   }
   renderHand(renderer);
@@ -59,9 +62,15 @@ void UiRenderer::renderScreen(Renderer &renderer) {
   renderer.renderMesh(camera, widget, mesh, nullptr);
 
   renderer.setFontSize(4);
-  renderer.renderText(camera, renderer.scene->screen->title, (vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->title)/2), vpHeight/2);
+  renderer.renderText(camera,
+                      renderer.scene->screen->title,
+                      (vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->title)/2),
+                      vpHeight/2);
   renderer.setFontSize(0.5);
-  renderer.renderText(camera, renderer.scene->screen->text, (vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->text)/2), (vpHeight/2)-100);
+  renderer.renderText(camera,
+                      renderer.scene->screen->text,
+                      (vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->text)/2),
+                      (vpHeight/2)-100);
 }
 
 void UiRenderer::renderHand(Renderer &renderer) {
