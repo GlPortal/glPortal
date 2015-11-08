@@ -65,11 +65,9 @@ void World::create() {
   std::random_device rd;
   generator = std::mt19937(rd());
 
-  bool done = false;
   std::string mapPath = config.mapPath;
   if (mapPath.length() > 0) {
     loadSceneFromPath(mapPath);
-    done = true;
     return;
   }
 
