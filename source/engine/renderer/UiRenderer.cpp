@@ -87,5 +87,5 @@ void UiRenderer::renderHand(Renderer &renderer) {
   renderer.setShader(&ShaderLoader::getShader("unshaded.frag"));
   glUniform4f(renderer.shader->uni("color"), 0, 0, 0, renderer.scene->screen->alpha);
   renderer.renderMesh(camera, widget, mesh, mat);
-}  
+}
 } /* namespace glPortal */
