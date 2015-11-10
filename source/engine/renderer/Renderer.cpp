@@ -184,7 +184,7 @@ void Renderer::renderScene(const Camera &camera) {
 
   // Set the light blending to additive, and depth testing to less or equal
   // in order to draw multiple layers of light over our ambient image
-	glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ZERO);
+  glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ZERO);
   glDepthFunc(GL_LEQUAL);
 
   setShader(&ShaderLoader::getShader("diffuse.frag"));
@@ -197,7 +197,7 @@ void Renderer::renderScene(const Camera &camera) {
       const Transform &t = e.getComponent<Transform>();
       const LightSource &ls = e.getComponent<LightSource>();
 
-      if (!ls.enabled) {
+      if (not ls.enabled) {
         continue;
       }
 
@@ -405,7 +405,8 @@ void Renderer::renderText(const Camera &cam, const std::string &text, Vector3f v
  * @param mesh   The mesh to render
  * @param mat    The material to render the mesh with
  */
-void Renderer::renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat) {
+void Renderer::renderMesh(const Camera &cam, Matrix4f &mdlMtx,
+                          const Mesh &mesh, const Material *mat) {
   Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
   glUniformMatrix4fv(shader->uni("projectionMatrix"), 1, false, projMatrix.toArray());
   Matrix4f viewMatrix; cam.getViewMatrix(viewMatrix);
@@ -454,7 +455,8 @@ void Renderer::renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh,
  * @param portal      The portal in which to place the camera
  * @param otherPortal The counterpart of the portal
  */
-void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal) {
+void Renderer::setCameraInPortal(const Camera &cam, Camera &dest,
+                                 const Entity &portal, const Entity &otherPortal) {
   Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
   p1mat.translate(p1T.position);
@@ -479,13 +481,15 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &
 /**
  * TODO Documentation required.
  */
-Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj) {
+Matrix4f Renderer::clipProjMat(const Entity &ent,
+                               const Matrix4f &view, const Matrix4f &proj) {
   const Transform &t = ent.getComponent<Transform>();
   Vector4f clipPlane(Math::toDirection(t.rotation), -dot(Math::toDirection(t.rotation), t.position));
   clipPlane = inverse(transpose(view)) * clipPlane;
 
-  if (clipPlane.w > 0.f)
+  if (clipPlane.w > 0.f){
     return proj;
+  }
 
   Vector4f q = inverse(proj) * Vector4f(
     sign(clipPlane.x),
