@@ -484,7 +484,9 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest,
 Matrix4f Renderer::clipProjMat(const Entity &ent,
                                const Matrix4f &view, const Matrix4f &proj) {
   const Transform &t = ent.getComponent<Transform>();
-  Vector4f clipPlane(Math::toDirection(t.rotation), -dot(Math::toDirection(t.rotation), t.position));
+  Vector4f clipPlane(Math::toDirection(t.rotation),
+                     -dot(Math::toDirection(t.rotation),
+                          t.position));
   clipPlane = inverse(transpose(view)) * clipPlane;
 
   if (clipPlane.w > 0.f){
