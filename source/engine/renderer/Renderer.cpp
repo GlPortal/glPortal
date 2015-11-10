@@ -369,14 +369,12 @@ void Renderer::renderPortalNoise(const Camera &cam, const Entity &portal, float 
  * @param x    The x-coordinate of the top left corner of the text in window coordinates
  * @param y    The y-coordinate of the top left corner of the text in window coordinates
  */
-void Renderer::renderText(const Camera &cam, const std::string &text, int x, int y) {
-  glClear(GL_DEPTH_BUFFER_BIT);
-
+void Renderer::renderText(const Camera &cam, const std::string &text, Vector3f vector) {
   // FIXME This should be determined by the currently set font
   const Material &mat = MaterialLoader::fromTexture("Pacaya.png");
   setShader(&ShaderLoader::getShader("text.frag"));
 
-  Vector2f position(x, y);
+  Vector2f position(vector.x, vector.y);
   Matrix4f mtx;
 
   const char *array = text.c_str();
@@ -389,7 +387,7 @@ void Renderer::renderText(const Camera &cam, const std::string &text, int x, int
     mtx.setIdentity();
     mtx.translate(Vector3f(position.x + letter.xOffset * font->size,
                   position.y + letter.yOffset * font->size,
-                  -10));
+                  vector.z));
 
     mtx.scale(Vector3f(letter.width * font->size,
                       letter.height * font->size, 1));

@@ -19,7 +19,7 @@ void UiRenderer::render(Renderer &renderer) {
   camera.setOrthographic();
   camera.setBounds(0, vpWidth, 0, vpHeight);
   Matrix4f crosshairMtx;
-  crosshairMtx.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
+  crosshairMtx.translate(Vector3f(vpWidth/2, vpHeight/2, -10));
   crosshairMtx.scale(Vector3f(80, 80, 1));
   Matrix4f widget;
   widget.translate(Vector3f(vpWidth/2+12, vpHeight-20, -2));
@@ -33,14 +33,13 @@ void UiRenderer::render(Renderer &renderer) {
 
   // Title
   renderer.setFont("Pacaya", 1.5f);
-  renderer.renderText(camera, "GlPortal", 25, vpHeight - 75);
+  renderer.renderText(camera, "GlPortal", Vector3f(25, vpHeight - 75, -20));
 
   // FPS counter
   renderer.setFont("Pacaya", 0.5f);
   renderer.renderText(camera,
                       std::string("FPS: ") + std::to_string(Game::fps.getFps()),
-                      10,
-                      vpHeight - 25);
+                      Vector3f(10, vpHeight - 25, -20));
   if (renderer.scene->screen->enabled){
     renderScreen(renderer);
   }
@@ -54,7 +53,7 @@ void UiRenderer::renderScreen(Renderer &renderer) {
   camera.setOrthographic();
   camera.setBounds(0, vpWidth, 0, vpHeight);
   Matrix4f widget;
-  widget.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
+  widget.translate(Vector3f(vpWidth/2, vpHeight/2, -5));
   widget.scale(Vector3f(vpWidth, vpHeight, 1));
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   renderer.setShader(&ShaderLoader::getShader("color.frag"));
@@ -64,13 +63,13 @@ void UiRenderer::renderScreen(Renderer &renderer) {
   renderer.setFontSize(4);
   renderer.renderText(camera,
                       renderer.scene->screen->title,
-                      (vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->title)/2),
-                      vpHeight/2);
+                      Vector3f((vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->title)/2),
+                               vpHeight/2, -1));
   renderer.setFontSize(0.5);
   renderer.renderText(camera,
                       renderer.scene->screen->text,
-                      (vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->text)/2),
-                      (vpHeight/2)-100);
+                      Vector3f((vpWidth/2)-(renderer.getTextWidth(renderer.scene->screen->text)/2),
+                               (vpHeight/2)-100, -1));
 }
 
 void UiRenderer::renderHand(Renderer &renderer) {
@@ -80,7 +79,7 @@ void UiRenderer::renderHand(Renderer &renderer) {
   camera.setOrthographic();
   camera.setBounds(0, vpWidth, 0, vpHeight);
   Matrix4f widget;
-  widget.translate(Vector3f(vpWidth-400, 200, -2));
+  widget.translate(Vector3f(vpWidth-400, 200, -50));
   widget.scale(Vector3f(vpWidth/2, vpHeight/2, 1));
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   const Material &mat = MaterialLoader::fromTexture("hand.png");

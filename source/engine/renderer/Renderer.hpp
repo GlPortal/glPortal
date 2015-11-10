@@ -35,7 +35,7 @@ public:
   void renderPortal(const Camera &cam, const Entity &portal, const Entity &otherPortal);
   void renderPortalOverlay(const Camera &cam, const Entity &portal);
   void renderPortalNoise(const Camera &cam, const Entity &portal, float fade);
-  void renderText(const Camera &cam, const std::string &text, int x, int y);
+  void renderText(const Camera &cam, const std::string &text, Vector3f vector);
   void renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh, const Material &mat) {
     return renderMesh(cam, mdlMtx, mesh, &mat);
   }
