@@ -80,7 +80,7 @@ void UiRenderer::renderHand(Renderer &renderer) {
   camera.setBounds(0, vpWidth, 0, vpHeight);
   Matrix4f widget;
   widget.translate(Vector3f(vpWidth-400, 250, -50));
-  widget.scale(Vector3f(960,540 , 1));
+  widget.scale(Vector3f(960, 540, 1));
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   const Material &mat = MaterialLoader::fromTexture("hand.png");
   renderer.setShader(&ShaderLoader::getShader("unshaded.frag"));
