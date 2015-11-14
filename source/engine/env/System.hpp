@@ -16,6 +16,7 @@ public:
   struct _Log {
     LogInput operator()();
     LogInput operator()(LogLevel);
+    LogInput operator()(LogLevel, const std::string &tag);
   };
   static _Log Log;
 

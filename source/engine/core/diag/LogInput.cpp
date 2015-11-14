@@ -9,13 +9,17 @@
 
 namespace glPortal {
 
-LogInput::LogInput(Logger &sink, LogLevel lvl) :
-  sink(sink), lvl(lvl) {
+LogInput::LogInput(Logger &sink, LogLevel lvl, const std::string &tag) :
+  sink(sink), lvl(lvl), tag(tag) {
 }
 
 LogInput::~LogInput() {
   if (not buf.empty()) {
-    sink.log(buf, lvl);
+    if (not tag.empty()) {
+      sink.log(tag + ": " + buf, lvl);
+    } else {
+      sink.log(buf, lvl);
+    }
   }
 }
 

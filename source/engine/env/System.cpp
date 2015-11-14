@@ -17,4 +17,8 @@ LogInput System::_Log::operator()(LogLevel lvl) {
   return LogInput(*System::logger, lvl);
 }
 
+LogInput System::_Log::operator()(LogLevel lvl, const std::string &tag) {
+  return LogInput(*System::logger, lvl, tag);
+}
+
 } /* namespace glPortal */

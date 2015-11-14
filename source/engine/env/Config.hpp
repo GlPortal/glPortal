@@ -19,6 +19,7 @@ public:
 
   std::string map;
   std::string mapPath;
+
 private:
   unsigned int width;
   unsigned int height;
