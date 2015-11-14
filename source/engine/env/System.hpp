@@ -3,7 +3,6 @@
 
 #include <string>
 #include <memory>
-#include <engine/core/diag/ConsoleLogger.hpp>
 #include <engine/core/diag/LogInput.hpp>
 
 namespace glPortal {

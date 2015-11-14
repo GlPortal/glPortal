@@ -15,11 +15,7 @@ LogInput::LogInput(Logger &sink, LogLevel lvl, const std::string &tag) :
 
 LogInput::~LogInput() {
   if (not buf.empty()) {
-    if (not tag.empty()) {
-      sink.log(tag + ": " + buf, lvl);
-    } else {
-      sink.log(buf, lvl);
-    }
+    sink.log(buf, lvl, tag);
   }
 }
 

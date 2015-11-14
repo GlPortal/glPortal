@@ -17,7 +17,7 @@ enum LogLevel {
 class Logger {
 public:
   virtual const char* getName() const;
-  virtual void log(const std::string &message, LogLevel lvl) {}
+  virtual void log(const std::string &message, LogLevel lvl, const std::string &tag) {}
 };
 
 } /* namespace glPortal */
