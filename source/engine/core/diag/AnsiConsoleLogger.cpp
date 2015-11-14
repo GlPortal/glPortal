@@ -50,7 +50,7 @@ void AnsiConsoleLogger::log(const std::string &message, LogLevel lvl, const std:
   if (needBlackText(bgcol)) {
     std::cout << "\x1B[30m";
   }
-  std::cout << std::string(16-std::min(16UL, tag.size()), ' ') << tag.substr(0, 16);
+  std::cout << std::string(16-std::min(16, (int)tag.size()), ' ') << tag.substr(0, 16);
   if (enableBackground) {
     std::cout << "\x1B[97m\x1B[48;5;" << oi.bgColorCode << "m ";
   } else {
