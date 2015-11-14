@@ -4,7 +4,7 @@
 namespace glPortal {
 
 void SoundSource::playSound(const std::string &path) {
-  SoundManager::PlaySound(path, entity);
+  SoundManager::playSound(path, entity);
 }
 
 } /* namespace glPortal */

@@ -29,7 +29,7 @@ Game::Game() : closed(false) {
   window.create("GlPortal");
   
   try {
-    SoundManager::Init();
+    SoundManager::init();
     world.create();
     world.setRendererWindow(&window);
     update();
@@ -54,7 +54,7 @@ void Game::update() {
     while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
       controller->handleInput();
       
-      SoundManager::Update(world.getPlayer());
+      SoundManager::update(world.getPlayer());
       world.update();
       nextUpdate += SKIP_TIME;
       skipped++;
