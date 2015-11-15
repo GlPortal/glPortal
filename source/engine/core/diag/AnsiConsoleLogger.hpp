@@ -8,7 +8,9 @@ namespace glPortal {
 
 class AnsiConsoleLogger : public Logger {
 public:
-  bool enableBackground = false;
+  bool enableColors, enableBackground;
+
+  AnsiConsoleLogger();
 
   const char* getName() const;
   void log(const std::string &message, LogLevel lvl, const std::string &tag);

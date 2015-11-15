@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <iostream>
 
+using std::cout;
+
 namespace glPortal {
 
 static const struct LogLevelOutputInfo {
@@ -18,6 +20,17 @@ static const struct LogLevelOutputInfo {
   {'E', "160", "52"},
   {'F', "92", "53"}
 };
+
+AnsiConsoleLogger::AnsiConsoleLogger() :
+  enableColors(true),
+  enableBackground(false) {
+  std::string term = getenv("TERM");
+  if (term == "linux") {
+    // Linux fbcon VTs don't handle extended colors
+    // This is also what's reported by some IDEs' output window which aren't full fledged terminals
+    enableColors = false;
+  }
+}
 
 const char* AnsiConsoleLogger::getName() const {
   return "ANSI/vt100 logger";
@@ -44,19 +57,30 @@ bool needBlackText(int bgcol) {
 
 void AnsiConsoleLogger::log(const std::string &message, LogLevel lvl, const std::string &tag) {
   const LogLevelOutputInfo &oi = outInfo[(int)lvl];
-  std::cout << "\x1B[97m\x1B[48;5;" << oi.colorCode << 'm' << oi.letter;
-  int bgcol = getBackgroundColor(tag);
-  std::cout << "\x1B[48;5;" << bgcol << 'm';
-  if (needBlackText(bgcol)) {
-    std::cout << "\x1B[30m";
+  if (enableColors) {
+    cout << "\x1B[97m\x1B[48;5;" << oi.colorCode << 'm';
   }
-  std::cout << std::string(16-std::min(16, (int)tag.size()), ' ') << tag.substr(0, 16);
-  if (enableBackground) {
-    std::cout << "\x1B[97m\x1B[48;5;" << oi.bgColorCode << "m ";
-  } else {
-    std::cout << "\x1B[0m ";
+  cout << oi.letter;
+  if (enableColors) {
+    int bgcol = getBackgroundColor(tag);
+    cout << "\x1B[48;5;" << bgcol << 'm';
+    if (needBlackText(bgcol)) {
+      cout << "\x1B[30m";
+    }
   }
-  std::cout << message << "\x1B[0m" << std::endl;
+  cout << std::string(16-std::min(16, (int)tag.size()), ' ') << tag.substr(0, 16);
+  if (enableColors) {
+    if (enableBackground) {
+      cout << "\x1B[97m\x1B[48;5;" << oi.bgColorCode << "m ";
+    } else {
+      cout << "\x1B[0m";
+    }
+  }
+  cout << ' ' << message;
+  if (enableColors) {
+    cout << "\x1B[0m";
+  }
+  cout << std::endl;
 }
 
 } /* namespace glPortal */
