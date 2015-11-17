@@ -319,7 +319,7 @@ void Renderer::renderText(const Camera &cam, const std::string &text, Vector3f v
   // FIXME This should be determined by the currently set font
   const Material &mat = MaterialLoader::fromTexture("Pacaya.png");
   setShader(&ShaderLoader::getShader("text.frag"));
-
+  glUniform4f(shader->uni("color"), 1, 1, 1, 1);
   Vector2f position(vector.x, vector.y);
   Matrix4f mtx;
 
