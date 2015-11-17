@@ -85,7 +85,7 @@ void Renderer::setFontSize(float size) {
 
 void Renderer::setFontColor(const Vector4f color) {
   this->fontColor = color;
-}  
+}
 
 int Renderer::getTextWidth(std::string text) {
   return this->font->getStringLength(text);
