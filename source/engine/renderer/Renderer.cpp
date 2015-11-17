@@ -41,7 +41,7 @@
 
 namespace glPortal {
 
-Renderer::Renderer() : viewport(nullptr), portalDepth(2) {
+Renderer::Renderer() : viewport(nullptr), portalDepth(2), fontColor(1, 1, 1, 1){
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
@@ -82,6 +82,10 @@ void Renderer::setFont(const std::string &font, float size) {
 void Renderer::setFontSize(float size) {
   this->font->size = size;
 }
+
+void Renderer::setFontColor(const Vector4f color) {
+  this->fontColor = color;
+}  
 
 int Renderer::getTextWidth(std::string text) {
   return this->font->getStringLength(text);
@@ -319,7 +323,7 @@ void Renderer::renderText(const Camera &cam, const std::string &text, Vector3f v
   // FIXME This should be determined by the currently set font
   const Material &mat = MaterialLoader::fromTexture("Pacaya.png");
   setShader(&ShaderLoader::getShader("text.frag"));
-  glUniform4f(shader->uni("color"), 1, 1, 1, 1);
+  glUniform4f(shader->uni("color"), fontColor.x, fontColor.y, fontColor.z, fontColor.w);
   Vector2f position(vector.x, vector.y);
   Matrix4f mtx;
 

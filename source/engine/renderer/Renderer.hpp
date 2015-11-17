@@ -8,6 +8,7 @@
 #include <assets/text/Font.hpp>
 
 #include <engine/core/math/Matrix4f.hpp>
+#include <engine/core/math/Vector4f.hpp>
 #include <engine/renderer/UiRenderer.hpp>
 
 namespace glPortal {
@@ -139,16 +140,16 @@ public:
    */
   void setFont(const std::string &font, float size);
 
-  /**
-   * Sets font size
-   */
   void setFontSize(float size);
 
+  void setFontColor(const Vector4f color);
+  
   int getTextWidth(std::string text);
   static Matrix4f clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj);
   Viewport *viewport;
   Scene *scene;
   Shader *shader;
+  Vector4f fontColor;
 private:
   Camera getCamera();
   int vpWidth, vpHeight;
