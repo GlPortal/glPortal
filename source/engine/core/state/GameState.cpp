@@ -4,7 +4,7 @@
 #include <engine/core/math/Vector4f.hpp>
 
 namespace glPortal {
-  
+
 void GameState::handleInput(Game& game){
   HandleGameFunction stateFunction = game.getWorld()->stateFunctionStack.top();
   stateFunction(game);
