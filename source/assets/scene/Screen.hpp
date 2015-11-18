@@ -2,6 +2,7 @@
 #define SCREEN_HPP
 #include <string>
 #include <engine/core/math/Vector2f.hpp>
+#include <engine/core/math/Vector4f.hpp>
 
 namespace glPortal {
 
@@ -12,6 +13,8 @@ public:
   std::string text;
   bool enabled;
   float alpha;
+  Vector4f backgroundColor;
+  Vector4f textColor;
 };
 
 } /* namespace glPortal */

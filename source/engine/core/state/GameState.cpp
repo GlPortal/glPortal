@@ -1,6 +1,7 @@
 #include "GameState.hpp"
 #include "../../../Input.hpp"
 #include <engine/env/Environment.hpp>
+#include <engine/core/math/Vector4f.hpp>
 
 namespace glPortal {
   
