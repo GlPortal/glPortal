@@ -41,7 +41,7 @@
 
 namespace glPortal {
 
-Renderer::Renderer() : viewport(nullptr), portalDepth(2) {
+Renderer::Renderer() : viewport(nullptr), portalDepth(2), fontColor(1, 1, 1, 1){
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
@@ -60,16 +60,10 @@ Viewport* Renderer::getViewport() const {
   return viewport;
 }
 
-/**
- * Sets the current scene for rendering
- */
 void Renderer::setScene(Scene *scene) {
   this->scene = scene;
 }
 
-/**
- * Sets the current shader for rendering
- */
 void Renderer::setShader(Shader *shader) {
   this->shader = shader;
   glUseProgram(shader->handle);
@@ -80,11 +74,6 @@ Camera Renderer::getCamera() {
 }
 
 
-/**
- * Sets the font to use for all future text drawing until changed again
- * @param font Name of the font
- * @param size Size of the text drawn with this font
- */
 void Renderer::setFont(const std::string &font, float size) {
   this->font = &FontLoader::getFont(font);
   this->font->size = size;
@@ -92,6 +81,10 @@ void Renderer::setFont(const std::string &font, float size) {
 
 void Renderer::setFontSize(float size) {
   this->font->size = size;
+}
+
+void Renderer::setFontColor(const Vector4f color) {
+  this->fontColor = color;
 }
 
 int Renderer::getTextWidth(std::string text) {
@@ -184,7 +177,7 @@ void Renderer::renderScene(const Camera &camera) {
 
   // Set the light blending to additive, and depth testing to less or equal
   // in order to draw multiple layers of light over our ambient image
-	glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ZERO);
+  glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ZERO);
   glDepthFunc(GL_LEQUAL);
 
   setShader(&ShaderLoader::getShader("diffuse.frag"));
@@ -197,7 +190,7 @@ void Renderer::renderScene(const Camera &camera) {
       const Transform &t = e.getComponent<Transform>();
       const LightSource &ls = e.getComponent<LightSource>();
 
-      if (!ls.enabled) {
+      if (not ls.enabled) {
         continue;
       }
 
@@ -216,10 +209,6 @@ void Renderer::renderScene(const Camera &camera) {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-/**
- * Renders all the entities in the scene regardless of shading
- * @param cam The camera from which we look at the scene
- */
 void Renderer::renderEntities(const Camera &cam) {
   for (Entity &e : scene->entities) {
     if (e.hasComponent<MeshDrawable>()) {
@@ -229,11 +218,6 @@ void Renderer::renderEntities(const Camera &cam) {
   renderEntity(cam, scene->end);
 }
 
-/**
- * Renders a single entity regardless of shading
- * @param cam The camera from which we look at the entity
- * @param e   The entity to render
- */
 void Renderer::renderEntity(const Camera &cam, const Entity &e) {
   MeshDrawable &drawable = e.getComponent<MeshDrawable>();
   Matrix4f mtx;
@@ -242,10 +226,6 @@ void Renderer::renderEntity(const Camera &cam, const Entity &e) {
   renderMesh(cam, mtx, drawable.mesh, drawable.material);
 }
 
-/**
- * Renders the player character using ambient shading
- * @param cam The camera from which we look at the player
- */
 void Renderer::renderPlayer(const Camera &cam) {
   const Transform &t = scene->player.getComponent<Transform>();
   Matrix4f mtx;
@@ -259,11 +239,6 @@ void Renderer::renderPlayer(const Camera &cam) {
   renderMesh(cam, mtx, dummy, mat);
 }
 
-/**
- * Renders the portal into the stencil buffer
- * @param cam    The camera from which we look at the portal
- * @param portal The entity that has the portal component
- */
 void Renderer::renderPortalStencil(const Camera &cam, const Entity &portal) {
   glClear(GL_STENCIL_BUFFER_BIT);
 
@@ -289,12 +264,6 @@ void Renderer::renderPortalStencil(const Camera &cam, const Entity &portal) {
   glDepthMask(GL_TRUE);
 }
 
-/**
- * Renders a full portal and its content
- * @param cam         The camera from which we look at the camera
- * @param portal      The portal to render
- * @param otherPortal The other portal necessary for placing the camera correctly
- */
 void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entity &otherPortal) {
   if (portal.getComponent<Portal>().open and otherPortal.getComponent<Portal>().open) {
     glEnable(GL_STENCIL_TEST);
@@ -318,11 +287,6 @@ void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entit
   }
 }
 
-/**
- * Render the glowing circle around the portal
- * @param cam    The camera from which we look at the portal
- * @param portal The portal on which to draw the overlay
- */
 void Renderer::renderPortalOverlay(const Camera &cam, const Entity &portal) {
   const Portal &p = portal.getComponent<Portal>();
   if (p.open) {
@@ -336,12 +300,6 @@ void Renderer::renderPortalOverlay(const Camera &cam, const Entity &portal) {
   }
 }
 
-/**
- * Renders the simplex noise in the portal if only one portal is active
- * @param cam    The camera from which we look at the portal
- * @param portal The portal in which to draw the noise
- * @param fade   The fade factor with which to multiply the noise
- */
 void Renderer::renderPortalNoise(const Camera &cam, const Entity &portal, float fade) {
   Matrix4f mtx;
   portal.getComponent<Transform>().getModelMtx(mtx);
@@ -361,22 +319,12 @@ void Renderer::renderPortalNoise(const Camera &cam, const Entity &portal, float 
   renderMesh(cam, mtx, p.overlayMesh, p.maskTex);
 }
 
-/**
- * Renders a string to the screen using signed-distance field text rendering.
- * The text is rendered in the font that is currently set with setFont().
- * @param cam  The camera from which we look at the text
- * @param text The text to render
- * @param x    The x-coordinate of the top left corner of the text in window coordinates
- * @param y    The y-coordinate of the top left corner of the text in window coordinates
- */
-void Renderer::renderText(const Camera &cam, const std::string &text, int x, int y) {
-  glClear(GL_DEPTH_BUFFER_BIT);
-
+void Renderer::renderText(const Camera &cam, const std::string &text, Vector3f vector) {
   // FIXME This should be determined by the currently set font
   const Material &mat = MaterialLoader::fromTexture("Pacaya.png");
   setShader(&ShaderLoader::getShader("text.frag"));
-
-  Vector2f position(x, y);
+  glUniform4f(shader->uni("color"), fontColor.x, fontColor.y, fontColor.z, fontColor.w);
+  Vector2f position(vector.x, vector.y);
   Matrix4f mtx;
 
   const char *array = text.c_str();
@@ -389,7 +337,7 @@ void Renderer::renderText(const Camera &cam, const std::string &text, int x, int
     mtx.setIdentity();
     mtx.translate(Vector3f(position.x + letter.xOffset * font->size,
                   position.y + letter.yOffset * font->size,
-                  -10));
+                  vector.z));
 
     mtx.scale(Vector3f(letter.width * font->size,
                       letter.height * font->size, 1));
@@ -399,15 +347,8 @@ void Renderer::renderText(const Camera &cam, const std::string &text, int x, int
   }
 }
 
-/**
- * Renders a mesh with the specified material and transform determined by the
- * given modelMatrix.
- * @param cam    The camera from which we look at the mesh
- * @param mdlMtx The model matrix determining the position, rotation and scale of the mesh
- * @param mesh   The mesh to render
- * @param mat    The material to render the mesh with
- */
-void Renderer::renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat) {
+void Renderer::renderMesh(const Camera &cam, Matrix4f &mdlMtx,
+                          const Mesh &mesh, const Material *mat) {
   Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
   glUniformMatrix4fv(shader->uni("projectionMatrix"), 1, false, projMatrix.toArray());
   Matrix4f viewMatrix; cam.getViewMatrix(viewMatrix);
@@ -449,14 +390,8 @@ void Renderer::renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh,
   glBindVertexArray(0);
 }
 
-/**
- * Set the camera in the portal so rendering from that portal is possible
- * @param cam         The camera from which we look at the portal
- * @param dest        The camera to move inside the portal and point in the right direction
- * @param portal      The portal in which to place the camera
- * @param otherPortal The counterpart of the portal
- */
-void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal) {
+void Renderer::setCameraInPortal(const Camera &cam, Camera &dest,
+                                 const Entity &portal, const Entity &otherPortal) {
   Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
   p1mat.translate(p1T.position);
@@ -481,13 +416,17 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &
 /**
  * TODO Documentation required.
  */
-Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj) {
+Matrix4f Renderer::clipProjMat(const Entity &ent,
+                               const Matrix4f &view, const Matrix4f &proj) {
   const Transform &t = ent.getComponent<Transform>();
-  Vector4f clipPlane(Math::toDirection(t.rotation), -dot(Math::toDirection(t.rotation), t.position));
+  Vector4f clipPlane(Math::toDirection(t.rotation),
+                     -dot(Math::toDirection(t.rotation),
+                          t.position));
   clipPlane = inverse(transpose(view)) * clipPlane;
 
-  if (clipPlane.w > 0.f)
+  if (clipPlane.w > 0.f){
     return proj;
+  }
 
   Vector4f q = inverse(proj) * Vector4f(
     sign(clipPlane.x),

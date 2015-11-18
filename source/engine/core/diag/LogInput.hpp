@@ -14,10 +14,10 @@ class LogInput {
 protected:
   Logger &sink;
   LogLevel lvl;
-  std::string buf;
+  std::string buf, tag;
 
 public:
-  LogInput(Logger &sink, LogLevel lvl);
+  LogInput(Logger &sink, LogLevel lvl, const std::string &tag = "");
   ~LogInput();
 
   LogInput(const LogInput&) = delete;

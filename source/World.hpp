@@ -23,12 +23,8 @@ class JavascriptSystem;
 const float GRAVITY = 0.5;
 
 class Window;
-class Editor;
 
 class World {
-private:
-  friend Editor;
-
 public:
   World();
   void create();
@@ -43,18 +39,16 @@ public:
   void render();
   Entity& getPlayer();
   void hidePortals();
-  bool isEditorShown;
   std::string currentScenePath;
   static float gravity;
   Scene *scene;
-  std::stack<HandleGameFunction> stateFunctionStack;  
+  std::stack<HandleGameFunction> stateFunctionStack;
 private:
   double gameTime;
   uint32_t lastUpdateTime;
   bool wasF5Down = false;
   bool wasTabDown = false;
   Renderer *renderer;
-  Editor *editor;
   std::mt19937 generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;

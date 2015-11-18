@@ -41,7 +41,6 @@
 #include <engine/core/state/GameState.hpp>
 #include <SDL2/SDL_keyboard.h>
 
-#include "Editor.hpp"
 #include "Input.hpp"
 #include "Portal.hpp"
 #include "Window.hpp"
@@ -53,7 +52,6 @@ float World::gravity = GRAVITY;
 
 World::World() :
   scene(nullptr),
-  isEditorShown(false),
   gameTime(0),
   config(Environment::getConfig()) {
   stateFunctionStack.push(&GameState::handleRunning);
@@ -61,7 +59,6 @@ World::World() :
 }
 
 void World::create() {
-  editor = new Editor(*this);
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
   js = new JavascriptSystem();
@@ -70,14 +67,12 @@ void World::create() {
   std::random_device rd;
   generator = std::mt19937(rd());
 
-  bool done = false;
   std::string mapPath = config.mapPath;
   if (mapPath.length() > 0) {
     loadSceneFromPath(mapPath);
-    done = true;
     return;
-  } 
-  
+  }
+
   try {
     std::string map = config.map;
     loadScene(map);
@@ -94,7 +89,6 @@ void World::setRendererWindow(Window *win) {
 }
 
 void World::destroy() {
-  delete editor;
   delete renderer;
   delete scene;
   delete js;
@@ -105,8 +99,9 @@ void World::loadScene(const std::string &path) {
   delete scene;
   currentScenePath = path;
   scene = MapLoader::getScene(path);
-  
+
   Environment::dispatcher.dispatch(Event::loadScene);
+  renderer->setScene(scene);
 }
 
 void World::loadSceneFromPath(const std::string &path) {
@@ -114,8 +109,8 @@ void World::loadSceneFromPath(const std::string &path) {
   currentScenePath = path;
   scene = MapLoader::getSceneFromPath(path);
   Environment::dispatcher.dispatch(Event::loadScene);
+  renderer->setScene(scene);
 }
-
 
 void World::update() {
   uint32_t updateTime = SDL_GetTicks();
@@ -142,14 +137,14 @@ void World::update() {
 
   //Y collision
   BoxCollider bboxY(Vector3f(plrTform.position.x, pos.y, plrTform.position.z), plrTform.scale);
-  
+
   if (collidesWithWalls(bboxY)) {
     bool portaling = false;
     portaling = WorldHelper::isPlayerPortalingY(bboxY, &player, scene);
 
     if (not portaling and not plrMotion.noclip) {
       if (plrMotion.velocity.y < 0) {
-        if(plrMotion.velocity.y < -HURT_VELOCITY) {
+        if (plrMotion.velocity.y < -HURT_VELOCITY) {
           std::uniform_int_distribution<> dis(0, PLAYER_FALL_SOUND.size()-1);
           player.getComponent<SoundSource>().playSound(
             Environment::getDataDir() + PLAYER_FALL_SOUND[dis(generator)]);
@@ -198,10 +193,13 @@ void World::update() {
           player.getComponent<Health>().kill();
           System::Log(Verbose) << "Death touched.";
         } else if (trigger.type == "win") {
-          if(currentLevel + 1 < mapList.size()) {
+          if (currentLevel + 1 < mapList.size()) {
             currentLevel++;
+            loadScene(mapList[currentLevel]);
+          } else {
+            scene->screen->enabled = true;
           }
-          loadScene(mapList[currentLevel]);
+
           System::Log(Verbose) << "Win touched.";
         } else if (trigger.type == "map") {
           System::Log(Verbose) << "Map trigger touched.";
@@ -260,10 +258,14 @@ void World::update() {
   //Check if the end of the level has been reached
   float distToEnd = (scene->end.getComponent<Transform>().position - plrTform.position).length();
   if (distToEnd < 1) {
-    if(currentLevel + 1 < mapList.size()) {
+    if (currentLevel + 1 < mapList.size()) {
       currentLevel++;
+      loadScene(mapList[currentLevel]);
+    } else {
+      scene->screen->enabled = true;
+      scene->screen->title   = "Game Over";
+      scene->screen->text    = "Hit q to quit the game.";
     }
-    loadScene(mapList[currentLevel]);
   }
 
   lastUpdateTime = updateTime;
@@ -285,11 +287,7 @@ void World::shootPortal(int button) {
 }
 
 void World::render() {
-  renderer->setScene(scene);
   renderer->render();
-  if (isEditorShown) {
-    editor->renderUI();
-  }
 }
 
 Entity& World::getPlayer() {

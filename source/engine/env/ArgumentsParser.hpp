@@ -12,7 +12,7 @@ private:
   static std::string mapName;
   static std::string mapPath;
 public:
-  static void setEnvironmentFromArgs(int argc, char **argv);
+  static void setEnvironmentFromArgs(const int argc, char **argv);
   static void populateConfig();
 };
 

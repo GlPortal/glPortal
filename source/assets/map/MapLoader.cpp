@@ -67,9 +67,9 @@ Scene* MapLoader::getSceneFromPath(const std::string &path) {
     extractWalls();
     extractAcids();
     extractTriggers();
-    System::Log(Info) << "Map " << path << " loaded";
+    System::Log(Info, "MapLoader") << "Map " << path << " loaded";
   } else {
-    System::Log(Error) << "Failed to load map " << Environment::getDataDir()
+    System::Log(Error, "MapLoader") << "Failed to load map " << Environment::getDataDir()
                        << "/" << path << ".xml";
   }
   return scene;

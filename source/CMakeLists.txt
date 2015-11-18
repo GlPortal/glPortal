@@ -16,8 +16,9 @@ add_executable(${EXE_NAME}
   engine/core/math/Matrix4f.cpp
   engine/core/math/Matrix3f.cpp
   engine/core/math/Math.cpp
+  engine/core/diag/AnsiConsoleLogger.cpp
   engine/core/diag/Logger.cpp
-  engine/core/diag/ConsoleLogger.cpp
+  engine/core/diag/StdoutLogger.cpp
   engine/core/diag/LogInput.cpp
   engine/core/event/Dispatcher.cpp
   engine/core/event/observer/FlagObserver.cpp

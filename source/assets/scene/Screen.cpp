@@ -2,11 +2,7 @@
 
 namespace glPortal {
 
-Screen::Screen(std::string title, std::string text) {
-  this->title = title;
-  this->text  = text;
-  this->enabled = true;
-  this->alpha = 1;
+Screen::Screen(std::string title, std::string text):
+  title(title), text(text), enabled(true), alpha(1) {
 }
 } /* namespace glPortal */
-
