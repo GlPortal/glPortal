@@ -98,7 +98,6 @@ void PlayerMotion::move(float dtime) {
       }
     }
 
-
     if ((Input::isKeyDown(SDL_SCANCODE_SPACE) || Input::isKeyDown(SDL_SCANCODE_BACKSPACE)) && grounded) {
       std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);
       entity.getComponent<SoundSource>().playSound(
