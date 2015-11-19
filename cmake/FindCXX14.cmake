@@ -3,24 +3,24 @@
 # a small subset of the language.
 #
 # The following variables are set:
-#   CXX11_FLAGS - flags to add to the CXX compiler for C++11 support
-#   CXX11_FOUND - true if the compiler supports C++11
+#   CXX14_FLAGS - flags to add to the CXX compiler for C++11 support
+#   CXX14_FOUND - true if the compiler supports C++11
 #
 # TODO: When compilers starts implementing the whole C++11, check the full set
 
 include(CheckCXXSourceCompiles)
 include(FindPackageHandleStandardArgs)
 
-set(CXX11_FLAG_CANDIDATES
+set(CXX14_FLAG_CANDIDATES
     #Gnu and Intel Linux
-    "-std=c++0x"
+    "-std=c++14"
     #Microsoft Visual Studio, and everything that automatically accepts C++11
     " "
     #Intel windows
-    "/Qstd=c++0x"
+    "/Qstd=c++14"
     )
 
-set(CXX11_TEST_SOURCE
+set(CXX14_TEST_SOURCE
 "
 class Matrix
 {
@@ -42,20 +42,20 @@ int main()
 }
 ")
 
-foreach(FLAG ${CXX11_FLAG_CANDIDATES})
+foreach(FLAG ${CXX14_FLAG_CANDIDATES})
     set(SAFE_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
     set(CMAKE_REQUIRED_FLAGS "${FLAG}")
-    unset(CXX11_FLAG_DETECTED CACHE)
+    unset(CXX14_FLAG_DETECTED CACHE)
     message(STATUS "Try C++11 flag = [${FLAG}]")
-    check_cxx_source_compiles("${CXX11_TEST_SOURCE}" CXX11_FLAG_DETECTED)
+    check_cxx_source_compiles("${CXX14_TEST_SOURCE}" CXX14_FLAG_DETECTED)
     set(CMAKE_REQUIRED_FLAGS "${SAFE_CMAKE_REQUIRED_FLAGS}")
-    if(CXX11_FLAG_DETECTED)
-        set(CXX11_FLAGS_INTERNAL "${FLAG}")
+    if(CXX14_FLAG_DETECTED)
+        set(CXX14_FLAGS_INTERNAL "${FLAG}")
         break()
-    endif(CXX11_FLAG_DETECTED)
-endforeach(FLAG ${CXX11_FLAG_CANDIDATES})
+    endif(CXX14_FLAG_DETECTED)
+endforeach(FLAG ${CXX14_FLAG_CANDIDATES})
 
-set(CXX11_FLAGS "${CXX11_FLAGS_INTERNAL}")
+set(CXX14_FLAGS "${CXX14_FLAGS_INTERNAL}")
 
-find_package_handle_standard_args(CXX11 DEFAULT_MSG CXX11_FLAGS)
-mark_as_advanced(CXX11_FLAGS)
+find_package_handle_standard_args(CXX14 DEFAULT_MSG CXX14_FLAGS)
+mark_as_advanced(CXX14_FLAGS)

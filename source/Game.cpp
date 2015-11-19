@@ -23,7 +23,7 @@ namespace glPortal {
 Fps Game::fps;
 
 Game::Game() : closed(false) {
-  controller = std::unique_ptr<GameController>(new GameController(this));
+  controller = std::make_unique<GameController>(this);
   MusicObserver musicObserver;
   musicObserver.addCallback(Event::loadScene, std::bind(&MusicObserver::loadMap, musicObserver));
   window.create("GlPortal");
