@@ -42,8 +42,8 @@ Game::Game() : closed(false) {
 
 World* Game::getWorld() {
   return &world;
-}  
-  
+}
+
 void Game::update() {
   SDL_Event event;
   unsigned int nextUpdate = SDL_GetTicks();
