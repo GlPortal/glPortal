@@ -1,6 +1,5 @@
 #include "World.hpp"
 
-#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_timer.h>
 #include <climits>
 #include <cmath>
@@ -37,8 +36,6 @@
 #include <engine/core/math/Vector3f.hpp>
 #include <engine/core/event/Dispatcher.hpp>
 #include <engine/core/state/GameState.hpp>
-
-#include <SDL2/SDL_keyboard.h>
 
 #include "Input.hpp"
 #include "Portal.hpp"
