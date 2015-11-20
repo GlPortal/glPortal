@@ -23,7 +23,7 @@ namespace glPortal {
 Fps Game::fps;
 
 Game::Game() : closed(false) {
-  controller = new GameController(this);
+  controller = std::make_unique<GameController>(this);
   MusicObserver musicObserver;
   musicObserver.addCallback(Event::loadScene, std::bind(&MusicObserver::loadMap, musicObserver));
   window.create("GlPortal");
@@ -41,8 +41,8 @@ Game::Game() : closed(false) {
 
 World* Game::getWorld() {
   return &world;
-}  
-  
+}
+
 void Game::update() {
   SDL_Event event;
   unsigned int nextUpdate = SDL_GetTicks();
@@ -65,7 +65,6 @@ void Game::update() {
   }
   world.destroy();
   window.close();
-  delete(controller);
 }
 
 void Game::close() {

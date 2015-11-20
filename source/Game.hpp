@@ -24,7 +24,7 @@ public:
 private:
   Window window;
   World world;
-  GameController *controller;
+  std::unique_ptr<GameController> controller;
   bool closed;
 };
 

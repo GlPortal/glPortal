@@ -1,6 +1,5 @@
 #include "World.hpp"
 
-#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_timer.h>
 #include <climits>
 #include <cmath>
@@ -9,26 +8,17 @@
 
 #include <assets/map/MapLoader.hpp>
 #include <assets/map/MapListLoader.hpp>
-#include <assets/model/MeshLoader.hpp>
-#include <assets/texture/TextureLoader.hpp>
 #include <assets/scene/SceneHelper.hpp>
-
 #include <assets/scene/Scene.hpp>
-#include <assets/model/Mesh.hpp>
-#include <assets/texture/Texture.hpp>
 
 #include <engine/renderer/Renderer.hpp>
 #include <engine/env/Environment.hpp>
 #include <engine/BoxCollider.hpp>
-#include <engine/Ray.hpp>
-#include <engine/Camera.hpp>
-#include <engine/SoundManager.hpp>
 
 #include <engine/component/Health.hpp>
 #include <engine/component/Transform.hpp>
 #include <engine/component/Trigger.hpp>
 #include <engine/component/AACollisionBox.hpp>
-#include <engine/component/MeshDrawable.hpp>
 #include <engine/component/SoundSource.hpp>
 #include <engine/component/LightSource.hpp>
 #include "PlayerMotion.hpp"

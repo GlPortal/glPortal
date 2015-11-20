@@ -57,9 +57,13 @@ void UiRenderer::renderScreen(Renderer &renderer) {
   widget.scale(Vector3f(vpWidth, vpHeight, 1));
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   renderer.setShader(&ShaderLoader::getShader("color.frag"));
-  glUniform4f(renderer.shader->uni("color"), 0, 0, 0, renderer.scene->screen->alpha);
+  glUniform4f(renderer.shader->uni("color"),
+              renderer.scene->screen->backgroundColor.x,
+              renderer.scene->screen->backgroundColor.y,
+              renderer.scene->screen->backgroundColor.z,
+              renderer.scene->screen->backgroundColor.w);
   renderer.renderMesh(camera, widget, mesh, nullptr);
-
+  renderer.setFontColor(renderer.scene->screen->textColor);
   renderer.setFontSize(4);
   renderer.renderText(camera,
                       renderer.scene->screen->title,

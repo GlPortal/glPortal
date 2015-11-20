@@ -10,8 +10,8 @@ project(${EXE_NAME})
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 
-find_package(CXX11 REQUIRED)
-set(CMAKE_CXX_FLAGS "${CXX11_FLAGS} ${CMAKE_CXX_FLAGS}")
+find_package(CXX14 REQUIRED)
+set(CMAKE_CXX_FLAGS "${CXX14_FLAGS} ${CMAKE_CXX_FLAGS}")
 
 find_package(OpenGL REQUIRED)
 find_package(PkgConfig REQUIRED)
