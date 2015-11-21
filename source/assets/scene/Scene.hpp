@@ -19,6 +19,7 @@ class Scene {
 public:
   Scene();
   Entity player;
+  Entity terminal;
   Camera camera;
   std::map<int, Material> materials;
   std::list<Entity> entities;

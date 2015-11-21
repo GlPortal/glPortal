@@ -44,13 +44,12 @@ namespace glPortal {
  */
 Scene* MapLoader::getSceneFromPath(const std::string &path) {
   scene = new Scene();
-  // FIXME: shall we init player here? Probably not, and do it ONCE.
   scene->player.addComponent<Transform>();
   scene->player.addComponent<PlayerMotion>();
   scene->player.addComponent<Health>();
   scene->player.addComponent<SoundSource>();
   scene->player.addComponent<SoundListener>();
-
+  scene->terminal.addComponent<Transform>();
   XMLDocument doc;
   XMLError error = doc.LoadFile(path.c_str());
 
