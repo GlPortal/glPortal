@@ -43,22 +43,9 @@ since you want to install the files for development there is a dev in the name.
 Pretty much like libfoo-dev for most libraries.
 
 # Downloading source code
-We have several branches on git which reflects development status.
-
-## Stable
-```bash
-git clone --depth 1 -b stable  https://github.com/GlPortal/glPortal.git
-cd glPortal
-sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-git submodule init
-git submodule update
-```
-
-## Development
 ```bash
 git clone https://github.com/GlPortal/glPortal.git
 cd glPortal
-sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
 git submodule init
 git submodule update
 ```
