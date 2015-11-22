@@ -187,9 +187,6 @@ void World::update(double dtime) {
     }
   }*/
 
-  //Add velocity to the player position
-  plrTform.position += plrMotion.velocity;
-
   //Parent camera to player
   scene->camera.setPerspective();
   int vpWidth, vpHeight;

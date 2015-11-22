@@ -4,6 +4,7 @@
 #include <engine/component/SoundSource.hpp>
 #include <engine/component/SoundListener.hpp>
 #include <engine/component/RigidBody.hpp>
+#include <engine/component/Player.hpp>
 #include "../../PlayerMotion.hpp"
 
 namespace glPortal {
@@ -14,7 +15,9 @@ Scene::Physics::Physics(Scene &parent) :
   collisionConfiguration(new btDefaultCollisionConfiguration()),
   dispatcher(new btCollisionDispatcher(collisionConfiguration)),
   solver(new btSequentialImpulseConstraintSolver),
-  world(new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration)) {
+  world(new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration)),
+  gpCallback(new btGhostPairCallback) {
+  broadphase->getOverlappingPairCache()->setInternalGhostPairCallback(gpCallback);
 }
 
 void Scene::Physics::setGravity(float x, float y, float z) {
@@ -22,6 +25,7 @@ void Scene::Physics::setGravity(float x, float y, float z) {
 }
 
 Scene::Physics::~Physics() {
+  delete gpCallback;
   delete world;
   delete solver;
   delete dispatcher;
@@ -36,12 +40,11 @@ Scene::Scene() :
   start(nullptr),
   end(nullptr) {
   player = &entities.create();
-  player->addComponent<Transform>();
-  player->getComponent<Transform>().position = Vector3f(2.5, 1, 5);
+  player->addComponent<Transform>().position = Vector3f(2.5, 1, 5);
   player->addComponent<Health>();
   player->addComponent<SoundSource>();
   player->addComponent<SoundListener>();
-  player->addComponent<RigidBody>(1, std::make_shared<btCapsuleShape>(.4, 1));
+  player->addComponent<Player>();
   player->addComponent<PlayerMotion>();
 }
 

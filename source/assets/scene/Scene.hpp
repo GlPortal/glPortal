@@ -5,6 +5,7 @@
 #include <map>
 
 #include <bullet/btBulletDynamicsCommon.h>
+#include <bullet/BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <assets/gui/GUIButton.hpp>
 #include <assets/material/Material.hpp>
@@ -27,6 +28,7 @@ public:
     btCollisionDispatcher *dispatcher;
     btSequentialImpulseConstraintSolver *solver;
     btDiscreteDynamicsWorld *world;
+    btGhostPairCallback *gpCallback;
     Physics(Scene &parent);
     void setGravity(float x, float y, float z);
     ~Physics();
