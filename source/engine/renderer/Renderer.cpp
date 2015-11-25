@@ -437,7 +437,6 @@ Matrix4f Renderer::clipProjMat(const Entity &ent,
 
   Vector4f c = clipPlane * (2.0f / dot(clipPlane, q));
 
-  // third row = clip plane - fourth row
   Matrix4f newProj = proj;
   newProj[2] = c.x - newProj[3];
   newProj[6] = c.y - newProj[7];
