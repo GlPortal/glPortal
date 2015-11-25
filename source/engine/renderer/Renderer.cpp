@@ -277,7 +277,6 @@ void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entit
     // Draw the whole scene onto the stencil containing the player and recursive portal overlays
     Camera portalCam;
     setCameraInPortal(cam, portalCam, portal, otherPortal);
-    // TODO: rework to allow recursive rendering, and draw other portal pairs
     renderPlayer(portalCam);
     renderScene(portalCam);
     renderPortalOverlay(portalCam, portal);
@@ -408,8 +407,6 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest,
   dest.setAspect(cam.getAspect());
   dest.setFovy(cam.getFovy());
   dest.setZNear((p1T.position - cam.getPosition()).length());
-  //Matrix4f proj; dest.getProjMatrix(proj);
-  //dest.setProjMatrix(clipProjMat(portal, destView, proj));
   dest.setViewMatrix(destView);
 }
 
