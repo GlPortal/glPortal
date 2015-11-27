@@ -1,5 +1,5 @@
 #include "SceneHelper.hpp"
-#include <PortalFilterCallback.hpp>
+#include <engine/physics/Uncollider.hpp>
 
 namespace glPortal {
 
@@ -12,8 +12,8 @@ EntityPair& SceneHelper::getPortalPairFromScene(int n, Scene *scene) {
       Entity &pEnt1 = scene->entities.create();
       Entity &pEnt2 = scene->entities.create();
       // TODO Handle collision subtraction better
-      PortalFilterCallback::portals.emplace_back(&pEnt1);
-      PortalFilterCallback::portals.emplace_back(&pEnt2);
+      Uncollider::portals.emplace_back(&pEnt1);
+      Uncollider::portals.emplace_back(&pEnt2);
       pEnt1.addComponent<Transform>();
       pEnt1.addComponent<Portal>();
       LightSource &ls1 = pEnt1.addComponent<LightSource>();

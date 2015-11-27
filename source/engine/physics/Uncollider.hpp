@@ -1,23 +1,24 @@
-#ifndef PORTAL_FILTER_CALLBACK_HPP
-#define PORTAL_FILTER_CALLBACK_HPP
+#ifndef UNCOLLIDER_HPP
+#define UNCOLLIDER_HPP
 
 #include <bullet/BulletCollision/BroadphaseCollision/btOverlappingPairCache.h>
 #include <assets/scene/Scene.hpp>
 
 namespace glPortal {
 
-class PortalFilterCallback {
+class Uncollider {
 private:
   Scene &scene;
 
 public:
   static std::vector<Entity*> portals;
+  static bool isPointInUncollideVolume(const btVector3 &p);
 
-  PortalFilterCallback(Scene&);
+  Uncollider(Scene&);
   void beforePhysicsStep();
   static void nearCallback(btBroadphasePair&, btCollisionDispatcher&, const btDispatcherInfo&);
 };
 
 } /* namespace glPortal */
 
-#endif /* PORTAL_FILTER_CALLBACK_HPP */
+#endif /* UNCOLLIDER_HPP */

@@ -4,12 +4,12 @@
 
 namespace glPortal {
 
-class PortalFilterCallback;
+class Uncollider;
 
 class PhysicsSystem {
 private:
   Scene *scene;
-  PortalFilterCallback *filterCallback;
+  Uncollider *filterCallback;
 
 public:
   PhysicsSystem();

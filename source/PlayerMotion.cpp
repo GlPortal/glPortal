@@ -40,7 +40,7 @@ void PlayerMotion::move(float dtime) {
        jumping       = Input::isKeyDown(SDL_SCANCODE_SPACE) or Input::isKeyDown(SDL_SCANCODE_BACKSPACE);
   float rot = rotation.y;
   Vector3f movement;
-  btKinematicCharacterController &ctrl = *entity.getComponent<Player>().controller;
+  KinematicCharacterController &ctrl = *entity.getComponent<Player>().controller;
   Transform &plrTform = entity.getComponent<Transform>();
   plrTform.position = entity.getComponent<Player>().obj->getWorldTransform().getOrigin();
 

@@ -25,6 +25,13 @@ float PortalHelper::getDistanceFromCoordinates(const float &contactCoordinate, c
 
 bool PortalHelper::isInPortal(const Entity &entity, const BoxCollider &collider) {
   // TODO reimplment with Bullet
+  /*
+    vec normalA;
+    vec AB = B - A;
+    double dot = dot(AB, normalA);
+    bool inFront = (dot > 0);
+    OK we're done with portal passthrough detection. isPortalling && isBehindPlane == hasPassedThrough
+  */
   return false;
 }
 

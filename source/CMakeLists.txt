@@ -41,7 +41,9 @@ add_executable(${EXE_NAME}
   engine/env/ArgumentsParser.cpp
   engine/env/System.cpp
   engine/env/Config.cpp
+  engine/physics/KinematicCharacterController.cpp
   engine/physics/PhysicsDebugDraw.cpp
+  engine/physics/Uncollider.cpp
   engine/renderer/Renderer.cpp
   engine/system/PhysicsSystem.cpp
   util/sdl/Fps.cpp
@@ -51,7 +53,6 @@ add_executable(${EXE_NAME}
   Input.cpp
   PlayerMotion.cpp
   Portal.cpp
-  PortalFilterCallback.cpp
   World.cpp
   Window.cpp
   WorldHelper.cpp

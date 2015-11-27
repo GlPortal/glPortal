@@ -8,6 +8,7 @@
 #include <bullet/BulletDynamics/Character/btKinematicCharacterController.h>
 #include <engine/Entity.hpp>
 #include <engine/EntityManager.hpp>
+#include <engine/physics/KinematicCharacterController.hpp>
 #include <assets/scene/Scene.hpp>
 #include "Transform.hpp"
 
@@ -17,7 +18,7 @@ class Player : public Component {
 public:
   std::shared_ptr<btConvexShape> shape;
   btPairCachingGhostObject *obj;
-  btKinematicCharacterController *controller;
+  KinematicCharacterController *controller;
 
   Player(Entity &ent) :
     Component(ent) {
@@ -30,7 +31,7 @@ public:
     shape = std::make_shared<btCapsuleShape>(.4, 1);
     obj->setCollisionShape(shape.get());
     obj->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-    controller = new btKinematicCharacterController(obj, shape.get(), 0.35);
+    controller = new KinematicCharacterController(obj, shape.get(), 0.35);
     entity.manager.scene.physics.world->addCollisionObject(obj,
       btBroadphaseProxy::CharacterFilter,
       btBroadphaseProxy::StaticFilter | btBroadphaseProxy::DefaultFilter);

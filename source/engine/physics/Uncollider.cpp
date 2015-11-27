@@ -1,11 +1,11 @@
-#include "PortalFilterCallback.hpp"
+#include "Uncollider.hpp"
 #include <cmath>
 
 namespace glPortal {
 
-std::vector<Entity*> PortalFilterCallback::portals;
+std::vector<Entity*> Uncollider::portals;
 
-PortalFilterCallback::PortalFilterCallback(Scene &scene) : 
+Uncollider::Uncollider(Scene &scene) : 
   scene(scene) {
 }
 
@@ -19,15 +19,15 @@ public:
   }
 };
 
-static bool isCollisionSubtracted(const btVector3 &p) {
-  if (PortalFilterCallback::portals.size() > 0) {
+bool Uncollider::isPointInUncollideVolume(const btVector3 &p) {
+  if (portals.size() > 0) {
     ContactResultHolder cb;
     btDefaultMotionState ms;
     ms.setWorldTransform(btTransform(btQuaternion(), p));
     btSphereShape sh(0);
     btRigidBody::btRigidBodyConstructionInfo ci(0, &ms, &sh, btVector3(0, 0, 0));
     btRigidBody rb(ci);
-    for (Entity *pEnt : PortalFilterCallback::portals) {
+    for (Entity *pEnt : portals) {
       Portal &pComp = pEnt->getComponent<Portal>();
       if (pComp.open and pComp.uncollider) {
         pEnt->manager.scene.physics.world->contactPairTest(
@@ -41,8 +41,8 @@ static bool isCollisionSubtracted(const btVector3 &p) {
   return false;
 }
 
-void PortalFilterCallback::beforePhysicsStep() {
-  for (Entity *pEnt : PortalFilterCallback::portals) {
+void Uncollider::beforePhysicsStep() {
+  for (Entity *pEnt : Uncollider::portals) {
     Portal &pComp = pEnt->getComponent<Portal>();
     if (pComp.open and pComp.uncollider) {
       btVector3 ext = ((btBoxShape*)(pComp.uncolliderShape.get()))
@@ -53,7 +53,7 @@ void PortalFilterCallback::beforePhysicsStep() {
   }
 }
 
-void PortalFilterCallback::nearCallback(btBroadphasePair &collisionPair,
+void Uncollider::nearCallback(btBroadphasePair &collisionPair,
   btCollisionDispatcher &dispatcher, const btDispatcherInfo &dispatchInfo) {
 
   btCollisionObject *colObj0 = (btCollisionObject*)collisionPair.m_pProxy0->m_clientObject;
@@ -76,7 +76,7 @@ void PortalFilterCallback::nearCallback(btBroadphasePair &collisionPair,
         for (int i = 0; i < contactPointResult.getPersistentManifold()->getNumContacts(); ++i) {
           const btManifoldPoint &pt = contactPointResult.getPersistentManifold()->getContactPoint(i);
           const btVector3 &cp = pt.getPositionWorldOnA();
-          if (isCollisionSubtracted(cp)) {
+          if (isPointInUncollideVolume(cp)) {
             contactPointResult.getPersistentManifold()->removeContactPoint(i--);
           }
         }

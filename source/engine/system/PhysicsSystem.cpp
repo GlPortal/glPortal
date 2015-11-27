@@ -3,8 +3,8 @@
 #include <engine/component/Transform.hpp>
 #include <engine/component/RigidBody.hpp>
 #include <assets/material/MaterialLoader.hpp>
+#include <engine/physics/Uncollider.hpp>
 #include <assets/model/MeshLoader.hpp>
-#include "../../PortalFilterCallback.hpp"
 
 namespace glPortal {
 
@@ -13,9 +13,9 @@ void PhysicsSystem::setScene(Scene *scene) {
   delete filterCallback;
 
   this->scene = scene;
-  filterCallback = new PortalFilterCallback(*scene);
+  filterCallback = new Uncollider(*scene);
   //scene->physics.world->getPairCache()->setOverlapFilterCallback(filterCallback);
-  scene->physics.dispatcher->setNearCallback(PortalFilterCallback::nearCallback);
+  scene->physics.dispatcher->setNearCallback(Uncollider::nearCallback);
 }
 
 PhysicsSystem::PhysicsSystem() : 
