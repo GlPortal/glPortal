@@ -5,6 +5,10 @@ Well done. You made the right decision. It's not even that hard.
 **Note:** Dependencies will change all the time so watch the cmake output carefuly for missing libraries.
 Make sure to check CmakeList.txt if is something missing.
 
+## Upgrade your os
+You will need very recent versions of all the dependencies. So please upgrade your os before proceeding.
+[ubuntu](http://www.ubuntu.com/download/desktop/upgrade)
+
 ## List of dependencies
 - assimp
 - epoxy
