@@ -7,7 +7,7 @@ Make sure to check CmakeList.txt if is something missing.
 
 ## Upgrade your os
 You will need very recent versions of all the dependencies. So please upgrade your os before proceeding.
-[ubuntu](http://www.ubuntu.com/download/desktop/upgrade)
+[upgrade ubuntu](http://www.ubuntu.com/download/desktop/upgrade)
 
 ## List of dependencies
 - assimp
