@@ -27,7 +27,7 @@ public:
     }
     obj = new btPairCachingGhostObject;
     Transform &tform = entity.getComponent<Transform>();
-    obj->setWorldTransform(btTransform(tform.orientation, tform.position));
+    obj->setWorldTransform(btTransform(tform.getOrientation(), tform.getPosition()));
     shape = std::make_shared<btCapsuleShape>(.4, 1);
     obj->setCollisionShape(shape.get());
     obj->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);

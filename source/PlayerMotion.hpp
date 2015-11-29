@@ -41,7 +41,6 @@ const std::array<const std::string,6> PLAYER_FOOT_SOUND =
   "/audio/sfx/character/fem_foot_1.ogg",
   "/audio/sfx/character/fem_foot_2.ogg",
   "/audio/sfx/character/fem_foot_3.ogg",
-#include <bullet/BulletDynamics/ConstraintSolver/btGeneric6DofConstraint.h>
   "/audio/sfx/character/fem_foot_4.ogg",
   "/audio/sfx/character/fem_foot_5.ogg",
   "/audio/sfx/character/fem_foot_6.ogg"
@@ -54,7 +53,7 @@ public:
     flying(false),
     noclip(false)/*,
     shape(.4, 1)*/ {
-    entity.getComponent<Transform>().scale = PLAYER_SIZE;
+    entity.getComponent<Transform>().setScale(PLAYER_SIZE);
 
     velocity.set(0, 0, 0);
     speed = RUNNING_SPEED;

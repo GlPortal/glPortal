@@ -104,11 +104,13 @@ void MapLoader::extractSpawn() {
   if (spawnElement) {
     scene->start = &scene->entities.create();
     Transform &t = scene->start->addComponent<Transform>();
-    XmlHelper::extractPosition(spawnElement, t.position);
+    Vector3f position;
+    XmlHelper::extractPosition(spawnElement, position);
+    t.setPosition(position);
     PlayerMotion &pm = scene->player->getComponent<PlayerMotion>();
     XmlHelper::extractRotation(spawnElement, pm.rotation);
     Transform &pt = scene->player->getComponent<Transform>();
-    pt.position = t.position;
+    pt.setPosition(position);
   } else {
     throw std::runtime_error("No spawn position defined.");
   }
@@ -138,7 +140,7 @@ void MapLoader::extractLights() {
 
     Entity &light = scene->entities.create();
     Transform &t = light.addComponent<Transform>();
-    t.position = lightPos;
+    t.setPosition(lightPos);
     LightSource &ls = light.addComponent<LightSource>();
     ls.color = lightColor;
     ls.distance = distance;
@@ -155,10 +157,12 @@ void MapLoader::extractDoor() {
     scene->end = &door;
     door.clearComponents();
     Transform &t = door.addComponent<Transform>();
-    XmlHelper::extractPosition(endElement, t.position);
+    Vector3f position;
+    XmlHelper::extractPosition(endElement, position);
+    t.setPosition(position);
     Vector3f eulerOrient;
     XmlHelper::extractRotation(endElement, eulerOrient);
-    t.orientation.setFromEuler(eulerOrient);
+    t.setOrientation(Quaternion().setFromEuler(eulerOrient));
     MeshDrawable &m = door.addComponent<MeshDrawable>();
     m.material = MaterialLoader::loadFromXML("door/door");
     m.mesh = MeshLoader::getMesh("Door.obj");
@@ -173,11 +177,15 @@ void MapLoader::extractWalls() {
       Entity &wall = scene->entities.create();
 
       Transform &t = wall.addComponent<Transform>();
-      XmlHelper::extractPosition(wallBoxElement, t.position);
+      Vector3f position;
+      XmlHelper::extractPosition(wallBoxElement, position);
+      t.setPosition(position);
       Vector3f eulerOrient;
       XmlHelper::extractRotation(wallBoxElement, eulerOrient);
-      t.orientation.setFromEuler(eulerOrient);
-      XmlHelper::extractScale(wallBoxElement, t.scale);
+      t.setOrientation(Quaternion().setFromEuler(eulerOrient));
+      Vector3f scale;
+      XmlHelper::extractScale(wallBoxElement, scale);
+      t.setScale(scale);
 
       int mid = -1;
       wallBoxElement->QueryIntAttribute("mid", &mid);
@@ -186,7 +194,7 @@ void MapLoader::extractWalls() {
       m.material.scaleU = m.material.scaleV = 2.f;
       m.mesh = MeshLoader::getPortalBox(wall);
       wall.addComponent<RigidBody>
-        (0, std::make_shared<btBoxShape>(btVector3(t.scale.x/2, t.scale.y/2, t.scale.z/2)));
+        (0, std::make_shared<btBoxShape>(btVector3(t.getScale().x/2, t.getScale().y/2, t.getScale().z/2)));
       wall.addComponent<AACollisionBox>().box = BoxCollider::generateCage(wall);
     } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != nullptr);
   }
@@ -200,8 +208,12 @@ void MapLoader::extractAcids() {
       Entity &acid = scene->entities.create();
 
       Transform &t = acid.addComponent<Transform>();
-      XmlHelper::extractPosition(acidElement, t.position);
-      XmlHelper::extractScale(acidElement, t.scale);
+      Vector3f position;
+      XmlHelper::extractPosition(acidElement, position);
+      t.setPosition(position);
+      Vector3f scale;
+      XmlHelper::extractScale(acidElement, scale);
+      t.setScale(scale);
 
       MeshDrawable &m = acid.addComponent<MeshDrawable>();
       m.material = MaterialLoader::loadFromXML("fluid/acid00");
@@ -219,8 +231,12 @@ void MapLoader::extractTriggers() {
       Entity &trigger = scene->entities.create();
 
       Transform &t = trigger.addComponent<Transform>();
-      XmlHelper::extractPosition(triggerElement, t.position);
-      XmlHelper::extractScale(triggerElement, t.scale);
+      Vector3f position;
+      XmlHelper::extractPosition(triggerElement, position);
+      t.setPosition(position);
+      Vector3f scale;
+      XmlHelper::extractScale(triggerElement, scale);
+      t.setScale(scale);
       
       Trigger &tgr = trigger.addComponent<Trigger>();
       tgr.type = triggerElement->Attribute("type");
@@ -241,10 +257,12 @@ void MapLoader::extractModels() {
 
       Entity &model = scene->entities.create();
       Transform &t = model.addComponent<Transform>();
-      XmlHelper::extractPosition(modelElement, t.position);
+      Vector3f position;
+      XmlHelper::extractPosition(modelElement, position);
+      t.setPosition(position);
       Vector3f eulerOrient;
       XmlHelper::extractRotation(modelElement, eulerOrient);
-      t.orientation.setFromEuler(eulerOrient);
+      t.setOrientation(Quaternion().setFromEuler(eulerOrient));
       MeshDrawable &m = model.addComponent<MeshDrawable>();
       m.material = MaterialLoader::fromTexture(texture);
       m.mesh = MeshLoader::getMesh(mesh);

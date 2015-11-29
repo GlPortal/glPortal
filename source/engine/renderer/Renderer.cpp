@@ -107,7 +107,8 @@ void Renderer::render(double dtime, const Camera &cam) {
         std::string distance = "lights[" + index + "].distance";
         std::string energy = "lights[" + index + "].energy";
         std::string specular = "lights[" + index + "].specular";
-        glUniform3f(diffuse.uni(position.c_str()), t.position.x, t.position.y, t.position.z);
+        const Vector3f &tposition = t.getPosition();
+        glUniform3f(diffuse.uni(position.c_str()), tposition.x, tposition.y, tposition.z);
         glUniform3f(diffuse.uni(color.c_str()), ls.color.x, ls.color.y, ls.color.z);
         glUniform1f(diffuse.uni(distance.c_str()), ls.distance);
         glUniform1f(diffuse.uni(energy.c_str()), ls.energy);
@@ -140,7 +141,8 @@ void Renderer::render(double dtime, const Camera &cam) {
         std::string distance = "lights[" + index + "].distance";
         std::string energy = "lights[" + index + "].energy";
         std::string specular = "lights[" + index + "].specular";
-        glUniform3f(metal.uni(position.c_str()), t.position.x, t.position.y, t.position.z);
+        const Vector3f &tposition = t.getPosition();
+        glUniform3f(metal.uni(position.c_str()), tposition.x, tposition.y, tposition.z);
         glUniform3f(metal.uni(color.c_str()), ls.color.x, ls.color.y, ls.color.z);
         glUniform1f(metal.uni(distance.c_str()), ls.distance);
         glUniform1f(metal.uni(energy.c_str()), ls.energy);
@@ -272,8 +274,8 @@ void Renderer::renderEntity(const Camera &cam, const Entity &e) {
 void Renderer::renderPlayer(const Camera &cam) {
   const Transform &t = scene->player->getComponent<Transform>();
   Matrix4f mtx;
-  mtx.translate(t.position+Vector3f(0, -.5f, 0));
-  mtx.rotate(t.orientation);
+  mtx.translate(t.getPosition() + Vector3f(0, -.5f, 0));
+  mtx.rotate(t.getOrientation());
   mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
   const Mesh &dummy = MeshLoader::getMesh("HumanToken.obj");
   const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
@@ -307,34 +309,34 @@ void Renderer::renderPortal(const Camera &cam, Entity &portal, const Entity &oth
   if (portal.getComponent<Portal>().open and otherPortal.getComponent<Portal>().open) {
     Transform &pt = portal.getComponent<Transform>();
     Transform &opt = otherPortal.getComponent<Transform>();
-    Vector3f displacement = pt.position - opt.position;
+    Vector3f displacement = pt.getPosition() - opt.getPosition();
     int recursionLevel = Environment::getConfig().getRecursionLevel();
     Camera portalCam;
 
-    Vector3f portalPosition = pt.position;
-    Quaternion portalOrientation = pt.orientation;
-    Vector3f portalScale = pt.scale;
+    Vector3f portalPosition = pt.getPosition();
+    Quaternion portalOrientation = pt.getOrientation();
+    Vector3f portalScale = pt.getScale();
     Vector3f portalDir = portal.getComponent<Portal>().getDirection();
     Vector3f otherPortalDir = otherPortal.getComponent<Portal>().getDirection();
     float dotProduct = dot(portalDir, otherPortalDir);
 
     if (abs(dotProduct) < 0.0001) {
       // The two portals' direction are perpendicular to each other
-      Quaternion RotDifference = conjugate(pt.orientation * conjugate(opt.orientation));
+      Quaternion RotDifference = conjugate(pt.getOrientation() * conjugate(opt.getOrientation()));
       displacement = toMatrix3f(RotDifference.toMatrix()).transform(displacement);
 
       // recursionLevel is set to 1, because we can't see past 1 level
       // when the portals are perpendicular to each other
       recursionLevel = 1;
 
-      pt.orientation = opt.orientation;
+      pt.setOrientation(opt.getOrientation());
     } else if (dotProduct == 1.0f) {
       // The two portals are facing the same direction
       recursionLevel = 0;
     }
 
     // Render portal from the deepest recursion level up for recursionLevel > 0
-    pt.position += displacement * (float)recursionLevel;
+    pt.setPosition(pt.getPosition() + displacement * (float)recursionLevel);
     for (int i = 0; i < recursionLevel; i++) {
       glEnable(GL_STENCIL_TEST);
       glClear(GL_STENCIL_BUFFER_BIT);
@@ -352,16 +354,16 @@ void Renderer::renderPortal(const Camera &cam, Entity &portal, const Entity &oth
 
       // Restore portal to its original position, then render the overlay,
       // so that the overlay will show up correctly
-      Vector3f tmpPosition = pt.position;
-      pt.position = portalPosition;
+      Vector3f tmpPosition = pt.getPosition();
+      pt.setPosition(portalPosition);
       renderPortalOverlay(portalCam, portal);
-      pt.position = tmpPosition;
+      pt.setPosition(tmpPosition);
 
       // Move the displaced portal one level back
-      pt.position -= displacement;
+      pt.setPosition(pt.getPosition() - displacement);
       // The next line only matters if the portals are perpendicular to each other
       // In all other cases, the displaced portal's orientation doesn't change
-      pt.orientation = portalOrientation;
+      pt.setOrientation(portalOrientation);
       setCameraInPortal(cam, portalCam, portal, otherPortal);
       glDisable(GL_STENCIL_TEST);
 
@@ -519,12 +521,12 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &
                                  const Entity &otherPortal) {
   Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
-  p1mat.translate(p1T.position);
-  p1mat.rotate(p1T.orientation);
+  p1mat.translate(p1T.getPosition());
+  p1mat.rotate(p1T.getOrientation());
   Transform &p2T = otherPortal.getComponent<Transform>();
   Matrix4f p2mat;
-  p2mat.translate(p2T.position);
-  p2mat.rotate(p2T.orientation);
+  p2mat.translate(p2T.getPosition());
+  p2mat.rotate(p2T.getOrientation());
   Matrix4f rotate180; rotate180.rotate(rad(180), 0, 1, 0);
   Matrix4f view; cam.getViewMatrix(view);
   Matrix4f destView = view * p1mat * rotate180 * inverse(p2mat);
@@ -532,7 +534,7 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &
   dest.setPerspective();
   dest.setAspect(cam.getAspect());
   dest.setFovy(cam.getFovy());
-  dest.setZNear((p1T.position - cam.getPosition()).length());
+  dest.setZNear((p1T.getPosition() - cam.getPosition()).length());
   //Matrix4f proj; dest.getProjMatrix(proj);
   //dest.setProjMatrix(clipProjMat(portal, destView, proj));
   dest.setViewMatrix(destView);

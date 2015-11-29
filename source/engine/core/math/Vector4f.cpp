@@ -9,10 +9,13 @@
 namespace glPortal {
 
 Vector4f::Vector4f(const Vector3f &v, float w)
-    : x(v.x), y(v.y), z(v.z), w(w) {}
+  : x(v.x), y(v.y), z(v.z), w(w) {}
 
 Vector4f::Vector4f(const Vector2f &v, float z, float w)
   : x(v.x), y(v.y), z(z), w(w) {}
+
+Vector4f::Vector4f(const btVector4 &v)
+  : x(v.x()), y(v.y()), z(v.z()), w(v.w()) {}
 
 Vector4f normalize(const Vector4f &v) {
   float len = length(v);
@@ -46,7 +49,10 @@ Vector4f& Vector4f::operator=(const btQuaternion &q) {
 
 // === Quaternion === //
 
-Quaternion Quaternion::operator*(const Quaternion &q) {
+Quaternion::Quaternion(const btQuaternion &v)
+  : Vector4f(v.x(), v.y(), v.z(), v.w()) {}
+
+Quaternion Quaternion::operator*(const Quaternion &q) const {
   return Quaternion(
     w * q.x + x * q.w + y * q.z - z * q.y,
     w * q.y + y * q.w + z * q.x - x * q.z,

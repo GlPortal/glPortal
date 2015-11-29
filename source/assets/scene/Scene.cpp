@@ -40,7 +40,7 @@ Scene::Scene() :
   start(nullptr),
   end(nullptr) {
   player = &entities.create();
-  player->addComponent<Transform>().position = Vector3f(2.5, 1, 5);
+  player->addComponent<Transform>().setPosition(Vector3f(2.5, 1, 5));
   player->addComponent<Health>();
   player->addComponent<SoundSource>();
   player->addComponent<SoundListener>();

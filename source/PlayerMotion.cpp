@@ -42,7 +42,7 @@ void PlayerMotion::move(float dtime) {
   Vector3f movement;
   KinematicCharacterController &ctrl = *entity.getComponent<Player>().controller;
   Transform &plrTform = entity.getComponent<Transform>();
-  plrTform.position = entity.getComponent<Player>().obj->getWorldTransform().getOrigin();
+  plrTform.privSetPosition(entity.getComponent<Player>().obj->getWorldTransform().getOrigin());
 
   if (jumping and ctrl.canJump()) {
     std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);

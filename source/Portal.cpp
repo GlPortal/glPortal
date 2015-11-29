@@ -50,12 +50,10 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
   }*/
 
   Transform &t = entity.getComponent<Transform>();
-  Quaternion &orientation = t.orientation;
-  Vector3f &position = t.position;
-  Vector3f &scale = t.scale;
-  scale = Vector3f(1, 2, 1);
-  position = point;
-  direction = normal;
+  Quaternion orientation;
+  Vector3f position(point);
+  Vector3f scale(1, 2, 1);
+  direction = normalize(normal);
   if (normal.fuzzyEqual(Vector3f(0, 0, -1))) {
     // Edge case, since the portal has a "default normal" of 0, 0, -1
     // the below quaternion-from-normal formula would be ambiguous
@@ -92,6 +90,10 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
   position += (getDirection() * SURFACE_OFFSET);
   overlayMesh = MeshLoader::getMesh("Plane.obj");
   stencilMesh = MeshLoader::getMesh("PortalStencil.obj");
+
+  t.setPosition(position);
+  t.setOrientation(orientation);
+  t.setScale(scale);
 }
 
 Vector3f Portal::getScaleMult() const {

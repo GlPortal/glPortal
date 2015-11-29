@@ -34,6 +34,7 @@ struct Vector4f {
     : x(v), y(v), z(v), d(v) {}
   Vector4f(const Vector3f&, float w);
   Vector4f(const Vector2f&, float z, float w);
+  Vector4f(const btVector4&);
 
   void set(float x, float y, float z, float w) {
     this->x = x;
@@ -42,11 +43,11 @@ struct Vector4f {
     this->w = w;
   }
 
-  Vector4f operator-() {
+  Vector4f operator-() const {
     return Vector4f(-x, -y, -z, -w);
   }
 
-  Vector4f operator*(const Vector4f &v) {
+  Vector4f operator*(const Vector4f &v) const {
     return Vector4f(x*v.x, y*v.y, z*v.z, w*v.w);
   }
   Vector4f& operator*=(const Vector4f &v) {
@@ -54,7 +55,7 @@ struct Vector4f {
     return *this;
   }
 
-  Vector4f operator*(float v) {
+  Vector4f operator*(float v) const {
     return Vector4f(x*v, y*v, z*v, w*v);
   }
   Vector4f& operator*=(float v) {
@@ -62,7 +63,7 @@ struct Vector4f {
     return *this;
   }
 
-  Vector4f operator/(const Vector4f &v) {
+  Vector4f operator/(const Vector4f &v) const {
     return Vector4f(x/v.x, y/v.y, z/v.z, w/v.w);
   }
   Vector4f& operator/=(const Vector4f &v) {
@@ -70,7 +71,7 @@ struct Vector4f {
     return *this;
   }
 
-  Vector4f operator/(float v) {
+  Vector4f operator/(float v) const {
     return Vector4f(x/v, y/v, z/v, w/v);
   }
   Vector4f& operator/=(float v) {
@@ -78,7 +79,7 @@ struct Vector4f {
     return *this;
   }
 
-  Vector4f operator+(const Vector4f &v) {
+  Vector4f operator+(const Vector4f &v) const {
     return Vector4f(x+v.x, y+v.y, z+v.z, w+v.w);
   }
   Vector4f& operator+=(const Vector4f &v) {
@@ -86,7 +87,7 @@ struct Vector4f {
     return *this;
   }
 
-  Vector4f operator-(const Vector4f &v) {
+  Vector4f operator-(const Vector4f &v) const {
     return Vector4f(x-v.x, y-v.y, z-v.z, w-v.w);
   }
   Vector4f& operator-=(const Vector4f &v) {
@@ -115,12 +116,13 @@ struct Quaternion : public Vector4f {
   using Vector4f::Vector4f;
   Quaternion()
     : Vector4f(0, 0, 0, 1) {}
+  Quaternion(const btQuaternion&);
 
-  Quaternion operator*(const Quaternion&);
+  Quaternion operator*(const Quaternion&) const;
   Quaternion& operator*=(const Quaternion&);
 
   // Quaternion multiplication isn't commutative, and so isn't division
-  Quaternion operator/(const Quaternion&) = delete;
+  Quaternion operator/(const Quaternion&) const = delete;
   Quaternion& operator/=(const Quaternion&) = delete;
 
   Quaternion& fromAxAngle(float x, float y, float z, float r);

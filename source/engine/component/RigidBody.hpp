@@ -23,7 +23,7 @@ public:
       entity.addComponent<Transform>();
     }
     Transform &tform = entity.getComponent<Transform>();
-    motionState.setWorldTransform(btTransform(tform.orientation, tform.position));
+    motionState.setWorldTransform(btTransform(tform.getOrientation(), tform.getPosition()));
     btVector3 localInertia(0, 0, 0);
     collisionshape->calculateLocalInertia(mass, localInertia);
     btRigidBody::btRigidBodyConstructionInfo ci(mass, &motionState, shape.get(), localInertia);

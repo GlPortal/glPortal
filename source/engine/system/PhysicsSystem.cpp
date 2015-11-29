@@ -38,8 +38,8 @@ void PhysicsSystem::update(float dtime) {
       for (const Vector3f &pos : posz) {
         Entity &e = scene->entities.create();
         Transform &t = e.addComponent<Transform>();
-        t.position = pos;
-        t.orientation.setFromEuler(0, rad(45), 0);
+        t.setPosition(pos);
+        t.setOrientation(Quaternion().setFromEuler(0, rad(45), 0));
         MeshDrawable &m = e.addComponent<MeshDrawable>();
         m.material = MaterialLoader::getMaterial("boxes/dev00");
         m.mesh = MeshLoader::getMesh("Cube.obj");
@@ -57,8 +57,8 @@ void PhysicsSystem::update(float dtime) {
         Transform &t = e.getComponent<Transform>();
         btTransform btTform;
         b.body->getMotionState()->getWorldTransform(btTform);
-        t.position = btTform.getOrigin();
-        t.orientation = btTform.getRotation();
+        t.privSetPosition(btTform.getOrigin());
+        t.privSetOrientation(btTform.getRotation());
       }
     }
   }

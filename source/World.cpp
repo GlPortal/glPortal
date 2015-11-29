@@ -111,7 +111,7 @@ void World::update(double dtime) {
 
   // Check if player is still alive
   if (not plrHealth.isAlive()) {
-    plrTform.position = scene->start->getComponent<Transform>().position;
+    plrTform.setPosition(scene->start->getComponent<Transform>().getPosition());
     plrHealth.revive();
     hidePortals();
   }
@@ -192,11 +192,11 @@ void World::update(double dtime) {
   int vpWidth, vpHeight;
   renderer->getViewport()->getSize(&vpWidth, &vpHeight);
   scene->camera.setAspect((float)vpWidth / vpHeight);
-  scene->camera.setPosition(plrTform.position + Vector3f(0, plrTform.scale.y/2, 0));
+  scene->camera.setPosition(plrTform.getPosition() + Vector3f(0, plrTform.getScale().y/2, 0));
   scene->camera.setRotation(plrMotion.rotation);
 
   //Check if the end of the level has been reached
-  float distToEnd = (scene->end->getComponent<Transform>().position - plrTform.position).length();
+  float distToEnd = (scene->end->getComponent<Transform>().getPosition() - plrTform.getPosition()).length();
   if (distToEnd < 1) {
     if (currentLevel + 1 < mapList.size()) {
       currentLevel++;
