@@ -34,7 +34,9 @@ bool Uncollider::isPointInUncollideVolume(const btVector3 &p) {
           pComp.uncollider.get(),
           &rb,
           cb);
-        return cb.collides;
+        if (cb.collides) {
+          return true;
+        }
       }
     }
   }
