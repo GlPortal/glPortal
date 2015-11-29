@@ -125,8 +125,7 @@ void World::update() {
   BoxCollider bboxY(Vector3f(plrTform.position.x, pos.y, plrTform.position.z), plrTform.scale);
 
   if (collidesWithWalls(bboxY)) {
-    bool portaling = false;
-    portaling = WorldHelper::isPlayerPortalingY(bboxY, &player, scene);
+    bool portaling = WorldHelper::isPlayerPortalingY(bboxY, &player, scene);
 
     if (not portaling and not plrMotion.noclip) {
       if (plrMotion.velocity.y < 0) {
@@ -146,8 +145,7 @@ void World::update() {
   //X collision
   BoxCollider bboxX(Vector3f(pos.x, plrTform.position.y, plrTform.position.z), plrTform.scale);
   if (collidesWithWalls(bboxX)) {
-    bool portaling = false;
-    portaling = WorldHelper::isPlayerPortalingX(bboxX, &player, scene);
+    bool portaling = WorldHelper::isPlayerPortalingX(bboxX, &player, scene);
     if (not portaling and not plrMotion.noclip) {
       plrMotion.velocity.x = 0;
     }
@@ -156,8 +154,7 @@ void World::update() {
   //Z collision
   BoxCollider bboxZ(Vector3f(plrTform.position.x, plrTform.position.y, pos.z), plrTform.scale);
   if (collidesWithWalls(bboxZ)) {
-    bool portaling = false;
-    portaling = WorldHelper::isPlayerPortalingZ(bboxZ, &player, scene);
+    bool portaling = WorldHelper::isPlayerPortalingZ(bboxZ, &player, scene);
     if (not portaling and not plrMotion.noclip) {
       plrMotion.velocity.z = 0;
     }
