@@ -23,14 +23,14 @@ Texture TextureLoader::getEmptyTextureByString(std::string string) {
   
   return texture;
 }
-  
+
 Texture TextureLoader::getEmptyDiffuse() {
 
   return TextureLoader::getEmptyTextureByString("engine@empty/diffuse");
 }
 
 Texture TextureLoader::getEmptyNormal() {
-  
+
   return TextureLoader::getEmptyTextureByString("engine@empty/normal");
 }
 
