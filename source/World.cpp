@@ -39,7 +39,9 @@ namespace glPortal {
 float World::gravity = GRAVITY;
 
 World::World() :
+  lastUpdateTime(0),
   scene(nullptr),
+  renderer(nullptr),
   gameTime(0),
   config(Environment::getConfig()) {
   stateFunctionStack.push(&GameState::handleRunning);
