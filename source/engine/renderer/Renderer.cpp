@@ -41,7 +41,9 @@
 
 namespace glPortal {
 
-Renderer::Renderer() : scene(nullptr), viewport(nullptr), portalDepth(2), fontColor(1, 1, 1, 1){
+  Renderer::Renderer() : font(nullptr), vpWidth(0), vpHeight(0),
+                         scene(nullptr), viewport(nullptr),
+                         portalDepth(2), fontColor(1, 1, 1, 1){
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);

@@ -153,7 +153,6 @@ public:
 private:
   Camera getCamera();
   int vpWidth, vpHeight;
-
   Font *font;
   int portalDepth;
 };
