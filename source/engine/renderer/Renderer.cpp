@@ -41,7 +41,7 @@
 
 namespace glPortal {
 
-  Renderer::Renderer() : shader(nullptr);font(nullptr), vpWidth(0), vpHeight(0),
+  Renderer::Renderer() : shader(nullptr), font(nullptr), vpWidth(0), vpHeight(0),
                          scene(nullptr), viewport(nullptr),
                          portalDepth(2), fontColor(1, 1, 1, 1){
   glEnable(GL_DEPTH_TEST);
