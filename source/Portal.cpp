@@ -21,6 +21,10 @@ const int Portal::NOISE_FADE_DELAY = 300;
 const int Portal::OPEN_ANIM_DURATION = 250;
 const float Portal::SURFACE_OFFSET = 0.01f;
 
+Portal::Portal(Entity &ent): Component(ent), open(false), openSince(0),
+                             overlayMesh(), stencilMesh() {
+}
+  
 Vector3f Portal::getDirection() const {
   return direction;
 }
