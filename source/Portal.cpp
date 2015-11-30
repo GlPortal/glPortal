@@ -24,7 +24,7 @@ const float Portal::SURFACE_OFFSET = 0.01f;
 Portal::Portal(Entity &ent): Component(ent), open(false), openSince(0),
                              overlayMesh(), stencilMesh() {
 }
-  
+
 Vector3f Portal::getDirection() const {
   return direction;
 }
@@ -37,7 +37,8 @@ bool Portal::inPortal(const BoxCollider &collider) const {
   return PortalHelper::isInPortal(entity, collider);
 }
 
-void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, const Vector3f &point) {
+void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall,
+                         const Vector3f &point) {
   //Determine on what side the portal is
   //Side 0: -x, Side 1: x, Side 2: -z, Side 3: z, Side 4: -y, Side 5: y
   float dist = 1000000;
@@ -151,8 +152,10 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall, con
 
 Vector3f Portal::getScaleMult() const {
   uint32_t delta  = SDL_GetTicks()-openSince;
-  if (delta > OPEN_ANIM_DURATION)
+  if (delta > OPEN_ANIM_DURATION){
+
     return Vector3f(1, 1, 1);
+  }
   float s = delta;
 
   // Linear:
