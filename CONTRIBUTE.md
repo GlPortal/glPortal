@@ -5,7 +5,7 @@
 - Send a pull request on github.
 
 ## Artist
-- Contact us through gitter or irc.
+- Contact us through [gitter](https://gitter.im/GlPortal/glPortal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) or [irc](http://webchat.freenode.net/?channels=%23%23glportal&uio=d4).
 
 ### Composers
 If you are a composer check our [music guidelines](https://github.com/GlPortal/specification/blob/master/music.md).
