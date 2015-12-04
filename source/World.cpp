@@ -26,8 +26,10 @@
 #include <engine/core/math/Math.hpp>
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
-#include <engine/core/event/Dispatcher.hpp>
+
+#include <engine/system/JavascriptSystem.hpp>
 #include <engine/core/state/GameState.hpp>
+#include <SDL2/SDL_keyboard.h>
 
 #include "Input.hpp"
 #include "Portal.hpp"
@@ -51,6 +53,7 @@ World::World() :
 void World::create() {
   mapList = MapListLoader::getMapList();
   renderer = new Renderer();
+  js = new JavascriptSystem();
   lastUpdateTime = SDL_GetTicks();
 
   std::random_device rd;
@@ -80,6 +83,7 @@ void World::setRendererWindow(Window *win) {
 void World::destroy() {
   delete renderer;
   delete scene;
+  delete js;
 }
 
 void World::loadScene(const std::string &path) {

@@ -56,6 +56,8 @@ add_executable(${EXE_NAME}
   GameController.cpp
   WorldHelper.cpp
   PortalHelper.cpp
+  engine/system/JavascriptSystem.cpp
+  engine/system/javascript/JavascriptPlayer.cpp
   )
 target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
 install(TARGETS ${EXE_NAME} DESTINATION bin)
