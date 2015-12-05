@@ -27,7 +27,6 @@ private:
   static void extractAcids();
   static void extractTriggers();
   static void extractModels();
-  static void extractButtons();
 };
 
 } /* namespace glPortal */

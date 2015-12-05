@@ -255,41 +255,4 @@ void MapLoader::extractModels() {
     } while ((modelElement = modelElement->NextSiblingElement("model")) != nullptr);
   }
 }
-
-void MapLoader::extractButtons() {
-  // FIXME
-#if 0
-  XMLElement *textureElement = rootHandle.FirstChild("texture").ToElement();
-  string texturePath("none");
-  string surfaceType("none");
-  Vector2f position;
-  Vector2f size;
-
-  if (textureElement) {
-    do {
-      textureElement->QueryStringAttribute("source", &texturePath);
-      textureElement->QueryStringAttribute("type", &surfaceType);
-      XMLElement *buttonElement = textureElement->FirstChildElement("GUIbutton");
-
-      if (buttonElement) {
-        do {
-          scene->buttons.emplace_back();
-          GUIButton &button = scene->buttons.back();
-
-          buttonElement->QueryFloatAttribute("x", &position.x);
-          buttonElement->QueryFloatAttribute("y", &position.y);
-
-          buttonElement->QueryFloatAttribute("w", &size.x);
-          buttonElement->QueryFloatAttribute("h", &size.y);
-
-          button.material = MaterialLoader::fromTexture(texturePath);
-          button.material.scaleU = button.material.scaleV = 2.f;
-        } while ((buttonElement = buttonElement->NextSiblingElement("GUIbutton")) != nullptr);
-      }
-
-      texturePath = "none";
-    } while ((textureElement = textureElement->NextSiblingElement("texture")) != nullptr);
-  }
-#endif
-}
 } /* namespace glPortal */
