@@ -1,14 +1,13 @@
 #ifndef GAME_CONTROLLER_HPP
 #define GAME_CONTROLLER_HPP
 
-#include "Window.hpp"
-#include "World.hpp"
 #include <SDL2/SDL_events.h>
 #include <engine/core/state/PlayerState.hpp>
 #include <engine/core/state/GameState.hpp>
 
 namespace glPortal {
 class Game;
+class World;
 class GameController {
 public:
   GameController(Game *game);
