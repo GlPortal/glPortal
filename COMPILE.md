@@ -63,7 +63,7 @@ In the root directory of the downloaded source type:
 mkdir build && cd build
 cmake ../
 ```
-
+If you want to profile the source code pass *-DCMAKE_CXX_FLAGS=-pg* to cmake.   
 Now if this throws an error you have to fix something first. If you don't manage to fix the error, use the
 bugtracker https://github.com/GlPortal/glPortal/issues or http://bugs.glportal.de to report what you did, and what error you got.
 
