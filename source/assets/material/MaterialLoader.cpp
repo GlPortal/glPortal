@@ -75,8 +75,6 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
     surfaceE->QueryBoolAttribute("portalable", &mat.portalable);
   }
 
-  // TODO
-
   return mat;
 }
 

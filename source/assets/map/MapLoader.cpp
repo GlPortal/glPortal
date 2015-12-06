@@ -235,12 +235,12 @@ void MapLoader::extractTriggers() {
 
 void MapLoader::extractModels() {
   Vector3f modelPos;
-  string texture("none");
+  string mid("none");
   string mesh("none");
-  XMLElement *modelElement = rootHandle.FirstChildElement("model").ToElement();
+  XMLElement *modelElement = rootHandle.FirstChildElement("object").ToElement();
   if (modelElement){
     do {
-      texture = modelElement->Attribute("texture");
+      mid = modelElement->Attribute("mid");
       mesh = modelElement->Attribute("mesh");
       XmlHelper::pushAttributeVertexToVector(modelElement, modelPos);
 
@@ -250,9 +250,9 @@ void MapLoader::extractModels() {
       XmlHelper::extractPosition(modelElement, t.position);
       XmlHelper::extractRotation(modelElement, t.rotation);
       MeshDrawable &m = model.addComponent<MeshDrawable>();
-      m.material = MaterialLoader::fromTexture(texture);
+      m.material = MaterialLoader::loadFromXML(mid);
       m.mesh = MeshLoader::getMesh(mesh);
-    } while ((modelElement = modelElement->NextSiblingElement("model")) != nullptr);
+    } while ((modelElement = modelElement->NextSiblingElement("object")) != nullptr);
   }
 }
 } /* namespace glPortal */
