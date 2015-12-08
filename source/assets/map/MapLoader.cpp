@@ -90,13 +90,15 @@ void MapLoader::extractMaterials() {
         int mid = -1;
         matElm->QueryIntAttribute("mid", &mid);
         if (mid == -1) {
-          continue; // Ignore, no good Material ID bound to it
+          System::Log(Error) << "Invalid Material ID in map.";
+          continue;
         }
         std::string name = matElm->Attribute("name");
         if (name.length() > 0) {
           scene->materials[mid] = MaterialLoader::getMaterial(name);
         } else {
-          continue; // No name, no candy
+          System::Log(Error) << "Name is mandatory for mat tag.";
+          continue;
         }
       } while ((matElm = matElm->NextSiblingElement("mat")) != nullptr);
     }
