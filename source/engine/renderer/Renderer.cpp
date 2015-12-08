@@ -56,6 +56,7 @@ namespace glPortal {
 
 void Renderer::setViewport(Viewport *vp) {
   viewport = vp;
+  viewport->getSize(&vpWidth, &vpHeight);
 }
 
 Viewport* Renderer::getViewport() const {
@@ -94,8 +95,6 @@ int Renderer::getTextWidth(std::string text) {
 }
 
 void Renderer::render() {
-  viewport->getSize(&vpWidth, &vpHeight);
-
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   Camera &camera = scene->camera;

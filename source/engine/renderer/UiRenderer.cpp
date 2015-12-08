@@ -47,8 +47,8 @@ void UiRenderer::render(Renderer &renderer) {
 }
 
 void UiRenderer::renderScreen(Renderer &renderer) {
-  int vpWidth, vpHeight;
-  renderer.viewport->getSize(&vpWidth, &vpHeight);
+  int vpWidth  = renderer.vpWidth;
+  int vpHeight = renderer.vpHeight;
   Camera camera;
   camera.setOrthographic();
   camera.setBounds(0, vpWidth, 0, vpHeight);

@@ -150,9 +150,9 @@ public:
   Scene *scene;
   Shader *shader;
   Vector4f fontColor;
+  int vpWidth, vpHeight;
 private:
   Camera getCamera();
-  int vpWidth, vpHeight;
   Font *font;
   int portalDepth;
 };
