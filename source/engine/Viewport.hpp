@@ -10,4 +10,4 @@ public:
 
 } /* namespace glPortal */
 
-#endif /* RAY_HPP */
+#endif /* VIEWPORT_HPP */
