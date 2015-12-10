@@ -22,6 +22,8 @@ const float Portal::SURFACE_OFFSET = 0.01f;
 
 Portal::Portal(Entity &ent)  : Component(ent), open(false) {
   uncolliderMotionState.reset(new btDefaultMotionState);
+  wrapper.vertShape.reset(new btBoxShape(btVector3(0.1, 1, 0.5)));
+  wrapper.horzShape.reset(new btBoxShape(btVector3(.5, 0.1, 0.5)));
 }
 
 Vector3f Portal::getDirection() const {
@@ -31,6 +33,21 @@ Vector3f Portal::getDirection() const {
 bool Portal::inPortal(const BoxCollider &collider) const {
   
   return PortalHelper::isInPortal(entity, collider);
+}
+
+void Portal::placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vector3f &s,
+    const std::unique_ptr<btCollisionShape> &shape, Wrapper::Side &side, const Vector3f &offset) {
+  side.motionState.reset(new btDefaultMotionState);
+  side.motionState->setWorldTransform(
+    btTransform(btQuaternion(0,0,0,1), p) *
+    btTransform(o) * 
+    btTransform(btQuaternion(0,0,0,1), offset));
+  btRigidBody::btRigidBodyConstructionInfo ci(0, side.motionState.get(), shape.get(), btVector3(0, 0, 0));
+  if (side.body) {
+    entity.manager.scene.physics.world->removeRigidBody(side.body.get());
+  }
+  side.body.reset(new btRigidBody(ci));
+  entity.manager.scene.physics.world->addRigidBody(side.body.get()); 
 }
 
 void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const Vector3f &normal) {
@@ -62,7 +79,6 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
   } else if (normal.fuzzyEqual(Vector3f(0, 0, 1))) {
     // Same as above, other side
     orientation = Quaternion(0, sin(M_PI/2), 0, cos(M_PI/2));
-    //Quaternion(0, sin(rad(180)/2), 0, cos(rad(180)/2));
   } else if (normal.fuzzyEqual(Vector3f(0, 1, 0))) {
     // Floor
     float yRot = std::atan2(point.x-launchPos.x, point.z-launchPos.z);
@@ -80,8 +96,20 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
     orientation.y = from.z*H.x - from.x*H.z; 
     orientation.z = from.x*H.y - from.y*H.x;
   }
+  
+  placeWrapperPiece(position, orientation, scale,
+    wrapper.horzShape, wrapper.bottom, Vector3f(0, -1.05, 0.501));
+  placeWrapperPiece(position, orientation, scale,
+    wrapper.horzShape, wrapper.top, Vector3f(0, 1.05, 0.501));
+  placeWrapperPiece(position, orientation, scale,
+    wrapper.vertShape, wrapper.right, Vector3f(0.55, 0, 0.501));
+  placeWrapperPiece(position, orientation, scale,
+    wrapper.vertShape, wrapper.left, Vector3f(-0.55, 0, 0.501));
 
-  uncolliderMotionState->setWorldTransform(btTransform(orientation, position));
+  uncolliderMotionState->setWorldTransform(
+    btTransform(btQuaternion(0,0,0,1), position) *
+    btTransform(orientation) * 
+    btTransform(btQuaternion(0,0,0,1), btVector3(0, 0, 0.499)));
   uncolliderShape.reset(new btBoxShape(scale/2));
   btRigidBody::btRigidBodyConstructionInfo ci(0, uncolliderMotionState.get(), uncolliderShape.get(), btVector3(0, 0, 0));
   uncollider.reset(new btRigidBody(ci));

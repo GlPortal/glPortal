@@ -5,6 +5,7 @@
 
 #include <engine/component/Component.hpp>
 #include <engine/core/math/Vector3f.hpp>
+#include <engine/core/math/Quaternion.hpp>
 #include <engine/BoxCollider.hpp>
 #include <assets/material/Material.hpp>
 #include <assets/model/Mesh.hpp>
@@ -35,6 +36,17 @@ public:
   std::unique_ptr<btDefaultMotionState> uncolliderMotionState;
   std::unique_ptr<btCollisionShape> uncolliderShape;
   std::unique_ptr<btCollisionObject> uncollider;
+  struct Wrapper {
+    std::unique_ptr<btCollisionShape> vertShape, horzShape;
+    struct Side {
+      std::unique_ptr<btRigidBody> body;
+      std::unique_ptr<btDefaultMotionState> motionState;
+    } top, right, bottom, left;
+  } wrapper;
+
+private:
+  void placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vector3f &s,
+    const std::unique_ptr<btCollisionShape> &shape, Wrapper::Side &side, const Vector3f &offset);
 };
 
 } /* namespace glPortal */
