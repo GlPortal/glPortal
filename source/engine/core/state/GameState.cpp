@@ -35,7 +35,7 @@ void GameState::handleSplash(Game& game){
     game.getWorld()->stateFunctionStack.pop();
     Input::clear();
     game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = false;
-    game.getWorld()->scene->screen->enabled = false;  
+    game.getWorld()->scene->screen->enabled = false;
   }
 }
 void GameState::handleMenu(Game& game){}
