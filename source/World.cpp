@@ -89,6 +89,13 @@ void World::loadScene(const std::string &path) {
   scene = MapLoader::getScene(path);
 
   Environment::dispatcher.dispatch(Event::loadScene);
+  if (justStarted) {
+    Entity &player = scene->player;
+    PlayerMotion &motion = player.getComponent<PlayerMotion>();
+    motion.frozen = true;
+    scene->screen->enabled = true;
+    justStarted = false;
+  }
   renderer->setScene(scene);
 }
 

@@ -19,4 +19,8 @@ bool Input::isKeyDown(int key) {
   return keystates[key];
 }
 
+void Input::clear() {
+  keystates.clear();
+}
+
 } /* namespace glPortal */

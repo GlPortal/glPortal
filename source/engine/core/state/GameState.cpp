@@ -2,7 +2,7 @@
 #include "../../../Input.hpp"
 #include <engine/env/Environment.hpp>
 #include <engine/core/math/Vector4f.hpp>
-
+#include "PlayerMotion.hpp"
 namespace glPortal {
 
 void GameState::handleInput(Game& game){
@@ -11,8 +11,8 @@ void GameState::handleInput(Game& game){
 }
 
 void GameState::handleRunning(Game& game){
-  game.getWorld()->scene->screen->enabled = false;
   if (Input::isKeyDown(SDL_SCANCODE_ESCAPE)){
+    game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = true;
     game.getWorld()->scene->screen->enabled = true;
     game.getWorld()->scene->screen->title = "Pause";
     game.getWorld()->scene->screen->text  = "Press escape to continue playing.";
@@ -24,6 +24,8 @@ void GameState::handlePaused(Game& game){
   if (Input::isKeyDown(SDL_SCANCODE_ESCAPE)){
     game.getWorld()->scene->screen->enabled = false;
     game.getWorld()->stateFunctionStack.pop();
+    Input::clear();
+    game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = false;
   }
 }
 
@@ -31,6 +33,9 @@ void GameState::handleSplash(Game& game){
   if (Input::isKeyDown(SDL_SCANCODE_RETURN)){
     game.getWorld()->scene->screen->enabled = false;
     game.getWorld()->stateFunctionStack.pop();
+    Input::clear();
+    game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = false;
+    game.getWorld()->scene->screen->enabled = false;  
   }
 }
 void GameState::handleMenu(Game& game){}

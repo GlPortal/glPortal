@@ -47,6 +47,7 @@ private:
   uint32_t lastUpdateTime;
   bool wasF5Down = false;
   bool wasTabDown = false;
+  bool justStarted = true;
   Renderer *renderer;
   std::mt19937 generator;
   std::vector<std::string> mapList;
