@@ -48,6 +48,7 @@ public:
   PlayerMotion(Entity &ent) :
     Component(ent),
     flying(false),
+    frozen(false),
     noclip(false) {
     entity.getComponent<Transform>().scale = PLAYER_SIZE;
 
@@ -66,7 +67,7 @@ public:
 
   Vector3f velocity;
   bool grounded;
-  bool flying, noclip;
+  bool flying, noclip, frozen;
 
   float speed;
 private:
