@@ -18,7 +18,7 @@ static const float MIN_SPEED_ON_AXIS = FRICTION;
 
 // Movement
 void PlayerMotion::mouseLook() {
-  if(not frozen) {
+  if (not frozen) {
     int mousedx, mousedy;
     SDL_GetRelativeMouseState(&mousedx, &mousedy);
 
@@ -33,7 +33,7 @@ void PlayerMotion::mouseLook() {
 }
 
 void PlayerMotion::move(float dtime) {
-  if(not frozen) {  
+  if (not frozen) {
     bool movingFwd  = Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP),
       movingBack    = Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN),
       strafingLeft  = Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT),
@@ -105,7 +105,8 @@ void PlayerMotion::move(float dtime) {
            Input::isKeyDown(SDL_SCANCODE_BACKSPACE)) && grounded) {
         std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);
         entity.getComponent<SoundSource>().playSound(
-                                                     Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)]);
+                                                     Environment::getDataDir() +
+                                                     PLAYER_JUMP_SOUND[dis(generator)]);
         grounded = false;
         velocity.y = JUMP_SPEED;
       }
@@ -117,7 +118,8 @@ void PlayerMotion::move(float dtime) {
         if (stepCounter>=2.5f) {
           std::uniform_int_distribution<> dis(0, PLAYER_FOOT_SOUND.size()-1);
           entity.getComponent<SoundSource>().playSound(
-                                                       Environment::getDataDir() + PLAYER_FOOT_SOUND[dis(generator)]);
+                                                       Environment::getDataDir() +
+                                                       PLAYER_FOOT_SOUND[dis(generator)]);
           stepCounter-=2.5f;
         }
       }
