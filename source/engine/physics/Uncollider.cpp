@@ -1,6 +1,7 @@
 #include "Uncollider.hpp"
 #include <cmath>
 #include <Portal.hpp>
+#include "PhysicsHelper.hpp"
 
 namespace glPortal {
 
@@ -10,35 +11,12 @@ Uncollider::Uncollider(Scene &scene) :
   scene(scene) {
 }
 
-class ContactResultHolder : public btCollisionWorld::ContactResultCallback {
-public:
-  bool collides = false;
-  btScalar addSingleResult(btManifoldPoint&, const btCollisionObjectWrapper*, int, int,
-    const btCollisionObjectWrapper*, int, int) {
-    collides = true;
-    return 1;
-  }
-};
-
 bool Uncollider::isPointInUncollideVolume(const btVector3 &p) {
   if (portals.size() > 0) {
-    ContactResultHolder cb;
-    btDefaultMotionState ms;
-    ms.setWorldTransform(btTransform(btQuaternion(), p));
-    btSphereShape sh(0);
-    btRigidBody::btRigidBodyConstructionInfo ci(0, &ms, &sh, btVector3(0, 0, 0));
-    btRigidBody rb(ci);
     for (Entity *pEnt : portals) {
       Portal &pComp = pEnt->getComponent<Portal>();
       if (pComp.open and pComp.uncollider) {
-        // TODO: add AABB checks (performance sink else)
-        pEnt->manager.scene.physics.world->contactPairTest(
-          pComp.uncollider.get(),
-          &rb,
-          cb);
-        if (cb.collides) {
-          return true;
-        }
+        return PhysicsHelper::pointInVolume(p, pComp.uncollider.get());
       }
     }
   }

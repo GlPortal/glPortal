@@ -43,6 +43,7 @@ add_executable(${EXE_NAME}
   engine/env/Config.cpp
   engine/physics/KinematicCharacterController.cpp
   engine/physics/PhysicsDebugDraw.cpp
+  engine/physics/PhysicsHelper.cpp
   engine/physics/Uncollider.cpp
   engine/renderer/Renderer.cpp
   engine/system/PhysicsSystem.cpp
