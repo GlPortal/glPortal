@@ -93,6 +93,7 @@ void World::loadScene(const std::string &path) {
   phys.setScene(scene);
   scene->physics.world->setDebugDrawer(&pdd);
   scene->physics.setGravity(0, -9.8, 0);
+  prtl.setScene(scene);
 
   Environment::dispatcher.dispatch(Event::loadScene);
 }
@@ -122,6 +123,7 @@ void World::update(double dtime) {
   plrMotion.move(dtime);
 
   phys.update(dtime);
+  prtl.update(dtime);
 /*
   for (Entity &e : scene->entities) {
     // Trigger
@@ -154,35 +156,6 @@ void World::update(double dtime) {
         } else {
           System::Log(Verbose) << "Other trigger touched. " << trigger.type;
         }
-      }
-    }
-  }
-
-  pos = plrTform.position + plrMotion.velocity;
-
-  // Check if the player is moving through a portal
-  BoxCollider playerCollider(pos, plrTform.scale);// TODO reimplement with Bullet
-  for (EntityPair &p : scene->portalPairs) {
-    Portal &portal1 = p.first->getComponent<Portal>(),
-            &portal2 = p.second->getComponent<Portal>();
-    Transform &p1Tform = p.first->getComponent<Transform>(),
-              &p2Tform = p.second->getComponent<Transform>();
-    if (portal1.open and portal2.open) {
-      if (portal1.throughPortal(playerCollider)) {
-        plrTform.position = p2Tform.position;
-        float rotation = p2Tform.rotation.y - p1Tform.rotation.y + rad(180);
-        plrTform.rotation.y += rotation;
-        // Transform the velocity of the player
-        float velocity = plrMotion.velocity.length();
-        plrMotion.velocity = portal2.getDirection() * velocity;
-      }
-      if (portal2.throughPortal(playerCollider)) {
-        plrTform.position = p1Tform.position;
-        float rotation = p1Tform.rotation.y - p2Tform.rotation.y + rad(180);
-        plrTform.rotation.y += rotation;
-        // Transform the velocity of the player
-        float velocity = plrMotion.velocity.length();
-        plrMotion.velocity = portal1.getDirection() * velocity;
       }
     }
   }*/

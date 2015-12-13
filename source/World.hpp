@@ -10,6 +10,7 @@
 #include <engine/env/Config.hpp>
 #include <engine/physics/PhysicsDebugDraw.hpp>
 #include <engine/system/PhysicsSystem.hpp>
+#include <engine/system/PortalSystem.hpp>
 
 namespace glPortal {
 
@@ -60,6 +61,7 @@ private:
   // FIXME: now, aggregating all of this in here is more like patchwork rather than coding
   PhysicsSystem phys;
   PhysicsDebugDraw pdd;
+  PortalSystem prtl;
   std::mt19937 generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;

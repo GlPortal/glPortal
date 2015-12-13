@@ -1,5 +1,6 @@
 #include "Uncollider.hpp"
 #include <cmath>
+#include <Portal.hpp>
 
 namespace glPortal {
 
@@ -15,7 +16,7 @@ public:
   btScalar addSingleResult(btManifoldPoint&, const btCollisionObjectWrapper*, int, int,
     const btCollisionObjectWrapper*, int, int) {
     collides = true;
-    return 0;
+    return 1;
   }
 };
 
@@ -30,6 +31,7 @@ bool Uncollider::isPointInUncollideVolume(const btVector3 &p) {
     for (Entity *pEnt : portals) {
       Portal &pComp = pEnt->getComponent<Portal>();
       if (pComp.open and pComp.uncollider) {
+        // TODO: add AABB checks (performance sink else)
         pEnt->manager.scene.physics.world->contactPairTest(
           pComp.uncollider.get(),
           &rb,

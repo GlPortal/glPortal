@@ -46,6 +46,7 @@ add_executable(${EXE_NAME}
   engine/physics/Uncollider.cpp
   engine/renderer/Renderer.cpp
   engine/system/PhysicsSystem.cpp
+  engine/system/PortalSystem.cpp
   util/sdl/Fps.cpp
   Editor.cpp
   Game.cpp
