@@ -3,7 +3,7 @@
 namespace glPortal {
 
 Scene::Scene() {
-  this->screen   = std::unique_ptr<Screen>(new Screen("GlPortal", "Hit enter to start."));
-  this->terminal = std::unique_ptr<Terminal>(new Terminal());
+  this->screen   = std::make_unique<Screen>("GlPortal", "Hit enter to start.");
+  this->terminal = std::make_unique<Terminal>();
 }
 } /* namespace glPortal */
