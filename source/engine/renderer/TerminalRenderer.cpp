@@ -37,6 +37,6 @@ void TerminalRenderer::render(Renderer &renderer) {
   renderer.setFontSize(1);
   renderer.renderText(camera,
                       "Foo",
-                      Vector3f(0,vpHeight-30, -1));
+                      Vector3f(0, vpHeight-30, -1));
 }
 } /* namespace glPortal */
