@@ -38,6 +38,7 @@
 #include <SDL2/SDL_timer.h>
 #include <algorithm>
 #include "UiRenderer.hpp"
+#include "TerminalRenderer.hpp"
 
 namespace glPortal {
 
@@ -170,6 +171,7 @@ void Renderer::render() {
   //Draw GUI
   glClear(GL_DEPTH_BUFFER_BIT);
   UiRenderer::render(*this);
+  TerminalRenderer::render(*this);
 }
 
 void Renderer::renderScene(const Camera &camera) {

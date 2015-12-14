@@ -10,6 +10,7 @@
 #include <engine/Camera.hpp>
 #include "Portal.hpp"
 #include "Screen.hpp"
+#include "Terminal.hpp"
 
 namespace glPortal {
 
@@ -19,13 +20,13 @@ class Scene {
 public:
   Scene();
   Entity player;
-  Entity terminal;
   Camera camera;
   std::map<int, Material> materials;
   std::list<Entity> entities;
   std::vector<EntityPair> portalPairs;
   std::vector<GUIButton> buttons;
   std::unique_ptr<Screen> screen;
+  std::unique_ptr<Terminal> terminal;
   Entity start;
   Entity end;
 };

@@ -49,7 +49,6 @@ Scene* MapLoader::getSceneFromPath(const std::string &path) {
   scene->player.addComponent<Health>();
   scene->player.addComponent<SoundSource>();
   scene->player.addComponent<SoundListener>();
-  scene->terminal.addComponent<Transform>();
   XMLDocument doc;
   XMLError error = doc.LoadFile(path.c_str());
 

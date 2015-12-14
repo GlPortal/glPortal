@@ -32,6 +32,7 @@ add_executable(${EXE_NAME}
   engine/Camera.cpp
   engine/renderer/Renderer.cpp
   engine/renderer/UiRenderer.cpp
+  engine/renderer/TerminalRenderer.cpp  
   assets/material/MaterialLoader.cpp
   assets/map/MapLoader.cpp
   assets/map/MapListLoader.cpp
@@ -53,6 +54,7 @@ add_executable(${EXE_NAME}
   assets/scene/SceneHelper.cpp
   assets/scene/Scene.cpp
   assets/scene/Screen.cpp
+  assets/scene/Terminal.cpp
   GameController.cpp
   WorldHelper.cpp
   PortalHelper.cpp
