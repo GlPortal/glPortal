@@ -22,7 +22,7 @@ namespace glPortal {
   this->game = game;
   this->world = game->getWorld();
   this->playerState = std::unique_ptr<PlayerState>(new PlayerState());
-  this->gameState = std::unique_ptr<GameState>(new GameState()) ;
+  this->gameState = std::unique_ptr<GameState>(new GameState());
 }
 
 void GameController::handleInput() {
@@ -60,8 +60,8 @@ void GameController::handleEvent(const SDL_Event &event) {
       game->close();
     }
     break;
-  case SDL_KEYUP:  
-    Input::keyReleased(key, mod);    
+  case SDL_KEYUP:
+    Input::keyReleased(key, mod);
     break;
   case SDL_MOUSEBUTTONDOWN:
     if (event.button.button == SDL_BUTTON_LEFT) {
@@ -70,7 +70,8 @@ void GameController::handleEvent(const SDL_Event &event) {
     if (event.button.button == SDL_BUTTON_RIGHT) {
       world->shootPortal(2);
     }
-    if (event.button.button == SDL_BUTTON_MIDDLE  and Environment::getConfig().isHidePortalsByClick()) {
+    if (event.button.button == SDL_BUTTON_MIDDLE and
+        Environment::getConfig().isHidePortalsByClick()) {
       world->hidePortals();
     }
     break;
