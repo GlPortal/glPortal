@@ -27,11 +27,11 @@ void Input::addToBuffer(std::string character) {
 std::string Input::getCharBuffer() {
   return charbuffer;
 }
-  
+
 void Input::clearBuffer() {
   charbuffer = "";
 }
-  
+
 void Input::clear() {
   keystates.clear();
 }
