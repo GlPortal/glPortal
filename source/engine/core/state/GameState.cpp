@@ -49,7 +49,7 @@ void GameState::handleTerminal(Game& game){
   if (Input::isKeyDown(SDL_SCANCODE_F2)){
     game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = false;
     game.getWorld()->scene->terminal->enabled = false;
-    game.getWorld()->stateFunctionStack.pop();    
+    game.getWorld()->stateFunctionStack.pop();
   }
 }
 void GameState::handleGameOverScreen(Game& game){}
