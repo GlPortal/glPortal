@@ -18,6 +18,12 @@ void GameState::handleRunning(Game& game){
     game.getWorld()->scene->screen->text  = "Press escape to continue playing.";
     game.getWorld()->stateFunctionStack.push(&GameState::handlePaused);
   }
+
+  if (Input::isKeyDown(SDL_SCANCODE_F2)){
+    game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = true;
+    game.getWorld()->scene->terminal->enabled = true;
+    game.getWorld()->stateFunctionStack.push(&GameState::handleTerminal);
+  }
 }
 
 void GameState::handlePaused(Game& game){
@@ -39,6 +45,13 @@ void GameState::handleSplash(Game& game){
   }
 }
 void GameState::handleMenu(Game& game){}
+void GameState::handleTerminal(Game& game){
+  if (Input::isKeyDown(SDL_SCANCODE_F2)){
+    game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = false;
+    game.getWorld()->scene->terminal->enabled = false;
+    game.getWorld()->stateFunctionStack.pop();    
+  }
+}
 void GameState::handleGameOverScreen(Game& game){}
 void GameState::handleWinScreen(Game& game){}
 }

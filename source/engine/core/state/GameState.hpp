@@ -20,6 +20,7 @@ public:
   static void handlePaused(Game &game);
   static void handleSplash(Game &game);
   static void handleMenu(Game &game);
+  static void handleTerminal(Game &game);
   static void handleGameOverScreen(Game &game);
   static void handleWinScreen(Game &game);
 };
