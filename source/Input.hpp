@@ -14,6 +14,7 @@ public:
   static std::string getCharBuffer();
   static void addToBuffer(std::string character);
   static void clearBuffer();
+  static void truncateCharBuffer();
   static void clear();
 private:
   static std::vector<bool> keystates;

@@ -45,6 +45,7 @@ void GameController::handleEvent(const SDL_Event &event) {
   //  SDL_PollEvent(&event);
   int key = event.key.keysym.scancode;
   int mod = event.key.keysym.mod;
+  int sym = event.key.keysym.sym;
 
   switch (event.type) {
   case SDL_TEXTINPUT:
@@ -55,6 +56,9 @@ void GameController::handleEvent(const SDL_Event &event) {
     //    int selection_len = event.edit.length;
     break;
   case SDL_KEYDOWN:
+    if (sym == SDLK_BACKSPACE) {
+      Input::truncateCharBuffer();
+    }
     Input::keyPressed(key, mod);
     if (key == SDL_SCANCODE_Q) {
       game->close();

@@ -32,6 +32,12 @@ void Input::clearBuffer() {
   charbuffer = "";
 }
 
+void Input::truncateCharBuffer() {
+  if (charbuffer.size() > 0) {
+    charbuffer = charbuffer.substr(0, charbuffer.size()-1);
+  }
+}
+
 void Input::clear() {
   keystates.clear();
 }
