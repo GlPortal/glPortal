@@ -21,8 +21,8 @@ namespace glPortal {
   GameController::GameController(Game *game) {
   this->game = game;
   this->world = game->getWorld();
-  this->playerState = std::unique_ptr<PlayerState>(new PlayerState());
-  this->gameState = std::unique_ptr<GameState>(new GameState());
+  this->playerState = std::make_unique<PlayerState>();
+  this->gameState   = std::make_unique<GameState>();
 }
 
 void GameController::handleInput() {
