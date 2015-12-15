@@ -4,6 +4,7 @@
 #include "World.hpp"
 #include "Game.hpp"
 #include <stack>
+#include <string>
 #include <engine/Entity.hpp>
 #include <engine/core/state/HandleGameFunction.hpp>
 #include <SDL2/SDL_events.h>

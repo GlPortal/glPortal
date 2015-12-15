@@ -23,6 +23,7 @@ void GameState::handleRunning(Game& game){
     game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = true;
     game.getWorld()->scene->terminal->enabled = true;
     game.getWorld()->stateFunctionStack.push(&GameState::handleTerminal);
+    SDL_StartTextInput();
   }
 }
 
@@ -49,6 +50,7 @@ void GameState::handleTerminal(Game& game){
   if (Input::isKeyDown(SDL_SCANCODE_F2)){
     game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = false;
     game.getWorld()->scene->terminal->enabled = false;
+    SDL_StopTextInput();
     game.getWorld()->stateFunctionStack.pop();
   }
 }

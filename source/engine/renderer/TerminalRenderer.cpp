@@ -5,7 +5,7 @@
 #include <assets/text/FontLoader.hpp>
 #include <assets/shader/ShaderLoader.hpp>
 #include <assets/material/MaterialLoader.hpp>
-
+#include <Input.hpp>
 #include <cstdio>
 #include <vector>
 #include <string>
@@ -36,7 +36,7 @@ void TerminalRenderer::render(Renderer &renderer) {
   renderer.setFontColor(renderer.scene->screen->textColor);
   renderer.setFontSize(1);
   renderer.renderText(camera,
-                      "Foo",
+                      Input::getCharBuffer(),
                       Vector3f(0, vpHeight-30, -1));
 }
 } /* namespace glPortal */

@@ -40,23 +40,30 @@ void GameController::handleEvent(const SDL_Event &event) {
   //  this->playerState->handleEvent(this->world->getPlayer(), event);
   this->gameState->handleInput(*this->game);
 
-  if (event.type == SDL_KEYDOWN) {
-    int key = event.key.keysym.scancode;
-    int mod = event.key.keysym.mod;
+  bool done = false;
+  //  SDL_Event event;
+  //  SDL_PollEvent(&event);
+  int key = event.key.keysym.scancode;
+  int mod = event.key.keysym.mod;
 
+  switch (event.type) {
+  case SDL_TEXTINPUT:
+    Input::addToBuffer(event.text.text);
+    break;
+  case SDL_TEXTEDITING:
+    //    int cursor = event.edit.start;
+    //    int selection_len = event.edit.length;
+    break;
+  case SDL_KEYDOWN:
     Input::keyPressed(key, mod);
-
     if (key == SDL_SCANCODE_Q) {
       game->close();
     }
-  }
-  if (event.type == SDL_KEYUP) {
-    int key = event.key.keysym.scancode;
-    int mod = event.key.keysym.mod;
-
-    Input::keyReleased(key, mod);
-  }
-  if (event.type == SDL_MOUSEBUTTONDOWN) {
+    break;
+  case SDL_KEYUP:  
+    Input::keyReleased(key, mod);    
+    break;
+  case SDL_MOUSEBUTTONDOWN:
     if (event.button.button == SDL_BUTTON_LEFT) {
       world->shootPortal(1);
     }
@@ -66,6 +73,7 @@ void GameController::handleEvent(const SDL_Event &event) {
     if (event.button.button == SDL_BUTTON_MIDDLE  and Environment::getConfig().isHidePortalsByClick()) {
       world->hidePortals();
     }
+    break;
   }
 
   // If F5 released, reload the scene
