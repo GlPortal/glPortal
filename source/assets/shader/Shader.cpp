@@ -2,12 +2,18 @@
 
 namespace glPortal {
 
-GLint Shader::uni(const char *name) const {
-  return glGetUniformLocation(handle, name);
-}
+GLint Shader::uni(const std::string &name) {
+  // Check if the uniform name is already in our map
+  auto it = locationMap.find(name);
+  if (it != locationMap.end()) {
+    return it->second;
+  }
 
-GLint Shader::uni(const std::string &name) const {
-  return uni(name.c_str());
+  // If its not, get the location and store it
+  GLint loc = glGetUniformLocation(handle, name.c_str());
+  locationMap.insert({name, loc});
+
+  return loc;
 }
 
 } /* namespace glPortal */

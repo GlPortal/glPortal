@@ -1,34 +1,76 @@
 #include "SoundManager.hpp"
 
 #include <cstdio>
+#include <SDL2/SDL.h>
 
 namespace glPortal {
+
+bool SoundManager::isInitialized = false;
+bool SoundManager::isDisabled = true;
+
 Mix_Music *SoundManager::music = nullptr;
 std::map<int, SoundManager::SoundInfo> SoundManager::sounds = {};
 
-void SoundManager::Init() {
-  music = nullptr;
-  int audio_rate = 22050;
-  Uint16 audio_format = AUDIO_S16;
-  int audio_channels = 2;
-  int audio_buffers = 4096;
-
-  if (Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) == -1) {
-    printf("Unable to open audio!\n");
-    exit(1);
+void SoundManager::init() {
+  if (isInitialized) {
+    System::Log(Info, "SoundManager") << "init() called when already initialized";
+    return;
   }
+
+  isDisabled = false;
+
+  if (SDL_WasInit(SDL_INIT_AUDIO)) {
+    System::Log(Verbose, "SoundManager") << "SDL Audio system already initialized";
+  } else {
+    if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
+      System::Log(Warning, "SoundManager") << "SDL Audio system init failed: " << SDL_GetError() << ", sound disabled";
+      isDisabled = true;
+    } else {
+      System::Log(Info, "SoundManager") << "SDL Audio system initialized";
+    }
+  }
+
+  music = nullptr;
+  sounds.clear();
+
+  if (not isDisabled) {
+    int flags = MIX_INIT_OGG;
+
+    if ((Mix_Init(flags) & flags) != flags) {
+      System::Log(Warning, "SoundManager") << "SDL_mixer Init failed: " << Mix_GetError() << ", sound disabled";
+      isDisabled = true;
+    }
+  }
+
+  if (not isDisabled) {
+    int audioRate = 22050;
+    Uint16 audioFormat = AUDIO_S16;
+    int audioChannels = 2;
+    int audioBuffers = 4096;
+
+    if (Mix_OpenAudio(audioRate, audioFormat, audioChannels, audioBuffers) == -1) {
+      System::Log(Warning, "SoundManager") << "SDL_mixer OpenAudio failed: " << Mix_GetError() << ", sound disabled";
+      isDisabled = true;
+    }
+  }
+
+  System::Log(Verbose, "SoundManager") << "fully initialized";
+  isInitialized = true;
 }
 
-void SoundManager::PlayMusic(const std::string &filename) {
-  if (music!=nullptr) {
+void SoundManager::playMusic(const std::string &filename) {
+  if (isDisabled) {
+    return;
+  }
+
+  if (music != nullptr) {
     Mix_FreeMusic(music);
     music = nullptr;
   }
 
-
   music = Mix_LoadMUS(filename.c_str());
   if (music == NULL) {
-    printf( "Failed to load Music: SDL_mixer Error: %s\n", Mix_GetError() );
+    System::Log(Warning, "SoundManager") << "music load failed: " << Mix_GetError();
     return;
   }
 
@@ -36,15 +78,19 @@ void SoundManager::PlayMusic(const std::string &filename) {
   Mix_Fading(MIX_FADING_IN);
 
   if (Mix_PlayMusic(music, 0) == -1) {
-    printf("Unable to play Ogg file: %s\n", Mix_GetError());
+    System::Log(Warning, "SoundManager") << "music play failed: " << Mix_GetError();
     return;
   }
 }
 
-void SoundManager::PlaySound(const std::string &filename, const Entity &source) {
+void SoundManager::playSound(const std::string &filename, const Entity &source) {
+  if (isDisabled) {
+    return;
+  }
+
   Mix_Chunk *sound = Mix_LoadWAV(filename.c_str());
   if (sound == nullptr) {
-    printf("Failed to load Sound: SDL_mixer Error: %s\n", Mix_GetError());
+    System::Log(Warning, "SoundManager") << "sound load failed: " << Mix_GetError();
     return;
   }
 
@@ -53,7 +99,7 @@ void SoundManager::PlaySound(const std::string &filename, const Entity &source) 
   int channel = Mix_PlayChannel(-1, sound, 0);
 
   if (channel == -1) {
-    printf("Unable to play Ogg file: %s\n", Mix_GetError());
+    System::Log(Warning, "SoundManager") << "sound play failed: " << Mix_GetError();
     return;
   }
 
@@ -61,7 +107,11 @@ void SoundManager::PlaySound(const std::string &filename, const Entity &source) 
   info.chunk = sound;
 }
 
-void SoundManager::Update(const Entity &listener) {
+void SoundManager::update(const Entity &listener) {
+  if (isDisabled) {
+    return;
+  }
+
   std::vector<int> erase_list;
 
   for (auto sound : sounds) {
@@ -76,13 +126,27 @@ void SoundManager::Update(const Entity &listener) {
   }
 }
 
-void SoundManager::Destroy() {
+void SoundManager::destroy() {
+  if (isInitialized) {
+    System::Log(Info, "SoundManager") << "destroy() called when uninitialized";
+    return;
+  }
+
   for (const auto sound : sounds) {
     Mix_FreeChunk(sound.second.chunk);
   }
-  if (music!=nullptr)
+  if (music != nullptr) {
     Mix_FreeMusic(music);
+  }
   Mix_CloseAudio();
+  SDL_QuitSubSystem(SDL_INIT_AUDIO);
+
+  isInitialized = false;
+}
+
+void SoundManager::reload() {
+  SoundManager::destroy();
+  SoundManager::init();
 }
 
 }

@@ -15,16 +15,20 @@ public:
     Mix_Chunk *chunk;
   };
 
-  static void Init();
-  static void Destroy();
+  static void init();
+  static void reload();
+  static void destroy();
   
-  static void PlayMusic(const std::string &filename);
-  static void PlaySound(const std::string &filename, const Entity &source);
+  static void playMusic(const std::string &filename);
+  static void playSound(const std::string &filename, const Entity &source);
   
-  static void Update(const Entity &listener);
+  static void update(const Entity &listener);
+
 private:
+  static bool isInitialized, isDisabled;
+
   static Mix_Music *music;
-  static std::map<int ,SoundInfo> sounds;
+  static std::map<int, SoundInfo> sounds;
 };
 
 } /* namespace glPortal */

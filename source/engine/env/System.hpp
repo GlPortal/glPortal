@@ -3,7 +3,6 @@
 
 #include <string>
 #include <memory>
-#include <engine/core/diag/ConsoleLogger.hpp>
 #include <engine/core/diag/LogInput.hpp>
 
 namespace glPortal {
@@ -16,6 +15,7 @@ public:
   struct _Log {
     LogInput operator()();
     LogInput operator()(LogLevel);
+    LogInput operator()(LogLevel, const std::string &tag);
   };
   static _Log Log;
 

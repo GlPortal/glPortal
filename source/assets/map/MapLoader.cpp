@@ -44,13 +44,11 @@ namespace glPortal {
  */
 Scene* MapLoader::getSceneFromPath(const std::string &path) {
   scene = new Scene();
-  // FIXME: shall we init player here? Probably not, and do it ONCE.
   scene->player.addComponent<Transform>();
   scene->player.addComponent<PlayerMotion>();
   scene->player.addComponent<Health>();
   scene->player.addComponent<SoundSource>();
   scene->player.addComponent<SoundListener>();
-
   XMLDocument doc;
   XMLError error = doc.LoadFile(path.c_str());
 
@@ -67,9 +65,9 @@ Scene* MapLoader::getSceneFromPath(const std::string &path) {
     extractWalls();
     extractAcids();
     extractTriggers();
-    System::Log(Info) << "Map " << path << " loaded";
+    System::Log(Info, "MapLoader") << "Map " << path << " loaded";
   } else {
-    System::Log(Error) << "Failed to load map " << Environment::getDataDir()
+    System::Log(Error, "MapLoader") << "Failed to load map " << Environment::getDataDir()
                        << "/" << path << ".xml";
   }
   return scene;
@@ -91,13 +89,15 @@ void MapLoader::extractMaterials() {
         int mid = -1;
         matElm->QueryIntAttribute("mid", &mid);
         if (mid == -1) {
-          continue; // Ignore, no good Material ID bound to it
+          System::Log(Error) << "Invalid Material ID in map.";
+          continue;
         }
         std::string name = matElm->Attribute("name");
         if (name.length() > 0) {
           scene->materials[mid] = MaterialLoader::getMaterial(name);
         } else {
-          continue; // No name, no candy
+          System::Log(Error) << "Name is mandatory for mat tag.";
+          continue;
         }
       } while ((matElm = matElm->NextSiblingElement("mat")) != nullptr);
     }
@@ -236,12 +236,12 @@ void MapLoader::extractTriggers() {
 
 void MapLoader::extractModels() {
   Vector3f modelPos;
-  string texture("none");
+  string mid("none");
   string mesh("none");
-  XMLElement *modelElement = rootHandle.FirstChildElement("model").ToElement();
+  XMLElement *modelElement = rootHandle.FirstChildElement("object").ToElement();
   if (modelElement){
     do {
-      texture = modelElement->Attribute("texture");
+      mid = modelElement->Attribute("mid");
       mesh = modelElement->Attribute("mesh");
       XmlHelper::pushAttributeVertexToVector(modelElement, modelPos);
 
@@ -251,46 +251,9 @@ void MapLoader::extractModels() {
       XmlHelper::extractPosition(modelElement, t.position);
       XmlHelper::extractRotation(modelElement, t.rotation);
       MeshDrawable &m = model.addComponent<MeshDrawable>();
-      m.material = MaterialLoader::fromTexture(texture);
+      m.material = MaterialLoader::loadFromXML(mid);
       m.mesh = MeshLoader::getMesh(mesh);
-    } while ((modelElement = modelElement->NextSiblingElement("model")) != nullptr);
+    } while ((modelElement = modelElement->NextSiblingElement("object")) != nullptr);
   }
-}
-
-void MapLoader::extractButtons() {
-  // FIXME
-#if 0
-  XMLElement *textureElement = rootHandle.FirstChild("texture").ToElement();
-  string texturePath("none");
-  string surfaceType("none");
-  Vector2f position;
-  Vector2f size;
-
-  if (textureElement) {
-    do {
-      textureElement->QueryStringAttribute("source", &texturePath);
-      textureElement->QueryStringAttribute("type", &surfaceType);
-      XMLElement *buttonElement = textureElement->FirstChildElement("GUIbutton");
-
-      if (buttonElement) {
-        do {
-          scene->buttons.emplace_back();
-          GUIButton &button = scene->buttons.back();
-
-          buttonElement->QueryFloatAttribute("x", &position.x);
-          buttonElement->QueryFloatAttribute("y", &position.y);
-
-          buttonElement->QueryFloatAttribute("w", &size.x);
-          buttonElement->QueryFloatAttribute("h", &size.y);
-
-          button.material = MaterialLoader::fromTexture(texturePath);
-          button.material.scaleU = button.material.scaleV = 2.f;
-        } while ((buttonElement = buttonElement->NextSiblingElement("GUIbutton")) != nullptr);
-      }
-
-      texturePath = "none";
-    } while ((textureElement = textureElement->NextSiblingElement("texture")) != nullptr);
-  }
-#endif
 }
 } /* namespace glPortal */

@@ -20,24 +20,26 @@ void Window::initEpoxy() {
 }
 
 void Window::create(const char *title) {
-  SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
+  SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
 
   SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-  if (Environment::getConfig().getAntialiasLevel() > 0) {
+  Config &config = Environment::getConfig();
+
+  if (config.getAntialiasLevel() > 0) {
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, Environment::getConfig().getAntialiasLevel());
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, config.getAntialiasLevel());
   }
   
   int flags = SDL_WINDOW_OPENGL;
-  if (Environment::getConfig().isFullscreen()) {
+  if (config.isFullscreen()) {
     flags |= SDL_WINDOW_BORDERLESS;
   }
 
   SDL_DisplayMode dispMode = {SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0};
   SDL_GetDesktopDisplayMode(0, &dispMode);
-  int width = Environment::getConfig().getWidth();
-  int height = Environment::getConfig().getHeight();
+  int width = config.getWidth();
+  int height = config.getHeight();
   if (width == 0) {
     width = dispMode.w;
   }
@@ -56,7 +58,7 @@ void Window::create(const char *title) {
   this->height = height;
 
   // Allows unbound framerate if vsync is disabled
-  SDL_GL_SetSwapInterval(Environment::getConfig().hasVsync() ? 1 : 0);
+  SDL_GL_SetSwapInterval(config.hasVsync() ? 1 : 0);
 
   // Lock cursor in the middle of the screen
   lockMouse();

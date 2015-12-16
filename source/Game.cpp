@@ -23,13 +23,13 @@ namespace glPortal {
 Fps Game::fps;
 
 Game::Game() : closed(false) {
-  controller = new GameController(this);
+  controller = std::make_unique<GameController>(this);
   MusicObserver musicObserver;
   musicObserver.addCallback(Event::loadScene, std::bind(&MusicObserver::loadMap, musicObserver));
   window.create("GlPortal");
   
   try {
-    SoundManager::Init();
+    SoundManager::init();
     world.create();
     world.setRendererWindow(&window);
     update();
@@ -41,20 +41,20 @@ Game::Game() : closed(false) {
 
 World* Game::getWorld() {
   return &world;
-}  
-  
+}
+
 void Game::update() {
   SDL_Event event;
-  int skipped;
   unsigned int nextUpdate = SDL_GetTicks();
 
   while (not closed) {
+    int skipped;
     skipped = 0;
     //Update the game if it is time
     while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
       controller->handleInput();
       
-      SoundManager::Update(world.getPlayer());
+      SoundManager::update(world.getPlayer());
       world.update();
       nextUpdate += SKIP_TIME;
       skipped++;
@@ -65,7 +65,6 @@ void Game::update() {
   }
   world.destroy();
   window.close();
-  delete(controller);
 }
 
 void Game::close() {
@@ -77,7 +76,7 @@ using namespace glPortal;
 
 Window window;
 
-int main(int argc, char *argv[]) {
+int main(const int argc, char *argv[]) {
   System::Init();
   ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   Environment::init();

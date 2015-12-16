@@ -24,7 +24,7 @@ void Health::kill() {
 }
 
 void Health::revive() {
-  if (!isAlive()) {
+  if (not isAlive()) {
     health = 1.f;
   }
 }

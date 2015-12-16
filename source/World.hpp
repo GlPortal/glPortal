@@ -4,9 +4,11 @@
 #include <string>
 #include <vector>
 #include <random>
+#include <stack>
 #include <array>
 #include <assets/scene/Scene.hpp>
 #include <engine/env/Config.hpp>
+#include <engine/core/state/HandleGameFunction.hpp>
 
 namespace glPortal {
 
@@ -20,19 +22,13 @@ class SoundManager;
 const float GRAVITY = 0.5;
 
 class Window;
-class Editor;
 
 class World {
-private:
-  friend Editor;
-
 public:
   World();
   void create();
   void destroy();
-
   void setRendererWindow(Window*);
-
   void update();
   void loadScene(const std::string &path);
   void loadSceneFromPath(const std::string &path);
@@ -42,17 +38,17 @@ public:
   void render();
   Entity& getPlayer();
   void hidePortals();
-  bool isEditorShown;
   std::string currentScenePath;
   static float gravity;
+  Scene *scene;
+  std::stack<HandleGameFunction> stateFunctionStack;
 private:
   double gameTime;
   uint32_t lastUpdateTime;
   bool wasF5Down = false;
   bool wasTabDown = false;
+  bool justStarted = true;
   Renderer *renderer;
-  Editor *editor;
-  Scene *scene;
   std::mt19937 generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;

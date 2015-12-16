@@ -16,12 +16,15 @@ add_executable(${EXE_NAME}
   engine/core/math/Matrix4f.cpp
   engine/core/math/Matrix3f.cpp
   engine/core/math/Math.cpp
+  engine/core/diag/AnsiConsoleLogger.cpp
   engine/core/diag/Logger.cpp
-  engine/core/diag/ConsoleLogger.cpp
+  engine/core/diag/StdoutLogger.cpp
   engine/core/diag/LogInput.cpp
   engine/core/event/Dispatcher.cpp
   engine/core/event/observer/FlagObserver.cpp
   engine/core/event/observer/MusicObserver.cpp
+  engine/core/state/PlayerState.cpp
+  engine/core/state/GameState.cpp
   engine/core/event/Observer.cpp
   engine/core/gl/TightDataPacker.cpp
   util/sdl/Fps.cpp
@@ -29,6 +32,7 @@ add_executable(${EXE_NAME}
   engine/Camera.cpp
   engine/renderer/Renderer.cpp
   engine/renderer/UiRenderer.cpp
+  engine/renderer/TerminalRenderer.cpp  
   assets/material/MaterialLoader.cpp
   assets/map/MapLoader.cpp
   assets/map/MapListLoader.cpp
@@ -48,6 +52,9 @@ add_executable(${EXE_NAME}
   engine/component/Transform.cpp
   engine/component/SoundSource.cpp
   assets/scene/SceneHelper.cpp
+  assets/scene/Scene.cpp
+  assets/scene/Screen.cpp
+  assets/scene/Terminal.cpp
   GameController.cpp
   WorldHelper.cpp
   PortalHelper.cpp

@@ -38,10 +38,13 @@
 #include <SDL2/SDL_timer.h>
 #include <algorithm>
 #include "UiRenderer.hpp"
+#include "TerminalRenderer.hpp"
 
 namespace glPortal {
 
-Renderer::Renderer() : viewport(nullptr), portalDepth(2) {
+  Renderer::Renderer() : shader(nullptr), font(nullptr), vpWidth(0), vpHeight(0),
+                         scene(nullptr), viewport(nullptr),
+                         portalDepth(2), fontColor(1, 1, 1, 1){
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
@@ -54,75 +57,50 @@ Renderer::Renderer() : viewport(nullptr), portalDepth(2) {
 
 void Renderer::setViewport(Viewport *vp) {
   viewport = vp;
+  viewport->getSize(&vpWidth, &vpHeight);
 }
 
 Viewport* Renderer::getViewport() const {
   return viewport;
 }
 
-/**
- * Sets the current scene for rendering
- */
 void Renderer::setScene(Scene *scene) {
   this->scene = scene;
 }
 
+void Renderer::setShader(Shader *shader) {
+  this->shader = shader;
+  glUseProgram(shader->handle);
+}
+
 Camera Renderer::getCamera() {
-  
   return scene->camera;
 }
 
-  
-/**
- * Sets the font to use for all future text drawing until changed again
- * @param font Name of the font
- * @param size Size of the text drawn with this font
- */
+
 void Renderer::setFont(const std::string &font, float size) {
   this->font = &FontLoader::getFont(font);
   this->font->size = size;
 }
 
+void Renderer::setFontSize(float size) {
+  this->font->size = size;
+}
+
+void Renderer::setFontColor(const Vector4f color) {
+  this->fontColor = color;
+}
+
+int Renderer::getTextWidth(std::string text) {
+  return this->font->getStringLength(text);
+}
 
 void Renderer::render() {
-  viewport->getSize(&vpWidth, &vpHeight);
-
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   Camera &camera = scene->camera;
   camera.setPerspective();
   camera.setAspect((float)vpWidth / vpHeight);
-
-  const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
-  glUseProgram(diffuse.handle);
-
-  /* Lights */ {
-    int numLights = 0;
-    for (const Entity &e : scene->entities) {
-      if (not e.hasComponent<LightSource>()) {
-        continue;
-      }
-
-      std::string index = std::to_string(numLights);
-      std::string position = "lights[" + index + "].position";
-      std::string color = "lights[" + index + "].color";
-      std::string distance = "lights[" + index + "].distance";
-      std::string energy = "lights[" + index + "].energy";
-      std::string specular = "lights[" + index + "].specular";
-
-      const Transform &t = e.getComponent<Transform>();
-      const LightSource &ls = e.getComponent<LightSource>();
-      glUniform3f(diffuse.uni(position.c_str()), t.position.x, t.position.y, t.position.z);
-      glUniform3f(diffuse.uni(color.c_str()), ls.color.x, ls.color.y, ls.color.z);
-      glUniform1f(diffuse.uni(distance.c_str()), ls.distance);
-      glUniform1f(diffuse.uni(energy.c_str()), ls.energy);
-      glUniform1f(diffuse.uni(specular.c_str()), ls.specular);
-
-      ++numLights;
-    }
-    int numLightsLoc = diffuse.uni("numLights");
-    glUniform1i(numLightsLoc, numLights);
-  }
 
   /* Portals, pass 1 */
   for (EntityPair &p : scene->portalPairs) {
@@ -136,7 +114,7 @@ void Renderer::render() {
     renderPortal(camera, pEnt2, pEnt1);
     // Depth buffer
     if (portal1.open and portal2.open) {
-      const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
+      setShader(&ShaderLoader::getShader("unshaded.frag"));
 
       glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
       glDepthMask(GL_TRUE);
@@ -147,11 +125,11 @@ void Renderer::render() {
       Matrix4f mtx;
       pEnt1.getComponent<Transform>().getModelMtx(mtx);
       mtx.scale(portal1.getScaleMult());
-      renderMesh(camera, unshaded, mtx, portalStencil);
+      renderMesh(camera, mtx, portalStencil);
 
       pEnt2.getComponent<Transform>().getModelMtx(mtx);
       mtx.scale(portal2.getScaleMult());
-      renderMesh(camera, unshaded, mtx, portalStencil);
+      renderMesh(camera, mtx, portalStencil);
 
       glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     }
@@ -183,7 +161,7 @@ void Renderer::render() {
         renderPortalNoise(camera, pEnt2, 1.f);
       }
     }
-    
+
     // Draw overlays
     renderPortalOverlay(camera, pEnt1);
     renderPortalOverlay(camera, pEnt2);
@@ -192,34 +170,49 @@ void Renderer::render() {
 
   //Draw GUI
   glClear(GL_DEPTH_BUFFER_BIT);
-  renderUI();
-}
-
-void Renderer::renderUI() {
-  viewport->getSize(&vpWidth, &vpHeight);
-  Camera camera;
-  camera.setOrthographic();
-  camera.setBounds(0, vpWidth, 0, vpHeight);
-  // Crosshair
-  Matrix4f crosshairMtx;
-  crosshairMtx.translate(Vector3f(vpWidth/2, vpHeight/2, -2));
-  crosshairMtx.scale(Vector3f(80, 80, 1));
-  const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
-  const Material &mat = MaterialLoader::fromTexture("Reticle.png");
-  const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
-  renderMesh(camera, unshaded, crosshairMtx, mesh, mat);
-
-  // Title
-  setFont("Pacaya", 1.5f);
-  renderText(camera, "GlPortal", 25, vpHeight - 75);
-
-  // FPS counter
-  setFont("Pacaya", 0.5f);
-  renderText(camera, std::string("FPS: ") + std::to_string(Game::fps.getFps()), 10, vpHeight - 25);
   UiRenderer::render(*this);
+  TerminalRenderer::render(*this);
 }
 
-void Renderer::renderScene(const Camera &cam) {
+void Renderer::renderScene(const Camera &camera) {
+  setShader(&ShaderLoader::getShader("ambient.frag"));
+  renderEntities(camera);
+
+  // Set the light blending to additive, and depth testing to less or equal
+  // in order to draw multiple layers of light over our ambient image
+  glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ZERO);
+  glDepthFunc(GL_LEQUAL);
+
+  setShader(&ShaderLoader::getShader("diffuse.frag"));
+  /* Lights */ {
+    for (const Entity &e : scene->entities) {
+      if (not e.hasComponent<LightSource>()) {
+        continue;
+      }
+
+      const Transform &t = e.getComponent<Transform>();
+      const LightSource &ls = e.getComponent<LightSource>();
+
+      if (not ls.enabled) {
+        continue;
+      }
+
+      glUniform3f(shader->uni("light.position"), t.position.x, t.position.y, t.position.z);
+      glUniform3f(shader->uni("light.color"), ls.color.x, ls.color.y, ls.color.z);
+      glUniform1f(shader->uni("light.distance"), ls.distance);
+      glUniform1f(shader->uni("light.energy"), ls.energy);
+      glUniform1f(shader->uni("light.specular"), ls.specular);
+
+      renderEntities(camera);
+    }
+  }
+
+  // Set the blending and depth function back to their normal values
+  glDepthFunc(GL_LESS);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void Renderer::renderEntities(const Camera &cam) {
   for (Entity &e : scene->entities) {
     if (e.hasComponent<MeshDrawable>()) {
       renderEntity(cam, e);
@@ -232,8 +225,8 @@ void Renderer::renderEntity(const Camera &cam, const Entity &e) {
   MeshDrawable &drawable = e.getComponent<MeshDrawable>();
   Matrix4f mtx;
   e.getComponent<Transform>().getModelMtx(mtx);
-  const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
-  renderMesh(cam, diffuse, mtx, drawable.mesh, drawable.material);
+
+  renderMesh(cam, mtx, drawable.mesh, drawable.material);
 }
 
 void Renderer::renderPlayer(const Camera &cam) {
@@ -244,48 +237,49 @@ void Renderer::renderPlayer(const Camera &cam) {
   mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
   const Mesh &dummy = MeshLoader::getMesh("HumanToken.obj");
   const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
-  const Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
-  renderMesh(cam, diffuse, mtx, dummy, mat);
+
+  setShader(&ShaderLoader::getShader("ambient.frag"));
+  renderMesh(cam, mtx, dummy, mat);
 }
 
-void Renderer::renderPortalContent(const Camera &cam, const Entity &portal) {
-  //Stencil drawing
-  //Primary portal
+void Renderer::renderPortalStencil(const Camera &cam, const Entity &portal) {
+  glClear(GL_STENCIL_BUFFER_BIT);
+
+  // Disable writing to the color and depth buffer
+  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+  glDepthMask(GL_FALSE);
+
+  // Set the stencil function to always fail
   glStencilFunc(GL_NEVER, 1, 0xFF);
+  // Replace all stencil pixel where we draw with 1
   glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
-  
+
   const Portal &p = portal.getComponent<Portal>();
   Matrix4f mtx;
-  mtx.translate(p.getDirection() * -cam.getZNear());
   portal.getComponent<Transform>().applyModelMtx(mtx);
   mtx.scale(p.getScaleMult());
-  renderMesh(cam, ShaderLoader::getShader("unshaded.frag"), mtx, p.stencilMesh);
 
-  mtx.setIdentity();
-  portal.getComponent<Transform>().applyModelMtx(mtx);
-  mtx.scale(p.getScaleMult());
-  renderMesh(cam, ShaderLoader::getShader("unshaded.frag"), mtx, p.stencilMesh);
+  setShader(&ShaderLoader::getShader("unshaded.frag"));
+  renderMesh(cam, mtx, p.stencilMesh);
 
+  // Enable writing to the color and depth buffer again
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glDepthMask(GL_TRUE);
 }
-  
+
 void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entity &otherPortal) {
   if (portal.getComponent<Portal>().open and otherPortal.getComponent<Portal>().open) {
     glEnable(GL_STENCIL_TEST);
-    glClear(GL_STENCIL_BUFFER_BIT);
-    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-    glDepthMask(GL_FALSE);
 
-    renderPortalContent(cam, portal);
-    
-    //Draw the scene from the secondary portal
+    renderPortalStencil(cam, portal);
+
+    // Set the stencil function so we only render on the stencil
     glStencilFunc(GL_EQUAL, 1, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
+    // Draw the whole scene onto the stencil containing the player and recursive portal overlays
     Camera portalCam;
     setCameraInPortal(cam, portalCam, portal, otherPortal);
-    // TODO: rework to allow recursive rendering, and draw other portal pairs
     renderPlayer(portalCam);
     renderScene(portalCam);
     renderPortalOverlay(portalCam, portal);
@@ -294,16 +288,17 @@ void Renderer::renderPortal(const Camera &cam, const Entity &portal, const Entit
     glDisable(GL_STENCIL_TEST);
   }
 }
-  
+
 void Renderer::renderPortalOverlay(const Camera &cam, const Entity &portal) {
   const Portal &p = portal.getComponent<Portal>();
   if (p.open) {
-    const Shader &unshaded = ShaderLoader::getShader("unshaded.frag");
+    setShader(&ShaderLoader::getShader("unshaded.frag"));
+
     Matrix4f mtx;
     portal.getComponent<Transform>().getModelMtx(mtx);
     mtx.scale(p.getScaleMult());
 
-    renderMesh(cam, unshaded, mtx, p.overlayMesh, p.overlayTex);
+    renderMesh(cam, mtx, p.overlayMesh, p.overlayTex);
   }
 }
 
@@ -314,25 +309,24 @@ void Renderer::renderPortalNoise(const Camera &cam, const Entity &portal, float 
   const Portal &p = portal.getComponent<Portal>();
   mtx.scale(p.getScaleMult());
 
-  const Shader &simplexTime = ShaderLoader::getShader("simplexTime.frag");
-  glUseProgram(simplexTime.handle);
-  int timeLoc = simplexTime.uni("time");
-  int colorLoc = simplexTime.uni("color");
-  int noiseAlphaLoc = simplexTime.uni("noiseAlpha");
+  setShader(&ShaderLoader::getShader("simplexTime.frag"));
+
+  int timeLoc = shader->uni("time");
+  int colorLoc = shader->uni("color");
+  int noiseAlphaLoc = shader->uni("noiseAlpha");
   glUniform1f(timeLoc, SDL_GetTicks()/1000.f);
   glUniform3f(colorLoc, p.color.x, p.color.y, p.color.z);
   glUniform1f(noiseAlphaLoc, fade);
 
-  renderMesh(cam, simplexTime, mtx, p.overlayMesh, p.maskTex);
+  renderMesh(cam, mtx, p.overlayMesh, p.maskTex);
 }
 
-void Renderer::renderText(const Camera &cam, const std::string &text, int x, int y) {
-  glClear(GL_DEPTH_BUFFER_BIT);
-
+void Renderer::renderText(const Camera &cam, const std::string &text, Vector3f vector) {
+  // FIXME This should be determined by the currently set font
   const Material &mat = MaterialLoader::fromTexture("Pacaya.png");
-  const Shader &sh = ShaderLoader::getShader("text.frag");
-
-  Vector2f position(x, y);
+  setShader(&ShaderLoader::getShader("text.frag"));
+  glUniform4f(shader->uni("color"), fontColor.x, fontColor.y, fontColor.z, fontColor.w);
+  Vector2f position(vector.x, vector.y);
   Matrix4f mtx;
 
   const char *array = text.c_str();
@@ -345,52 +339,46 @@ void Renderer::renderText(const Camera &cam, const std::string &text, int x, int
     mtx.setIdentity();
     mtx.translate(Vector3f(position.x + letter.xOffset * font->size,
                   position.y + letter.yOffset * font->size,
-                  -10));
+                  vector.z));
 
     mtx.scale(Vector3f(letter.width * font->size,
                       letter.height * font->size, 1));
 
-    renderMesh(cam, sh, mtx, mesh, mat);
+    renderMesh(cam, mtx, mesh, mat);
     position.x += letter.advance * font->size;
   }
 }
 
-
-/**
- * Renders a mesh with the specified texture
- * @param mesh The mesh to render
- */
-void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat) {
-  glUseProgram(sh.handle);
-
+void Renderer::renderMesh(const Camera &cam, Matrix4f &mdlMtx,
+                          const Mesh &mesh, const Material *mat) {
   Matrix4f projMatrix; cam.getProjMatrix(projMatrix);
-  glUniformMatrix4fv(sh.uni("projectionMatrix"), 1, false, projMatrix.toArray());
+  glUniformMatrix4fv(shader->uni("projectionMatrix"), 1, false, projMatrix.toArray());
   Matrix4f viewMatrix; cam.getViewMatrix(viewMatrix);
-  glUniformMatrix4fv(sh.uni("viewMatrix"), 1, false, viewMatrix.toArray());
-  Matrix4f invViewMatrix = inverse(viewMatrix);
-  glUniformMatrix4fv(sh.uni("invViewMatrix"), 1, false, invViewMatrix.toArray());
+  glUniformMatrix4fv(shader->uni("viewMatrix"), 1, false, viewMatrix.toArray());
+  Matrix4f invViewMatrix; cam.getInvViewMatrix(invViewMatrix);
+  glUniformMatrix4fv(shader->uni("invViewMatrix"), 1, false, invViewMatrix.toArray());
 
   Matrix3f mdlMtx3 = toMatrix3f(mdlMtx);
   Matrix3f i3 = inverse(mdlMtx3);
   Matrix4f modelTrInv4Matrix = toMatrix4f(transpose(i3));
-  glUniformMatrix4fv(sh.uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.toArray());
+  glUniformMatrix4fv(shader->uni("modelTrInv4Matrix"), 1, false, modelTrInv4Matrix.toArray());
 
-  glUniformMatrix4fv(sh.uni("modelMatrix"), 1, false, mdlMtx.toArray());
+  glUniformMatrix4fv(shader->uni("modelMatrix"), 1, false, mdlMtx.toArray());
 
   glBindVertexArray(mesh.handle);
   if (mat) {
-    int tiling = sh.uni("tiling");
+    int tiling = shader->uni("tiling");
     glUniform2f(tiling, mat->scaleU, mat->scaleV);
-    glUniform1i(sh.uni("diffuse"), 0);
+    glUniform1i(shader->uni("diffuse"), 0);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mat->diffuse.handle);
-    glUniform1i(sh.uni("normalMap"), 1);
+    glUniform1i(shader->uni("normalMap"), 1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, mat->normal.handle);
-    glUniform1i(sh.uni("specularMap"), 2);
+    glUniform1i(shader->uni("specularMap"), 2);
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, mat->specular.handle);
-    glUniform1f(sh.uni("shininess"), mat->shininess);
+    glUniform1f(shader->uni("shininess"), mat->shininess);
   }
   glDrawArrays(GL_TRIANGLES, 0, mesh.numFaces * 3);
   if (mat) {
@@ -404,7 +392,8 @@ void Renderer::renderMesh(const Camera &cam, const Shader &sh, Matrix4f &mdlMtx,
   glBindVertexArray(0);
 }
 
-void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal) {
+void Renderer::setCameraInPortal(const Camera &cam, Camera &dest,
+                                 const Entity &portal, const Entity &otherPortal) {
   Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
   p1mat.translate(p1T.position);
@@ -421,24 +410,23 @@ void Renderer::setCameraInPortal(const Camera &cam, Camera &dest, const Entity &
   dest.setAspect(cam.getAspect());
   dest.setFovy(cam.getFovy());
   dest.setZNear((p1T.position - cam.getPosition()).length());
-  //Matrix4f proj; dest.getProjMatrix(proj);
-  //dest.setProjMatrix(clipProjMat(portal, destView, proj));
   dest.setViewMatrix(destView);
 }
 
-static float sign(float v) {
-  if (v > 0.f) return 1.f;
-  if (v < 0.f) return -1.f;
-  return 0.f;
-}
-
-Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj) {
+/**
+ * TODO Documentation required.
+ */
+Matrix4f Renderer::clipProjMat(const Entity &ent,
+                               const Matrix4f &view, const Matrix4f &proj) {
   const Transform &t = ent.getComponent<Transform>();
-  Vector4f clipPlane(Math::toDirection(t.rotation), -dot(Math::toDirection(t.rotation), t.position));
+  Vector4f clipPlane(Math::toDirection(t.rotation),
+                     -dot(Math::toDirection(t.rotation),
+                          t.position));
   clipPlane = inverse(transpose(view)) * clipPlane;
 
-  if (clipPlane.w > 0.f)
+  if (clipPlane.w > 0.f){
     return proj;
+  }
 
   Vector4f q = inverse(proj) * Vector4f(
     sign(clipPlane.x),
@@ -449,7 +437,6 @@ Matrix4f Renderer::clipProjMat(const Entity &ent, const Matrix4f &view, const Ma
 
   Vector4f c = clipPlane * (2.0f / dot(clipPlane, q));
 
-  // third row = clip plane - fourth row
   Matrix4f newProj = proj;
   newProj[2] = c.x - newProj[3];
   newProj[6] = c.y - newProj[7];

@@ -1,5 +1,5 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+#ifndef PLAYER_MOTION_HPP
+#define PLAYER_MOTION_HPP
 
 #include <engine/Entity.hpp>
 #include <engine/component/Transform.hpp>
@@ -48,6 +48,7 @@ public:
   PlayerMotion(Entity &ent) :
     Component(ent),
     flying(false),
+    frozen(false),
     noclip(false) {
     entity.getComponent<Transform>().scale = PLAYER_SIZE;
 
@@ -66,7 +67,7 @@ public:
 
   Vector3f velocity;
   bool grounded;
-  bool flying, noclip;
+  bool flying, noclip, frozen;
 
   float speed;
 private:
@@ -76,4 +77,4 @@ private:
 
 } /* namespace glPortal */
 
-#endif /* PLAYER_HPP */
+#endif /* PLAYER_MOTION_HPP */

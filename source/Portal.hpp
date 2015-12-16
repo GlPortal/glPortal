@@ -18,7 +18,7 @@ public:
   static const int OPEN_ANIM_DURATION;
   static const float SURFACE_OFFSET;
 
-  Portal(Entity &ent) : Component(ent), open(false) {}
+  Portal(Entity &ent);
   Vector3f getDirection() const;
   bool throughPortal(const BoxCollider &collider) const;
   bool inPortal(const BoxCollider &collider) const;

@@ -23,3 +23,5 @@ tests/
 documentation/html/
 documentation/latex/
 external/json11/libjson11.a
+analysis.txt
+source/gmon.out
