@@ -59,6 +59,11 @@ void GameController::handleEvent(const SDL_Event &event) {
     if (sym == SDLK_BACKSPACE) {
       Input::truncateCharBuffer();
     }
+
+    if (sym == SDLK_RETURN) {
+      Input::clearBuffer();
+    }
+    
     Input::keyPressed(key, mod);
     if (key == SDL_SCANCODE_Q) {
       game->close();

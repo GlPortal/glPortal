@@ -23,6 +23,7 @@ void GameState::handleRunning(Game& game){
     game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = true;
     game.getWorld()->scene->terminal->enabled = true;
     game.getWorld()->stateFunctionStack.push(&GameState::handleTerminal);
+    Input::clear();
     SDL_StartTextInput();
   }
 }
