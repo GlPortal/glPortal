@@ -46,14 +46,15 @@ void GameController::handleEvent(const SDL_Event &event) {
   int key = event.key.keysym.scancode;
   int mod = event.key.keysym.mod;
   int sym = event.key.keysym.sym;
+  int cursor = event.edit.start;
+  int selection_len = event.edit.length;
 
   switch (event.type) {
   case SDL_TEXTINPUT:
     Input::addToBuffer(event.text.text);
     break;
   case SDL_TEXTEDITING:
-    //    int cursor = event.edit.start;
-    //    int selection_len = event.edit.length;
+
     break;
   case SDL_KEYDOWN:
     if (sym == SDLK_BACKSPACE) {
