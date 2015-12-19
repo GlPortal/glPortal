@@ -12,7 +12,7 @@
 namespace glPortal {
 
 void WorldHelper::shootPortal(int button, Scene *scene) {
-  Vector3f cameraDir = Math::toDirection(scene->camera.getRotation());
+  Vector3f cameraDir = Math::toDirection(scene->camera.getOrientation());
   btVector3 btFrom = scene->camera.getPosition();
   btVector3 btTo = btFrom + cameraDir*10000;
   btCollisionWorld::ClosestRayResultCallback res(btFrom, btTo);

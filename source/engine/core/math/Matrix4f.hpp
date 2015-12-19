@@ -45,6 +45,7 @@ public:
   bool operator!=(const Matrix4f&) const;
   Matrix4f operator*(const Matrix4f&) const;
   Vector4f operator*(const Vector4f&) const;
+  Vector3f operator*(const Vector3f&) const;
 private:
   float a[16];
 };

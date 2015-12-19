@@ -8,10 +8,10 @@
 
 namespace glPortal {
 
-Vector4f::Vector4f(const Vector3f &v, float w)
+constexpr Vector4f::Vector4f(const Vector3f &v, float w)
   : x(v.x), y(v.y), z(v.z), w(w) {}
 
-Vector4f::Vector4f(const Vector2f &v, float z, float w)
+constexpr Vector4f::Vector4f(const Vector2f &v, float z, float w)
   : x(v.x), y(v.y), z(z), w(w) {}
 
 Vector4f::Vector4f(const btVector4 &v)
@@ -69,13 +69,21 @@ Quaternion& Quaternion::operator*=(const Quaternion &q) {
   return *this;
 }
 
+Vector3f Quaternion::operator*(const Vector3f &v) const {
+  // Pout = q * Pin * conj(q)
+  Vector3f vn = normalize(v);
+  Quaternion resQuat = *this * Quaternion(vn.x, vn.y, vn.z, 0) * conjugate(*this);
+  return Vector3f(resQuat.x, resQuat.y, resQuat.z);
+}
+
+
 Quaternion& Quaternion::fromAxAngle(const Vector3f &a, float r) {
   Vector3f na = normalize(a);
-  float sinR2 = std::sin(r / 2);
+  const float r2 = r / 2, sinR2 = std::sin(r2);
   this->x = na.x * sinR2;
   this->y = na.y * sinR2;
   this->z = na.z * sinR2;
-  this->w = std::cos(r / 2);
+  this->w = std::cos(r2);
   return *this;
 }
 
@@ -86,6 +94,59 @@ Quaternion& Quaternion::fromAxAngle(float x, float y, float z, float r) {
 Quaternion& Quaternion::fromAxAngle(const Vector4f &a) {
   return fromAxAngle(a.x, a.y, a.z, a.w);
 }
+
+Vector4f Quaternion::toAxAngle() const {
+  const float r = std::acos(w)*2, invSinR2 = 1/std::sin(r/2);
+  return Vector4f(
+    x * invSinR2,
+    y * invSinR2,
+    z * invSinR2,
+    r
+  );
+}
+
+
+Quaternion& Quaternion::fromAero(float tetha, float phi, float psi) {
+  *this = Quaternion().fromAxAngle(0, 1, 0, tetha) *
+          Quaternion().fromAxAngle(1, 0, 0, phi) *
+          Quaternion().fromAxAngle(0, 0, 1, psi);
+  return *this;
+}
+
+Quaternion& Quaternion::fromAero(const Vector3f &v) {
+  fromAero(v.tetha, v.phi, v.psi);
+  return *this;
+}
+
+Vector3f Quaternion::toAero() const {
+  // FIXME!
+  const double sqw = w*w, sqx = x*x, sqy = y*y, sqz = z*z;
+  double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+  double test = x*z + w*y;
+  if (test > 0.499*unit) { // singularity at north pole
+    return Vector3f(2 * std::atan2(x, w), M_PI/2, 0);
+  }
+  if (test < -0.499*unit) { // singularity at south pole
+    return Vector3f(-2 * std::atan2(x, w), -M_PI/2, 0);
+  }
+  return Vector3f(
+    std::atan2(-2*(x*z - w*y), sqw - sqx - sqy + sqz),
+    std::asin(2*test/unit),
+    std::atan2(-2*(x*y - w*z), sqw - sqx + sqy - sqz)
+  );
+}
+
+#if 0
+Quaternion& Quaternion::fromEulerZXY(const Vector3f &v) {
+  fromEulerZXY(v.y, v.x, v.z);
+  return *this;
+}
+
+Vector3f Quaternion::toEulerZXY() const {
+  const Vector3f a = toAero();
+  return Vector3f(a.y, a.x, a.z);
+}
+#endif
 
 Quaternion& Quaternion::setFromEuler(float p, float y, float r) {
   float c1 = std::cos(y/2);
@@ -112,16 +173,6 @@ Quaternion& Quaternion::setFromEuler(const Vector3f &e) {
   return setFromEuler(e.pitch, e.yaw, e.roll);
 }
 
-Vector4f Quaternion::toAxAngle() const {
-  float r = std::acos(w)*2, invSinR2 = 1/std::sin(r/2);
-  return Vector4f(
-    x * invSinR2,
-    y * invSinR2,
-    z * invSinR2,
-    r
-  );
-}
-
 Matrix4f Quaternion::toMatrix() const {
   Matrix4f m;
   m[0] = 1.0f - 2.0f*y*y - 2.0f*z*z;
@@ -134,10 +185,6 @@ Matrix4f Quaternion::toMatrix() const {
   m[9] = 2.0f*y*z - 2.0f*x*w;
   m[10] = 1.0f - 2.0f*x*x - 2.0f*y*y;
   return m;
-}
-
-Quaternion conjugate(const Quaternion &q) {
-  return Quaternion(-q.x, -q.y, -q.z, q.w);
 }
 
 } /* namespace glPortal */

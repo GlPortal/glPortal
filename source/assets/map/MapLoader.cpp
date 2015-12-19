@@ -108,7 +108,7 @@ void MapLoader::extractSpawn() {
     XmlHelper::extractPosition(spawnElement, position);
     t.setPosition(position);
     PlayerMotion &pm = scene->player->getComponent<PlayerMotion>();
-    XmlHelper::extractRotation(spawnElement, pm.rotation);
+    XmlHelper::extractRotation(spawnElement, pm.headAngle);
     Transform &pt = scene->player->getComponent<Transform>();
     pt.setPosition(position);
   } else {

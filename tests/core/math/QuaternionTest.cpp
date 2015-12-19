@@ -1,3 +1,4 @@
+#include <iostream>
 #include <unittest++/UnitTest++.h>
 #include <engine/core/math/Math.hpp>
 #include <engine/core/math/Quaternion.hpp>
@@ -59,20 +60,20 @@ SUITE(QuaternionTest) {
   }
 
   // http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/steps/index.htm
-  TEST_FIXTURE(QuaternionTestFixtures, Euler_X90) {
-    quat.setFromEuler(rad(90), 0, 0);
+  TEST_FIXTURE(QuaternionTestFixtures, Euler_Heading90) {
+    quat.fromEulerZXY(rad(90), 0, 0);
     CHECK(fuzzyEq(length(quat), 1));
     CHECK(fuzzyEq(quat, 0, 0.7071, 0, 0.7071));
   }
-  TEST_FIXTURE(QuaternionTestFixtures, Euler_Y90) {
-    quat.setFromEuler(0, rad(90), 0);
+  TEST_FIXTURE(QuaternionTestFixtures, Euler_Attitude90) {
+    quat.fromEulerZXY(0, rad(90), 0);
     CHECK(fuzzyEq(length(quat), 1));
-    CHECK(fuzzyEq(quat, 0, 0, 0.7071, 0.7071));
+    CHECK(fuzzyEq(quat, 0.7071, 0, 0, 0.7071));
   }
-  TEST_FIXTURE(QuaternionTestFixtures, Euler_XY90) {
-    quat.setFromEuler(rad(90), rad(90), 0);
+  TEST_FIXTURE(QuaternionTestFixtures, Euler_HA90) {
+    quat.fromEulerZXY(rad(90), rad(90), 0);
     CHECK(fuzzyEq(length(quat), 1));
-    CHECK(fuzzyEq(quat, 0.5, 0.5, 0.5, 0.5));
+    CHECK(fuzzyEq(quat, 0.5, 0.5, -0.5, 0.5));
   }
 }
 

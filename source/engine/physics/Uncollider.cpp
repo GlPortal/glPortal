@@ -16,7 +16,9 @@ bool Uncollider::isPointInUncollideVolume(const btVector3 &p) {
     for (Entity *pEnt : portals) {
       Portal &pComp = pEnt->getComponent<Portal>();
       if (pComp.open and pComp.uncollider) {
-        return PhysicsHelper::pointInVolume(p, pComp.uncollider.get());
+        if (PhysicsHelper::pointInVolume(p, pComp.uncollider.get())) {
+          return true;
+        }
       }
     }
   }

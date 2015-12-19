@@ -2,6 +2,7 @@
 #define VECTOR4F_HPP
 
 #include <cmath>
+#include <string>
 
 class btVector4;
 class btQuaternion;
@@ -26,14 +27,14 @@ struct Vector4f {
     float w, a, v, d;
   };
 
-  Vector4f()
+  constexpr Vector4f()
     : Vector4f(0, 0, 0, 0) {}
-  Vector4f(float x, float y, float z, float w)
+  constexpr Vector4f(float x, float y, float z, float w)
     : x(x), y(y), z(z), w(w) {}
-  Vector4f(float v)
+  constexpr Vector4f(float v)
     : x(v), y(v), z(v), d(v) {}
-  Vector4f(const Vector3f&, float w);
-  Vector4f(const Vector2f&, float z, float w);
+  constexpr Vector4f(const Vector3f&, float w);
+  constexpr Vector4f(const Vector2f&, float z, float w);
   Vector4f(const btVector4&);
 
   void set(float x, float y, float z, float w) {
@@ -97,6 +98,13 @@ struct Vector4f {
 
   bool fuzzyEqual(const Vector4f&, float threshold = .01f) const;
 
+  inline std::string toString() const {
+    return (std::string("Vec4f{x=") + std::to_string(x) +
+      ", y=" + std::to_string(y) +
+      ", z=" + std::to_string(z) +
+      ", w=" + std::to_string(w) + "}");
+  }
+
   operator btVector4() const;
   Vector4f& operator=(const btVector4&);
 
@@ -105,51 +113,73 @@ struct Vector4f {
 };
 
 struct Quaternion : public Vector4f {
-  enum EulerOrder {
-    XYZ,
-    XZY,
-    YXZ,
-    YZX,
-    ZXY,
-    ZYX
-  };
   using Vector4f::Vector4f;
-  Quaternion()
+  constexpr Quaternion()
     : Vector4f(0, 0, 0, 1) {}
   Quaternion(const btQuaternion&);
 
   Quaternion operator*(const Quaternion&) const;
   Quaternion& operator*=(const Quaternion&);
 
+  Vector3f operator*(const Vector3f&) const;
+
   // Quaternion multiplication isn't commutative, and so isn't division
   Quaternion operator/(const Quaternion&) const = delete;
   Quaternion& operator/=(const Quaternion&) = delete;
+
 
   Quaternion& fromAxAngle(float x, float y, float z, float r);
   Quaternion& fromAxAngle(const Vector3f &a, float r);
   Quaternion& fromAxAngle(const Vector4f &a);
 
-  Quaternion& setFromEuler(float pitch, float yaw, float roll);
-  Quaternion& setFromEuler(const Vector3f&);
-
   Vector4f toAxAngle() const;
+
+
+  Quaternion& fromAero(float tetha, float phi, float psi);
+  Quaternion& fromAero(const Vector3f&);
+
+  Vector3f toAero() const;
+
+#if 0
+  inline Quaternion& fromEulerZXY(float X, float Y, float Z) {
+    fromAero(Y, X, Z);
+    return *this;
+  }
+  Quaternion& fromEulerZXY(const Vector3f&);
+
+  Vector3f toEulerZXY() const;
+#endif
+
+  /* Deprecated because rotation order is unspecified */
+  [[deprecated]] Quaternion& setFromEuler(float pitch, float yaw, float roll);
+  [[deprecated]] Quaternion& setFromEuler(const Vector3f&);
+
   Matrix4f toMatrix() const;
+
+  inline std::string toString() const {
+    return (std::string("Quat{x=") + std::to_string(x) +
+      ", y=" + std::to_string(y) +
+      ", z=" + std::to_string(z) +
+      ", w=" + std::to_string(w) + "}");
+  }
 
   using Vector4f::operator=;
   using Vector4f::operator btVector4;
   using Vector4f::operator btQuaternion;
 };
 
-inline float length(const Vector4f &v) {
+constexpr inline float length(const Vector4f &v) {
   return std::sqrt(v.x*v.x + v.y*v.y + v.z*v.z + v.d*v.d);
 }
 
-inline float dot(const Vector4f &v, const Vector4f &w) {
+constexpr inline float dot(const Vector4f &v, const Vector4f &w) {
   return v.x*w.x + v.y*w.y + v.z*w.z + v.w*w.w;
 }
 
 Vector4f normalize(const Vector4f&);
-Quaternion conjugate(const Quaternion&);
+constexpr inline Quaternion conjugate(const Quaternion &q) {
+  return Quaternion(-q.x, -q.y, -q.z, q.w);
+}
 
 } /* namespace glPortal */
 

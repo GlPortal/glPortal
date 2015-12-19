@@ -98,10 +98,6 @@ void World::loadScene(const std::string &path) {
   Environment::dispatcher.dispatch(Event::loadScene);
 }
 
-double World::getTime() const {
-  return gameTime;
-}
-
 void World::update(double dtime) {
   gameTime += dtime;
   
@@ -160,13 +156,13 @@ void World::update(double dtime) {
     }
   }*/
 
-  //Parent camera to player
+  // Parent camera to player
   scene->camera.setPerspective();
   int vpWidth, vpHeight;
   renderer->getViewport()->getSize(&vpWidth, &vpHeight);
   scene->camera.setAspect((float)vpWidth / vpHeight);
   scene->camera.setPosition(plrTform.getPosition() + Vector3f(0, plrTform.getScale().y/2, 0));
-  scene->camera.setRotation(plrMotion.rotation);
+  scene->camera.setOrientation(plrMotion.getHeadOrientation());
 
   //Check if the end of the level has been reached
   float distToEnd = (scene->end->getComponent<Transform>().getPosition() - plrTform.getPosition()).length();

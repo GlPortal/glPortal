@@ -198,6 +198,15 @@ Vector4f Matrix4f::operator*(const Vector4f &v) const {
   return dest;
 }
 
+Vector3f Matrix4f::operator*(const Vector3f &v) const {
+  Vector3f dest;
+  dest.x = a[0] * v.x + a[4] * v.y + a[8] * v.z;
+  dest.y = a[1] * v.x + a[5] * v.y + a[9] * v.z;
+  dest.z = a[2] * v.x + a[6] * v.y + a[10] * v.z;
+  return dest;
+}
+
+
 /* Utility functions */
 Matrix4f transpose(const Matrix4f &m) {
   Matrix4f d;

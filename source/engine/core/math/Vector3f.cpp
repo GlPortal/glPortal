@@ -145,20 +145,12 @@ Vector3f& Vector3f::operator=(const btVector3 &v) {
 }
 
 /* Utility functions */
-float dot(const Vector3f& v1, const Vector3f& v2) {
-  return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-}
-
 Vector3f cross(const Vector3f& v1, const Vector3f& v2) {
   Vector3f v;
   v.x = v1.y * v2.z - v1.z * v2.y;
   v.y = v2.x * v1.z - v2.z * v1.x;
   v.z = v1.x * v2.y - v1.y * v2.x;
   return v;
-}
-
-Vector3f negate(const Vector3f& v) {
-  return Vector3f(-v.x, -v.y, -v.z);
 }
 
 Vector3f normalize(const Vector3f& v) {

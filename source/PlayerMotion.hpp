@@ -10,6 +10,7 @@
 #include <engine/component/RigidBody.hpp>
 #include <engine/core/math/Vector2f.hpp>
 #include <engine/core/math/Vector3f.hpp>
+#include <engine/core/math/Quaternion.hpp>
 
 namespace glPortal {
 
@@ -51,8 +52,7 @@ public:
   PlayerMotion(Entity &ent) :
     Component(ent),
     flying(false),
-    noclip(false)/*,
-    shape(.4, 1)*/ {
+    noclip(false) {
     entity.getComponent<Transform>().setScale(PLAYER_SIZE);
 
     velocity.set(0, 0, 0);
@@ -67,7 +67,8 @@ public:
   void mouseLook();
   void move(float dtime);
 
-  Vector3f velocity, rotation;
+  Vector3f velocity, headAngle;
+  Quaternion getHeadOrientation() const;
   bool grounded;
   bool flying, noclip;
 

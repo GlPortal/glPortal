@@ -37,7 +37,9 @@ public:
 
   void setRendererWindow(Window*);
 
-  double getTime() const;
+  inline double getTime() const {
+    return gameTime;
+  }
   void update(double dtime);
 
   Renderer* getRenderer() const;

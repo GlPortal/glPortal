@@ -22,13 +22,13 @@ namespace glPortal {
 class Vector3f {
 public:
   union {
-    float x, r, s, pitch;
+    float x, r, s, yaw, heading, azimuth, tetha;
   };
   union {
-    float y, g, t, yaw;
+    float y, g, t, pitch, attitude, elevation, phi;
   };
   union {
-    float z, b, u, roll;
+    float z, b, u, roll, bank, tilt, psi;
   };
 
   static const Vector3f ZERO;
@@ -69,10 +69,11 @@ public:
 };
 
 /* Utility functions */
-float dot(const Vector3f& v1, const Vector3f& v2);
-Vector3f cross(const Vector3f& v1, const Vector3f& v2);
-Vector3f negate(const Vector3f& v);
-Vector3f normalize(const Vector3f& v);
+constexpr inline float dot(const Vector3f &v1, const Vector3f &v2) {
+  return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+Vector3f cross(const Vector3f &v1, const Vector3f &v2);
+Vector3f normalize(const Vector3f &v);
 
 } /* namespace glPortal */
 
