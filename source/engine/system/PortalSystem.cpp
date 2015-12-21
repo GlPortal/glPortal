@@ -49,31 +49,30 @@ void PortalSystem::update(float dtime) {
             &pBT = pp.second->getComponent<Transform>();
           Vector3f normalA = pA.getDirection();
           Vector3f AP = pos - pAT.getPosition();
-          double APl = AP.length();
           if (dot(AP, normalA) < 0) {
-            Quaternion ad =
-            conjugate(pBT.getOrientation())*
-            pMotion.getBaseHeadOrientation()*
-            pAT.getOrientation();
+            double APl = AP.length();
+            Quaternion ad = pAT.getOrientation()*conjugate(pBT.getOrientation());
             t.setPosition(pBT.getPosition() + (ad*AP)*APl);
-            Vector3f a = ad.toAero();
-            System::Log(Debug) << "R from " << 
-            pMotion.headAngle.x << ' ' << pMotion.headAngle.y << ' ' << pMotion.headAngle.z <<
-            " to " << a.x << ' ' << a.z << ' ' << a.y;
-            pMotion.headAngle = Vector3f(a.x, a.z, a.y);
+            pMotion.headAngle = (ad*pMotion.getBaseHeadOrientation()).toAero();
           }
         }
         pB.uncolliderShape->getAabb(
           pB.uncollider->getWorldTransform(),
           min, max);
         // Is player within portal B uncollider ?
-        if (false&&PhysicsHelper::pointInAABB(pos, min, max) &&
+        if (PhysicsHelper::pointInAABB(pos, min, max) &&
             PhysicsHelper::pointInVolume(pos, *pB.uncollider)) {
           // Behind portal B
+          const Transform
+            &pAT = pp.first->getComponent<Transform>(),
+            &pBT = pp.second->getComponent<Transform>();
           Vector3f normalB = pB.getDirection();
-          Vector3f BP = pos - pp.second->getComponent<Transform>().getPosition();
+          Vector3f BP = pos - pBT.getPosition();
           if (dot(BP, normalB) < 0) {
-            t.setPosition(pp.first->getComponent<Transform>().getPosition() + BP);
+            double BPl = BP.length();
+            Quaternion ad = pBT.getOrientation()*conjugate(pAT.getOrientation());
+            t.setPosition(pAT.getPosition() + (ad*BP)*BPl);
+            pMotion.headAngle = (ad*pMotion.getBaseHeadOrientation()).toAero();
           }
         }
       }

@@ -14,12 +14,13 @@ struct QuaternionTestFixtures {
   Quaternion quat;
   std::random_device rd;
   std::mt19937 gen;
-  std::uniform_real_distribution<> nppi2, nppi;
+  std::uniform_real_distribution<> nppi2, nppi, z360;
 
   QuaternionTestFixtures() :
     gen(rd()),
     nppi2(-M_PI/2 + 0.002f, M_PI/2 - 0.002f),
-    nppi(-M_PI + 0.002f, M_PI - 0.002f) {
+    nppi(-M_PI + 0.002f, M_PI - 0.002f),
+    z360(0, 359.99f) {
   }
   
   ~QuaternionTestFixtures() {}
@@ -145,8 +146,40 @@ SUITE(QuaternionTest) {
       init.y = nppi2(gen);
       init.z = 0;
       back = (q*quat.fromAero(init)).toAero();
-      init.x = std::fmod(init.x + M_PI + M_PI/2, 2*M_PI)-M_PI;
-      back.x = std::fmod(back.x + M_PI, 2*M_PI)-M_PI;
+      init.x = std::remainder(init.x + M_PI + M_PI/2, 2*M_PI)-M_PI;
+      back.x = std::remainder(back.x + M_PI, 2*M_PI)-M_PI;
+      CHECK(back.fuzzyEqual(init));
+    }
+  }
+  TEST_FIXTURE(QuaternionTestFixtures, Random_HeadRotHRand) {
+    Vector3f init, back; float add;
+    Quaternion q; 
+    for (int n = 0; n < 200; ++n) {
+      add = rad(z360(gen));
+      q.fromAxAngle(0, 1, 0, add);
+      init.x = nppi(gen);
+      init.y = nppi2(gen);
+      init.z = 0;
+      back = (q*quat.fromAero(init)).toAero();
+      init.x = std::remainder(init.x + M_PI + add, 2*M_PI)-M_PI;
+      back.x = std::remainder(back.x + M_PI, 2*M_PI)-M_PI;
+      CHECK(back.fuzzyEqual(init));
+    }
+  }
+  TEST_FIXTURE(QuaternionTestFixtures, Random_HeadRotHRandAddSub) {
+    Vector3f init, back; float add, sub;
+    Quaternion q, qs; 
+    for (int n = 0; n < 200; ++n) {
+      add = rad(z360(gen));
+      sub = rad(z360(gen));
+      q.fromAxAngle(0, 1, 0, add);
+      qs.fromAxAngle(0, 1, 0, -sub);
+      init.x = nppi(gen);
+      init.y = nppi2(gen);
+      init.z = 0;
+      back = (q*qs*quat.fromAero(init)).toAero();
+      init.x = std::remainder(init.x + M_PI + add - sub, 2*M_PI)-M_PI;
+      back.x = std::remainder(back.x + M_PI, 2*M_PI)-M_PI;
       CHECK(back.fuzzyEqual(init));
     }
   }
