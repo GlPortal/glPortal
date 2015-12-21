@@ -26,8 +26,7 @@ public:
     float y, g, t, v;
   };
 
-  static const Vector2f ZERO;
-  static const Vector2f UP;
+  static const Vector2f ZERO, UP;
 
   /* Core */
   Vector2f();

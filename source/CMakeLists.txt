@@ -36,6 +36,7 @@ add_executable(${EXE_NAME}
   engine/core/gl/VBO.cpp
   engine/component/Health.cpp
   engine/component/Transform.cpp
+  engine/component/RigidBody.cpp
   engine/component/SoundSource.cpp
   engine/env/Environment.cpp
   engine/env/ArgumentsParser.cpp

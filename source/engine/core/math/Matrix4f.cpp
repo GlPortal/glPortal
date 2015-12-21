@@ -70,12 +70,6 @@ void Matrix4f::rotate(float angle, float x, float y, float z) {
   a[8] = f8; a[9] = f9; a[10] = f10; a[11] = f11;
 }
 
-void Matrix4f::rotate(const Vector3f &eulerYZX) {
-  rotate(eulerYZX.y, 0, 1, 0);
-  rotate(eulerYZX.z, 0, 0, 1);
-  rotate(eulerYZX.x, 1, 0, 0);
-}
-
 void Matrix4f::rotate(const Quaternion &quat) {
   *this = (*this * quat.toMatrix());
 }

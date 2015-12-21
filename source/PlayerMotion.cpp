@@ -25,15 +25,20 @@ void PlayerMotion::mouseLook() {
 
   // Apply mouse movement to view
   //Vector3f &rotation = entity.getComponent<Transform>().rotation;
-  headAngle.attitude += rad(mousedy * Environment::getConfig().getSensitivity());
-  headAngle.heading  += rad(mousedx * Environment::getConfig().getSensitivity());
+  headAngle.attitude -= rad(mousedy * Environment::getConfig().getSensitivity());
+  headAngle.heading  -= rad(mousedx * Environment::getConfig().getSensitivity());
+  headAngle.tilt *= 0.8;
 
   // Restrict rotation in horizontal axis
   headAngle.attitude = Math::clamp(headAngle.attitude, rad(-89.99f), rad(89.99f));
 }
 
+Quaternion PlayerMotion::getBaseHeadOrientation() const {
+  return Quaternion().fromAero(headAngle);
+}
+
 Quaternion PlayerMotion::getHeadOrientation() const {
-  return Quaternion().fromAero(-headAngle);
+  return Quaternion().fromAero(headAngle+Vector3f(0, 0, 0.02*sin(entity.manager.scene.world->getTime()*5)));
 }
 
 void PlayerMotion::move(float dtime) {
@@ -42,7 +47,7 @@ void PlayerMotion::move(float dtime) {
        strafingLeft  = Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT),
        strafingRight = Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT),
        jumping       = Input::isKeyDown(SDL_SCANCODE_SPACE) or Input::isKeyDown(SDL_SCANCODE_BACKSPACE);
-  float rot = -headAngle.heading;
+  float rot = headAngle.heading;
   Vector3f movement;
   KinematicCharacterController &ctrl = *entity.getComponent<Player>().controller;
   Transform &plrTform = entity.getComponent<Transform>();

@@ -1,15 +1,25 @@
-#include <iostream>
+#include <random>
+#include <cmath>
 #include <unittest++/UnitTest++.h>
 #include <engine/core/math/Math.hpp>
+#include <engine/core/math/Vector3f.hpp>
 #include <engine/core/math/Quaternion.hpp>
+
+#include <iostream>
 
 using namespace glPortal;
 using namespace std;
 
 struct QuaternionTestFixtures {
   Quaternion quat;
+  std::random_device rd;
+  std::mt19937 gen;
+  std::uniform_real_distribution<> nppi2, nppi;
 
-  QuaternionTestFixtures() {
+  QuaternionTestFixtures() :
+    gen(rd()),
+    nppi2(-M_PI/2 + 0.002f, M_PI/2 - 0.002f),
+    nppi(-M_PI + 0.002f, M_PI - 0.002f) {
   }
   
   ~QuaternionTestFixtures() {}
@@ -60,20 +70,85 @@ SUITE(QuaternionTest) {
   }
 
   // http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/steps/index.htm
-  TEST_FIXTURE(QuaternionTestFixtures, Euler_Heading90) {
-    quat.fromEulerZXY(rad(90), 0, 0);
+  TEST_FIXTURE(QuaternionTestFixtures, Aero_Heading90) {
+    quat.fromAero(rad(90), 0, 0);
     CHECK(fuzzyEq(length(quat), 1));
     CHECK(fuzzyEq(quat, 0, 0.7071, 0, 0.7071));
   }
-  TEST_FIXTURE(QuaternionTestFixtures, Euler_Attitude90) {
-    quat.fromEulerZXY(0, rad(90), 0);
+  TEST_FIXTURE(QuaternionTestFixtures, Aero_Attitude90) {
+    quat.fromAero(0, rad(90), 0);
     CHECK(fuzzyEq(length(quat), 1));
     CHECK(fuzzyEq(quat, 0.7071, 0, 0, 0.7071));
   }
-  TEST_FIXTURE(QuaternionTestFixtures, Euler_HA90) {
-    quat.fromEulerZXY(rad(90), rad(90), 0);
+  TEST_FIXTURE(QuaternionTestFixtures, Aero_HA90) {
+    quat.fromAero(rad(90), rad(90), 0);
     CHECK(fuzzyEq(length(quat), 1));
     CHECK(fuzzyEq(quat, 0.5, 0.5, -0.5, 0.5));
+  }
+
+  TEST_FIXTURE(QuaternionTestFixtures, QuatToAero_NorthSingularity) {
+    Vector3f init, back;
+    for (int n = 0; n < 50; ++n) {
+      init.x = nppi(gen);
+      init.y = rad(90);
+      init.z = 0;
+      back = quat.fromAero(init).toAero();
+      std::cout << init.x << ' ' << init.y << ' ' << init.z << " -> " << back.x << ' ' << back.y << ' ' << back.z << std::endl;
+      CHECK(back.fuzzyEqual(init));
+    }
+  }
+  TEST_FIXTURE(QuaternionTestFixtures, QuatToAero_SouthSingularity) {
+    Vector3f init, back;
+    for (int n = 0; n < 50; ++n) {
+      init.x = nppi(gen);
+      init.y = rad(-90);
+      init.z = 0;
+      back = quat.fromAero(init).toAero();
+      std::cout << init.x << ' ' << init.y << ' ' << init.z << " -> " << back.x << ' ' << back.y << ' ' << back.z << std::endl;
+      CHECK(back.fuzzyEqual(init));
+    }
+  }
+  TEST_FIXTURE(QuaternionTestFixtures, QuatToAero_A90) {
+    quat.set(.7071, 0, 0, .7071);
+    Vector3f a = quat.toAero();
+    CHECK(a.fuzzyEqual(Vector3f(0, rad(90), 0)));
+  }
+
+  TEST_FIXTURE(QuaternionTestFixtures, RandomAeroQuatAero_HA) {
+    Vector3f init, back;
+    for (int n = 0; n < 100; ++n) {
+      init.x = nppi(gen);
+      init.y = nppi2(gen);
+      init.z = 0;
+      back = quat.fromAero(init).toAero();
+      std::cout << init.x << ' ' << init.y << ' ' << init.z << " -> " << back.x << ' ' << back.y << ' ' << back.z << std::endl;
+      CHECK(back.fuzzyEqual(init));
+    }
+  }
+  TEST_FIXTURE(QuaternionTestFixtures, RandomAeroQuatAero_HT) {
+    Vector3f init, back;
+    for (int n = 0; n < 100; ++n) {
+      init.x = nppi(gen);
+      init.y = 0;
+      init.z = nppi(gen);
+      back = quat.fromAero(init).toAero();
+      std::cout << init.x << ' ' << init.y << ' ' << init.z << " -> " << back.x << ' ' << back.y << ' ' << back.z << std::endl;
+      CHECK(back.fuzzyEqual(init));
+    }
+  }
+
+  TEST_FIXTURE(QuaternionTestFixtures, Random_HeadRotH90) {
+    Vector3f init, back;
+    Quaternion q; q.fromAxAngle(0, 1, 0, rad(90));
+    for (int n = 0; n < 100; ++n) {
+      init.x = nppi(gen);
+      init.y = nppi2(gen);
+      init.z = 0;
+      back = (q*quat.fromAero(init)).toAero();
+      init.x = std::fmod(init.x + M_PI + M_PI/2, 2*M_PI)-M_PI;
+      back.x = std::fmod(back.x + M_PI, 2*M_PI)-M_PI;
+      CHECK(back.fuzzyEqual(init));
+    }
   }
 }
 

@@ -68,6 +68,7 @@ public:
   void move(float dtime);
 
   Vector3f velocity, headAngle;
+  Quaternion getBaseHeadOrientation() const;
   Quaternion getHeadOrientation() const;
   bool grounded;
   bool flying, noclip;

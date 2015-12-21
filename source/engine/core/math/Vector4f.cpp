@@ -14,17 +14,22 @@ constexpr Vector4f::Vector4f(const Vector3f &v, float w)
 constexpr Vector4f::Vector4f(const Vector2f &v, float z, float w)
   : x(v.x), y(v.y), z(z), w(w) {}
 
-Vector4f::Vector4f(const btVector4 &v)
-  : x(v.x()), y(v.y()), z(v.z()), w(v.w()) {}
-
 Vector4f normalize(const Vector4f &v) {
   float len = length(v);
   return Vector4f(v.x/len, v.y/len, v.z/len, v.w/len);
 }
 
+Quaternion normalize(const Quaternion &v) {
+  float len = length(v);
+  return Quaternion(v.x/len, v.y/len, v.z/len, v.w/len);
+}
+
 Vector4f::operator btVector4() const {
   return btVector4(x, y, z, w);
 }
+
+Vector4f::Vector4f(const btVector4 &v)
+  : x(v.x()), y(v.y()), z(v.z()), w(v.w()) {}
 
 Vector4f& Vector4f::operator=(const btVector4 &v) {
   x = v.x(); y = v.y(); z = v.z(); w = v.w();
@@ -41,6 +46,9 @@ bool Vector4f::fuzzyEqual(const Vector4f &v, float threshold) const {
 Vector4f::operator btQuaternion() const {
   return btQuaternion(x, y, z, w);
 }
+
+Vector4f::Vector4f(const btQuaternion &q)
+  : x(q.x()), y(q.y()), z(q.z()), w(q.w()) {}
 
 Vector4f& Vector4f::operator=(const btQuaternion &q) {
   x = q.x(); y = q.y(); z = q.z(); w = q.w();
@@ -62,10 +70,10 @@ Quaternion Quaternion::operator*(const Quaternion &q) const {
 }
 
 Quaternion& Quaternion::operator*=(const Quaternion &q) {
-  x = w * q.x + x * q.w + y * q.z - z * q.y;
-  y = w * q.y + y * q.w + z * q.x - x * q.z;
-  z = w * q.z + z * q.w + x * q.y - y * q.x;
-  w = w * q.w - x * q.x - y * q.y - z * q.z;
+  x = w * x + x * w + y * z - z * y;
+  y = w * y + y * w + z * x - x * z;
+  z = w * z + z * w + x * y - y * x;
+  w = w * w - x * x - y * y - z * z;
   return *this;
 }
 
@@ -107,9 +115,18 @@ Vector4f Quaternion::toAxAngle() const {
 
 
 Quaternion& Quaternion::fromAero(float tetha, float phi, float psi) {
-  *this = Quaternion().fromAxAngle(0, 1, 0, tetha) *
-          Quaternion().fromAxAngle(1, 0, 0, phi) *
-          Quaternion().fromAxAngle(0, 0, 1, psi);
+  const float hY = tetha * 0.5, hP = phi * 0.5, hR = psi * 0.5;
+  const float cY = std::cos(hY);
+  const float sY = std::sin(hY);
+  const float cP = std::cos(hP);
+  const float sP = std::sin(hP);
+  const float cR = std::cos(hR);
+  const float sR = std::sin(hR);
+  const float cRcP = cR*cP, cRsP = cR*sP, sRcP = sR*cP, sRsP = sR*sP;
+  x = cRsP * cY + sRcP * sY;
+  y = cRcP * sY - sRsP * cY;
+  z = sRcP * cY - cRsP * sY;
+  w = cRcP * cY + sRsP * sY;
   return *this;
 }
 
@@ -119,21 +136,31 @@ Quaternion& Quaternion::fromAero(const Vector3f &v) {
 }
 
 Vector3f Quaternion::toAero() const {
-  // FIXME!
-  const double sqw = w*w, sqx = x*x, sqy = y*y, sqz = z*z;
-  double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
-  double test = x*z + w*y;
-  if (test > 0.499*unit) { // singularity at north pole
-    return Vector3f(2 * std::atan2(x, w), M_PI/2, 0);
+  // http://www.geometrictools.com/Documentation/EulerAngles.pdf
+  float r00 = 1.0f - 2.0f*y*y - 2.0f*z*z;
+  float r01 = 2.0f*x*y + 2.0f*z*w;
+  float r02 = 2.0f*x*z - 2.0f*y*w;
+  float r11 = 1.0f - 2.0f*x*x - 2.0f*z*z;
+  float r20 = 2.0f*x*z + 2.0f*y*w;
+  float r21 = 2.0f*y*z - 2.0f*x*w;
+  float r22 = 1.0f - 2.0f*x*x - 2.0f*y*y;
+  float thetaX, thetaY, thetaZ;
+  if (r21 < +1) {
+    if (r21 > -1) {
+      thetaX = asin(r21);
+      thetaZ = atan2(-r01 , r11);
+      thetaY = atan2(-r20,r22);
+    } else {
+      thetaX = -M_PI /2;
+      thetaZ = 0;
+      thetaY = -atan2(r02 , r00);
+    }
+  } else {
+    thetaX = +M_PI/2;
+    thetaZ = 0;
+    thetaY = atan2(r02 , r00);
   }
-  if (test < -0.499*unit) { // singularity at south pole
-    return Vector3f(-2 * std::atan2(x, w), -M_PI/2, 0);
-  }
-  return Vector3f(
-    std::atan2(-2*(x*z - w*y), sqw - sqx - sqy + sqz),
-    std::asin(2*test/unit),
-    std::atan2(-2*(x*y - w*z), sqw - sqx + sqy - sqz)
-  );
+  return Vector3f(-thetaY, -thetaX, -thetaZ);
 }
 
 #if 0

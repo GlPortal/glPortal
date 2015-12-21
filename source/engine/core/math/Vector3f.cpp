@@ -21,10 +21,6 @@ const Vector3f Vector3f::FORWARD = Vector3f(0, 0, -1);
 const Vector3f Vector3f::UP = Vector3f(0, 1, 0);
 
 /* Core */
-Vector3f::Vector3f() : x(0), y(0), z(0) {}
-
-Vector3f::Vector3f(float x, float y, float z) : x(x), y(y), z(z) {}
-
 void Vector3f::set(float x, float y, float z) {
   this->x = x;
   this->y = y;

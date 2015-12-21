@@ -52,20 +52,22 @@ void PortalSystem::update(float dtime) {
           double APl = AP.length();
           if (dot(AP, normalA) < 0) {
             Quaternion ad =
-            pAT.getOrientation()*
-            Quaternion().fromAero(pMotion.headAngle)*
-            conjugate(pBT.getOrientation());
+            conjugate(pBT.getOrientation())*
+            pMotion.getBaseHeadOrientation()*
+            pAT.getOrientation();
             t.setPosition(pBT.getPosition() + (ad*AP)*APl);
             Vector3f a = ad.toAero();
-            System::Log(Debug) << a.x << " " << a.y << " " << a.z;
-            pMotion.headAngle = Vector3f(a.y, a.z, a.x);
+            System::Log(Debug) << "R from " << 
+            pMotion.headAngle.x << ' ' << pMotion.headAngle.y << ' ' << pMotion.headAngle.z <<
+            " to " << a.x << ' ' << a.z << ' ' << a.y;
+            pMotion.headAngle = Vector3f(a.x, a.z, a.y);
           }
         }
         pB.uncolliderShape->getAabb(
           pB.uncollider->getWorldTransform(),
           min, max);
         // Is player within portal B uncollider ?
-        if (PhysicsHelper::pointInAABB(pos, min, max) &&
+        if (false&&PhysicsHelper::pointInAABB(pos, min, max) &&
             PhysicsHelper::pointInVolume(pos, *pB.uncollider)) {
           // Behind portal B
           Vector3f normalB = pB.getDirection();

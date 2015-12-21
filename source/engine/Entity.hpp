@@ -12,6 +12,10 @@ namespace glPortal {
 class EntityManager;
 
 class Entity {
+private:
+  Entity(Entity&) = delete;
+  Entity(Entity&&) = delete;
+
 public:
   EntityManager &manager;
   Entity(EntityManager &manager) : 

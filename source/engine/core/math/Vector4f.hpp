@@ -11,31 +11,31 @@ namespace glPortal {
 
 struct Vector2f;
 struct Vector3f;
+class Matrix3f;
 class Matrix4f;
 
 struct Vector4f {
   union {
-    float x, r, s;
+    float x, r, s, yaw, heading, azimuth, tetha;
   };
   union {
-    float y, g, t;
+    float y, g, t, pitch, attitude, elevation, phi;
   };
   union {
-    float z, b, u;
+    float z, b, u, roll, bank, tilt, psi;
   };
   union {
     float w, a, v, d;
   };
 
   constexpr Vector4f()
-    : Vector4f(0, 0, 0, 0) {}
+    : x(0), y(0), z(0), w(0) {}
   constexpr Vector4f(float x, float y, float z, float w)
     : x(x), y(y), z(z), w(w) {}
   constexpr Vector4f(float v)
     : x(v), y(v), z(v), d(v) {}
   constexpr Vector4f(const Vector3f&, float w);
   constexpr Vector4f(const Vector2f&, float z, float w);
-  Vector4f(const btVector4&);
 
   void set(float x, float y, float z, float w) {
     this->x = x;
@@ -106,9 +106,11 @@ struct Vector4f {
   }
 
   operator btVector4() const;
+  Vector4f(const btVector4&);
   Vector4f& operator=(const btVector4&);
 
   operator btQuaternion() const;
+  Vector4f(const btQuaternion&);
   Vector4f& operator=(const btQuaternion&);
 };
 
@@ -168,6 +170,10 @@ struct Quaternion : public Vector4f {
   using Vector4f::operator btQuaternion;
 };
 
+constexpr inline float length2(const Vector4f &v) {
+  return v.x*v.x + v.y*v.y + v.z*v.z + v.d*v.d;
+}
+
 constexpr inline float length(const Vector4f &v) {
   return std::sqrt(v.x*v.x + v.y*v.y + v.z*v.z + v.d*v.d);
 }
@@ -177,6 +183,7 @@ constexpr inline float dot(const Vector4f &v, const Vector4f &w) {
 }
 
 Vector4f normalize(const Vector4f&);
+Quaternion normalize(const Quaternion&);
 constexpr inline Quaternion conjugate(const Quaternion &q) {
   return Quaternion(-q.x, -q.y, -q.z, q.w);
 }

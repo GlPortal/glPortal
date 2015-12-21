@@ -6,7 +6,7 @@
 
 namespace glPortal {
 Vector3f Math::toDirection(const Quaternion &orientation) {
-  return orientation * Vector3f(0, 0, -1);
+  return orientation * Vector3f::FORWARD;
 }
 
 Vector3f Math::toEuler(const Vector3f &direction) {

@@ -71,7 +71,7 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
   Vector3f position(point);
   Vector3f scale(1, 2, 1);
   direction = normalize(normal);
-  if (normal.fuzzyEqual(Vector3f(0, 0, -1))) {
+  if (normal.fuzzyEqual(Vector3f::FORWARD)) {
     // Edge case, since the portal has a "default normal" of 0, 0, -1
     // the below quaternion-from-normal formula would be ambiguous
     // and possibly fail

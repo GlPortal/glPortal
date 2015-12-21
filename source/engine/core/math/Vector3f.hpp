@@ -31,13 +31,15 @@ public:
     float z, b, u, roll, bank, tilt, psi;
   };
 
-  static const Vector3f ZERO;
-  static const Vector3f FORWARD;
-  static const Vector3f UP;
+  static const Vector3f ZERO, FORWARD, UP;
 
   /* Core */
-  Vector3f();
-  Vector3f(float x, float y, float z);
+  constexpr Vector3f()
+    : x(0), y(0), z(0) {}
+  constexpr Vector3f(float x, float y, float z)
+    : x(x), y(y), z(z) {}
+  constexpr Vector3f(float v)
+    : x(v), y(v), z(v) {}
   void set(float x, float y, float z);
   void set(const Vector3f& v);
   Vector3f& normalise();

@@ -29,7 +29,6 @@ public:
   void setIdentity();
   void translate(const Vector3f &v);
   void rotate(float angle, float x, float y, float z);
-  void rotate(const Vector3f &eulerXYZ);
   void rotate(const Quaternion &quat);
   void scale(float scale);
   void scale(const Vector3f &scale);
