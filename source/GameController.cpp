@@ -41,8 +41,6 @@ void GameController::handleEvent(const SDL_Event &event) {
   this->gameState->handleInput(*this->game);
 
   bool done = false;
-  //  SDL_Event event;
-  //  SDL_PollEvent(&event);
   int key = event.key.keysym.scancode;
   int mod = event.key.keysym.mod;
   int sym = event.key.keysym.sym;
