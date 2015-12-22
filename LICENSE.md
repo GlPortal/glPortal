@@ -1,4 +1,4 @@
-Copyright (c) 2014 GlPortal Team: Julian Thijssen, Henry Hirsch
+Copyright (c) 2015 GlPortal Team: Julian Thijssen, Henry Hirsch
 Original Software (c) 2012 Simon Jonas Larsen
 Contributors: gravgun, xantares, faust, fraang
 Please drop me a message if you are missing on this list.
