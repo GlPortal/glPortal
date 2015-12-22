@@ -41,10 +41,6 @@ namespace glPortal {
 
 /**
  * Get a scene from a map file in XML format.
- * [map file format spec](specification/map-format.md)
- * [map file format spec](map-format.md)
- * @ref map-format.md
- * @ref map-format
  * @ref map-format-spec
  */
 Scene* MapLoader::getSceneFromPath(const std::string &path) {
