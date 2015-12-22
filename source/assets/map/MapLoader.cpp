@@ -34,6 +34,7 @@ using namespace std;
 namespace glPortal {
 /** \class MapLoader
  *  Load a map in GlPortal XML format.
+ *  @ref map-format-spec
  */
 
   Scene* MapLoader::scene;
@@ -41,7 +42,6 @@ namespace glPortal {
 
 /**
  * Get a scene from a map file in XML format.
- * @ref map-format-spec
  */
 Scene* MapLoader::getSceneFromPath(const std::string &path) {
   scene = new Scene();
