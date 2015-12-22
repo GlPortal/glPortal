@@ -50,10 +50,15 @@ void PortalSystem::update(float dtime) {
           Vector3f normalA = pA.getDirection();
           Vector3f AP = pos - pAT.getPosition();
           if (dot(AP, normalA) < 0) {
-            double APl = AP.length();
-            Quaternion ad = pAT.getOrientation()*conjugate(pBT.getOrientation());
-            t.setPosition(pBT.getPosition() + (ad*AP)*APl);
-            pMotion.headAngle = (ad*pMotion.getBaseHeadOrientation()).toAero();
+            Matrix4f rotate180; rotate180.rotate(rad(180), 0, 1, 0);
+            Matrix4f view = inverse(pMotion.getBaseHeadOrientation().toMatrix());
+            view.translate(-t.getPosition());
+            Matrix4f iv = inverse( view *
+              Matrix4f(pAT.getPosition(), pAT.getOrientation()) *
+              rotate180 *
+              inverse(Matrix4f(pBT.getPosition(), pBT.getOrientation())) );
+            t.setPosition(iv.getPosition());
+            pMotion.headAngle = iv.getRotation().toAero();
           }
         }
         pB.uncolliderShape->getAabb(
@@ -69,10 +74,15 @@ void PortalSystem::update(float dtime) {
           Vector3f normalB = pB.getDirection();
           Vector3f BP = pos - pBT.getPosition();
           if (dot(BP, normalB) < 0) {
-            double BPl = BP.length();
-            Quaternion ad = pBT.getOrientation()*conjugate(pAT.getOrientation());
-            t.setPosition(pAT.getPosition() + (ad*BP)*BPl);
-            pMotion.headAngle = (ad*pMotion.getBaseHeadOrientation()).toAero();
+            Matrix4f rotate180; rotate180.rotate(rad(180), 0, 1, 0);
+            Matrix4f view = inverse(pMotion.getBaseHeadOrientation().toMatrix());
+            view.translate(-t.getPosition());
+            Matrix4f iv = inverse( view *
+              Matrix4f(pBT.getPosition(), pBT.getOrientation()) *
+              rotate180 *
+              inverse(Matrix4f(pAT.getPosition(), pAT.getOrientation())) );
+            t.setPosition(Vector3f(iv[12], iv[13], iv[14]));
+            pMotion.headAngle = iv.getRotation().toAero();
           }
         }
       }

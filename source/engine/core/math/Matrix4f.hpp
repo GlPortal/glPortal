@@ -26,6 +26,7 @@ class Matrix4f {
 public:
   /* Core */
   Matrix4f();
+  Matrix4f(const Vector3f&, const Quaternion&);
   void setIdentity();
   void translate(const Vector3f &v);
   void rotate(float angle, float x, float y, float z);
@@ -36,6 +37,9 @@ public:
 
   float* toArray();
   std::string str() const;
+
+  Quaternion getRotation() const;
+  Vector3f getPosition() const;
 
   /* Operator overloads */
   float operator[](int i) const;

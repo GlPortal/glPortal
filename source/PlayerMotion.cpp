@@ -38,7 +38,7 @@ Quaternion PlayerMotion::getBaseHeadOrientation() const {
 }
 
 Quaternion PlayerMotion::getHeadOrientation() const {
-  return Quaternion().fromAero(headAngle+Vector3f(0, 0, 0.02*sin(entity.manager.scene.world->getTime()*5)));
+  return Quaternion().fromAero(headAngle);
 }
 
 void PlayerMotion::move(float dtime) {

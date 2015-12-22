@@ -34,6 +34,12 @@ Matrix4f::Matrix4f() {
   setIdentity();
 }
 
+Matrix4f::Matrix4f(const Vector3f &t, const Quaternion &q) {
+  setIdentity();
+  translate(t);
+  rotate(q);
+}
+
 void Matrix4f::setIdentity() {
   std::memcpy(a, Identity4, sizeof(Identity4));
 }
@@ -130,6 +136,38 @@ std::string Matrix4f::str() const {
   return ss.str();
 }
 
+
+Quaternion Matrix4f::getRotation() const {
+  float trace = a[0] + a[5] + a[10], temp[4];
+  if (trace > 0) {
+    float s = std::sqrt(trace + 1.0);
+    temp[3]=(s * 0.5);
+    s = 0.5 / s;
+
+    temp[0]=((a[7] - a[9]) * s);
+    temp[1]=((a[8] - a[2]) * s);
+    temp[2]=((a[1] - a[4]) * s);
+  } else {
+    int i = a[0] < a[5] ?
+      (a[5] < a[10] ? 2 : 1) :
+      (a[0] < a[10] ? 2 : 0);
+    int j = (i + 1) % 3;
+    int k = (i + 2) % 3;
+
+    float s = std::sqrt(a[i+4*i] - a[j+4*j] - a[k+4*k] + 1.0);
+    temp[i] = s * 0.5;
+    s = 0.5 / s;
+
+    temp[3] = (a[k+4*j] - a[j+4*k]) * s;
+    temp[j] = (a[j+4*i] + a[i+4*j]) * s;
+    temp[k] = (a[k+4*i] + a[i+4*k]) * s;
+  }
+  return Quaternion(temp[0], temp[1], temp[2], temp[3]);
+}
+
+Vector3f Matrix4f::getPosition() const {
+  return Vector3f(a[12], a[13], a[14]);
+}
 
 /* Operator overloads */
 float Matrix4f::operator[](int i) const {

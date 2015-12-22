@@ -183,6 +183,23 @@ SUITE(QuaternionTest) {
       CHECK(back.fuzzyEqual(init));
     }
   }
+  TEST_FIXTURE(QuaternionTestFixtures, Random_HeadRotHRandAddSubByInv) {
+    Vector3f init, back; float add, sub;
+    Quaternion q, qs;
+    for (int n = 0; n < 200; ++n) {
+      add = rad(z360(gen));
+      sub = rad(z360(gen));
+      q.fromAxAngle(0, 1, 0, add);
+      qs.fromAxAngle(0, 1, 0, sub);
+      init.x = nppi(gen);
+      init.y = nppi2(gen);
+      init.z = 0;
+      back = (q*conjugate(qs)*quat.fromAero(init)).toAero();
+      init.x = std::remainder(init.x + M_PI + add - sub, 2*M_PI)-M_PI;
+      back.x = std::remainder(back.x + M_PI, 2*M_PI)-M_PI;
+      CHECK(back.fuzzyEqual(init));
+    }
+  }
 }
 
 int main() {
