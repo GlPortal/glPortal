@@ -4,6 +4,7 @@
 namespace glPortal {
 
 class Vector3f;
+class Quaternion;
 
 class Math {
 public:
@@ -11,7 +12,7 @@ public:
   static constexpr float DEG_TO_RAD = PI_RND / 180;
   static constexpr float RAD_TO_DEG = 180 / PI_RND;
 
-  static Vector3f toDirection(const Vector3f &v);
+  static Vector3f toDirection(const Quaternion &orientation);
   static Vector3f toEuler(const Vector3f &direction);
 
   template <typename T>
@@ -34,7 +35,7 @@ constexpr inline float rad(float deg) {
   return deg * Math::DEG_TO_RAD;
 }
 
-static float sign(float v) {
+constexpr inline float sign(float v) {
   if (v > 0.f) return 1.f;
   if (v < 0.f) return -1.f;
   return 0.f;

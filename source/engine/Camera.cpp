@@ -1,6 +1,7 @@
 #include "Camera.hpp"
 
-#include <math.h>
+#include <cmath>
+#include "core/math/Quaternion.hpp"
 #include "../Window.hpp"
 
 namespace glPortal {
@@ -36,11 +37,8 @@ void Camera::calcProj() {
 
 void Camera::calcView() {
   Matrix4f &m = viewMatrix;
-  m.setIdentity();
-  m.rotate(-rotation.x, 1, 0, 0);
-  m.rotate(-rotation.y, 0, 1, 0);
-  m.translate(negate(position));
-  invViewMatrix = inverse(m);
+  m = inverse(orientation.toMatrix());
+  m.translate(-position);
 }
 
 void Camera::getProjMatrix(Matrix4f &m) const {
@@ -126,12 +124,12 @@ void Camera::setPosition(const Vector3f &p) {
   calcView();
 }
 
-Vector3f Camera::getRotation() const {
-  return rotation;
+Quaternion Camera::getOrientation() const {
+  return orientation;
 }
 
-void Camera::setRotation(const Vector3f &r) {
-  rotation = r;
+void Camera::setOrientation(const Quaternion &o) {
+  orientation = o;
   calcView();
 }
 

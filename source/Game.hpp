@@ -18,6 +18,9 @@ public:
   static Fps fps;
 
   Game();
+  Game(Game&) = delete;
+  Game(Game&&) = delete;
+
   void update();
   void close();
   World* getWorld();

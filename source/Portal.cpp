@@ -1,5 +1,6 @@
 #include "Portal.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 #include <assets/model/MeshLoader.hpp>
@@ -8,40 +9,59 @@
 #include <engine/core/math/Math.hpp>
 #include <engine/Entity.hpp>
 #include <engine/component/Transform.hpp>
-#include <engine/component/LightSource.hpp>
-#include <PortalHelper.hpp>
-#include <SDL2/SDL_timer.h>
+#include "PortalHelper.hpp"
+#include <engine/physics/Uncollider.hpp>
+#include "World.hpp"
 
 namespace glPortal {
 
 const int Portal::PORTAL_RANGE = 1000;
 const Vector3f Portal::BLUE_COLOR = Vector3f(0.33, 0.57, 1);
 const Vector3f Portal::ORANGE_COLOR = Vector3f(1, 0.76, 0.33);
-const int Portal::NOISE_FADE_DELAY = 300;
-const int Portal::OPEN_ANIM_DURATION = 250;
+const double Portal::NOISE_FADE_DELAY = .300;
+const double Portal::OPEN_ANIM_DURATION = .250;
 const float Portal::SURFACE_OFFSET = 0.01f;
 
-Portal::Portal(Entity &ent): Component(ent), open(false), openSince(0),
-                             overlayMesh(), stencilMesh() {
+Portal::Portal(Entity &ent)  : Component(ent), open(false) {
+  uncolliderMotionState.reset(new btDefaultMotionState);
+  wrapper.vertShape.reset(new btBoxShape(btVector3(0.1, 1, 0.5)));
+  wrapper.horzShape.reset(new btBoxShape(btVector3(.5, 0.1, 0.5)));
+  // TODO Handle collision subtraction better
+  Uncollider::portals.emplace_back(&entity);
+}
+
+Portal::~Portal() {
+  Uncollider::portals.erase(std::remove(
+    Uncollider::portals.begin(), Uncollider::portals.end(), &entity), Uncollider::portals.end());
 }
 
 Vector3f Portal::getDirection() const {
   return direction;
 }
 
-bool Portal::throughPortal(const BoxCollider &collider) const {
-  return PortalHelper::goesThroughPortal(entity, collider);
-}
-
 bool Portal::inPortal(const BoxCollider &collider) const {
   return PortalHelper::isInPortal(entity, collider);
 }
 
-void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall,
-                         const Vector3f &point) {
+void Portal::placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vector3f &s,
+    const std::unique_ptr<btCollisionShape> &shape, Wrapper::Side &side, const Vector3f &offset) {
+  side.motionState.reset(new btDefaultMotionState);
+  side.motionState->setWorldTransform(
+    btTransform(btQuaternion(0,0,0,1), p) *
+    btTransform(o) * 
+    btTransform(btQuaternion(0,0,0,1), offset));
+  btRigidBody::btRigidBodyConstructionInfo ci(0, side.motionState.get(), shape.get(), btVector3(0, 0, 0));
+  if (side.body) {
+    entity.manager.scene.physics.world->removeRigidBody(side.body.get());
+  }
+  side.body.reset(new btRigidBody(ci));
+  entity.manager.scene.physics.world->addRigidBody(side.body.get()); 
+}
+
+void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const Vector3f &normal) {
   //Determine on what side the portal is
   //Side 0: -x, Side 1: x, Side 2: -z, Side 3: z, Side 4: -y, Side 5: y
-  float dist = 1000000;
+  /*float dist = 1000000;
   int side = 0;
 
   float *distances;
@@ -52,108 +72,72 @@ void Portal::placeOnWall(const Vector3f &launchPos, const BoxCollider &wall,
       side = i;
       dist = distances[i];
     }
-  }
+  }*/
 
   Transform &t = entity.getComponent<Transform>();
-  Vector3f &rotation = t.rotation;
-  Vector3f &position = t.position;
-  Vector3f &scale = t.scale;
-  position = point;
-
-  switch (side) {
-  case 0: direction.set(-1,  0,  0); break;
-  case 1: direction.set( 1,  0,  0); break;
-  case 2: direction.set( 0,  0, -1); break;
-  case 3: direction.set( 0,  0,  1); break;
-  case 4: direction.set( 0, -1,  0); break;
-  case 5: direction.set( 0,  1,  0); break;
+  Quaternion orientation;
+  Vector3f position(point);
+  Vector3f scale(1, 2, 1);
+  direction = normalize(normal);
+  if (normal.fuzzyEqual(Vector3f::FORWARD)) {
+    // Edge case, since the portal has a "default normal" of 0, 0, -1
+    // the below quaternion-from-normal formula would be ambiguous
+    // and possibly fail
+    orientation = Quaternion();
+  } else if (normal.fuzzyEqual(Vector3f(0, 0, 1))) {
+    // Same as above, other side
+    orientation = Quaternion(0, sin(M_PI/2), 0, cos(M_PI/2));
+  } else if (normal.fuzzyEqual(Vector3f(0, 1, 0))) {
+    // Floor
+    float yRot = std::atan2(point.x-launchPos.x, point.z-launchPos.z);
+    orientation.fromAero(0, rad(90), -yRot);
+  } else if (normal.fuzzyEqual(Vector3f(0, -1, 0))) {
+    // Ceiling
+    float yRot = std::atan2(point.x-launchPos.x, point.z-launchPos.z);
+    orientation.fromAero(0, rad(-90), yRot);
+  } else {
+    // http://www.gamedev.net/topic/566295-normal-to-a-quaternion/
+    const Vector3f from(0, 0, -1);
+    Vector3f H = normalize(from + normal);
+    orientation.w = dot(from, H);
+    orientation.x = from.y*H.z - from.z*H.y;
+    orientation.y = from.z*H.x - from.x*H.z; 
+    orientation.z = from.x*H.y - from.y*H.x;
   }
 
-  if (wall.size.z >= 1 && wall.size.y >= 2 && (side == 0 || side == 1)) {
-    rotation.x = 0;
-    if (side == 0) {
-      rotation.y = rad(90);
-      scale.set(1, 2, 1);
-    }
-    if (side == 1) {
-      rotation.y = rad(-90);
-      scale.set(1, 2, 1);
-    }
-    if (position.z - scale.z/2 < wall.position.z - wall.size.z/2) {
-      position.z = wall.position.z - wall.size.z/2 + scale.z/2;
-    }
-    if (position.z + scale.z/2 > wall.position.z + wall.size.z/2) {
-      position.z = wall.position.z + wall.size.z/2 - scale.z/2;
-    }
-    if (position.y - scale.y/2 < wall.position.y - wall.size.y/2) {
-      position.y = wall.position.y - wall.size.y/2 + scale.y/2;
-    }
-    if (position.y + scale.y/2 > wall.position.y + wall.size.y/2) {
-      position.y = wall.position.y + wall.size.y/2 - scale.y/2;
-    }
-    open = true;
-  }
-  if (wall.size.x >= 1 && wall.size.y >= 2 && (side == 2 || side == 3)) {
-    rotation.x = 0;
-    if (side == 2) {
-      rotation.y = 0;
-      scale.set(1, 2, 1);
-    }
-    if (side == 3) {
-      rotation.y = rad(180);
-      scale.set(1, 2, 1);
-    }
-    if (position.x - scale.x/2 < wall.position.x - wall.size.x/2) {
-      position.x = wall.position.x - wall.size.x/2 + scale.x/2;
-    }
-    if (position.x + scale.x/2 > wall.position.x + wall.size.x/2) {
-      position.x = wall.position.x + wall.size.x/2 - scale.x/2;
-    }
-    if (position.y - scale.y/2 < wall.position.y - wall.size.y/2) {
-      position.y = wall.position.y - wall.size.y/2 + scale.y/2;
-    }
-    if (position.y + scale.y/2 > wall.position.y + wall.size.y/2) {
-      position.y = wall.position.y + wall.size.y/2 - scale.y/2;
-    }
-    open = true;
-  }
-  if (wall.size.x >= 1 && wall.size.z >= 2 && (side == 4 || side == 5)) {
-    rotation.y = std::atan2(point.x-launchPos.x, point.z-launchPos.z);
-    if (side == 4) {
-      rotation.x = rad(-90);
-      scale.set(1, 2, 2);
-    }
-    if (side == 5) {
-      rotation.x = rad(90);
-      scale.set(1, 2, 2);
-    }
-    if (position.x - scale.x/2 < wall.position.x - wall.size.x/2) {
-      position.x = wall.position.x - wall.size.x/2 + scale.x/2;
-    }
-    if (position.x + scale.x/2 > wall.position.x + wall.size.x/2) {
-      position.x = wall.position.x + wall.size.x/2 - scale.x/2;
-    }
-    if (position.z - scale.z/2 < wall.position.z - wall.size.z/2) {
-      position.z = wall.position.z - wall.size.z/2 + scale.z/2;
-    }
-    if (position.z + scale.z/2 > wall.position.z + wall.size.z/2) {
-      position.z = wall.position.z + wall.size.z/2 - scale.z/2;
-    }
-    open = true;
-  }
+  // Enable the light
+  // entity.getComponent<LightSource>().enabled = true;
 
-  // Enabled the light
-  entity.getComponent<LightSource>().enabled = true;
+  placeWrapperPiece(position, orientation, scale,
+    wrapper.horzShape, wrapper.bottom, Vector3f(0, -1.076, 0.501));
+  placeWrapperPiece(position, orientation, scale,
+    wrapper.horzShape, wrapper.top, Vector3f(0, 1.076, 0.501));
+  placeWrapperPiece(position, orientation, scale,
+    wrapper.vertShape, wrapper.right, Vector3f(0.576, 0, 0.501));
+  placeWrapperPiece(position, orientation, scale,
+    wrapper.vertShape, wrapper.left, Vector3f(-0.576, 0, 0.501));
 
+  uncolliderMotionState->setWorldTransform(
+    btTransform(btQuaternion(0,0,0,1), position) *
+    btTransform(orientation) *
+    btTransform(btQuaternion(0,0,0,1), btVector3(0, 0, 0.499)));
+  uncolliderShape.reset(new btBoxShape(scale/2));
+  btRigidBody::btRigidBodyConstructionInfo ci(0, uncolliderMotionState.get(), uncolliderShape.get(), btVector3(0, 0, 0));
+  uncollider.reset(new btRigidBody(ci));
+
+  open = true;
   position += (getDirection() * SURFACE_OFFSET);
   overlayMesh = MeshLoader::getMesh("Plane.obj");
   stencilMesh = MeshLoader::getMesh("PortalStencil.obj");
+
+  t.setPosition(position);
+  t.setOrientation(orientation);
+  t.setScale(scale);
 }
 
 Vector3f Portal::getScaleMult() const {
-  uint32_t delta  = SDL_GetTicks()-openSince;
-  if (delta > OPEN_ANIM_DURATION){
-
+  double delta = entity.manager.scene.world->getTime()-openSince;
+  if (delta > OPEN_ANIM_DURATION) {
     return Vector3f(1, 1, 1);
   }
   float s = delta;

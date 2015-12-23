@@ -1,6 +1,5 @@
 #include "Game.hpp"
 
-#include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_timer.h>
 #include <stdexcept>
 #include <string>
@@ -44,22 +43,23 @@ World* Game::getWorld() {
 }
 
 void Game::update() {
-  SDL_Event event;
-  unsigned int nextUpdate = SDL_GetTicks();
+  unsigned int nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
 
   while (not closed) {
-    int skipped;
-    skipped = 0;
+    int skipped = 0;
+    unsigned int currentTime = SDL_GetTicks();
     //Update the game if it is time
-    while (SDL_GetTicks() > nextUpdate && skipped < MAX_SKIP) {
+    while (currentTime > nextUpdate && skipped < MAX_SKIP) {
       controller->handleInput();
-      
+
       SoundManager::update(world.getPlayer());
-      world.update();
+      world.update((currentTime-lastUpdate)/1000.);
+      lastUpdate = currentTime;
       nextUpdate += SKIP_TIME;
       skipped++;
     }
-    world.render();
+    world.render((currentTime-lastRender)/1000.);
+    lastRender = currentTime;
     fps.countCycle();
     window.swapBuffers();
   }

@@ -139,7 +139,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh *mesh) {
   if (hasTangents) {
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, vtxSize, (GLvoid*)offset);
     glEnableVertexAttribArray(3);
-    offset += sizeof(float)*3;
+    // offset += sizeof(float)*3;
   }
 
   // Unbind the buffers
@@ -192,8 +192,7 @@ Mesh MeshLoader::getPortalBox(const Entity &wall) {
   };
 
   const Transform &t = wall.getComponent<Transform>();
-  const Vector3f &position = t.position;
-  const Vector3f &scale = t.scale;
+  const Vector3f &scale = t.getScale();
   const float texCoords[8][2] = {
     {0, 0},
     {scale.x, 0},

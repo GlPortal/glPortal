@@ -18,7 +18,7 @@
 
 namespace glPortal {
 
-  GameController::GameController(Game *game) {
+GameController::GameController(Game *game) {
   this->game = game;
   this->world = game->getWorld();
   this->playerState = std::make_unique<PlayerState>();
@@ -94,7 +94,6 @@ void GameController::handleEvent(const SDL_Event &event) {
     world->loadScene(world->currentScenePath);
   }
   wasF5Down = Input::isKeyDown(SDL_SCANCODE_F5);
-  wasTabDown = Input::isKeyDown(SDL_SCANCODE_F5);
+}
 
-}
-}
+} /* namespace glPortal */

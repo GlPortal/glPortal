@@ -14,11 +14,15 @@ find_package(CXX14 REQUIRED)
 set(CMAKE_CXX_FLAGS "${CXX14_FLAGS} ${CMAKE_CXX_FLAGS}")
 
 find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIR})
+# Don't load libGLU, that's old GL1.0 crap.
+set(PORTAL_LIBRARIES ${OPENGL_gl_LIBRARY})
+
 find_package(PkgConfig REQUIRED)
 pkg_search_module(EPOXY REQUIRED epoxy)
 find_package(UnitTestPlusPlus)
-include_directories(${OPENGL_INCLUDE_DIR} ${EPOXY_INCLUDE_DIRS})
-set(PORTAL_LIBRARIES ${OPENGL_LIBRARIES} ${EPOXY_LIBRARIES} )
+include_directories(${EPOXY_INCLUDE_DIRS})
+list(APPEND PORTAL_LIBRARIES ${EPOXY_LIBRARIES} )
 
 find_package(Assimp REQUIRED)
 include_directories(${ASSIMP_INCLUDE_DIRS})
@@ -37,7 +41,15 @@ find_package(json11 REQUIRED)
 include_directories(${JSON11_INCLUDE_DIR})
 list(APPEND PORTAL_LIBRARIES ${JSON11_LIBRARY})
 
+find_package(Bullet 2.82 REQUIRED)
+include_directories(${BULLET_INCLUDE_DIR})
+list(APPEND PORTAL_LIBRARIES ${BULLET_LIBRARIES})
+
 set(PORTAL_TEST_LIBRARIES ${PORTAL_LIBRARIES})
+
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+  add_definitions("-Wall")
+endif ()
 
 add_subdirectory(data)
 add_subdirectory(source)

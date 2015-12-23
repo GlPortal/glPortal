@@ -13,8 +13,10 @@
 namespace glPortal {
 std::string ArgumentsParser::mapName = "";
 std::string ArgumentsParser::mapPath = "";
+
 void ArgumentsParser::setEnvironmentFromArgs(const int argc, char **argv) {
-  
+  int argument;
+
   static struct option long_options[] = {
     {"version",          no_argument,       0, 'v'},
     {"help",             no_argument,       0, 'h'},
@@ -63,13 +65,15 @@ void ArgumentsParser::setEnvironmentFromArgs(const int argc, char **argv) {
     }
   }
 }
+
 void ArgumentsParser::populateConfig() {
   Config &config = Environment::getConfig();
-  if (mapName != ""){
+  if (not mapName.empty()) {
     config.map = mapName;
   }
-  if (mapPath != ""){
+  if (not mapPath.empty()) {
     config.mapPath = mapPath;
   }  
 }
+
 } /* namespace glPortal */

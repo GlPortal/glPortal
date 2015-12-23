@@ -75,7 +75,6 @@ void SoundManager::playMusic(const std::string &filename) {
   }
 
   Mix_VolumeMusic(14);
-  Mix_Fading(MIX_FADING_IN);
 
   if (Mix_PlayMusic(music, 0) == -1) {
     System::Log(Warning, "SoundManager") << "music play failed: " << Mix_GetError();
@@ -95,7 +94,6 @@ void SoundManager::playSound(const std::string &filename, const Entity &source) 
   }
 
   Mix_VolumeMusic(14);
-  Mix_Fading(MIX_FADING_IN);
   int channel = Mix_PlayChannel(-1, sound, 0);
 
   if (channel == -1) {

@@ -33,21 +33,26 @@ public:
   void setScene(Scene *scene);
 
   /**
-   * Sets the current shader for rendering
+   * Getss the current scene
    */
-  void setShader(Shader *scene);
-
+  inline Scene* getScene() const {
+    return scene;
+  }
 
   /**
-   * Renders the scene with parameters from the scene itself
+   * Main scene rendering method. To be called only once per frame.
+   * @param dtime Time delta since last frame, in seconds
+   * @param cam The camera from which we look at the scene
    */
-  void render();
+  void render(double dtime, const Camera &cam);
 
   /**
    * Renders the scene with provided camera parameters
    * @param cam The camera from which we look at the scene
    */
   void renderScene(const Camera &cam);
+
+  void renderUI(const Camera &cam);
 
   /**
    * Renders all the entities in the scene regardless of shading
@@ -98,6 +103,7 @@ public:
    */
   void renderPortalNoise(const Camera &cam, const Entity &portal, float fade);
 
+
   /**
    * Renders a string to the screen using signed-distance field text rendering.
    * The text is rendered in the font that is currently set with setFont().
@@ -113,14 +119,17 @@ public:
    * Renders a mesh with the specified material and transform determined by the
    * given modelMatrix.
    * @param cam    The camera from which we look at the mesh
+   * @param shader Shader to use to render the mesh
    * @param mdlMtx The model matrix determining the position, rotation and scale of the mesh
    * @param mesh   The mesh to render
    * @param mat    The material to render the mesh with
    */
-  void renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh, const Material *mat = nullptr);
+  void renderMesh(const Camera &cam, Shader &shader, Matrix4f &mdlMtx, const Mesh &mesh,
+                  const Material *mat = nullptr);
 
-  void renderMesh(const Camera &cam, Matrix4f &mdlMtx, const Mesh &mesh, const Material &mat) {
-    return renderMesh(cam, mdlMtx, mesh, &mat);
+  void renderMesh(const Camera &cam, Shader &shader, Matrix4f &mdlMtx, const Mesh &mesh,
+                  const Material &mat) {
+    return renderMesh(cam, shader, mdlMtx, mesh, &mat);
   }
 
   /**
@@ -130,7 +139,8 @@ public:
    * @param portal      The portal in which to place the camera
    * @param otherPortal The counterpart of the portal
    */
-  void setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal, const Entity &otherPortal);
+  void setCameraInPortal(const Camera &cam, Camera &dest, const Entity &portal,
+                         const Entity &otherPortal);
 
 
   /**
@@ -146,13 +156,13 @@ public:
   
   int getTextWidth(std::string text);
   static Matrix4f clipProjMat(const Entity &ent, const Matrix4f &view, const Matrix4f &proj);
-  Viewport *viewport;
-  Scene *scene;
-  Shader *shader;
-  Vector4f fontColor;
-  int vpWidth, vpHeight;
+
 private:
-  Camera getCamera();
+  Viewport *viewport;
+  int vpWidth, vpHeight;
+  double time;
+  Scene *scene;
+  Vector4f fontColor;
   Font *font;
   int portalDepth;
 };

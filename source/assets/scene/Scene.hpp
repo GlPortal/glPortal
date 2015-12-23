@@ -3,11 +3,15 @@
 
 #include <vector>
 #include <map>
-#include <list>
+
+#include <bullet/btBulletDynamicsCommon.h>
+#include <bullet/BulletCollision/CollisionDispatch/btGhostObject.h>
 
 #include <assets/gui/GUIButton.hpp>
 #include <assets/material/Material.hpp>
 #include <engine/Camera.hpp>
+#include <engine/EntityManager.hpp>
+
 #include "Portal.hpp"
 #include "Screen.hpp"
 #include "Terminal.hpp"
@@ -15,20 +19,39 @@
 namespace glPortal {
 
 typedef std::pair<Entity*, Entity*> EntityPair;
+class World;
 
 class Scene {
 public:
-  Scene();
-  Entity player;
+  struct Physics {
+    Scene &parent;
+    btBroadphaseInterface *broadphase;
+    btDefaultCollisionConfiguration *collisionConfiguration;
+    btCollisionDispatcher *dispatcher;
+    btSequentialImpulseConstraintSolver *solver;
+    btDiscreteDynamicsWorld *world;
+    btGhostPairCallback *gpCallback;
+    Physics(Scene &parent);
+    void setGravity(float x, float y, float z);
+    ~Physics();
+  } physics;
+
+  World *world;
   Camera camera;
   std::map<int, Material> materials;
-  std::list<Entity> entities;
+  EntityManager entities;
   std::vector<EntityPair> portalPairs;
   std::vector<GUIButton> buttons;
   std::unique_ptr<Screen> screen;
   std::unique_ptr<Terminal> terminal;
-  Entity start;
-  Entity end;
+  Entity *player;
+  // FIXME: remove us!
+  Entity *start;
+  Entity *end;
+
+  Scene();
+  Scene(Scene&) = delete;
+  Scene(Scene&&) = delete;
 };
 
 } /* namespace glPortal */

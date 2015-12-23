@@ -32,14 +32,13 @@ bool BoxCollider::collidesWith(const BoxCollider &collider) const {
 
 BoxCollider BoxCollider::generateCage(const Entity &entity) {
   const Transform &t = entity.getComponent<Transform>();
-  const Vector3f &rotation = t.rotation;
-  const Vector3f &position = t.position;
-  const Vector3f &scale = t.scale;
+  const Vector3f &position = t.getPosition();
+  const Vector3f &scale = t.getScale();
 
   if (entity.hasComponent<MeshDrawable>()) {
     Mesh &mesh = entity.getComponent<MeshDrawable>().mesh;
     Matrix4f modelMatrix;
-    modelMatrix.rotate(rotation);
+    modelMatrix.rotate(t.getOrientation());
     modelMatrix.scale(scale);
 
     Vector3f size;

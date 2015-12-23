@@ -19,14 +19,12 @@ std::string Environment::datadir = "";
 */
 
 void Environment::init() {
-  int argument;
-
   // default installation dir
   if (datadir.empty()) {
 #ifndef _WIN32
-    datadir = "/usr/share/glportal/data/";
+    datadir = "/usr/share/glportal/data";
 #else
-    datadir = "data/";
+    datadir = "data";
 #endif
   }
   initializeConfig();

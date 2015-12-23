@@ -9,9 +9,18 @@
 
 namespace glPortal {
 
+class EntityManager;
+
 class Entity {
+private:
+  Entity(Entity&) = delete;
+  Entity(Entity&&) = delete;
+
 public:
-  Entity() {}
+  EntityManager &manager;
+  Entity(EntityManager &manager) : 
+    manager(manager) {
+  }
 
   std::array<std::unique_ptr<Component>, Component::MaxId> components;
 
@@ -19,7 +28,7 @@ public:
   T& addComponent(TArgs&&... mArgs) {
     static_assert(std::is_base_of<Component, T>::value, "T must be a Component");
     if (hasComponent<T>()) {
-      System::Log() << "Overwriting a " << typeid(T).name() << " component";
+      System::Log(Warning) << "Overwriting a " << typeid(T).name() << " component";
     }
     T* result(new T(*this, std::forward<TArgs>(mArgs)...));
     Component::TypeId id = Component::getTypeId<T>();

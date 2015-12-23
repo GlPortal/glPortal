@@ -35,8 +35,6 @@ public:
   Component(const Component&) = delete;
   Component& operator=(const Component&) = delete;
 
-  virtual void update(float dt) {}
-
   virtual ~Component() {}
 };
 

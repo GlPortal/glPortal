@@ -4,6 +4,7 @@
 #include <engine/core/math/Math.hpp>
 #include <engine/core/math/Matrix4f.hpp>
 #include <engine/core/math/Vector3f.hpp>
+#include <engine/core/math/Quaternion.hpp>
 
 namespace glPortal {
 
@@ -41,13 +42,13 @@ public:
   void setBounds(float left, float right, float bottom, float top);
 
   Vector3f getPosition() const;
-  void setPosition(const Vector3f &p);
-  Vector3f getRotation() const;
-  void setRotation(const Vector3f &r);
+  void setPosition(const Vector3f&);
+  Quaternion getOrientation() const;
+  void setOrientation(const Quaternion&);
 
 private:
   Vector3f position;
-  Vector3f rotation;
+  Quaternion orientation;
 
   void calcProj();
   void calcView();

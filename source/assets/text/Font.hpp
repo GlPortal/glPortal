@@ -23,8 +23,6 @@ public:
       char c = array[i];
       
       const Letter &letter = this->getLetter(c);
-      const Mesh &mesh = letter.mesh;
-
 
       length = length + (letter.width * this->size);
     }

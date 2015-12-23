@@ -17,7 +17,6 @@ private:
   World *world;
   Game *game;
   bool wasF5Down = false;
-  bool wasTabDown = false;
   std::unique_ptr<PlayerState> playerState;
   std::unique_ptr<GameState> gameState;
 };

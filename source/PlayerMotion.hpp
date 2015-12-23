@@ -1,12 +1,16 @@
 #ifndef PLAYER_MOTION_HPP
 #define PLAYER_MOTION_HPP
 
-#include <engine/Entity.hpp>
-#include <engine/component/Transform.hpp>
-#include <engine/core/math/Vector2f.hpp>
-#include <engine/core/math/Vector3f.hpp>
 #include <array>
 #include <random>
+#include <bullet/BulletCollision/CollisionDispatch/btGhostObject.h>
+#include <bullet/BulletDynamics/Character/btKinematicCharacterController.h>
+#include <engine/Entity.hpp>
+#include <engine/component/Transform.hpp>
+#include <engine/component/RigidBody.hpp>
+#include <engine/core/math/Vector2f.hpp>
+#include <engine/core/math/Vector3f.hpp>
+#include <engine/core/math/Quaternion.hpp>
 
 namespace glPortal {
 
@@ -48,14 +52,13 @@ public:
   PlayerMotion(Entity &ent) :
     Component(ent),
     flying(false),
-    frozen(false),
-    noclip(false) {
-    entity.getComponent<Transform>().scale = PLAYER_SIZE;
+    noclip(false),
+    frozen(false) {
+    entity.getComponent<Transform>().setScale(PLAYER_SIZE);
 
     velocity.set(0, 0, 0);
     speed = RUNNING_SPEED;
 
-    grounded = true;
     std::random_device rd;
     generator =  std::mt19937(rd());
     stepCounter = 0.0f;
@@ -63,14 +66,19 @@ public:
 
   // Movement
   void mouseLook();
-  void move(float dtime);
+  void move(double dtime);
 
-  Vector3f velocity;
+  Vector3f velocity, headAngle;
+  Quaternion getBaseHeadOrientation() const;
+  Quaternion getHeadOrientation() const;
   bool grounded;
   bool flying, noclip, frozen;
 
   float speed;
 private:
+  /*btCapsuleShape shape;
+  std::unique_ptr<btPairCachingGhostObject> ghostObj;
+  std::unique_ptr<btKinematicCharacterController> physController;*/
   std::mt19937 generator;
   float stepCounter;
 };

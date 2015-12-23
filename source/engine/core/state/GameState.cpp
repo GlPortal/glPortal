@@ -12,7 +12,7 @@ void GameState::handleInput(Game& game){
 
 void GameState::handleRunning(Game& game){
   if (Input::isKeyDown(SDL_SCANCODE_ESCAPE)){
-    game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = true;
+    game.getWorld()->scene->player->getComponent<PlayerMotion>().frozen = true;
     game.getWorld()->scene->screen->enabled = true;
     game.getWorld()->scene->screen->title = "Pause";
     game.getWorld()->scene->screen->text  = "Press escape to continue playing.";
@@ -20,7 +20,7 @@ void GameState::handleRunning(Game& game){
   }
 
   if (Input::isKeyDown(SDL_SCANCODE_F2)){
-    game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = true;
+    game.getWorld()->scene->player->getComponent<PlayerMotion>().frozen = true;
     game.getWorld()->scene->terminal->enabled = true;
     game.getWorld()->stateFunctionStack.push(&GameState::handleTerminal);
     Input::clear();
@@ -33,7 +33,7 @@ void GameState::handlePaused(Game& game){
     game.getWorld()->scene->screen->enabled = false;
     game.getWorld()->stateFunctionStack.pop();
     Input::clear();
-    game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = false;
+    game.getWorld()->scene->player->getComponent<PlayerMotion>().frozen = false;
   }
 }
 
@@ -42,14 +42,14 @@ void GameState::handleSplash(Game& game){
     game.getWorld()->scene->screen->enabled = false;
     game.getWorld()->stateFunctionStack.pop();
     Input::clear();
-    game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = false;
+    game.getWorld()->scene->player->getComponent<PlayerMotion>().frozen = false;
     game.getWorld()->scene->screen->enabled = false;
   }
 }
 void GameState::handleMenu(Game& game){}
 void GameState::handleTerminal(Game& game){
   if (Input::isKeyDown(SDL_SCANCODE_F2)){
-    game.getWorld()->scene->player.getComponent<PlayerMotion>().frozen = false;
+    game.getWorld()->scene->player->getComponent<PlayerMotion>().frozen = false;
     game.getWorld()->scene->terminal->enabled = false;
     SDL_StopTextInput();
     game.getWorld()->stateFunctionStack.pop();

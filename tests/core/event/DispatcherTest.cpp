@@ -25,8 +25,7 @@ struct DispatcherFixtures {
 
 SUITE(DispatcherTest)
 {
-  TEST_FIXTURE(DispatcherFixtures, dispatchEvent){
-
+  TEST_FIXTURE(DispatcherFixtures, dispatchEvent) {
     CHECK(flag);
   }
 }

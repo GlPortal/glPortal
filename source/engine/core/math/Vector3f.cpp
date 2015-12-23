@@ -12,6 +12,7 @@
 #include "Vector3f.hpp"
 #include <cmath>
 #include <sstream>
+#include <bullet/LinearMath/btVector3.h>
 
 namespace glPortal {
 
@@ -20,10 +21,6 @@ const Vector3f Vector3f::FORWARD = Vector3f(0, 0, -1);
 const Vector3f Vector3f::UP = Vector3f(0, 1, 0);
 
 /* Core */
-Vector3f::Vector3f() : x(0), y(0), z(0) {}
-
-Vector3f::Vector3f(float x, float y, float z) : x(x), y(y), z(z) {}
-
 void Vector3f::set(float x, float y, float z) {
   this->x = x;
   this->y = y;
@@ -122,11 +119,28 @@ Vector3f Vector3f::operator/(float divisor) const {
   return Vector3f(x / divisor, y / divisor, z / divisor);
 }
 
-/* Utility functions */
-float dot(const Vector3f& v1, const Vector3f& v2) {
-  return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+bool Vector3f::fuzzyEqual(const Vector3f &v, float threshold) const {
+  return (x > v.x - threshold and x < v.x + threshold) and
+         (y > v.y - threshold and y < v.y + threshold) and
+         (z > v.z - threshold and z < v.z + threshold);
 }
 
+/* Bullet interop */
+
+Vector3f::Vector3f(const btVector3 &v) :
+  Vector3f(v.x(), v.y(), v.z()) {
+}
+
+Vector3f::operator btVector3() const {
+  return btVector3(x, y, z);
+}
+
+Vector3f& Vector3f::operator=(const btVector3 &v) {
+  x = v.x(); y = v.y(); z = v.z();
+  return *this;
+}
+
+/* Utility functions */
 Vector3f cross(const Vector3f& v1, const Vector3f& v2) {
   Vector3f v;
   v.x = v1.y * v2.z - v1.z * v2.y;
@@ -135,11 +149,7 @@ Vector3f cross(const Vector3f& v1, const Vector3f& v2) {
   return v;
 }
 
-Vector3f negate(const Vector3f& v) {
-  return Vector3f(-v.x, -v.y, -v.z);
-}
-
-Vector3f normalise(const Vector3f& v) {
+Vector3f normalize(const Vector3f& v) {
   float l = v.length();
   return Vector3f(v.x / l, v.y / l, v.z / l);
 }

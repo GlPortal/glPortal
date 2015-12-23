@@ -15,6 +15,12 @@ const int Window::DEFAULT_WIDTH = 800;
 const int Window::DEFAULT_HEIGHT = 600;
 const char* Window::DEFAULT_TITLE = "GlPortal";
 
+Window::Window() :
+  width(0),
+  height(0),
+  window(nullptr) {
+}
+
 void Window::initEpoxy() {
   System::Log() << "GL " << epoxy_gl_version();
 }
@@ -38,8 +44,10 @@ void Window::create(const char *title) {
 
   SDL_DisplayMode dispMode = {SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0};
   SDL_GetDesktopDisplayMode(0, &dispMode);
+
   int width = config.getWidth();
   int height = config.getHeight();
+
   if (width == 0) {
     width = dispMode.w;
   }
