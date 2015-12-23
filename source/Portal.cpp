@@ -98,17 +98,17 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
   }
   
   placeWrapperPiece(position, orientation, scale,
-    wrapper.horzShape, wrapper.bottom, Vector3f(0, -1.05, 0.501));
+    wrapper.horzShape, wrapper.bottom, Vector3f(0, -1.076, 0.501));
   placeWrapperPiece(position, orientation, scale,
-    wrapper.horzShape, wrapper.top, Vector3f(0, 1.05, 0.501));
+    wrapper.horzShape, wrapper.top, Vector3f(0, 1.076, 0.501));
   placeWrapperPiece(position, orientation, scale,
-    wrapper.vertShape, wrapper.right, Vector3f(0.55, 0, 0.501));
+    wrapper.vertShape, wrapper.right, Vector3f(0.576, 0, 0.501));
   placeWrapperPiece(position, orientation, scale,
-    wrapper.vertShape, wrapper.left, Vector3f(-0.55, 0, 0.501));
+    wrapper.vertShape, wrapper.left, Vector3f(-0.576, 0, 0.501));
 
   uncolliderMotionState->setWorldTransform(
     btTransform(btQuaternion(0,0,0,1), position) *
-    btTransform(orientation) * 
+    btTransform(orientation) *
     btTransform(btQuaternion(0,0,0,1), btVector3(0, 0, 0.499)));
   uncolliderShape.reset(new btBoxShape(scale/2));
   btRigidBody::btRigidBodyConstructionInfo ci(0, uncolliderMotionState.get(), uncolliderShape.get(), btVector3(0, 0, 0));

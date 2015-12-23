@@ -10,7 +10,7 @@ RigidBody::RigidBody(Entity &ent, float mass,
   }
   Transform &tform = entity.getComponent<Transform>();
   motionState.setWorldTransform(btTransform(tform.getOrientation(), tform.getPosition()));
-  btVector3 localInertia(0, 0, 0);
+  btVector3 localInertia;
   collisionshape->calculateLocalInertia(mass, localInertia);
   btRigidBody::btRigidBodyConstructionInfo ci(mass, &motionState, shape.get(), localInertia);
   body = new btRigidBody(ci);

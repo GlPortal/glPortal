@@ -39,6 +39,8 @@ public:
   }
 
   ~Player() {
+    entity.manager.scene.physics.world->removeAction(controller);
+    entity.manager.scene.physics.world->removeCollisionObject(obj);
     delete controller;
     delete obj;
   }

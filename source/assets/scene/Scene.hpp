@@ -36,11 +36,11 @@ public:
 
   World *world;
 
-  Entity *player;
   Camera camera;
   std::map<int, Material> materials;
   EntityManager entities;
   std::vector<EntityPair> portalPairs;
+  Entity *player;
   // FIXME: remove us!
   Entity *start;
   Entity *end;

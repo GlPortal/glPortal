@@ -3,7 +3,9 @@
 
 #include "Component.hpp"
 #include <memory>
-#include <bullet/btBulletDynamicsCommon.h>
+#include <bullet/BulletCollision/CollisionShapes/btCollisionShape.h>
+#include <bullet/BulletDynamics/Dynamics/btRigidBody.h>
+#include <bullet/LinearMath/btDefaultMotionState.h>
 #include <engine/Entity.hpp>
 #include <engine/EntityManager.hpp>
 #include <assets/scene/Scene.hpp>
