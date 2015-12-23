@@ -27,6 +27,7 @@ PhysicsSystem::~PhysicsSystem() {
 }
 
 void PhysicsSystem::update(float dtime) {
+#if 0
   // TESTING
   static bool spawned = false;
   static float time = 0;
@@ -48,6 +49,7 @@ void PhysicsSystem::update(float dtime) {
       spawned = true;
     }
   }
+#endif
   filterCallback->beforePhysicsStep();
   scene->physics.world->stepSimulation(dtime, 10);
   for (Entity &e : scene->entities) {
