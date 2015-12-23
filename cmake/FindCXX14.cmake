@@ -20,26 +20,16 @@ set(CXX14_FLAG_CANDIDATES
     "/Qstd=c++14"
     )
 
+# From C++14 onwards, you can use "if" statements in constexpr functions,
+# check for that.
 set(CXX14_TEST_SOURCE
 "
-class Matrix
-{
-public:
-    Matrix(int a, int b, int c, int d)
-        : data {a, b, c, d}
-    {}
-
-private:
-    int data[4];
-};
-
-int main()
-{
-    int n[] {4,7,6,1,2};
-    for (auto i : n)
-        Matrix mat (3,5,1,2);
-    return 0;
+constexpr inline float sign(float v) {
+  if (v > 0.f) return 1.f;
+  if (v < 0.f) return -1.f;
+  return 0.f;
 }
+int main() { return sign(0); }
 ")
 
 foreach(FLAG ${CXX14_FLAG_CANDIDATES})
