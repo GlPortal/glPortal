@@ -1,9 +1,9 @@
 #ifndef FONT_HPP
 #define FONT_HPP
 
-#include <assets/text/Letter.hpp>
 #include <map>
 #include <string>
+#include <assets/text/Glyph.hpp>
 
 namespace glPortal {
 
@@ -12,7 +12,7 @@ public:
   int num_chars;
   float size;
 
-  const Letter& getLetter(int index) const {
+  const Glyph& getGlyph(int index) const {
     return letters.at(index);
   }
 
@@ -22,14 +22,14 @@ public:
     for (unsigned int i = 0; i < string.length(); i++) {
       char c = array[i];
       
-      const Letter &letter = this->getLetter(c);
+      const Glyph &letter = getGlyph(c);
 
       length = length + (letter.width * this->size);
     }
     return length;
   }
 
-  std::map<int, Letter> letters;
+  std::map<int, Glyph> letters;
 };
 
 } /* namespace glPortal */

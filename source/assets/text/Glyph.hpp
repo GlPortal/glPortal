@@ -5,7 +5,7 @@
 
 namespace glPortal {
 
-class Letter {
+class Glyph {
 public:
   int x;
   int y;
