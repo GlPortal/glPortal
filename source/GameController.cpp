@@ -62,6 +62,16 @@ void GameController::handleEvent(const SDL_Event &event) {
     if (sym == SDLK_RETURN) {
       Input::clearBuffer();
     }
+
+    if (sym == SDLK_F1) {
+      world->isPhysicsDebugEnabled = !world->isPhysicsDebugEnabled;
+    } else if (sym == SDLK_F5) {
+      if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
+        // Enable reload-on-change (inotify on Linux)
+      }
+
+      world->loadScene(world->currentScenePath);
+    }
     
     Input::keyPressed(key, mod);
     if (key == SDL_SCANCODE_Q) {
@@ -84,16 +94,6 @@ void GameController::handleEvent(const SDL_Event &event) {
     }
     break;
   }
-
-  // If F5 released, reload the scene
-  if (wasF5Down and not Input::isKeyDown(SDL_SCANCODE_F5)) {
-    if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
-      // Enable reload-on-change (inotify on Linux)
-    }
-
-    world->loadScene(world->currentScenePath);
-  }
-  wasF5Down = Input::isKeyDown(SDL_SCANCODE_F5);
 }
 
 } /* namespace glPortal */
