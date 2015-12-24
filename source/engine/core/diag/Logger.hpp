@@ -14,9 +14,23 @@ enum LogLevel {
   Failure
 };
 
+/** \class Logger
+ * Base class to create log sinks.
+ */
 class Logger {
 public:
+  /**
+   * @brief Returns the name of the Logger instance
+   */
   virtual const char* getName() const;
+
+  /**
+   * @brief Log a message
+   * 
+   * @param message Message to log
+   * @param lvl     Log level
+   * @param tag     Log tag, identifying the log category / class emitting the message
+   */
   virtual void log(const std::string &message, LogLevel lvl, const std::string &tag) {}
 };
 
