@@ -16,6 +16,11 @@ template<typename T> ComponentTypeId _ComponentTypeId<T>::id { getNewId() };
 class Entity;
 
 class Component {
+private:
+  // Forbid any copy
+  Component(const Component&) = delete;
+  Component& operator=(const Component&) = delete;
+
 protected:
   Entity &entity;
 
@@ -30,10 +35,6 @@ public:
   
   inline Component(Entity &ent) noexcept :
     entity(ent) {}
-
-  // Forbid any copy
-  Component(const Component&) = delete;
-  Component& operator=(const Component&) = delete;
 
   virtual ~Component() {}
 };

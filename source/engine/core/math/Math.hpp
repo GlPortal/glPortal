@@ -36,8 +36,12 @@ constexpr inline float rad(float deg) {
 }
 
 constexpr inline float sign(float v) {
-  if (v > 0.f) return 1.f;
-  if (v < 0.f) return -1.f;
+  if (v > 0.f) {
+    return 1.f;
+  }
+  if (v < 0.f) {
+    return -1.f;
+  }
   return 0.f;
 }
 

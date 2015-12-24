@@ -12,20 +12,20 @@ Vector3f Math::toDirection(const Quaternion &orientation) {
 Vector3f Math::toEuler(const Vector3f &direction) {
   Vector3f euler;
 
-  //Pitch
+  // Pitch
   euler.x = asin(direction.y);
 
-  //Yaw
-  if(direction.x <= 0 && direction.z < 0) {
+  // Yaw
+  if (direction.x <= 0 && direction.z < 0) {
     euler.y = atan(fabs(direction.x) / fabs(direction.z));
   }
-  if(direction.x < 0 && direction.z >= 0) {
+  if (direction.x < 0 && direction.z >= 0) {
     euler.y = atan(fabs(direction.z) / fabs(direction.x)) + rad(90);
   }
-  if(direction.x >= 0 && direction.z > 0) {
+  if (direction.x >= 0 && direction.z > 0) {
     euler.y = atan(fabs(direction.x) / fabs(direction.z)) + rad(180);
   }
-  if(direction.x > 0 && direction.z <= 0) {
+  if (direction.x > 0 && direction.z <= 0) {
     euler.y = atan(fabs(direction.z) / fabs(direction.x)) + rad(270);
   }
 

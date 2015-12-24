@@ -47,15 +47,16 @@ void Portal::placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vec
     const std::unique_ptr<btCollisionShape> &shape, Wrapper::Side &side, const Vector3f &offset) {
   side.motionState.reset(new btDefaultMotionState);
   side.motionState->setWorldTransform(
-    btTransform(btQuaternion(0,0,0,1), p) *
-    btTransform(o) * 
-    btTransform(btQuaternion(0,0,0,1), offset));
-  btRigidBody::btRigidBodyConstructionInfo ci(0, side.motionState.get(), shape.get(), btVector3(0, 0, 0));
+    btTransform(btQuaternion(0, 0, 0, 1), p) *
+    btTransform(o) *
+    btTransform(btQuaternion(0, 0, 0, 1), offset));
+  btRigidBody::btRigidBodyConstructionInfo ci(0, side.motionState.get(),
+    shape.get(), btVector3(0, 0, 0));
   if (side.body) {
     entity.manager.scene.physics.world->removeRigidBody(side.body.get());
   }
   side.body.reset(new btRigidBody(ci));
-  entity.manager.scene.physics.world->addRigidBody(side.body.get()); 
+  entity.manager.scene.physics.world->addRigidBody(side.body.get());
 }
 
 void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const Vector3f &normal) {
@@ -101,7 +102,7 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
     Vector3f H = normalize(from + normal);
     orientation.w = dot(from, H);
     orientation.x = from.y*H.z - from.z*H.y;
-    orientation.y = from.z*H.x - from.x*H.z; 
+    orientation.y = from.z*H.x - from.x*H.z;
     orientation.z = from.x*H.y - from.y*H.x;
   }
 
@@ -118,11 +119,12 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
     wrapper.vertShape, wrapper.left, Vector3f(-0.576, 0, 0.501));
 
   uncolliderMotionState->setWorldTransform(
-    btTransform(btQuaternion(0,0,0,1), position) *
+    btTransform(btQuaternion(0, 0, 0, 1), position) *
     btTransform(orientation) *
-    btTransform(btQuaternion(0,0,0,1), btVector3(0, 0, 0.499)));
+    btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0.499)));
   uncolliderShape.reset(new btBoxShape(scale/2));
-  btRigidBody::btRigidBodyConstructionInfo ci(0, uncolliderMotionState.get(), uncolliderShape.get(), btVector3(0, 0, 0));
+  btRigidBody::btRigidBodyConstructionInfo ci(0, uncolliderMotionState.get(),
+    uncolliderShape.get(), btVector3(0, 0, 0));
   uncollider.reset(new btRigidBody(ci));
 
   open = true;

@@ -183,12 +183,12 @@ Mesh MeshLoader::getPortalBox(const Entity &wall) {
     { 0.5f,  0.5f,  0.5f}
   };
   static const uint8_t vi[36] = {
-    3,1,5,3,5,7, // Front
-    7,5,4,7,4,6, // Left
-    6,4,0,6,0,2, // Back
-    2,0,1,2,1,3, // Right
-    2,3,7,2,7,6, // Top
-    1,0,4,1,4,5  // Bottom
+    3, 1, 5, 3, 5, 7, // Front
+    7, 5, 4, 7, 4, 6, // Left
+    6, 4, 0, 6, 0, 2, // Back
+    2, 0, 1, 2, 1, 3, // Right
+    2, 3, 7, 2, 7, 6, // Top
+    1, 0, 4, 1, 4, 5  // Bottom
   };
 
   const Transform &t = wall.getComponent<Transform>();
@@ -204,12 +204,12 @@ Mesh MeshLoader::getPortalBox(const Entity &wall) {
     {scale.z, scale.y}
   };
   static const uint8_t ti[36] = {
-    0,3,5,0,5,1,
-    0,3,7,0,7,2,
-    0,3,5,0,5,1,
-    0,3,7,0,7,2,
-    0,4,6,0,6,1,
-    0,4,6,0,6,1
+    0, 3, 5, 0, 5, 1,
+    0, 3, 7, 0, 7, 2,
+    0, 3, 5, 0, 5, 1,
+    0, 3, 7, 0, 7, 2,
+    0, 4, 6, 0, 6, 1,
+    0, 4, 6, 0, 6, 1
   };
 
   static const int8_t normals[6][3] = {
@@ -221,12 +221,12 @@ Mesh MeshLoader::getPortalBox(const Entity &wall) {
     { 0, -1,  0}
   };
   static const uint8_t ni[36] = {
-    0,0,0,0,0,0,
-    1,1,1,1,1,1,
-    2,2,2,2,2,2,
-    3,3,3,3,3,3,
-    4,4,4,4,4,4,
-    5,5,5,5,5,5
+    0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1,
+    2, 2, 2, 2, 2, 2,
+    3, 3, 3, 3, 3, 3,
+    4, 4, 4, 4, 4, 4,
+    5, 5, 5, 5, 5, 5
   };
 
   static const int8_t tangents[6][3] = {
@@ -238,18 +238,18 @@ Mesh MeshLoader::getPortalBox(const Entity &wall) {
     {-1,  0,  0}
   };
   static const uint8_t tai[36] = {
-    0,0,0,0,0,0,
-    1,1,1,1,1,1,
-    2,2,2,2,2,2,
-    3,3,3,3,3,3,
-    4,4,4,4,4,4,
-    5,5,5,5,5,5
+    0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1,
+    2, 2, 2, 2, 2, 2,
+    3, 3, 3, 3, 3, 3,
+    4, 4, 4, 4, 4, 4,
+    5, 5, 5, 5, 5, 5
   };
   constexpr unsigned int
     texCoordsOffset = coordsSize,
     normalsOffset = texCoordsOffset + texcSize,
     tangentsOffset = normalsOffset + normalsSize;
-  for(int i = 0; i < 36; ++i) {
+  for (int i = 0; i < 36; ++i) {
     const float *v = vertices[vi[i]];
     data << v[0] << v[1] << v[2];
     
@@ -317,8 +317,8 @@ Mesh MeshLoader::getSubPlane(int x, int y, int width, int height, int w, int h) 
   };
 
   static const uint8_t
-    vi[6] = { 0,1,3,2,3,1 },
-    ti[6] = { 3,2,0,1,0,2 };
+    vi[6] = { 0, 1, 3, 2, 3, 1 },
+    ti[6] = { 3, 2, 0, 1, 0, 2 };
 
   constexpr unsigned int vtxSize = 3*sizeof(int8_t) + 2*sizeof(float);
   TightDataPacker data(6*vtxSize);

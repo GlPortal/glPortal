@@ -30,7 +30,7 @@ Font& FontLoader::getFont(const std::string &name) {
 Font FontLoader::loadFont(const std::string &path, const std::string &name) {
   Font font;
   std::ifstream input(path);
-  for(std::string line; getline(input, line);) {
+  for (std::string line; getline(input, line);) {
     stringstream stream(line);
 
     if (line.length() > 0) {
@@ -61,7 +61,8 @@ Font FontLoader::loadFont(const std::string &path, const std::string &name) {
 
         //Load the mesh
         Texture texture = TextureLoader::getTexture(name + ".png");
-        letter.mesh = MeshLoader::getSubPlane(letter.x, letter.y, letter.width, letter.height, texture.width, texture.height);
+        letter.mesh = MeshLoader::getSubPlane(letter.x, letter.y, letter.width, letter.height,
+          texture.width, texture.height);
 
         font.letters.insert(std::pair<int, Letter>(id, letter));
       }

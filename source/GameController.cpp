@@ -64,7 +64,7 @@ void GameController::handleEvent(const SDL_Event &event) {
     }
 
     if (sym == SDLK_F1) {
-      world->isPhysicsDebugEnabled = !world->isPhysicsDebugEnabled;
+      world->isPhysicsDebugEnabled = not world->isPhysicsDebugEnabled;
     } else if (sym == SDLK_F5) {
       if (Input::isKeyDown(SDL_SCANCODE_LSHIFT) || Input::isKeyDown(SDL_SCANCODE_RSHIFT)) {
         // Enable reload-on-change (inotify on Linux)
