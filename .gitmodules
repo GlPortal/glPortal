@@ -3,4 +3,4 @@
 	url = https://github.com/GlPortal/glportal_data.git
 [submodule "documentation/specification"]
 	path = documentation/specification
-	url = git@github.com:GlPortal/specification.git
+	url = https://github.com/GlPortal/specification.git
