@@ -10,11 +10,17 @@ namespace glPortal {
 using ComponentTypeId = size_t;
 
 ComponentTypeId getNewId();
+
+/*! \cond PRIVATE */
 template<typename T> struct _ComponentTypeId { static ComponentTypeId id; };
 template<typename T> ComponentTypeId _ComponentTypeId<T>::id { getNewId() };
+/*! \endcond */
 
 class Entity;
 
+/** \class Component
+ * Base class to create entity components.
+ */
 class Component {
 private:
   // Forbid any copy
@@ -28,6 +34,9 @@ public:
   using TypeId = ComponentTypeId;
   static constexpr TypeId MaxId = 32;
 
+  /** @brief Gets a component's type ID
+   * @param T Component type
+   */
   template<typename T> inline static TypeId getTypeId() {
     static_assert(std::is_base_of<Component, T>::value, "T must be a Component");
     return _ComponentTypeId<T>::id;
@@ -37,6 +46,8 @@ public:
     entity(ent) {}
 
   virtual ~Component() {}
+
+  
 };
 
 inline ComponentTypeId getNewId() {

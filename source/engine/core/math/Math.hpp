@@ -6,24 +6,48 @@ namespace glPortal {
 class Vector3f;
 class Quaternion;
 
+/** \class Math
+ * Math helper class.
+ */
 class Math {
 public:
-  static constexpr float PI_RND = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089;
-  static constexpr float DEG_TO_RAD = PI_RND / 180;
-  static constexpr float RAD_TO_DEG = 180 / PI_RND;
+  static constexpr float PI = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089;
+  static constexpr float DEG_TO_RAD = PI / 180;
+  static constexpr float RAD_TO_DEG = 180 / PI;
 
   static Vector3f toDirection(const Quaternion &orientation);
   static Vector3f toEuler(const Vector3f &direction);
 
+  /** Restricts a value to a range
+   * @param v    Value
+   * @param low  Low bound
+   * @param high High bound
+   */
   template <typename T>
-  static T clamp(T v, T low, T high) {
+  static constexpr inline T clamp(T v, T low, T high) {
     if (v < low) {
       return low;
-    }
-    else if (v > high) {
+    } else if (v > high) {
       return high;
     }
     return v;
+  }
+
+  /** Returns the sign of value
+   * @param v value
+   * @returns  1 if v is positive
+   *          -1 if v is negative
+   *           0 if v is 0
+   */ 
+  template <typename T>
+  static constexpr inline T sign(T v) {
+    if (v > 0) {
+      return 1;
+    }
+    if (v < 0) {
+      return -1;
+    }
+    return 0;
   }
 };
 
@@ -33,16 +57,6 @@ constexpr inline float deg(float rad) {
 
 constexpr inline float rad(float deg) {
   return deg * Math::DEG_TO_RAD;
-}
-
-constexpr inline float sign(float v) {
-  if (v > 0.f) {
-    return 1.f;
-  }
-  if (v < 0.f) {
-    return -1.f;
-  }
-  return 0.f;
 }
 
 } /* namespace glPortal */

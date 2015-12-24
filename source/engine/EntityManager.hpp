@@ -8,6 +8,9 @@ namespace glPortal {
 
 class Scene;
 
+/** \class EntityManager
+ * Manager and container of @ref Entity "entities".
+ */
 class EntityManager : public std::list<Entity> {
 public:
   Scene &scene;
