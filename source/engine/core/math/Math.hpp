@@ -7,7 +7,7 @@ class Vector3f;
 class Quaternion;
 
 /** \class Math
- * Math helper class.
+ * @brief Math helper class
  */
 class Math {
 public:

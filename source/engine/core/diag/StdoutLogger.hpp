@@ -7,7 +7,7 @@
 namespace glPortal {
 
 /** \class StdoutLogger
- * Logger that outputs to an ANSI/vt-100 console.
+ * @brief Logger that outputs to an ANSI/vt-100 console
  */
 class StdoutLogger : public Logger {
 public:

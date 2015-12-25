@@ -19,7 +19,7 @@ template<typename T> ComponentTypeId _ComponentTypeId<T>::id { getNewId() };
 class Entity;
 
 /** \class Component
- * Base class to create entity components.
+ * @brief Base class to create entity components
  */
 class Component {
 private:
