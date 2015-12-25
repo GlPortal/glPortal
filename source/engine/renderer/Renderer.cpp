@@ -15,7 +15,7 @@
 #include <assets/model/Mesh.hpp>
 #include <assets/texture/Texture.hpp>
 #include <assets/text/Font.hpp>
-#include <assets/text/Letter.hpp>
+#include <assets/text/Glyph.hpp>
 #include <assets/material/MaterialLoader.hpp>
 
 #include <engine/Camera.hpp>
@@ -438,7 +438,7 @@ void Renderer::renderText(const Camera &cam, const std::string &text, Vector3f v
   for (unsigned int i = 0; i < text.length(); i++) {
     char c = array[i];
 
-    const Letter &letter = font->getLetter(c);
+    const Glyph &letter = font->getGlyph(c);
     const Mesh &mesh = letter.mesh;
 
     mtx.setIdentity();

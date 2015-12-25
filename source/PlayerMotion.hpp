@@ -19,25 +19,25 @@ const float RUNNING_SPEED = 0.1f;
 const float JUMP_SPEED = 0.15f;
 const float HURT_VELOCITY = 0.18f;
 
-const std::array<const std::string,2> PLAYER_PANTING_SOUND =
+const std::array<const std::string, 2> PLAYER_PANTING_SOUND =
 {
-	"/audio/sfx/character/fem_panting_1.ogg",
-	"/audio/sfx/character/fem_panting_2.ogg"
+  "/audio/sfx/character/fem_panting_1.ogg",
+  "/audio/sfx/character/fem_panting_2.ogg"
 };
 
-const std::array<const std::string,2> PLAYER_JUMP_SOUND =
+const std::array<const std::string, 2> PLAYER_JUMP_SOUND =
 {
-	"/audio/sfx/character/fem_jump_1.ogg",
-	"/audio/sfx/character/fem_jump_2.ogg"
+  "/audio/sfx/character/fem_jump_1.ogg",
+  "/audio/sfx/character/fem_jump_2.ogg"
 };
 
-const std::array<const std::string,2> PLAYER_FALL_SOUND =
+const std::array<const std::string, 2> PLAYER_FALL_SOUND =
 {
-	"/audio/sfx/character/fem_fall_1.ogg",
-	"/audio/sfx/character/fem_fall_2.ogg"
+  "/audio/sfx/character/fem_fall_1.ogg",
+  "/audio/sfx/character/fem_fall_2.ogg"
 };
 
-const std::array<const std::string,6> PLAYER_FOOT_SOUND =
+const std::array<const std::string, 6> PLAYER_FOOT_SOUND =
 {
   "/audio/sfx/character/fem_foot_1.ogg",
   "/audio/sfx/character/fem_foot_2.ogg",

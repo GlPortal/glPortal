@@ -182,8 +182,15 @@ constexpr inline float dot(const Vector4f &v, const Vector4f &w) {
   return v.x*w.x + v.y*w.y + v.z*w.z + v.w*w.w;
 }
 
-Vector4f normalize(const Vector4f&);
-Quaternion normalize(const Quaternion&);
+inline Vector4f normalize(const Vector4f &v) {
+  return v / length(v);
+}
+
+constexpr inline Quaternion normalize(const Quaternion &q) {
+  float l = length(q);
+  return Quaternion(q.x/l, q.y/l, q.z/l, q.w/l);
+}
+
 constexpr inline Quaternion conjugate(const Quaternion &q) {
   return Quaternion(-q.x, -q.y, -q.z, q.w);
 }

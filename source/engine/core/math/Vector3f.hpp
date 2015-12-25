@@ -19,8 +19,7 @@ class btVector3;
 
 namespace glPortal {
 
-class Vector3f {
-public:
+struct Vector3f {
   union {
     float x, r, s, yaw, heading, azimuth, tetha;
   };
@@ -40,9 +39,9 @@ public:
     : x(x), y(y), z(z) {}
   constexpr Vector3f(float v)
     : x(v), y(v), z(v) {}
+
   void set(float x, float y, float z);
   void set(const Vector3f& v);
-  Vector3f& normalise();
 
   float length() const;
   std::string str() const;
@@ -50,17 +49,58 @@ public:
   /* Operator overloads */
   bool operator==(const Vector3f& v) const;
   bool operator!=(const Vector3f& v) const;
-  Vector3f& operator+=(const Vector3f& v);
-  Vector3f& operator-=(const Vector3f& v);
-  Vector3f& operator*=(const Vector3f& v);
-  Vector3f& operator*=(float scale);
-  Vector3f& operator/=(const Vector3f& v);
-  Vector3f operator+(const Vector3f& v) const;
-  Vector3f operator-(const Vector3f& v) const;
-  Vector3f operator-() const;
-  Vector3f operator*(const Vector3f& v) const;
-  Vector3f operator*(float scale) const;
-  Vector3f operator/(float divisor) const;
+
+  Vector3f operator-() const {
+    return Vector3f(-x, -y, -z);
+  }
+
+  Vector3f operator*(const Vector3f &v) const {
+    return Vector3f(x*v.x, y*v.y, z*v.z);
+  }
+  Vector3f& operator*=(const Vector3f &v) {
+    x *= v.x; y *= v.y; z *= v.z;
+    return *this;
+  }
+
+  Vector3f operator*(float v) const {
+    return Vector3f(x*v, y*v, z*v);
+  }
+  Vector3f& operator*=(float v) {
+    x *= v; y *= v; z *= v;
+    return *this;
+  }
+
+  Vector3f operator/(const Vector3f &v) const {
+    return Vector3f(x/v.x, y/v.y, z/v.z);
+  }
+  Vector3f& operator/=(const Vector3f &v) {
+    x /= v.x; y /= v.y; z /= v.z;
+    return *this;
+  }
+
+  Vector3f operator/(float v) const {
+    return Vector3f(x/v, y/v, z/v);
+  }
+  Vector3f& operator/=(float v) {
+    x /= v; y /= v; z /= v;
+    return *this;
+  }
+
+  Vector3f operator+(const Vector3f &v) const {
+    return Vector3f(x+v.x, y+v.y, z+v.z);
+  }
+  Vector3f& operator+=(const Vector3f &v) {
+    x += v.x; y += v.y; z += v.z;
+    return *this;
+  }
+
+  Vector3f operator-(const Vector3f &v) const {
+    return Vector3f(x-v.x, y-v.y, z-v.z);
+  }
+  Vector3f& operator-=(const Vector3f &v) {
+    x -= v.x; y -= v.y; z -= v.z;
+    return *this;
+  }
 
   bool fuzzyEqual(const Vector3f&, float threshold = .02f) const;
 
@@ -74,8 +114,12 @@ public:
 constexpr inline float dot(const Vector3f &v1, const Vector3f &v2) {
   return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
+
 Vector3f cross(const Vector3f &v1, const Vector3f &v2);
-Vector3f normalize(const Vector3f &v);
+
+inline Vector3f normalize(const Vector3f &v) {
+  return v / v.length();
+}
 
 } /* namespace glPortal */
 

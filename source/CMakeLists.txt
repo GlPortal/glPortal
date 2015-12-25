@@ -1,5 +1,9 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+if(NOT DEFINED PORTAL_LIBRARIES)
+  message(FATAL_ERROR "Please compile using the repo's root CMakeLists.txt")
+endif()
+
 add_executable(${EXE_NAME}
   engine/BoxCollider.cpp
   engine/Camera.cpp

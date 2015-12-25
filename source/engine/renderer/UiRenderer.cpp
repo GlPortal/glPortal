@@ -13,6 +13,7 @@
 namespace glPortal {
 
 void UiRenderer::render(Renderer &renderer) {
+  glDepthMask(GL_FALSE);
   int vpWidth, vpHeight;
   renderer.getViewport()->getSize(&vpWidth, &vpHeight);
   Camera camera;
@@ -44,6 +45,7 @@ void UiRenderer::render(Renderer &renderer) {
     renderScreen(renderer);
   }
   renderHand(renderer);
+  glDepthMask(GL_TRUE);
 }
 
 void UiRenderer::renderScreen(Renderer &renderer) {

@@ -19,7 +19,8 @@ float* PortalHelper::getDistancesForPoint(const Vector3f &point, const BoxCollid
 
   return distances;
 }
-float PortalHelper::getDistanceFromCoordinates(const float &contactCoordinate, const float &outerBoundCoordinate) {
+float PortalHelper::getDistanceFromCoordinates(const float &contactCoordinate,
+  const float &outerBoundCoordinate) {
   return (float) fabs(contactCoordinate - (outerBoundCoordinate));
 }
 

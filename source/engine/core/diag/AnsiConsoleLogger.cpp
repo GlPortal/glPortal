@@ -7,6 +7,7 @@ using std::cout;
 
 namespace glPortal {
 
+/*! \cond PRIVATE */
 static const struct LogLevelOutputInfo {
   char letter;
   const char *colorCode;
@@ -20,6 +21,7 @@ static const struct LogLevelOutputInfo {
   {'E', "160", "52"},
   {'F', "92", "53"}
 };
+/*! \endcond */
 
 AnsiConsoleLogger::AnsiConsoleLogger() :
   enableColors(true),

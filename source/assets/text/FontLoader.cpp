@@ -30,7 +30,7 @@ Font& FontLoader::getFont(const std::string &name) {
 Font FontLoader::loadFont(const std::string &path, const std::string &name) {
   Font font;
   std::ifstream input(path);
-  for(std::string line; getline(input, line);) {
+  for (std::string line; getline(input, line);) {
     stringstream stream(line);
 
     if (line.length() > 0) {
@@ -49,7 +49,7 @@ Font FontLoader::loadFont(const std::string &path, const std::string &name) {
           tokens[i].erase(0, pos);
         }
 
-        Letter letter;
+        Glyph letter;
         int id = std::stoi(tokens[1]);
         letter.x = std::stoi(tokens[2]);
         letter.y = std::stoi(tokens[3]);
@@ -61,9 +61,10 @@ Font FontLoader::loadFont(const std::string &path, const std::string &name) {
 
         //Load the mesh
         Texture texture = TextureLoader::getTexture(name + ".png");
-        letter.mesh = MeshLoader::getSubPlane(letter.x, letter.y, letter.width, letter.height, texture.width, texture.height);
+        letter.mesh = MeshLoader::getSubPlane(letter.x, letter.y, letter.width, letter.height,
+          texture.width, texture.height);
 
-        font.letters.insert(std::pair<int, Letter>(id, letter));
+        font.letters.insert(std::pair<int, Glyph>(id, letter));
       }
     }
   }

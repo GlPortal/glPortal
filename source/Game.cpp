@@ -70,6 +70,7 @@ void Game::update() {
 void Game::close() {
   closed = true;
 }
+
 } /* namespace glPortal */
 
 using namespace glPortal;

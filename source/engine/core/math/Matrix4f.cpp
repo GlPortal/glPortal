@@ -11,14 +11,14 @@
 
 #include "Matrix4f.hpp"
 
+#include <cmath>
+#include <cstring>
+#include <sstream>
+
 #include "Matrix3f.hpp"
 #include "Vector3f.hpp"
 #include "Quaternion.hpp"
 #include "Math.hpp"
-
-#include <cstring>
-#include <cmath>
-#include <sstream>
 
 namespace glPortal {
 
@@ -170,30 +170,12 @@ Vector3f Matrix4f::getPosition() const {
 }
 
 /* Operator overloads */
-float Matrix4f::operator[](int i) const {
-  return a[i];
-}
-
-float& Matrix4f::operator[](int i) {
-  return a[i];
-}
-
 bool Matrix4f::operator==(const Matrix4f &m) const {
-  for (int i = 0; i < 16; i++) {
-    if (a[i] != m.a[i]) {
-      return false;
-    }
-  }
-  return true;
+  return std::memcmp(a, m.a, sizeof(a)) == 0;
 }
 
 bool Matrix4f::operator!=(const Matrix4f &m) const {
-  for (int i = 0; i < 16; i++) {
-    if (a[i] != m.a[i]) {
-      return true;
-    }
-  }
-  return false;
+  return std::memcmp(a, m.a, sizeof(a)) != 0;
 }
 
 Matrix4f Matrix4f::operator*(const Matrix4f &m) const {

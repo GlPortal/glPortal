@@ -10,6 +10,9 @@ class Vector2f;
 class Vector3f;
 class Vector4f;
 
+/** \class LogInput
+ * `std::cout`-like object that sends the data it aggregated to a Logger when it dies.
+ */
 class LogInput {
 protected:
   Logger &sink;

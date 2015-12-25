@@ -36,8 +36,12 @@ public:
   std::string str() const;
 
   /* Operator overloads */
-  float operator[](int i) const;
-  float& operator[](int i);
+  inline float operator[](int i) const {
+    return a[i];
+  }
+  inline float& operator[](int i) {
+    return a[i];
+  }
   bool operator==(const Matrix3f&) const;
   bool operator!=(const Matrix3f&) const;
   Matrix3f operator*(const Matrix3f&) const;

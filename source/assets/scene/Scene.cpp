@@ -34,7 +34,7 @@ Scene::Physics::~Physics() {
   delete broadphase;
 }
 
-Scene::Scene() : 
+Scene::Scene() :
   physics(*this),
   world(nullptr),
   entities(*this),
