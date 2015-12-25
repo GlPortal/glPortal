@@ -12,7 +12,7 @@ namespace glPortal {
 class EntityManager;
 
 /** \class Entity
- * ECS entity, Component container.
+ * @brief ECS entity, Component container
  */
 class Entity {
 private:

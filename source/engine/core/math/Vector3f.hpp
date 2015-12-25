@@ -19,6 +19,9 @@ class btVector3;
 
 namespace glPortal {
 
+/** \class Vector3f
+ * @brief 3-dimensional `float`-based vector/point storage and manipulation struct
+ */
 struct Vector3f {
   union {
     float x, r, s, yaw, heading, azimuth, tetha;

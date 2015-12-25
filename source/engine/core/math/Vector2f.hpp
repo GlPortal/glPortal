@@ -17,6 +17,9 @@
 
 namespace glPortal {
 
+/** \class Vector2f
+ * @brief 2-dimensional `float`-based vector/point storage and manipulation struct
+ */
 struct Vector2f {
   union {
     float x, r, s, u;

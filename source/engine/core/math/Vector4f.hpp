@@ -14,6 +14,9 @@ struct Vector3f;
 class Matrix3f;
 class Matrix4f;
 
+/** \class Vector4f
+ * @brief 4-dimensional `float`-based vector/point storage and manipulation struct
+ */
 struct Vector4f {
   union {
     float x, r, s, yaw, heading, azimuth, tetha;

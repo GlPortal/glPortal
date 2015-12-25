@@ -15,7 +15,7 @@ enum LogLevel {
 };
 
 /** \class Logger
- * Base class to create log sinks.
+ * @brief Base class to create log sinks
  */
 class Logger {
 public:
