@@ -14,16 +14,6 @@ constexpr Vector4f::Vector4f(const Vector3f &v, float w)
 constexpr Vector4f::Vector4f(const Vector2f &v, float z, float w)
   : x(v.x), y(v.y), z(z), w(w) {}
 
-Vector4f normalize(const Vector4f &v) {
-  float len = length(v);
-  return Vector4f(v.x/len, v.y/len, v.z/len, v.w/len);
-}
-
-Quaternion normalize(const Quaternion &v) {
-  float len = length(v);
-  return Quaternion(v.x/len, v.y/len, v.z/len, v.w/len);
-}
-
 Vector4f::operator btVector4() const {
   return btVector4(x, y, z, w);
 }

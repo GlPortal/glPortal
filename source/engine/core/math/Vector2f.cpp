@@ -19,25 +19,9 @@ const Vector2f Vector2f::ZERO = Vector2f(0, 0);
 const Vector2f Vector2f::UP = Vector2f(0, 1);
 
 /* Core */
-Vector2f::Vector2f() : x(0), y(0) {}
-
-Vector2f::Vector2f(float x, float y) : x(x), y(y) {}
-
 void Vector2f::set(float x, float y) {
   this->x = x;
   this->y = y;
-}
-
-void Vector2f::set(const Vector2f &v) {
-  x = v.x;
-  y = v.y;
-}
-
-Vector2f& Vector2f::normalise() {
-  float l = length();
-  x /= l;
-  y /= l;
-  return *this;
 }
 
 float Vector2f::length() const {

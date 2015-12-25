@@ -33,14 +33,6 @@ void Vector3f::set(const Vector3f& v) {
   z = v.z;
 }
 
-Vector3f& Vector3f::normalise() {
-  float l = length();
-  x /= l;
-  y /= l;
-  z /= l;
-  return *this;
-}
-
 float Vector3f::length() const {
   return sqrt(x * x + y * y + z * z);
 }
@@ -58,65 +50,6 @@ bool Vector3f::operator==(const Vector3f& v) const {
 
 bool Vector3f::operator!=(const Vector3f& v) const {
   return x != v.x || y != v.y || z != v.z;
-}
-
-Vector3f& Vector3f::operator+=(const Vector3f& v) {
-  x += v.x;
-  y += v.y;
-  z += v.z;
-  return *this;
-}
-
-Vector3f& Vector3f::operator-=(const Vector3f& v) {
-  x -= v.x;
-  y -= v.y;
-  z -= v.z;
-  return *this;
-}
-
-Vector3f& Vector3f::operator*=(const Vector3f& v) {
-  x *= v.x;
-  y *= v.y;
-  z *= v.z;
-  return *this;
-}
-
-Vector3f& Vector3f::operator*=(float scale) {
-  x *= scale;
-  y *= scale;
-  z *= scale;
-  return *this;
-}
-
-Vector3f& Vector3f::operator/=(const Vector3f& v) {
-  x /= v.x;
-  y /= v.y;
-  z /= v.z;
-  return *this;
-}
-
-Vector3f Vector3f::operator+(const Vector3f& v) const {
-  return Vector3f(x + v.x, y + v.y, z + v.z);
-}
-
-Vector3f Vector3f::operator-(const Vector3f& v) const {
-  return Vector3f(x - v.x, y - v.y, z - v.z);
-}
-
-Vector3f Vector3f::operator-() const {
-  return Vector3f(-x, -y, -z);
-}
-
-Vector3f Vector3f::operator*(const Vector3f& v) const {
-  return Vector3f(x*v.x, y*v.y, z*v.z);
-}
-
-Vector3f Vector3f::operator*(float scale) const {
-  return Vector3f(x * scale, y * scale, z * scale);
-}
-
-Vector3f Vector3f::operator/(float divisor) const {
-  return Vector3f(x / divisor, y / divisor, z / divisor);
 }
 
 bool Vector3f::fuzzyEqual(const Vector3f &v, float threshold) const {
@@ -147,11 +80,6 @@ Vector3f cross(const Vector3f& v1, const Vector3f& v2) {
   v.y = v2.x * v1.z - v2.z * v1.x;
   v.z = v1.x * v2.y - v1.y * v2.x;
   return v;
-}
-
-Vector3f normalize(const Vector3f& v) {
-  float l = v.length();
-  return Vector3f(v.x / l, v.y / l, v.z / l);
 }
 
 } /* namespace glPortal */

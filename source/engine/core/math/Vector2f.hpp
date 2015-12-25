@@ -17,8 +17,7 @@
 
 namespace glPortal {
 
-class Vector2f {
-public:
+struct Vector2f {
   union {
     float x, r, s, u;
   };
@@ -29,11 +28,14 @@ public:
   static const Vector2f ZERO, UP;
 
   /* Core */
-  Vector2f();
-  Vector2f(float x, float y);
+  constexpr Vector2f()
+    : x(0), y(0) {}
+  constexpr Vector2f(float x, float y)
+    : x(x), y(y) {}
+  constexpr Vector2f(float v)
+    : x(v), y(v) {}
+
   void set(float x, float y);
-  void set(const Vector2f& v);
-  Vector2f& normalise();
 
   float length() const;
   std::string str() const;

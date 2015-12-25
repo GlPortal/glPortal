@@ -42,8 +42,12 @@ public:
   Vector3f getPosition() const;
 
   /* Operator overloads */
-  float operator[](int i) const;
-  float& operator[](int i);
+  inline float operator[](int i) const {
+    return a[i];
+  }
+  inline float& operator[](int i) {
+    return a[i];
+  }
   bool operator==(const Matrix4f&) const;
   bool operator!=(const Matrix4f&) const;
   Matrix4f operator*(const Matrix4f&) const;
