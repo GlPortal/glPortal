@@ -100,7 +100,7 @@ public:
       return btScalar(1.0);
     }
     
-    if (!convexResult.m_hitCollisionObject->hasContactResponse()){
+    if (not convexResult.m_hitCollisionObject->hasContactResponse()){
       return btScalar(1.0);
     }
     
@@ -165,17 +165,17 @@ KinematicCharacterController::KinematicCharacterController (btPairCachingGhostOb
 {
   m_upAxis = upAxis;
   m_addedMargin = 0.02;
-  m_walkDirection.setValue(0,0,0);
+  m_walkDirection.setValue(0, 0, 0);
   m_useGhostObjectSweepTest = true;
   m_ghostObject = ghostObject;
   m_stepHeight = stepHeight;
   m_turnAngle = btScalar(0.0);
   m_convexShape=convexShape;
-  m_useWalkDirection = true;	// use walk direction by default, legacy behavior
+  m_useWalkDirection = true;// use walk direction by default, legacy behavior
   m_velocityTimeInterval = 0.0;
   m_verticalVelocity = 0.0;
   m_verticalOffset = 0.0;
-  m_gravity = 9.8 * 3 ; // 3G acceleration.
+  m_gravity = 9.8 * 3; // 3G acceleration.
   m_fallSpeed = 55.0; // Terminal velocity of a sky diver in m/s.
   m_jumpSpeed = 10.0; // ?
   m_wasOnGround = false;
@@ -207,8 +207,8 @@ bool KinematicCharacterController::recoverFromPenetration ( btCollisionWorld* co
   // broadphase paircache and the ghostobject's internal paircache at the same time.   /BW
 
   btVector3 minAabb, maxAabb;
-  m_convexShape->getAabb(m_ghostObject->getWorldTransform(), minAabb,maxAabb);
-  collisionWorld->getBroadphase()->setAabb(m_ghostObject->getBroadphaseHandle(), 
+  m_convexShape->getAabb(m_ghostObject->getWorldTransform(), minAabb, maxAabb);
+  collisionWorld->getBroadphase()->setAabb(m_ghostObject->getBroadphaseHandle(),
             minAabb,
             maxAabb,
             collisionWorld->getDispatcher());
@@ -235,12 +235,13 @@ bool KinematicCharacterController::recoverFromPenetration ( btCollisionWorld* co
     btCollisionObject* obj1 =
       static_cast<btCollisionObject*>(collisionPair->m_pProxy1->m_clientObject);
 
-    if ((obj0 && !obj0->hasContactResponse()) || (obj1 && !obj1->hasContactResponse()))
+    if ((obj0 && !obj0->hasContactResponse()) || (obj1 && !obj1->hasContactResponse())){
       continue;
-
-    if (collisionPair->m_algorithm)
+    }
+    
+    if (collisionPair->m_algorithm){
       collisionPair->m_algorithm->getAllContactManifolds(m_manifoldArray);
-
+    }
 
     for (int j=0;j<m_manifoldArray.size();j++)
     {
