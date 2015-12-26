@@ -196,7 +196,8 @@ void MapLoader::extractWalls() {
       m.material.scaleU = m.material.scaleV = 2.f;
       m.mesh = MeshLoader::getPortalBox(wall);
       wall.addComponent<RigidBody>
-        (0, std::make_shared<btBoxShape>(btVector3(t.getScale().x/2, t.getScale().y/2, t.getScale().z/2)));
+        (0, std::make_shared<btBoxShape>(btVector3(t.getScale().x/2,
+                                                   t.getScale().y/2, t.getScale().z/2)));
     } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != nullptr);
   }
 }
