@@ -99,11 +99,11 @@ public:
     if (convexResult.m_hitCollisionObject == m_me){
       return btScalar(1.0);
     }
-    
+
     if (not convexResult.m_hitCollisionObject->hasContactResponse()){
       return btScalar(1.0);
     }
-    
+
     btVector3 hitNormalWorld;
     if (normalInWorldSpace)
     {
@@ -238,7 +238,7 @@ bool KinematicCharacterController::recoverFromPenetration ( btCollisionWorld* co
     if ((obj0 && !obj0->hasContactResponse()) || (obj1 && !obj1->hasContactResponse())){
       continue;
     }
-    
+
     if (collisionPair->m_algorithm){
       collisionPair->m_algorithm->getAllContactManifolds(m_manifoldArray);
     }
@@ -547,7 +547,7 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
 
       m_targetPosition = orig_position;
       downVelocity = m_stepHeight;
-      
+
       btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
       m_targetPosition -= step_drop;
       runonce = true;
@@ -607,8 +607,6 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
   }
 }
 
-
-
 void KinematicCharacterController::setWalkDirection
 (
 const btVector3& walkDirection
@@ -627,10 +625,6 @@ const btVector3& velocity,
 btScalar timeInterval
 )
 {
-//	printf("setVelocity!\n");
-//	printf("  interval: %f\n", timeInterval);
-//	printf("  velocity: (%f, %f, %f)\n",
-//		 velocity.x(), velocity.y(), velocity.z());
 
   m_useWalkDirection = false;
   m_walkDirection = velocity;
