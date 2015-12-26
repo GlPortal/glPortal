@@ -4,9 +4,7 @@
 #include <SDL2/SDL_timer.h>
 #include <assets/scene/SceneHelper.hpp>
 #include <assets/texture/TextureLoader.hpp>
-#include <engine/component/AACollisionBox.hpp>
 #include <engine/component/MeshDrawable.hpp>
-#include <engine/Ray.hpp>
 #include "World.hpp"
 
 namespace glPortal {

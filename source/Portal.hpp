@@ -1,12 +1,13 @@
 #ifndef PORTAL_HPP
 #define PORTAL_HPP
 
+#include <memory>
+
 #include <bullet/BulletCollision/btBulletCollisionCommon.h>
 
 #include <engine/component/Component.hpp>
 #include <engine/core/math/Vector3f.hpp>
 #include <engine/core/math/Quaternion.hpp>
-#include <engine/BoxCollider.hpp>
 #include <assets/material/Material.hpp>
 #include <assets/model/Mesh.hpp>
 
@@ -24,7 +25,7 @@ public:
   Portal(Entity &ent);
   ~Portal();
   Vector3f getDirection() const;
-  bool inPortal(const BoxCollider &collider) const;
+
   void placeOnWall(const Vector3f &launchPos, const Vector3f &point, const Vector3f &normal);
 
   Vector3f getScaleMult() const;

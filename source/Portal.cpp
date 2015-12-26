@@ -5,11 +5,9 @@
 
 #include <assets/model/MeshLoader.hpp>
 
-#include <engine/BoxCollider.hpp>
 #include <engine/core/math/Math.hpp>
 #include <engine/Entity.hpp>
 #include <engine/component/Transform.hpp>
-#include "PortalHelper.hpp"
 #include <engine/physics/Uncollider.hpp>
 #include "World.hpp"
 
@@ -37,10 +35,6 @@ Portal::~Portal() {
 
 Vector3f Portal::getDirection() const {
   return direction;
-}
-
-bool Portal::inPortal(const BoxCollider &collider) const {
-  return PortalHelper::isInPortal(entity, collider);
 }
 
 void Portal::placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vector3f &s,
