@@ -1,26 +1,64 @@
-#include "PlayerMotion.hpp"
+#include "PlayerSystem.hpp"
+
+#include <SDL2/SDL_mouse.h>
+#include <SDL2/SDL_keyboard.h>
 
 #include <engine/core/math/Math.hpp>
-#include <engine/core/math/Vector2f.hpp>
 #include <engine/env/Environment.hpp>
+#include <Input.hpp>
 #include <engine/component/Health.hpp>
 #include <engine/component/SoundSource.hpp>
 #include <engine/component/RigidBody.hpp>
 #include <engine/component/Player.hpp>
-#include <Input.hpp>
-#include <SDL2/SDL_mouse.h>
-#include <SDL2/SDL_keyboard.h>
-#include <World.hpp>
-#include <cmath>
 
 namespace glPortal {
 
-static const float FRICTION = 0.001;
-static const float MIN_SPEED_ON_AXIS = FRICTION;
+static const float RUNNING_SPEED = 0.1f;
+static const float JUMP_SPEED = 0.15f;
+static const float HURT_VELOCITY = 0.18f;
 
-// Movement
-void PlayerMotion::mouseLook() {
-  if (frozen) {
+static const std::array<const std::string, 2> PLAYER_PANTING_SOUND =
+{
+  "/audio/sfx/character/fem_panting_1.ogg",
+  "/audio/sfx/character/fem_panting_2.ogg"
+};
+
+static const std::array<const std::string, 2> PLAYER_JUMP_SOUND =
+{
+  "/audio/sfx/character/fem_jump_1.ogg",
+  "/audio/sfx/character/fem_jump_2.ogg"
+};
+
+static const std::array<const std::string, 2> PLAYER_FALL_SOUND =
+{
+  "/audio/sfx/character/fem_fall_1.ogg",
+  "/audio/sfx/character/fem_fall_2.ogg"
+};
+
+static const std::array<const std::string, 6> PLAYER_FOOT_SOUND =
+{
+  "/audio/sfx/character/fem_foot_1.ogg",
+  "/audio/sfx/character/fem_foot_2.ogg",
+  "/audio/sfx/character/fem_foot_3.ogg",
+  "/audio/sfx/character/fem_foot_4.ogg",
+  "/audio/sfx/character/fem_foot_5.ogg",
+  "/audio/sfx/character/fem_foot_6.ogg"
+};
+
+void PlayerSystem::setScene(Scene *scene) {
+  this->scene = scene;
+}
+
+PlayerSystem::PlayerSystem() :
+  scene(nullptr) {
+}
+
+PlayerSystem::~PlayerSystem() {
+}
+
+void PlayerSystem::mouseLook(Entity &entity) {
+  Player &plr = entity.getComponent<Player>();
+  if (plr.frozen) {
     return;
   }
   int mousedx, mousedy;
@@ -28,34 +66,26 @@ void PlayerMotion::mouseLook() {
 
   // Apply mouse movement to view
   //Vector3f &rotation = entity.getComponent<Transform>().rotation;
-  headAngle.attitude -= rad(mousedy * Environment::getConfig().getSensitivity());
-  headAngle.heading  -= rad(mousedx * Environment::getConfig().getSensitivity());
-  headAngle.tilt *= 0.8;
+  plr.headAngle.attitude -= rad(mousedy * Environment::getConfig().getSensitivity());
+  plr.headAngle.heading  -= rad(mousedx * Environment::getConfig().getSensitivity());
+  plr.headAngle.tilt *= 0.8;
 
   // Restrict rotation in horizontal axis
-  headAngle.attitude = Math::clamp(headAngle.attitude, rad(-89.99), rad(89.99));
+  plr.headAngle.attitude = Math::clamp(plr.headAngle.attitude, rad(-89.99), rad(89.99));
 }
 
-Quaternion PlayerMotion::getBaseHeadOrientation() const {
-  return Quaternion().fromAero(headAngle);
-}
-
-Quaternion PlayerMotion::getHeadOrientation() const {
-  return Quaternion().fromAero(headAngle);
-}
-
-void PlayerMotion::move(double dtime) {
+void PlayerSystem::move(Entity &entity, double dtime) {
   (void) dtime;
-  if (frozen) {
+  Player &plr = entity.getComponent<Player>();
+  if (plr.frozen) {
     return;
   }
   bool movingFwd     = Input::isKeyDown(SDL_SCANCODE_W) or Input::isKeyDown(SDL_SCANCODE_UP),
        movingBack    = Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN),
        strafingLeft  = Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT),
        strafingRight = Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT),
-       jumping = Input::isKeyDown(SDL_SCANCODE_SPACE) or Input::isKeyDown(SDL_SCANCODE_BACKSPACE);
-
-  float rot = headAngle.heading;
+       jumping       = Input::isKeyDown(SDL_SCANCODE_SPACE) or Input::isKeyDown(SDL_SCANCODE_BACKSPACE);
+  float rot = plr.headAngle.heading;
   Vector3f movement;
   KinematicCharacterController &ctrl = *entity.getComponent<Player>().controller;
   Transform &plrTform = entity.getComponent<Transform>();
@@ -84,17 +114,17 @@ void PlayerMotion::move(double dtime) {
     movement.z += -sin(rot);
   }
 
-  ctrl.setWalkDirection(movement*0.1);
+  movement *= RUNNING_SPEED;
+  ctrl.setWalkDirection(movement);
 
   if (ctrl.onGround()) {
-    stepCounter += abs(velocity.x);
-    stepCounter += abs(velocity.z);
+    plr.stepCounter += std::sqrt(movement.x*movement.x + movement.z*movement.z);
 
-    if (stepCounter >= 2.5f) {
+    if (plr.stepCounter >= 2.5f) {
       std::uniform_int_distribution<> dis(0, PLAYER_FOOT_SOUND.size()-1);
       entity.getComponent<SoundSource>().playSound(
         Environment::getDataDir() + PLAYER_FOOT_SOUND[dis(generator)]);
-      stepCounter -= 2.5f;
+      plr.stepCounter -= 2.5f;
     }
   }
 #if 0
@@ -117,6 +147,11 @@ void PlayerMotion::move(double dtime) {
       }
     }
 #endif
+}
+
+void PlayerSystem::update(float dtime) {
+  mouseLook(*scene->player);
+  move(*scene->player, dtime);
 }
 
 } /* namespace glPortal */

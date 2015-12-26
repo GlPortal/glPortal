@@ -6,7 +6,6 @@
 #include <engine/component/SoundListener.hpp>
 #include <engine/component/RigidBody.hpp>
 #include <engine/component/Player.hpp>
-#include "../../PlayerMotion.hpp"
 
 namespace glPortal {
 
@@ -46,7 +45,6 @@ Scene::Scene() :
   player->addComponent<SoundSource>();
   player->addComponent<SoundListener>();
   player->addComponent<Player>();
-  player->addComponent<PlayerMotion>();
   screen   = std::make_unique<Screen>("GlPortal", "Hit enter to start.");
   terminal = std::make_unique<Terminal>();
 }

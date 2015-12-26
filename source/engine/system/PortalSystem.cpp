@@ -2,8 +2,8 @@
 #include <vector>
 #include <engine/component/Player.hpp>
 #include <engine/component/Transform.hpp>
+#include <engine/component/Player.hpp>
 #include <Portal.hpp>
-#include <PlayerMotion.hpp>
 #include "../physics/PhysicsHelper.hpp"
 
 namespace glPortal {
@@ -25,8 +25,7 @@ void PortalSystem::update(float dtime) {
     if (e.hasComponent<Player>()) {
       Transform &t = e.getComponent<Transform>();
       const Vector3f &pos = t.getPosition();
-      Player &aplr = e.getComponent<Player>();
-      PlayerMotion &pMotion = e.getComponent<PlayerMotion>();
+      Player &plr = e.getComponent<Player>();
       for (const EntityPair &pp : scene->portalPairs) {
         btVector3 min, max;
         Portal &pA = pp.first->getComponent<Portal>(),
@@ -51,14 +50,14 @@ void PortalSystem::update(float dtime) {
           Vector3f AP = pos - pAT.getPosition();
           if (dot(AP, normalA) < 0) {
             Matrix4f rotate180; rotate180.rotate(rad(180), 0, 1, 0);
-            Matrix4f view = inverse(pMotion.getBaseHeadOrientation().toMatrix());
+            Matrix4f view = inverse(plr.getBaseHeadOrientation().toMatrix());
             view.translate(-t.getPosition());
             Matrix4f iv = inverse( view *
               Matrix4f(pAT.getPosition(), pAT.getOrientation()) *
               rotate180 *
               inverse(Matrix4f(pBT.getPosition(), pBT.getOrientation())) );
             t.setPosition(iv.getPosition());
-            pMotion.headAngle = iv.getRotation().toAero();
+            plr.headAngle = iv.getRotation().toAero();
           }
         }
         pB.uncolliderShape->getAabb(
@@ -75,14 +74,14 @@ void PortalSystem::update(float dtime) {
           Vector3f BP = pos - pBT.getPosition();
           if (dot(BP, normalB) < 0) {
             Matrix4f rotate180; rotate180.rotate(rad(180), 0, 1, 0);
-            Matrix4f view = inverse(pMotion.getBaseHeadOrientation().toMatrix());
+            Matrix4f view = inverse(plr.getBaseHeadOrientation().toMatrix());
             view.translate(-t.getPosition());
             Matrix4f iv = inverse( view *
               Matrix4f(pBT.getPosition(), pBT.getOrientation()) *
               rotate180 *
               inverse(Matrix4f(pAT.getPosition(), pAT.getOrientation())) );
             t.setPosition(Vector3f(iv[12], iv[13], iv[14]));
-            pMotion.headAngle = iv.getRotation().toAero();
+            plr.headAngle = iv.getRotation().toAero();
           }
         }
       }

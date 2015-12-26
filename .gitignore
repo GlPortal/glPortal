@@ -8,10 +8,9 @@ docs/
 [#]*[#]
 .\#*
 /Default
-.ditz-config
-.settings/
-.project
-.cproject
+/.*
+/glPortal.*
+/build
 Debug/
 __pycache__/
 CTestTestfile.cmake
