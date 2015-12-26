@@ -56,12 +56,14 @@ getNormalizedVector(const btVector3& v)
 class KinematicClosestNotMeRayResultCallback : public btCollisionWorld::ClosestRayResultCallback
 {
 public:
-  KinematicClosestNotMeRayResultCallback (btCollisionObject* me) : btCollisionWorld::ClosestRayResultCallback(btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0))
+  KinematicClosestNotMeRayResultCallback (btCollisionObject* me) :
+    btCollisionWorld::ClosestRayResultCallback(btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0))
   {
     m_me = me;
   }
 
-  virtual btScalar addSingleResult(btCollisionWorld::LocalRayResult& rayResult,bool normalInWorldSpace)
+  virtual btScalar addSingleResult(btCollisionWorld::LocalRayResult& rayResult,
+                                   bool normalInWorldSpace)
   {
     btVector3 p; p.setInterpolate3(m_rayFromWorld, m_rayToWorld, rayResult.m_hitFraction);
     if (rayResult.m_collisionObject == m_me || Uncollider::isPointInUncollideVolume(p))
@@ -605,7 +607,9 @@ void KinematicCharacterController::reset ( btCollisionWorld* collisionWorld )
         btHashedOverlappingPairCache *cache = m_ghostObject->getOverlappingPairCache();
         while (cache->getOverlappingPairArray().size() > 0)
         {
-                cache->removeOverlappingPair(cache->getOverlappingPairArray()[0].m_pProxy0, cache->getOverlappingPairArray()[0].m_pProxy1, collisionWorld->getDispatcher());
+          cache->removeOverlappingPair(cache->getOverlappingPairArray()[0].m_pProxy0,
+                                       cache->getOverlappingPairArray()[0].m_pProxy1,
+                                       collisionWorld->getDispatcher());
         }
 }
 
@@ -769,7 +773,8 @@ bool KinematicCharacterController::onGround () const
 
 btVector3* KinematicCharacterController::getUpAxisDirections()
 {
-  static btVector3 sUpAxisDirection[3] = { btVector3(1.0f, 0.0f, 0.0f), btVector3(0.0f, 1.0f, 0.0f), btVector3(0.0f, 0.0f, 1.0f) };
+  static btVector3 sUpAxisDirection[3] =
+    { btVector3(1.0f, 0.0f, 0.0f), btVector3(0.0f, 1.0f, 0.0f), btVector3(0.0f, 0.0f, 1.0f) };
 
   return sUpAxisDirection;
 }
