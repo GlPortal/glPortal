@@ -5,7 +5,6 @@ if(NOT DEFINED PORTAL_LIBRARIES)
 endif()
 
 add_executable(${EXE_NAME}
-  assets/gui/GUIButton.cpp
   assets/map/MapListLoader.cpp
   assets/map/MapLoader.cpp
   assets/map/XmlHelper.cpp

@@ -20,7 +20,6 @@
 #include <assets/scene/Scene.hpp>
 #include <assets/model/Mesh.hpp>
 #include <assets/texture/Texture.hpp>
-#include <assets/gui/GUIButton.hpp>
 
 #include <assets/model/MeshLoader.hpp>
 #include <assets/texture/TextureLoader.hpp>

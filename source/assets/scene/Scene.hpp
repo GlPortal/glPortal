@@ -7,7 +7,6 @@
 #include <bullet/btBulletDynamicsCommon.h>
 #include <bullet/BulletCollision/CollisionDispatch/btGhostObject.h>
 
-#include <assets/gui/GUIButton.hpp>
 #include <assets/material/Material.hpp>
 #include <engine/Camera.hpp>
 #include <engine/EntityManager.hpp>
@@ -44,7 +43,6 @@ public:
   std::map<int, Material> materials;
   EntityManager entities;
   std::vector<EntityPair> portalPairs;
-  std::vector<GUIButton> buttons;
   std::unique_ptr<Screen> screen;
   std::unique_ptr<Terminal> terminal;
   Entity *player;
