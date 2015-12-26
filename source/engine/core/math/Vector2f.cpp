@@ -109,7 +109,7 @@ Vector2f negate(const Vector2f& v) {
 
 Vector2f normalize(const Vector2f& v) {
   float length = v.length();
-  return Vector2f(v.x / length, v.y / lenght);
+  return Vector2f(v.x / length, v.y / length);
 }
 
 } /* namespace glPortal */
