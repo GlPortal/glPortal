@@ -21,7 +21,7 @@ private:
 
 public:
   EntityManager &manager;
-  Entity(EntityManager &manager) : 
+  Entity(EntityManager &manager) :
     manager(manager) {
   }
 

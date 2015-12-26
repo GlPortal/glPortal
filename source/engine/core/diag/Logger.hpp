@@ -26,7 +26,7 @@ public:
 
   /**
    * @brief Log a message
-   * 
+   *
    * @param message Message to log
    * @param lvl     Log level
    * @param tag     Log tag, identifying the log category / class emitting the message

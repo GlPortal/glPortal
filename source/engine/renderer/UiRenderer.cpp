@@ -68,15 +68,13 @@ void UiRenderer::renderScreen(Renderer &renderer) {
   renderer.renderMesh(camera, sh, widget, mesh, nullptr);
   renderer.setFontColor(renderer.getScene()->screen->textColor);
   renderer.setFontSize(4);
-  renderer.renderText(camera,
-                      renderer.getScene()->screen->title,
-                      Vector3f((vpWidth/2)-(renderer.getTextWidth(renderer.getScene()->screen->title)/2),
-                               vpHeight/2, -1));
+  renderer.renderText(camera, renderer.getScene()->screen->title,
+    Vector3f((vpWidth/2)-(renderer.getTextWidth(renderer.getScene()->screen->title)/2),
+             vpHeight/2, -1));
   renderer.setFontSize(0.5);
-  renderer.renderText(camera,
-                      renderer.getScene()->screen->text,
-                      Vector3f((vpWidth/2)-(renderer.getTextWidth(renderer.getScene()->screen->text)/2),
-                               (vpHeight/2)-100, -1));
+  renderer.renderText(camera, renderer.getScene()->screen->text,
+    Vector3f((vpWidth/2)-(renderer.getTextWidth(renderer.getScene()->screen->text)/2),
+             (vpHeight/2)-100, -1));
 }
 
 void UiRenderer::renderHand(Renderer &renderer) {

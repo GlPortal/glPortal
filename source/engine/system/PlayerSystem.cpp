@@ -84,7 +84,8 @@ void PlayerSystem::move(Entity &entity, double dtime) {
        movingBack    = Input::isKeyDown(SDL_SCANCODE_S) or Input::isKeyDown(SDL_SCANCODE_DOWN),
        strafingLeft  = Input::isKeyDown(SDL_SCANCODE_A) or Input::isKeyDown(SDL_SCANCODE_LEFT),
        strafingRight = Input::isKeyDown(SDL_SCANCODE_D) or Input::isKeyDown(SDL_SCANCODE_RIGHT),
-       jumping       = Input::isKeyDown(SDL_SCANCODE_SPACE) or Input::isKeyDown(SDL_SCANCODE_BACKSPACE);
+       jumping       = Input::isKeyDown(SDL_SCANCODE_SPACE) or
+                       Input::isKeyDown(SDL_SCANCODE_BACKSPACE);
   float rot = plr.headAngle.heading;
   Vector3f movement;
   KinematicCharacterController &ctrl = *entity.getComponent<Player>().controller;

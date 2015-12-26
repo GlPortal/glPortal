@@ -1,13 +1,18 @@
-#include "World.hpp"
+#ifndef PLAYERSTATE_HPP
+#define PLAYERSTATE_HPP
+
 #include <stack>
-#include <engine/Entity.hpp>
+
 #include <SDL2/SDL_events.h>
 
+#include <engine/Entity.hpp>
+#include "World.hpp"
+
 namespace glPortal {
+
 typedef std::function<void (Entity& player, const SDL_Event &event)> HandleEventFunction;
-  
-class PlayerState
-{
+
+class PlayerState {
 private:
   World *world;
   std::stack<HandleEventFunction> stateFunctionStack;
@@ -18,4 +23,7 @@ public:
   static void handleInputRunning(Entity& player, const SDL_Event &event);
   static void handleInputJumping(Entity& player, const SDL_Event &event);
 };
+
 } /* namespace glPortal */
+
+#endif

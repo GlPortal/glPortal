@@ -4,8 +4,6 @@
 #include <string>
 #include <tinyxml2.h>
 
-using namespace tinyxml2;
-
 namespace glPortal {
 class Entity;
 class Mesh;
@@ -16,7 +14,7 @@ public:
   static Scene* getSceneFromPath(const std::string &path);
   static Scene* getScene(const std::string &path);
   static Scene* scene;
-  static XMLHandle rootHandle;
+  static tinyxml2::XMLHandle rootHandle;
 private:
   static Mesh getBox(const Entity &wall);
   static void extractMaterials();

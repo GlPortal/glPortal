@@ -58,4 +58,3 @@ Matrix4f toMatrix4f(const Matrix3f& m);
 } /* namespace glPortal */
 
 #endif /* MATRIX3F_HPP */
-

@@ -31,7 +31,7 @@ Font FontLoader::loadFont(const std::string &path, const std::string &name) {
   Font font;
   std::ifstream input(path);
   for (std::string line; getline(input, line);) {
-    stringstream stream(line);
+    std::stringstream stream(line);
 
     if (line.length() > 0) {
       std::string tokens[9];

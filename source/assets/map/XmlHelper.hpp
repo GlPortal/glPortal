@@ -1,24 +1,25 @@
 #ifndef XMLHELPER_HPP
 #define XMLHELPER_HPP
 
-#include <engine/core/math/Vector3f.hpp>
-#include <engine/Entity.hpp>
-#include <tinyxml2.h>
 #include <string>
 
-using namespace tinyxml2;
+#include <tinyxml2.h>
+
+#include <engine/core/math/Vector3f.hpp>
+#include <engine/Entity.hpp>
 
 namespace glPortal {
 
 class XmlHelper {
 public:
-  static void pushAttributeVertexToVector(XMLElement *xmlElement, Vector3f &targetVector);
+  static void pushAttributeVertexToVector(tinyxml2::XMLElement *xmlElement,
+    Vector3f &targetVector);
   static std::string mandatoryAttributeMessage;
   static std::string invalidElementMessage;
   static void throwMandatoryAttributeException(const std::string &message);
-  static void extractPosition(XMLElement *xmlElement, Vector3f &position);
-  static void extractRotation(XMLElement *xmlElement, Vector3f &rotation);
-  static void extractScale(XMLElement *xmlElement, Vector3f &scale);
+  static void extractPosition(tinyxml2::XMLElement *xmlElement, Vector3f &position);
+  static void extractRotation(tinyxml2::XMLElement *xmlElement, Vector3f &rotation);
+  static void extractScale(tinyxml2::XMLElement *xmlElement, Vector3f &scale);
 };
 
 } /* namespace glPortal */

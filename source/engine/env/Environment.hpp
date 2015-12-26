@@ -2,10 +2,9 @@
 #define ENVIRONMENT_HPP
 
 #include <string>
+
 #include <engine/core/event/Dispatcher.hpp>
 #include <engine/env/Config.hpp>
-
-using namespace std;
 
 namespace glPortal {
 

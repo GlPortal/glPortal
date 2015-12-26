@@ -1,10 +1,12 @@
 #ifndef SOUNDMANAGER_HPP
 #define SOUNDMANAGER_HPP
- 
-#include <SDL2/SDL_mixer.h>
-#include <string>
+
 #include <map>
+#include <string>
 #include <vector>
+
+#include <SDL2/SDL_mixer.h>
+
 #include <engine/Entity.hpp>
 
 namespace glPortal {

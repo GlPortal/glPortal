@@ -6,6 +6,8 @@
 
 #include <engine/env/Environment.hpp>
 
+using namespace std;
+
 namespace glPortal {
 
 vector<string> MapListLoader::getMapList() {

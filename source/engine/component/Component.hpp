@@ -46,8 +46,6 @@ public:
     entity(ent) {}
 
   virtual ~Component() {}
-
-  
 };
 
 inline ComponentTypeId getNewId() {

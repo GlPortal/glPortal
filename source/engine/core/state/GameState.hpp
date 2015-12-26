@@ -10,9 +10,8 @@
 #include <SDL2/SDL_events.h>
 
 namespace glPortal {
-  
-class GameState
-{
+
+class GameState {
 private:
   World *world;
 public:
@@ -25,5 +24,6 @@ public:
   static void handleGameOverScreen(Game &game);
   static void handleWinScreen(Game &game);
 };
+
 } /* namespace glPortal */
 #endif /* GAME_STATE_HPP */

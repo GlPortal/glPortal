@@ -110,10 +110,12 @@ int ShaderLoader::loadShader(const std::string &path, GLenum type) {
     glGetShaderInfoLog(shader, logSize, &logSize, log.get());
 
     if (type == GL_VERTEX_SHADER) {
-      System::Log(Error, "ShaderLoader") << path << ": vertex shader compilation failed:\n" << log.get();
+      System::Log(Error, "ShaderLoader") << path << ": vertex shader compilation failed:\n" <<
+        log.get();
     }
     if (type == GL_FRAGMENT_SHADER) {
-      System::Log(Error, "ShaderLoader") << path << ": fragment shader compilation failed:\n" << log.get();
+      System::Log(Error, "ShaderLoader") << path << ": fragment shader compilation failed:\n" <<
+        log.get();
     }
 
     glDeleteShader(shader);

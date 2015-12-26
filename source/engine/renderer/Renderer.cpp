@@ -108,7 +108,7 @@ void Renderer::render(double dtime, const Camera &cam) {
       }
 
       LightSource &ls = e.getComponent<LightSource>();
-      if (!ls._uploaded) {
+      if (not ls._uploaded) {
         const Transform &t = e.getComponent<Transform>();
         std::string index = std::to_string(numLights);
         std::string position = "lights[" + index + "].position";
@@ -142,7 +142,7 @@ void Renderer::render(double dtime, const Camera &cam) {
       }
 
       LightSource &ls = e.getComponent<LightSource>();
-      if (!ls._uploaded) {
+      if (not ls._uploaded) {
         const Transform &t = e.getComponent<Transform>();
         std::string index = std::to_string(numLights);
         std::string position = "lights[" + index + "].position";

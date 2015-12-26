@@ -8,4 +8,4 @@ void MusicObserver::loadMap() {
   SoundManager::playMusic(Environment::getDataDir() + MUSIC_PLAYLIST[dis(generator)]);
 }
 
-}
+} /* namespace glPortal */

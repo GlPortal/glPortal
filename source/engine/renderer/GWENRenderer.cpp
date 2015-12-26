@@ -19,7 +19,7 @@
 namespace glPortal {
 
 GWENRenderer::GWENRenderer() {
-  m_iVertNum = 0;
+  vertNum = 0;
   vbo = std::make_unique<VBO>(MaxVerts*sizeof(Vertex), GL_DYNAMIC_DRAW);
 }
 
@@ -44,7 +44,7 @@ void GWENRenderer::End() {
 }
 
 void GWENRenderer::Flush() {
-  if (m_iVertNum == 0) {
+  if (vertNum == 0) {
     return;
   }
 
@@ -73,7 +73,7 @@ void GWENRenderer::Flush() {
 
   glUniformMatrix4fv(sh.uni("projectionMatrix"), 1, false, projMatrix.toArray());
 
-  vbo->update(m_Vertices, m_iVertNum);
+  vbo->update(vertices, vertNum);
   vbo->bind();
 
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
@@ -86,29 +86,29 @@ void GWENRenderer::Flush() {
     sizeof(Vertex), (GLvoid*)offsetof(Vertex, r));
   glEnableVertexAttribArray(2);
 
-  glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m_iVertNum);
+  glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertNum);
 
   glDisableVertexAttribArray(2);
   glDisableVertexAttribArray(1);
   glDisableVertexAttribArray(0);
   
-  m_iVertNum = 0;
+  vertNum = 0;
 }
 
 void GWENRenderer::AddVert(int x, int y, float u, float v) {
-  if (m_iVertNum >= MaxVerts - 1) {
+  if (vertNum >= MaxVerts - 1) {
     Flush();
   }
 
-  m_Vertices[ m_iVertNum ].x = (float) x;
-  m_Vertices[ m_iVertNum ].y = (float) y;
-  m_Vertices[ m_iVertNum ].u = u;
-  m_Vertices[ m_iVertNum ].v = v;
-  m_Vertices[ m_iVertNum ].r = m_Color.r;
-  m_Vertices[ m_iVertNum ].g = m_Color.g;
-  m_Vertices[ m_iVertNum ].b = m_Color.b;
-  m_Vertices[ m_iVertNum ].a = m_Color.a;
-  m_iVertNum++;
+  vertices[vertNum].x = (float) x;
+  vertices[vertNum].y = (float) y;
+  vertices[vertNum].u = u;
+  vertices[vertNum].v = v;
+  vertices[vertNum].r = color.r;
+  vertices[vertNum].g = color.g;
+  vertices[vertNum].b = color.b;
+  vertices[vertNum].a = color.a;
+  vertNum++;
 }
 
 void GWENRenderer::DrawFilledRect(Gwen::Rect rect) {
@@ -135,7 +135,7 @@ void GWENRenderer::DrawFilledRect(Gwen::Rect rect) {
 }
 
 void GWENRenderer::SetDrawColor(Gwen::Color color) {
-  m_Color = color;
+  color = color;
 }
 
 void GWENRenderer::StartClip() {
@@ -162,7 +162,8 @@ void GWENRenderer::EndClip() {
   glDisable(GL_SCISSOR_TEST);
 };
 
-void GWENRenderer::DrawTexturedRect(Gwen::Texture *tex, Gwen::Rect rect, float u1, float v1, float u2, float v2) {
+void GWENRenderer::DrawTexturedRect(Gwen::Texture *tex, Gwen::Rect rect, float u1, float v1,
+  float u2, float v2) {
   GLuint *glTex = (GLuint*)tex->data;
 
   // Missing image, not loaded properly?
@@ -231,7 +232,8 @@ void GWENRenderer::FreeTexture(Gwen::Texture *tex) {
   tex->data = nullptr;
 }
 
-Gwen::Color GWENRenderer::PixelColour(Gwen::Texture *tex, unsigned int x, unsigned int y, const Gwen::Color &col_default) {
+Gwen::Color GWENRenderer::PixelColour(Gwen::Texture *tex, unsigned int x, unsigned int y,
+  const Gwen::Color &col_default) {
   GLuint *glTex = (GLuint*)tex->data;
 
   if (not glTex) {

@@ -6,6 +6,7 @@
 #include <engine/core/math/Math.hpp>
 
 using namespace std;
+using namespace tinyxml2;
 
 namespace glPortal {
 

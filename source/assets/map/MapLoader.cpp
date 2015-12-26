@@ -26,6 +26,7 @@
 #include <assets/material/MaterialLoader.hpp>
 
 using namespace std;
+using namespace tinyxml2;
 
 namespace glPortal {
 /** \class MapLoader

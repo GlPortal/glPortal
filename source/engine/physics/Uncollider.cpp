@@ -7,7 +7,7 @@ namespace glPortal {
 
 std::vector<Entity*> Uncollider::portals;
 
-Uncollider::Uncollider(Scene &scene) : 
+Uncollider::Uncollider(Scene &scene) :
   scene(scene) {
 }
 
@@ -49,28 +49,32 @@ void Uncollider::nearCallback(btBroadphasePair &collisionPair,
     btCollisionObjectWrapper obj1Wrap(0, colObj1->getCollisionShape(),
       colObj1, colObj1->getWorldTransform(), -1, -1);
 
-    if (!collisionPair.m_algorithm) {
+    if (not collisionPair.m_algorithm) {
       collisionPair.m_algorithm = dispatcher.findAlgorithm(&obj0Wrap, &obj1Wrap);
     }
 
     if (collisionPair.m_algorithm) {
       btManifoldResult contactPointResult(&obj0Wrap, &obj1Wrap);
       if (dispatchInfo.m_dispatchFunc == btDispatcherInfo::DISPATCH_DISCRETE) {
-        collisionPair.m_algorithm->processCollision(&obj0Wrap, &obj1Wrap, dispatchInfo, &contactPointResult);
+        collisionPair.m_algorithm->processCollision(&obj0Wrap, &obj1Wrap, dispatchInfo,
+          &contactPointResult);
         for (int i = 0; i < contactPointResult.getPersistentManifold()->getNumContacts(); ++i) {
-          const btManifoldPoint &pt = contactPointResult.getPersistentManifold()->getContactPoint(i);
+          const btManifoldPoint &pt = contactPointResult.getPersistentManifold()->
+            getContactPoint(i);
           const btVector3 &cp = pt.getPositionWorldOnA();
           if (isPointInUncollideVolume(cp)) {
             contactPointResult.getPersistentManifold()->removeContactPoint(i--);
           }
         }
       } else {
-        btScalar toi = collisionPair.m_algorithm->calculateTimeOfImpact(colObj0, colObj1, dispatchInfo, &contactPointResult);
-        if (dispatchInfo.m_timeOfImpact > toi)
+        btScalar toi = collisionPair.m_algorithm->calculateTimeOfImpact(colObj0, colObj1,
+          dispatchInfo, &contactPointResult);
+        if (dispatchInfo.m_timeOfImpact > toi) {
           dispatchInfo.m_timeOfImpact = toi;
+        }
       }
     }
   }
 }
-  
+
 } /* namespace glPortal */

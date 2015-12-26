@@ -15,6 +15,6 @@ public:
   void execute();
 };
 
-}
+} /* namespace glPortal */
 
 #endif /* FLAG_OBSERVER_HPP */

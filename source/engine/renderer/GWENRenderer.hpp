@@ -44,13 +44,13 @@ protected:
   static const int MaxVerts = 1024;
 
   void Flush();
-  void AddVert(int x, int y, float u = 0.0f , float v = 0.0f);
+  void AddVert(int x, int y, float u = 0.0f, float v = 0.0f);
 
   std::unique_ptr<VBO> vbo;
 
-  Gwen::Color m_Color;
-  int m_iVertNum;
-  Vertex m_Vertices[ MaxVerts ];
+  Gwen::Color color;
+  int vertNum;
+  Vertex vertices[MaxVerts];
 };
 
 } /* namespace glPortal */

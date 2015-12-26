@@ -1,10 +1,3 @@
-/*
-	GWEN
-	Copyright (c) 2011 Facepunch Studios
-	See license in Gwen.h
-*/
-
-#pragma once
 #ifndef GWENINPUT_HPP
 #define GWENINPUT_HPP
 

@@ -11,7 +11,7 @@ class Quaternion;
  */
 class Math {
 public:
-  static constexpr float PI = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089;
+  static constexpr float PI = 3.141592653589793238462643383279502884197169399375105820974944592307;
   static constexpr float DEG_TO_RAD = PI / 180;
   static constexpr float RAD_TO_DEG = 180 / PI;
 
@@ -38,7 +38,7 @@ public:
    * @returns  1 if v is positive
    *          -1 if v is negative
    *           0 if v is 0
-   */ 
+   */
   template <typename T>
   static constexpr inline T sign(T v) {
     if (v > 0) {

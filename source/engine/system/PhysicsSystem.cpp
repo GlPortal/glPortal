@@ -18,7 +18,7 @@ void PhysicsSystem::setScene(Scene *scene) {
   scene->physics.dispatcher->setNearCallback(Uncollider::nearCallback);
 }
 
-PhysicsSystem::PhysicsSystem() : 
+PhysicsSystem::PhysicsSystem() :
   filterCallback(nullptr) {
 }
 
