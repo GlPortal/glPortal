@@ -235,7 +235,7 @@ bool KinematicCharacterController::recoverFromPenetration ( btCollisionWorld* co
     btCollisionObject* obj1 =
       static_cast<btCollisionObject*>(collisionPair->m_pProxy1->m_clientObject);
 
-    if ((obj0 && !obj0->hasContactResponse()) || (obj1 && !obj1->hasContactResponse())){
+    if ((obj0 && not obj0->hasContactResponse()) || (obj1 && not obj1->hasContactResponse())){
       continue;
     }
 
@@ -318,15 +318,16 @@ void KinematicCharacterController::stepUp ( btCollisionWorld* world)
   if (callback.hasHit())
   {
     // Only modify the position if the hit was a slope and not a wall or ceiling.
-    if(callback.m_hitNormalWorld.dot(getUpAxisDirections()[m_upAxis]) > 0.0)
+    if (callback.m_hitNormalWorld.dot(getUpAxisDirections()[m_upAxis]) > 0.0)
     {
       // we moved up only a fraction of the step height
       m_currentStepOffset = m_stepHeight * callback.m_closestHitFraction;
-      if (m_interpolateUp == true)
+      if (m_interpolateUp == true){
         m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition,
                                            callback.m_closestHitFraction);
-      else
+      } else {
         m_currentPosition = m_targetPosition;
+      }
     }
     m_verticalVelocity = 0.0;
     m_verticalOffset = 0.0;
@@ -366,9 +367,6 @@ void KinematicCharacterController::updateTargetPositionBasedOnCollision (const b
       btVector3 perpComponent = perpindicularDir * btScalar (normalMag*movementLength);
       m_targetPosition += perpComponent;
     }
-  } else
-  {
-//		printf("movementLength don't normalize a zero vector\n");
   }
 }
 
@@ -376,7 +374,6 @@ void KinematicCharacterController::stepForwardAndStrafe(btCollisionWorld* collis
                                                         const btVector3& walkMove)
 {
   // printf("m_normalizedDirection=%f,%f,%f\n",
-  // 	m_normalizedDirection[0],m_normalizedDirection[1],m_normalizedDirection[2]);
   // phase 2: forward and strafe
   btTransform start, end;
   m_targetPosition = m_currentPosition + walkMove;
@@ -386,7 +383,7 @@ void KinematicCharacterController::stepForwardAndStrafe(btCollisionWorld* collis
 
   btScalar fraction = 1.0;
   btScalar distance2 = (m_currentPosition-m_targetPosition).length2();
-//	printf("distance2=%f\n",distance2);
+
 
   if (m_touchingContact)
   {
@@ -468,7 +465,7 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
   btScalar downVelocity = (m_verticalVelocity<0.f?-m_verticalVelocity:0.f) * dt;
 
   if(downVelocity > 0.0 && downVelocity > m_fallSpeed
-    && (m_wasOnGround || !m_wasJumping))
+    && (m_wasOnGround || not m_wasJumping))
     downVelocity = m_fallSpeed;
 
   btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
@@ -509,7 +506,7 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
                                      start, end, callback,
                                      collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
 
-      if (!callback.hasHit())
+      if (not callback.hasHit())
       {
         // test a double fall height, to see if the character should interpolate it's fall (full)
         // or not (partial)
@@ -522,7 +519,7 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
       collisionWorld->convexSweepTest(m_convexShape, start, end, callback,
                                       collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
 
-      if (!callback.hasHit())
+      if (not callback.hasHit())
           {
             // test a double fall height, to see if the character should interpolate it's
             // fall (large) or not (small)
@@ -539,7 +536,7 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
       has_hit = callback2.hasHit();
 
     if(downVelocity2 > 0.0 && downVelocity2 < m_stepHeight && has_hit == true && runonce == false
-          && (m_wasOnGround || !m_wasJumping))
+          && (m_wasOnGround || not m_wasJumping))
     {
       //redo the velocity calculation when falling a small amount, for fast stairs motion
       //for larger falls, use the smoother/slower interpolated movement by not touching
@@ -571,7 +568,7 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
                                            callback.m_closestHitFraction);
       } else {
         //due to errors in the closestHitFraction variable when used with large polygons,
-        calculate the hit fraction manually
+        //calculate the hit fraction manually
                                 m_currentPosition.setInterpolate3(m_currentPosition,
                                                                   m_targetPosition,
                                                                   fraction);
@@ -593,7 +590,7 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
     if (bounce_fix == true)
     {
       downVelocity = (m_verticalVelocity<0.f?-m_verticalVelocity:0.f) * dt;
-      if (downVelocity > m_fallSpeed && (m_wasOnGround || !m_wasJumping))
+      if (downVelocity > m_fallSpeed && (m_wasOnGround || not m_wasJumping))
       {
         m_targetPosition += step_drop; //undo previous target change
         downVelocity = m_fallSpeed;
@@ -686,13 +683,10 @@ void KinematicCharacterController::preStep (  btCollisionWorld* collisionWorld)
 
 void KinematicCharacterController::playerStep (  btCollisionWorld* collisionWorld, btScalar dt)
 {
-//	printf("playerStep(): ");
-//	printf("  dt = %f", dt);
 
   // quick check...
-  if (!m_useWalkDirection && (m_velocityTimeInterval <= 0.0 || m_walkDirection.fuzzyZero())) {
-//		printf("\n");
-    return;		// no motion
+  if (not m_useWalkDirection && (m_velocityTimeInterval <= 0.0 || m_walkDirection.fuzzyZero())) {
+    return;
   }
 
   m_wasOnGround = onGround();
@@ -712,9 +706,6 @@ void KinematicCharacterController::playerStep (  btCollisionWorld* collisionWorl
 
   btTransform xform;
   xform = m_ghostObject->getWorldTransform ();
-
-//	printf("walkDirection(%f,%f,%f)\n",walkDirection[0],walkDirection[1],walkDirection[2]);
-//	printf("walkSpeed=%f\n",walkSpeed);
 
   stepUp (collisionWorld);
   if (m_useWalkDirection) {
