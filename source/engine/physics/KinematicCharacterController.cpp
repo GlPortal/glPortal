@@ -705,11 +705,11 @@ void KinematicCharacterController::playerStep (  btCollisionWorld* collisionWorl
 
   // Update fall velocity.
   m_verticalVelocity -= m_gravity * dt;
-  if(m_verticalVelocity > 0.0 && m_verticalVelocity > m_jumpSpeed)
+  if (m_verticalVelocity > 0.0 && m_verticalVelocity > m_jumpSpeed)
   {
     m_verticalVelocity = m_jumpSpeed;
   }
-  if(m_verticalVelocity < 0.0 && btFabs(m_verticalVelocity) > btFabs(m_fallSpeed))
+  if (m_verticalVelocity < 0.0 && btFabs(m_verticalVelocity) > btFabs(m_fallSpeed))
   {
     m_verticalVelocity = -btFabs(m_fallSpeed);
   }
@@ -770,7 +770,7 @@ bool KinematicCharacterController::canJump () const
 
 void KinematicCharacterController::jump ()
 {
-  if (!canJump())
+  if (not canJump())
     return;
 
   m_verticalVelocity = m_jumpSpeed;
