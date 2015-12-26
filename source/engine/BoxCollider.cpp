@@ -9,7 +9,7 @@
 #include <cstdio>
 
 namespace glPortal {
-  
+
 BoxCollider::BoxCollider() {
 }
 
@@ -19,7 +19,7 @@ BoxCollider::BoxCollider(const Vector3f &position, const Vector3f &size) {
 }
 
 bool BoxCollider::collidesWith(const BoxCollider &collider) const {
-  if(position.x - size.x/2 < collider.position.x + collider.size.x/2 &&
+  if (position.x - size.x/2 < collider.position.x + collider.size.x/2 &&
       position.x + size.x/2 > collider.position.x - collider.size.x/2 &&
       position.y - size.y/2 < collider.position.y + collider.size.y/2 &&
       position.y + size.y/2 > collider.position.y - collider.size.y/2 &&
@@ -55,4 +55,3 @@ BoxCollider BoxCollider::generateCage(const Entity &entity) {
 }
 
 } /* namespace glPortal */
-
