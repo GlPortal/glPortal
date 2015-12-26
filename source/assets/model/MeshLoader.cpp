@@ -62,7 +62,7 @@ Mesh MeshLoader::uploadMesh(const aiMesh *mesh) {
       sizeof(unsigned int) * mesh->mNumFaces * 3, faceArray, GL_STATIC_DRAW);
 
   // Once data is uploaded to GPU, no need to keep it in memory
-  delete[] faceArray;
+  delete [] faceArray;
 
 
   // Prepare vertex data VBO
@@ -169,7 +169,7 @@ Mesh MeshLoader::getPortalBox(const Entity &wall) {
     normalsSize = sizeof(int8_t)*3,
     tangentsSize = sizeof(int8_t)*3,
     vtxSize = coordsSize + texcSize + normalsSize + tangentsSize,
-    vboSize = vtxSize * 3 /*verts*/ * 2 /*tris*/ * 6 /*faces*/;
+    vboSize = vtxSize * 3 /*verts*/ * 2 /*tris*/ * 6; /*faces*/
   TightDataPacker data(vboSize);
 
   static const float vertices[8][3] = {
