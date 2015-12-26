@@ -138,17 +138,17 @@ Vector3f Quaternion::toAero() const {
   if (r21 < +1) {
     if (r21 > -1) {
       thetaX = asin(r21);
-      thetaZ = atan2(-r01 , r11);
-      thetaY = atan2(-r20,r22);
+      thetaZ = atan2(-r01, r11);
+      thetaY = atan2(-r20, r22);
     } else {
       thetaX = -M_PI /2;
       thetaZ = 0;
-      thetaY = -atan2(r02 , r00);
+      thetaY = -atan2(r02, r00);
     }
   } else {
     thetaX = +M_PI/2;
     thetaZ = 0;
-    thetaY = atan2(r02 , r00);
+    thetaY = atan2(r02, r00);
   }
   return Vector3f(-thetaY, -thetaX, -thetaZ);
 }
