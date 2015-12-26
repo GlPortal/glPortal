@@ -8,16 +8,16 @@ Permission is granted to anyone to use this software for any purpose,
 including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
-1. The origin of this software must not be misrepresented; you must not claim that you wrote 
-the original software. If you use this software in a product, an acknowledgment in the product 
+1. The origin of this software must not be misrepresented; you must not claim that you wrote
+the original software. If you use this software in a product, an acknowledgment in the product
 documentation would be appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as 
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as
 being the original software.
 3. This notice may not be removed or altered from any source distribution.
 
 -----------
 
-This file is taken from the original Bullet engine source, and is MODIFIED to add support for 
+This file is taken from the original Bullet engine source, and is MODIFIED to add support for
 what we need.
 
 */
@@ -66,27 +66,31 @@ public:
                                    bool normalInWorldSpace)
   {
     btVector3 p; p.setInterpolate3(m_rayFromWorld, m_rayToWorld, rayResult.m_hitFraction);
-    if (rayResult.m_collisionObject == m_me || Uncollider::isPointInUncollideVolume(p))
+    if (rayResult.m_collisionObject == m_me || Uncollider::isPointInUncollideVolume(p)){
       return 1.0;
-
+    }
     return ClosestRayResultCallback::addSingleResult(rayResult, normalInWorldSpace);
   }
 protected:
   btCollisionObject* m_me;
 };
 
-class KinematicClosestNotMeConvexResultCallback : public btCollisionWorld::ClosestConvexResultCallback
+class KinematicClosestNotMeConvexResultCallback :
+    public btCollisionWorld::ClosestConvexResultCallback
 {
 public:
-  KinematicClosestNotMeConvexResultCallback (btCollisionObject* me, const btVector3& up, btScalar minSlopeDot)
-  : btCollisionWorld::ClosestConvexResultCallback(btVector3(0.0, 0.0, 0.0), btVector3(0.0, 0.0, 0.0))
+  KinematicClosestNotMeConvexResultCallback (btCollisionObject* me,
+                                             const btVector3& up, btScalar minSlopeDot)
+  : btCollisionWorld::ClosestConvexResultCallback(btVector3(0.0, 0.0, 0.0),
+                                                  btVector3(0.0, 0.0, 0.0))
   , m_me(me)
   , m_up(up)
   , m_minSlopeDot(minSlopeDot)
   {
   }
 
-  virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult,bool normalInWorldSpace)
+  virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult,
+                                   bool normalInWorldSpace)
   {
     if (Uncollider::isPointInUncollideVolume(convexResult.m_hitPointLocal)) {
       return 1.0;
@@ -105,7 +109,9 @@ public:
     } else
     {
       ///need to transform normal into worldspace
-      hitNormalWorld = convexResult.m_hitCollisionObject->getWorldTransform().getBasis()*convexResult.m_hitNormalLocal;
+      hitNormalWorld =
+        convexResult.m_hitCollisionObject->getWorldTransform().getBasis()*
+        convexResult.m_hitNormalLocal;
     }
 
     btScalar dotUp = m_up.dot(hitNormalWorld);
@@ -126,7 +132,8 @@ protected:
 *
 * from: http://www-cs-students.stanford.edu/~adityagp/final/node3.html
 */
-btVector3 KinematicCharacterController::computeReflectionDirection (const btVector3& direction, const btVector3& normal)
+btVector3 KinematicCharacterController::computeReflectionDirection (const btVector3& direction,
+                                                                    const btVector3& normal)
 {
   return direction - (btScalar(2.0) * direction.dot(normal)) * normal;
 }
@@ -134,7 +141,8 @@ btVector3 KinematicCharacterController::computeReflectionDirection (const btVect
 /*
 * Returns the portion of 'direction' that is parallel to 'normal'
 */
-btVector3 KinematicCharacterController::parallelComponent (const btVector3& direction, const btVector3& normal)
+btVector3 KinematicCharacterController::parallelComponent (const btVector3& direction,
+                                                           const btVector3& normal)
 {
   btScalar magnitude = direction.dot(normal);
   return normal * magnitude;
@@ -143,12 +151,15 @@ btVector3 KinematicCharacterController::parallelComponent (const btVector3& dire
 /*
 * Returns the portion of 'direction' that is perpindicular to 'normal'
 */
-btVector3 KinematicCharacterController::perpindicularComponent (const btVector3& direction, const btVector3& normal)
+btVector3 KinematicCharacterController::perpindicularComponent (const btVector3& direction,
+                                                                const btVector3& normal)
 {
   return direction - parallelComponent(direction, normal);
 }
 
-KinematicCharacterController::KinematicCharacterController (btPairCachingGhostObject* ghostObject,btConvexShape* convexShape,btScalar stepHeight, int upAxis)
+KinematicCharacterController::KinematicCharacterController (btPairCachingGhostObject* ghostObject,
+                                                            btConvexShape* convexShape,
+                                                            btScalar stepHeight, int upAxis)
 {
   m_upAxis = upAxis;
   m_addedMargin = 0.02;
@@ -190,8 +201,8 @@ bool KinematicCharacterController::recoverFromPenetration ( btCollisionWorld* co
   // that is not in the previous cache contents from the last timestep, as will happen if we
   // are pushed into a new AABB overlap. Unhandled this means the next convex sweep gets stuck.
   //
-  // Do this by calling the broadphase's setAabb with the moved AABB, this will update the broadphase
-  // paircache and the ghostobject's internal paircache at the same time.    /BW
+  // Do this by calling the broadphase's setAabb with the moved AABB, this will update the
+  // broadphase paircache and the ghostobject's internal paircache at the same time.   /BW
 
   btVector3 minAabb, maxAabb;
   m_convexShape->getAabb(m_ghostObject->getWorldTransform(), minAabb,maxAabb);
@@ -201,7 +212,11 @@ bool KinematicCharacterController::recoverFromPenetration ( btCollisionWorld* co
             collisionWorld->getDispatcher());
   bool penetration = false;
 
-  collisionWorld->getDispatcher()->dispatchAllCollisionPairs(m_ghostObject->getOverlappingPairCache(), collisionWorld->getDispatchInfo(), collisionWorld->getDispatcher());
+  collisionWorld->getDispatcher()->dispatchAllCollisionPairs(
+  m_ghostObject->getOverlappingPairCache(),
+  collisionWorld->getDispatchInfo(),
+  collisionWorld->getDispatcher()
+  );
 
   m_currentPosition = m_ghostObject->getWorldTransform().getOrigin();
 
@@ -210,10 +225,13 @@ bool KinematicCharacterController::recoverFromPenetration ( btCollisionWorld* co
   {
     m_manifoldArray.resize(0);
 
-    btBroadphasePair* collisionPair = &m_ghostObject->getOverlappingPairCache()->getOverlappingPairArray()[i];
+    btBroadphasePair* collisionPair =
+      &m_ghostObject->getOverlappingPairCache()->getOverlappingPairArray()[i];
 
-    btCollisionObject* obj0 = static_cast<btCollisionObject*>(collisionPair->m_pProxy0->m_clientObject);
-                btCollisionObject* obj1 = static_cast<btCollisionObject*>(collisionPair->m_pProxy1->m_clientObject);
+    btCollisionObject* obj0 =
+      static_cast<btCollisionObject*>(collisionPair->m_pProxy0->m_clientObject);
+    btCollisionObject* obj1 =
+      static_cast<btCollisionObject*>(collisionPair->m_pProxy1->m_clientObject);
 
     if ((obj0 && !obj0->hasContactResponse()) || (obj1 && !obj1->hasContactResponse()))
       continue;
@@ -225,7 +243,8 @@ bool KinematicCharacterController::recoverFromPenetration ( btCollisionWorld* co
     for (int j=0;j<m_manifoldArray.size();j++)
     {
       btPersistentManifold* manifold = m_manifoldArray[j];
-      btScalar directionSign = manifold->getBody0() == m_ghostObject ? btScalar(-1.0) : btScalar(1.0);
+      btScalar directionSign =
+        manifold->getBody0() == m_ghostObject ? btScalar(-1.0) : btScalar(1.0);
       for (int p=0;p<manifold->getNumContacts();p++)
       {
         const btManifoldPoint&pt = manifold->getContactPoint(p);
@@ -253,7 +272,6 @@ bool KinematicCharacterController::recoverFromPenetration ( btCollisionWorld* co
   btTransform newTrans = m_ghostObject->getWorldTransform();
   newTrans.setOrigin(m_currentPosition);
   m_ghostObject->setWorldTransform(newTrans);
-//	printf("m_touchingNormal = %f,%f,%f\n",m_touchingNormal[0],m_touchingNormal[1],m_touchingNormal[2]);
   return penetration;
 }
 
@@ -261,22 +279,33 @@ void KinematicCharacterController::stepUp ( btCollisionWorld* world)
 {
   // phase 1: up
   btTransform start, end;
-  m_targetPosition = m_currentPosition + getUpAxisDirections()[m_upAxis] * (m_stepHeight + (m_verticalOffset > 0.f?m_verticalOffset:0.f));
+  m_targetPosition =
+    m_currentPosition +
+    getUpAxisDirections()[m_upAxis] *
+    (m_stepHeight + (m_verticalOffset > 0.f?m_verticalOffset:0.f));
 
   start.setIdentity ();
   end.setIdentity ();
 
   /* FIXME: Handle penetration properly */
-  start.setOrigin (m_currentPosition + getUpAxisDirections()[m_upAxis] * (m_convexShape->getMargin() + m_addedMargin));
+  start.setOrigin (m_currentPosition + getUpAxisDirections()[m_upAxis] *
+                   (m_convexShape->getMargin() + m_addedMargin));
   end.setOrigin (m_targetPosition);
 
-  KinematicClosestNotMeConvexResultCallback callback (m_ghostObject, -getUpAxisDirections()[m_upAxis], btScalar(0.7071));
-  callback.m_collisionFilterGroup = getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
-  callback.m_collisionFilterMask = getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
+  KinematicClosestNotMeConvexResultCallback callback(
+                                                     m_ghostObject,
+                                                     -getUpAxisDirections()[m_upAxis],
+                                                     btScalar(0.7071)
+                                                     );
+  callback.m_collisionFilterGroup =
+    getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
+  callback.m_collisionFilterMask =
+    getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
 
   if (m_useGhostObjectSweepTest)
   {
-    m_ghostObject->convexSweepTest (m_convexShape, start, end, callback, world->getDispatchInfo().m_allowedCcdPenetration);
+    m_ghostObject->convexSweepTest(m_convexShape, start,
+                                   end, callback, world->getDispatchInfo().m_allowedCcdPenetration);
   }
   else
   {
@@ -291,7 +320,8 @@ void KinematicCharacterController::stepUp ( btCollisionWorld* world)
       // we moved up only a fraction of the step height
       m_currentStepOffset = m_stepHeight * callback.m_closestHitFraction;
       if (m_interpolateUp == true)
-        m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition, callback.m_closestHitFraction);
+        m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition,
+                                           callback.m_closestHitFraction);
       else
         m_currentPosition = m_targetPosition;
     }
@@ -303,7 +333,9 @@ void KinematicCharacterController::stepUp ( btCollisionWorld* world)
   }
 }
 
-void KinematicCharacterController::updateTargetPositionBasedOnCollision (const btVector3& hitNormal, btScalar tangentMag, btScalar normalMag)
+void KinematicCharacterController::updateTargetPositionBasedOnCollision (const btVector3& hitNormal,
+                                                                         btScalar tangentMag,
+                                                                         btScalar normalMag)
 {
   btVector3 movementDirection = m_targetPosition - m_currentPosition;
   btScalar movementLength = movementDirection.length();
@@ -323,14 +355,12 @@ void KinematicCharacterController::updateTargetPositionBasedOnCollision (const b
     if (0)//tangentMag != 0.0)
     {
       btVector3 parComponent = parallelDir * btScalar (tangentMag*movementLength);
-//			printf("parComponent=%f,%f,%f\n",parComponent[0],parComponent[1],parComponent[2]);
       m_targetPosition +=  parComponent;
     }
 
     if (normalMag != 0.0)
     {
       btVector3 perpComponent = perpindicularDir * btScalar (normalMag*movementLength);
-//			printf("perpComponent=%f,%f,%f\n",perpComponent[0],perpComponent[1],perpComponent[2]);
       m_targetPosition += perpComponent;
     }
   } else
@@ -339,7 +369,8 @@ void KinematicCharacterController::updateTargetPositionBasedOnCollision (const b
   }
 }
 
-void KinematicCharacterController::stepForwardAndStrafe ( btCollisionWorld* collisionWorld, const btVector3& walkMove)
+void KinematicCharacterController::stepForwardAndStrafe(btCollisionWorld* collisionWorld,
+                                                        const btVector3& walkMove)
 {
   // printf("m_normalizedDirection=%f,%f,%f\n",
   // 	m_normalizedDirection[0],m_normalizedDirection[1],m_normalizedDirection[2]);
@@ -371,9 +402,13 @@ void KinematicCharacterController::stepForwardAndStrafe ( btCollisionWorld* coll
     end.setOrigin (m_targetPosition);
     btVector3 sweepDirNegative(m_currentPosition - m_targetPosition);
 
-    KinematicClosestNotMeConvexResultCallback callback (m_ghostObject, sweepDirNegative, btScalar(0.0));
-    callback.m_collisionFilterGroup = getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
-    callback.m_collisionFilterMask = getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
+    KinematicClosestNotMeConvexResultCallback callback(m_ghostObject,
+                                                       sweepDirNegative,
+                                                       btScalar(0.0));
+    callback.m_collisionFilterGroup =
+      getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
+    callback.m_collisionFilterMask =
+      getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
 
 
     btScalar margin = m_convexShape->getMargin();
@@ -382,10 +417,13 @@ void KinematicCharacterController::stepForwardAndStrafe ( btCollisionWorld* coll
 
     if (m_useGhostObjectSweepTest)
     {
-      m_ghostObject->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+      m_ghostObject->convexSweepTest(m_convexShape,
+                                     start, end, callback,
+                                     collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
     } else
     {
-      collisionWorld->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+      collisionWorld->convexSweepTest(m_convexShape, start, end, callback,
+                                      collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
     }
 
     m_convexShape->setMargin(margin);
@@ -395,36 +433,24 @@ void KinematicCharacterController::stepForwardAndStrafe ( btCollisionWorld* coll
 
     if (callback.hasHit())
     {
-      // we moved only a fraction
-      //btScalar hitDistance;
-      //hitDistance = (callback.m_hitPointWorld - m_currentPosition).length();
-
-//			m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition, callback.m_closestHitFraction);
-
       updateTargetPositionBasedOnCollision (callback.m_hitNormalWorld);
       btVector3 currentDir = m_targetPosition - m_currentPosition;
       distance2 = currentDir.length2();
       if (distance2 > SIMD_EPSILON)
       {
         currentDir.normalize();
-        /* See Quake2: "If velocity is against original velocity, stop ead to avoid tiny oscilations in sloping corners." */
         if (currentDir.dot(m_normalizedDirection) <= btScalar(0.0))
         {
           break;
         }
       } else
       {
-//				printf("currentDir: don't normalize a zero vector\n");
         break;
       }
 
     } else {
-      // we moved whole way
       m_currentPosition = m_targetPosition;
     }
-
-  //	if (callback.m_closestHitFraction == 0.f)
-  //		break;
 
   }
 }
@@ -433,13 +459,6 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
 {
   btTransform start, end, end_double;
   bool runonce = false;
-
-  // phase 3: down
-  /*btScalar additionalDownStep = (m_wasOnGround && !onGround()) ? m_stepHeight : 0.0;
-  btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + additionalDownStep);
-  btScalar downVelocity = (additionalDownStep == 0.0 && m_verticalVelocity<0.0?-m_verticalVelocity:0.0) * dt;
-  btVector3 gravity_drop = getUpAxisDirections()[m_upAxis] * downVelocity;
-  m_targetPosition -= (step_drop + gravity_drop);*/
 
   btVector3 orig_position = m_targetPosition;
 
@@ -452,13 +471,21 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
   btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
   m_targetPosition -= step_drop;
 
-  KinematicClosestNotMeConvexResultCallback callback (m_ghostObject, getUpAxisDirections()[m_upAxis], m_maxSlopeCosine);
-        callback.m_collisionFilterGroup = getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
-        callback.m_collisionFilterMask = getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
+  KinematicClosestNotMeConvexResultCallback callback(m_ghostObject,
+                                                     getUpAxisDirections()[m_upAxis],
+                                                     m_maxSlopeCosine);
+        callback.m_collisionFilterGroup =
+          getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
+        callback.m_collisionFilterMask =
+          getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
 
-        KinematicClosestNotMeConvexResultCallback callback2 (m_ghostObject, getUpAxisDirections()[m_upAxis], m_maxSlopeCosine);
-        callback2.m_collisionFilterGroup = getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
-        callback2.m_collisionFilterMask = getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
+        KinematicClosestNotMeConvexResultCallback callback2 (m_ghostObject,
+                                                             getUpAxisDirections()[m_upAxis],
+                                                             m_maxSlopeCosine);
+        callback2.m_collisionFilterGroup =
+          getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
+        callback2.m_collisionFilterMask =
+          getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
 
   while (1)
   {
@@ -475,21 +502,29 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
 
     if (m_useGhostObjectSweepTest)
     {
-      m_ghostObject->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+      m_ghostObject->convexSweepTest(m_convexShape,
+                                     start, end, callback,
+                                     collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
 
       if (!callback.hasHit())
       {
-        //test a double fall height, to see if the character should interpolate it's fall (full) or not (partial)
-        m_ghostObject->convexSweepTest (m_convexShape, start, end_double, callback2, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+        // test a double fall height, to see if the character should interpolate it's fall (full)
+        // or not (partial)
+        m_ghostObject->convexSweepTest(m_convexShape, start, end_double,
+                                       callback2,
+                                       collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
       }
     } else
     {
-      collisionWorld->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+      collisionWorld->convexSweepTest(m_convexShape, start, end, callback,
+                                      collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
 
       if (!callback.hasHit())
           {
-              //test a double fall height, to see if the character should interpolate it's fall (large) or not (small)
-              collisionWorld->convexSweepTest (m_convexShape, start, end_double, callback2, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+            // test a double fall height, to see if the character should interpolate it's
+            // fall (large) or not (small)
+            collisionWorld->convexSweepTest(m_convexShape, start, end_double, callback2,
+                             collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
           }
     }
 
@@ -504,12 +539,13 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
           && (m_wasOnGround || !m_wasJumping))
     {
       //redo the velocity calculation when falling a small amount, for fast stairs motion
-      //for larger falls, use the smoother/slower interpolated movement by not touching the target position
+      //for larger falls, use the smoother/slower interpolated movement by not touching
+      //the target position
 
       m_targetPosition = orig_position;
-          downVelocity = m_stepHeight;
-
-        btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
+      downVelocity = m_stepHeight;
+      
+      btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
       m_targetPosition -= step_drop;
       runonce = true;
       continue; //re-run previous tests
@@ -527,15 +563,20 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
 
     if (bounce_fix == true)
     {
-      if (full_drop == true)
-                                m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition, callback.m_closestHitFraction);
-                        else
-                                //due to errors in the closestHitFraction variable when used with large polygons, calculate the hit fraction manually
-                                m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition, fraction);
+      if (full_drop == true) {
+        m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition,
+                                           callback.m_closestHitFraction);
+      } else {
+        //due to errors in the closestHitFraction variable when used with large polygons,
+        calculate the hit fraction manually
+                                m_currentPosition.setInterpolate3(m_currentPosition,
+                                                                  m_targetPosition,
+                                                                  fraction);
+      }
+    } else {
+      m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition,
+                                         callback.m_closestHitFraction);
     }
-    else
-      m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition, callback.m_closestHitFraction);
-
     full_drop = false;
 
     m_verticalVelocity = 0.0;
@@ -640,7 +681,6 @@ void KinematicCharacterController::preStep (  btCollisionWorld* collisionWorld)
 
   m_currentPosition = m_ghostObject->getWorldTransform().getOrigin();
   m_targetPosition = m_currentPosition;
-//	printf("m_targetPosition=%f,%f,%f\n",m_targetPosition[0],m_targetPosition[1],m_targetPosition[2]);
 
 
 }
