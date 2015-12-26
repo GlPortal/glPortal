@@ -82,10 +82,10 @@ public:
   KinematicClosestNotMeConvexResultCallback (btCollisionObject* me,
                                              const btVector3& up, btScalar minSlopeDot)
   : btCollisionWorld::ClosestConvexResultCallback(btVector3(0.0, 0.0, 0.0),
-                                                  btVector3(0.0, 0.0, 0.0))
-  , m_me(me)
-  , m_up(up)
-  , m_minSlopeDot(minSlopeDot)
+                                                  btVector3(0.0, 0.0, 0.0)),
+    m_me(me),
+    m_up(up),
+    m_minSlopeDot(minSlopeDot)
   {
   }
 
@@ -96,12 +96,14 @@ public:
       return 1.0;
     }
 
-    if (convexResult.m_hitCollisionObject == m_me)
+    if (convexResult.m_hitCollisionObject == m_me){
       return btScalar(1.0);
-
-    if (!convexResult.m_hitCollisionObject->hasContactResponse())
+    }
+    
+    if (!convexResult.m_hitCollisionObject->hasContactResponse()){
       return btScalar(1.0);
-
+    }
+    
     btVector3 hitNormalWorld;
     if (normalInWorldSpace)
     {
