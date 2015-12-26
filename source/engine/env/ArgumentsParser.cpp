@@ -73,7 +73,7 @@ void ArgumentsParser::populateConfig() {
   }
   if (not mapPath.empty()) {
     config.mapPath = mapPath;
-  }  
+  }
 }
 
 } /* namespace glPortal */
