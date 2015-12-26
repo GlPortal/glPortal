@@ -25,7 +25,8 @@ void WorldHelper::shootPortal(int button, Scene *scene) {
     if (pEnt) {
       const Entity &ent = *pEnt;
       // TODO: material in separate Component, + 1 mat per face
-      if (ent.hasComponent<MeshDrawable>() and ent.getComponent<MeshDrawable>().material.portalable) {
+      if (ent.hasComponent<MeshDrawable>() and
+          ent.getComponent<MeshDrawable>().material.portalable) {
         EntityPair &pPair = SceneHelper::getPortalPairFromScene(0, scene);
         Vector3f ipos(res.m_hitPointWorld);
         Entity &pEnt = (button == 1) ? *pPair.first : *pPair.second;
