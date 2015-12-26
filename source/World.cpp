@@ -212,7 +212,8 @@ void World::update(double dtime) {
   scene->camera.setOrientation(plrMotion.getHeadOrientation());
 
   //Check if the end of the level has been reached
-  float distToEnd = (scene->end->getComponent<Transform>().getPosition() - plrTform.getPosition()).length();
+  float distToEnd = (scene->end->getComponent<Transform>().getPosition() -
+                     plrTform.getPosition()).length();
   if (distToEnd < 1) {
     if (currentLevel + 1 < mapList.size()) {
       currentLevel++;
