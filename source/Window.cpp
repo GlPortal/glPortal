@@ -115,6 +115,13 @@ void Window::getSize(int *width, int *height) const {
 }
 
 void Window::close() {
+  SDL_HideWindow(window);
+
+  gwenInput.release();
+  gwenCanvas.release();
+  gwenSkin.release();
+  gwenRenderer.release();
+
   SDL_GL_DeleteContext(context);
   SDL_DestroyWindow(window);
   window = nullptr;
