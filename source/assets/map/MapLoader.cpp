@@ -7,12 +7,10 @@
 
 #include <assets/map/XmlHelper.hpp>
 #include <engine/env/Environment.hpp>
-#include <engine/BoxCollider.hpp>
 #include <engine/core/math/Vector3f.hpp>
 
 #include <engine/component/Transform.hpp>
 #include <engine/component/MeshDrawable.hpp>
-#include <engine/component/AACollisionBox.hpp>
 #include <engine/component/Trigger.hpp>
 #include <engine/component/SoundSource.hpp>
 #include <engine/component/LightSource.hpp>
@@ -199,7 +197,6 @@ void MapLoader::extractWalls() {
       m.mesh = MeshLoader::getPortalBox(wall);
       wall.addComponent<RigidBody>
         (0, std::make_shared<btBoxShape>(btVector3(t.getScale().x/2, t.getScale().y/2, t.getScale().z/2)));
-      wall.addComponent<AACollisionBox>().box = BoxCollider::generateCage(wall);
     } while ((wallBoxElement = wallBoxElement->NextSiblingElement("wall")) != nullptr);
   }
 }
@@ -222,7 +219,6 @@ void MapLoader::extractAcids() {
       MeshDrawable &m = acid.addComponent<MeshDrawable>();
       m.material = MaterialLoader::loadFromXML("fluid/acid00");
       m.mesh = MeshLoader::getPortalBox(acid);
-      acid.addComponent<AACollisionBox>().box = BoxCollider::generateCage(acid);
     } while ((acidElement = acidElement->NextSiblingElement("acid")) != nullptr);
   }
 }

@@ -17,14 +17,11 @@
 
 #include <engine/renderer/Renderer.hpp>
 #include <engine/env/Environment.hpp>
-#include <engine/BoxCollider.hpp>
-#include <engine/Ray.hpp>
 #include <engine/Camera.hpp>
 
 #include <engine/component/Health.hpp>
 #include <engine/component/Transform.hpp>
 #include <engine/component/Trigger.hpp>
-#include <engine/component/AACollisionBox.hpp>
 #include <engine/component/SoundSource.hpp>
 #include <engine/component/LightSource.hpp>
 #include <engine/component/Player.hpp>
@@ -221,17 +218,6 @@ void World::update(double dtime) {
       scene->screen->text    = "Hit q to quit the game.";
     }
   }
-}
-
-bool World::collidesWithWalls(const BoxCollider &collider) const {
-  for (const Entity &e : scene->entities) {
-    if (e.hasComponent<AACollisionBox>()) {
-      if (collider.collidesWith(e.getComponent<AACollisionBox>().box)) {
-        return true;
-      }
-    }
-  }
-  return false;
 }
 
 void World::shootPortal(int button) {

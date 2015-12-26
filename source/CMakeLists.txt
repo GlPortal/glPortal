@@ -6,33 +6,19 @@ endif()
 
 add_executable(${EXE_NAME}
   assets/gui/GUIButton.cpp
-  assets/gui/GUIButton.cpp
-  assets/map/MapListLoader.cpp
   assets/map/MapListLoader.cpp
   assets/map/MapLoader.cpp
-  assets/map/MapLoader.cpp
-  assets/map/XmlHelper.cpp
   assets/map/XmlHelper.cpp
   assets/material/MaterialLoader.cpp
-  assets/material/MaterialLoader.cpp
-  assets/model/MeshLoader.cpp
   assets/model/MeshLoader.cpp
   assets/scene/Scene.cpp
-  assets/scene/Scene.cpp
-  assets/scene/SceneHelper.cpp
   assets/scene/SceneHelper.cpp
   assets/scene/Screen.cpp
   assets/scene/Terminal.cpp
   assets/shader/Shader.cpp
-  assets/shader/Shader.cpp
-  assets/shader/ShaderLoader.cpp
   assets/shader/ShaderLoader.cpp
   assets/text/FontLoader.cpp
-  assets/text/FontLoader.cpp
   assets/texture/TextureLoader.cpp
-  assets/texture/TextureLoader.cpp
-  engine/BoxCollider.cpp
-  engine/BoxCollider.cpp
   engine/Camera.cpp
   engine/Camera.cpp
   engine/component/Health.cpp
@@ -68,7 +54,6 @@ add_executable(${EXE_NAME}
   engine/physics/PhysicsDebugDraw.cpp
   engine/physics/PhysicsHelper.cpp
   engine/physics/Uncollider.cpp
-  engine/Ray.cpp
   engine/renderer/GWENRenderer.cpp
   engine/renderer/Renderer.cpp
   engine/renderer/TerminalRenderer.cpp
@@ -83,7 +68,6 @@ add_executable(${EXE_NAME}
   Game.cpp
   Input.cpp
   Portal.cpp
-  PortalHelper.cpp
   Window.cpp
   World.cpp
   WorldHelper.cpp
