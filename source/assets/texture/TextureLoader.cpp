@@ -11,48 +11,32 @@ namespace glPortal {
 
 std::map<std::string, Texture> TextureLoader::textureCache = {};
 
-Texture TextureLoader::getEmptyTextureByString(std::string string) {
-  auto it = textureCache.find(string);
+Texture TextureLoader::getEmptyTexture(const std::string &name,
+  const char *pixel, int pxDepth) {
+  auto it = textureCache.find(name);
   if (it != textureCache.end()) {
     return it->second;
   }
-  Texture texture = uploadTexture((const unsigned char*)"\xFF\xFF\xFF", 1, 1, 3);
+  Texture texture = uploadTexture((const unsigned char*)pixel, 1, 1, pxDepth);
   texture.width = 1;
   texture.height = 1;
-  textureCache.insert(std::pair<std::string, Texture>(string, texture));
+  textureCache.insert(std::pair<std::string, Texture>(name, texture));
   return texture;
 }
 
 Texture TextureLoader::getEmptyDiffuse() {
-
-  return TextureLoader::getEmptyTextureByString("engine@empty/diffuse");
+  return TextureLoader::getEmptyTexture("engine@empty/diffuse");
 }
 
 Texture TextureLoader::getEmptyNormal() {
-  auto it = textureCache.find("engine@empty/normal");
-  if (it != textureCache.end()) {
-    return it->second;
-  }
-  Texture texture = uploadTexture((const unsigned char*)"\x7F\x7F\xFF", 1, 1, 3);
-  texture.width = 1;
-  texture.height = 1;
-  textureCache.insert(std::pair<std::string, Texture>("engine@empty/normal", texture));
-  return texture;
+  return TextureLoader::getEmptyTexture("engine@empty/normal", "\x7F\x7F\xFF");
 }
 
 Texture TextureLoader::getEmptySpecular() {
-  auto it = textureCache.find("engine@empty/specular");
-  if (it != textureCache.end()) {
-    return it->second;
-  }
-  Texture texture = uploadTexture((const unsigned char*)"\x7F\x7F\x7F", 1, 1, 3);
-  texture.width = 1;
-  texture.height = 1;
-  textureCache.insert(std::pair<std::string, Texture>("engine@empty/specular", texture));
-  return texture;
+  return TextureLoader::getEmptyTexture("engine@empty/specular", "\x7F\x7F\x7F");
 }
 
-Texture TextureLoader::getTexture(std::string path) {
+Texture TextureLoader::getTexture(const std::string &path) {
   auto it = textureCache.find(path);
   if (it != textureCache.end()) {
     return it->second;
