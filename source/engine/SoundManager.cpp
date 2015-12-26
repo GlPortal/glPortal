@@ -23,7 +23,8 @@ void SoundManager::init() {
     System::Log(Verbose, "SoundManager") << "SDL Audio system already initialized";
   } else {
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
-      System::Log(Warning, "SoundManager") << "SDL Audio system init failed: " << SDL_GetError() << ", sound disabled";
+      System::Log(Warning, "SoundManager") << "SDL Audio system init failed: "
+                                           << SDL_GetError() << ", sound disabled";
       isDisabled = true;
     } else {
       System::Log(Info, "SoundManager") << "SDL Audio system initialized";
@@ -37,7 +38,8 @@ void SoundManager::init() {
     int flags = MIX_INIT_OGG;
 
     if ((Mix_Init(flags) & flags) != flags) {
-      System::Log(Warning, "SoundManager") << "SDL_mixer Init failed: " << Mix_GetError() << ", sound disabled";
+      System::Log(Warning, "SoundManager") << "SDL_mixer Init failed: "
+                                           << Mix_GetError() << ", sound disabled";
       isDisabled = true;
     }
   }
@@ -49,7 +51,8 @@ void SoundManager::init() {
     int audioBuffers = 4096;
 
     if (Mix_OpenAudio(audioRate, audioFormat, audioChannels, audioBuffers) == -1) {
-      System::Log(Warning, "SoundManager") << "SDL_mixer OpenAudio failed: " << Mix_GetError() << ", sound disabled";
+      System::Log(Warning, "SoundManager") << "SDL_mixer OpenAudio failed: "
+                                           << Mix_GetError() << ", sound disabled";
       isDisabled = true;
     }
   }
