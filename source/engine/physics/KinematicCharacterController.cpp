@@ -464,10 +464,10 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
 
   btScalar downVelocity = (m_verticalVelocity<0.f?-m_verticalVelocity:0.f) * dt;
 
-  if(downVelocity > 0.0 && downVelocity > m_fallSpeed
-    && (m_wasOnGround || not m_wasJumping))
+  if (downVelocity > 0.0 && downVelocity > m_fallSpeed
+      && (m_wasOnGround || not m_wasJumping)){
     downVelocity = m_fallSpeed;
-
+  }
   btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
   m_targetPosition -= step_drop;
 
@@ -530,12 +530,13 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
 
     btScalar downVelocity2 = (m_verticalVelocity<0.f?-m_verticalVelocity:0.f) * dt;
     bool has_hit = false;
-    if (bounce_fix == true)
+    if (bounce_fix == true){
       has_hit = callback.hasHit() || callback2.hasHit();
-    else
+    } else {
       has_hit = callback2.hasHit();
+    }
 
-    if(downVelocity2 > 0.0 && downVelocity2 < m_stepHeight && has_hit == true && runonce == false
+    if (downVelocity2 > 0.0 && downVelocity2 < m_stepHeight && has_hit == true && runonce == false
           && (m_wasOnGround || not m_wasJumping))
     {
       //redo the velocity calculation when falling a small amount, for fast stairs motion
@@ -614,8 +615,6 @@ const btVector3& walkDirection
   m_normalizedDirection = getNormalizedVector(m_walkDirection);
 }
 
-
-
 void KinematicCharacterController::setVelocityForTimeInterval
 (
 const btVector3& velocity,
@@ -635,7 +634,7 @@ void KinematicCharacterController::reset ( btCollisionWorld* collisionWorld )
         m_verticalOffset = 0.0;
         m_wasOnGround = false;
         m_wasJumping = false;
-        m_walkDirection.setValue(0,0,0);
+        m_walkDirection.setValue(0, 0, 0);
         m_velocityTimeInterval = 0.0;
 
         //clear pair cache
@@ -755,8 +754,9 @@ bool KinematicCharacterController::canJump () const
 
 void KinematicCharacterController::jump ()
 {
-  if (not canJump())
+  if (not canJump()){
     return;
+  }
 
   m_verticalVelocity = m_jumpSpeed;
   m_wasJumping = true;
