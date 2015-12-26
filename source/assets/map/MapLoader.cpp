@@ -17,7 +17,7 @@
 #include <engine/component/SoundSource.hpp>
 #include <engine/component/LightSource.hpp>
 #include <engine/component/RigidBody.hpp>
-#include "../../PlayerMotion.hpp"
+#include <engine/component/Player.hpp>
 
 #include <assets/scene/Scene.hpp>
 #include <assets/model/Mesh.hpp>
@@ -111,8 +111,8 @@ void MapLoader::extractSpawn() {
     Vector3f position;
     XmlHelper::extractPosition(spawnElement, position);
     t.setPosition(position);
-    PlayerMotion &pm = scene->player->getComponent<PlayerMotion>();
-    XmlHelper::extractRotation(spawnElement, pm.headAngle);
+    Player &p = scene->player->getComponent<Player>();
+    XmlHelper::extractRotation(spawnElement, p.headAngle);
     Transform &pt = scene->player->getComponent<Transform>();
     pt.setPosition(position);
   } else {

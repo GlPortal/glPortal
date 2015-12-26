@@ -27,7 +27,7 @@
 #include <engine/component/AACollisionBox.hpp>
 #include <engine/component/SoundSource.hpp>
 #include <engine/component/LightSource.hpp>
-#include "PlayerMotion.hpp"
+#include <engine/component/Player.hpp>
 
 #include <engine/core/math/Math.hpp>
 #include <engine/core/math/Vector2f.hpp>
@@ -101,13 +101,14 @@ void World::loadScene(const std::string &path) {
 
   if (justStarted) {
     Entity &player = *scene->player;
-    PlayerMotion &motion = player.getComponent<PlayerMotion>();
-    motion.frozen = true;
+    Player &plr = player.getComponent<Player>();
+    plr.frozen = true;
     scene->screen->enabled = true;
     justStarted = false;
   }
 
   scene->world = this;
+  plrSys.setScene(scene);
   phys.setScene(scene);
   scene->physics.world->setDebugDrawer(&pdd);
   scene->physics.setGravity(0, -9.8, 0);
@@ -126,13 +127,14 @@ void World::loadSceneFromPath(const std::string &path) {
 
   if (justStarted) {
     Entity &player = *scene->player;
-    PlayerMotion &motion = player.getComponent<PlayerMotion>();
-    motion.frozen = true;
+    Player &plr = player.getComponent<Player>();
+    plr.frozen = true;
     scene->screen->enabled = true;
     justStarted = false;
   }
 
   scene->world = this;
+  plrSys.setScene(scene);
   phys.setScene(scene);
   scene->physics.world->setDebugDrawer(&pdd);
   scene->physics.setGravity(0, -9.8, 0);
@@ -148,7 +150,7 @@ void World::update(double dtime) {
   Entity &player = *scene->player;
   Health &plrHealth = player.getComponent<Health>();
   Transform &plrTform = player.getComponent<Transform>();
-  PlayerMotion &plrMotion = player.getComponent<PlayerMotion>();
+  Player &plrComp = player.getComponent<Player>();
 
   // Check if player is still alive
   if (not plrHealth.isAlive()) {
@@ -157,11 +159,7 @@ void World::update(double dtime) {
     hidePortals();
   }
 
-  // Calculate the view and new velocity of the player
-  // FIXME: don't do this here, let a manager handle
-  plrMotion.mouseLook();
-  plrMotion.move(dtime);
-
+  plrSys.update(dtime);
   phys.update(dtime);
   prtl.update(dtime);
 
@@ -209,7 +207,7 @@ void World::update(double dtime) {
   renderer->getViewport()->getSize(&vpWidth, &vpHeight);
   scene->camera.setAspect((float)vpWidth / vpHeight);
   scene->camera.setPosition(plrTform.getPosition() + Vector3f(0, plrTform.getScale().y/2, 0));
-  scene->camera.setOrientation(plrMotion.getHeadOrientation());
+  scene->camera.setOrientation(plrComp.getHeadOrientation());
 
   //Check if the end of the level has been reached
   float distToEnd = (scene->end->getComponent<Transform>().getPosition() - plrTform.getPosition()).length();

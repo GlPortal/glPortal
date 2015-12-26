@@ -12,6 +12,7 @@
 #include <engine/core/state/HandleGameFunction.hpp>
 #include <engine/physics/PhysicsDebugDraw.hpp>
 #include <engine/system/PhysicsSystem.hpp>
+#include <engine/system/PlayerSystem.hpp>
 #include <engine/system/PortalSystem.hpp>
 
 namespace glPortal {
@@ -67,6 +68,7 @@ private:
   PhysicsSystem phys;
   PhysicsDebugDraw pdd;
   PortalSystem prtl;
+  PlayerSystem plrSys;
   std::mt19937 generator;
   std::vector<std::string> mapList;
   unsigned int currentLevel = 0;

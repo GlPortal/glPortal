@@ -20,30 +20,16 @@ public:
   btPairCachingGhostObject *obj;
   KinematicCharacterController *controller;
 
-  Player(Entity &ent) :
-    Component(ent) {
-    if (not entity.hasComponent<Transform>()) {
-      entity.addComponent<Transform>();
-    }
-    obj = new btPairCachingGhostObject;
-    Transform &tform = entity.getComponent<Transform>();
-    obj->setWorldTransform(btTransform(tform.getOrientation(), tform.getPosition()));
-    shape = std::make_shared<btCapsuleShape>(.4, 1);
-    obj->setCollisionShape(shape.get());
-    obj->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-    controller = new KinematicCharacterController(obj, shape.get(), 0.35);
-    entity.manager.scene.physics.world->addCollisionObject(obj,
-      btBroadphaseProxy::CharacterFilter,
-      btBroadphaseProxy::StaticFilter | btBroadphaseProxy::DefaultFilter);
-    entity.manager.scene.physics.world->addAction(controller);
-  }
+  Vector3f velocity, headAngle;
+  bool flying, noclip, frozen;
+  float speed;
+  float stepCounter;
 
-  ~Player() {
-    entity.manager.scene.physics.world->removeAction(controller);
-    entity.manager.scene.physics.world->removeCollisionObject(obj);
-    delete controller;
-    delete obj;
-  }
+  Player(Entity&);
+  ~Player();
+
+  Quaternion getBaseHeadOrientation() const;
+  Quaternion getHeadOrientation() const;
 };
 
 } /* namespace glPortal */
