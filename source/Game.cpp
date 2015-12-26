@@ -1,10 +1,11 @@
 #include "Game.hpp"
 
-#include <SDL2/SDL_timer.h>
 #include <stdexcept>
 #include <string>
 #include <cstdio>
 #include <iostream>
+
+#include <SDL2/SDL_timer.h>
 
 #include "engine/env/Environment.hpp"
 #include "engine/env/ArgumentsParser.hpp"

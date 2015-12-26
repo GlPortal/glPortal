@@ -1,11 +1,19 @@
 #include "Window.hpp"
 
-#include <epoxy/gl.h>
-#include <stdio.h>
-#include <SDL2/SDL.h>
+#include <cstdio>
 #include <cstdlib>
 #include <stdexcept>
 #include <iostream>
+
+#include <epoxy/gl.h>
+
+#include <SDL2/SDL.h>
+
+#include <Gwen/Controls/Button.h>
+#include <Gwen/Controls/CheckBox.h>
+
+#include <engine/GWENInput.hpp>
+#include <engine/renderer/GWENRenderer.hpp>
 #include <engine/env/Environment.hpp>
 #include <engine/env/System.hpp>
 
@@ -20,6 +28,8 @@ Window::Window() :
   height(0),
   window(nullptr) {
 }
+
+Window::~Window() = default;
 
 void Window::initEpoxy() {
   System::Log() << "GL " << epoxy_gl_version();
@@ -65,11 +75,31 @@ void Window::create(const char *title) {
   this->width = width;
   this->height = height;
 
+  glViewport(0, 0, width, height);
+
   // Allows unbound framerate if vsync is disabled
   SDL_GL_SetSwapInterval(config.hasVsync() ? 1 : 0);
 
   // Lock cursor in the middle of the screen
   lockMouse();
+
+  gwenRenderer = std::make_unique<GWENRenderer>();
+  gwenSkin = std::make_unique<Gwen::Skin::TexturedBase>(gwenRenderer.get());
+  gwenSkin->Init((Environment::getDataDir() + "/gui/DefaultSkin.png").c_str());
+  gwenCanvas = std::make_unique<Gwen::Controls::Canvas>(gwenSkin.get());
+  gwenInput = std::make_unique<GWENInput>();
+  gwenInput->init(gwenCanvas.get());
+
+#if 0 // Testing code
+  Gwen::Controls::Button* pButtonA = new Gwen::Controls::Button( gwenCanvas.get() );
+  pButtonA->SetText("");
+  pButtonA->SetBounds( 30, 30, 300, 200 );
+    Gwen::Controls::CheckBox* pCA = new Gwen::Controls::CheckBox( gwenCanvas.get() );
+  pCA->SetText("abc");
+  pCA->SetPos(40, 40);
+  pCA->SetChecked(true);
+  //pCA->SetBounds( 30, 30, 100, 30);
+#endif
 }
 
 void Window::setFullscreen() {

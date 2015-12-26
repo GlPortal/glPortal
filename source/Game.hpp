@@ -24,6 +24,10 @@ public:
   void update();
   void close();
   World* getWorld();
+  inline Window& getWindow() {
+    return window;
+  }
+
 private:
   Window window;
   World world;

@@ -67,11 +67,11 @@ add_executable(${EXE_NAME}
   engine/physics/PhysicsDebugDraw.cpp
   engine/physics/PhysicsHelper.cpp
   engine/physics/Uncollider.cpp
-  engine/renderer/Renderer.cpp
   engine/system/PhysicsSystem.cpp
   engine/system/PortalSystem.cpp
   engine/BoxCollider.cpp
   engine/Camera.cpp
+  engine/renderer/GWENRenderer.cpp
   engine/renderer/Renderer.cpp
   engine/renderer/UiRenderer.cpp
   engine/renderer/TerminalRenderer.cpp

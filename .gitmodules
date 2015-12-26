@@ -4,3 +4,6 @@
 [submodule "documentation/specification"]
 	path = documentation/specification
 	url = https://github.com/GlPortal/specification.git
+[submodule "external/gwen"]
+	path = external/gwen
+	url = git@github.com:GlPortal/gwen.git

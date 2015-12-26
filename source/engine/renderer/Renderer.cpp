@@ -46,14 +46,6 @@ namespace glPortal {
   Renderer::Renderer() : font(nullptr), vpWidth(0), vpHeight(0),
                          scene(nullptr), viewport(nullptr),
                          portalDepth(2), fontColor(1, 1, 1, 1){
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);
-  glCullFace(GL_BACK);
-
-  glClearColor(0, 0, 0, 1.0);
-
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Renderer::setViewport(Viewport *vp) {
@@ -90,6 +82,15 @@ void Renderer::render(double dtime, const Camera &cam) {
   time += dtime;
   viewport->getSize(&vpWidth, &vpHeight);
 
+  glDepthMask(GL_TRUE);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+
+  glClearColor(0, 0, 0, 1.0);
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   Camera camera = cam;

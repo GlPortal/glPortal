@@ -71,7 +71,6 @@ public:
   Vector3f velocity, headAngle;
   Quaternion getBaseHeadOrientation() const;
   Quaternion getHeadOrientation() const;
-  bool grounded;
   bool flying, noclip, frozen;
 
   float speed;
