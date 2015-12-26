@@ -145,20 +145,6 @@ struct Quaternion : public Vector4f {
 
   Vector3f toAero() const;
 
-#if 0
-  inline Quaternion& fromEulerZXY(float X, float Y, float Z) {
-    fromAero(Y, X, Z);
-    return *this;
-  }
-  Quaternion& fromEulerZXY(const Vector3f&);
-
-  Vector3f toEulerZXY() const;
-#endif
-
-  /* Deprecated because rotation order is unspecified */
-  [[deprecated]] Quaternion& setFromEuler(float pitch, float yaw, float roll);
-  [[deprecated]] Quaternion& setFromEuler(const Vector3f&);
-
   Matrix4f toMatrix() const;
 
   inline std::string toString() const {

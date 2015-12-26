@@ -14,7 +14,7 @@ vector<string> MapListLoader::getMapList() {
   ifstream file(path);
 
   if (not file.is_open()) {
-    throw runtime_error("Could not find file: data/maps/maplist");
+    throw runtime_error("Could not find file: " + path);
   }
 
   string line;

@@ -162,9 +162,9 @@ void MapLoader::extractDoor() {
     Vector3f position;
     XmlHelper::extractPosition(endElement, position);
     t.setPosition(position);
-    Vector3f eulerOrient;
-    XmlHelper::extractRotation(endElement, eulerOrient);
-    t.setOrientation(Quaternion().setFromEuler(eulerOrient));
+    Vector3f angles;
+    XmlHelper::extractRotation(endElement, angles);
+    t.setOrientation(Quaternion().fromAero(angles));
     MeshDrawable &m = door.addComponent<MeshDrawable>();
     m.material = MaterialLoader::loadFromXML("door/door");
     m.mesh = MeshLoader::getMesh("Door.obj");
@@ -182,9 +182,9 @@ void MapLoader::extractWalls() {
       Vector3f position;
       XmlHelper::extractPosition(wallBoxElement, position);
       t.setPosition(position);
-      Vector3f eulerOrient;
-      XmlHelper::extractRotation(wallBoxElement, eulerOrient);
-      t.setOrientation(Quaternion().setFromEuler(eulerOrient));
+      Vector3f angles;
+      XmlHelper::extractRotation(wallBoxElement, angles);
+      t.setOrientation(Quaternion().fromAero(angles));
       Vector3f scale;
       XmlHelper::extractScale(wallBoxElement, scale);
       t.setScale(scale);
@@ -261,9 +261,9 @@ void MapLoader::extractModels() {
       Vector3f position;
       XmlHelper::extractPosition(modelElement, position);
       t.setPosition(position);
-      Vector3f eulerOrient;
-      XmlHelper::extractRotation(modelElement, eulerOrient);
-      t.setOrientation(Quaternion().setFromEuler(eulerOrient));
+      Vector3f angles;
+      XmlHelper::extractRotation(modelElement, angles);
+      t.setOrientation(Quaternion().fromAero(angles));
       MeshDrawable &m = model.addComponent<MeshDrawable>();
       m.material = MaterialLoader::loadFromXML(mid);
       m.mesh = MeshLoader::getMesh(mesh);

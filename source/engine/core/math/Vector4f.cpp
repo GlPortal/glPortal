@@ -153,43 +153,6 @@ Vector3f Quaternion::toAero() const {
   return Vector3f(-thetaY, -thetaX, -thetaZ);
 }
 
-#if 0
-Quaternion& Quaternion::fromEulerZXY(const Vector3f &v) {
-  fromEulerZXY(v.y, v.x, v.z);
-  return *this;
-}
-
-Vector3f Quaternion::toEulerZXY() const {
-  const Vector3f a = toAero();
-  return Vector3f(a.y, a.x, a.z);
-}
-#endif
-
-Quaternion& Quaternion::setFromEuler(float p, float y, float r) {
-  float c1 = std::cos(y/2);
-  float s1 = std::sin(y/2);
-  float c2 = std::cos(p/2);
-  float s2 = std::sin(p/2);
-  float c3 = std::cos(r/2);
-  float s3 = std::sin(r/2);
-  float c1c2 = c1*c2, s1s2 = s1*s2, s1c2 = s1*c2, c1s2 = c1*s2;
-  this->w = c1c2 * c3 - s1s2 * s3;
-  this->x = s1s2 * c3 + c1c2 * s3;
-  this->y = s1c2 * c3 + c1s2 * s3;
-  this->z = c1s2 * c3 - s1c2 * s3;
-  // Normalise:
-  float invlen = 1/length(*this);
-  this->x *= invlen;
-  this->y *= invlen;
-  this->z *= invlen;
-  this->w *= invlen;
-  return *this;
-}
-
-Quaternion& Quaternion::setFromEuler(const Vector3f &e) {
-  return setFromEuler(e.pitch, e.yaw, e.roll);
-}
-
 Matrix4f Quaternion::toMatrix() const {
   Matrix4f m;
   m[0] = 1.0f - 2.0f*y*y - 2.0f*z*z;
