@@ -22,7 +22,9 @@ void Config::load() {
     in.read(&templateTxt[0], templateTxt.size());
     in.close();
   } else {
-    throw std::runtime_error(std::string("Can't open ") + templatePath + ": " + std::strerror(errno));
+    throw std::runtime_error(std::string("Can't open ") +
+                             templatePath + ": " +
+                             std::strerror(errno));
   }
   Json templateJson = Json::parse(templateTxt, err);
   Json videoJson = templateJson["video"];
