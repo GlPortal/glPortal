@@ -32,8 +32,11 @@ public:
     btDiscreteDynamicsWorld *world;
     btGhostPairCallback *gpCallback;
     Physics(Scene &parent);
-    void setGravity(float x, float y, float z);
     ~Physics();
+    void setGravity(float x, float y, float z);
+
+    Physics(const Physics&) = delete;
+    Physics(Physics&&) = delete;
   } physics;
 
   World *world;

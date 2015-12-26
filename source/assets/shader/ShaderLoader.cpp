@@ -13,28 +13,33 @@ namespace {
 
 namespace glPortal {
 
-std::map<std::string, Shader> ShaderLoader::shaderCache = { };
+std::map<std::pair<std::string, std::string>, Shader> ShaderLoader::shaderCache = { };
 
-Shader& ShaderLoader::getShader(const std::string &path) {
-  auto it = shaderCache.find(path);
+Shader& ShaderLoader::getShader(const std::string &fragpath, const std::string &vertpath) {
+  std::string fpath = Environment::getDataDir() + "/shaders/" + fragpath;
+  std::string vpath;
+  if (vertpath.empty()) {
+    vpath = Environment::getDataDir() + "/shaders/diffuse.vert";
+  } else {
+    vpath = Environment::getDataDir() + "/shaders/" + vertpath;
+  }
+  auto it = shaderCache.find(std::pair<std::string, std::string>(fragpath, vertpath));
   if (it != shaderCache.end()) {
     return it->second;
   }
 
-  std::string fpath = Environment::getDataDir() + "/shaders/" + path;
-
-  //Load the shaders
-  int vertShader = loadShader(Environment::getDataDir() + "/shaders/diffuse.vert", GL_VERTEX_SHADER);
+  // Load the shaders
+  int vertShader = loadShader(vpath, GL_VERTEX_SHADER);
   int fragShader = loadShader(fpath, GL_FRAGMENT_SHADER);
 
-  //Create a program and attach both shaders
+  // Create a program and attach both shaders
   int shader = glCreateProgram();
   glAttachShader(shader, vertShader);
   glAttachShader(shader, fragShader);
 
   glLinkProgram(shader);
 
-  //Error checking
+  // Error checking
   GLint success = 0;
   glGetProgramiv(shader, GL_LINK_STATUS, &success);
   if (success == GL_TRUE) {
@@ -49,7 +54,7 @@ Shader& ShaderLoader::getShader(const std::string &path) {
 
   glValidateProgram(shader);
 
-  //Error checking
+  // Error checking
   glGetProgramiv(shader, GL_VALIDATE_STATUS, &success);
   if (success == GL_TRUE) {
     System::Log(Debug, "ShaderLoader") << fpath << ": progam validated";
@@ -63,7 +68,8 @@ Shader& ShaderLoader::getShader(const std::string &path) {
 
   Shader s;
   s.handle = shader;
-  auto inserted = shaderCache.insert(std::pair<std::string, Shader>(path, s));
+  auto inserted = shaderCache.insert(std::pair<std::pair<std::string, std::string>, Shader>(
+    std::pair<std::string, std::string>(fragpath, vertpath), s));
   // Return reference to newly inserted Shader
   return inserted.first->second;
 }

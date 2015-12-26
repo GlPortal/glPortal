@@ -30,6 +30,7 @@ class Window;
 class World {
 public:
   World();
+  ~World();
   void create();
   void destroy();
   void setRendererWindow(Window*);
@@ -60,6 +61,8 @@ private:
   uint32_t lastUpdateTime;
   bool justStarted = true;
   Renderer *renderer;
+  Window *window;
+
   // FIXME: now, aggregating all of this in here is more like patchwork rather than coding
   PhysicsSystem phys;
   PhysicsDebugDraw pdd;

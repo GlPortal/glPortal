@@ -1,15 +1,25 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
-#include <SDL2/SDL_video.h>
-#include <engine/Viewport.hpp>
+#include <memory>
 #include <string>
 
+#include <SDL2/SDL_video.h>
+
+#include <Gwen/Controls/Canvas.h>
+#include <Gwen/Skins/TexturedBase.h>
+
+#include <engine/Viewport.hpp>
+
 namespace glPortal {
+
+class GWENRenderer;
+class GWENInput;
 
 class Window : public Viewport {
 public:
   Window();
+  ~Window();
   void create(const char*);
   void setFullscreen();
   void swapBuffers();
@@ -18,6 +28,11 @@ public:
 
   void lockMouse();
   void unlockMouse();
+
+  std::unique_ptr<GWENRenderer> gwenRenderer;
+  std::unique_ptr<Gwen::Skin::TexturedBase> gwenSkin;
+  std::unique_ptr<Gwen::Controls::Canvas> gwenCanvas;
+  std::unique_ptr<GWENInput> gwenInput;
   
 private:
   void initEpoxy();

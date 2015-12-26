@@ -12,6 +12,7 @@ public:
   
   // Ctor / dtor
   VBO();
+  VBO(unsigned int size, GLenum usage = GL_STATIC_DRAW);
   ~VBO();
   // No copy
   VBO(const VBO&) = delete;
@@ -38,6 +39,12 @@ public:
     GLint currentBoundArray; glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &currentBoundArray);
     glBindBuffer(GL_ARRAY_BUFFER, id);
     glBufferSubData(GL_ARRAY_BUFFER, offset*sizeof(T), count*sizeof(T), data);
+    glBindBuffer(GL_ARRAY_BUFFER, currentBoundArray);
+  }
+  template <typename T> void update(const T *data, unsigned int count) {
+    GLint currentBoundArray; glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &currentBoundArray);
+    glBindBuffer(GL_ARRAY_BUFFER, id);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, count*sizeof(T), data);
     glBindBuffer(GL_ARRAY_BUFFER, currentBoundArray);
   }
   void bind() const;

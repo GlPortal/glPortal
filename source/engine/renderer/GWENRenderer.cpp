@@ -1,0 +1,261 @@
+#include "GWENRenderer.hpp"
+
+#include <cmath>
+
+#include <epoxy/gl.h>
+
+#include <Gwen/Utility.h>
+#include <Gwen/Font.h>
+#include <Gwen/Texture.h>
+#include <Gwen/WindowProvider.h>
+
+#include <engine/stb_image.h>
+#include <engine/core/gl/VBO.hpp>
+#include <engine/core/math/Matrix4f.hpp>
+#include <engine/env/System.hpp>
+#include <assets/shader/ShaderLoader.hpp>
+#include <assets/texture/TextureLoader.hpp>
+
+namespace glPortal {
+
+GWENRenderer::GWENRenderer() {
+  m_iVertNum = 0;
+  vbo = std::make_unique<VBO>(MaxVerts*sizeof(Vertex), GL_DYNAMIC_DRAW);
+}
+
+GWENRenderer::~GWENRenderer() {
+}
+
+void GWENRenderer::Init() {
+  System::Log(Debug, "GWENRenderer") << "Initialize";
+}
+
+void GWENRenderer::Begin() {
+  glDepthMask(GL_FALSE);
+  glDisable(GL_DEPTH_TEST);
+  glDisable(GL_CULL_FACE);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glAlphaFunc(GL_GREATER, 1.0f);
+  glEnable(GL_BLEND);
+}
+
+void GWENRenderer::End() {
+  Flush();
+}
+
+void GWENRenderer::Flush() {
+  if (m_iVertNum == 0) {
+    return;
+  }
+
+  Shader &sh = ShaderLoader::getShader("2d.frag", "2d.vert");
+  glUseProgram(sh.handle);
+
+  glUniform1i(sh.uni("tex"), 0);
+
+  Matrix4f projMatrix;
+  // TODO move this into a generic ortho matrix method
+  float left, right, bottom, top, far = 1.f, near = -1.f;
+  {
+    GLint view[4];
+    glGetIntegerv(GL_VIEWPORT, &view[0]);
+    left = view[0];
+    top = view[1];
+    right = view[2];
+    bottom = view[3];
+  }
+  projMatrix[0]  =  2/(right-left);
+  projMatrix[5]  =  2/(top-bottom);
+  projMatrix[10] = -2/(far-near);
+  projMatrix[12] = -(right+left)/(right-left);
+  projMatrix[13] = -(top+bottom)/(top-bottom);
+  projMatrix[14] = -(far+near)/(far-near);
+
+  glUniformMatrix4fv(sh.uni("projectionMatrix"), 1, false, projMatrix.toArray());
+
+  vbo->update(m_Vertices, m_iVertNum);
+  vbo->bind();
+
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+    sizeof(Vertex), (GLvoid*)offsetof(Vertex, x));
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,
+    sizeof(Vertex), (GLvoid*)offsetof(Vertex, u));
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_TRUE,
+    sizeof(Vertex), (GLvoid*)offsetof(Vertex, r));
+  glEnableVertexAttribArray(2);
+
+  glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m_iVertNum);
+
+  glDisableVertexAttribArray(2);
+  glDisableVertexAttribArray(1);
+  glDisableVertexAttribArray(0);
+  
+  m_iVertNum = 0;
+}
+
+void GWENRenderer::AddVert(int x, int y, float u, float v) {
+  if (m_iVertNum >= MaxVerts - 1) {
+    Flush();
+  }
+
+  m_Vertices[ m_iVertNum ].x = (float) x;
+  m_Vertices[ m_iVertNum ].y = (float) y;
+  m_Vertices[ m_iVertNum ].u = u;
+  m_Vertices[ m_iVertNum ].v = v;
+  m_Vertices[ m_iVertNum ].r = m_Color.r;
+  m_Vertices[ m_iVertNum ].g = m_Color.g;
+  m_Vertices[ m_iVertNum ].b = m_Color.b;
+  m_Vertices[ m_iVertNum ].a = m_Color.a;
+  m_iVertNum++;
+}
+
+void GWENRenderer::DrawFilledRect(Gwen::Rect rect) {
+  GLuint boundtex;
+  GLboolean texturesOn;
+  glGetBooleanv(GL_TEXTURE_2D, &texturesOn);
+  glGetIntegerv(GL_TEXTURE_BINDING_2D, (GLint*)&boundtex);
+  GLuint glTexEmptyHandle = TextureLoader::getEmptyDiffuse().handle;
+
+  if (not texturesOn or boundtex != glTexEmptyHandle) {
+    Flush();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, glTexEmptyHandle);
+    glEnable(GL_TEXTURE_2D);
+  }
+
+  Translate(rect);
+  AddVert(rect.x, rect.y);
+  AddVert(rect.x + rect.w, rect.y);
+  AddVert(rect.x, rect.y + rect.h);
+  AddVert(rect.x + rect.w, rect.y);
+  AddVert(rect.x + rect.w, rect.y + rect.h);
+  AddVert(rect.x, rect.y + rect.h);
+}
+
+void GWENRenderer::SetDrawColor(Gwen::Color color) {
+  m_Color = color;
+}
+
+void GWENRenderer::StartClip() {
+  Flush();
+  Gwen::Rect rect = ClipRegion();
+  // OpenGL's scissor feature speaks window coordinates,
+  // which start from the bottom left.
+  {
+    struct {
+      GLint x, y, w, h;
+    } view;
+    glGetIntegerv(GL_VIEWPORT, (GLint*)&view);
+    rect.x = std::max(rect.x, view.x);
+    rect.y = std::max(view.h - (rect.y + rect.h), view.y);
+    rect.w = std::min(rect.w, view.w);
+    rect.h = std::min(rect.h, view.h);
+  }
+  glScissor(rect.x * Scale(), rect.y * Scale(), rect.w * Scale(), rect.h * Scale());
+  glEnable(GL_SCISSOR_TEST);
+};
+
+void GWENRenderer::EndClip() {
+  Flush();
+  glDisable(GL_SCISSOR_TEST);
+};
+
+void GWENRenderer::DrawTexturedRect(Gwen::Texture *tex, Gwen::Rect rect, float u1, float v1, float u2, float v2) {
+  GLuint *glTex = (GLuint*)tex->data;
+
+  // Missing image, not loaded properly?
+  if (not glTex) {
+    return DrawMissingImage(rect);
+  }
+
+  Translate(rect);
+  GLuint boundtex;
+  GLboolean texturesOn;
+  glGetBooleanv(GL_TEXTURE_2D, &texturesOn);
+  glGetIntegerv(GL_TEXTURE_BINDING_2D, (GLint*)&boundtex);
+
+  // Switch textures if necessary - that means drawing what we've accumulated so far
+  if (not texturesOn or *glTex != boundtex) {
+    Flush();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, *glTex);
+    glEnable(GL_TEXTURE_2D);
+  }
+
+  AddVert(rect.x, rect.y, u1, v1);
+  AddVert(rect.x + rect.w, rect.y, u2, v1);
+  AddVert(rect.x, rect.y + rect.h, u1, v2);
+  AddVert(rect.x + rect.w, rect.y, u2, v1);
+  AddVert(rect.x + rect.w, rect.y + rect.h, u2, v2);
+  AddVert(rect.x, rect.y + rect.h, u1, v2);
+}
+
+void GWENRenderer::LoadTexture(Gwen::Texture *tex) {
+  int width = 0, height = 0, bytes = 0;
+  unsigned char *data = stbi_load(tex->name.c_str(),
+                                  &width, &height, &bytes, 0);
+  if (width == 0 or height == 0) {
+    tex->failed = true;
+    return;
+  }
+  tex->width = width;
+  tex->height = height;
+
+  // Create the opengl texture
+  GLuint *glTex = new GLuint;
+  tex->data = glTex;
+  glGenTextures(1, glTex);
+  glBindTexture(GL_TEXTURE_2D, *glTex);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  if (bytes == 3) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+  } else if (bytes == 4) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+  }
+  stbi_image_free(data);
+  System::Log(Debug, "GWENRenderer") << "LoadTexture " << tex->name.c_str() << ", id " << *glTex;
+}
+
+void GWENRenderer::FreeTexture(Gwen::Texture *tex) {
+  GLuint *glTex = (GLuint*)tex->data;
+
+  if (not glTex) {
+    return;
+  }
+
+  glDeleteTextures(1, glTex);
+  delete glTex;
+  tex->data = nullptr;
+}
+
+Gwen::Color GWENRenderer::PixelColour(Gwen::Texture *tex, unsigned int x, unsigned int y, const Gwen::Color &col_default) {
+  GLuint *glTex = (GLuint*)tex->data;
+
+  if (not glTex) {
+    return col_default;
+  }
+
+  unsigned int pxSize = sizeof(unsigned char) * 4;
+  glBindTexture(GL_TEXTURE_2D, *glTex);
+  unsigned char* data = (unsigned char*) malloc(pxSize * tex->width * tex->height);
+  glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+  unsigned int offset = (y * tex->width + x) * pxSize;
+  Gwen::Color c;
+  c.r = data[0 + offset];
+  c.g = data[1 + offset];
+  c.b = data[2 + offset];
+  c.a = data[3 + offset];
+  //
+  // Retrieving the entire texture for a single pixel read
+  // is kind of a waste - maybe cache this pointer in the texture
+  // data and then release later on? It's never called during runtime
+  // - only during initialization.
+  //
+  free(data);
+  return c;
+}
+
+} /* namespace glPortal */

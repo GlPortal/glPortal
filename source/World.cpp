@@ -1,10 +1,14 @@
 #include "World.hpp"
 
-#include <SDL2/SDL_timer.h>
 #include <climits>
 #include <cmath>
 #include <vector>
 #include <cstdio>
+
+#include <SDL2/SDL_timer.h>
+
+// TODO remove
+#include <engine/renderer/GWENRenderer.hpp>
 
 #include <assets/map/MapLoader.hpp>
 #include <assets/map/MapListLoader.hpp>
@@ -39,6 +43,7 @@
 namespace glPortal {
 
 float World::gravity = GRAVITY;
+
 World::World() :
   scene(nullptr),
   gameTime(0),
@@ -49,10 +54,13 @@ World::World() :
   stateFunctionStack.push(&GameState::handleSplash);
 }
 
+World::~World() = default;
+
 void World::create() {
   mapList = MapListLoader::getMapList();
-  renderer = new Renderer();
   lastUpdateTime = SDL_GetTicks();
+
+  renderer = new Renderer();
 
   std::random_device rd;
   generator = std::mt19937(rd());
@@ -74,8 +82,10 @@ void World::create() {
 
 }
 
+// TODO: move elsewhere.
 void World::setRendererWindow(Window *win) {
   renderer->setViewport(win);
+  window = win;
 }
 
 void World::destroy() {
@@ -234,12 +244,15 @@ Renderer* World::getRenderer() const {
   return renderer;
 }
 
+// TODO: move elsewhere. World is world, not renderer.
 void World::render(double dtime) {
   renderer->render(dtime, scene->camera);
   if (isPhysicsDebugEnabled) {
     scene->physics.world->debugDrawWorld();
     pdd.render(scene->camera);
   }
+  window->gwenCanvas->RenderCanvas();
+  window->gwenRenderer->End();
 }
 
 Entity& World::getPlayer() {

@@ -13,6 +13,7 @@
 #include <engine/core/event/Observer.hpp>
 #include <engine/core/event/Dispatcher.hpp>
 #include <engine/core/event/observer/MusicObserver.hpp>
+#include <engine/GWENInput.hpp>
 #include "Input.hpp"
 #include "Game.hpp"
 
@@ -28,6 +29,7 @@ GameController::GameController(Game *game) {
 void GameController::handleInput() {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
+    game->getWindow().gwenInput->processEvent(event);
     handleEvent(event);
   }
 }
@@ -40,12 +42,11 @@ void GameController::handleEvent(const SDL_Event &event) {
   //  this->playerState->handleEvent(this->world->getPlayer(), event);
   this->gameState->handleInput(*this->game);
 
-  bool done = false;
   int key = event.key.keysym.scancode;
   int mod = event.key.keysym.mod;
   int sym = event.key.keysym.sym;
-  int cursor = event.edit.start;
-  int selection_len = event.edit.length;
+  // int cursor = event.edit.start;
+  // int selection_len = event.edit.length;
 
   switch (event.type) {
   case SDL_TEXTINPUT:

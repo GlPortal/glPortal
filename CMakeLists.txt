@@ -41,6 +41,10 @@ find_package(json11 REQUIRED)
 include_directories(${JSON11_INCLUDE_DIR})
 list(APPEND PORTAL_LIBRARIES ${JSON11_LIBRARY})
 
+find_package(GWEN REQUIRED)
+include_directories(${GWEN_INCLUDE_DIR})
+list(APPEND PORTAL_LIBRARIES ${GWEN_LIBRARY})
+
 find_package(Bullet 2.82 REQUIRED)
 include_directories(${BULLET_INCLUDE_DIR})
 list(APPEND PORTAL_LIBRARIES ${BULLET_LIBRARIES})

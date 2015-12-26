@@ -7,6 +7,12 @@ VBO::VBO() :
   glGenBuffers(1, &id);
 }
 
+VBO::VBO(unsigned int size, GLenum usage) :
+  invalid(false) {
+  glGenBuffers(1, &id);
+  setSize(size, usage);
+}
+
 VBO::VBO(VBO &&other) {
   id = other.id;
   other.invalid = true;
