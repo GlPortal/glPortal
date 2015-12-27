@@ -2,6 +2,7 @@
 #define GWEN_RENDERERS_HPP
 
 #include <memory>
+#include <vector>
 
 #include <Gwen/Gwen.h>
 #include <Gwen/BaseRender.h>
@@ -39,14 +40,23 @@ public:
   Gwen::Color PixelColour(Gwen::Texture *tex, unsigned int x, unsigned int y,
     const Gwen::Color &col_default) final override;
 
+  void RenderText(Gwen::Font *font, Gwen::Point pos, const Gwen::UnicodeString &text);
+  Gwen::Point MeasureText(Gwen::Font *font, const Gwen::UnicodeString &text);
+
 protected:
 
   static const int MaxVerts = 1024;
 
-  void Flush();
-  void AddVert(int x, int y, float u = 0.0f, float v = 0.0f);
+  void flush();
+  void addVert(int x, int y, float u = 0.0f, float v = 0.0f);
+  void loadDebugFont();
 
   std::unique_ptr<VBO> vbo;
+
+  std::unique_ptr<Gwen::Texture> fontTex;
+  float fontScale[2];
+  float fontLetterSpacing;
+  std::vector<char> fontSpacing;
 
   Gwen::Color color;
   int vertNum;

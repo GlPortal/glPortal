@@ -9,6 +9,7 @@
 
 #include <SDL2/SDL.h>
 
+#include <Gwen/Controls/WindowControl.h>
 #include <Gwen/Controls/Button.h>
 #include <Gwen/Controls/CheckBox.h>
 
@@ -88,13 +89,15 @@ void Window::create(const char *title) {
   gwenSkin->Init((Environment::getDataDir() + "/gui/DefaultSkin.png").c_str());
   gwenCanvas = std::make_unique<Gwen::Controls::Canvas>(gwenSkin.get());
   gwenInput = std::make_unique<GWENInput>();
+  gwenRenderer->Init();
   gwenInput->init(gwenCanvas.get());
 
-#if 0 // Testing code
-  Gwen::Controls::Button* pButtonA = new Gwen::Controls::Button( gwenCanvas.get() );
-  pButtonA->SetText("");
-  pButtonA->SetBounds( 30, 30, 300, 200 );
-    Gwen::Controls::CheckBox* pCA = new Gwen::Controls::CheckBox( gwenCanvas.get() );
+#if 1 // Testing code
+  Gwen::Controls::WindowControl *win = new Gwen::Controls::WindowControl(gwenCanvas.get());
+  win->SetBounds( 30, 30, 300, 200 );
+  Gwen::Controls::Button* pButtonA = new Gwen::Controls::Button(win);
+  pButtonA->SetText("ABCDEFGHIJKL");
+    Gwen::Controls::CheckBox* pCA = new Gwen::Controls::CheckBox(win);
   pCA->SetText("abc");
   pCA->SetPos(40, 40);
   pCA->SetChecked(true);

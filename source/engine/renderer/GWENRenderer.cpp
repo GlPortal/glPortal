@@ -1,6 +1,8 @@
 #include "GWENRenderer.hpp"
 
 #include <cmath>
+#include <fstream>
+#include <iterator>
 
 #include <epoxy/gl.h>
 
@@ -13,14 +15,18 @@
 #include <engine/core/gl/VBO.hpp>
 #include <engine/core/math/Matrix4f.hpp>
 #include <engine/env/System.hpp>
+#include <engine/env/Environment.hpp>
 #include <assets/shader/ShaderLoader.hpp>
 #include <assets/texture/TextureLoader.hpp>
 
 namespace glPortal {
 
-GWENRenderer::GWENRenderer() {
+GWENRenderer::GWENRenderer() :
+  fontLetterSpacing(1.0f / 16.0f),
+  fontSpacing(0xFF) {
   vertNum = 0;
   vbo = std::make_unique<VBO>(MaxVerts*sizeof(Vertex), GL_DYNAMIC_DRAW);
+  fontScale[0] = fontScale[1] = 1.5f;
 }
 
 GWENRenderer::~GWENRenderer() {
@@ -28,6 +34,7 @@ GWENRenderer::~GWENRenderer() {
 
 void GWENRenderer::Init() {
   System::Log(Debug, "GWENRenderer") << "Initialize";
+  loadDebugFont();
 }
 
 void GWENRenderer::Begin() {
@@ -40,10 +47,10 @@ void GWENRenderer::Begin() {
 }
 
 void GWENRenderer::End() {
-  Flush();
+  flush();
 }
 
-void GWENRenderer::Flush() {
+void GWENRenderer::flush() {
   if (vertNum == 0) {
     return;
   }
@@ -95,9 +102,9 @@ void GWENRenderer::Flush() {
   vertNum = 0;
 }
 
-void GWENRenderer::AddVert(int x, int y, float u, float v) {
+void GWENRenderer::addVert(int x, int y, float u, float v) {
   if (vertNum >= MaxVerts - 1) {
-    Flush();
+    flush();
   }
 
   vertices[vertNum].x = (float) x;
@@ -119,27 +126,27 @@ void GWENRenderer::DrawFilledRect(Gwen::Rect rect) {
   GLuint glTexEmptyHandle = TextureLoader::getEmptyDiffuse().handle;
 
   if (not texturesOn or boundtex != glTexEmptyHandle) {
-    Flush();
+    flush();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, glTexEmptyHandle);
     glEnable(GL_TEXTURE_2D);
   }
 
   Translate(rect);
-  AddVert(rect.x, rect.y);
-  AddVert(rect.x + rect.w, rect.y);
-  AddVert(rect.x, rect.y + rect.h);
-  AddVert(rect.x + rect.w, rect.y);
-  AddVert(rect.x + rect.w, rect.y + rect.h);
-  AddVert(rect.x, rect.y + rect.h);
+  addVert(rect.x, rect.y);
+  addVert(rect.x + rect.w, rect.y);
+  addVert(rect.x, rect.y + rect.h);
+  addVert(rect.x + rect.w, rect.y);
+  addVert(rect.x + rect.w, rect.y + rect.h);
+  addVert(rect.x, rect.y + rect.h);
 }
 
 void GWENRenderer::SetDrawColor(Gwen::Color color) {
-  color = color;
+  this->color = color;
 }
 
 void GWENRenderer::StartClip() {
-  Flush();
+  flush();
   Gwen::Rect rect = ClipRegion();
   // OpenGL's scissor feature speaks window coordinates,
   // which start from the bottom left.
@@ -158,7 +165,7 @@ void GWENRenderer::StartClip() {
 };
 
 void GWENRenderer::EndClip() {
-  Flush();
+  flush();
   glDisable(GL_SCISSOR_TEST);
 };
 
@@ -179,26 +186,27 @@ void GWENRenderer::DrawTexturedRect(Gwen::Texture *tex, Gwen::Rect rect, float u
 
   // Switch textures if necessary - that means drawing what we've accumulated so far
   if (not texturesOn or *glTex != boundtex) {
-    Flush();
+    flush();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, *glTex);
     glEnable(GL_TEXTURE_2D);
   }
 
-  AddVert(rect.x, rect.y, u1, v1);
-  AddVert(rect.x + rect.w, rect.y, u2, v1);
-  AddVert(rect.x, rect.y + rect.h, u1, v2);
-  AddVert(rect.x + rect.w, rect.y, u2, v1);
-  AddVert(rect.x + rect.w, rect.y + rect.h, u2, v2);
-  AddVert(rect.x, rect.y + rect.h, u1, v2);
+  addVert(rect.x, rect.y, u1, v1);
+  addVert(rect.x + rect.w, rect.y, u2, v1);
+  addVert(rect.x, rect.y + rect.h, u1, v2);
+  addVert(rect.x + rect.w, rect.y, u2, v1);
+  addVert(rect.x + rect.w, rect.y + rect.h, u2, v2);
+  addVert(rect.x, rect.y + rect.h, u1, v2);
 }
 
 void GWENRenderer::LoadTexture(Gwen::Texture *tex) {
   int width = 0, height = 0, bytes = 0;
   unsigned char *data = stbi_load(tex->name.c_str(),
                                   &width, &height, &bytes, 0);
-  if (width == 0 or height == 0) {
+  if (width == 0 or height == 0 or bytes == 0) {
     tex->failed = true;
+    System::Log(Debug, "GWENRenderer") << "LoadTexture: loading " << tex->name.c_str() << " failed";
     return;
   }
   tex->width = width;
@@ -215,6 +223,8 @@ void GWENRenderer::LoadTexture(Gwen::Texture *tex) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
   } else if (bytes == 4) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+  } else {
+    System::Log(Debug, "GWENRenderer") << "LoadTexture: unsupported byte depth " << bytes;
   }
   stbi_image_free(data);
   System::Log(Debug, "GWENRenderer") << "LoadTexture " << tex->name.c_str() << ", id " << *glTex;
@@ -258,6 +268,72 @@ Gwen::Color GWENRenderer::PixelColour(Gwen::Texture *tex, unsigned int x, unsign
   //
   free(data);
   return c;
+}
+
+void GWENRenderer::loadDebugFont() {
+  if (fontTex) {
+    return;
+  }
+
+  fontTex = std::make_unique<Gwen::Texture>();
+  fontTex->Load(Environment::getDataDir() + "/gui/DebugFont.png", this);
+
+  std::ifstream f(Environment::getDataDir() + "/gui/DebugFont.spacing", std::ios::binary);
+  std::istream_iterator<char> start(f), end;
+  fontSpacing.assign(start, end);
+}
+
+void GWENRenderer::RenderText(Gwen::Font *font, Gwen::Point pos, const Gwen::UnicodeString &text) {
+  float size = font->size * Scale();
+
+  if (not text.length()) {
+    return;
+  }
+
+  Gwen::String converted_string = Gwen::Utility::UnicodeToString( text );
+  float xOffset = 0.0f;
+
+  for (unsigned int i = 0; i < text.length(); ++i) {
+    char ch = converted_string[i];
+    float curSpacing = fontSpacing[ch] * fontLetterSpacing * size * fontScale[0];
+    Gwen::Rect r(pos.x + xOffset, pos.y - size * 0.5, size * fontScale[0], size * fontScale[1]);
+
+    if (fontTex) {
+      float uv_texcoords[4] = {0., 0., 1., 1.};
+
+      if (ch >= 0) {
+        float cx = ( ch % 16 ) / 16.0;
+        float cy = ( ch / 16 ) / 16.0;
+        uv_texcoords[0] = cx;
+        uv_texcoords[1] = cy;
+        uv_texcoords[2] = float( cx + 1.0f / 16.0f );
+        uv_texcoords[3] = float( cy + 1.0f / 16.0f );
+      }
+
+      DrawTexturedRect(fontTex.get(), r, uv_texcoords[0], uv_texcoords[3], uv_texcoords[2], uv_texcoords[1]);
+      xOffset += curSpacing;
+      // System::Log(Debug, "GWENRenderer") << fontLetterSpacing<<' '<<fontScale[0]<<' '<< ch << ": " << curSpacing << ' ' << xOffset;
+    } else {
+      DrawFilledRect( r );
+      xOffset += curSpacing;
+    }
+  }
+}
+
+Gwen::Point GWENRenderer::MeasureText(Gwen::Font *font, const Gwen::UnicodeString &text) {
+  Gwen::Point p;
+  float size = font->size * Scale();
+  Gwen::String converted_string = Gwen::Utility::UnicodeToString(text);
+  float spacing = 0.0f;
+
+  for (int i = text.length(); i > 0; --i) {
+    char ch = converted_string[i];
+    spacing += fontSpacing[ch];
+  }
+
+  p.x = spacing * fontLetterSpacing * size * fontScale[0];
+  p.y = font->size * Scale();
+  return p;
 }
 
 } /* namespace glPortal */
