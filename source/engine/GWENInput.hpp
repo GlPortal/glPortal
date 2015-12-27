@@ -115,7 +115,7 @@ public:
       bool down = (evt.type == SDL_KEYDOWN);
 
       if (evt.key.keysym.sym and down and
-          evt.key.keysym.sym >= 'a' and evt.key.keysym.sym <= 'z') {
+          evt.key.keysym.sym >= ' ' and evt.key.keysym.sym <= '~') {
         return canvas->InputCharacter(evt.key.keysym.sym);
       }
 
