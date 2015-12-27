@@ -12,6 +12,7 @@
 #include <Gwen/Controls/WindowControl.h>
 #include <Gwen/Controls/Button.h>
 #include <Gwen/Controls/CheckBox.h>
+#include <Gwen/Controls/TextBox.h>
 
 #include <engine/GWENInput.hpp>
 #include <engine/renderer/GWENRenderer.hpp>
@@ -82,7 +83,7 @@ void Window::create(const char *title) {
   SDL_GL_SetSwapInterval(config.hasVsync() ? 1 : 0);
 
   // Lock cursor in the middle of the screen
-  lockMouse();
+  //lockMouse();
 
   gwenRenderer = std::make_unique<GWENRenderer>();
   gwenSkin = std::make_unique<Gwen::Skin::TexturedBase>(gwenRenderer.get());
@@ -102,6 +103,8 @@ void Window::create(const char *title) {
   pCA->SetPos(40, 40);
   pCA->Checkbox()->SetChecked(true);
   //pCA->SetBounds( 30, 30, 100, 30);
+  Gwen::Controls::TextBox *tb = new Gwen::Controls::TextBox(win);
+  tb->SetPos(10,100);
 #endif
 }
 
