@@ -279,6 +279,10 @@ void GWENRenderer::loadDebugFont() {
   fontTex->Load(Environment::getDataDir() + "/gui/DebugFont.png", this);
 
   std::ifstream f(Environment::getDataDir() + "/gui/DebugFont.spacing", std::ios::binary);
+  // 9-width chars are skipped else, because 0x09 = <tab>, which is whitespace.
+  // See http://en.cppreference.com/w/cpp/iterator/istream_iterator#Notes .
+  // So, disable this behaviour.
+  f.unsetf(std::ios_base::skipws);
   std::istream_iterator<char> start(f), end;
   fontSpacing.assign(start, end);
 }
@@ -312,9 +316,8 @@ void GWENRenderer::RenderText(Gwen::Font *font, Gwen::Point pos, const Gwen::Uni
 
       DrawTexturedRect(fontTex.get(), r, uv_texcoords[0], uv_texcoords[3], uv_texcoords[2], uv_texcoords[1]);
       xOffset += curSpacing;
-      // System::Log(Debug, "GWENRenderer") << fontLetterSpacing<<' '<<fontScale[0]<<' '<< ch << ": " << curSpacing << ' ' << xOffset;
     } else {
-      DrawFilledRect( r );
+      DrawFilledRect(r);
       xOffset += curSpacing;
     }
   }
@@ -326,7 +329,7 @@ Gwen::Point GWENRenderer::MeasureText(Gwen::Font *font, const Gwen::UnicodeStrin
   Gwen::String converted_string = Gwen::Utility::UnicodeToString(text);
   float spacing = 0.0f;
 
-  for (int i = text.length(); i > 0; --i) {
+  for (int i = text.length()-1; i >= 0; --i) {
     char ch = converted_string[i];
     spacing += fontSpacing[ch];
   }

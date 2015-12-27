@@ -97,10 +97,10 @@ void Window::create(const char *title) {
   win->SetBounds( 30, 30, 300, 200 );
   Gwen::Controls::Button* pButtonA = new Gwen::Controls::Button(win);
   pButtonA->SetText("ABCDEFGHIJKL");
-    Gwen::Controls::CheckBox* pCA = new Gwen::Controls::CheckBox(win);
-  pCA->SetText("abc");
+    Gwen::Controls::CheckBoxWithLabel* pCA = new Gwen::Controls::CheckBoxWithLabel(win);
+  pCA->Label()->SetText("abc");
   pCA->SetPos(40, 40);
-  pCA->SetChecked(true);
+  pCA->Checkbox()->SetChecked(true);
   //pCA->SetBounds( 30, 30, 100, 30);
 #endif
 }
