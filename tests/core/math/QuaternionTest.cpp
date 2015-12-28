@@ -44,7 +44,7 @@ void printq(const Quaternion &q) {
 }
 
 SUITE(QuaternionTest) {
-  // http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
+  // euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/
   TEST_FIXTURE(QuaternionTestFixtures, AxAngle_X90) {
     quat.fromAxAngle(1, 0, 0, rad(90));
     CHECK(fuzzyEq(quat, 0.7071, 0, 0, 0.7071));
@@ -70,7 +70,7 @@ SUITE(QuaternionTest) {
     CHECK(fuzzyEq(quat, 0.2706, 0.2706, 0, 0.9239));
   }
 
-  // http://www.euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/steps/index.htm
+  // euclideanspace.com/maths/geometry/rotations/conversions/eulerToQuaternion/steps/
   TEST_FIXTURE(QuaternionTestFixtures, Aero_Heading90) {
     quat.fromAero(rad(90), 0, 0);
     CHECK(fuzzyEq(length(quat), 1));
