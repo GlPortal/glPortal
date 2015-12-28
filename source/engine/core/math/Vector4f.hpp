@@ -159,15 +159,15 @@ struct Quaternion : public Vector4f {
   using Vector4f::operator btQuaternion;
 };
 
-constexpr inline float length2(const Vector4f &v) {
+inline float length2(const Vector4f &v) {
   return v.x*v.x + v.y*v.y + v.z*v.z + v.d*v.d;
 }
 
-constexpr inline float length(const Vector4f &v) {
+inline float length(const Vector4f &v) {
   return std::sqrt(v.x*v.x + v.y*v.y + v.z*v.z + v.d*v.d);
 }
 
-constexpr inline float dot(const Vector4f &v, const Vector4f &w) {
+inline float dot(const Vector4f &v, const Vector4f &w) {
   return v.x*w.x + v.y*w.y + v.z*w.z + v.w*w.w;
 }
 
@@ -175,12 +175,12 @@ inline Vector4f normalize(const Vector4f &v) {
   return v / length(v);
 }
 
-constexpr inline Quaternion normalize(const Quaternion &q) {
+inline Quaternion normalize(const Quaternion &q) {
   float l = length(q);
   return Quaternion(q.x/l, q.y/l, q.z/l, q.w/l);
 }
 
-constexpr inline Quaternion conjugate(const Quaternion &q) {
+inline Quaternion conjugate(const Quaternion &q) {
   return Quaternion(-q.x, -q.y, -q.z, q.w);
 }
 
