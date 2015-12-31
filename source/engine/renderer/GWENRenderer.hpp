@@ -4,6 +4,8 @@
 #include <memory>
 #include <vector>
 
+#include <epoxy/gl.h>
+
 #include <Gwen/Gwen.h>
 #include <Gwen/BaseRender.h>
 
@@ -51,6 +53,7 @@ protected:
   void addVert(int x, int y, float u = 0.0f, float v = 0.0f);
   void loadDebugFont();
 
+  GLuint vao;
   std::unique_ptr<VBO> vbo;
 
   std::unique_ptr<Gwen::Texture> fontTex;

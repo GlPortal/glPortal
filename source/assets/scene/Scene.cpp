@@ -13,7 +13,7 @@ Scene::Physics::Physics(Scene &parent) :
   parent(parent),
   broadphase(new btDbvtBroadphase()),
   collisionConfiguration(new btDefaultCollisionConfiguration()),
-  dispatcher(new btCollisionDispatcher(collisionConfiguration)),
+  dispatcher(new CollisionDispatcher(collisionConfiguration)),
   solver(new btSequentialImpulseConstraintSolver),
   world(new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration)),
   gpCallback(new btGhostPairCallback) {

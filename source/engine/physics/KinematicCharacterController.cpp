@@ -187,16 +187,14 @@ KinematicCharacterController::KinematicCharacterController (btPairCachingGhostOb
   bounce_fix = false;
 }
 
-KinematicCharacterController::~KinematicCharacterController ()
-{
+KinematicCharacterController::~KinematicCharacterController() {
 }
 
-btPairCachingGhostObject* KinematicCharacterController::getGhostObject()
-{
+btPairCachingGhostObject* KinematicCharacterController::getGhostObject() {
   return m_ghostObject;
 }
 
-bool KinematicCharacterController::recoverFromPenetration ( btCollisionWorld* collisionWorld)
+bool KinematicCharacterController::recoverFromPenetration(btCollisionWorld *collisionWorld)
 {
   // Here we must refresh the overlapping paircache as the penetrating movement itself or the
   // previous recovery iteration might have used setWorldTransform and pushed us into an object
@@ -455,8 +453,7 @@ void KinematicCharacterController::stepForwardAndStrafe(btCollisionWorld* collis
   }
 }
 
-void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, btScalar dt)
-{
+void KinematicCharacterController::stepDown(btCollisionWorld *collisionWorld, btScalar dt) {
   btTransform start, end, end_double;
   bool runonce = false;
 
@@ -464,31 +461,30 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
 
   btScalar downVelocity = (m_verticalVelocity<0.f?-m_verticalVelocity:0.f) * dt;
 
-  if (downVelocity > 0.0 && downVelocity > m_fallSpeed
-      && (m_wasOnGround || not m_wasJumping)){
+  if (downVelocity > 0.0 and downVelocity > m_fallSpeed
+      and (m_wasOnGround or not m_wasJumping)) {
     downVelocity = m_fallSpeed;
   }
   btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
   m_targetPosition -= step_drop;
 
   KinematicClosestNotMeConvexResultCallback callback(m_ghostObject,
-                                                     getUpAxisDirections()[m_upAxis],
-                                                     m_maxSlopeCosine);
-        callback.m_collisionFilterGroup =
-          getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
-        callback.m_collisionFilterMask =
-          getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
+    getUpAxisDirections()[m_upAxis],
+    m_maxSlopeCosine);
+  callback.m_collisionFilterGroup =
+    getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
+  callback.m_collisionFilterMask =
+    getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
 
-        KinematicClosestNotMeConvexResultCallback callback2 (m_ghostObject,
-                                                             getUpAxisDirections()[m_upAxis],
-                                                             m_maxSlopeCosine);
-        callback2.m_collisionFilterGroup =
-          getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
-        callback2.m_collisionFilterMask =
-          getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
+  KinematicClosestNotMeConvexResultCallback callback2(m_ghostObject,
+    getUpAxisDirections()[m_upAxis],
+    m_maxSlopeCosine);
+  callback2.m_collisionFilterGroup =
+    getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
+  callback2.m_collisionFilterMask =
+    getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
 
-  while (1)
-  {
+  while (1) {
     start.setIdentity ();
     end.setIdentity ();
 
@@ -500,8 +496,7 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
     //set double test for 2x the step drop, to check for a large drop vs small drop
     end_double.setOrigin (m_targetPosition - step_drop);
 
-    if (m_useGhostObjectSweepTest)
-    {
+    if (m_useGhostObjectSweepTest) {
       m_ghostObject->convexSweepTest(m_convexShape,
                                      start, end, callback,
                                      collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
@@ -514,8 +509,7 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
                                        callback2,
                                        collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
       }
-    } else
-    {
+    } else {
       collisionWorld->convexSweepTest(m_convexShape, start, end, callback,
                                       collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
 
@@ -537,8 +531,7 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
     }
 
     if (downVelocity2 > 0.0 && downVelocity2 < m_stepHeight && has_hit == true && runonce == false
-          && (m_wasOnGround || not m_wasJumping))
-    {
+          && (m_wasOnGround || not m_wasJumping)) {
       //redo the velocity calculation when falling a small amount, for fast stairs motion
       //for larger falls, use the smoother/slower interpolated movement by not touching
       //the target position
@@ -554,25 +547,23 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
     break;
   }
 
-  if (callback.hasHit() || runonce == true)
-  {
+  if (callback.hasHit() or runonce) {
     // we dropped a fraction of the height -> hit floor
 
     btScalar fraction = (m_currentPosition.getY() - callback.m_hitPointWorld.getY()) / 2;
 
     //printf("hitpoint: %g - pos %g\n", callback.m_hitPointWorld.getY(), m_currentPosition.getY());
 
-    if (bounce_fix == true)
-    {
-      if (full_drop == true) {
-        m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition,
-                                           callback.m_closestHitFraction);
+    if (bounce_fix) {
+      if (full_drop) {
+        m_currentPosition.setInterpolate3(m_currentPosition, m_targetPosition,
+          callback.m_closestHitFraction);
       } else {
         //due to errors in the closestHitFraction variable when used with large polygons,
         //calculate the hit fraction manually
-                                m_currentPosition.setInterpolate3(m_currentPosition,
-                                                                  m_targetPosition,
-                                                                  fraction);
+        m_currentPosition.setInterpolate3(m_currentPosition,
+          m_targetPosition,
+          fraction);
       }
     } else {
       m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition,
@@ -588,11 +579,9 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
 
     full_drop = true;
 
-    if (bounce_fix == true)
-    {
+    if (bounce_fix) {
       downVelocity = (m_verticalVelocity<0.f?-m_verticalVelocity:0.f) * dt;
-      if (downVelocity > m_fallSpeed && (m_wasOnGround || not m_wasJumping))
-      {
+      if (downVelocity > m_fallSpeed and (m_wasOnGround or not m_wasJumping)) {
         m_targetPosition += step_drop; //undo previous target change
         downVelocity = m_fallSpeed;
         step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
@@ -605,68 +594,52 @@ void KinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, 
   }
 }
 
-void KinematicCharacterController::setWalkDirection
-(
-const btVector3& walkDirection
-)
-{
+void KinematicCharacterController::setWalkDirection(const btVector3 &walkDirection) {
   m_useWalkDirection = true;
   m_walkDirection = walkDirection;
   m_normalizedDirection = getNormalizedVector(m_walkDirection);
 }
 
-void KinematicCharacterController::setVelocityForTimeInterval
-(
-const btVector3& velocity,
-btScalar timeInterval
-)
-{
-
+void KinematicCharacterController::setVelocityForTimeInterval(const btVector3 &velocity,
+  btScalar timeInterval) {
   m_useWalkDirection = false;
   m_walkDirection = velocity;
   m_normalizedDirection = getNormalizedVector(m_walkDirection);
   m_velocityTimeInterval += timeInterval;
 }
 
-void KinematicCharacterController::reset ( btCollisionWorld* collisionWorld )
-{
-        m_verticalVelocity = 0.0;
-        m_verticalOffset = 0.0;
-        m_wasOnGround = false;
-        m_wasJumping = false;
-        m_walkDirection.setValue(0, 0, 0);
-        m_velocityTimeInterval = 0.0;
+void KinematicCharacterController::reset(btCollisionWorld *collisionWorld) {
+  m_verticalVelocity = 0.0;
+  m_verticalOffset = 0.0;
+  m_wasOnGround = false;
+  m_wasJumping = false;
+  m_walkDirection.setValue(0, 0, 0);
+  m_velocityTimeInterval = 0.0;
 
-        //clear pair cache
-        btHashedOverlappingPairCache *cache = m_ghostObject->getOverlappingPairCache();
-        while (cache->getOverlappingPairArray().size() > 0)
-        {
-          cache->removeOverlappingPair(cache->getOverlappingPairArray()[0].m_pProxy0,
-                                       cache->getOverlappingPairArray()[0].m_pProxy1,
-                                       collisionWorld->getDispatcher());
-        }
+  //clear pair cache
+  btHashedOverlappingPairCache *cache = m_ghostObject->getOverlappingPairCache();
+  while (cache->getOverlappingPairArray().size() > 0) {
+    cache->removeOverlappingPair(cache->getOverlappingPairArray()[0].m_pProxy0,
+      cache->getOverlappingPairArray()[0].m_pProxy1,
+      collisionWorld->getDispatcher());
+  }
 }
 
-void KinematicCharacterController::warp (const btVector3& origin)
-{
+void KinematicCharacterController::warp(const btVector3& origin) {
   btTransform xform;
   xform.setIdentity();
   xform.setOrigin (origin);
-  m_ghostObject->setWorldTransform (xform);
+  m_ghostObject->setWorldTransform(xform);
 }
 
 
-void KinematicCharacterController::preStep (  btCollisionWorld* collisionWorld)
-{
-
+void KinematicCharacterController::preStep(btCollisionWorld *collisionWorld) {
   int numPenetrationLoops = 0;
   m_touchingContact = false;
-  while (recoverFromPenetration (collisionWorld))
-  {
+  while (recoverFromPenetration(collisionWorld)) {
     numPenetrationLoops++;
     m_touchingContact = true;
-    if (numPenetrationLoops > 4)
-    {
+    if (numPenetrationLoops > 4) {
       //printf("character could not recover from penetration = %d\n", numPenetrationLoops);
       break;
     }
@@ -674,17 +647,11 @@ void KinematicCharacterController::preStep (  btCollisionWorld* collisionWorld)
 
   m_currentPosition = m_ghostObject->getWorldTransform().getOrigin();
   m_targetPosition = m_currentPosition;
-
-
 }
 
-#include <stdio.h>
-
-void KinematicCharacterController::playerStep (  btCollisionWorld* collisionWorld, btScalar dt)
-{
-
+void KinematicCharacterController::playerStep(btCollisionWorld *collisionWorld, btScalar dt) {
   // quick check...
-  if (not m_useWalkDirection && (m_velocityTimeInterval <= 0.0 || m_walkDirection.fuzzyZero())) {
+  if (not m_useWalkDirection and (m_velocityTimeInterval <= 0.0 or m_walkDirection.fuzzyZero())) {
     return;
   }
 
@@ -692,12 +659,10 @@ void KinematicCharacterController::playerStep (  btCollisionWorld* collisionWorl
 
   // Update fall velocity.
   m_verticalVelocity -= m_gravity * dt;
-  if (m_verticalVelocity > 0.0 && m_verticalVelocity > m_jumpSpeed)
-  {
+  if (m_verticalVelocity > 0.0 && m_verticalVelocity > m_jumpSpeed) {
     m_verticalVelocity = m_jumpSpeed;
   }
-  if (m_verticalVelocity < 0.0 && btFabs(m_verticalVelocity) > btFabs(m_fallSpeed))
-  {
+  if (m_verticalVelocity < 0.0 && btFabs(m_verticalVelocity) > btFabs(m_fallSpeed)) {
     m_verticalVelocity = -btFabs(m_fallSpeed);
   }
   m_verticalOffset = m_verticalVelocity * dt;
@@ -732,29 +697,24 @@ void KinematicCharacterController::playerStep (  btCollisionWorld* collisionWorl
   m_ghostObject->setWorldTransform (xform);
 }
 
-void KinematicCharacterController::setFallSpeed (btScalar fallSpeed)
-{
+void KinematicCharacterController::setFallSpeed(btScalar fallSpeed) {
   m_fallSpeed = fallSpeed;
 }
 
-void KinematicCharacterController::setJumpSpeed (btScalar jumpSpeed)
-{
+void KinematicCharacterController::setJumpSpeed(btScalar jumpSpeed) {
   m_jumpSpeed = jumpSpeed;
 }
 
-void KinematicCharacterController::setMaxJumpHeight (btScalar maxJumpHeight)
-{
+void KinematicCharacterController::setMaxJumpHeight(btScalar maxJumpHeight) {
   m_maxJumpHeight = maxJumpHeight;
 }
 
-bool KinematicCharacterController::canJump () const
-{
+bool KinematicCharacterController::canJump() const {
   return onGround();
 }
 
-void KinematicCharacterController::jump ()
-{
-  if (not canJump()){
+void KinematicCharacterController::jump() {
+  if (not canJump()) {
     return;
   }
 
@@ -772,13 +732,11 @@ void KinematicCharacterController::jump ()
 #endif
 }
 
-void KinematicCharacterController::setGravity(btScalar gravity)
-{
+void KinematicCharacterController::setGravity(btScalar gravity) {
   m_gravity = gravity;
 }
 
-btScalar KinematicCharacterController::getGravity() const
-{
+btScalar KinematicCharacterController::getGravity() const {
   return m_gravity;
 }
 

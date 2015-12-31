@@ -1,8 +1,8 @@
 #ifndef TEXTURELOADER_HPP
 #define TEXTURELOADER_HPP
 
-#include <string>
 #include <map>
+#include <string>
 
 #include <assets/texture/Texture.hpp>
 
@@ -16,6 +16,10 @@ public:
   static Texture getEmptyNormal();
   static Texture getEmptySpecular();
   static Texture getTexture(const std::string &path);
+
+  static std::map<std::string, Texture>& getTextureCache() {
+    return textureCache;
+  }
 private:
   static Texture uploadTexture(const unsigned char *data, int width, int height, int bytes);
   static std::map<std::string, Texture> textureCache;

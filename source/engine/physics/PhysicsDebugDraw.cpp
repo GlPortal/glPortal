@@ -65,7 +65,11 @@ void PhysicsDebugDraw::render(const Camera &cam) {
   glBindTexture(GL_TEXTURE_2D, TextureLoader::getEmptyDiffuse().handle);
   glUniform1i(sh.uni("diffuse"), 0);
 
-  vbo->setData(points, GL_DYNAMIC_DRAW);
+  if (vbo->getSize() < points.size()*sizeof(PtData)) {
+    vbo->update(points);
+  } else {
+    vbo->setData(points, GL_DYNAMIC_DRAW);
+  }
   vbo->bind();
   glVertexAttribPointer(0, 3, GL_FLOAT, 0, sizeof(PtData), 0);
   glEnableVertexAttribArray(0);

@@ -10,6 +10,9 @@ namespace glPortal {
 std::unique_ptr<Logger> System::logger;
 System::_Log System::Log;
 
+std::random_device System::RandDev;
+std::mt19937 System::Rand(System::RandDev());
+
 void System::Init() {
   if (std::string("Linux") == SDL_GetPlatform()) {
     logger.reset(new AnsiConsoleLogger);

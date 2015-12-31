@@ -40,7 +40,7 @@ void PhysicsSystem::update(float dtime) {
         Entity &e = scene->entities.create();
         Transform &t = e.addComponent<Transform>();
         t.setPosition(pos);
-        t.setOrientation(Quaternion().setFromEuler(0, rad(45), 0));
+        t.setOrientation(Quaternion().fromAero(0, rad(45), 0));
         MeshDrawable &m = e.addComponent<MeshDrawable>();
         m.material = MaterialLoader::getMaterial("boxes/dev00");
         m.mesh = MeshLoader::getMesh("Cube.obj");

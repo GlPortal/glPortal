@@ -3,16 +3,18 @@
 
 namespace glPortal {
 
+class Window;
 class World;
 
 class Editor {
 private:
+  Window &window;
   World &world;
 
 public:
-  Editor(World&);
+  Editor(Window&, World&);
 
-  void renderUI();
+  void render();
 };
 
 } /* namespace glPortal */

@@ -25,11 +25,26 @@ GWENRenderer::GWENRenderer() :
   fontLetterSpacing(1.0f / 16.0f),
   fontSpacing(0xFF) {
   vertNum = 0;
-  vbo = std::make_unique<VBO>(MaxVerts*sizeof(Vertex), GL_DYNAMIC_DRAW);
   fontScale[0] = fontScale[1] = 1.5f;
+  
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+  vbo = std::make_unique<VBO>(MaxVerts*sizeof(Vertex), GL_DYNAMIC_DRAW);
+  vbo->bind();
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+    sizeof(Vertex), (GLvoid*)offsetof(Vertex, x));
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,
+    sizeof(Vertex), (GLvoid*)offsetof(Vertex, u));
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_TRUE,
+    sizeof(Vertex), (GLvoid*)offsetof(Vertex, r));
+  glEnableVertexAttribArray(2);
+  glBindVertexArray(0);
 }
 
 GWENRenderer::~GWENRenderer() {
+  glDeleteVertexArrays(1, &vao);
 }
 
 void GWENRenderer::Init() {
@@ -80,24 +95,11 @@ void GWENRenderer::flush() {
 
   glUniformMatrix4fv(sh.uni("projectionMatrix"), 1, false, projMatrix.toArray());
 
-  vbo->update(vertices, vertNum);
-  vbo->bind();
+  glBindVertexArray(vao);
 
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
-    sizeof(Vertex), (GLvoid*)offsetof(Vertex, x));
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,
-    sizeof(Vertex), (GLvoid*)offsetof(Vertex, u));
-  glEnableVertexAttribArray(1);
-  glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_TRUE,
-    sizeof(Vertex), (GLvoid*)offsetof(Vertex, r));
-  glEnableVertexAttribArray(2);
+  vbo->update(vertices, vertNum);
 
   glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertNum);
-
-  glDisableVertexAttribArray(2);
-  glDisableVertexAttribArray(1);
-  glDisableVertexAttribArray(0);
   
   vertNum = 0;
 }
@@ -107,8 +109,8 @@ void GWENRenderer::addVert(int x, int y, float u, float v) {
     flush();
   }
 
-  vertices[vertNum].x = (float) x;
-  vertices[vertNum].y = (float) y;
+  vertices[vertNum].x = (short) x;
+  vertices[vertNum].y = (short) y;
   vertices[vertNum].u = u;
   vertices[vertNum].v = v;
   vertices[vertNum].r = color.r;

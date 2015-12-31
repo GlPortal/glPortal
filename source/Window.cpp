@@ -13,6 +13,10 @@
 #include <Gwen/Controls/Button.h>
 #include <Gwen/Controls/CheckBox.h>
 #include <Gwen/Controls/TextBox.h>
+#include <Gwen/Controls/TreeControl.h>
+#include <chrono>
+#include <thread>
+#include <assets/texture/TextureLoader.hpp>
 
 #include <engine/GWENInput.hpp>
 #include <engine/renderer/GWENRenderer.hpp>
@@ -93,18 +97,33 @@ void Window::create(const char *title) {
   gwenRenderer->Init();
   gwenInput->init(gwenCanvas.get());
 
-#if 1 // Testing code
-  Gwen::Controls::WindowControl *win = new Gwen::Controls::WindowControl(gwenCanvas.get());
-  win->SetBounds( 30, 30, 300, 200 );
-  Gwen::Controls::Button* pButtonA = new Gwen::Controls::Button(win);
-  pButtonA->SetText("ABCDEFGHIJKL");
-    Gwen::Controls::CheckBoxWithLabel* pCA = new Gwen::Controls::CheckBoxWithLabel(win);
-  pCA->Label()->SetText("abc");
-  pCA->SetPos(40, 40);
-  pCA->Checkbox()->SetChecked(true);
-  //pCA->SetBounds( 30, 30, 100, 30);
-  Gwen::Controls::TextBox *tb = new Gwen::Controls::TextBox(win);
-  tb->SetPos(10,100);
+#if 0 // Testing code
+  { using namespace Gwen::Controls;
+    WindowControl *win = new WindowControl(gwenCanvas.get());
+    win->SetTitle("Texture cache");
+    win->SetBounds( 30, 30, 500, 200 );
+    TreeControl *tree = new TreeControl(win, "tree");
+    tree->SetBounds(0, 0, 200, 186);
+    std::thread thr([tree]() {
+      while (true) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        Base::List &l = tree->GetChildNodes();
+        for (auto it : TextureLoader::getTextureCache()) {
+          bool add = true;
+          for (Base *b : l) {
+            if (((TreeNode*)b)->GetName() == it.first) {
+              add = false;
+              break;
+            }
+          }
+          if (add) {
+            TreeNode *n = tree->AddNode(it.first);
+            n->SetName(it.first);
+          }
+        }
+      }
+    }); thr.detach();
+  }
 #endif
 }
 

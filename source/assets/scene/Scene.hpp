@@ -10,6 +10,7 @@
 #include <assets/material/Material.hpp>
 #include <engine/Camera.hpp>
 #include <engine/EntityManager.hpp>
+#include <engine/physics/CollisionDispatcher.hpp>
 
 #include "Portal.hpp"
 #include "Screen.hpp"
@@ -26,7 +27,7 @@ public:
     Scene &parent;
     btBroadphaseInterface *broadphase;
     btDefaultCollisionConfiguration *collisionConfiguration;
-    btCollisionDispatcher *dispatcher;
+    CollisionDispatcher *dispatcher;
     btSequentialImpulseConstraintSolver *solver;
     btDiscreteDynamicsWorld *world;
     btGhostPairCallback *gpCallback;

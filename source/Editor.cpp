@@ -2,11 +2,11 @@
 
 namespace glPortal {
 
-Editor::Editor(World &w)
-  : world(w) {
+Editor::Editor(Window &win, World &w)
+  : window(win), world(w) {
 }
 
-void Editor::renderUI() {
+void Editor::render() {
 
 }
 

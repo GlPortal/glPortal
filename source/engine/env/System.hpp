@@ -3,6 +3,8 @@
 
 #include <string>
 #include <memory>
+#include <random>
+
 #include <engine/core/diag/LogInput.hpp>
 
 namespace glPortal {
@@ -20,6 +22,9 @@ public:
   };
 /*! \endcond */
   static _Log Log;
+
+  static std::random_device RandDev;
+  static std::mt19937 Rand;
 
   static void Init();
 };
