@@ -17,7 +17,6 @@ CTestTestfile.cmake
 Testing/
 source/glportal
 source/glportal_d
-tests/
 /html
 documentation/html/
 documentation/latex/
