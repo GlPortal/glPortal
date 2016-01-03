@@ -87,7 +87,7 @@ void Window::create(const char *title) {
   SDL_GL_SetSwapInterval(config.hasVsync() ? 1 : 0);
 
   // Lock cursor in the middle of the screen
-  //lockMouse();
+  lockMouse();
 
   gwenRenderer = std::make_unique<GWENRenderer>();
   gwenSkin = std::make_unique<Gwen::Skin::TexturedBase>(gwenRenderer.get());

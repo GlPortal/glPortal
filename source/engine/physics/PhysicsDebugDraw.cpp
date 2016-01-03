@@ -50,7 +50,7 @@ void PhysicsDebugDraw::render(const Camera &cam) {
     return;
   }
   if (not vbo) {
-    vbo.reset(new VBO);
+    vbo = std::make_unique<VBO>(12*4*sizeof(PtData));
   }
   Shader &sh = ShaderLoader::getShader("unshaded.frag");
   glUseProgram(sh.handle);

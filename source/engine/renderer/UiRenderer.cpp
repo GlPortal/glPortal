@@ -61,10 +61,10 @@ void UiRenderer::renderScreen(Renderer &renderer) {
   Shader &sh = ShaderLoader::getShader("color.frag");
   Vector4f screenBackgroundColor = renderer.getScene()->screen->backgroundColor;
   glUniform4f(sh.uni("color"),
-              screenBackgroundColor.x,
-              screenBackgroundColor.y,
-              screenBackgroundColor.z,
-              screenBackgroundColor.w);
+              screenBackgroundColor.r,
+              screenBackgroundColor.g,
+              screenBackgroundColor.b,
+              screenBackgroundColor.a);
   renderer.renderMesh(camera, sh, widget, mesh, nullptr);
   renderer.setFontColor(renderer.getScene()->screen->textColor);
   renderer.setFontSize(4);
