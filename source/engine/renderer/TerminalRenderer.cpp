@@ -28,6 +28,7 @@ void TerminalRenderer::render(Renderer &renderer) {
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   Shader &sh = ShaderLoader::getShader("color.frag");
   Vector4f screenBackgroundColor = renderer.getScene()->terminal->backgroundColor;
+  glUseProgram(sh.handle);
   glUniform4f(sh.uni("color"),
               screenBackgroundColor.x,
               screenBackgroundColor.y,
