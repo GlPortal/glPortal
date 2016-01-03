@@ -60,6 +60,7 @@ void UiRenderer::renderScreen(Renderer &renderer) {
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   Shader &sh = ShaderLoader::getShader("color.frag");
   Vector4f screenBackgroundColor = renderer.getScene()->screen->backgroundColor;
+  glUseProgram(sh.handle);
   glUniform4f(sh.uni("color"),
               screenBackgroundColor.r,
               screenBackgroundColor.g,
