@@ -9,7 +9,8 @@
 
 ### Composers
 - Check our [music guidelines](https://github.com/GlPortal/specification/blob/master/music.md).
-- Add your note-sheets to our [repository](https://github.com/GlPortal/music).
+- Optionaly add your note-sheets to our [repository](https://github.com/GlPortal/music).
+- Add your licence and tracks to [raw data repository](https://github.com/GlPortal/glportal_raw_data/tree/master/audio/music).
 
 ## Quality Control
 - If there is anything wrong with a commit do one of the following
