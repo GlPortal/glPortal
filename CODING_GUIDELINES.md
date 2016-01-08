@@ -22,7 +22,7 @@ As of the 2012-01-16 C++11 Working Draft, this is specified in 17.6.4.3.2/1 `[gl
 
 *(Yet, many developers keep using this bad practice)*
 
-As a side note for MSVC developers: no, ```#pragma once``` isn't an include guard and can't replace nor even supplement it. 
+As a side note for MSVC developers: ```#pragma once``` isn't an include guard and can't replace nor even supplement it. 
 Except for Windows-specific source files, any file containing it will be rejected.
 ### Indentation, whitespace and line length
 - An indentation level = two spaces. Tabs aren't considered a consistent identation method.
