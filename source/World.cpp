@@ -12,8 +12,6 @@
 
 #include <assets/map/MapLoader.hpp>
 #include <assets/map/MapListLoader.hpp>
-#include <assets/scene/SceneHelper.hpp>
-#include <assets/scene/Scene.hpp>
 
 #include <engine/renderer/Renderer.hpp>
 #include <engine/env/Environment.hpp>
