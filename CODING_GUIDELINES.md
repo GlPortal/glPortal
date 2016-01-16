@@ -1,8 +1,9 @@
 # Coding Guidelines
-### Stick to the principles of Object Oriented Design!
+## Stick to the principles of Object Oriented Design
 Read more about this wonderful concept [here](http://www.c2.com/cgi/wiki?PrinciplesOfObjectOrientedDesign).
-### Always leave the code cleaner than you have found it.
-##Conventions
+## Leave the code cleaner than you have found it
+## Use comments to describe the why, not the how
+## Conventions
 ### File encoding and line endings
 - The source files may be restricted to ASCII encoding, or use UTF-8 *without* *BOM* 
 (this warning specifically targets developers using Windows).
