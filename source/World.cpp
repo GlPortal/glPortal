@@ -147,7 +147,6 @@ void World::update(double dtime) {
   Transform &plrTform = player.getComponent<Transform>();
   Player &plrComp = player.getComponent<Player>();
 
-  // Check if player is still alive
   if (not plrHealth.isAlive()) {
     plrTform.setPosition(scene->start->getComponent<Transform>().getPosition());
     plrHealth.revive();
