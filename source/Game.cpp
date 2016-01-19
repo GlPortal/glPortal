@@ -7,10 +7,11 @@
 
 #include <SDL2/SDL_timer.h>
 
-#include "engine/env/Environment.hpp"
-#include "engine/env/ArgumentsParser.hpp"
+#include <engine/env/Environment.hpp>
+#include <engine/env/ArgumentsParser.hpp>
 #include <engine/env/System.hpp>
 #include <engine/SoundManager.hpp>
+#include <engine/core/diag/Throwables.hpp>
 #include <engine/core/event/Observer.hpp>
 #include <engine/core/event/Dispatcher.hpp>
 #include <engine/core/event/observer/MusicObserver.hpp>
@@ -76,15 +77,17 @@ void Game::close() {
 
 using namespace glPortal;
 
-Window window;
-
 int main(const int argc, char *argv[]) {
   System::Init();
   ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   Environment::init();
   ArgumentsParser::populateConfig();
 
-  Game game;
+  try {
+    Game game;
+  } catch (Exception::Error &err) {
+    System::Log(Error, err.source()) << err.what();
+  }
 
   return 0;
 }

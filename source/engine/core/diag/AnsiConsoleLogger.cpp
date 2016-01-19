@@ -43,7 +43,7 @@ int getBackgroundColor(const std::string &tag) {
     return 233; // Dark gray
   }
   uint8_t bg = 0xAA;
-  for (int i = 0; i < tag.size(); ++i) {
+  for (size_t i = 0; i < tag.size(); ++i) {
     bg ^= (uint8_t)tag[i] ^ i;
   }
   return bg%(231-15)+16;

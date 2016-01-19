@@ -18,6 +18,7 @@
 #include <thread>
 #include <assets/texture/TextureLoader.hpp>
 
+#include <engine/core/diag/Throwables.hpp>
 #include <engine/GWENInput.hpp>
 #include <engine/renderer/GWENRenderer.hpp>
 #include <engine/env/Environment.hpp>
@@ -38,7 +39,13 @@ Window::Window() :
 Window::~Window() = default;
 
 void Window::initEpoxy() {
-  System::Log() << "GL " << epoxy_gl_version();
+  const int glver = epoxy_gl_version(), glmaj = glver/10, glmin = glver%10;
+  const std::string verstr = std::to_string(glmaj) + '.' + std::to_string(glmin);
+  System::Log(Verbose, "Window") << "OpenGL " << verstr;
+  if (glver < 30) {
+    throw Exception::Error("Window", std::string("OpenGL Version ") + verstr + " is unsupported, "
+      "required minimum is 3.0");
+  }
 }
 
 void Window::create(const char *title) {
@@ -70,6 +77,13 @@ void Window::create(const char *title) {
   if (height == 0) {
     height = dispMode.h;
   }
+
+  // Explicitly request a Forward-Compatible GL 3.0 Core context
+  // i.e. enforce using non-deprecated functions
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
   window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
       width, height, flags);
