@@ -25,7 +25,7 @@ void ArgumentsParser::setEnvironmentFromArgs(const int argc, char **argv) {
     {"mapfrompath",      required_argument, 0, 'p'},
     {0, 0, 0, 0}
   };
-  
+
   while (1) {
     int option_index = 0;
     int argument;
@@ -34,7 +34,7 @@ void ArgumentsParser::setEnvironmentFromArgs(const int argc, char **argv) {
     if (argument == -1) {
       break;
     }
-    
+
     /// Command Line arguments
     switch (argument) {
     case 'v':
@@ -56,6 +56,7 @@ void ArgumentsParser::setEnvironmentFromArgs(const int argc, char **argv) {
       /// - map \n
       /// Set the map that should be loaded.
       mapName = optarg;
+      break;
     case 'p':
       /// - mapFromPath \n
       /// Set the map that should be loaded.
