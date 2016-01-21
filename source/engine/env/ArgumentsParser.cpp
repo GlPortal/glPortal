@@ -48,7 +48,15 @@ void ArgumentsParser::setEnvironmentFromArgs(const int argc, char **argv) {
     case 'h':
       /// - help \n
       /// Display the help.
-      std::cout << "Help\n";
+      std::cout << "Usage: glportal [options]" << std::endl << std::endl;
+
+      std::cout << "Options:" << std::endl;
+      std::cout << "  --help               Show this help message and exit" << std::endl;
+      std::cout << "  --version            Display GlPortal version" << std::endl;
+      std::cout << "  --datadir DIR        Set the data directory" << std::endl;
+      std::cout << "  --map NAME           Specify map name to load" << std::endl;
+      std::cout << "  --mapfrompath FILE   Load the specified map file" << std::endl;
+
       exit(0);
     case 'm':
       /// - map \n
