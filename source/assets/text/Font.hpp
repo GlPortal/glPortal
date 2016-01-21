@@ -16,12 +16,12 @@ public:
     return letters.at(index);
   }
 
-  const int getStringLength(std::string string){
+  const int getStringLength(std::string string) {
     int length = 0;
     const char *array = string.c_str();
     for (unsigned int i = 0; i < string.length(); i++) {
       char c = array[i];
-      
+
       const Glyph &letter = getGlyph(c);
 
       length = length + (letter.width * this->size);
