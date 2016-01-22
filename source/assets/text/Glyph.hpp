@@ -1,5 +1,5 @@
-#ifndef LETTER_HPP
-#define LETTER_HPP
+#ifndef GLYPH_HPP
+#define GLYPH_HPP
 
 #include <assets/model/Mesh.hpp>
 
@@ -20,4 +20,4 @@ public:
 
 } /* namespace glPortal */
 
-#endif /* LETTER_HPP */
+#endif /* GLYPH_HPP */
