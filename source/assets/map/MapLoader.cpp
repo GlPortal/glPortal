@@ -246,15 +246,13 @@ void MapLoader::extractTriggers() {
 }
 
 void MapLoader::extractModels() {
-  Vector3f modelPos;
-  string mid("none");
+  int mid = -1;
   string mesh("none");
   XMLElement *modelElement = rootHandle.FirstChildElement("object").ToElement();
   if (modelElement){
     do {
-      mid = modelElement->Attribute("mid");
+      modelElement->QueryIntAttribute("mid", &mid);
       mesh = modelElement->Attribute("mesh");
-      XmlHelper::pushAttributeVertexToVector(modelElement, modelPos);
 
       Entity &model = scene->entities.create();
       Transform &t = model.addComponent<Transform>();
@@ -265,7 +263,7 @@ void MapLoader::extractModels() {
       XmlHelper::extractRotation(modelElement, angles);
       t.setOrientation(Quaternion().fromAero(angles));
       MeshDrawable &m = model.addComponent<MeshDrawable>();
-      m.material = MaterialLoader::loadFromXML(mid);
+      m.material = scene->materials[mid];
       m.mesh = MeshLoader::getMesh(mesh);
     } while ((modelElement = modelElement->NextSiblingElement("object")) != nullptr);
   }
