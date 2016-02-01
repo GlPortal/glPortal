@@ -34,7 +34,6 @@ what we need.
 
 namespace glPortal {
 
-// static helper method
 static btVector3
 getNormalizedVector(const btVector3& v)
 {
@@ -177,7 +176,7 @@ KinematicCharacterController::KinematicCharacterController (btPairCachingGhostOb
   m_verticalOffset = 0.0;
   m_gravity = 9.8 * 3; // 3G acceleration.
   m_fallSpeed = 55.0; // Terminal velocity of a sky diver in m/s.
-  m_jumpSpeed = 10.0; // ?
+  m_jumpSpeed = 10.0;
   m_wasOnGround = false;
   m_wasJumping = false;
   m_interpolateUp = true;
@@ -257,17 +256,12 @@ bool KinematicCharacterController::recoverFromPenetration(btCollisionWorld *coll
           if (dist < maxPen)
           {
             maxPen = dist;
-            m_touchingNormal = pt.m_normalWorldOnB * directionSign;//??
-
+            m_touchingNormal = pt.m_normalWorldOnB * directionSign;
           }
           m_currentPosition += pt.m_normalWorldOnB * directionSign * dist * btScalar(0.2);
           penetration = true;
-        } else {
-          //printf("touching %f\n", dist);
         }
       }
-
-      //manifold->clearManifold();
     }
   }
   btTransform newTrans = m_ghostObject->getWorldTransform();
@@ -371,7 +365,6 @@ void KinematicCharacterController::updateTargetPositionBasedOnCollision (const b
 void KinematicCharacterController::stepForwardAndStrafe(btCollisionWorld* collisionWorld,
                                                         const btVector3& walkMove)
 {
-  // printf("m_normalizedDirection=%f,%f,%f\n",
   // phase 2: forward and strafe
   btTransform start, end;
   m_targetPosition = m_currentPosition + walkMove;
@@ -552,8 +545,6 @@ void KinematicCharacterController::stepDown(btCollisionWorld *collisionWorld, bt
 
     btScalar fraction = (m_currentPosition.getY() - callback.m_hitPointWorld.getY()) / 2;
 
-    //printf("hitpoint: %g - pos %g\n", callback.m_hitPointWorld.getY(), m_currentPosition.getY());
-
     if (bounce_fix) {
       if (full_drop) {
         m_currentPosition.setInterpolate3(m_currentPosition, m_targetPosition,
@@ -588,8 +579,6 @@ void KinematicCharacterController::stepDown(btCollisionWorld *collisionWorld, bt
         m_targetPosition -= step_drop;
       }
     }
-    //printf("full drop - %g, %g\n", m_currentPosition.getY(), m_targetPosition.getY());
-
     m_currentPosition = m_targetPosition;
   }
 }
@@ -640,7 +629,6 @@ void KinematicCharacterController::preStep(btCollisionWorld *collisionWorld) {
     numPenetrationLoops++;
     m_touchingContact = true;
     if (numPenetrationLoops > 4) {
-      //printf("character could not recover from penetration = %d\n", numPenetrationLoops);
       break;
     }
   }
@@ -675,7 +663,6 @@ void KinematicCharacterController::playerStep(btCollisionWorld *collisionWorld, 
   if (m_useWalkDirection) {
     stepForwardAndStrafe (collisionWorld, m_walkDirection);
   } else {
-    //printf("  time: %f", m_velocityTimeInterval);
     // still have some time left for moving!
     btScalar dtMoving =
       (dt < m_velocityTimeInterval) ? dt : m_velocityTimeInterval;
@@ -684,14 +671,10 @@ void KinematicCharacterController::playerStep(btCollisionWorld *collisionWorld, 
     // how far will we move while we are moving?
     btVector3 move = m_walkDirection * dtMoving;
 
-    //printf("  dtMoving: %f", dtMoving);
-
     // okay, step
     stepForwardAndStrafe(collisionWorld, move);
   }
   stepDown (collisionWorld, dt);
-
-  // printf("\n");
 
   xform.setOrigin (m_currentPosition);
   m_ghostObject->setWorldTransform (xform);
@@ -720,16 +703,6 @@ void KinematicCharacterController::jump() {
 
   m_verticalVelocity = m_jumpSpeed;
   m_wasJumping = true;
-
-#if 0
-  currently no jumping.
-  btTransform xform;
-  m_rigidBody->getMotionState()->getWorldTransform (xform);
-  btVector3 up = xform.getBasis()[1];
-  up.normalize ();
-  btScalar magnitude = (btScalar(1.0)/m_rigidBody->getInvMass()) * btScalar(8.0);
-  m_rigidBody->applyCentralImpulse (up * magnitude);
-#endif
 }
 
 void KinematicCharacterController::setGravity(btScalar gravity) {
