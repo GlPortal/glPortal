@@ -7,3 +7,6 @@
 [submodule "external/gwen"]
 	path = external/gwen
 	url = https://github.com/GlPortal/gwen.git
+[submodule "external/vhacd-lib"]
+	path = external/vhacd-lib
+	url = https://github.com/GlPortal/vhacd-lib.git
