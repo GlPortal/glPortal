@@ -657,7 +657,7 @@ WARN_LOGFILE           =
 
 INPUT                  = source
 INPUT 		       += ./documentation/mainpage.dox
-INPUT 		       += ./documentation/specification/
+INPUT 		       += ./documentation/specificationCompiled/
 INPUT 		       += ./external/gwen/src/
 
 # This tag can be used to specify the character encoding of the source files 
