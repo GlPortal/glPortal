@@ -1,6 +1,8 @@
+#define _USE_MATH_DEFINES
 #include "Portal.hpp"
 
 #include <algorithm>
+
 #include <cmath>
 
 #include <assets/model/MeshLoader.hpp>
