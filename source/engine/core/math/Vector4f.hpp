@@ -1,6 +1,7 @@
 #ifndef VECTOR4F_HPP
 #define VECTOR4F_HPP
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <string>
 
