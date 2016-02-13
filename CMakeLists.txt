@@ -9,6 +9,9 @@ project(${EXE_NAME})
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+if(DEFINED WIN32)
+  add_definitions("-D_USE_MATH_DEFINES")
+endif()
 
 find_package(CXX14 REQUIRED)
 set(CMAKE_CXX_FLAGS "${CXX14_FLAGS} ${CMAKE_CXX_FLAGS}")
