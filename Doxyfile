@@ -655,7 +655,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = source
+INPUT             = source
 INPUT 		       += ./documentation/mainpage.dox
 INPUT 		       += ./documentation/specificationCompiled/
 INPUT 		       += ./external/gwen/src/
@@ -691,7 +691,7 @@ RECURSIVE              = YES
 # run.
 
 EXCLUDE                = "stb_image.c"
-
+EXCLUDE     		      += ./documentation/specificationCompiled/README.md
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or 
 # directories that are symbolic links (a Unix file system feature) are excluded 
 # from the input.
