@@ -24,7 +24,7 @@ public:
    * @param high High bound
    */
   template <typename T>
-  static constexpr inline T clamp(T v, T low, T high) {
+  static /*constexpr*/ inline T clamp(T v, T low, T high) {
     if (v < low) {
       return low;
     } else if (v > high) {
