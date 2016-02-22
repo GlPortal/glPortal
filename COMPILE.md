@@ -29,7 +29,7 @@ Remember, you have to be root, so you might want to prefix `sudo`.
 ### Windows
 Install msys2 from http://msys2.github.io/. In the command line type:
 ```bash
-pacman -S mingw-w64-cmake mingw-w64-make mingw-w64-gcc mingw-w64-pkg-config mingw-w64-assimp mingw-w64-libepoxy mingw-w64-SDL2 mingw-w64-SDL2_mixer mingw-w64-bullet mingw-w64-mesa mingw-w64-tinyxml2
+pacman -S mingw-w64-x86_64-cmake mingw-w64-x86_64-make mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config mingw-w64-x86_64-assimp mingw-w64-x86_64-libepoxy mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer mingw-w64-x86_64-bullet mingw-w64-x86_64-mesa mingw-w64-x86_64-tinyxml2
 ```
 
 ### Arch Linux
