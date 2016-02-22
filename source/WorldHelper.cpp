@@ -33,6 +33,14 @@ void WorldHelper::shootPortal(int button, Scene *scene) {
         portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png");
         // TODO: ditch AACollisionBoxes
         portal.placeOnWall(scene->camera.getPosition(), ipos, res.m_hitNormalWorld);
+
+        const Entity& otherPortalEntity = (button==1) ? *pPair.second : *pPair.first;
+        Portal& otherPortal = otherPortalEntity.getComponent<Portal>();
+        if(otherPortal.open)  {
+          otherPortal.isUncolliderActive = true;
+          portal.isUncolliderActive = true;
+        }
+
         LightSource &pLight = pEnt.getComponent<LightSource>();
 
         if (button == 1) {
