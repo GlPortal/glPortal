@@ -175,7 +175,7 @@ inline Vector4f normalize(const Vector4f &v) {
   return v / length(v);
 }
 
-constexpr inline Quaternion normalize(const Quaternion &q) {
+/*constexpr*/ inline Quaternion normalize(const Quaternion &q) {
   float l = length(q);
   return Quaternion(q.x/l, q.y/l, q.z/l, q.w/l);
 }
