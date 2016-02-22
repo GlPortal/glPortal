@@ -26,6 +26,12 @@ You will need very recent versions of all the dependencies. So please upgrade yo
 ## Installing dependencies
 Remember, you have to be root, so you might want to prefix `sudo`.
 
+### Windows
+Install msys2 from http://msys2.github.io/. In the command line type:
+```bash
+pacman -S cmake make gcc pkg-config assimp libepoxy sdl2 sdl2-mixer bullet mesa tinyxml2
+```
+
 ### Arch Linux
 **Note:** Package `tinyxml2` can be found in AUR.
 ```bash
@@ -55,6 +61,10 @@ git submodule update
 ```
 
 # Building the binary
+## Windows
+Get the newest version of Visual Studio and follow this guide:
+https://cognitivewaves.wordpress.com/cmake-and-visual-studio/
+## GNU/Linux
 Make sure to check the README.org and COMPILE.org from the release you downloaded in case
 there are differences in the compile workflow for it.
 
