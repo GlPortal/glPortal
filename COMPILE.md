@@ -1,7 +1,8 @@
-# Quick note if you are compiling for the first time
+# Compile Guide for GlPortal
+## Quick note if you are compiling for the first time
 Well done. You made the right decision. It's not even that hard.
 
-# Dependencies
+## Dependencies
 **Note:** Dependencies will change all the time so watch the cmake output carefuly for missing libraries.
 Make sure to check CmakeList.txt if is something missing.
 
