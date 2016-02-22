@@ -23,6 +23,7 @@ You will need very recent versions of all the dependencies. So please upgrade yo
 - gcc *(make)*
 - pkg-config *(make)*
 - git *(download source code)*
+- libunittest++
 
 ## Installing dependencies
 Remember, you have to be root, so you might want to prefix `sudo`.
@@ -41,7 +42,7 @@ pacman -S cmake make gcc pkg-config assimp libepoxy sdl2 sdl2-mixer bullet mesa
 
 ### Debian 8 / Ubuntu 14.04 / Linux Mint 17.x
 ```bash
-apt-get install cmake make gcc pkg-config libassimp-dev libepoxy-dev libsdl2-dev libsdl2-mixer-dev libbullet-dev libtinyxml2-dev libgl1-mesa-dev
+apt-get install cmake make gcc pkg-config libassimp-dev libepoxy-dev libsdl2-dev libsdl2-mixer-dev libbullet-dev libtinyxml2-dev libgl1-mesa-dev libunittest++-dev
 ```
 
 ### Others
