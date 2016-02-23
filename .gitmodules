@@ -10,3 +10,6 @@
 [submodule "external/vhacd-lib"]
 	path = external/vhacd-lib
 	url = https://github.com/GlPortal/vhacd-lib.git
+[submodule "external/RadixEngine"]
+	path = external/RadixEngine
+	url = https://github.com/GlPortal/RadixEngine.git
