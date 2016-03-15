@@ -5,35 +5,35 @@
 
 #include <bullet/BulletCollision/btBulletCollisionCommon.h>
 
-#include <engine/component/Component.hpp>
-#include <engine/core/math/Vector3f.hpp>
-#include <engine/core/math/Quaternion.hpp>
-#include <assets/material/Material.hpp>
-#include <assets/model/Mesh.hpp>
+#include <radix/component/Component.hpp>
+#include <radix/core/math/Vector3f.hpp>
+#include <radix/core/math/Quaternion.hpp>
+#include <radix/material/Material.hpp>
+#include <radix/model/Mesh.hpp>
 
 namespace glPortal {
 
-class Portal : public Component {
+class Portal : public radix::Component {
 public:
   static const int PORTAL_RANGE;
-  static const Vector3f BLUE_COLOR;
-  static const Vector3f ORANGE_COLOR;
+  static const radix::Vector3f BLUE_COLOR;
+  static const radix::Vector3f ORANGE_COLOR;
   static const double NOISE_FADE_DELAY;
   static const double OPEN_ANIM_DURATION;
   static const float SURFACE_OFFSET;
 
-  Portal(Entity &ent);
+  Portal(radix::Entity &ent);
   ~Portal();
-  Vector3f getDirection() const;
+  radix::Vector3f getDirection() const;
 
-  void placeOnWall(const Vector3f &launchPos, const Vector3f &point, const Vector3f &normal);
+  void placeOnWall(const radix::Vector3f &launchPos, const radix::Vector3f &point, const radix::Vector3f &normal);
 
-  Vector3f getScaleMult() const;
+  radix::Vector3f getScaleMult() const;
 
-  Material overlayTex, maskTex;
+  radix::Material overlayTex, maskTex;
   double openSince;
-  Mesh overlayMesh, stencilMesh;
-  Vector3f direction, color;
+  radix::Mesh overlayMesh, stencilMesh;
+  radix::Vector3f direction, color;
   bool open;
   std::unique_ptr<btDefaultMotionState> uncolliderMotionState;
   std::unique_ptr<btCollisionShape> uncolliderShape;
@@ -47,8 +47,9 @@ public:
   } wrapper;
 
 private:
-  void placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vector3f &s,
-    const std::unique_ptr<btCollisionShape> &shape, Wrapper::Side &side, const Vector3f &offset);
+  // TODO: move this to PortalSystem v
+  void placeWrapperPiece(const radix::Vector3f &p, const radix::Quaternion &o, const radix::Vector3f &s,
+    const std::unique_ptr<btCollisionShape> &shape, Wrapper::Side &side, const radix::Vector3f &offset);
 };
 
 } /* namespace glPortal */

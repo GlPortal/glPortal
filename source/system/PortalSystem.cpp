@@ -1,19 +1,21 @@
 #include "PortalSystem.hpp"
+
 #include <vector>
-#include <engine/component/Player.hpp>
-#include <engine/component/Transform.hpp>
-#include <engine/component/Player.hpp>
-#include <Portal.hpp>
-#include "../physics/PhysicsHelper.hpp"
+
+#include <radix/component/Player.hpp>
+#include <radix/component/Transform.hpp>
+#include <radix/component/Player.hpp>
+#include <radix/physics/PhysicsHelper.hpp>
+#include <radix/World.hpp>
+
+#include "Portal.hpp"
+
+using namespace radix;
 
 namespace glPortal {
 
-void PortalSystem::setScene(Scene *scene) {
-  this->scene = scene;
-}
-
-PortalSystem::PortalSystem() :
-  scene(nullptr) {
+PortalSystem::PortalSystem(World &w) :
+  System(w) {
 }
 
 PortalSystem::~PortalSystem() {
@@ -21,12 +23,12 @@ PortalSystem::~PortalSystem() {
 
 void PortalSystem::update(float dtime) {
   (void) dtime;
-  for (Entity &e : scene->entities) {
+  for (Entity &e : world.entities) {
     if (e.hasComponent<Player>()) {
       Transform &t = e.getComponent<Transform>();
       const Vector3f &pos = t.getPosition();
       Player &plr = e.getComponent<Player>();
-      for (const EntityPair &pp : scene->portalPairs) {
+      for (const EntityPair &pp : world.entityPairs.at("portals")) {
         btVector3 min, max;
         Portal &pA = pp.first->getComponent<Portal>(),
                &pB = pp.second->getComponent<Portal>();

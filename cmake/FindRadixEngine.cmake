@@ -1,9 +1,6 @@
 set(RADIX_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/RadixEngine")
-# set(RADIX_INCLUDE_DIR "${RADIX_ROOT_DIR}/include")
-# set(RADIX_INCLUDE_DIRS "${RADIX_INCLUDE_DIR}" "${RADIX_ROOT_DIR}/external/serine/include")
-# set(RADIX_LIBRARY "RadixEngine")
-# set(RADIX_LIBRARIES ${RADIX_LIBRARY})
 
+set(RADIX_EXPORT_CMAKE_PACKAGE_VARS ON)
 add_subdirectory("${RADIX_ROOT_DIR}")
 
 include(FindPackageHandleStandardArgs)

@@ -7,36 +7,36 @@
 
 #include <SDL2/SDL_timer.h>
 
-#include <engine/env/Environment.hpp>
-#include <engine/env/ArgumentsParser.hpp>
-#include <engine/env/System.hpp>
-#include <engine/SoundManager.hpp>
-#include <engine/core/diag/Throwables.hpp>
-#include <engine/core/event/Observer.hpp>
-#include <engine/core/event/Dispatcher.hpp>
-#include <engine/core/event/observer/MusicObserver.hpp>
+#include <radix/component/Transform.hpp>
+#include <radix/component/Player.hpp>
+#include <radix/env/Environment.hpp>
+#include <radix/env/ArgumentsParser.hpp>
+#include <radix/env/Util.hpp>
+#include <radix/map/MapLoader.hpp>
+#include <radix/SoundManager.hpp>
+#include <radix/core/diag/Throwables.hpp>
+#include <radix/renderer/Renderer.hpp>
 #include <util/sdl/Fps.hpp>
 #include "Input.hpp"
-#include "GameController.hpp"
+
+using namespace radix;
 
 namespace glPortal {
 
 Fps Game::fps;
 
 Game::Game() : closed(false) {
-  controller = std::make_unique<GameController>(this);
-  MusicObserver musicObserver;
-  musicObserver.addCallback(Event::loadScene, std::bind(&MusicObserver::loadMap, musicObserver));
   window.create("GlPortal");
   
   try {
     SoundManager::init();
     world.create();
-    world.setRendererWindow(&window);
+    MapLoader ldr(world);
+    ldr.load(Environment::getDataDir() + "/maps/n1.xml");
     update();
   }
   catch (std::runtime_error &e) {
-    System::Log(Error) << "Runtime Error: " << e.what();
+    Util::Log(Error) << "Runtime Error: " << e.what();
   }
 }
 
@@ -46,21 +46,32 @@ World* Game::getWorld() {
 
 void Game::update() {
   unsigned int nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
+  Renderer renderer(world);
+  renderer.setViewport(&window);
+  Camera camera;
 
   while (not closed) {
     int skipped = 0;
     unsigned int currentTime = SDL_GetTicks();
     //Update the game if it is time
     while (currentTime > nextUpdate && skipped < MAX_SKIP) {
-      controller->handleInput();
-
       SoundManager::update(world.getPlayer());
       world.update((currentTime-lastUpdate)/1000.);
       lastUpdate = currentTime;
       nextUpdate += SKIP_TIME;
       skipped++;
     }
-    world.render((currentTime-lastRender)/1000.);
+
+    camera.setPerspective();
+    int vpWidth, vpHeight;
+    window.getSize(&vpWidth, &vpHeight);
+    camera.setAspect((float)vpWidth / vpHeight);
+    const Transform &plrTform = world.getPlayer().getComponent<Transform>();
+    camera.setPosition(plrTform.getPosition() + Vector3f(0, plrTform.getScale().y/2, 0));
+    const Player &plrComp = world.getPlayer().getComponent<Player>();
+    camera.setOrientation(plrComp.getHeadOrientation());
+
+    renderer.render((currentTime-lastRender)/1000., camera);
     lastRender = currentTime;
     fps.countCycle();
     window.swapBuffers();
@@ -78,7 +89,7 @@ void Game::close() {
 using namespace glPortal;
 
 int main(const int argc, char *argv[]) {
-  System::Init();
+  Util::Init();
   ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   Environment::init();
   ArgumentsParser::populateConfig();
@@ -86,7 +97,7 @@ int main(const int argc, char *argv[]) {
   try {
     Game game;
   } catch (Exception::Error &err) {
-    System::Log(Error, err.source()) << err.what();
+    Util::Log(Error, err.source()) << err.what();
   }
 
   return 0;

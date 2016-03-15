@@ -5,20 +5,18 @@ if(NOT DEFINED PORTAL_LIBRARIES)
 endif()
 
 add_executable(${EXE_NAME}
-  SysTest.cpp
-#   renderer/TerminalRenderer.cpp
-#   renderer/UiRenderer.cpp
-#   system/PortalSystem.cpp
-#   util/sdl/Fps.cpp
-#   Editor.cpp
-#   GameController.cpp
-#   Game.cpp
-#   Input.cpp
-#   Portal.cpp
-#   Window.cpp
-#   World.cpp
-#   WorldHelper.cpp
+  renderer/TerminalRenderer.cpp
+  renderer/UiRenderer.cpp
+  system/PortalSystem.cpp
+  util/sdl/Fps.cpp
+  Editor.cpp
+  Game.cpp
+  Input.cpp
+  Portal.cpp
+  Window.cpp
+  WorldHelper.cpp
 )
+
 target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
 install(TARGETS ${EXE_NAME} DESTINATION bin)
 add_custom_target(update_assets COMMAND git submodule update --depth 1)

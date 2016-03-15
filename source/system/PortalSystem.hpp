@@ -1,17 +1,15 @@
 #ifndef PORTAL_SYSTEM_HPP
 #define PORTAL_SYSTEM_HPP
-#include <assets/scene/Scene.hpp>
+
+#include <radix/system/System.hpp>
 
 namespace glPortal {
 
-class PortalSystem {
-private:
-  Scene *scene;
-
+class PortalSystem : public radix::System {
 public:
-  PortalSystem();
+  PortalSystem(radix::World&);
   ~PortalSystem();
-  void setScene(Scene *scene);
+
   void update(float dtime);
 };
 

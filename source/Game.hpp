@@ -1,16 +1,19 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "Window.hpp"
-#include "World.hpp"
-#include "util/sdl/Fps.hpp"
 #include <SDL2/SDL_events.h>
+
+#include <radix/World.hpp>
+
+#include "Window.hpp"
+#include "util/sdl/Fps.hpp"
+
+namespace glPortal {
 
 const int UPDATE_RATE = 50;
 const int SKIP_TIME = 1000 / UPDATE_RATE;
 const int MAX_SKIP = 5;
 
-namespace glPortal {
 class GameController;
 class Game {
 public:
@@ -23,15 +26,14 @@ public:
 
   void update();
   void close();
-  World* getWorld();
+  radix::World* getWorld();
   inline Window& getWindow() {
     return window;
   }
 
 private:
   Window window;
-  World world;
-  std::unique_ptr<GameController> controller;
+  radix::World world;
   bool closed;
 };
 

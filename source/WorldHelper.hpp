@@ -2,17 +2,16 @@
 #define WORLD_HELPER_HPP
 
 #include <utility>
-#include <assets/scene/Scene.hpp>
-#include <engine/Entity.hpp>
-#include <engine/component/Transform.hpp>
-#include <engine/component/LightSource.hpp>
+
+#include <radix/World.hpp>
 
 namespace glPortal {
 
 class WorldHelper {
 public:
-  static void shootPortal(int button, Scene *scene);
-  static void closePortals(Scene *scene);
+  static void shootPortal(int button, radix::World &world);
+  static radix::EntityPair& getPortalPair(int pair, radix::World &world);
+  static void closePortals(radix::World &world);
 };
 
 } /* namespace glPortal */

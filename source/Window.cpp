@@ -16,13 +16,15 @@
 #include <Gwen/Controls/TreeControl.h>
 #include <chrono>
 #include <thread>
-#include <assets/texture/TextureLoader.hpp>
 
-#include <engine/core/diag/Throwables.hpp>
-#include <engine/GWENInput.hpp>
-#include <engine/renderer/GWENRenderer.hpp>
-#include <engine/env/Environment.hpp>
-#include <engine/env/System.hpp>
+#include <radix/texture/TextureLoader.hpp>
+#include <radix/core/diag/Throwables.hpp>
+#include <radix/input/GWENInput.hpp>
+#include <radix/renderer/GWENRenderer.hpp>
+#include <radix/env/Environment.hpp>
+#include <radix/env/Util.hpp>
+
+using namespace radix;
 
 namespace glPortal {
 
@@ -41,7 +43,7 @@ Window::~Window() = default;
 void Window::initEpoxy() {
   const int glver = epoxy_gl_version(), glmaj = glver/10, glmin = glver%10;
   const std::string verstr = std::to_string(glmaj) + '.' + std::to_string(glmin);
-  System::Log(Verbose, "Window") << "OpenGL " << verstr;
+  Util::Log(Verbose, "Window") << "OpenGL " << verstr;
   if (glver < 30) {
     throw Exception::Error("Window", std::string("OpenGL Version ") + verstr + " is unsupported, "
       "required minimum is 3.0");

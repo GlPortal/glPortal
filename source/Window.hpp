@@ -9,14 +9,16 @@
 #include <Gwen/Controls/Canvas.h>
 #include <Gwen/Skins/TexturedBase.h>
 
-#include <engine/Viewport.hpp>
+#include <radix/Viewport.hpp>
+
+namespace radix {
+  class GWENRenderer;
+  class GWENInput;
+}
 
 namespace glPortal {
 
-class GWENRenderer;
-class GWENInput;
-
-class Window : public Viewport {
+class Window : public radix::Viewport {
 public:
   Window();
   ~Window();
@@ -29,10 +31,10 @@ public:
   void lockMouse();
   void unlockMouse();
 
-  std::unique_ptr<GWENRenderer> gwenRenderer;
+  std::unique_ptr<radix::GWENRenderer> gwenRenderer;
   std::unique_ptr<Gwen::Skin::TexturedBase> gwenSkin;
   std::unique_ptr<Gwen::Controls::Canvas> gwenCanvas;
-  std::unique_ptr<GWENInput> gwenInput;
+  std::unique_ptr<radix::GWENInput> gwenInput;
   
 private:
   void initEpoxy();
@@ -41,7 +43,7 @@ private:
   SDL_Window *window;
   SDL_GLContext context;
 
-  static const char *DEFAULT_TITLE;
+  static const char* DEFAULT_TITLE;
   static const int DEFAULT_WIDTH, DEFAULT_HEIGHT;
 };
 

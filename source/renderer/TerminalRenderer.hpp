@@ -2,22 +2,14 @@
 #define TERMINAL_RENDERER_HPP
 
 #include <string>
-#include <engine/renderer/Renderer.hpp>
-#include <assets/shader/Shader.hpp>
-#include <Game.hpp>
+
+#include <radix/renderer/Renderer.hpp>
 
 namespace glPortal {
-class Renderer;
-class Viewport;
-class Entity;
-class Portal;
-class Scene;
-class Texture;
-class Font;
 
 class TerminalRenderer {
 public:
-  static void render(Renderer &renderer);
+  static void render(radix::Renderer &renderer, radix::World &world);
 };
 
 } /* namespace glPortal */

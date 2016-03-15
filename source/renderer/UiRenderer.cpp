@@ -1,20 +1,26 @@
 #include "UiRenderer.hpp"
-#include "Renderer.hpp"
-#include <assets/model/MeshLoader.hpp>
-#include <assets/texture/TextureLoader.hpp>
-#include <assets/text/FontLoader.hpp>
-#include <assets/shader/ShaderLoader.hpp>
-#include <assets/material/MaterialLoader.hpp>
 
 #include <cstdio>
 #include <vector>
 #include <string>
 
+#include <radix/renderer/Renderer.hpp>
+#include <radix/model/MeshLoader.hpp>
+#include <radix/texture/TextureLoader.hpp>
+#include <radix/text/FontLoader.hpp>
+#include <radix/shader/ShaderLoader.hpp>
+#include <radix/material/MaterialLoader.hpp>
+#include <radix/Viewport.hpp>
+
+#include "../Game.hpp"
+
+using namespace radix;
+
 namespace glPortal {
 
-void UiRenderer::render(Renderer &renderer) {
+void UiRenderer::render(Renderer &renderer, World &world) {
   glDepthMask(GL_FALSE);
-  renderHand(renderer);
+  renderHand(renderer, world);
   int vpWidth, vpHeight;
   renderer.getViewport()->getSize(&vpWidth, &vpHeight);
   Camera camera;
@@ -42,13 +48,15 @@ void UiRenderer::render(Renderer &renderer) {
   renderer.renderText(camera,
                       std::string("FPS: ") + std::to_string(Game::fps.getFps()),
                       Vector3f(10, vpHeight - 25, -20));
-  if (renderer.getScene()->screen->enabled){
+  /*if (renderer.getScene()->screen->enabled){
     renderScreen(renderer);
-  }
+  }*/
   glDepthMask(GL_TRUE);
 }
 
-void UiRenderer::renderScreen(Renderer &renderer) {
+void UiRenderer::renderScreen(Renderer &renderer, World &world) {
+#if 0
+  // TODO: restore
   int vpWidth, vpHeight;
   renderer.getViewport()->getSize(&vpWidth, &vpHeight);
   Camera camera;
@@ -76,9 +84,10 @@ void UiRenderer::renderScreen(Renderer &renderer) {
   renderer.renderText(camera, renderer.getScene()->screen->text,
     Vector3f((vpWidth/2)-(renderer.getTextWidth(renderer.getScene()->screen->text)/2),
              (vpHeight/2)-100, -1));
+#endif
 }
 
-void UiRenderer::renderHand(Renderer &renderer) {
+void UiRenderer::renderHand(Renderer &renderer, World &world) {
   int vpWidth, vpHeight;
   renderer.getViewport()->getSize(&vpWidth, &vpHeight);
   Camera camera;
@@ -90,7 +99,8 @@ void UiRenderer::renderHand(Renderer &renderer) {
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   const Material &mat = MaterialLoader::fromTexture("hand.png");
   Shader &sh = ShaderLoader::getShader("unshaded.frag");
-  glUniform4f(sh.uni("color"), 0, 0, 0, renderer.getScene()->screen->alpha);
+  //glUniform4f(sh.uni("color"), 0, 0, 0, renderer.getScene()->screen->alpha);
   renderer.renderMesh(camera, sh, widget, mesh, mat);
 }
+
 } /* namespace glPortal */
