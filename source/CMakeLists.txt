@@ -14,6 +14,7 @@ add_executable(${EXE_NAME}
   Input.cpp
   Portal.cpp
   Window.cpp
+  World.cpp
   WorldHelper.cpp
 )
 

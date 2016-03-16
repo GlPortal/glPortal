@@ -3,8 +3,7 @@
 
 #include <SDL2/SDL_events.h>
 
-#include <radix/World.hpp>
-
+#include "World.hpp"
 #include "Window.hpp"
 #include "util/sdl/Fps.hpp"
 
@@ -26,14 +25,14 @@ public:
 
   void update();
   void close();
-  radix::World* getWorld();
+  World* getWorld();
   inline Window& getWindow() {
     return window;
   }
 
 private:
   Window window;
-  radix::World world;
+  World world;
   bool closed;
 };
 

@@ -12,6 +12,7 @@
 #include <radix/material/MaterialLoader.hpp>
 #include <radix/Viewport.hpp>
 
+#include "../Screen.hpp"
 #include "../Game.hpp"
 
 using namespace radix;
@@ -48,14 +49,13 @@ void UiRenderer::render(Renderer &renderer, World &world) {
   renderer.renderText(camera,
                       std::string("FPS: ") + std::to_string(Game::fps.getFps()),
                       Vector3f(10, vpHeight - 25, -20));
-  /*if (renderer.getScene()->screen->enabled){
-    renderScreen(renderer);
-  }*/
+  if (world.activeScreen) {
+    renderScreen(renderer, world, *world.activeScreen);
+  }
   glDepthMask(GL_TRUE);
 }
 
-void UiRenderer::renderScreen(Renderer &renderer, World &world) {
-#if 0
+void UiRenderer::renderScreen(Renderer &renderer, World &world, Screen &scr) {
   // TODO: restore
   int vpWidth, vpHeight;
   renderer.getViewport()->getSize(&vpWidth, &vpHeight);
@@ -67,7 +67,7 @@ void UiRenderer::renderScreen(Renderer &renderer, World &world) {
   widget.scale(Vector3f(vpWidth, vpHeight, 1));
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   Shader &sh = ShaderLoader::getShader("color.frag");
-  Vector4f screenBackgroundColor = renderer.getScene()->screen->backgroundColor;
+  Vector4f screenBackgroundColor = scr.backgroundColor;
   glUseProgram(sh.handle);
   glUniform4f(sh.uni("color"),
               screenBackgroundColor.r,
@@ -75,16 +75,15 @@ void UiRenderer::renderScreen(Renderer &renderer, World &world) {
               screenBackgroundColor.b,
               screenBackgroundColor.a);
   renderer.renderMesh(camera, sh, widget, mesh, nullptr);
-  renderer.setFontColor(renderer.getScene()->screen->textColor);
+  renderer.setFontColor(scr.textColor);
   renderer.setFontSize(4);
-  renderer.renderText(camera, renderer.getScene()->screen->title,
-    Vector3f((vpWidth/2)-(renderer.getTextWidth(renderer.getScene()->screen->title)/2),
+  renderer.renderText(camera, scr.title,
+    Vector3f((vpWidth/2)-(renderer.getTextWidth(scr.title)/2),
              vpHeight/2, -1));
   renderer.setFontSize(0.5);
-  renderer.renderText(camera, renderer.getScene()->screen->text,
-    Vector3f((vpWidth/2)-(renderer.getTextWidth(renderer.getScene()->screen->text)/2),
+  renderer.renderText(camera, scr.text,
+    Vector3f((vpWidth/2)-(renderer.getTextWidth(scr.text)/2),
              (vpHeight/2)-100, -1));
-#endif
 }
 
 void UiRenderer::renderHand(Renderer &renderer, World &world) {
@@ -99,7 +98,7 @@ void UiRenderer::renderHand(Renderer &renderer, World &world) {
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
   const Material &mat = MaterialLoader::fromTexture("hand.png");
   Shader &sh = ShaderLoader::getShader("unshaded.frag");
-  //glUniform4f(sh.uni("color"), 0, 0, 0, renderer.getScene()->screen->alpha);
+  //glUniform4f(sh.uni("color"), 0, 0, 0, scr.alpha);
   renderer.renderMesh(camera, sh, widget, mesh, mat);
 }
 
