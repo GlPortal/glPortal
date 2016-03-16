@@ -29,7 +29,7 @@ Remember, you have to be root, so you might want to prefix `sudo`.
 ### Arch Linux
 **Note:** Package `tinyxml2` can be found in AUR.
 ```bash
-pacman -S cmake make gcc pkg-config assimp libepoxy sdl2 sdl2-mixer bullet mesa
+pacman -S cmake make gcc pkg-config assimp libepoxy sdl2 sdl2_mixer bullet mesa
 ```
 
 ### Debian 8 / Ubuntu 14.04 / Linux Mint 17.x

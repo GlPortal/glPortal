@@ -17,6 +17,7 @@
 #include <radix/core/diag/Throwables.hpp>
 #include <radix/renderer/Renderer.hpp>
 #include <util/sdl/Fps.hpp>
+#include "renderer/UiRenderer.hpp"
 #include "Input.hpp"
 
 using namespace radix;
@@ -72,6 +73,7 @@ void Game::update() {
     camera.setOrientation(plrComp.getHeadOrientation());
 
     renderer.render((currentTime-lastRender)/1000., camera);
+    UiRenderer::render(renderer, world);
     lastRender = currentTime;
     fps.countCycle();
     window.swapBuffers();
