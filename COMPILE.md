@@ -86,7 +86,7 @@ Building with docker is still in early testing and not feature complete. It will
 docker run -it --rm -w /data -v $(pwd):/data glportal/gcc bash -c "cmake ./; make"
 ```
 
-Run
+To run the game type:
 ```bash
 source/glportal --datadir ./data
 ```
