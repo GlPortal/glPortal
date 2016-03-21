@@ -101,6 +101,18 @@ make run
 If you get errors, try to build GlPortal again. If you don't manage to fix the error, use the
 bugtracker https://github.com/GlPortal/glPortal/issues or http://bugs.glportal.de to report what you did, and what error you got.
 
+# Build with docker
+Building with docker is still in early testing and not feature complete. It will make compiling easier in the future.
+```bash
+docker run -it --rm -w /data -v $(pwd):/data glportal/gcc bash -c "cmake ./; make"
+```
+
+To run the game type:
+```bash
+source/glportal --datadir ./data
+```
+
+
 # Keep us posted
 Not working? No worries! Help us help you figure out what we missed to make this work on 
 your system by opening an issue.
