@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+#include <epoxy/gl.h>
+
 #include <radix/renderer/Renderer.hpp>
 #include <radix/model/MeshLoader.hpp>
 #include <radix/texture/TextureLoader.hpp>

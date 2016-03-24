@@ -12,7 +12,7 @@
 #include <radix/env/Environment.hpp>
 #include <radix/env/ArgumentsParser.hpp>
 #include <radix/env/Util.hpp>
-#include <radix/map/MapLoader.hpp>
+#include <radix/map/XmlMapLoader.hpp>
 #include <radix/SoundManager.hpp>
 #include <radix/core/diag/Throwables.hpp>
 #include <radix/renderer/Renderer.hpp>
@@ -32,7 +32,7 @@ Game::Game() : closed(false) {
   try {
     SoundManager::init();
     world.create();
-    MapLoader ldr(world);
+    XmlMapLoader ldr(world);
     ldr.load(Environment::getDataDir() + "/maps/n1.xml");
     update();
   }

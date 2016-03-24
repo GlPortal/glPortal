@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include <bullet/BulletDynamics/Dynamics/btRigidBody.h>
+#include <bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
 #include <radix/model/MeshLoader.hpp>
 #include <radix/core/math/Math.hpp>
