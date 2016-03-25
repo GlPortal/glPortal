@@ -16,6 +16,8 @@
 #include <radix/SoundManager.hpp>
 #include <radix/core/diag/Throwables.hpp>
 #include <radix/renderer/Renderer.hpp>
+#include <radix/system/PlayerSystem.hpp>
+#include <radix/system/PhysicsSystem.hpp>
 #include <util/sdl/Fps.hpp>
 #include "renderer/UiRenderer.hpp"
 #include "Input.hpp"
@@ -32,6 +34,10 @@ Game::Game() : closed(false) {
   try {
     SoundManager::init();
     world.create();
+    { World::SystemTransaction st = world.systemTransact();
+      st.addSystem<PlayerSystem>();
+      st.addSystem<PhysicsSystem>();
+    }
     XmlMapLoader ldr(world);
     ldr.load(Environment::getDataDir() + "/maps/n1.xml");
     update();
