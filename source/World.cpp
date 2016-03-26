@@ -2,9 +2,14 @@
 
 #include "Screen.hpp"
 
+using namespace radix;
+
 namespace glPortal {
 
-World::World() = default;
+World::World(InputSource &input) :
+  radix::World(input) {
+}
+
 World::~World() = default;
 
 } /* namespace glPortal */

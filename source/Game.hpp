@@ -1,10 +1,9 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include <SDL2/SDL_events.h>
+#include <radix/Window.hpp>
 
 #include "World.hpp"
-#include "Window.hpp"
 #include "util/sdl/Fps.hpp"
 
 namespace glPortal {
@@ -26,12 +25,12 @@ public:
   void update();
   void close();
   World* getWorld();
-  inline Window& getWindow() {
+  inline radix::Window& getWindow() {
     return window;
   }
 
 private:
-  Window window;
+  radix::Window window;
   World world;
   bool closed;
 };

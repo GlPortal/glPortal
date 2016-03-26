@@ -12,8 +12,8 @@
 #include <radix/text/FontLoader.hpp>
 #include <radix/shader/ShaderLoader.hpp>
 #include <radix/material/MaterialLoader.hpp>
-#include <radix/input/Input.hpp>
 #include <radix/Viewport.hpp>
+#include <radix/World.hpp>
 
 #include "../component/Terminal.hpp"
 
@@ -44,7 +44,7 @@ void TerminalRenderer::render(Renderer &renderer, World &world) {
   renderer.setFontColor(term.textColor);
   renderer.setFontSize(1);
   renderer.renderText(camera,
-                      Input::getCharBuffer(),
+                      world.input.getCharBuffer(),
                       Vector3f(0, vpHeight-30, -1));
 }
 

@@ -20,7 +20,6 @@
 #include <radix/system/PhysicsSystem.hpp>
 #include <util/sdl/Fps.hpp>
 #include "renderer/UiRenderer.hpp"
-#include "Input.hpp"
 
 using namespace radix;
 
@@ -28,7 +27,9 @@ namespace glPortal {
 
 Fps Game::fps;
 
-Game::Game() : closed(false) {
+Game::Game() :
+  closed(false),
+  world(window) {
   window.create("GlPortal");
   
   try {
@@ -58,6 +59,8 @@ void Game::update() {
   Camera camera;
 
   while (not closed) {
+    window.processEvents();
+
     int skipped = 0;
     unsigned int currentTime = SDL_GetTicks();
     //Update the game if it is time

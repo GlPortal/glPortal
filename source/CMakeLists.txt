@@ -11,9 +11,7 @@ add_executable(${EXE_NAME}
   util/sdl/Fps.cpp
   Editor.cpp
   Game.cpp
-  Input.cpp
   Portal.cpp
-  Window.cpp
   World.cpp
   WorldHelper.cpp
 )

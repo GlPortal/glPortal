@@ -11,7 +11,7 @@ class World : public radix::World {
 public:
   std::unique_ptr<Screen> activeScreen;
 
-  World();
+  World(radix::InputSource &input);
   ~World();
 };
 
