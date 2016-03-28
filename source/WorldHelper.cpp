@@ -40,7 +40,6 @@ void WorldHelper::shootPortal(int button, World &world) {
         Portal &portal = pEnt.getComponent<Portal>();
         portal.openSince = world.getTime();
         portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png");
-        // TODO: ditch AACollisionBoxes
         portal.placeOnWall(world.camera.getPosition(), ipos, res.m_hitNormalWorld);
         LightSource &pLight = pEnt.getComponent<LightSource>();
 
