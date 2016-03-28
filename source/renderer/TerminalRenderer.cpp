@@ -21,12 +21,14 @@ using namespace radix;
 
 namespace glPortal {
 
-void TerminalRenderer::render(Renderer &renderer, World &world) {
+void TerminalRenderer::render(RenderContext &rc, World &world) {
   int vpWidth, vpHeight;
+  Renderer &renderer = rc.renderer;
   renderer.getViewport()->getSize(&vpWidth, &vpHeight);
   Camera camera;
   camera.setOrthographic();
   camera.setBounds(0, vpWidth, 0, vpHeight);
+  rc.pushCamera(camera);
   Matrix4f widget;
   widget.translate(Vector3f(vpWidth/2, vpHeight-100, -5));
   widget.scale(Vector3f(vpWidth, 200, 1));
@@ -40,12 +42,13 @@ void TerminalRenderer::render(Renderer &renderer, World &world) {
               screenBackgroundColor.y,
               screenBackgroundColor.z,
               screenBackgroundColor.w);
-  renderer.renderMesh(camera, sh, widget, mesh, nullptr);
+  renderer.renderMesh(rc, sh, widget, mesh, nullptr);
   renderer.setFontColor(term.textColor);
   renderer.setFontSize(1);
-  renderer.renderText(camera,
+  renderer.renderText(rc,
                       world.input.getCharBuffer(),
                       Vector3f(0, vpHeight-30, -1));
+  rc.popCamera();
 }
 
 } /* namespace glPortal */

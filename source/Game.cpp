@@ -28,10 +28,10 @@ namespace glPortal {
 Fps Game::fps;
 
 Game::Game() :
-  closed(false),
-  world(window) {
+  world(window),
+  closed(false) {
   window.create("GlPortal");
-  
+
   try {
     SoundManager::init();
     world.create();
@@ -42,8 +42,7 @@ Game::Game() :
     XmlMapLoader ldr(world);
     ldr.load(Environment::getDataDir() + "/maps/n1.xml");
     update();
-  }
-  catch (std::runtime_error &e) {
+  } catch (std::runtime_error &e) {
     Util::Log(Error) << "Runtime Error: " << e.what();
   }
 }
@@ -82,7 +81,8 @@ void Game::update() {
     camera.setOrientation(plrComp.getHeadOrientation());
 
     renderer.render((currentTime-lastRender)/1000., camera);
-    UiRenderer::render(renderer, world);
+    radix::RenderContext rc(renderer);
+    UiRenderer::render(rc, world);
     lastRender = currentTime;
     fps.countCycle();
     window.swapBuffers();

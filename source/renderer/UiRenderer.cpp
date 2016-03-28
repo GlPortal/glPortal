@@ -21,14 +21,18 @@ using namespace radix;
 
 namespace glPortal {
 
-void UiRenderer::render(Renderer &renderer, World &world) {
+void UiRenderer::render(RenderContext &rc, World &world) {
   glDepthMask(GL_FALSE);
-  renderHand(renderer, world);
+  renderHand(rc, world);
   int vpWidth, vpHeight;
+  Renderer &renderer = rc.renderer;
   renderer.getViewport()->getSize(&vpWidth, &vpHeight);
+
   Camera camera;
   camera.setOrthographic();
   camera.setBounds(0, vpWidth, 0, vpHeight);
+  rc.pushCamera(camera);
+
   Matrix4f crosshairMtx;
   crosshairMtx.translate(Vector3f(vpWidth/2, vpHeight/2, -10));
   crosshairMtx.scale(Vector3f(80, 80, 1));
@@ -40,30 +44,33 @@ void UiRenderer::render(Renderer &renderer, World &world) {
   const Material &mat = MaterialLoader::fromTexture("Reticle.png");
 
   Shader &sh = ShaderLoader::getShader("unshaded.frag");
-  renderer.renderMesh(camera, sh, crosshairMtx, mesh, mat);
+  renderer.renderMesh(rc, sh, crosshairMtx, mesh, mat);
 
   // Title
   renderer.setFont("Pacaya", 1.5f);
-  renderer.renderText(camera, "GlPortal", Vector3f(25, vpHeight - 75, -20));
+  renderer.renderText(rc, "GlPortal", Vector3f(25, vpHeight - 75, -20));
 
   // FPS counter
   renderer.setFont("Pacaya", 0.5f);
-  renderer.renderText(camera,
+  renderer.renderText(rc,
                       std::string("FPS: ") + std::to_string(Game::fps.getFps()),
                       Vector3f(10, vpHeight - 25, -20));
   if (world.activeScreen) {
-    renderScreen(renderer, world, *world.activeScreen);
+    renderScreen(rc, world, *world.activeScreen);
   }
+  rc.popCamera();
   glDepthMask(GL_TRUE);
 }
 
-void UiRenderer::renderScreen(Renderer &renderer, World &world, Screen &scr) {
+void UiRenderer::renderScreen(RenderContext &rc, World &world, Screen &scr) {
   // TODO: restore
   int vpWidth, vpHeight;
+  Renderer &renderer = rc.renderer;
   renderer.getViewport()->getSize(&vpWidth, &vpHeight);
   Camera camera;
   camera.setOrthographic();
   camera.setBounds(0, vpWidth, 0, vpHeight);
+  rc.pushCamera(camera);
   Matrix4f widget;
   widget.translate(Vector3f(vpWidth/2, vpHeight/2, -5));
   widget.scale(Vector3f(vpWidth, vpHeight, 1));
@@ -76,24 +83,26 @@ void UiRenderer::renderScreen(Renderer &renderer, World &world, Screen &scr) {
               screenBackgroundColor.g,
               screenBackgroundColor.b,
               screenBackgroundColor.a);
-  renderer.renderMesh(camera, sh, widget, mesh, nullptr);
+  renderer.renderMesh(rc, sh, widget, mesh, nullptr);
   renderer.setFontColor(scr.textColor);
   renderer.setFontSize(4);
-  renderer.renderText(camera, scr.title,
+  renderer.renderText(rc, scr.title,
     Vector3f((vpWidth/2)-(renderer.getTextWidth(scr.title)/2),
              vpHeight/2, -1));
   renderer.setFontSize(0.5);
-  renderer.renderText(camera, scr.text,
+  renderer.renderText(rc, scr.text,
     Vector3f((vpWidth/2)-(renderer.getTextWidth(scr.text)/2),
              (vpHeight/2)-100, -1));
+  rc.popCamera();
 }
 
-void UiRenderer::renderHand(Renderer &renderer, World &world) {
+void UiRenderer::renderHand(RenderContext &rc, World &world) {
   int vpWidth, vpHeight;
-  renderer.getViewport()->getSize(&vpWidth, &vpHeight);
+  rc.renderer.getViewport()->getSize(&vpWidth, &vpHeight);
   Camera camera;
   camera.setOrthographic();
   camera.setBounds(0, vpWidth, 0, vpHeight);
+  rc.pushCamera(camera);
   Matrix4f widget;
   widget.translate(Vector3f(vpWidth-400, 250, -50));
   widget.scale(Vector3f(960, 540, 1));
@@ -101,7 +110,8 @@ void UiRenderer::renderHand(Renderer &renderer, World &world) {
   const Material &mat = MaterialLoader::fromTexture("hand.png");
   Shader &sh = ShaderLoader::getShader("unshaded.frag");
   //glUniform4f(sh.uni("color"), 0, 0, 0, scr.alpha);
-  renderer.renderMesh(camera, sh, widget, mesh, mat);
+  rc.renderer.renderMesh(rc, sh, widget, mesh, mat);
+  rc.popCamera();
 }
 
 } /* namespace glPortal */

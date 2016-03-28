@@ -2,7 +2,7 @@
 #define UIRENDERER_HPP
 
 namespace radix {
-  class Renderer;
+  struct RenderContext;
   class Viewport;
 }
 
@@ -13,9 +13,9 @@ class Screen;
 
 class UiRenderer {
 public:
-  static void render(radix::Renderer &renderer, World &world);
-  static void renderScreen(radix::Renderer &renderer, World &world, Screen &scr);
-  static void renderHand(radix::Renderer &renderer, World &world);
+  static void render(radix::RenderContext &rc, World &world);
+  static void renderScreen(radix::RenderContext &rc, World &world, Screen &scr);
+  static void renderHand(radix::RenderContext &rc, World &world);
 };
 
 } /* namespace glPortal */

@@ -3,13 +3,16 @@
 
 #include <string>
 
-#include <radix/renderer/Renderer.hpp>
+namespace radix {
+  struct RenderContext;
+  class World;
+}
 
 namespace glPortal {
 
 class TerminalRenderer {
 public:
-  static void render(radix::Renderer &renderer, radix::World &world);
+  static void render(radix::RenderContext &rc, radix::World &world);
 };
 
 } /* namespace glPortal */
