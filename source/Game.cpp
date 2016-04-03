@@ -65,7 +65,7 @@ void Game::update() {
     //Update the game if it is time
     while (currentTime > nextUpdate && skipped < MAX_SKIP) {
       SoundManager::update(world.getPlayer());
-      world.update((currentTime-lastUpdate)/1000.);
+      world.update(TimeDelta::msec(currentTime-lastUpdate));
       lastUpdate = currentTime;
       nextUpdate += SKIP_TIME;
       skipped++;
