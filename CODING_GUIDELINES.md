@@ -1,9 +1,16 @@
 # Coding Guidelines
-## Stick to the principles of Object Oriented Design
-Read more about this wonderful concept [here](http://www.c2.com/cgi/wiki?PrinciplesOfObjectOrientedDesign).
-## Leave the code cleaner than you have found it
-## Use comments to describe the why, not the how
+## Basics
+- Stick to the principles of Object Oriented Design
+- Leave the code cleaner than you have found it
+- Use comments to describe the why, not the how
+
+## Planning
+- One branch per feature/bugfix
+- Split up any task that will take longer than a week
+- Merge branches back as soon as possible
+
 ## Conventions
+
 ### File encoding and line endings
 - The source files may be restricted to ASCII encoding, or use UTF-8 *without* *BOM* 
 (this warning specifically targets developers using Windows).
