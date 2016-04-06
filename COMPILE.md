@@ -50,8 +50,7 @@ Pretty much like libfoo-dev for most libraries.
 ```bash
 git clone https://github.com/GlPortal/glPortal.git
 cd glPortal
-git submodule init
-git submodule update
+git submodule update --init --recursive
 ```
 
 # Building the binary
