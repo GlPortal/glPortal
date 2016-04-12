@@ -58,7 +58,7 @@ Texture TextureLoader::uploadTexture(const unsigned char *data, int width, int h
   GLuint handle;
   glGenTextures(1, &handle);
   glBindTexture(GL_TEXTURE_2D, handle);
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Fuck you OpenGL.
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
   if (bytes == 3) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
