@@ -20,6 +20,7 @@
 #include <radix/system/PhysicsSystem.hpp>
 #include <util/sdl/Fps.hpp>
 #include "renderer/UiRenderer.hpp"
+#include <SDL2/SDL_keyboard.h>
 
 using namespace radix;
 
@@ -56,10 +57,13 @@ void Game::update() {
   Renderer renderer(world);
   renderer.setViewport(&window);
   Camera camera;
+  InputSource &input = world.input;
 
   while (not closed) {
     window.processEvents();
-
+    if (input.isKeyDown(SDL_SCANCODE_Q)) {
+      close();
+    }
     int skipped = 0;
     unsigned int currentTime = SDL_GetTicks();
     //Update the game if it is time
