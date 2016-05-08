@@ -36,6 +36,7 @@ Game::Game() :
   try {
     SoundManager::init();
     world.create();
+    
     { World::SystemTransaction st = world.systemTransact();
       st.addSystem<PlayerSystem>();
       st.addSystem<PhysicsSystem>();
@@ -57,11 +58,10 @@ void Game::update() {
   Renderer renderer(world);
   renderer.setViewport(&window);
   Camera camera;
-  InputSource &input = world.input;
 
   while (not closed) {
     window.processEvents();
-    if (input.isKeyDown(SDL_SCANCODE_Q)) {
+    if (window.isKeyDown(SDL_SCANCODE_Q)) {
       close();
     }
     int skipped = 0;
