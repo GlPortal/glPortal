@@ -113,6 +113,8 @@ To run the game type:
 source/glportal --datadir ./data
 ```
 
+If you want to work on the docker image please follow this guide:
+https://docs.docker.com/v1.8/userguide/dockerimages/
 
 # Keep us posted
 Not working? No worries! Help us help you figure out what we missed to make this work on 
