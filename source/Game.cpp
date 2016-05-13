@@ -36,7 +36,7 @@ Game::Game() :
   try {
     SoundManager::init();
     world.create();
-    
+
     { World::SystemTransaction st = world.systemTransact();
       st.addSystem<PlayerSystem>();
       st.addSystem<PhysicsSystem>();
