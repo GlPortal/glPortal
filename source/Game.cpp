@@ -30,7 +30,8 @@ Fps Game::fps;
 
 Game::Game() :
   world(window),
-  closed(false) {
+  closed(false),
+  config(Environment::getConfig()){
   window.create("GlPortal");
 
   try {
@@ -41,8 +42,14 @@ Game::Game() :
       st.addSystem<PlayerSystem>();
       st.addSystem<PhysicsSystem>();
     }
-    XmlMapLoader ldr(world);
-    ldr.load(Environment::getDataDir() + "/maps/n1.xml");
+    XmlMapLoader mapLoader(world);
+    std::string mapPath = config.mapPath;
+    if (mapPath.length() > 0) {
+      mapLoader.load(mapPath);
+    } else {
+      mapLoader.load(Environment::getDataDir() + "/maps/n1.xml");
+    }
+
     update();
   } catch (std::runtime_error &e) {
     Util::Log(Error) << "Runtime Error: " << e.what();

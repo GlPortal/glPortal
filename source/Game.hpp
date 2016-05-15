@@ -2,6 +2,7 @@
 #define GAME_HPP
 
 #include <radix/Window.hpp>
+#include <radix/env/Config.hpp>
 
 #include "World.hpp"
 #include "util/sdl/Fps.hpp"
@@ -33,6 +34,7 @@ private:
   radix::Window window;
   World world;
   bool closed;
+  radix::Config &config;
 };
 
 } /* namespace glPortal */
