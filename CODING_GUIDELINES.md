@@ -11,6 +11,9 @@
 
 ## Conventions
 
+### Naming
+- No cryptic abbreviations in names (well known abb. are fine e.g. HTML).
+
 ### File encoding and line endings
 - The source files may be restricted to ASCII encoding, or use UTF-8 *without* *BOM* 
 (this warning specifically targets developers using Windows).
