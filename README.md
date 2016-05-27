@@ -10,6 +10,10 @@ You can find the website at http://glportal.de .
 
 Chat with us at *irc.freenode.org* in the channel [#glportal](http://webchat.freenode.net/?channels=%23glportal&uio=d4).
 
+GlPortal is powered by RadixEngine:
+
+[![Powered by RadixEngine](https://raw.githubusercontent.com/GlPortal/glportal_raw_data/master/graphics/logo/radix/RadixEngine.png)](https://github.com/GlPortal/RadixEngine)
+
 <img src="http://glportal.de/glportal.gif">
 
 ## History 
