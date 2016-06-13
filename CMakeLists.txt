@@ -39,3 +39,7 @@ if (CMAKE_VERSION VERSION_GREATER 2.8.5)
   include(FeatureSummary)
   feature_summary(WHAT ALL)
 endif ()
+
+add_custom_target(versionInfo ALL
+    COMMAND git describe | cat>../version.txt
+)
