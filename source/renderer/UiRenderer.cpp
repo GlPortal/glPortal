@@ -48,13 +48,17 @@ void UiRenderer::render(RenderContext &rc, World &world) {
 
   // Title
   renderer.setFont("Pacaya", 1.5f);
-  renderer.renderText(rc, "GlPortal", Vector3f(25, vpHeight - 75, -20));
+  renderer.renderText(rc, "GlPortal", Vector3f(25, vpHeight - 95, -20));
 
   // FPS counter
   renderer.setFont("Pacaya", 0.5f);
   renderer.renderText(rc,
                       std::string("FPS: ") + std::to_string(Game::fps.getFps()),
                       Vector3f(10, vpHeight - 25, -20));
+  renderer.renderText(rc,
+                      std::string("Early testing build: ") + world.gameVersion,
+                      Vector3f(10, vpHeight - 45, -20));
+
   if (world.activeScreen) {
     renderScreen(rc, world, *world.activeScreen);
   }
