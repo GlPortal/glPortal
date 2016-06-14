@@ -16,6 +16,7 @@
 
 #include "../Screen.hpp"
 #include "../Game.hpp"
+#include "../Version.hpp"
 
 using namespace radix;
 
@@ -56,7 +57,7 @@ void UiRenderer::render(RenderContext &rc, World &world) {
                       std::string("FPS: ") + std::to_string(Game::fps.getFps()),
                       Vector3f(10, vpHeight - 25, -20));
   renderer.renderText(rc,
-                      std::string("Early testing build: ") + world.gameVersion,
+                      std::string("Early testing build: ")  + GAME_VERSION,
                       Vector3f(10, vpHeight - 45, -20));
 
   if (world.activeScreen) {

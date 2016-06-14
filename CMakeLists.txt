@@ -41,5 +41,8 @@ if (CMAKE_VERSION VERSION_GREATER 2.8.5)
 endif ()
 
 add_custom_target(versionInfo ALL
-    COMMAND git describe | cat>../version.txt
+    COMMAND echo -n \"\#define GAME_VERSION \\\"\">./source/Version.hpp
+    COMMAND git describe | tr -d \"\\n\" >>./source/Version.hpp
+    COMMAND echo -n \"\\\"\">>./source/Version.hpp
+
 )
