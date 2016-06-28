@@ -12,7 +12,7 @@ You can find the website at http://glportal.de .
 
 Chat with us at *irc.freenode.org* in the channel [#glportal](http://webchat.freenode.net/?channels=%23glportal&uio=d4).
 
-<img src="http://glportal.de/glportal.gif">
+<img src="https://glportal.de/glportal.gif">
 
 ## History 
 GlPortal is based on a project by Simon Larsen in 2012.
