@@ -6,6 +6,10 @@
 [![Donate Bitcoin](https://img.shields.io/badge/donate-bitcoin-brightgreen.svg)](https://www.bitcoin.com/)
  15Nt42PptnaBFg5Zwwa5B7GNdWxBsy297m
 # GlPortal
+    The game is under active development. Master is the stable branch and thus receives only 
+    irregular updates. If you want to see or work on the bleeding edge check out our current 
+    feature branches.
+  
 GlPortal is a modern free and open shader based 3d game and game engine with realistic physic simulation.
 It runs on all modern operating systems including GNU/Linux, Mac and Windows.
 You can find the website at http://glportal.de .
