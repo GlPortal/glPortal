@@ -29,14 +29,14 @@ Remember, you have to be root, so you might want to prefix `sudo`.
 ### Windows
 [Install msys2](http://msys2.github.io/).
 
-#### 32-bit
+#### on 32-bit
 Launch the *Mingw-w64 Win32 shell* from the start menu. In it, type:
 ```bash
 pacman -S pkg-config mingw-w64-i686-cmake mingw-w64-i686-make mingw-w64-i686-gcc mingw-w64-i686-pkg-config mingw-w64-i686-assimp mingw-w64-i686-libepoxy mingw-w64-i686-SDL2 mingw-w64-i686-SDL2_mixer mingw-w64-i686-bullet mingw-w64-i686-tinyxml2
 ```
 
-#### 64-bit
-Launch the *Mingw-w64 Win32 shell* from the start menu. In it, type:
+#### on 64-bit
+Launch the *Mingw-w64 Win64 shell* from the start menu. In it, type:
 ```bash
 pacman -S pkg-config mingw-w64-x86_64-cmake mingw-w64-x86_64-make mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config mingw-w64-x86_64-assimp mingw-w64-x86_64-libepoxy mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer mingw-w64-x86_64-bullet mingw-w64-x86_64-tinyxml2
 ```
@@ -120,12 +120,12 @@ make run
 ### Windows
 Before we can start the game it is neccesery to copy some dlls into our executable directory.
 
-#### 32-bit
+#### on 32-bit
 ```bash
 cp /mingw32/bin/libLinearMath.dll /mingw32/bin/SDL2.dll /mingw32/bin/SDL2_mixer.dll /mingw32/bin/libtinyxml2.dll /mingw32/bin/libgcc_s_dw2-1.dll /mingw32/bin/libstdc++-6.dll /mingw32/bin/libmodplug-1.dll /mingw32/bin/libvorbisfile-3.dll /mingw32/bin/libvorbis-0.dll /mingw32/bin/libogg-0.dll /mingw32/bin/libassimp.dll /mingw32/bin/libBulletCollision.dll /mingw32/bin/libBulletDynamics.dll /mingw32/bin/libepoxy-0.dll /mingw32/bin/libwinpthread-1.dll /mingw32/bin/libfluidsynth-1.dll /mingw32/bin/libminizip-1.dll /mingw32/bin/zlib1.dll /mingw32/bin/libFLAC-8.dll /mingw32/bin/libmad-0.dll /mingw32/bin/libbz2-1.dll /mingw32/bin/libglib-2.0-0.dll /mingw32/bin/libportaudio-2.dll /mingw32/bin/libsndfile-1.dll /mingw32/bin/libintl-8.dll /mingw32/bin/libspeex-1.dll /mingw32/bin/libvorbisenc-2.dll /mingw32/bin/libiconv-2.dll source
 ```
 
-#### 64-bit
+#### on 64-bit
 ```bash
 cp /mingw64/bin/libLinearMath.dll /mingw64/bin/SDL2.dll /mingw64/bin/SDL2_mixer.dll /mingw64/bin/libtinyxml2.dll /mingw64/bin/libgcc_s_seh-1.dll /mingw64/bin/libstdc++-6.dll /mingw64/bin/libmodplug-1.dll /mingw64/bin/libvorbisfile-3.dll /mingw64/bin/libvorbis-0.dll /mingw64/bin/libogg-0.dll /mingw64/bin/libassimp.dll /mingw64/bin/libBulletCollision.dll /mingw64/bin/libBulletDynamics.dll /mingw64/bin/libepoxy-0.dll /mingw64/bin/libwinpthread-1.dll /mingw64/bin/libfluidsynth-1.dll /mingw64/bin/libminizip-1.dll /mingw64/bin/zlib1.dll /mingw64/bin/libFLAC-8.dll /mingw64/bin/libmad-0.dll /mingw64/bin/libbz2-1.dll /mingw64/bin/libglib-2.0-0.dll /mingw64/bin/libportaudio-2.dll /mingw64/bin/libsndfile-1.dll /mingw64/bin/libintl-8.dll /mingw64/bin/libspeex-1.dll /mingw64/bin/libvorbisenc-2.dll /mingw64/bin/libiconv-2.dll source
 ```
