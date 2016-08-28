@@ -11,7 +11,7 @@ class Screen {
 public:
   Screen(std::string title, std::string text) :
     title(title),
-    text(text) {
+    text(text), enabled(false), alpha(0) {
   }
   std::string title;
   std::string text;
