@@ -51,10 +51,10 @@ void Portal::placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vec
   btRigidBody::btRigidBodyConstructionInfo ci(0, side.motionState.get(),
     shape.get(), btVector3(0, 0, 0));
   if (side.body) {
-    entity.manager.world.getSystem<PhysicsSystem>().getPhysWorld().removeRigidBody(side.body.get());
+    entity.manager.world.getSystem<PhysicsSystem>().getPhysicsWorld().removeRigidBody(side.body.get());
   }
   side.body.reset(new btRigidBody(ci));
-  entity.manager.world.getSystem<PhysicsSystem>().getPhysWorld().addRigidBody(side.body.get());
+  entity.manager.world.getSystem<PhysicsSystem>().getPhysicsWorld().addRigidBody(side.body.get());
 }
 
 void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const Vector3f &normal) {

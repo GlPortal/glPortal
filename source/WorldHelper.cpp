@@ -24,7 +24,7 @@ void WorldHelper::shootPortal(int button, World &world) {
   btCollisionWorld::ClosestRayResultCallback res(btFrom, btTo);
 
   PhysicsSystem &phys = world.getSystem<PhysicsSystem>();
-  phys.getPhysWorld().rayTest(btFrom, btTo, res);
+  phys.getPhysicsWorld().rayTest(btFrom, btTo, res);
 
   if (res.hasHit()) {
     const Entity *pEnt = reinterpret_cast<Entity*>(res.m_collisionObject->getUserPointer());
