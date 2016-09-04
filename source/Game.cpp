@@ -33,7 +33,7 @@ Game::Game() :
   closed(false),
   config(Environment::getConfig()){
   window.create("GlPortal");
-  
+
   if(config.cursorVisibility) {
     window.unlockMouse();
   }
