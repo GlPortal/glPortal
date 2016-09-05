@@ -49,14 +49,7 @@ Game::Game() :
       st.addSystem<PlayerSystem>();
       st.addSystem<PhysicsSystem>();
     }
-    XmlMapLoader mapLoader(world);
-    std::string mapPath = config.mapPath;
-    if (mapPath.length() > 0) {
-      mapLoader.load(mapPath);
-    } else {
-      mapLoader.load(Environment::getDataDir() + "/maps/n1.xml");
-    }
-
+    loadMap();
     update();
   } catch (std::runtime_error &e) {
     Util::Log(Error) << "Runtime Error: " << e.what();
@@ -65,6 +58,16 @@ Game::Game() :
 
 World* Game::getWorld() {
   return &world;
+}
+
+void Game::loadMap() {
+  XmlMapLoader mapLoader(world);
+  std::string mapPath = config.mapPath;
+  if (mapPath.length() > 0) {
+    mapLoader.load(mapPath);
+  } else {
+    mapLoader.load(Environment::getDataDir() + "/maps/n1.xml");
+  }
 }
 
 void Game::update() {

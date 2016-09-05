@@ -34,6 +34,7 @@ private:
   radix::Window window;
   World world;
   bool closed;
+  void loadMap();
   radix::Config &config;
 };
 
