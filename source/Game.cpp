@@ -90,17 +90,18 @@ void Game::update() {
     }
 
     camera.setPerspective();
-    int vpWidth, vpHeight;
-    window.getSize(&vpWidth, &vpHeight);
-    camera.setAspect((float)vpWidth / vpHeight);
-    const Transform &plrTform = world.getPlayer().getComponent<Transform>();
-    camera.setPosition(plrTform.getPosition() + Vector3f(0, plrTform.getScale().y/2, 0));
-    const Player &plrComp = world.getPlayer().getComponent<Player>();
-    camera.setOrientation(plrComp.getHeadOrientation());
+    int viewportWidth, viewportHeight;
+    window.getSize(&viewportWidth, &viewportHeight);
+    camera.setAspect((float)viewportWidth / viewportHeight);
+    const Transform &playerTransform = world.getPlayer().getComponent<Transform>();
+    Vector3f headOffset(0, playerTransform.getScale().y, 0);
+    camera.setPosition(playerTransform.getPosition() + headOffset);
+    const Player &playerComponent = world.getPlayer().getComponent<Player>();
+    camera.setOrientation(playerComponent.getHeadOrientation());
 
     renderer.render((currentTime-lastRender)/1000., camera);
-    radix::RenderContext rc(renderer);
-    UiRenderer::render(rc, world);
+    radix::RenderContext renderContext(renderer);
+    UiRenderer::render(renderContext, world);
     lastRender = currentTime;
     fps.countCycle();
     window.swapBuffers();
