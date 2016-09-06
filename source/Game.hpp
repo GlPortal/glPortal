@@ -22,7 +22,7 @@ public:
   Game();
   Game(Game&) = delete;
   Game(Game&&) = delete;
-
+  bool isRunning();
   void runGameLoop();
   void update();
   void close();
@@ -38,6 +38,7 @@ private:
   std::unique_ptr<radix::Renderer> renderer;
   std::unique_ptr<radix::Camera> camera;
   bool closed;
+  void init();
   void loadMap();
   void render();
   radix::Config &config;

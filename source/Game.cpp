@@ -42,18 +42,26 @@ Game::Game() :
 
   try {
     SoundManager::init();
-    world.create();
-    renderer = std::make_unique<Renderer>(world);
-    camera = std::make_unique<Camera>();
-    { World::SystemTransaction st = world.systemTransact();
-      st.addSystem<PlayerSystem>();
-      st.addSystem<PhysicsSystem>();
-    }
+    init();
     loadMap();
     runGameLoop();
   } catch (std::runtime_error &e) {
     Util::Log(Error) << "Runtime Error: " << e.what();
   }
+}
+
+void Game::init() {
+  world.create();
+  renderer = std::make_unique<Renderer>(world);
+  camera = std::make_unique<Camera>();
+  { World::SystemTransaction st = world.systemTransact();
+    st.addSystem<PlayerSystem>();
+    st.addSystem<PhysicsSystem>();
+  }
+}
+
+bool Game::isRunning() {
+  return !closed;
 }
 
 World* Game::getWorld() {
