@@ -32,6 +32,11 @@ int main(const int argc, char *argv[]) {
 
   try {
     Game game;
+    while (game.isRunning()) {
+      game.processInput();
+      game.update();
+      game.render();
+    }
     game.cleanUp();
   } catch (radix::Exception::Error &err) {
     radix::Util::Log(radix::Error, err.source()) << err.what();

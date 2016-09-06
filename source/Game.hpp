@@ -28,6 +28,7 @@ public:
   void update();
   void cleanUp();
   void close();
+  void render();
   World* getWorld();
   inline radix::Window& getWindow() {
     return window;
@@ -42,7 +43,6 @@ private:
   bool closed;
   void init();
   void loadMap();
-  void render();
   radix::Config &config;
 };
 

@@ -44,7 +44,6 @@ Game::Game() :
     SoundManager::init();
     init();
     loadMap();
-    runGameLoop();
   } catch (std::runtime_error &e) {
     Util::Log(Error) << "Runtime Error: " << e.what();
   }
@@ -103,13 +102,7 @@ void Game::processInput() {
 
 void Game::runGameLoop() {
 
-  while (not closed) {
 
-    processInput();
-    update();
-    render();
-
-  }
 }
 
 void Game::cleanUp() {
