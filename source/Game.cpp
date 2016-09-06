@@ -91,17 +91,21 @@ void Game::update() {
   }
 }
 
+void Game::processInput() {
+  window.processEvents();
+  if (window.isKeyDown(SDL_SCANCODE_Q)) {
+    close();
+  }
+}
+
 void Game::runGameLoop() {
   nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
 
   renderer->setViewport(&window);
 
   while (not closed) {
-    window.processEvents();
-    if (window.isKeyDown(SDL_SCANCODE_Q)) {
-      close();
-    }
 
+    processInput();
     update();
     render();
 
