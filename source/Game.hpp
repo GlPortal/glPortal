@@ -23,7 +23,6 @@ public:
   Game(Game&) = delete;
   Game(Game&&) = delete;
   bool isRunning();
-  void runGameLoop();
   void processInput();
   void update();
   void cleanUp();

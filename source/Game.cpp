@@ -100,11 +100,6 @@ void Game::processInput() {
   }
 }
 
-void Game::runGameLoop() {
-
-
-}
-
 void Game::cleanUp() {
   world.destroy();
   window.close();
