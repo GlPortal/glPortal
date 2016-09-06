@@ -58,6 +58,9 @@ void Game::init() {
     st.addSystem<PlayerSystem>();
     st.addSystem<PhysicsSystem>();
   }
+  nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
+
+  renderer->setViewport(&window);
 }
 
 bool Game::isRunning() {
@@ -99,9 +102,6 @@ void Game::processInput() {
 }
 
 void Game::runGameLoop() {
-  nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
-
-  renderer->setViewport(&window);
 
   while (not closed) {
 
