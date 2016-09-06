@@ -2,6 +2,7 @@
 #define GAME_HPP
 
 #include <radix/Window.hpp>
+#include <radix/renderer/Renderer.hpp>
 #include <radix/env/Config.hpp>
 
 #include "World.hpp"
@@ -31,10 +32,14 @@ public:
   }
 
 private:
+  unsigned int currentTime = 0, nextUpdate = 0, lastUpdate = 0, lastRender = 0;
   radix::Window window;
   World world;
+  std::unique_ptr<radix::Renderer> renderer;
+  std::unique_ptr<radix::Camera> camera;
   bool closed;
   void loadMap();
+  void render();
   radix::Config &config;
 };
 

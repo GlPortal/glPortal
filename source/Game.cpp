@@ -15,7 +15,6 @@
 #include <radix/map/XmlMapLoader.hpp>
 #include <radix/SoundManager.hpp>
 #include <radix/core/diag/Throwables.hpp>
-#include <radix/renderer/Renderer.hpp>
 #include <radix/system/PlayerSystem.hpp>
 #include <radix/system/PhysicsSystem.hpp>
 #include <util/sdl/Fps.hpp>
@@ -44,7 +43,8 @@ Game::Game() :
   try {
     SoundManager::init();
     world.create();
-
+    renderer = std::make_unique<Renderer>(world);
+    camera = std::make_unique<Camera>();
     { World::SystemTransaction st = world.systemTransact();
       st.addSystem<PlayerSystem>();
       st.addSystem<PhysicsSystem>();
@@ -71,10 +71,9 @@ void Game::loadMap() {
 }
 
 void Game::update() {
-  unsigned int nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
-  Renderer renderer(world);
-  renderer.setViewport(&window);
-  Camera camera;
+  nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
+
+  renderer->setViewport(&window);
 
   while (not closed) {
     window.processEvents();
@@ -82,7 +81,7 @@ void Game::update() {
       close();
     }
     int skipped = 0;
-    unsigned int currentTime = SDL_GetTicks();
+    currentTime = SDL_GetTicks();
     //Update the game if it is time
     while (currentTime > nextUpdate && skipped < MAX_SKIP) {
       SoundManager::update(world.getPlayer());
@@ -92,26 +91,33 @@ void Game::update() {
       skipped++;
     }
 
-    camera.setPerspective();
+    camera->setPerspective();
     int viewportWidth, viewportHeight;
     window.getSize(&viewportWidth, &viewportHeight);
-    camera.setAspect((float)viewportWidth / viewportHeight);
+    camera->setAspect((float)viewportWidth / viewportHeight);
     const Transform &playerTransform = world.getPlayer().getComponent<Transform>();
     Vector3f headOffset(0, playerTransform.getScale().y, 0);
-    camera.setPosition(playerTransform.getPosition() + headOffset);
+    camera->setPosition(playerTransform.getPosition() + headOffset);
     const Player &playerComponent = world.getPlayer().getComponent<Player>();
-    camera.setOrientation(playerComponent.getHeadOrientation());
+    camera->setOrientation(playerComponent.getHeadOrientation());
 
-    renderer.render((currentTime-lastRender)/1000., camera);
-    radix::RenderContext renderContext(renderer);
-    UiRenderer::render(renderContext, world);
-    lastRender = currentTime;
-    fps.countCycle();
-    window.swapBuffers();
+    render();
+
   }
   world.destroy();
   window.close();
 }
+
+void Game::render() {
+  renderer->render((currentTime-lastRender)/1000., *camera.get());
+  radix::RenderContext renderContext(*renderer.get());
+  UiRenderer::render(renderContext, world);
+
+  fps.countCycle();
+  window.swapBuffers();
+  lastRender = currentTime;
+}
+
 
 void Game::close() {
   closed = true;
