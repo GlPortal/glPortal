@@ -17,7 +17,6 @@ const int MAX_SKIP = 5;
 class GameController;
 class Game {
 public:
-  // FIXME: make non-static
   static Fps fps;
 
   Game();
