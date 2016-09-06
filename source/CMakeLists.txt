@@ -10,6 +10,7 @@ add_executable(${EXE_NAME}
   system/PortalSystem.cpp
   util/sdl/Fps.cpp
   Editor.cpp
+  Main.cpp
   Game.cpp
   Portal.cpp
   World.cpp

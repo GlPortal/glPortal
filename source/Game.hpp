@@ -23,6 +23,7 @@ public:
   Game(Game&) = delete;
   Game(Game&&) = delete;
 
+  void runGameLoop();
   void update();
   void close();
   World* getWorld();

@@ -50,7 +50,7 @@ Game::Game() :
       st.addSystem<PhysicsSystem>();
     }
     loadMap();
-    update();
+    runGameLoop();
   } catch (std::runtime_error &e) {
     Util::Log(Error) << "Runtime Error: " << e.what();
   }
@@ -71,6 +71,19 @@ void Game::loadMap() {
 }
 
 void Game::update() {
+  int skipped = 0;
+  currentTime = SDL_GetTicks();
+  //Update the game if it is time
+  while (currentTime > nextUpdate && skipped < MAX_SKIP) {
+    SoundManager::update(world.getPlayer());
+    world.update(TimeDelta::msec(currentTime-lastUpdate));
+    lastUpdate = currentTime;
+    nextUpdate += SKIP_TIME;
+    skipped++;
+  }
+}
+
+void Game::runGameLoop() {
   nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
 
   renderer->setViewport(&window);
@@ -80,17 +93,8 @@ void Game::update() {
     if (window.isKeyDown(SDL_SCANCODE_Q)) {
       close();
     }
-    int skipped = 0;
-    currentTime = SDL_GetTicks();
-    //Update the game if it is time
-    while (currentTime > nextUpdate && skipped < MAX_SKIP) {
-      SoundManager::update(world.getPlayer());
-      world.update(TimeDelta::msec(currentTime-lastUpdate));
-      lastUpdate = currentTime;
-      nextUpdate += SKIP_TIME;
-      skipped++;
-    }
 
+    update();
     render();
 
   }
@@ -124,20 +128,3 @@ void Game::close() {
 }
 
 } /* namespace glPortal */
-
-using namespace glPortal;
-
-int main(const int argc, char *argv[]) {
-  Util::Init();
-  ArgumentsParser::setEnvironmentFromArgs(argc, argv);
-  Environment::init();
-  ArgumentsParser::populateConfig();
-
-  try {
-    Game game;
-  } catch (Exception::Error &err) {
-    Util::Log(Error, err.source()) << err.what();
-  }
-
-  return 0;
-}
