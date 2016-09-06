@@ -26,6 +26,7 @@ public:
   void runGameLoop();
   void processInput();
   void update();
+  void cleanUp();
   void close();
   World* getWorld();
   inline radix::Window& getWindow() {

@@ -32,6 +32,7 @@ int main(const int argc, char *argv[]) {
 
   try {
     Game game;
+    game.cleanUp();
   } catch (radix::Exception::Error &err) {
     radix::Util::Log(radix::Error, err.source()) << err.what();
   }

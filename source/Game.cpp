@@ -110,6 +110,9 @@ void Game::runGameLoop() {
     render();
 
   }
+}
+
+void Game::cleanUp() {
   world.destroy();
   window.close();
 }
