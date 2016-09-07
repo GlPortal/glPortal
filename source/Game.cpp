@@ -33,13 +33,6 @@ Game::Game() :
   config(Environment::getConfig()){
   window.create("GlPortal");
 
-  if(config.cursorVisibility) {
-    window.unlockMouse();
-  }
-  else {
-    window.lockMouse();
-  }
-
   try {
     SoundManager::init();
     init();
@@ -50,6 +43,11 @@ Game::Game() :
 }
 
 void Game::init() {
+  if(config.cursorVisibility) {
+    window.unlockMouse();
+  } else {
+    window.lockMouse();
+  }
   world.create();
   renderer = std::make_unique<Renderer>(world);
   camera = std::make_unique<Camera>();
