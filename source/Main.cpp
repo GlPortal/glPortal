@@ -7,7 +7,6 @@
 #include <radix/env/ArgumentsParser.hpp>
 #include <radix/env/Util.hpp>
 
-
 using namespace glPortal;
 
 int main(const int argc, char *argv[]) {
