@@ -43,9 +43,6 @@ Game::Game() :
 }
 
 void Game::init() {
-  radix::Environment::init();
-  radix::ArgumentsParser::populateConfig();
-
   if(config.cursorVisibility) {
     window.unlockMouse();
   } else {
