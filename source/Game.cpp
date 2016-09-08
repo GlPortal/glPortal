@@ -84,12 +84,12 @@ void Game::update() {
   int elapsedTime = currentTime - lastUpdate;
   //Update the game if it is time
   while (currentTime > nextUpdate && skipped < MAX_SKIP) {
-    SoundManager::update(world.getPlayer());
-    world.update(TimeDelta::msec(elapsedTime));
-    lastUpdate = currentTime;
     nextUpdate += SKIP_TIME;
     skipped++;
   }
+  lastUpdate = currentTime;
+  SoundManager::update(world.getPlayer());
+  world.update(TimeDelta::msec(elapsedTime));
 }
 
 void Game::processInput() {
