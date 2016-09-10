@@ -10,7 +10,7 @@
 
 namespace glPortal {
 
-const int UPDATE_RATE = 50;
+const int UPDATE_RATE = 60;
 const int SKIP_TIME = 1000 / UPDATE_RATE;
 const int MAX_SKIP = 5;
 
@@ -40,6 +40,7 @@ private:
   std::unique_ptr<radix::Renderer> renderer;
   std::unique_ptr<radix::Camera> camera;
   bool closed;
+  void prepareCamera();
   void init();
   void loadMap();
   radix::Config &config;

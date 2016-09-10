@@ -105,15 +105,7 @@ void Game::cleanUp() {
 }
 
 void Game::render() {
-  camera->setPerspective();
-  int viewportWidth, viewportHeight;
-  window.getSize(&viewportWidth, &viewportHeight);
-  camera->setAspect((float)viewportWidth / viewportHeight);
-  const Transform &playerTransform = world.getPlayer().getComponent<Transform>();
-  Vector3f headOffset(0, playerTransform.getScale().y, 0);
-  camera->setPosition(playerTransform.getPosition() + headOffset);
-  const Player &playerComponent = world.getPlayer().getComponent<Player>();
-  camera->setOrientation(playerComponent.getHeadOrientation());
+  prepareCamera();
 
   renderer->render((currentTime-lastRender)/1000., *camera.get());
   radix::RenderContext renderContext(*renderer.get());
@@ -124,6 +116,17 @@ void Game::render() {
   lastRender = currentTime;
 }
 
+void Game::prepareCamera() {
+  camera->setPerspective();
+  int viewportWidth, viewportHeight;
+  window.getSize(&viewportWidth, &viewportHeight);
+  camera->setAspect((float)viewportWidth / viewportHeight);
+  const Transform &playerTransform = world.getPlayer().getComponent<Transform>();
+  Vector3f headOffset(0, playerTransform.getScale().y, 0);
+  camera->setPosition(playerTransform.getPosition() + headOffset);
+  const Player &playerComponent = world.getPlayer().getComponent<Player>();
+  camera->setOrientation(playerComponent.getHeadOrientation());
+}
 
 void Game::close() {
   closed = true;
