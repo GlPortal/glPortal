@@ -35,14 +35,14 @@ void UiRenderer::render() {
   initCamera();
 
   // Hand
-  renderImage(Vector3f(viewportWidth-400, 250, -50), Vector3f(960, 540, 1), "hand.png");
+  renderImage(Vector3f(viewportWidth - 400, 250, -50), Vector3f(960, 540, 1), "hand.png");
 
   // Crosshair
-  renderImage(Vector3f(viewportWidth/2, viewportHeight/2, -10), Vector3f(80, 80, 1), "Reticle.png");
+  renderImage(Vector3f(viewportWidth / 2, viewportHeight / 2, -10), Vector3f(80, 80, 1), "Reticle.png");
 
   // Title
   renderer.setFont("Pacaya", 1.5f);
-  renderer.renderText(*renderContext.get(),"GlPortal", Vector3f(25, viewportHeight - 95, -20));
+  renderer.renderText(*renderContext.get(), "GlPortal", Vector3f(25, viewportHeight - 95, -20));
 
   // FPS counter
   renderer.setFont("Pacaya", 0.5f);
@@ -90,7 +90,7 @@ void UiRenderer::renderScreen(RenderContext &rc, World &world, Screen &scr) {
   rc.pushCamera(camera);
 
   Matrix4f widget;
-  widget.translate(Vector3f(vpWidth/2, vpHeight/2, -5));
+  widget.translate(Vector3f(vpWidth / 2, vpHeight / 2, -5));
   widget.scale(Vector3f(vpWidth, vpHeight, 1));
 
   const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
@@ -109,12 +109,12 @@ void UiRenderer::renderScreen(RenderContext &rc, World &world, Screen &scr) {
   renderer.setFontColor(scr.textColor);
   renderer.setFontSize(4);
   renderer.renderText(rc, scr.title,
-    Vector3f((vpWidth/2)-(renderer.getTextWidth(scr.title)/2),
-             vpHeight/2, -1));
+    Vector3f((vpWidth / 2) - (renderer.getTextWidth(scr.title) / 2),
+              vpHeight / 2, -1));
   renderer.setFontSize(0.5);
   renderer.renderText(rc, scr.text,
-    Vector3f((vpWidth/2)-(renderer.getTextWidth(scr.text)/2),
-             (vpHeight/2)-100, -1));
+    Vector3f((vpWidth / 2) - (renderer.getTextWidth(scr.text) / 2),
+              (vpHeight / 2) - 100, -1));
   rc.popCamera();
 }
 
