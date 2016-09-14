@@ -58,6 +58,8 @@ void Game::init() {
   nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
 
   renderer->setViewport(&window);
+
+  uiRenderer = std::make_unique<UiRenderer>(world, *renderer.get());
 }
 
 bool Game::isRunning() {
@@ -108,8 +110,7 @@ void Game::render() {
   prepareCamera();
 
   renderer->render((currentTime-lastRender)/1000., *camera.get());
-  radix::RenderContext renderContext(*renderer.get());
-  UiRenderer::render(renderContext, world);
+  uiRenderer->render();
 
   fps.countCycle();
   window.swapBuffers();

@@ -7,6 +7,7 @@
 
 #include "World.hpp"
 #include "util/sdl/Fps.hpp"
+#include "renderer/UiRenderer.hpp"
 
 namespace glPortal {
 
@@ -37,6 +38,7 @@ private:
   unsigned int currentTime = 0, nextUpdate = 0, lastUpdate = 0, lastRender = 0;
   radix::Window window;
   World world;
+  std::unique_ptr<UiRenderer> uiRenderer;
   std::unique_ptr<radix::Renderer> renderer;
   std::unique_ptr<radix::Camera> camera;
   bool closed;
