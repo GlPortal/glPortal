@@ -27,9 +27,7 @@ public:
 
   void renderImage(radix::Vector3f position, radix::Vector3f scale, std::string path);
 
-  static void render(radix::RenderContext &rc, World &world);
   static void renderScreen(radix::RenderContext &rc, World &world, Screen &scr);
-  static void renderHand(radix::RenderContext &rc, World &world);
 
 private:
   World &world;
