@@ -8,7 +8,7 @@
 
 namespace radix {
   struct RenderContext;
-  class Viewport;
+  struct Viewport;
   class Camera;
   class Renderer;
 }
