@@ -27,8 +27,6 @@ public:
 
   void renderImage(radix::Vector3f position, radix::Vector3f scale, std::string path);
 
-  static void renderScreen(radix::RenderContext &rc, World &world, Screen &scr);
-
 private:
   World &world;
   radix::Renderer &renderer;

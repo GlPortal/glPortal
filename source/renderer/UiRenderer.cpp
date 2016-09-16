@@ -78,44 +78,4 @@ void UiRenderer::renderImage(radix::Vector3f position, radix::Vector3f scale, st
   renderer.renderMesh(*renderContext.get(), sh, matrix, mesh, material);
 }
 
-void UiRenderer::renderScreen(RenderContext &rc, World &world, Screen &scr) {
-  // TODO: restore
-  int vpWidth, vpHeight;
-  Renderer &renderer = rc.renderer;
-  renderer.getViewport()->getSize(&vpWidth, &vpHeight);
-
-  Camera camera;
-  camera.setOrthographic();
-  camera.setBounds(0, vpWidth, 0, vpHeight);
-  rc.pushCamera(camera);
-
-  Matrix4f widget;
-  widget.translate(Vector3f(vpWidth / 2, vpHeight / 2, -5));
-  widget.scale(Vector3f(vpWidth, vpHeight, 1));
-
-  const Mesh &mesh = MeshLoader::getMesh("GUIElement.obj");
-
-  Shader &sh = ShaderLoader::getShader("color.frag");
-
-  Vector4f screenBackgroundColor = scr.backgroundColor;
-  glUseProgram(sh.handle);
-  glUniform4f(sh.uni("color"),
-              screenBackgroundColor.r,
-              screenBackgroundColor.g,
-              screenBackgroundColor.b,
-              screenBackgroundColor.a);
-
-  renderer.renderMesh(rc, sh, widget, mesh, nullptr);
-  renderer.setFontColor(scr.textColor);
-  renderer.setFontSize(4);
-  renderer.renderText(rc, scr.title,
-    Vector3f((vpWidth / 2) - (renderer.getTextWidth(scr.title) / 2),
-              vpHeight / 2, -1));
-  renderer.setFontSize(0.5);
-  renderer.renderText(rc, scr.text,
-    Vector3f((vpWidth / 2) - (renderer.getTextWidth(scr.text) / 2),
-              (vpHeight / 2) - 100, -1));
-  rc.popCamera();
-}
-
 } /* namespace glPortal */
