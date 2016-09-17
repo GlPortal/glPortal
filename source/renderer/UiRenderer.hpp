@@ -8,7 +8,6 @@
 
 namespace radix {
   struct RenderContext;
-  struct Viewport;
   class Camera;
   class Renderer;
 }
@@ -16,7 +15,6 @@ namespace radix {
 namespace glPortal {
 
 class World;
-class Screen;
 
 class UiRenderer {
 public:
