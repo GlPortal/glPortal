@@ -4,6 +4,7 @@
 
 #include <epoxy/gl.h>
 
+#include <radix/core/math/Vector4f.hpp>
 #include <radix/renderer/Renderer.hpp>
 #include <radix/model/MeshLoader.hpp>
 #include <radix/shader/ShaderLoader.hpp>
@@ -39,6 +40,7 @@ void UiRenderer::render() {
 
   // Title
   renderer.setFont("Pacaya", 1.5f);
+  renderer.setFontColor(Vector4f(1, 1, 1, 1));
   renderer.renderText(*renderContext.get(), "GlPortal", Vector3f(25, viewportHeight - 95, -20));
 
   // FPS counter
