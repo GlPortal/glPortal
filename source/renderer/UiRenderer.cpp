@@ -42,7 +42,7 @@ void UiRenderer::render() {
   renderer.renderText(*renderContext.get(), "GlPortal", Vector3f(25, viewportHeight - 95, -20));
 
   // FPS counter
-  renderer.setFont("Pacaya", 0.5f);
+  renderer.setFontSize(0.5f);
   renderer.renderText(*renderContext.get(),
                       std::string("FPS: ") + std::to_string(Game::fps.getFps()),
                       Vector3f(10, viewportHeight - 25, -20));
