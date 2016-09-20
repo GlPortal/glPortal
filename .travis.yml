@@ -4,6 +4,5 @@ services:
   - docker
 before_install:
 - docker pull glportal/whale-gcc
-- docker run -it --rm -w /data -v $(pwd):/data glportal/whale-gcc bash -c "cmake ./; make"
 script:
-- cmake ./; make
+- docker run -it --rm -w /data -v $(pwd):/data glportal/whale-gcc bash -c "cmake ./; make"
