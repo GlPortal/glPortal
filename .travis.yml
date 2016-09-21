@@ -5,6 +5,7 @@ services:
 before_install:
 - docker pull glportal/whale-gcc
 script:
-- docker run -it --rm -w /data -v $(pwd):/data glportal/whale-gcc bash -c "cmake ./; make"
+- docker run -it --rm -w /data -v $(pwd):/data glportal/whale-gcc bash -c "cmake ./; make; make tests;"
+- ctest --no-compress-output -T Test 
 notifications:
   irc: "chat.freenode.net#glportal"
