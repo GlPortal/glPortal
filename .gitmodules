@@ -4,3 +4,6 @@
 [submodule "external/RadixEngine"]
 	path = external/RadixEngine
 	url = https://github.com/GlPortal/RadixEngine.git
+[submodule "documentation"]
+	path = documentation
+	url = git@github.com:GlPortal/documentation.git
