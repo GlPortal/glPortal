@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/sh
 git submodule update --init --recursive;
 cd external/RadixEngine;
 cmake ./; make;
