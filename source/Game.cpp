@@ -37,6 +37,7 @@ Game::Game() :
     SoundManager::init();
     init();
     loadMap();
+    renderer->init();
   } catch (std::runtime_error &e) {
     Util::Log(Error) << "Runtime Error: " << e.what();
   }
