@@ -220,7 +220,7 @@ void GameRenderer::renderPlayer(RenderContext &rc) {
   renderer.renderMesh(rc, ShaderLoader::getShader("diffuse.frag"), mtx, dummy, mat);
 }
 
-void Renderer::setCameraInPortal(const Camera &cam, Camera &dest,
+void GameRenderer::setCameraInPortal(const Camera &cam, Camera &dest,
                                  const Entity &portal, const Entity &otherPortal) {
   Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
