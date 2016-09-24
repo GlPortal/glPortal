@@ -229,4 +229,25 @@ void GameRenderer::renderPlayer(RenderContext &rc) {
   renderer.renderMesh(rc, ShaderLoader::getShader("diffuse.frag"), mtx, dummy, mat);
 }
 
+void Renderer::setCameraInPortal(const Camera &cam, Camera &dest,
+                                 const Entity &portal, const Entity &otherPortal) {
+  Transform &p1T = portal.getComponent<Transform>();
+  Matrix4f p1mat;
+  p1mat.translate(p1T.getPosition());
+  p1mat.rotate(p1T.getOrientation());
+  Transform &p2T = otherPortal.getComponent<Transform>();
+  Matrix4f p2mat;
+  p2mat.translate(p2T.getPosition());
+  p2mat.rotate(p2T.getOrientation());
+  Matrix4f rotate180; rotate180.rotate(rad(180), 0, 1, 0);
+  Matrix4f view; cam.getViewMatrix(view);
+  Matrix4f destView = view * p1mat * rotate180 * inverse(p2mat);
+
+  dest.setPerspective();
+  dest.setAspect(cam.getAspect());
+  dest.setFovy(cam.getFovy());
+  dest.setZNear((p1T.getPosition() - cam.getPosition()).length());
+  dest.setViewMatrix(destView);
+}
+
 } /* namespace glPortal */

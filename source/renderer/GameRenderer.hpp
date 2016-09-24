@@ -47,6 +47,16 @@ public:
    */
   void renderPlayer(radix::RenderContext &rc);
 
+  /**
+   * Set the camera in the portal so rendering from that portal is possible
+   * @param cam         The camera from which we look at the portal
+   * @param dest        The camera to move inside the portal and point in the right direction
+   * @param portal      The portal in which to place the camera
+   * @param otherPortal The counterpart of the portal
+   */
+  static void setCameraInPortal(const radix::Camera &cam, radix::Camera &dest,
+                const radix::Entity &portal, const radix::Entity &otherPortal);
+
 private:
   World &world;
   radix::Renderer &renderer;
