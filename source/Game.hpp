@@ -20,7 +20,7 @@ class Game {
 public:
   static Fps fps;
 
-  Game();
+  Game(radix::Config &config);
   Game(Game&) = delete;
   Game(Game&&) = delete;
   bool isRunning();

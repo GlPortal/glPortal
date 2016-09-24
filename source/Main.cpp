@@ -19,7 +19,7 @@ int main(const int argc, char *argv[]) {
   radix::ArgumentsParser::populateConfig(config);
 
   try {
-    Game game;
+    Game game(config);
     while (game.isRunning()) {
       game.processInput();
       game.update();
