@@ -31,6 +31,7 @@ Game::Game() :
   world(window),
   closed(false),
   config(Environment::getConfig()){
+  window.setConfig(config);
   window.create("GlPortal");
 
   try {

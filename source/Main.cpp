@@ -7,6 +7,7 @@
 #include <radix/env/ArgumentsParser.hpp>
 #include <radix/env/Util.hpp>
 #include <radix/core/diag/Throwables.hpp>
+#include <radix/env/Config.hpp>
 
 using namespace glPortal;
 
@@ -14,7 +15,8 @@ int main(const int argc, char *argv[]) {
   radix::Util::Init();
   radix::ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   radix::Environment::init();
-  radix::ArgumentsParser::populateConfig();
+  radix::Config &config = radix::Environment::getConfig();
+  radix::ArgumentsParser::populateConfig(config);
 
   try {
     Game game;
