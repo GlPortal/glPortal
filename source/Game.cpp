@@ -60,6 +60,7 @@ void Game::init() {
 
   renderer->setViewport(&window);
 
+  gameRenderer = std::make_unique<GameRenderer>(world, *renderer.get());
   uiRenderer = std::make_unique<UiRenderer>(world, *renderer.get());
 }
 
@@ -110,7 +111,7 @@ void Game::cleanUp() {
 void Game::render() {
   prepareCamera();
 
-  renderer->render((currentTime-lastRender)/1000., *camera.get());
+  gameRenderer->render((currentTime-lastRender)/1000., *camera.get());
   uiRenderer->render();
 
   fps.countCycle();
