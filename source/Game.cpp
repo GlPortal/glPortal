@@ -49,6 +49,7 @@ void Game::init() {
   } else {
     window.lockMouse();
   }
+  world.setConfig(config);
   world.create();
   renderer = std::make_unique<Renderer>(world);
   camera = std::make_unique<Camera>();
@@ -59,7 +60,6 @@ void Game::init() {
   nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
 
   renderer->setViewport(&window);
-
   uiRenderer = std::make_unique<UiRenderer>(world, *renderer.get());
 }
 
