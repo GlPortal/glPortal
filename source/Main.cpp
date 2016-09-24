@@ -14,12 +14,8 @@ using namespace glPortal;
 int main(const int argc, char *argv[]) {
   radix::Util::Init();
   radix::ArgumentsParser::setEnvironmentFromArgs(argc, argv);
-  radix::Environment::init();
-  radix::Config &config = radix::Environment::getConfig();
-  radix::ArgumentsParser::populateConfig(config);
-
   try {
-    Game game(config);
+    Game game;
     while (game.isRunning()) {
       game.processInput();
       game.update();

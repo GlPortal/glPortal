@@ -20,7 +20,7 @@ class Game {
 public:
   static Fps fps;
 
-  Game(radix::Config &config);
+  Game();
   Game(Game&) = delete;
   Game(Game&&) = delete;
   bool isRunning();
@@ -45,7 +45,7 @@ private:
   void prepareCamera();
   void init();
   void loadMap();
-  radix::Config &config;
+  radix::Config config;
 };
 
 } /* namespace glPortal */

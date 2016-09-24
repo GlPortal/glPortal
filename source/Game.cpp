@@ -27,10 +27,13 @@ namespace glPortal {
 
 Fps Game::fps;
 
-Game::Game(radix::Config &config) :
+Game::Game() :
   world(window),
   closed(false),
-  config(config){
+  config(){
+  radix::Environment::init();
+  config = radix::Environment::getConfig();
+  radix::ArgumentsParser::populateConfig(config);
   window.setConfig(config);
   window.create("GlPortal");
 
