@@ -10,6 +10,7 @@ namespace radix {
   struct RenderContext;
   class Camera;
   class Renderer;
+  class Entity;
 }
 
 namespace glPortal {
@@ -33,9 +34,18 @@ public:
 
   /**
    * Renders all the entities in the scene regardless of shading
-   * @param cam The camera from which we look at the scene
    */
   void renderEntities(radix::RenderContext &rc);
+
+  /**
+   * Renders a single entity regardless of shading
+   */
+  void renderEntity(radix::RenderContext &rc, const radix::Entity &e);
+
+  /**
+   * Renders the player character using ambient shading
+   */
+  void renderPlayer(radix::RenderContext &rc);
 
 private:
   World &world;

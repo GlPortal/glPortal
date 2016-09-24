@@ -10,10 +10,14 @@
 
 #include <radix/Viewport.hpp>
 #include <radix/Camera.hpp>
+#include <radix/Entity.hpp>
 
 #include <radix/component/ViewFrame.hpp>
+#include <radix/component/MeshDrawable.hpp>
 
 #include <radix/shader/ShaderLoader.hpp>
+#include <radix/model/MeshLoader.hpp>
+#include <radix/material/MaterialLoader.hpp>
 
 using namespace radix;
 
@@ -98,7 +102,7 @@ void GameRenderer::renderScene(RenderContext &rc) {
     renderViewFrameStencil(rc);
   }
 
-  renderer.renderEntities(rc);
+  renderEntities(rc);
 }
 
 void GameRenderer::renderViewFrames(RenderContext &rc) {
@@ -192,7 +196,37 @@ void GameRenderer::renderViewFrameStencil(RenderContext &rc) {
 }
 
 void GameRenderer::renderEntities(RenderContext &rc) {
+  for (Entity &e : world.entities) {
+    if (e.hasComponent<MeshDrawable>()) {
+      renderEntity(rc, e);
+    }
+  }
+}
 
+void GameRenderer::renderEntity(RenderContext &rc, const Entity &e) {
+  MeshDrawable &drawable = e.getComponent<MeshDrawable>();
+  Matrix4f mtx;
+  e.getComponent<Transform>().getModelMtx(mtx);
+
+  if (drawable.material.fancyname.compare("Metal tiles .5x") == 0) {
+    Shader &metal = ShaderLoader::getShader("metal.frag");
+    renderer.renderMesh(rc, metal, mtx, drawable.mesh, drawable.material);
+  } else {
+    Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
+    renderer.renderMesh(rc, diffuse, mtx, drawable.mesh, drawable.material);
+  }
+}
+
+void GameRenderer::renderPlayer(RenderContext &rc) {
+  const Transform &t = world.getPlayer().getComponent<Transform>();
+  Matrix4f mtx;
+  mtx.translate(t.getPosition() + Vector3f(0, -.5f, 0));
+  mtx.rotate(t.getOrientation());
+  mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
+  const Mesh &dummy = MeshLoader::getMesh("HumanToken.obj");
+  const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
+
+  renderer.renderMesh(rc, ShaderLoader::getShader("diffuse.frag"), mtx, dummy, mat);
 }
 
 } /* namespace glPortal */
