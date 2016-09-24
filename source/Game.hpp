@@ -47,7 +47,7 @@ private:
   void prepareCamera();
   void init();
   void loadMap();
-  radix::Config &config;
+  radix::Config config;
 };
 
 } /* namespace glPortal */

@@ -27,10 +27,11 @@ namespace glPortal {
 
 Fps Game::fps;
 
-Game::Game() :
-  world(window),
-  closed(false),
-  config(Environment::getConfig()){
+Game::Game() : world(window), closed(false), config(){
+  radix::Environment::init();
+  config = radix::Environment::getConfig();
+  radix::ArgumentsParser::populateConfig(config);
+  window.setConfig(config);
   window.create("GlPortal");
 
   try {
@@ -49,6 +50,7 @@ void Game::init() {
   } else {
     window.lockMouse();
   }
+  world.setConfig(config);
   world.create();
   renderer = std::make_unique<Renderer>(world);
   camera = std::make_unique<Camera>();
