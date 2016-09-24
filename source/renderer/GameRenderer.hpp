@@ -27,8 +27,10 @@ private:
   World &world;
   radix::Renderer &renderer;
   std::unique_ptr<radix::Camera> camera;
-  std::unique_ptr<radix::RenderContext> renderContext;
+  std::unique_ptr<radix::RenderContext> rc;
   int viewportWidth, viewportHeight;
+
+  double time;
 };
 
 } /* namespace glPortal */
