@@ -36,8 +36,6 @@ void GameRenderer::render(double dtime, const Camera &cam) {
   //
   // initCamera();
   //
-  // glClear(GL_COLOR_BUFFER_BIT);
-  //
   // renderContext->popCamera();
   time += dtime;
   renderer.getViewport()->getSize(&viewportWidth, &viewportHeight);
@@ -71,13 +69,6 @@ void GameRenderer::render(double dtime, const Camera &cam) {
   rc->projDirty = rc->viewDirty = true;
 
   renderScene(*rc);
-}
-
-void GameRenderer::initCamera() {
-  camera = std::make_unique<Camera>();
-  camera->setOrthographic();
-  camera->setBounds(0, viewportWidth, 0, viewportHeight);
-  rc->pushCamera(*camera.get());
 }
 
 void GameRenderer::renderScene(RenderContext &rc) {

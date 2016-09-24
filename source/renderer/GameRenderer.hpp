@@ -22,7 +22,6 @@ public:
   GameRenderer(World& w, radix::Renderer& ren);
 
   void render(double dtime, const radix::Camera &cam);
-  void initCamera();
 
   /**
    * Renders the scene with provided camera parameters
