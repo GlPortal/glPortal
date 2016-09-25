@@ -12,10 +12,6 @@
 
 namespace glPortal {
 
-const int UPDATE_RATE = 60;
-const int SKIP_TIME = 1000 / UPDATE_RATE;
-const int MAX_SKIP = 5;
-
 class Game : public radix::BaseGame {
 public:
   Game();

@@ -24,7 +24,7 @@ using namespace radix;
 
 namespace glPortal {
 
-Game::Game() : world(window), closed(false), config(){
+Game::Game() : config(){
   radix::Environment::init();
   config = radix::Environment::getConfig();
   radix::ArgumentsParser::populateConfig(config);
@@ -59,8 +59,8 @@ void Game::init() {
 
   renderer->setViewport(&window);
 
-  gameRenderer = std::make_unique<GameRenderer>(world, *renderer.get());
-  uiRenderer = std::make_unique<UiRenderer>(world, *renderer.get());
+  gameRenderer = std::make_unique<GameRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
+  uiRenderer = std::make_unique<UiRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
 }
 
 void Game::loadMap() {
