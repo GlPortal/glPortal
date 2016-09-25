@@ -1,3 +1,3 @@
 #!/bin/sh
-cd ..;
+cd ../documentation/;
 doxygen;

@@ -7,6 +7,7 @@ endif()
 add_executable(${EXE_NAME}
   renderer/TerminalRenderer.cpp
   renderer/UiRenderer.cpp
+  renderer/GameRenderer.cpp
   system/PortalSystem.cpp
   Editor.cpp
   Main.cpp

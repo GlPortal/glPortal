@@ -1,9 +1,9 @@
 [submodule "data"]
 	path = data
 	url = https://github.com/GlPortal/glportal_data.git
-[submodule "documentation/specification"]
-	path = documentation/specification
-	url = https://github.com/GlPortal/specification.git
 [submodule "external/RadixEngine"]
 	path = external/RadixEngine
 	url = https://github.com/GlPortal/RadixEngine.git
+[submodule "documentation"]
+	path = documentation
+	url = https://github.com/GlPortal/documentation.git

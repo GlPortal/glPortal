@@ -1,4 +1,4 @@
-<a href="https://jenkins.glportal.de/job/GlPortal/"><img src="https://jenkins.glportal.de/buildStatus/icon?job=GlPortal"></a>
+[![Build Status](https://api.travis-ci.org/GlPortal/glPortal.svg?branch=RadixEngine)](https://travis-ci.org/GlPortal/glPortal)
 [![Join the chat at https://gitter.im/GlPortal/glPortal](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/GlPortal/glPortal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Join Chat](https://img.shields.io/badge/irc-join_chat_→-brightgreen.svg)](http://webchat.freenode.net/?channels=%23%23glportal&uio=d4)
 [![Report a bug](https://img.shields.io/badge/bugs-report_now_→-brightgreen.svg)](https://bugs.glportal.de)

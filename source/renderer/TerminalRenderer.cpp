@@ -36,7 +36,7 @@ void TerminalRenderer::render(RenderContext &rc, World &world) {
   Shader &sh = ShaderLoader::getShader("color.frag");
   Terminal &term = world.entityAliases.at("activeTerminal")->getComponent<Terminal>();
   Vector4f screenBackgroundColor = term.backgroundColor;
-  glUseProgram(sh.handle);
+  sh.bind();
   glUniform4f(sh.uni("color"),
               screenBackgroundColor.x,
               screenBackgroundColor.y,
