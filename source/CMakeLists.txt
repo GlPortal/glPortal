@@ -8,7 +8,6 @@ add_executable(${EXE_NAME}
   renderer/TerminalRenderer.cpp
   renderer/UiRenderer.cpp
   system/PortalSystem.cpp
-  util/sdl/Fps.cpp
   Editor.cpp
   Main.cpp
   Game.cpp
