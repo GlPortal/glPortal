@@ -25,7 +25,6 @@ using namespace radix;
 namespace glPortal {
 
 Game::Game() : config(){
-  radix::Environment::init();
   config = radix::Environment::getConfig();
   radix::ArgumentsParser::populateConfig(config);
   window.setConfig(config);
