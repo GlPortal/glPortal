@@ -58,8 +58,13 @@ void Game::init() {
 
   renderer->setViewport(&window);
 
+  gameController = std::make_unique<GameController>(this);
   gameRenderer = std::make_unique<GameRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
   uiRenderer = std::make_unique<UiRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
+}
+
+void Game::processInput() {
+  gameController->processInput();
 }
 
 void Game::loadMap() {

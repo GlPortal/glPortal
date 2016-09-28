@@ -9,6 +9,7 @@
 #include "World.hpp"
 #include "renderer/GameRenderer.hpp"
 #include "renderer/UiRenderer.hpp"
+#include "GameController.hpp"
 
 namespace glPortal {
 
@@ -16,7 +17,9 @@ class Game : public radix::BaseGame {
 public:
   Game();
   void render();
+  void processInput();
 private:
+  std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
   void loadMap();
