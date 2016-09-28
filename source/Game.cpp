@@ -25,6 +25,7 @@ using namespace radix;
 namespace glPortal {
 
 Game::Game() : config(){
+  BaseGame();
   config = radix::Environment::getConfig();
   radix::ArgumentsParser::populateConfig(config);
   window.setConfig(config);
@@ -48,6 +49,7 @@ void Game::init() {
   }
   world.setConfig(config);
   world.create();
+  world.stateFunctionStack.push(&radix::GameState::handleRunning); /* default gamestate */
   renderer = std::make_unique<Renderer>(world);
   camera = std::make_unique<Camera>();
   { World::SystemTransaction st = world.systemTransact();
