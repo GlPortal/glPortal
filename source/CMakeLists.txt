@@ -13,6 +13,7 @@ add_executable(${EXE_NAME}
   Main.cpp
   Game.cpp
   GameController.cpp
+  GameState.cpp
   Portal.cpp
   World.cpp
   WorldHelper.cpp

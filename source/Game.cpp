@@ -18,6 +18,7 @@
 #include <radix/system/PlayerSystem.hpp>
 #include <radix/system/PhysicsSystem.hpp>
 #include "renderer/UiRenderer.hpp"
+#include "GameState.hpp"
 #include <SDL2/SDL_keyboard.h>
 
 using namespace radix;
@@ -49,7 +50,7 @@ void Game::init() {
   }
   world.setConfig(config);
   world.create();
-  world.stateFunctionStack.push(&radix::GameState::handleRunning); /* default gamestate */
+  world.stateFunctionStack.push(&GameState::handleRunning); /* default gamestate */
   renderer = std::make_unique<Renderer>(world);
   camera = std::make_unique<Camera>();
   { World::SystemTransaction st = world.systemTransact();
