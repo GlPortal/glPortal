@@ -1,34 +1,23 @@
 #include "Game.hpp"
 
-#include <stdexcept>
-#include <string>
-#include <cstdio>
 #include <iostream>
 
-#include <SDL2/SDL_timer.h>
-
-#include <radix/component/Transform.hpp>
 #include <radix/component/Player.hpp>
 #include <radix/env/Environment.hpp>
 #include <radix/env/ArgumentsParser.hpp>
-#include <radix/env/Util.hpp>
 #include <radix/map/XmlMapLoader.hpp>
 #include <radix/SoundManager.hpp>
-#include <radix/core/diag/Throwables.hpp>
 #include <radix/system/PlayerSystem.hpp>
 #include <radix/system/PhysicsSystem.hpp>
-#include <util/sdl/Fps.hpp>
-#include "renderer/UiRenderer.hpp"
-#include <SDL2/SDL_keyboard.h>
+
+#include "GameState.hpp"
 
 using namespace radix;
 
 namespace glPortal {
 
-Fps Game::fps;
-
-Game::Game() : world(window), closed(false), config(){
-  radix::Environment::init();
+Game::Game() : config(){
+  BaseGame();
   config = radix::Environment::getConfig();
   radix::ArgumentsParser::populateConfig(config);
   window.setConfig(config);
@@ -52,6 +41,7 @@ void Game::init() {
   }
   world.setConfig(config);
   world.create();
+  world.stateFunctionStack.push(&GameState::handleRunning); /* default gamestate */
   renderer = std::make_unique<Renderer>(world);
   camera = std::make_unique<Camera>();
   { World::SystemTransaction st = world.systemTransact();
@@ -62,16 +52,13 @@ void Game::init() {
 
   renderer->setViewport(&window);
 
-  gameRenderer = std::make_unique<GameRenderer>(world, *renderer.get());
-  uiRenderer = std::make_unique<UiRenderer>(world, *renderer.get());
+  gameController = std::make_unique<GameController>(this);
+  gameRenderer = std::make_unique<GameRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
+  uiRenderer = std::make_unique<UiRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
 }
 
-bool Game::isRunning() {
-  return !closed;
-}
-
-World* Game::getWorld() {
-  return &world;
+void Game::processInput() {
+  gameController->processInput();
 }
 
 void Game::loadMap() {
@@ -84,32 +71,6 @@ void Game::loadMap() {
   }
 }
 
-void Game::update() {
-  int skipped = 0;
-  currentTime = SDL_GetTicks();
-
-  while (currentTime > nextUpdate && skipped < MAX_SKIP) {
-    nextUpdate += SKIP_TIME;
-    skipped++;
-  }
-  int elapsedTime = currentTime - lastUpdate;
-  SoundManager::update(world.getPlayer());
-  world.update(TimeDelta::msec(elapsedTime));
-  lastUpdate = currentTime;
-}
-
-void Game::processInput() {
-  window.processEvents();
-  if (window.isKeyDown(SDL_SCANCODE_Q)) {
-    close();
-  }
-}
-
-void Game::cleanUp() {
-  world.destroy();
-  window.close();
-}
-
 void Game::render() {
   prepareCamera();
 
@@ -119,22 +80,6 @@ void Game::render() {
   fps.countCycle();
   window.swapBuffers();
   lastRender = currentTime;
-}
-
-void Game::prepareCamera() {
-  camera->setPerspective();
-  int viewportWidth, viewportHeight;
-  window.getSize(&viewportWidth, &viewportHeight);
-  camera->setAspect((float)viewportWidth / viewportHeight);
-  const Transform &playerTransform = world.getPlayer().getComponent<Transform>();
-  Vector3f headOffset(0, playerTransform.getScale().y, 0);
-  camera->setPosition(playerTransform.getPosition() + headOffset);
-  const Player &playerComponent = world.getPlayer().getComponent<Player>();
-  camera->setOrientation(playerComponent.getHeadOrientation());
-}
-
-void Game::close() {
-  closed = true;
 }
 
 } /* namespace glPortal */

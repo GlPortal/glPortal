@@ -9,10 +9,11 @@ add_executable(${EXE_NAME}
   renderer/UiRenderer.cpp
   renderer/GameRenderer.cpp
   system/PortalSystem.cpp
-  util/sdl/Fps.cpp
   Editor.cpp
   Main.cpp
   Game.cpp
+  GameController.cpp
+  GameState.cpp
   Portal.cpp
   World.cpp
   WorldHelper.cpp
