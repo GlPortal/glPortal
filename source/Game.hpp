@@ -5,6 +5,8 @@
 #include <radix/renderer/Renderer.hpp>
 #include <radix/env/Config.hpp>
 #include <radix/BaseGame.hpp>
+#include <radix/screen/Screen.hpp>
+#include <radix/renderer/ScreenRenderer.hpp>
 
 #include "World.hpp"
 #include "renderer/GameRenderer.hpp"
@@ -19,6 +21,8 @@ public:
   void render();
   void processInput();
 private:
+  std::shared_ptr<radix::Screen> screen; /* TEMPORARY */
+  std::unique_ptr<radix::ScreenRenderer> screenRenderer; /* TEMPORARY */
   std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;

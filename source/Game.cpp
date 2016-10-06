@@ -9,6 +9,7 @@
 #include <radix/SoundManager.hpp>
 #include <radix/system/PlayerSystem.hpp>
 #include <radix/system/PhysicsSystem.hpp>
+#include <radix/screen/XMLScreenLoader.hpp>
 
 #include "GameState.hpp"
 
@@ -52,9 +53,12 @@ void Game::init() {
 
   renderer->setViewport(&window);
 
+  screen = radix::XMLScreenLoader::loadScreen(Environment::getDataDir() + "/screens/test.xml");
+
   gameController = std::make_unique<GameController>(this);
   gameRenderer = std::make_unique<GameRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
   uiRenderer = std::make_unique<UiRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
+  screenRenderer = std::make_unique<ScreenRenderer>(world, *renderer.get());
 }
 
 void Game::processInput() {
@@ -76,6 +80,7 @@ void Game::render() {
 
   gameRenderer->render((currentTime-lastRender)/1000., *camera.get());
   uiRenderer->render();
+  screenRenderer->renderScreen(screen);
 
   fps.countCycle();
   window.swapBuffers();
