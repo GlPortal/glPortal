@@ -45,9 +45,9 @@ void Game::init() {
   world.stateFunctionStack.push(&GameState::handleRunning); /* default gamestate */
   renderer = std::make_unique<Renderer>(world);
   camera = std::make_unique<Camera>();
-  { World::SystemTransaction st = world.systemTransact();
-    st.addSystem<PlayerSystem>();
-    st.addSystem<PhysicsSystem>();
+  { World::SystemTransaction systemTransaction = world.systemTransact();
+    systemTransaction.addSystem<PlayerSystem>();
+    systemTransaction.addSystem<PhysicsSystem>();
   }
   nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
 
