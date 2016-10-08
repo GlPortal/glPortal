@@ -16,10 +16,6 @@ void GameController::processInput() {
     game->close();
   }
 
-  if (game->getWindow().isKeyDown(SDL_SCANCODE_G)) {
-    game->getWindow().printScreenToFile(radix::Environment::getDataDir() + "/screenshot.bmp");
-  }
-
   gameState->handleInput(*game);
 }
 
