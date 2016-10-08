@@ -21,8 +21,8 @@ public:
   void render();
   void processInput();
 private:
-  std::shared_ptr<radix::Screen> screen; /* TEMPORARY */
-  std::unique_ptr<radix::ScreenRenderer> screenRenderer; /* TEMPORARY */
+  std::shared_ptr<radix::Screen> screen;
+  std::unique_ptr<radix::ScreenRenderer> screenRenderer;
   std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
