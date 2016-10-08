@@ -1,9 +1,6 @@
-//
-// Created by geert on 9/28/16.
-//
-
 #include "GameController.hpp"
 #include "Game.hpp"
+#include <radix/env/Environment.hpp>
 
 namespace glPortal {
 
@@ -17,6 +14,10 @@ void GameController::processInput() {
   game->getWindow().processEvents();
   if (game->getWindow().isKeyDown(SDL_SCANCODE_Q)) {
     game->close();
+  }
+
+  if (game->getWindow().isKeyDown(SDL_SCANCODE_G)) {
+    game->getWindow().printScreenToFile(radix::Environment::getDataDir() + "/screenshot.bmp");
   }
 
   gameState->handleInput(*game);
