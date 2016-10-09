@@ -12,10 +12,6 @@ GameController::GameController(Game *game) {
 
 void GameController::processInput() {
   game->getWindow().processEvents();
-  if (game->getWindow().isKeyDown(SDL_SCANCODE_Q)) {
-    game->close();
-  }
-
   gameState->process(*game);
 }
 

@@ -2,11 +2,23 @@
 
 namespace glPortal {
 
-void GameState::handleRunning(radix::BaseGame &game) { }
+void GameState::handleRunning(radix::BaseGame &game) {
+  game.getWorld()->hideScreen();
+  if (game.getWindow().isKeyDown(SDL_SCANCODE_Q)) {
+    game.close();
+  }
+}
 
 void GameState::handlePaused(radix::BaseGame &game) { }
 
-void GameState::handleSplash(radix::BaseGame &game) { }
+void GameState::handleSplash(radix::BaseGame &game) {
+  game.getWorld()->showScreen();
+  if (game.getWindow().isKeyDown(SDL_SCANCODE_RETURN)) {
+    game.getWorld()->hideScreen();
+    game.getWorld()->stateFunctionStack.pop();
+  }
+
+}
 
 void GameState::handleMenu(radix::BaseGame &game) { }
 

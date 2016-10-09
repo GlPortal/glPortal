@@ -42,7 +42,8 @@ void Game::init() {
   }
   world.setConfig(config);
   world.create();
-  world.stateFunctionStack.push(&GameState::handleRunning); /* default gamestate */
+  world.stateFunctionStack.push(&GameState::handleRunning);
+  world.stateFunctionStack.push(&GameState::handleSplash);
   renderer = std::make_unique<Renderer>(world);
   camera = std::make_unique<Camera>();
   { World::SystemTransaction st = world.systemTransact();
@@ -88,7 +89,9 @@ void Game::render() {
 
   gameRenderer->render((currentTime-lastRender)/1000., *camera.get());
   uiRenderer->render();
-  screenRenderer->renderScreen(screen);
+  if (getWorld()->isScreenVisible()) {
+    screenRenderer->renderScreen(screen);
+  }
 
   fps.countCycle();
   window.swapBuffers();
