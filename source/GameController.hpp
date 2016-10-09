@@ -1,7 +1,3 @@
-//
-// Created by geert on 9/28/16.
-//
-
 #ifndef GLPORTAL_GAMECONTROLLER_HPP
 #define GLPORTAL_GAMECONTROLLER_HPP
 
