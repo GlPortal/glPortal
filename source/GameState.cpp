@@ -6,14 +6,14 @@ namespace glPortal {
 void GameState::handleRunning(radix::BaseGame &game) {
   radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
   player.frozen = false;
-  game.getWorld()->hideScreen();
+  game.getGameWorld()->hideScreen();
   if (game.getWindow().isKeyDown(SDL_SCANCODE_Q)) {
     game.close();
   }
   if (game.getWindow().isKeyDown(SDL_SCANCODE_ESCAPE)) {
     player.frozen = true;
     game.getWorld()->stateFunctionStack.push(&GameState::handlePaused);
-    game.getWorld()->showScreen();
+    game.getGameWorld()->showScreen();
   }
 }
 
@@ -22,16 +22,16 @@ void GameState::handlePaused(radix::BaseGame &game) {
   if (game.getWindow().isKeyDown(SDL_SCANCODE_ESCAPE)) {
     player.frozen = false;
     game.getWorld()->stateFunctionStack.pop();
-    game.getWorld()->hideScreen();
+    game.getGameWorld()->hideScreen();
   }
 }
 
 void GameState::handleSplash(radix::BaseGame &game) {
-  game.getWorld()->showScreen();
+  game.getGameWorld()->showScreen();
   radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
   player.frozen = true;
   if (game.getWindow().isKeyDown(SDL_SCANCODE_RETURN)) {
-    game.getWorld()->hideScreen();
+    game.getGameWorld()->hideScreen();
     game.getWorld()->stateFunctionStack.pop();
   }
   if (game.getWindow().isKeyDown(SDL_SCANCODE_Q)) {

@@ -89,7 +89,7 @@ void Game::render() {
 
   gameRenderer->render((currentTime-lastRender)/1000., *camera.get());
   uiRenderer->render();
-  if (getWorld()->isScreenVisible()) {
+  if (getGameWorld()->isScreenVisible()) {
     screenRenderer->renderScreen(screen);
   }
 
