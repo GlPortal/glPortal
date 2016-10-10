@@ -75,6 +75,7 @@ void UiRenderer::renderImage(radix::Vector3f position, radix::Vector3f scale, st
 
   Shader &sh = ShaderLoader::getShader("unshaded.frag");
   renderer.renderMesh(*renderContext.get(), sh, matrix, mesh, material);
+  sh.release();
 }
 
 } /* namespace glPortal */
