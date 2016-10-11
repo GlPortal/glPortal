@@ -48,6 +48,7 @@ void TerminalRenderer::render(RenderContext &rc, World &world) {
   renderer.renderText(rc,
                       world.input.getCharBuffer(),
                       Vector3f(0, vpHeight-30, -1));
+  sh.release();
   rc.popCamera();
 }
 
