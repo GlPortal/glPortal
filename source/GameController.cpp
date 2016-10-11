@@ -13,7 +13,7 @@ GameController::GameController(Game *game) {
 void GameController::processInput() {
   game->getWindow().processEvents();
   gameState->process(*game);
-  
+
   if (game->getWindow().isKeyDown(SDL_SCANCODE_Q)) {
     game->close();
   }

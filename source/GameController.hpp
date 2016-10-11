@@ -3,6 +3,10 @@
 
 #include <radix/core/state/GameState.hpp>
 
+namespace radix {
+  class ScreenRenderer;
+} /* namespace radix */
+
 namespace glPortal {
 
 class Game;
@@ -15,6 +19,7 @@ public:
 private:
   Game *game;
   World *world;
+
   std::unique_ptr<radix::GameState> gameState;
 };
 

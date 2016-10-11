@@ -54,12 +54,10 @@ void Game::init() {
 
   renderer->setViewport(&window);
 
-  screen = radix::XMLScreenLoader::loadScreen(Environment::getDataDir() + "/screens/test.xml");
-
   gameController = std::make_unique<GameController>(this);
   gameRenderer = std::make_unique<GameRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
   uiRenderer = std::make_unique<UiRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
-  screenRenderer = std::make_unique<ScreenRenderer>(world, *renderer.get());
+  screenRenderer = std::make_shared<radix::ScreenRenderer>(world, *renderer.get());
   screenshotCallbackHolder =
     world.event.addObserver(InputSource::KeyReleasedEvent::Type, [this](const radix::Event &event) {
         const int key =  ((InputSource::KeyReleasedEvent &) event).key;
@@ -89,9 +87,12 @@ void Game::render() {
 
   gameRenderer->render((currentTime-lastRender)/1000., *camera.get());
   uiRenderer->render();
-  if (getWorld()->isScreenVisible()) {
-    screenRenderer->renderScreen(screen);
+
+  for (radix::Screen* screen : screens){
+    screenRenderer->renderScreen(*screen);
   }
+
+  screens.clear();
 
   fps.countCycle();
   window.swapBuffers();
