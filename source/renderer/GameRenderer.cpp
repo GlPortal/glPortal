@@ -136,6 +136,7 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
   for (size_t i = 0; i < rc.viewFramesStack.size(); i++) {
     renderer.renderMesh(rc, shader, modelMtx, rc.viewFramesStack[i].first, nullptr);
   }
+  shader.release();
   glColorMask(save_color_mask[0], save_color_mask[1], save_color_mask[2], save_color_mask[3]);
   glDepthMask(save_depth_mask);
 }
@@ -170,6 +171,7 @@ void GameRenderer::renderViewFrameStencil(RenderContext &rc) {
     rc.pushView(rc.viewStack[i-1]);
     renderer.renderMesh(rc, shader, modelMtx, rc.viewFramesStack.back().first, nullptr);
   }
+  shader.release();
 
   //glColorMask(GL_TRUE, GL_TRUE, GL_FALSE, GL_TRUE);  // blue-ish filter if drawing on white or grey
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -197,9 +199,11 @@ void GameRenderer::renderEntity(RenderContext &rc, const Entity &e) {
   if (drawable.material.fancyname.compare("Metal tiles .5x") == 0) {
     Shader &metal = ShaderLoader::getShader("metal.frag");
     renderer.renderMesh(rc, metal, mtx, drawable.mesh, drawable.material);
+    metal.release();
   } else {
     Shader &diffuse = ShaderLoader::getShader("diffuse.frag");
     renderer.renderMesh(rc, diffuse, mtx, drawable.mesh, drawable.material);
+    diffuse.release();
   }
 }
 
