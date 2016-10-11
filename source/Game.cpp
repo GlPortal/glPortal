@@ -88,10 +88,9 @@ void Game::render() {
   gameRenderer->render((currentTime-lastRender)/1000., *camera.get());
   uiRenderer->render();
 
-  for (radix::Screen* screen : screens){
+  for (radix::Screen* screen : screens) {
     screenRenderer->renderScreen(*screen);
   }
-
   screens.clear();
 
   fps.countCycle();
