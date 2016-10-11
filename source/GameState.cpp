@@ -29,6 +29,8 @@ void GameState::handlePaused(radix::BaseGame &game) {
 }
 
 void GameState::handleSplash(radix::BaseGame &game) {
+  radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
+  player.frozen = true;
   radix::Screen &screen = radix::XMLScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/test.xml");
   game.addScreen(screen);
   if (game.getWindow().isKeyDown(SDL_SCANCODE_RETURN)) {
