@@ -32,11 +32,6 @@ GameRenderer::GameRenderer(glPortal::World& w, radix::Renderer& ren) :
 }
 
 void GameRenderer::render(double dtime, const Camera &cam) {
-  //
-  //
-  // initCamera();
-  //
-  // renderContext->popCamera();
   time += dtime;
   renderer.getViewport()->getSize(&viewportWidth, &viewportHeight);
 

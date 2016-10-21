@@ -1,11 +1,11 @@
-//
-// Created by geert on 9/28/16.
-//
-
 #ifndef GLPORTAL_GAMECONTROLLER_HPP
 #define GLPORTAL_GAMECONTROLLER_HPP
 
 #include <radix/core/state/GameState.hpp>
+
+namespace radix {
+  class ScreenRenderer;
+} /* namespace radix */
 
 namespace glPortal {
 
@@ -19,6 +19,7 @@ public:
 private:
   Game *game;
   World *world;
+
   std::unique_ptr<radix::GameState> gameState;
 };
 

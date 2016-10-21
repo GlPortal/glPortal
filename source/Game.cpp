@@ -9,6 +9,7 @@
 #include <radix/SoundManager.hpp>
 #include <radix/system/PlayerSystem.hpp>
 #include <radix/system/PhysicsSystem.hpp>
+#include <radix/screen/XMLScreenLoader.hpp>
 
 #include "GameState.hpp"
 
@@ -41,7 +42,8 @@ void Game::init() {
   }
   world.setConfig(config);
   world.create();
-  world.stateFunctionStack.push(&GameState::handleRunning); /* default gamestate */
+  world.stateFunctionStack.push(&GameState::handleRunning);
+  world.stateFunctionStack.push(&GameState::handleSplash);
   renderer = std::make_unique<Renderer>(world);
   camera = std::make_unique<Camera>();
   { World::SystemTransaction st = world.systemTransact();
@@ -55,6 +57,15 @@ void Game::init() {
   gameController = std::make_unique<GameController>(this);
   gameRenderer = std::make_unique<GameRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
   uiRenderer = std::make_unique<UiRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
+  screenRenderer = std::make_shared<radix::ScreenRenderer>(world, *renderer.get());
+  screenshotCallbackHolder =
+    world.event.addObserver(InputSource::KeyReleasedEvent::Type, [this](const radix::Event &event) {
+        const int key =  ((InputSource::KeyReleasedEvent &) event).key;
+        if (key == SDL_SCANCODE_G) {
+          this->window.printScreenToFile(radix::Environment::getDataDir() + "/screenshot.bmp");
+        }
+      });
+
 }
 
 void Game::processInput() {
@@ -76,6 +87,11 @@ void Game::render() {
 
   gameRenderer->render((currentTime-lastRender)/1000., *camera.get());
   uiRenderer->render();
+
+  for (radix::Screen* screen : *gameWorld.getScreens()) {
+    screenRenderer->renderScreen(*screen);
+  }
+  gameWorld.getScreens()->clear();
 
   fps.countCycle();
   window.swapBuffers();

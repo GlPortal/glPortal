@@ -1,9 +1,6 @@
-//
-// Created by geert on 9/28/16.
-//
-
 #include "GameController.hpp"
 #include "Game.hpp"
+#include <radix/env/Environment.hpp>
 
 namespace glPortal {
 
@@ -15,11 +12,11 @@ GameController::GameController(Game *game) {
 
 void GameController::processInput() {
   game->getWindow().processEvents();
+  gameState->process(*game);
+
   if (game->getWindow().isKeyDown(SDL_SCANCODE_Q)) {
     game->close();
   }
-
-  gameState->handleInput(*game);
 }
 
 } /* namespace glPortal */
