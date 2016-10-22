@@ -119,7 +119,7 @@ make run
 ```
 
 ### Windows
-Before we can start the game it is neccesery to copy some dlls into our executable directory.
+Before we can start the game it is necessary to copy some dlls into our executable directory.
 
 #### on 32-bit
 ```bash

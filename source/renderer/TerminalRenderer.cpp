@@ -14,6 +14,7 @@
 #include <radix/material/MaterialLoader.hpp>
 #include <radix/Viewport.hpp>
 #include <radix/World.hpp>
+#include <radix/screen/Screen.hpp>
 
 #include "../component/Terminal.hpp"
 
@@ -43,11 +44,14 @@ void TerminalRenderer::render(RenderContext &rc, World &world) {
               screenBackgroundColor.z,
               screenBackgroundColor.w);
   renderer.renderMesh(rc, sh, widget, mesh, nullptr);
-  renderer.setFontColor(term.textColor);
-  renderer.setFontSize(1);
-  renderer.renderText(rc,
-                      world.input.getCharBuffer(),
-                      Vector3f(0, vpHeight-30, -1));
+  Text terminalText;
+  terminalText.font     = "Pacaya";
+  terminalText.size     = 1.0f;
+  terminalText.content  = world.input.getCharBuffer();
+  terminalText.color    = term.textColor;
+  terminalText.position = Vector3f(0, vpHeight-30, -1);
+  renderer.renderText(rc, terminalText);
+  sh.release();
   rc.popCamera();
 }
 

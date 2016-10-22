@@ -16,7 +16,7 @@ void GameController::processInput() {
     game->close();
   }
 
-  gameState->process(*game);
+  gameState->handleInput(*game);
 }
 
 } /* namespace glPortal */
