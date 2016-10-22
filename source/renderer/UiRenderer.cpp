@@ -9,6 +9,7 @@
 #include <radix/model/MeshLoader.hpp>
 #include <radix/shader/ShaderLoader.hpp>
 #include <radix/material/MaterialLoader.hpp>
+#include <radix/screen/Screen.hpp>
 
 #include "../Game.hpp"
 #include "../Version.hpp"
@@ -38,21 +39,29 @@ void UiRenderer::render() {
   // Crosshair
   renderImage(Vector3f(viewportWidth / 2, viewportHeight / 2, -10), Vector3f(80, 80, 1), "Reticle.png");
 
-  // Title
-  renderer.setFont("Pacaya", 1.5f);
-  renderer.setFontColor(Vector4f(1, 1, 1, 1));
-  renderer.renderText(*renderContext.get(), "GlPortal", Vector3f(25, viewportHeight - 95, -20));
+  Text glPortalTitle;
+  glPortalTitle.font     = "Pacaya";
+  glPortalTitle.size     = 1.5f;
+  glPortalTitle.content  = "GlPortal";
+  glPortalTitle.color    = Vector4f(1, 1, 1, 1);
+  glPortalTitle.position = Vector3f(25, viewportHeight - 95, -20);
+  renderer.renderText(*renderContext.get(), glPortalTitle);
 
-  // FPS counter
-  renderer.setFontSize(0.5f);
-  renderer.renderText(*renderContext.get(),
-                      std::string("FPS: ") + std::to_string(Game::fps.getFps()),
-                      Vector3f(10, viewportHeight - 25, -20));
+  Text fpsCounter;
+  fpsCounter.font     = "Pacaya";
+  fpsCounter.size     = 0.5f;
+  fpsCounter.content  = std::string("FPS: ") + std::to_string(Game::fps.getFps());
+  fpsCounter.color    = Vector4f(1, 1, 1, 1);
+  fpsCounter.position = Vector3f(10, viewportHeight - 25, -20);
+  renderer.renderText(*renderContext.get(), fpsCounter);
 
-  // Version
-  renderer.renderText(*renderContext.get(),
-                      std::string("Early testing build: ")  + GAME_VERSION,
-                      Vector3f(10, viewportHeight - 45, -20));
+  Text version;
+  version.font     = "Pacaya";
+  version.size     = 0.5f;
+  version.content  = std::string("Early testing build: ")  + GAME_VERSION;
+  version.color    = Vector4f(1, 1, 1, 1);
+  version.position = Vector3f(10, viewportHeight - 45, -20);
+  renderer.renderText(*renderContext.get(), version);
 
   renderContext->popCamera();
   glDepthMask(GL_TRUE);
