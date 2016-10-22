@@ -7,7 +7,6 @@
 #include <radix/BaseGame.hpp>
 #include <radix/screen/Screen.hpp>
 #include <radix/renderer/ScreenRenderer.hpp>
-#include <radix/core/event/EventDispatcher.hpp>
 #include "World.hpp"
 #include "renderer/GameRenderer.hpp"
 #include "renderer/UiRenderer.hpp"
@@ -29,7 +28,6 @@ private:
   void loadMap();
   void init();
   radix::Config config;
-  radix::EventDispatcher::CallbackHolder screenshotCallbackHolder;
 };
 
 } /* namespace glPortal */

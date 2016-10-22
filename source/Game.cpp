@@ -38,19 +38,10 @@ void Game::init() {
   BaseGame::init();
   world.stateFunctionStack.push(&GameState::handleRunning);
   world.stateFunctionStack.push(&GameState::handleSplash);
-
   gameController = std::make_unique<GameController>(this);
   gameRenderer = std::make_unique<GameRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
   uiRenderer = std::make_unique<UiRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
   screenRenderer = std::make_unique<radix::ScreenRenderer>(world, *renderer.get());
-  screenshotCallbackHolder =
-    world.event.addObserver(InputSource::KeyReleasedEvent::Type, [this](const radix::Event &event) {
-        const int key =  ((InputSource::KeyReleasedEvent &) event).key;
-        if (key == SDL_SCANCODE_G) {
-          this->window.printScreenToFile(radix::Environment::getDataDir() + "/screenshot.bmp");
-        }
-      });
-
 }
 
 void Game::processInput() {
