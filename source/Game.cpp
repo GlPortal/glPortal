@@ -35,24 +35,9 @@ Game::Game() : config(){
 }
 
 void Game::init() {
-  if(config.cursorVisibility) {
-    window.unlockMouse();
-  } else {
-    window.lockMouse();
-  }
-  world.setConfig(config);
-  world.create();
+  BaseGame::init();
   world.stateFunctionStack.push(&GameState::handleRunning);
   world.stateFunctionStack.push(&GameState::handleSplash);
-  renderer = std::make_unique<Renderer>(world);
-  camera = std::make_unique<Camera>();
-  World::SystemTransaction systemTransaction = world.systemTransact();
-  systemTransaction.addSystem<PlayerSystem>();
-  systemTransaction.addSystem<PhysicsSystem>();
-
-  nextUpdate = SDL_GetTicks(), lastUpdate = 0, lastRender = 0;
-
-  renderer->setViewport(&window);
 
   gameController = std::make_unique<GameController>(this);
   gameRenderer = std::make_unique<GameRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
