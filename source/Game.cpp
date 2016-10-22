@@ -9,7 +9,7 @@
 #include <radix/SoundManager.hpp>
 #include <radix/system/PlayerSystem.hpp>
 #include <radix/system/PhysicsSystem.hpp>
-#include <radix/screen/XMLScreenLoader.hpp>
+#include <radix/screen/XmlScreenLoader.hpp>
 
 #include "GameState.hpp"
 
@@ -57,7 +57,7 @@ void Game::init() {
   gameController = std::make_unique<GameController>(this);
   gameRenderer = std::make_unique<GameRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
   uiRenderer = std::make_unique<UiRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
-  screenRenderer = std::make_shared<radix::ScreenRenderer>(world, *renderer.get());
+  screenRenderer = std::make_unique<radix::ScreenRenderer>(world, *renderer.get());
   screenshotCallbackHolder =
     world.event.addObserver(InputSource::KeyReleasedEvent::Type, [this](const radix::Event &event) {
         const int key =  ((InputSource::KeyReleasedEvent &) event).key;

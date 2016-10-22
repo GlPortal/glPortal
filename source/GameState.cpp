@@ -1,5 +1,5 @@
 #include <radix/screen/Screen.hpp>
-#include <radix/screen/XMLScreenLoader.hpp>
+#include <radix/screen/XmlScreenLoader.hpp>
 #include <radix/env/Environment.hpp>
 #include "GameState.hpp"
 #include <radix/component/Player.hpp>
@@ -19,7 +19,7 @@ void GameState::handleRunning(radix::BaseGame &game) {
 }
 
 void GameState::handlePaused(radix::BaseGame &game) {
-  radix::Screen &screen = radix::XMLScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/test.xml");
+  radix::Screen &screen = radix::XmlScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/test.xml");
   game.getGameWorld()->addScreen(screen);
   radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
   if (game.getWindow().isKeyDown(SDL_SCANCODE_ESCAPE)) {
@@ -31,7 +31,7 @@ void GameState::handlePaused(radix::BaseGame &game) {
 void GameState::handleSplash(radix::BaseGame &game) {
   radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
   player.frozen = true;
-  radix::Screen &screen = radix::XMLScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/test.xml");
+  radix::Screen &screen = radix::XmlScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/test.xml");
   game.getGameWorld()->addScreen(screen);
   if (game.getWindow().isKeyDown(SDL_SCANCODE_RETURN)) {
     game.getWorld()->stateFunctionStack.pop();
