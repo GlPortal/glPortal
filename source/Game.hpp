@@ -27,7 +27,6 @@ private:
   std::unique_ptr<UiRenderer> uiRenderer;
   void loadMap();
   void init();
-  radix::Config config;
 };
 
 } /* namespace glPortal */

@@ -17,10 +17,8 @@ using namespace radix;
 
 namespace glPortal {
 
-Game::Game() : config(){
+Game::Game() {
   BaseGame();
-  config = radix::Environment::getConfig();
-  radix::ArgumentsParser::populateConfig(config);
   window.setConfig(config);
   window.create("GlPortal");
 
