@@ -18,9 +18,9 @@ using namespace radix;
 namespace glPortal {
 
 Game::Game() {
-  BaseGame();
   windowTitle = "GlPortal";
   defaultMap = "/maps/n1.xml";
+  BaseGame();
   try {
     SoundManager::init();
     init();
