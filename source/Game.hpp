@@ -25,7 +25,6 @@ private:
   std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
-  void loadMap();
   void init();
 };
 

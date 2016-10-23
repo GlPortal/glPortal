@@ -20,6 +20,7 @@ namespace glPortal {
 Game::Game() {
   BaseGame();
   windowTitle = "GlPortal";
+  defaultMap = "/maps/n1.xml";
   try {
     SoundManager::init();
     init();
@@ -42,16 +43,6 @@ void Game::init() {
 
 void Game::processInput() {
   gameController->processInput();
-}
-
-void Game::loadMap() {
-  XmlMapLoader mapLoader(world);
-  std::string mapPath = config.mapPath;
-  if (mapPath.length() > 0) {
-    mapLoader.load(mapPath);
-  } else {
-    mapLoader.load(Environment::getDataDir() + "/maps/n1.xml");
-  }
 }
 
 void Game::render() {
