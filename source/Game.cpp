@@ -19,9 +19,7 @@ namespace glPortal {
 
 Game::Game() {
   BaseGame();
-  window.setConfig(config);
-  window.create("GlPortal");
-
+  windowTitle = "GlPortal";
   try {
     SoundManager::init();
     init();
