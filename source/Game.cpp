@@ -2,13 +2,8 @@
 
 #include <iostream>
 
-#include <radix/component/Player.hpp>
-#include <radix/env/Environment.hpp>
-#include <radix/env/ArgumentsParser.hpp>
 #include <radix/map/XmlMapLoader.hpp>
 #include <radix/SoundManager.hpp>
-#include <radix/system/PlayerSystem.hpp>
-#include <radix/system/PhysicsSystem.hpp>
 #include <radix/screen/XmlScreenLoader.hpp>
 
 #include "GameState.hpp"
