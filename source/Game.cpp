@@ -33,7 +33,6 @@ void Game::init() {
   gameController = std::make_unique<GameController>(this);
   gameRenderer = std::make_unique<GameRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
   uiRenderer = std::make_unique<UiRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
-  screenRenderer = std::make_unique<radix::ScreenRenderer>(world, *renderer.get());
 }
 
 void Game::processInput() {
@@ -43,11 +42,6 @@ void Game::processInput() {
 void Game::renderHook() {
   gameRenderer->render((currentTime-lastRender)/1000., *camera.get());
   uiRenderer->render();
-
-  for (radix::Screen* screen : *gameWorld.getScreens()) {
-    screenRenderer->renderScreen(*screen);
-  }
-  gameWorld.getScreens()->clear();
 }
 
 } /* namespace glPortal */
