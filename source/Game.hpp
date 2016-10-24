@@ -17,7 +17,6 @@ namespace glPortal {
 class Game : public radix::BaseGame {
 public:
   Game();
-  void render();
   void processInput();
 private:
   std::shared_ptr<radix::Screen> screen;
@@ -25,6 +24,7 @@ private:
   std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
+  void renderHook();
   void init();
 };
 

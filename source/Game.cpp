@@ -40,9 +40,7 @@ void Game::processInput() {
   gameController->processInput();
 }
 
-void Game::render() {
-  prepareCamera();
-
+void Game::renderHook() {
   gameRenderer->render((currentTime-lastRender)/1000., *camera.get());
   uiRenderer->render();
 
@@ -50,10 +48,6 @@ void Game::render() {
     screenRenderer->renderScreen(*screen);
   }
   gameWorld.getScreens()->clear();
-
-  fps.countCycle();
-  window.swapBuffers();
-  lastRender = currentTime;
 }
 
 } /* namespace glPortal */
