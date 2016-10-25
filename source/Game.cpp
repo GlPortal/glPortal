@@ -15,7 +15,6 @@ namespace glPortal {
 Game::Game() {
   windowTitle = "GlPortal";
   defaultMap = "/maps/n1.xml";
-  BaseGame();
   try {
     SoundManager::init();
     init();
