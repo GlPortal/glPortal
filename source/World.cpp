@@ -1,7 +1,5 @@
 #include "World.hpp"
 
-#include "Screen.hpp"
-
 using namespace radix;
 
 namespace glPortal {

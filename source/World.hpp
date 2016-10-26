@@ -10,8 +10,6 @@ class Screen;
 
 class World : public radix::World {
 public:
-  std::unique_ptr<Screen> activeScreen;
-
   World(radix::InputSource &input);
   ~World();
 };
