@@ -16,6 +16,7 @@ int main(const int argc, char *argv[]) {
   radix::ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   try {
     Game game;
+    game.setup();
     while (game.isRunning()) {
       game.processInput();
       game.update();

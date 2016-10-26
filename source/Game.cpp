@@ -15,6 +15,9 @@ namespace glPortal {
 Game::Game() {
   windowTitle = "GlPortal";
   defaultMap = "/maps/n1.xml";
+}
+
+void Game::setup() {
   try {
     init();
   } catch (std::runtime_error &e) {

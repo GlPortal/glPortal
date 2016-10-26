@@ -16,6 +16,7 @@ class Game : public radix::BaseGame {
 public:
   Game();
   void processInput();
+  void setup();
 private:
   std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;
