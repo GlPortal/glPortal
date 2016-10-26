@@ -17,14 +17,6 @@ Game::Game() {
   defaultMap = "/maps/n1.xml";
 }
 
-void Game::setup() {
-  try {
-    init();
-  } catch (std::runtime_error &e) {
-    Util::Log(Error) << "Runtime Error: " << e.what();
-  }
-}
-
 void Game::initHook() {
   world.stateFunctionStack.push(&GameState::handleRunning);
   world.stateFunctionStack.push(&GameState::handleSplash);
