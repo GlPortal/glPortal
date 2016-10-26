@@ -1,5 +1,6 @@
 #include "GameController.hpp"
 #include "Game.hpp"
+
 #include <radix/env/Environment.hpp>
 
 namespace glPortal {

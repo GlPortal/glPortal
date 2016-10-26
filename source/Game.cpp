@@ -1,12 +1,7 @@
 #include "Game.hpp"
+#include "GameState.hpp"
 
 #include <iostream>
-
-#include <radix/map/XmlMapLoader.hpp>
-#include <radix/SoundManager.hpp>
-#include <radix/screen/XmlScreenLoader.hpp>
-
-#include "GameState.hpp"
 
 using namespace radix;
 

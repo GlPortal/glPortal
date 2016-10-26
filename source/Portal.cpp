@@ -1,8 +1,6 @@
 #include "Portal.hpp"
 
 #include <algorithm>
-#include <cmath>
-
 #include <bullet/BulletDynamics/Dynamics/btRigidBody.h>
 #include <bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 

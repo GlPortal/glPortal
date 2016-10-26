@@ -1,20 +1,12 @@
 #include "GameRenderer.hpp"
-
 #include "World.hpp"
 
 #include <epoxy/gl.h>
 
 #include <radix/renderer/Renderer.hpp>
-#include <radix/renderer/RenderContext.hpp>
-#include <radix/World.hpp>
-
 #include <radix/Viewport.hpp>
-#include <radix/Camera.hpp>
-#include <radix/Entity.hpp>
-
 #include <radix/component/ViewFrame.hpp>
 #include <radix/component/MeshDrawable.hpp>
-
 #include <radix/shader/ShaderLoader.hpp>
 #include <radix/model/MeshLoader.hpp>
 #include <radix/material/MaterialLoader.hpp>

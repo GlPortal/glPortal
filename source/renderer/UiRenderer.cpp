@@ -1,7 +1,5 @@
 #include "UiRenderer.hpp"
 
-#include <string>
-
 #include <epoxy/gl.h>
 
 #include <radix/core/math/Vector4f.hpp>
@@ -9,7 +7,6 @@
 #include <radix/model/MeshLoader.hpp>
 #include <radix/shader/ShaderLoader.hpp>
 #include <radix/material/MaterialLoader.hpp>
-#include <radix/screen/Screen.hpp>
 
 #include "../Game.hpp"
 #include "../Version.hpp"

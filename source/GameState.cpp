@@ -1,7 +1,7 @@
-#include <radix/screen/Screen.hpp>
+#include "GameState.hpp"
+
 #include <radix/screen/XmlScreenLoader.hpp>
 #include <radix/env/Environment.hpp>
-#include "GameState.hpp"
 #include <radix/component/Player.hpp>
 
 namespace glPortal {

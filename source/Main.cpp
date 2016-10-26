@@ -1,13 +1,8 @@
 #include "Game.hpp"
 
-#include <stdexcept>
-#include <string>
-
 #include <radix/env/Environment.hpp>
 #include <radix/env/ArgumentsParser.hpp>
-#include <radix/env/Util.hpp>
 #include <radix/core/diag/Throwables.hpp>
-#include <radix/env/Config.hpp>
 
 using namespace glPortal;
 

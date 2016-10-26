@@ -1,20 +1,11 @@
 #include "TerminalRenderer.hpp"
 
-#include <cstdio>
-#include <vector>
-#include <string>
-
 #include <epoxy/gl.h>
 
 #include <radix/renderer/Renderer.hpp>
 #include <radix/model/MeshLoader.hpp>
-#include <radix/texture/TextureLoader.hpp>
-#include <radix/text/FontLoader.hpp>
 #include <radix/shader/ShaderLoader.hpp>
-#include <radix/material/MaterialLoader.hpp>
 #include <radix/Viewport.hpp>
-#include <radix/World.hpp>
-#include <radix/screen/Screen.hpp>
 
 #include "../component/Terminal.hpp"
 

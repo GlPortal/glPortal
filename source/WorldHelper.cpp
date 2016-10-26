@@ -1,8 +1,5 @@
 #include "WorldHelper.hpp"
-
-#include <climits>
-
-#include <SDL2/SDL_timer.h>
+#include "Portal.hpp"
 
 #include <bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
@@ -10,8 +7,6 @@
 #include <radix/component/MeshDrawable.hpp>
 #include <radix/system/PhysicsSystem.hpp>
 #include <radix/component/LightSource.hpp>
-
-#include "Portal.hpp"
 
 using namespace radix;
 

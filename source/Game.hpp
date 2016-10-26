@@ -1,14 +1,15 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "World.hpp"
+#include "GameController.hpp"
+
 #include <radix/Window.hpp>
 #include <radix/renderer/Renderer.hpp>
 #include <radix/env/Config.hpp>
 #include <radix/BaseGame.hpp>
-#include "World.hpp"
 #include "renderer/GameRenderer.hpp"
 #include "renderer/UiRenderer.hpp"
-#include "GameController.hpp"
 
 namespace glPortal {
 
