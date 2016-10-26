@@ -16,17 +16,13 @@ Game::Game() {
   windowTitle = "GlPortal";
   defaultMap = "/maps/n1.xml";
   try {
-    SoundManager::init();
     init();
-    loadMap();
-    renderer->init();
   } catch (std::runtime_error &e) {
     Util::Log(Error) << "Runtime Error: " << e.what();
   }
 }
 
-void Game::init() {
-  BaseGame::init();
+void Game::initHook() {
   world.stateFunctionStack.push(&GameState::handleRunning);
   world.stateFunctionStack.push(&GameState::handleSplash);
   gameController = std::make_unique<GameController>(this);

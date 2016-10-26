@@ -21,7 +21,7 @@ private:
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
   void renderHook();
-  void init();
+  void initHook();
 };
 
 } /* namespace glPortal */
