@@ -74,7 +74,7 @@ void GameRenderer::renderScene(RenderContext &rc) {
   if (rc.viewFramesStack.size() > 0) {
     const RenderContext::ViewFrameInfo &vfi = rc.getViewFrame();
     // Don't render further if computed clip rect is zero-sized
-    if (!renderer.clipViewFrame(rc, vfi.first, vfi.second, scissor)) {
+    if (not renderer.clipViewFrame(rc, vfi.first, vfi.second, scissor)) {
       return;
     }
   }
@@ -115,10 +115,10 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
       rc.popViewFrame();
     }
   }
-  if (!save_stencil_test) {
+  if (not save_stencil_test) {
     glDisable(GL_STENCIL_TEST);
   }
-  if (!save_scissor_test) {
+  if (not save_scissor_test) {
     glDisable(GL_SCISSOR_TEST);
   }
 
