@@ -15,12 +15,14 @@ using namespace radix;
 
 namespace glPortal {
 
-GameRenderer::GameRenderer(glPortal::World& w, radix::Renderer& ren) :
-  SubRenderer(w, ren) {
+GameRenderer::GameRenderer(glPortal::World& w, radix::Renderer& ren, radix::Camera* cam, double* ptime) :
+  SubRenderer(w, ren),
+  camera(cam),
+  dtime(ptime){
 }
 
-void GameRenderer::render(double dtime, const Camera &cam) {
-  time += dtime;
+void GameRenderer::render() {
+  time += *dtime;
   renderer.getViewport()->getSize(&viewportWidth, &viewportHeight);
 
   glDepthMask(GL_TRUE);
@@ -34,18 +36,17 @@ void GameRenderer::render(double dtime, const Camera &cam) {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  Camera camera = cam;
-  camera.setPerspective();
-  camera.setAspect((float) viewportWidth / viewportHeight);
+  camera->setPerspective();
+  camera->setAspect((float) viewportWidth / viewportHeight);
 
   renderContext->projStack.resize(1);
-  camera.getProjMatrix(renderContext->projStack.back());
+  camera->getProjMatrix(renderContext->projStack.back());
 
   renderContext->viewStack.resize(1);
-  camera.getViewMatrix(renderContext->viewStack.back());
+  camera->getViewMatrix(renderContext->viewStack.back());
 
   renderContext->invViewStack.resize(1);
-  camera.getInvViewMatrix(renderContext->invViewStack.back());
+  camera->getInvViewMatrix(renderContext->invViewStack.back());
 
   renderContext->viewFramesStack.clear();
 

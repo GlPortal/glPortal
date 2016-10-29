@@ -20,9 +20,9 @@ class World;
 
 class GameRenderer : public radix::SubRenderer{
 public:
-  GameRenderer(World& w, radix::Renderer& ren);
+  GameRenderer(World& w, radix::Renderer& ren, radix::Camera* cam, double* ptime);
 
-  void render(double dtime, const radix::Camera &cam);
+  void render();
 
   /**
    * Renders the scene with provided camera parameters
@@ -58,6 +58,8 @@ public:
                 const radix::Entity &portal, const radix::Entity &otherPortal);
 
 private:
+  radix::Camera* camera;
+  double* dtime;
   double time;
 };
 
