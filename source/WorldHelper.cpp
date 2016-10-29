@@ -18,7 +18,7 @@ void WorldHelper::shootPortal(int button, World &world) {
   btVector3 btTo = btFrom + cameraDir*10000;
   btCollisionWorld::ClosestRayResultCallback res(btFrom, btTo);
 
-  PhysicsSystem &phys = world.getSystem<PhysicsSystem>();
+  PhysicsSystem &phys = world.systems.get<PhysicsSystem>();
   phys.getPhysicsWorld().rayTest(btFrom, btTo, res);
 
   if (res.hasHit()) {
