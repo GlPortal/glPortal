@@ -16,11 +16,7 @@ using namespace radix;
 namespace glPortal {
 
 GameRenderer::GameRenderer(glPortal::World& w, radix::Renderer& ren) :
-  world(w),
-  renderer(ren),
-  camera(nullptr),
-  viewportWidth(0), viewportHeight(0) {
-  rc = std::make_unique<RenderContext>(ren);
+  SubRenderer(w, ren) {
 }
 
 void GameRenderer::render(double dtime, const Camera &cam) {
@@ -42,20 +38,20 @@ void GameRenderer::render(double dtime, const Camera &cam) {
   camera.setPerspective();
   camera.setAspect((float) viewportWidth / viewportHeight);
 
-  rc->projStack.resize(1);
-  camera.getProjMatrix(rc->projStack.back());
+  renderContext->projStack.resize(1);
+  camera.getProjMatrix(renderContext->projStack.back());
 
-  rc->viewStack.resize(1);
-  camera.getViewMatrix(rc->viewStack.back());
+  renderContext->viewStack.resize(1);
+  camera.getViewMatrix(renderContext->viewStack.back());
 
-  rc->invViewStack.resize(1);
-  camera.getInvViewMatrix(rc->invViewStack.back());
+  renderContext->invViewStack.resize(1);
+  camera.getInvViewMatrix(renderContext->invViewStack.back());
 
-  rc->viewFramesStack.clear();
+  renderContext->viewFramesStack.clear();
 
-  rc->projDirty = rc->viewDirty = true;
+  renderContext->projDirty = renderContext->viewDirty = true;
 
-  renderScene(*rc);
+  renderScene(*renderContext);
 }
 
 void GameRenderer::renderScene(RenderContext &rc) {

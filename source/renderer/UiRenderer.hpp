@@ -5,6 +5,7 @@
 #include <string>
 
 #include <radix/core/math/Vector3f.hpp>
+#include <radix/renderer/SubRenderer.hpp>
 
 namespace radix {
   struct RenderContext;
@@ -16,21 +17,13 @@ namespace glPortal {
 
 class World;
 
-class UiRenderer {
+class UiRenderer : public radix::SubRenderer{
 public:
   UiRenderer(World& w, radix::Renderer& ren);
 
   void render();
-  void initCamera();
 
   void renderImage(radix::Vector3f position, radix::Vector3f scale, std::string path);
-
-private:
-  World &world;
-  radix::Renderer &renderer;
-  std::unique_ptr<radix::Camera> camera;
-  std::unique_ptr<radix::RenderContext> renderContext;
-  int viewportWidth, viewportHeight;
 };
 
 } /* namespace glPortal */

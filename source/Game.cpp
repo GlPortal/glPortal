@@ -18,6 +18,8 @@ void Game::initHook() {
   gameController = std::make_unique<GameController>(this);
   gameRenderer = std::make_unique<GameRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
   uiRenderer = std::make_unique<UiRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
+
+  renderer->addRenderer(*uiRenderer);
 }
 
 void Game::processInput() {
@@ -26,7 +28,7 @@ void Game::processInput() {
 
 void Game::renderHook() {
   gameRenderer->render((currentTime-lastRender)/1000., *camera.get());
-  uiRenderer->render();
+  //uiRenderer->render();
 }
 
 } /* namespace glPortal */
