@@ -28,6 +28,7 @@ void Game::processInput() {
 }
 
 void Game::update() {
+  BaseGame::update();
   dtime = (currentTime-lastRender)/1000.;
 }
 
