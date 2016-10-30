@@ -18,6 +18,8 @@ public:
   Game();
   void processInput();
   void update();
+
+  GameController& getGameController() { return *gameController; }
 private:
   std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;

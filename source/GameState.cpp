@@ -1,4 +1,5 @@
 #include "GameState.hpp"
+#include "Game.hpp"
 
 #include <radix/screen/XmlScreenLoader.hpp>
 #include <radix/env/Environment.hpp>
@@ -12,20 +13,11 @@ void GameState::handleRunning(radix::BaseGame &game) {
   if (game.getWindow().isKeyDown(SDL_SCANCODE_Q)) {
     game.close();
   }
-  if (game.getWindow().isKeyDown(SDL_SCANCODE_ESCAPE)) {
-    player.frozen = true;
-    game.getWorld()->stateFunctionStack.push(&GameState::handlePaused);
-  }
 }
 
 void GameState::handlePaused(radix::BaseGame &game) {
   radix::Screen &screen = radix::XmlScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/test.xml");
   game.getGameWorld()->addScreen(screen);
-  radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
-  if (game.getWindow().isKeyDown(SDL_SCANCODE_ESCAPE)) {
-    player.frozen = false;
-    game.getWorld()->stateFunctionStack.pop();
-  }
 }
 
 void GameState::handleSplash(radix::BaseGame &game) {
