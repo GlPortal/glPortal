@@ -15,12 +15,9 @@ using namespace radix;
 
 namespace glPortal {
 
-UiRenderer::UiRenderer(glPortal::World& w, radix::Renderer& ren) :
-  world(w),
-  renderer(ren),
-  camera(nullptr),
-  viewportWidth(0), viewportHeight(0) {
-  renderContext = std::make_unique<RenderContext>(ren);
+UiRenderer::UiRenderer(World &w, radix::Renderer &ren) :
+    SubRenderer(w, ren) {
+
 }
 
 void UiRenderer::render() {
@@ -62,13 +59,6 @@ void UiRenderer::render() {
 
   renderContext->popCamera();
   glDepthMask(GL_TRUE);
-}
-
-void UiRenderer::initCamera() {
-  camera = std::make_unique<Camera>();
-  camera->setOrthographic();
-  camera->setBounds(0, viewportWidth, 0, viewportHeight);
-  renderContext->pushCamera(*camera.get());
 }
 
 void UiRenderer::renderImage(radix::Vector3f position, radix::Vector3f scale, std::string path) {
