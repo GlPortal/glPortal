@@ -18,16 +18,11 @@ public:
   GameController(Game *game);
   void processInput();
 
-  bool paused = false;
 private:
   Game *game;
   World *world;
 
   std::unique_ptr<radix::GameState> gameState;
-  radix::EventDispatcher::CallbackHolder splashOnCallbackHolder;
-  radix::EventDispatcher::CallbackHolder splashOffCallbackHolder;
-
-  bool passed = false;
 };
 
 } /* namespace glPortal */
