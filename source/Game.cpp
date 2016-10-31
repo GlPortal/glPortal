@@ -16,8 +16,12 @@ void Game::initHook() {
   world.stateFunctionStack.push(&GameState::handleRunning);
   world.stateFunctionStack.push(&GameState::handleSplash);
   gameController = std::make_unique<GameController>(this);
-  gameRenderer = std::make_unique<GameRenderer>(static_cast<glPortal::World&>(world), *renderer.get(), camera.get(), &dtime);
-  uiRenderer = std::make_unique<UiRenderer>(static_cast<glPortal::World&>(world), *renderer.get());
+  World& worldReference = static_cast<glPortal::World&>(world);
+  radix::Renderer& rendererReference = *renderer.get();
+  gameRenderer =
+    std::make_unique<GameRenderer>(worldReference, rendererReference, camera.get(), &dtime);
+  uiRenderer =
+    std::make_unique<UiRenderer>(worldReference, rendererReference);
 
   renderer->addRenderer(*gameRenderer);
   renderer->addRenderer(*uiRenderer);
