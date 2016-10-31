@@ -12,9 +12,6 @@ radix::EventDispatcher::CallbackHolder GameState::splashCallbackHolder;
 void GameState::handleRunning(radix::BaseGame &game) {
   radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
   player.frozen = false;
-  if (game.getWindow().isKeyDown(SDL_SCANCODE_Q)) {
-    game.close();
-  }
 
   game.getWorld()->event.removeObserver(splashCallbackHolder);
 
@@ -52,9 +49,6 @@ void GameState::handleSplash(radix::BaseGame &game) {
   game.getGameWorld()->addScreen(screen);
   if (game.getWindow().isKeyDown(SDL_SCANCODE_RETURN)) {
     game.getWorld()->stateFunctionStack.pop();
-  }
-  if (game.getWindow().isKeyDown(SDL_SCANCODE_Q)) {
-    game.close();
   }
 }
 
