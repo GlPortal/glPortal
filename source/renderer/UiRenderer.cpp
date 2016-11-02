@@ -1,14 +1,12 @@
 #include <glPortal/renderer/UiRenderer.hpp>
+#include <glPortal/Game.hpp>
 
 #include <epoxy/gl.h>
 
-#include <radix/core/math/Vector4f.hpp>
-#include <radix/renderer/Renderer.hpp>
 #include <radix/model/MeshLoader.hpp>
 #include <radix/shader/ShaderLoader.hpp>
 #include <radix/material/MaterialLoader.hpp>
 
-#include "glPortal/Game.hpp"
 #include "../Version.hpp"
 
 using namespace radix;
