@@ -1,5 +1,5 @@
-#include "PortalSystem.hpp"
-#include "Portal.hpp"
+#include <glPortal/system/PortalSystem.hpp>
+#include <glPortal/Portal.hpp>
 
 #include <radix/component/Player.hpp>
 #include <radix/physics/PhysicsHelper.hpp>

@@ -1,5 +1,5 @@
-#include "GameRenderer.hpp"
-#include "World.hpp"
+#include <glPortal/renderer/GameRenderer.hpp>
+#include <glPortal/World.hpp>
 
 #include <epoxy/gl.h>
 

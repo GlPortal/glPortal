@@ -1,5 +1,5 @@
-#include "GameState.hpp"
-#include "Game.hpp"
+#include <glPortal/GameState.hpp>
+#include <glPortal/Game.hpp>
 
 #include <radix/screen/XmlScreenLoader.hpp>
 #include <radix/env/Environment.hpp>

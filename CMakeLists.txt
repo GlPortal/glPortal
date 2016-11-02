@@ -23,6 +23,8 @@ list(APPEND PORTAL_LIBRARIES ${RADIX_LIBRARIES})
 
 set(PORTAL_TEST_LIBRARIES ${PORTAL_LIBRARIES})
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
   add_definitions("-Wall")
 endif ()

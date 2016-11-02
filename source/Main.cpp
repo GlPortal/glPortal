@@ -1,4 +1,4 @@
-#include "Game.hpp"
+#include <glPortal/Game.hpp>
 
 #include <radix/env/Environment.hpp>
 #include <radix/env/ArgumentsParser.hpp>

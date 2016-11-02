@@ -1,5 +1,5 @@
-#include "WorldHelper.hpp"
-#include "Portal.hpp"
+#include <glPortal/WorldHelper.hpp>
+#include <glPortal/Portal.hpp>
 
 #include <bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 

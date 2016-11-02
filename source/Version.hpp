@@ -1,0 +1,1 @@
+#define GAME_VERSION ""

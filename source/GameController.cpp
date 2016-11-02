@@ -1,5 +1,5 @@
-#include "GameController.hpp"
-#include "Game.hpp"
+#include <glPortal/GameController.hpp>
+#include <glPortal/Game.hpp>
 
 #include <radix/env/Environment.hpp>
 #include <radix/component/Player.hpp>

@@ -1,4 +1,4 @@
-#include "Portal.hpp"
+#include <glPortal/Portal.hpp>
 
 #include <algorithm>
 #include <bullet/BulletDynamics/Dynamics/btRigidBody.h>

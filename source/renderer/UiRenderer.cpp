@@ -1,4 +1,4 @@
-#include "UiRenderer.hpp"
+#include <glPortal/renderer/UiRenderer.hpp>
 
 #include <epoxy/gl.h>
 
@@ -8,7 +8,7 @@
 #include <radix/shader/ShaderLoader.hpp>
 #include <radix/material/MaterialLoader.hpp>
 
-#include "../Game.hpp"
+#include "glPortal/Game.hpp"
 #include "../Version.hpp"
 
 using namespace radix;

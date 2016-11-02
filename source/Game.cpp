@@ -1,5 +1,5 @@
-#include "Game.hpp"
-#include "GameState.hpp"
+#include <glPortal/Game.hpp>
+#include <glPortal/GameState.hpp>
 
 #include <iostream>
 

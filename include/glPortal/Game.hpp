@@ -8,8 +8,8 @@
 #include <radix/renderer/Renderer.hpp>
 #include <radix/env/Config.hpp>
 #include <radix/BaseGame.hpp>
-#include "renderer/GameRenderer.hpp"
-#include "renderer/UiRenderer.hpp"
+#include "glPortal/renderer/GameRenderer.hpp"
+#include "glPortal/renderer/UiRenderer.hpp"
 
 namespace glPortal {
 

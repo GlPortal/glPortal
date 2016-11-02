@@ -1,4 +1,4 @@
-#include "TerminalRenderer.hpp"
+#include <glPortal/renderer/TerminalRenderer.hpp>
 
 #include <epoxy/gl.h>
 
@@ -7,7 +7,7 @@
 #include <radix/shader/ShaderLoader.hpp>
 #include <radix/Viewport.hpp>
 
-#include "../component/Terminal.hpp"
+#include "glPortal/component/Terminal.hpp"
 
 using namespace radix;
 
