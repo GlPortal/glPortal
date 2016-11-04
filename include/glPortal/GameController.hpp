@@ -19,7 +19,7 @@ public:
   void processInput();
 
 private:
-  void initObservers();
+  void initObservers(Game *game);
 
   Game *game;
   World *world;
