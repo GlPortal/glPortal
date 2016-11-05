@@ -10,13 +10,13 @@ GameController::GameController(Game *game) {
   this->game = game;
   this->world = static_cast<World*>(game->getWorld());
   this->gameState = std::make_unique<radix::GameState>();
-  initObservers(game);
+  initObservers();
 }
 
-void GameController::initObservers(Game *game) {
+void GameController::initObservers() {
   this->closeWindowHolder = game->getWorld()->event.addObserver(
-      radix::InputSource::WindowCloseEvent::Type, [game](const radix::Event& event) {
-        game->close();
+      radix::InputSource::WindowCloseEvent::Type, [this](const radix::Event& event) {
+        this->game->close();
     });
 }
 
