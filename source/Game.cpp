@@ -2,6 +2,7 @@
 #include <glPortal/GameState.hpp>
 
 #include <iostream>
+#include <radix/component/Trigger.hpp>
 
 using namespace radix;
 
@@ -25,6 +26,15 @@ void Game::initHook() {
 
   renderer->addRenderer(*gameRenderer);
   renderer->addRenderer(*uiRenderer);
+
+  Entity& entity = world.entities.create();
+  Transform& transform = entity.addComponent<Transform>();
+  transform.setPosition(world.getPlayer().getComponent<Transform>().getPosition());
+  transform.setOrientation(world.getPlayer().getComponent<Transform>().getOrientation());
+  transform.setScale(world.getPlayer().getComponent<Transform>().getScale());
+  entity.addComponent<Trigger>([] (BaseGame* game) {
+    Util::Log() << "Wooh";
+  });
 }
 
 void Game::processInput() {
