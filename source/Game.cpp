@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <radix/component/Trigger.hpp>
+#include <radix/component/Player.hpp>
 
 using namespace radix;
 
@@ -33,8 +34,11 @@ void Game::initHook() {
   transform.setOrientation(world.getPlayer().getComponent<Transform>().getOrientation());
   transform.setScale(world.getPlayer().getComponent<Transform>().getScale());
   entity.addComponent<Trigger>([] (BaseGame* game) {
-    Util::Log() << "Wooh";
+    //Util::Log() << "Wooh";
   });
+
+  Player &player = world.getPlayer().getComponent<Player>();
+  player.addTask<PlayerTestTask>();
 }
 
 void Game::processInput() {
