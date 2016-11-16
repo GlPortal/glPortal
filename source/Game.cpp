@@ -33,9 +33,9 @@ void Game::initHook() {
   transform.setPosition(world.getPlayer().getComponent<Transform>().getPosition());
   transform.setOrientation(world.getPlayer().getComponent<Transform>().getOrientation());
   transform.setScale(world.getPlayer().getComponent<Transform>().getScale());
-  entity.addComponent<Trigger>([] (BaseGame* game) {
-    //Util::Log() << "Wooh";
-  });
+  entity.addComponent<Trigger>([] (BaseGame* game) {}, [] (BaseGame* game) {},
+                               [] (BaseGame* game) {}, [] (BaseGame* game) {
+      /* Util::Log() << "wooh"; */ });
 
   Player &player = world.getPlayer().getComponent<Player>();
   player.addTask<PlayerTestTask>();
