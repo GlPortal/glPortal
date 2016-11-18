@@ -34,8 +34,10 @@ void Game::initHook() {
   transform.setOrientation(world.getPlayer().getComponent<Transform>().getOrientation());
   transform.setScale(world.getPlayer().getComponent<Transform>().getScale());
   entity.addComponent<Trigger>([] (BaseGame* game) {}, [] (BaseGame* game) {},
-                               [] (BaseGame* game) {Util::Log() << "wooh I moved!";}, [] (BaseGame* game) {
-                               });
+                               [] (BaseGame* game) {
+                                 Util::Log() << "wooh I moved!";
+                               }, [] (BaseGame* game) {}
+                               );
 }
 
 void Game::processInput() {
