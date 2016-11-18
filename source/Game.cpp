@@ -35,7 +35,7 @@ void Game::initHook() {
   transform.setScale(world.getPlayer().getComponent<Transform>().getScale());
   entity.addComponent<Trigger>([] (BaseGame* game) {}, [] (BaseGame* game) {},
                                [] (BaseGame* game) {Util::Log() << "wooh I moved!";}, [] (BaseGame* game) {
-       /* Util::Log() << "wooh"; */ });
+                               });
 }
 
 void Game::processInput() {
