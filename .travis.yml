@@ -18,7 +18,7 @@ matrix:
         submodules: false
       before_install:
         - wget "https://github.com/macports/macports-base/releases/download/v2.3.5/MacPorts-2.3.5-10.11-ElCapitan.pkg"
-        - sudo installer -pkg MacPorts-2.3.5-10.11-ElCapitan.pkg -target /
+        - travis_wait sudo installer -pkg MacPorts-2.3.5-10.11-ElCapitan.pkg -target /
         - export PATH=/opt/local/bin:/opt/local/sbin:$PATH
         - brew update
       install:
@@ -46,7 +46,7 @@ matrix:
         submodules: false
       before_install:
         - wget "https://github.com/macports/macports-base/releases/download/v2.3.5/MacPorts-2.3.5-10.11-ElCapitan.pkg"
-        - sudo installer -pkg MacPorts-2.3.5-10.11-ElCapitan.pkg -target /
+        - travis_wait sudo installer -pkg MacPorts-2.3.5-10.11-ElCapitan.pkg -target /
         - export PATH=/opt/local/bin:/opt/local/sbin:$PATH
         - brew update
       install:
