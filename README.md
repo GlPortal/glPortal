@@ -1,10 +1,9 @@
 <a href="https://jenkins.glportal.de/job/GlPortal/"><img src="https://jenkins.glportal.de/buildStatus/icon?job=GlPortal"></a>
 [![Join the chat at https://gitter.im/GlPortal/glPortal](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/GlPortal/glPortal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Join Chat](https://img.shields.io/badge/irc-join_chat_→-brightgreen.svg)](http://webchat.freenode.net/?channels=%23glportal&uio=d4)
-[![Report a bug](https://img.shields.io/badge/bugs-report_now_→-brightgreen.svg)](https://bugs.glportal.de)
+[![Join Chat](https://img.shields.io/badge/irc-join_chat-brightgreen.svg)](http://webchat.freenode.net/?channels=%23glportal&uio=d4)
+[![Report a bug](https://img.shields.io/badge/bugs-report_now-brightgreen.svg)](https://bugs.glportal.de)
 
-[![Donate Bitcoin](https://img.shields.io/badge/donate-bitcoin-brightgreen.svg)](https://www.bitcoin.com/)
- 15Nt42PptnaBFg5Zwwa5B7GNdWxBsy297m
+Donate Bitcoin to 15Nt42PptnaBFg5Zwwa5B7GNdWxBsy297m
 # GlPortal
     The game is under active development. Master is the stable branch and thus receives only 
     irregular updates. If you want to see or work on the bleeding edge check out our current 
