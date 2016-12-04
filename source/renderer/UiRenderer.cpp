@@ -1,28 +1,21 @@
-#include "UiRenderer.hpp"
-
-#include <string>
+#include <glPortal/renderer/UiRenderer.hpp>
+#include <glPortal/Game.hpp>
 
 #include <epoxy/gl.h>
 
-#include <radix/core/math/Vector4f.hpp>
-#include <radix/renderer/Renderer.hpp>
 #include <radix/model/MeshLoader.hpp>
 #include <radix/shader/ShaderLoader.hpp>
 #include <radix/material/MaterialLoader.hpp>
 
-#include "../Game.hpp"
 #include "../Version.hpp"
 
 using namespace radix;
 
 namespace glPortal {
 
-UiRenderer::UiRenderer(glPortal::World& w, radix::Renderer& ren) :
-  world(w),
-  renderer(ren),
-  camera(nullptr),
-  viewportWidth(0), viewportHeight(0) {
-  renderContext = std::make_unique<RenderContext>(ren);
+UiRenderer::UiRenderer(World &w, radix::Renderer &ren) :
+    SubRenderer(w, ren) {
+
 }
 
 void UiRenderer::render() {
@@ -38,31 +31,32 @@ void UiRenderer::render() {
   // Crosshair
   renderImage(Vector3f(viewportWidth / 2, viewportHeight / 2, -10), Vector3f(80, 80, 1), "Reticle.png");
 
-  // Title
-  renderer.setFont("Pacaya", 1.5f);
-  renderer.setFontColor(Vector4f(1, 1, 1, 1));
-  renderer.renderText(*renderContext.get(), "GlPortal", Vector3f(25, viewportHeight - 95, -20));
+  Text glPortalTitle;
+  glPortalTitle.font     = "Pacaya";
+  glPortalTitle.size     = 1.5f;
+  glPortalTitle.content  = "GlPortal";
+  glPortalTitle.color    = Vector4f(1, 1, 1, 1);
+  glPortalTitle.position = Vector3f(25, viewportHeight - 95, -20);
+  renderer.renderText(*renderContext.get(), glPortalTitle);
 
-  // FPS counter
-  renderer.setFontSize(0.5f);
-  renderer.renderText(*renderContext.get(),
-                      std::string("FPS: ") + std::to_string(Game::fps.getFps()),
-                      Vector3f(10, viewportHeight - 25, -20));
+  Text fpsCounter;
+  fpsCounter.font     = "Pacaya";
+  fpsCounter.size     = 0.5f;
+  fpsCounter.content  = std::string("FPS: ") + std::to_string(Game::fps.getFps());
+  fpsCounter.color    = Vector4f(1, 1, 1, 1);
+  fpsCounter.position = Vector3f(10, viewportHeight - 25, -20);
+  renderer.renderText(*renderContext.get(), fpsCounter);
 
-  // Version
-  renderer.renderText(*renderContext.get(),
-                      std::string("Early testing build: ")  + GAME_VERSION,
-                      Vector3f(10, viewportHeight - 45, -20));
+  Text version;
+  version.font     = "Pacaya";
+  version.size     = 0.5f;
+  version.content  = std::string("Early testing build: ")  + GAME_VERSION;
+  version.color    = Vector4f(1, 1, 1, 1);
+  version.position = Vector3f(10, viewportHeight - 45, -20);
+  renderer.renderText(*renderContext.get(), version);
 
   renderContext->popCamera();
   glDepthMask(GL_TRUE);
-}
-
-void UiRenderer::initCamera() {
-  camera = std::make_unique<Camera>();
-  camera->setOrthographic();
-  camera->setBounds(0, viewportWidth, 0, viewportHeight);
-  renderContext->pushCamera(*camera.get());
 }
 
 void UiRenderer::renderImage(radix::Vector3f position, radix::Vector3f scale, std::string path) {

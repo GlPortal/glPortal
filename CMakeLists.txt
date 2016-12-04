@@ -23,6 +23,8 @@ list(APPEND PORTAL_LIBRARIES ${RADIX_LIBRARIES})
 
 set(PORTAL_TEST_LIBRARIES ${PORTAL_LIBRARIES})
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
   add_definitions("-Wall")
 endif ()
@@ -40,9 +42,18 @@ if (CMAKE_VERSION VERSION_GREATER 2.8.5)
   feature_summary(WHAT ALL)
 endif ()
 
-add_custom_target(versionInfo ALL
+if (APPLE)
+  add_custom_target(versionInfo ALL
+    COMMAND echo \"\#define GAME_VERSION \\\"\\c\">${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
+    COMMAND git describe | tr -d \"\\n\" >>${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
+    COMMAND echo \"\\\"\\c\">>${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
+  )
+else ()
+  add_custom_target(versionInfo ALL
     COMMAND echo -n \"\#define GAME_VERSION \\\"\">${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
     COMMAND git describe | tr -d \"\\n\" >>${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
     COMMAND echo -n \"\\\"\">>${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
-)
+  )
+endif ()
+
 add_dependencies(${EXE_NAME} versionInfo)

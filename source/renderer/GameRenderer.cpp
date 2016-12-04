@@ -1,20 +1,12 @@
-#include "GameRenderer.hpp"
-
-#include "World.hpp"
+#include <glPortal/renderer/GameRenderer.hpp>
+#include <glPortal/World.hpp>
 
 #include <epoxy/gl.h>
 
 #include <radix/renderer/Renderer.hpp>
-#include <radix/renderer/RenderContext.hpp>
-#include <radix/World.hpp>
-
 #include <radix/Viewport.hpp>
-#include <radix/Camera.hpp>
-#include <radix/Entity.hpp>
-
 #include <radix/component/ViewFrame.hpp>
 #include <radix/component/MeshDrawable.hpp>
-
 #include <radix/shader/ShaderLoader.hpp>
 #include <radix/model/MeshLoader.hpp>
 #include <radix/material/MaterialLoader.hpp>
@@ -23,16 +15,14 @@ using namespace radix;
 
 namespace glPortal {
 
-GameRenderer::GameRenderer(glPortal::World& w, radix::Renderer& ren) :
-  world(w),
-  renderer(ren),
-  camera(nullptr),
-  viewportWidth(0), viewportHeight(0) {
-  rc = std::make_unique<RenderContext>(ren);
+GameRenderer::GameRenderer(glPortal::World& w, radix::Renderer& ren, radix::Camera* cam, double* ptime) :
+  SubRenderer(w, ren),
+  camera(cam),
+  dtime(ptime){
 }
 
-void GameRenderer::render(double dtime, const Camera &cam) {
-  time += dtime;
+void GameRenderer::render() {
+  time += *dtime;
   renderer.getViewport()->getSize(&viewportWidth, &viewportHeight);
 
   glDepthMask(GL_TRUE);
@@ -46,24 +36,23 @@ void GameRenderer::render(double dtime, const Camera &cam) {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  Camera camera = cam;
-  camera.setPerspective();
-  camera.setAspect((float) viewportWidth / viewportHeight);
+  camera->setPerspective();
+  camera->setAspect((float) viewportWidth / viewportHeight);
 
-  rc->projStack.resize(1);
-  camera.getProjMatrix(rc->projStack.back());
+  renderContext->projStack.resize(1);
+  camera->getProjMatrix(renderContext->projStack.back());
 
-  rc->viewStack.resize(1);
-  camera.getViewMatrix(rc->viewStack.back());
+  renderContext->viewStack.resize(1);
+  camera->getViewMatrix(renderContext->viewStack.back());
 
-  rc->invViewStack.resize(1);
-  camera.getInvViewMatrix(rc->invViewStack.back());
+  renderContext->invViewStack.resize(1);
+  camera->getInvViewMatrix(renderContext->invViewStack.back());
 
-  rc->viewFramesStack.clear();
+  renderContext->viewFramesStack.clear();
 
-  rc->projDirty = rc->viewDirty = true;
+  renderContext->projDirty = renderContext->viewDirty = true;
 
-  renderScene(*rc);
+  renderScene(*renderContext);
 }
 
 void GameRenderer::renderScene(RenderContext &rc) {
@@ -74,7 +63,7 @@ void GameRenderer::renderScene(RenderContext &rc) {
   if (rc.viewFramesStack.size() > 0) {
     const RenderContext::ViewFrameInfo &vfi = rc.getViewFrame();
     // Don't render further if computed clip rect is zero-sized
-    if (!renderer.clipViewFrame(rc, vfi.first, vfi.second, scissor)) {
+    if (not renderer.clipViewFrame(rc, vfi.first, vfi.second, scissor)) {
       return;
     }
   }
@@ -115,10 +104,10 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
       rc.popViewFrame();
     }
   }
-  if (!save_stencil_test) {
+  if (not save_stencil_test) {
     glDisable(GL_STENCIL_TEST);
   }
-  if (!save_scissor_test) {
+  if (not save_scissor_test) {
     glDisable(GL_SCISSOR_TEST);
   }
 

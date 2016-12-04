@@ -1,21 +1,12 @@
-#include "TerminalRenderer.hpp"
-
-#include <cstdio>
-#include <vector>
-#include <string>
+#include <glPortal/renderer/TerminalRenderer.hpp>
+#include <glPortal/component/Terminal.hpp>
 
 #include <epoxy/gl.h>
 
 #include <radix/renderer/Renderer.hpp>
 #include <radix/model/MeshLoader.hpp>
-#include <radix/texture/TextureLoader.hpp>
-#include <radix/text/FontLoader.hpp>
 #include <radix/shader/ShaderLoader.hpp>
-#include <radix/material/MaterialLoader.hpp>
 #include <radix/Viewport.hpp>
-#include <radix/World.hpp>
-
-#include "../component/Terminal.hpp"
 
 using namespace radix;
 
@@ -43,11 +34,13 @@ void TerminalRenderer::render(RenderContext &rc, World &world) {
               screenBackgroundColor.z,
               screenBackgroundColor.w);
   renderer.renderMesh(rc, sh, widget, mesh, nullptr);
-  renderer.setFontColor(term.textColor);
-  renderer.setFontSize(1);
-  renderer.renderText(rc,
-                      world.input.getCharBuffer(),
-                      Vector3f(0, vpHeight-30, -1));
+  Text terminalText;
+  terminalText.font     = "Pacaya";
+  terminalText.size     = 1.0f;
+  terminalText.content  = world.input.getCharBuffer();
+  terminalText.color    = term.textColor;
+  terminalText.position = Vector3f(0, vpHeight-30, -1);
+  renderer.renderText(rc, terminalText);
   sh.release();
   rc.popCamera();
 }

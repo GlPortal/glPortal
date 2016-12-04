@@ -2,6 +2,7 @@
 #define GLPORTAL_GAMECONTROLLER_HPP
 
 #include <radix/core/state/GameState.hpp>
+#include <radix/core/event/EventDispatcher.hpp>
 
 namespace radix {
   class ScreenRenderer;
@@ -16,10 +17,14 @@ class GameController {
 public:
   GameController(Game *game);
   void processInput();
+
 private:
+  void initObservers();
+
   Game *game;
   World *world;
 
+  radix::EventDispatcher::CallbackHolder closeWindowHolder;
   std::unique_ptr<radix::GameState> gameState;
 };
 

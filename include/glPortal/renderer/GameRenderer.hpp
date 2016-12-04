@@ -5,6 +5,7 @@
 #include <string>
 
 #include <radix/core/math/Vector3f.hpp>
+#include <radix/renderer/SubRenderer.hpp>
 
 namespace radix {
   struct RenderContext;
@@ -17,11 +18,11 @@ namespace glPortal {
 
 class World;
 
-class GameRenderer {
+class GameRenderer : public radix::SubRenderer{
 public:
-  GameRenderer(World& w, radix::Renderer& ren);
+  GameRenderer(World& w, radix::Renderer& ren, radix::Camera* cam, double* ptime);
 
-  void render(double dtime, const radix::Camera &cam);
+  void render();
 
   /**
    * Renders the scene with provided camera parameters
@@ -57,12 +58,8 @@ public:
                 const radix::Entity &portal, const radix::Entity &otherPortal);
 
 private:
-  World &world;
-  radix::Renderer &renderer;
-  std::unique_ptr<radix::Camera> camera;
-  std::unique_ptr<radix::RenderContext> rc;
-  int viewportWidth, viewportHeight;
-
+  radix::Camera* camera;
+  double* dtime;
   double time;
 };
 

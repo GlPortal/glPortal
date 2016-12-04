@@ -18,6 +18,8 @@ public:
   static void handleGameOverScreen(radix::BaseGame &game);
 
   static void handleWinScreen(radix::BaseGame &game);
+
+  static radix::EventDispatcher::CallbackHolder splashCallbackHolder;
 };
 
 } /* namespace glPortal */

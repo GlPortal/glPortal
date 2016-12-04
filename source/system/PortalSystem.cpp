@@ -1,14 +1,9 @@
-#include "PortalSystem.hpp"
+#include <glPortal/system/PortalSystem.hpp>
+#include <glPortal/Portal.hpp>
 
-#include <vector>
-
-#include <radix/component/Player.hpp>
-#include <radix/component/Transform.hpp>
 #include <radix/component/Player.hpp>
 #include <radix/physics/PhysicsHelper.hpp>
 #include <radix/World.hpp>
-
-#include "Portal.hpp"
 
 using namespace radix;
 

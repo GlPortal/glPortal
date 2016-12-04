@@ -2,7 +2,6 @@
 #define PORTAL_HPP
 
 #include <memory>
-
 #include <bullet/BulletCollision/btBulletCollisionCommon.h>
 
 #include <radix/component/Component.hpp>

@@ -1,8 +1,5 @@
-#include "WorldHelper.hpp"
-
-#include <climits>
-
-#include <SDL2/SDL_timer.h>
+#include <glPortal/WorldHelper.hpp>
+#include <glPortal/Portal.hpp>
 
 #include <bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
@@ -10,8 +7,6 @@
 #include <radix/component/MeshDrawable.hpp>
 #include <radix/system/PhysicsSystem.hpp>
 #include <radix/component/LightSource.hpp>
-
-#include "Portal.hpp"
 
 using namespace radix;
 
@@ -23,7 +18,7 @@ void WorldHelper::shootPortal(int button, World &world) {
   btVector3 btTo = btFrom + cameraDir*10000;
   btCollisionWorld::ClosestRayResultCallback res(btFrom, btTo);
 
-  PhysicsSystem &phys = world.getSystem<PhysicsSystem>();
+  PhysicsSystem &phys = world.systems.get<PhysicsSystem>();
   phys.getPhysicsWorld().rayTest(btFrom, btTo, res);
 
   if (res.hasHit()) {

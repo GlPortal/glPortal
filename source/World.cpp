@@ -1,6 +1,4 @@
-#include "World.hpp"
-
-#include "Screen.hpp"
+#include <glPortal/World.hpp>
 
 using namespace radix;
 

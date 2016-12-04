@@ -1,43 +1,57 @@
-#include <radix/screen/Screen.hpp>
-#include <radix/screen/XMLScreenLoader.hpp>
+#include <glPortal/GameState.hpp>
+#include <glPortal/Game.hpp>
+
+#include <radix/screen/XmlScreenLoader.hpp>
 #include <radix/env/Environment.hpp>
-#include "GameState.hpp"
 #include <radix/component/Player.hpp>
 
 namespace glPortal {
 
+radix::EventDispatcher::CallbackHolder GameState::splashCallbackHolder;
+
 void GameState::handleRunning(radix::BaseGame &game) {
   radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
   player.frozen = false;
-  if (game.getWindow().isKeyDown(SDL_SCANCODE_Q)) {
-    game.close();
-  }
-  if (game.getWindow().isKeyDown(SDL_SCANCODE_ESCAPE)) {
-    player.frozen = true;
-    game.getWorld()->stateFunctionStack.push(&GameState::handlePaused);
-  }
+
+  game.getWorld()->event.removeObserver(splashCallbackHolder);
+
+  splashCallbackHolder = game.getWorld()->event.addObserver
+    (
+     radix::InputSource::KeyReleasedEvent::Type, [&player, &game](const radix::Event& event) {
+       const int key = ((radix::InputSource::KeyReleasedEvent &) event).key;
+       if (key == SDL_SCANCODE_ESCAPE) {
+         player.frozen = true;
+         game.getWorld()->stateFunctionStack.push(&GameState::handlePaused);
+       }
+     });
 }
 
 void GameState::handlePaused(radix::BaseGame &game) {
-  radix::Screen &screen = radix::XMLScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/test.xml");
+  radix::Screen &screen = radix::XmlScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/test.xml");
   game.getGameWorld()->addScreen(screen);
   radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
-  if (game.getWindow().isKeyDown(SDL_SCANCODE_ESCAPE)) {
-    player.frozen = false;
-    game.getWorld()->stateFunctionStack.pop();
-  }
+
+  game.getWorld()->event.removeObserver(splashCallbackHolder);
+
+  splashCallbackHolder = game.getWorld()->event.addObserver
+    (
+     radix::InputSource::KeyReleasedEvent::Type, [&player, &game] (const radix::Event& event) {
+       const int key = ((radix::InputSource::KeyReleasedEvent &) event).key;
+       if (key == SDL_SCANCODE_ESCAPE) {
+         player.frozen = false;
+         game.getWorld()->stateFunctionStack.pop();
+       }
+     });
 }
 
 void GameState::handleSplash(radix::BaseGame &game) {
   radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
   player.frozen = true;
-  radix::Screen &screen = radix::XMLScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/test.xml");
+  radix::Screen &screen =
+    radix::XmlScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/test.xml");
   game.getGameWorld()->addScreen(screen);
   if (game.getWindow().isKeyDown(SDL_SCANCODE_RETURN)) {
     game.getWorld()->stateFunctionStack.pop();
-  }
-  if (game.getWindow().isKeyDown(SDL_SCANCODE_Q)) {
-    game.close();
   }
 }
 
