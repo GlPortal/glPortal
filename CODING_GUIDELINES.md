@@ -8,7 +8,7 @@
     ```cpp
 game.pause(); //pause the game
      ```
-
+     
 ## Planning
 - One branch per feature/bugfix
 - Split up any task that will take longer than a week
@@ -19,6 +19,10 @@ game.pause(); //pause the game
 ### Naming
 - No cryptic abbreviations in names (well known abb. are fine e.g. HTML).
 
+    ```cpp
+Observer *GmObsvrPtr; //not worth it
+     ```
+     
 ### File encoding and line endings
 - The source files may be restricted to ASCII encoding, or use UTF-8 *without* *BOM* 
 (this warning specifically targets developers using Windows).
