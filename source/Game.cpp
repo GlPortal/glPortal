@@ -33,11 +33,13 @@ void Game::initHook() {
   transform.setPosition(world.getPlayer().getComponent<Transform>().getPosition());
   transform.setOrientation(world.getPlayer().getComponent<Transform>().getOrientation());
   transform.setScale(world.getPlayer().getComponent<Transform>().getScale());
-  entity.addComponent<Trigger>([] (BaseGame* game) {}, [] (BaseGame* game) {},
-                               [] (BaseGame* game) {
-                                 Util::Log() << "wooh I moved!";
-                               }, [] (BaseGame* game) {}
-                               );
+  entity.addComponent<Trigger>();
+  entity.getComponent<Trigger>().setActionOnMove([] (BaseGame* game) {
+      Util::Log() << "Move Action Triggered";
+    });
+  entity.getComponent<Trigger>().setActionOnEnter([] (BaseGame* game) {
+      Util::Log() << "Enter Action Triggered";
+    });
 }
 
 void Game::processInput() {
