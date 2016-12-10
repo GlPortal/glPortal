@@ -3,7 +3,12 @@
 - Stick to the principles of Object Oriented Design
 - Leave the code cleaner than you have found it
 - Use comments to describe the why, not the how
+- Don't repeat apparent information in the comments 
 
+    ```cpp
+game.pause(); //pause the game
+     ```
+     
 ## Planning
 - One branch per feature/bugfix
 - Split up any task that will take longer than a week
@@ -14,6 +19,10 @@
 ### Naming
 - No cryptic abbreviations in names (well known abb. are fine e.g. HTML).
 
+    ```cpp
+Observer *GmObsvrPtr; //not worth it
+     ```
+     
 ### File encoding and line endings
 - The source files may be restricted to ASCII encoding, or use UTF-8 *without* *BOM* 
 (this warning specifically targets developers using Windows).
@@ -81,8 +90,8 @@ Type var1, *var2, &var3 = thing;
 Type* getPtr(Type *namedParm);
 Type& getRef(UnnamedParm*);
 
-// The following is inherently stupid:
-Type *idiotGetPtr(Type *namedParm);
+// The following is bad style:
+Type *badGetPtr(Type *namedParm);
 // because it doesn't return Type, it returns Type* !
 // Moreover the function name has nothing to do with that pointer mark on it.
     ```
