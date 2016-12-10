@@ -3,6 +3,11 @@
 - Stick to the principles of Object Oriented Design
 - Leave the code cleaner than you have found it
 - Use comments to describe the why, not the how
+- Don't repeat apparent information in the comments 
+
+    ```cpp
+game.pause(); //pause the game
+     ```
 
 ## Planning
 - One branch per feature/bugfix
