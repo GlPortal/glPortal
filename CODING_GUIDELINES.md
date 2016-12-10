@@ -90,8 +90,8 @@ Type var1, *var2, &var3 = thing;
 Type* getPtr(Type *namedParm);
 Type& getRef(UnnamedParm*);
 
-// The following is inherently stupid:
-Type *idiotGetPtr(Type *namedParm);
+// The following is bad style:
+Type *badGetPtr(Type *namedParm);
 // because it doesn't return Type, it returns Type* !
 // Moreover the function name has nothing to do with that pointer mark on it.
     ```
