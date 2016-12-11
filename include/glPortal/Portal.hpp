@@ -34,6 +34,7 @@ public:
   radix::Mesh overlayMesh, stencilMesh;
   radix::Vector3f direction, color;
   bool open;
+  bool isUncolliderActive = false;
   std::unique_ptr<btDefaultMotionState> uncolliderMotionState;
   std::unique_ptr<btCollisionShape> uncolliderShape;
   std::unique_ptr<btCollisionObject> uncollider;
