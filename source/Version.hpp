@@ -1,1 +1,1 @@
-#define GAME_VERSION ""
+#define GAME_VERSION "0.4.0-144-g4d4ee83"

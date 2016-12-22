@@ -7,9 +7,9 @@
 #include <radix/Viewport.hpp>
 #include <radix/component/ViewFrame.hpp>
 #include <radix/component/MeshDrawable.hpp>
-#include <radix/shader/ShaderLoader.hpp>
-#include <radix/model/MeshLoader.hpp>
-#include <radix/material/MaterialLoader.hpp>
+#include <radix/data/shader/ShaderLoader.hpp>
+#include <radix/data/model/MeshLoader.hpp>
+#include <radix/data/material/MaterialLoader.hpp>
 
 using namespace radix;
 

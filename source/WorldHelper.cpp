@@ -3,7 +3,7 @@
 
 #include <bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
-#include <radix/texture/TextureLoader.hpp>
+#include <radix/data/texture/TextureLoader.hpp>
 #include <radix/component/MeshDrawable.hpp>
 #include <radix/system/PhysicsSystem.hpp>
 #include <radix/component/LightSource.hpp>

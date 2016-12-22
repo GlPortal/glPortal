@@ -4,8 +4,8 @@
 #include <epoxy/gl.h>
 
 #include <radix/renderer/Renderer.hpp>
-#include <radix/model/MeshLoader.hpp>
-#include <radix/shader/ShaderLoader.hpp>
+#include <radix/data/model/MeshLoader.hpp>
+#include <radix/data/shader/ShaderLoader.hpp>
 #include <radix/Viewport.hpp>
 
 using namespace radix;

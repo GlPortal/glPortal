@@ -3,9 +3,9 @@
 
 #include <epoxy/gl.h>
 
-#include <radix/model/MeshLoader.hpp>
-#include <radix/shader/ShaderLoader.hpp>
-#include <radix/material/MaterialLoader.hpp>
+#include <radix/data/model/MeshLoader.hpp>
+#include <radix/data/shader/ShaderLoader.hpp>
+#include <radix/data/material/MaterialLoader.hpp>
 
 #include "../Version.hpp"
 

@@ -1,7 +1,7 @@
 #include <glPortal/GameState.hpp>
 #include <glPortal/Game.hpp>
 
-#include <radix/screen/XmlScreenLoader.hpp>
+#include <radix/data/screen/XmlScreenLoader.hpp>
 #include <radix/env/Environment.hpp>
 #include <radix/component/Player.hpp>
 
