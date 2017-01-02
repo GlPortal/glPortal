@@ -28,3 +28,4 @@ documentation/doxygen_sqlite3.db
 tests/gwenUnicodeTest
 tests/quaternionTest
 tests/xmlReadingTest/version.txt
+cmake-build-debug/
