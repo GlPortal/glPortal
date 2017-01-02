@@ -28,7 +28,7 @@ void Game::initHook() {
   renderer->addRenderer(*gameRenderer);
   renderer->addRenderer(*uiRenderer);
 
-  Entity& entity = world.entities.create();
+  Entity& entity = world.entityManager.create();
   Transform& transform = entity.addComponent<Transform>();
   transform.setPosition(world.getPlayer().getComponent<Transform>().getPosition());
   transform.setOrientation(world.getPlayer().getComponent<Transform>().getOrientation());

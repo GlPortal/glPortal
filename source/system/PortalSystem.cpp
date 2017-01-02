@@ -18,7 +18,7 @@ PortalSystem::~PortalSystem() {
 
 void PortalSystem::update(float dtime) {
   (void) dtime;
-  for (Entity &e : world.entities) {
+  for (Entity &e : world.entityManager) {
     if (e.hasComponent<Player>()) {
       Transform &t = e.getComponent<Transform>();
       const Vector3f &pos = t.getPosition();

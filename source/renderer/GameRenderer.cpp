@@ -88,7 +88,7 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
 
   glEnable(GL_STENCIL_TEST);
   glEnable(GL_SCISSOR_TEST);
-  for (Entity &e : world.entities) {
+  for (Entity &e : world.entityManager) {
     if (e.hasComponent<ViewFrame>()) {
       const Transform &t = e.getComponent<Transform>();
       Matrix4f inMat; t.getModelMtx(inMat);
@@ -173,7 +173,7 @@ void GameRenderer::renderViewFrameStencil(RenderContext &rc) {
 }
 
 void GameRenderer::renderEntities(RenderContext &rc) {
-  for (Entity &e : world.entities) {
+  for (Entity &e : world.entityManager) {
     if (e.hasComponent<MeshDrawable>()) {
       renderEntity(rc, e);
     }
