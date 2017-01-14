@@ -25,12 +25,6 @@ void Game::initHook() {
   transform.setOrientation(world.getPlayer().getComponent<Transform>().getOrientation());
   transform.setScale(world.getPlayer().getComponent<Transform>().getScale());
   entity.addComponent<Trigger>();
-  entity.getComponent<Trigger>().setActionOnMove([] (BaseGame &game) {
-      Util::Log() << "Move Action Triggered";
-    });
-  entity.getComponent<Trigger>().setActionOnEnter([] (BaseGame &game) {
-      Util::Log() << "Enter Action Triggered";
-    });
 }
 
 void Game::processInput() {
