@@ -26,6 +26,7 @@ private:
   std::unique_ptr<UiRenderer> uiRenderer;
   void initHook();
   double dtime;
+  void addRenderers();
 };
 
 } /* namespace glPortal */

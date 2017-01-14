@@ -18,16 +18,7 @@ void Game::initHook() {
   world.stateFunctionStack.push(&GameState::handleRunning);
   world.stateFunctionStack.push(&GameState::handleSplash);
   gameController = std::make_unique<GameController>(this);
-  World& worldReference = static_cast<glPortal::World&>(world);
-  radix::Renderer& rendererReference = *renderer.get();
-  gameRenderer =
-    std::make_unique<GameRenderer>(worldReference, rendererReference, camera.get(), &dtime);
-  uiRenderer =
-    std::make_unique<UiRenderer>(worldReference, rendererReference);
-
-  renderer->addRenderer(*gameRenderer);
-  renderer->addRenderer(*uiRenderer);
-
+  addRenderers();
   Entity& entity = world.entityManager.create();
   Transform& transform = entity.addComponent<Transform>();
   transform.setPosition(world.getPlayer().getComponent<Transform>().getPosition());
@@ -49,6 +40,18 @@ void Game::processInput() {
 void Game::update() {
   BaseGame::update();
   dtime = (currentTime-lastRender)/1000.;
+}
+
+void Game::addRenderers() {
+  World& worldReference = static_cast<glPortal::World&>(world);
+  radix::Renderer& rendererReference = *renderer.get();
+  gameRenderer =
+    std::make_unique<GameRenderer>(worldReference, rendererReference, camera.get(), &dtime);
+  uiRenderer =
+    std::make_unique<UiRenderer>(worldReference, rendererReference);
+
+  renderer->addRenderer(*gameRenderer);
+  renderer->addRenderer(*uiRenderer);
 }
 
 } /* namespace glPortal */
