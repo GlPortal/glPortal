@@ -8,6 +8,7 @@ matrix:
       services: docker
       before_install: docker pull glportal/whale-gcc
       script:
+        - set -e
         - docker run -it --rm -w /data -v $(pwd):/data glportal/whale-gcc bash -c "cmake ./; make; make tests;"
         - docker run -it --rm -w /data -v $(pwd):/data glportal/whale-gcc bash -c "./external/RadixEngine/tests/SystemGraphTest ./data"
         - docker run -it --rm -w /data -v $(pwd):/data glportal/whale-gcc bash -c "./external/RadixEngine/tests/XmlReadingTest"
@@ -63,6 +64,7 @@ matrix:
         - git submodule update --init --recursive
         - mkdir build && cd build
       script:
+        - set -e
         - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install ..
         - make -j4
 
