@@ -25,6 +25,8 @@ private:
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
   void initHook();
+  void initFunctionStack();
+  void initTriggers();
   double dtime;
   void addRenderers();
 };
