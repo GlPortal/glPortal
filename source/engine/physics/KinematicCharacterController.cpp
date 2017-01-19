@@ -696,7 +696,7 @@ bool KinematicCharacterController::canJump() const {
   return onGround();
 }
 
-void KinematicCharacterController::jump() {
+void KinematicCharacterController::jump(const btVector3& vector) {
   if (not canJump()) {
     return;
   }

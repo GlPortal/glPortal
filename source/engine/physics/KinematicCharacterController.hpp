@@ -158,7 +158,7 @@ public:
   void setMaxJumpHeight(btScalar maxJumpHeight);
   bool canJump() const;
 
-  void jump();
+  void jump(const btVector3& vector);
 
   void setGravity(btScalar gravity);
   btScalar getGravity() const;

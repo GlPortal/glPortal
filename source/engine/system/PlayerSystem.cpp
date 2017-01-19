@@ -96,7 +96,7 @@ void PlayerSystem::move(Entity &entity, double dtime) {
     std::uniform_int_distribution<> dis(0, PLAYER_JUMP_SOUND.size()-1);
       entity.getComponent<SoundSource>().playSound(
         Environment::getDataDir() + PLAYER_JUMP_SOUND[dis(generator)]);
-    ctrl.jump();
+    ctrl.jump(btVector3());
   }
   if (movingFwd) {
     movement.x += -sin(rot);

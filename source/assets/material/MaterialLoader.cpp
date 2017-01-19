@@ -16,7 +16,7 @@ const Material MaterialLoader::loadFromXML(const std::string &path) {
   XMLDocument doc;
   XMLError error = doc.LoadFile((Environment::getDataDir() + "/textures/" + path + ".gmd").c_str());
 
-  if (error != XML_NO_ERROR) {
+  if (error != 0) {
     System::Log(Error, "MaterialLoader") << "XML Error " << doc.ErrorID() << ": " <<
       doc.ErrorName() << " in " << path;
   }

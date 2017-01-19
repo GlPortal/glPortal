@@ -45,7 +45,7 @@ Scene* MapLoader::getSceneFromPath(const std::string &path) {
   XMLDocument doc;
   XMLError error = doc.LoadFile(path.c_str());
 
-  if (error == XML_NO_ERROR) {
+  if (error == 0) {
     XMLHandle docHandle(&doc);
     XMLElement *element = docHandle.FirstChildElement().ToElement();
     rootHandle = XMLHandle(element);
