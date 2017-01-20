@@ -17,6 +17,7 @@ Game::Game() {
 void Game::initHook() {
   initFunctionStack();
   gameController = std::make_unique<GameController>(this);
+  initRenderers();
   addRenderers();
   initTriggers();
 }
@@ -44,14 +45,17 @@ void Game::update() {
   dtime = (currentTime-lastRender)/1000.;
 }
 
-void Game::addRenderers() {
+void Game::initRenderers() {
   World& worldReference = static_cast<glPortal::World&>(world);
   radix::Renderer& rendererReference = *renderer.get();
   gameRenderer =
     std::make_unique<GameRenderer>(worldReference, rendererReference, camera.get(), &dtime);
   uiRenderer =
     std::make_unique<UiRenderer>(worldReference, rendererReference);
+ }
 
+
+void Game::addRenderers() {
   renderer->addRenderer(*gameRenderer);
   renderer->addRenderer(*uiRenderer);
 }

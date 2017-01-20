@@ -28,6 +28,7 @@ private:
   void initFunctionStack();
   void initTriggers();
   double dtime;
+  void initRenderers();
   void addRenderers();
 };
 
