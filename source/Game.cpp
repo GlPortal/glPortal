@@ -19,21 +19,11 @@ void Game::initHook() {
   gameController = std::make_unique<GameController>(this);
   initRenderers();
   addRenderers();
-  initTriggers();
 }
 
 void Game::initFunctionStack() {
   world.stateFunctionStack.push(&GameState::handleRunning);
   world.stateFunctionStack.push(&GameState::handleSplash);
-}
-
-void Game::initTriggers() {
-  Entity& entity = world.entityManager.create();
-  Transform& transform = entity.addComponent<Transform>();
-  transform.setPosition(world.getPlayer().getComponent<Transform>().getPosition());
-  transform.setOrientation(world.getPlayer().getComponent<Transform>().getOrientation());
-  transform.setScale(world.getPlayer().getComponent<Transform>().getScale());
-  entity.addComponent<Trigger>();
 }
 
 void Game::processInput() {

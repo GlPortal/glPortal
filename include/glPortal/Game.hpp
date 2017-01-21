@@ -26,7 +26,6 @@ private:
   std::unique_ptr<UiRenderer> uiRenderer;
   void initHook();
   void initFunctionStack();
-  void initTriggers();
   double dtime;
   void initRenderers();
   void addRenderers();
