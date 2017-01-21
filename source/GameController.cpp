@@ -3,6 +3,7 @@
 
 #include <radix/env/Environment.hpp>
 #include <radix/component/Player.hpp>
+#include <glPortal/GameState.hpp>
 
 namespace glPortal {
 
@@ -10,6 +11,7 @@ GameController::GameController(Game *game) {
   this->game = game;
   this->world = static_cast<World*>(game->getWorld());
   this->gameState = std::make_unique<radix::GameState>();
+  GameState::init(*game);
   initObservers();
 }
 

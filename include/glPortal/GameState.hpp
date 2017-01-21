@@ -7,6 +7,8 @@ namespace glPortal {
 
 class GameState {
 public:
+  static void init(radix::BaseGame &game);
+
   static void handleRunning(radix::BaseGame &game);
 
   static void handlePaused(radix::BaseGame &game);
@@ -20,6 +22,8 @@ public:
   static void handleWinScreen(radix::BaseGame &game);
 
   static radix::EventDispatcher::CallbackHolder splashCallbackHolder;
+
+  static radix::EventDispatcher::CallbackHolder winCallbackHolder;
 };
 
 } /* namespace glPortal */
