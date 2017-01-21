@@ -24,6 +24,10 @@ void GameState::handleRunning(radix::BaseGame &game) {
          game.getWorld()->stateFunctionStack.push(&GameState::handlePaused);
        }
      });
+
+  if (!splashCallbackHolder.getStatic()) {
+    splashCallbackHolder.setStatic();
+  }
 }
 
 void GameState::handlePaused(radix::BaseGame &game) {
