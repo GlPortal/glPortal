@@ -1,4 +1,4 @@
-#include "Editor.hpp"
+#include <glPortal/Editor.hpp>
 
 namespace glPortal {
 

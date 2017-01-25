@@ -22,6 +22,7 @@ You will need very recent versions of all the dependencies. So please upgrade yo
 - pkg-config *(make)*
 - git *(download source code)*
 - libunittest++
+- freeimage
 
 ## Installing dependencies
 Remember, you have to be root, so you might want to prefix `sudo`.
@@ -32,13 +33,13 @@ Remember, you have to be root, so you might want to prefix `sudo`.
 #### on 32-bit
 Launch the *Mingw-w64 Win32 shell* from the start menu. In it, type:
 ```bash
-pacman -S pkg-config mingw-w64-i686-cmake mingw-w64-i686-make mingw-w64-i686-gcc mingw-w64-i686-pkg-config mingw-w64-i686-assimp mingw-w64-i686-libepoxy mingw-w64-i686-SDL2 mingw-w64-i686-SDL2_mixer mingw-w64-i686-bullet mingw-w64-i686-tinyxml2
+pacman -S pkg-config mingw-w64-i686-cmake mingw-w64-i686-make mingw-w64-i686-gcc mingw-w64-i686-pkg-config mingw-w64-i686-assimp mingw-w64-i686-libepoxy mingw-w64-i686-SDL2 mingw-w64-i686-SDL2_mixer mingw-w64-i686-bullet mingw-w64-i686-tinyxml2 mingw-w64-i686-freeimage
 ```
 
 #### on 64-bit
 Launch the *Mingw-w64 Win64 shell* from the start menu. In it, type:
 ```bash
-pacman -S pkg-config mingw-w64-x86_64-cmake mingw-w64-x86_64-make mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config mingw-w64-x86_64-assimp mingw-w64-x86_64-libepoxy mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer mingw-w64-x86_64-bullet mingw-w64-x86_64-tinyxml2
+pacman -S pkg-config mingw-w64-x86_64-cmake mingw-w64-x86_64-make mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config mingw-w64-x86_64-assimp mingw-w64-x86_64-libepoxy mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer mingw-w64-x86_64-bullet mingw-w64-x86_64-tinyxml2 mingw-w64-x86_64-freeimage
 ```
 
 If you do not already have `git` installed, please also install it with:
@@ -49,12 +50,12 @@ pacman -S git
 
 ### Arch Linux
 ```bash
-pacman -S cmake make gcc pkg-config assimp libepoxy sdl2 sdl2_mixer bullet mesa tinyxml2
+pacman -S cmake make gcc pkg-config assimp libepoxy sdl2 sdl2_mixer bullet mesa tinyxml2 freeimage
 ```
 
 ### Debian 8 / Ubuntu 14.04 / Linux Mint 17.x
 ```bash
-apt-get install cmake make gcc pkg-config libassimp-dev libepoxy-dev libsdl2-dev libsdl2-mixer-dev libbullet-dev libtinyxml2-dev libgl1-mesa-dev libunittest++-dev
+apt-get install cmake make gcc pkg-config libassimp-dev libepoxy-dev libsdl2-dev libsdl2-mixer-dev libbullet-dev libtinyxml2-dev libgl1-mesa-dev libunittest++-dev libfreeimage-dev
 ```
 
 ### Others
@@ -118,7 +119,7 @@ make run
 ```
 
 ### Windows
-Before we can start the game it is neccesery to copy some dlls into our executable directory.
+Before we can start the game it is necessary to copy some dlls into our executable directory.
 
 #### on 32-bit
 ```bash

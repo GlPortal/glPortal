@@ -9,54 +9,21 @@ project(${EXE_NAME})
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-if(DEFINED WIN32)
-  add_definitions("-D_USE_MATH_DEFINES")
-endif()
+# Sort of dirty hack, try to fix its
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/RadixEngine/cmake)
+
+set(PORTAL_LIBRARIES "")
 
 find_package(CXX14 REQUIRED)
 set(CMAKE_CXX_FLAGS "${CXX14_FLAGS} ${CMAKE_CXX_FLAGS}")
 
-find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIR})
-# Don't load libGLU, that's old GL1.0 crap.
-set(PORTAL_LIBRARIES ${OPENGL_gl_LIBRARY})
-
-find_package(PkgConfig REQUIRED)
-pkg_search_module(EPOXY REQUIRED epoxy)
-find_package(UnitTestPlusPlus)
-include_directories(${EPOXY_INCLUDE_DIRS})
-list(APPEND PORTAL_LIBRARIES ${EPOXY_LIBRARIES} )
-
-find_package(Assimp REQUIRED)
-include_directories(${ASSIMP_INCLUDE_DIRS})
-list(APPEND PORTAL_LIBRARIES ${ASSIMP_LIBRARIES} )
-
-find_package(SDL2 REQUIRED)
-find_package(SDL2_mixer REQUIRED)
-include_directories(${SDL2_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIRS})
-list(APPEND PORTAL_LIBRARIES ${SDL2_LIBRARY} ${SDL2_MIXER_LIBRARIES} )
-
-find_package(TinyXML2 REQUIRED)
-include_directories(${TINYXML2_INCLUDE_DIR})
-list(APPEND PORTAL_LIBRARIES ${TINYXML2_LIBRARIES} )
-
-find_package(json11 REQUIRED)
-include_directories(${JSON11_INCLUDE_DIR})
-list(APPEND PORTAL_LIBRARIES ${JSON11_LIBRARY})
-
-find_package(GWEN REQUIRED)
-include_directories(${GWEN_INCLUDE_DIR})
-list(APPEND PORTAL_LIBRARIES ${GWEN_LIBRARY})
-
-find_package(Bullet 2.85 REQUIRED)
-include_directories(${BULLET_INCLUDE_DIR})
-list(APPEND PORTAL_LIBRARIES ${BULLET_LIBRARIES})
-
-find_package(VHACD REQUIRED)
-include_directories(${VHACD_INCLUDE_DIR})
-list(APPEND PORTAL_LIBRARIES ${VHACD_LIBRARY})
+find_package(RadixEngine REQUIRED)
+include_directories(${RADIX_INCLUDE_DIRS})
+list(APPEND PORTAL_LIBRARIES ${RADIX_LIBRARIES})
 
 set(PORTAL_TEST_LIBRARIES ${PORTAL_LIBRARIES})
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
   add_definitions("-Wall")
@@ -74,3 +41,21 @@ if (CMAKE_VERSION VERSION_GREATER 2.8.5)
   include(FeatureSummary)
   feature_summary(WHAT ALL)
 endif ()
+
+if (APPLE)
+  add_custom_target(versionInfo ALL
+    COMMAND echo \"\#define GAME_VERSION \\\"\\c\">${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
+    COMMAND git describe | tr -d \"\\n\" >>${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
+    COMMAND echo \"\\\"\\c\">>${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
+    COMMAND git update-index --assume-unchanged ${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
+  )
+else ()
+  add_custom_target(versionInfo ALL
+    COMMAND echo -n \"\#define GAME_VERSION \\\"\">${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
+    COMMAND git describe | tr -d \"\\n\" >>${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
+    COMMAND echo -n \"\\\"\">>${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
+    COMMAND git update-index --assume-unchanged ${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
+  )
+endif ()
+
+add_dependencies(${EXE_NAME} versionInfo)

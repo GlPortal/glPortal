@@ -1,21 +1,25 @@
-#include "WorldHelper.hpp"
+#include <glPortal/WorldHelper.hpp>
+#include <glPortal/Portal.hpp>
 
-#include <climits>
-#include <SDL2/SDL_timer.h>
-#include <assets/scene/SceneHelper.hpp>
-#include <assets/texture/TextureLoader.hpp>
-#include <engine/component/MeshDrawable.hpp>
-#include "World.hpp"
+#include <bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+
+#include <radix/data/texture/TextureLoader.hpp>
+#include <radix/component/MeshDrawable.hpp>
+#include <radix/system/PhysicsSystem.hpp>
+#include <radix/component/LightSource.hpp>
+
+using namespace radix;
 
 namespace glPortal {
 
-void WorldHelper::shootPortal(int button, Scene *scene) {
-  Vector3f cameraDir = Math::toDirection(scene->camera.getOrientation());
-  btVector3 btFrom = scene->camera.getPosition();
+void WorldHelper::shootPortal(int button, World &world) {
+  Vector3f cameraDir = Math::toDirection(world.camera.getOrientation());
+  btVector3 btFrom = world.camera.getPosition();
   btVector3 btTo = btFrom + cameraDir*10000;
   btCollisionWorld::ClosestRayResultCallback res(btFrom, btTo);
 
-  scene->physics.world->rayTest(btFrom, btTo, res);
+  PhysicsSystem &phys = world.systems.get<PhysicsSystem>();
+  phys.getPhysicsWorld().rayTest(btFrom, btTo, res);
 
   if (res.hasHit()) {
     const Entity *pEnt = reinterpret_cast<Entity*>(res.m_collisionObject->getUserPointer());
@@ -25,22 +29,13 @@ void WorldHelper::shootPortal(int button, Scene *scene) {
       // TODO: material in separate Component, + 1 mat per face
       if (ent.hasComponent<MeshDrawable>() and
           ent.getComponent<MeshDrawable>().material.portalable) {
-        EntityPair &pPair = SceneHelper::getPortalPairFromScene(0, scene);
+        EntityPair &pPair = getPortalPair(0, world);
         Vector3f ipos(res.m_hitPointWorld);
         Entity &pEnt = (button == 1) ? *pPair.first : *pPair.second;
         Portal &portal = pEnt.getComponent<Portal>();
-        portal.openSince = scene->world->getTime();
+        portal.openSince = world.getTime();
         portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png");
-        // TODO: ditch AACollisionBoxes
-        portal.placeOnWall(scene->camera.getPosition(), ipos, res.m_hitNormalWorld);
-
-        const Entity& otherPortalEntity = (button==1) ? *pPair.second : *pPair.first;
-        Portal& otherPortal = otherPortalEntity.getComponent<Portal>();
-        if(otherPortal.open)  {
-          otherPortal.isUncolliderActive = true;
-          portal.isUncolliderActive = true;
-        }
-
+        portal.placeOnWall(world.camera.getPosition(), ipos, res.m_hitNormalWorld);
         LightSource &pLight = pEnt.getComponent<LightSource>();
 
         if (button == 1) {
@@ -55,8 +50,12 @@ void WorldHelper::shootPortal(int button, Scene *scene) {
   }
 }
 
-void WorldHelper::closePortals(Scene *scene) {
-  EntityPair &pPair = SceneHelper::getPortalPairFromScene(0, scene);
+EntityPair& WorldHelper::getPortalPair(int pair, World &world) {
+  return world.entityPairs.at("portalPairs").at(pair);
+}
+
+void WorldHelper::closePortals(World &world) {
+  EntityPair &pPair = getPortalPair(0, world);
 
   pPair.first->getComponent<Portal>().open = false;
   pPair.second->getComponent<Portal>().open = false;

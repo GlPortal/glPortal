@@ -1,15 +1,18 @@
-#include "Portal.hpp"
+#include <glPortal/Portal.hpp>
 
 #include <algorithm>
-#include <cmath>
+#include <bullet/BulletDynamics/Dynamics/btRigidBody.h>
+#include <bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
-#include <assets/model/MeshLoader.hpp>
+#include <radix/data/model/MeshLoader.hpp>
+#include <radix/core/math/Math.hpp>
+#include <radix/Entity.hpp>
+#include <radix/component/Transform.hpp>
+#include <radix/physics/Uncollider.hpp>
+#include <radix/system/PhysicsSystem.hpp>
+#include <radix/World.hpp>
 
-#include <engine/core/math/Math.hpp>
-#include <engine/Entity.hpp>
-#include <engine/component/Transform.hpp>
-#include <engine/physics/Uncollider.hpp>
-#include "World.hpp"
+using namespace radix;
 
 namespace glPortal {
 
@@ -20,17 +23,16 @@ const double Portal::NOISE_FADE_DELAY = .300;
 const double Portal::OPEN_ANIM_DURATION = .250;
 const float Portal::SURFACE_OFFSET = 0.01f;
 
-Portal::Portal(Entity &ent)  : Component(ent), openSince(0), open(false) {
+Portal::Portal(Entity &ent) : radix::Component(ent), openSince(0), open(false) {
   uncolliderMotionState.reset(new btDefaultMotionState);
   wrapper.vertShape.reset(new btBoxShape(btVector3(0.1, 1, 0.5)));
   wrapper.horzShape.reset(new btBoxShape(btVector3(.5, 0.1, 0.5)));
   // TODO Handle collision subtraction better
-  Uncollider::portals.emplace_back(&entity);
+  Uncollider::volumes.emplace_back(uncollider.get());
 }
 
 Portal::~Portal() {
-  Uncollider::portals.erase(std::remove(
-    Uncollider::portals.begin(), Uncollider::portals.end(), &entity), Uncollider::portals.end());
+  Uncollider::volumes.remove(uncollider.get());
 }
 
 Vector3f Portal::getDirection() const {
@@ -47,10 +49,10 @@ void Portal::placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vec
   btRigidBody::btRigidBodyConstructionInfo ci(0, side.motionState.get(),
     shape.get(), btVector3(0, 0, 0));
   if (side.body) {
-    entity.manager.scene.physics.world->removeRigidBody(side.body.get());
+    entity.manager.world.systems.get<PhysicsSystem>().getPhysicsWorld().removeRigidBody(side.body.get());
   }
   side.body.reset(new btRigidBody(ci));
-  entity.manager.scene.physics.world->addRigidBody(side.body.get());
+  entity.manager.world.systems.get<PhysicsSystem>().getPhysicsWorld().addRigidBody(side.body.get());
 }
 
 void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const Vector3f &normal) {
@@ -132,7 +134,7 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
 }
 
 Vector3f Portal::getScaleMult() const {
-  double delta = entity.manager.scene.world->getTime()-openSince;
+  double delta = entity.manager.world.getTime()-openSince;
   if (delta > OPEN_ANIM_DURATION) {
     return Vector3f(1, 1, 1);
   }

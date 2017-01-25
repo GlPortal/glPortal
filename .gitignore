@@ -17,6 +17,7 @@ CTestTestfile.cmake
 Testing/
 source/glportal
 source/glportal_d
+source/Version.hpp
 /html
 documentation/html/
 documentation/latex/
@@ -26,4 +27,5 @@ source/gmon.out
 documentation/doxygen_sqlite3.db
 tests/gwenUnicodeTest
 tests/quaternionTest
-tests/xmlReadingTest
+tests/xmlReadingTest/version.txt
+cmake-build-debug/

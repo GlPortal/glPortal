@@ -1,21 +1,22 @@
-<a href="https://jenkins.glportal.de/job/GlPortal/"><img src="https://jenkins.glportal.de/buildStatus/icon?job=GlPortal"></a>
+[![Build Status](https://api.travis-ci.org/GlPortal/glPortal.svg?branch=RadixEngine)](https://travis-ci.org/GlPortal/glPortal)
 [![Join the chat at https://gitter.im/GlPortal/glPortal](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/GlPortal/glPortal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Join Chat](https://img.shields.io/badge/irc-join_chat-brightgreen.svg)](http://webchat.freenode.net/?channels=%23glportal&uio=d4)
 [![Report a bug](https://img.shields.io/badge/bugs-report_now-brightgreen.svg)](https://bugs.glportal.de)
+[![Contributors](https://img.shields.io/badge/contributors-stats-brightgreen.svg)](http://stats.glportal.de/)
 
 Donate Bitcoin to 15Nt42PptnaBFg5Zwwa5B7GNdWxBsy297m
 # GlPortal
-    The game is under active development. Master is the stable branch and thus receives only 
-    irregular updates. If you want to see or work on the bleeding edge check out our current 
-    feature branches.
-  
-GlPortal is a modern free and open shader based 3d game and game engine with realistic physic simulation.
+GlPortal is a modern free and open shader based 3d game with realistic physic simulation.
 It runs on all modern operating systems including GNU/Linux, Mac and Windows.
 You can find the website at http://glportal.de .
 
 Chat with us at *irc.freenode.org* in the channel [#glportal](http://webchat.freenode.net/?channels=%23glportal&uio=d4).
 
-<img src="https://glportal.de/glportal.gif">
+GlPortal is powered by RadixEngine:
+
+[![Powered by RadixEngine](https://raw.githubusercontent.com/GlPortal/glportal_raw_data/master/graphics/logo/radix/RadixEngine.png)](https://github.com/GlPortal/RadixEngine)
+
+<img src="http://glportal.de/glportal.gif">
 
 ## History 
 GlPortal is based on a project by Simon Larsen in 2012.
