@@ -88,11 +88,11 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
 
   glEnable(GL_STENCIL_TEST);
   glEnable(GL_SCISSOR_TEST);
-  for (Entity &e : world.entityManager) {
-    if (e.hasComponent<ViewFrame>()) {
-      const Transform &t = e.getComponent<Transform>();
+  for (Entity &entity : world.entityManager) {
+    if (entity.hasComponent<ViewFrame>()) {
+      const Transform &t = entity.getComponent<Transform>();
       Matrix4f inMat; t.getModelMtx(inMat);
-      const ViewFrame &vf = e.getComponent<ViewFrame>();
+      const ViewFrame &vf = entity.getComponent<ViewFrame>();
       Matrix4f outMat;
       outMat.translate(vf.view.getPosition());
       outMat.rotate(vf.view.getOrientation());
