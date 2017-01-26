@@ -55,29 +55,29 @@ void GameRenderer::render() {
   renderScene(*renderContext);
 }
 
-void GameRenderer::renderScene(RenderContext &rc) {
-  if (rc.viewFramesStack.size() > rc.viewStackMaxDepth) {
+void GameRenderer::renderScene(RenderContext &renderContext) {
+  if (renderContext.viewFramesStack.size() > renderContext.viewStackMaxDepth) {
     return;
   }
   RectangleI scissor;
-  if (rc.viewFramesStack.size() > 0) {
-    const RenderContext::ViewFrameInfo &vfi = rc.getViewFrame();
+  if (renderContext.viewFramesStack.size() > 0) {
+    const RenderContext::ViewFrameInfo &vfi = renderContext.getViewFrame();
     // Don't render further if computed clip rect is zero-sized
-    if (not renderer.clipViewFrame(rc, vfi.first, vfi.second, scissor)) {
+    if (not renderer.clipViewFrame(renderContext, vfi.first, vfi.second, scissor)) {
       return;
     }
   }
 
   glClear(GL_DEPTH_BUFFER_BIT);
 
-  renderViewFrames(rc);
+  renderViewFrames(renderContext);
 
-  if (rc.viewFramesStack.size() > 0) {
+  if (renderContext.viewFramesStack.size() > 0) {
     glScissor(scissor.x, scissor.y, scissor.w, scissor.h);
-    renderViewFrameStencil(rc);
+    renderViewFrameStencil(renderContext);
   }
 
-  renderEntities(rc);
+  renderEntities(renderContext);
 }
 
 void GameRenderer::renderViewFrames(RenderContext &rc) {
