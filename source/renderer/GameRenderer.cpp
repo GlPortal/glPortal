@@ -162,7 +162,6 @@ void GameRenderer::renderViewFrameStencil(RenderContext &rc) {
   }
   shader.release();
 
-  //glColorMask(GL_TRUE, GL_TRUE, GL_FALSE, GL_TRUE);  // blue-ish filter if drawing on white or grey
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glDepthMask(GL_TRUE);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
