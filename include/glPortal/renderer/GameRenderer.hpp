@@ -1,5 +1,5 @@
-#ifndef GAMERENDERER_HPP
-#define GAMERENDERER_HPP
+#ifndef GAME_RENDERER_HPP
+#define GAME_RENDERER_HPP
 
 #include <memory>
 #include <string>
@@ -65,4 +65,4 @@ private:
 
 } /* namespace glPortal */
 
-#endif /* GAMERENDERER_HPP */
+#endif /* GAME_RENDERER_HPP */
