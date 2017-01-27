@@ -74,8 +74,7 @@ In your favorite console, run these commands:
 ```bash
 git clone https://github.com/GlPortal/glPortal.git
 cd glPortal
-git submodule init
-git submodule update
+git submodule update --init --recursive
 ```
 
 ## Building the binary
