@@ -9,11 +9,24 @@ project(${EXE_NAME})
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+#### PLATFORM-SPECIFIC FIXES ####
+
+if(DEFINED WIN32) # Support for Windows based
+    add_definitions("-DNOMINMAX")
+endif()
+
+if(DEFINED WIN32) # Workaround for MSVC (and, or, not fix)
+    add_definitions("-Dnot=!")
+    add_definitions("-Dor=||")
+    add_definitions("-Dand=&&")
+endif()
+
 # Sort of dirty hack, try to fix its
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/RadixEngine/cmake)
 
 set(PORTAL_LIBRARIES "")
 
+set (CMAKE_CXX_FLAGS "")
 find_package(CXX14 REQUIRED)
 set(CMAKE_CXX_FLAGS "${CXX14_FLAGS} ${CMAKE_CXX_FLAGS}")
 

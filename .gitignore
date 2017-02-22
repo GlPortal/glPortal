@@ -29,3 +29,5 @@ tests/gwenUnicodeTest
 tests/quaternionTest
 tests/xmlReadingTest/version.txt
 cmake-build-debug/
+build/
+x64/

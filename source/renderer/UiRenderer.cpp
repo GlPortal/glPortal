@@ -50,7 +50,7 @@ void UiRenderer::render() {
   Text version;
   version.font     = "Pacaya";
   version.size     = 0.5f;
-  version.content  = std::string("Early testing build: ")  + GAME_VERSION;
+  version.content  = std::string("Early testing build: ") + "development 0.4.0-180-g3805388";
   version.color    = Vector4f(1, 1, 1, 1);
   version.position = Vector3f(10, viewportHeight - 45, -20);
   renderer.renderText(*renderContext.get(), version);
