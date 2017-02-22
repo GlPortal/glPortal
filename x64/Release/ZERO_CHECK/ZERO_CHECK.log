@@ -1,0 +1,60 @@
+﻿  Checking Build System
+  CMake is re-running because C:/dev/glPortal/build/CMakeFiles/generate.stamp is out-of-date.
+    the file 'C:/dev/glPortal/CMakeLists.txt'
+    is newer than 'C:/dev/glPortal/build/CMakeFiles/generate.stamp.depend'
+    result='-1'
+  [VHACD] 	 LIB_TYPE STATIC
+  [VHACD] 	 -> CMAKE_INSTALL_PREFIX C:/dev/install
+  -- Found FreeImage: headers at C:/dev/install/include, libraries at  :: C:/dev/install/lib/FreeImage.lib
+  -- Could NOT find UnitTestPlusPlus (missing:  UnitTestPlusPlus_LIBRARY UnitTestPlusPlus_INCLUDE_DIR) 
+  -- The following OPTIONAL packages have been found:
+  
+   * Threads
+  
+  -- The following REQUIRED packages have been found:
+  
+   * OpenGL
+   * PkgConfig
+   * Assimp
+   * SDL2
+   * SDL2_mixer
+   * TinyXML2
+   * json11
+   * GWEN
+   * Bullet (required version >= 2.82)
+   * VHACD
+   * FreeImage
+  
+  -- The following OPTIONAL packages have not been found:
+  
+   * UnitTestPlusPlus
+  
+  -- The following OPTIONAL packages have been found:
+  
+   * Threads
+  
+  -- The following REQUIRED packages have been found:
+  
+   * OpenGL
+   * PkgConfig
+   * Assimp
+   * SDL2
+   * SDL2_mixer
+   * TinyXML2
+   * json11
+   * GWEN
+   * Bullet (required version >= 2.82)
+   * VHACD
+   * FreeImage
+  
+  -- The following OPTIONAL packages have not been found:
+  
+   * UnitTestPlusPlus
+  
+  -- The following REQUIRED packages have not been found:
+  
+   * RadixEngine
+  
+  -- Configuring done
+  -- Generating done
+  -- Build files have been written to: C:/dev/glPortal/build

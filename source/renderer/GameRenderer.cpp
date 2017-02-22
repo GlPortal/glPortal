@@ -1,7 +1,8 @@
 #include <glPortal/renderer/GameRenderer.hpp>
 #include <glPortal/World.hpp>
 
-#include <epoxy/gl.h>
+//#include <epoxy/gl.h>
+#include <glad/glad.h>
 
 #include <radix/renderer/Renderer.hpp>
 #include <radix/Viewport.hpp>
@@ -63,7 +64,7 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
   if (renderContext.viewFramesStack.size() > 0) {
     const RenderContext::ViewFrameInfo &vfi = renderContext.getViewFrame();
     // Don't render further if computed clip rect is zero-sized
-    if (not renderer.clipViewFrame(renderContext, vfi.first, vfi.second, scissor)) {
+    if (!renderer.clipViewFrame(renderContext, vfi.first, vfi.second, scissor)) {
       return;
     }
   }
@@ -104,10 +105,10 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
       rc.popViewFrame();
     }
   }
-  if (not save_stencil_test) {
+  if (!save_stencil_test) {
     glDisable(GL_STENCIL_TEST);
   }
-  if (not save_scissor_test) {
+  if (!save_scissor_test) {
     glDisable(GL_SCISSOR_TEST);
   }
 

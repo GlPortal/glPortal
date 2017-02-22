@@ -1,7 +1,8 @@
 #include <glPortal/renderer/TerminalRenderer.hpp>
 #include <glPortal/component/Terminal.hpp>
 
-#include <epoxy/gl.h>
+//#include <epoxy/gl.h>
+#include <glad/glad.h>
 
 #include <radix/renderer/Renderer.hpp>
 #include <radix/data/model/MeshLoader.hpp>

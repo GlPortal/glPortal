@@ -29,7 +29,7 @@ void PortalSystem::update(float dtime) {
                &pB = pp.second->getComponent<Portal>();
 
         // No uncollider? No portal link.
-        if (not pA.uncollider or not pB.uncollider) {
+        if (!pA.uncollider || !pB.uncollider) {
           continue;
         }
 
@@ -37,7 +37,7 @@ void PortalSystem::update(float dtime) {
           pA.uncollider->getWorldTransform(),
           min, max);
         // Is player within portal A uncollider (AABB then real check) ?
-        if (PhysicsHelper::pointInAABB(pos, min, max) and
+        if (PhysicsHelper::pointInAABB(pos, min, max) && 
             PhysicsHelper::pointInVolume(pos, *pA.uncollider)) {
           // Behind portal A
           const Transform
@@ -61,7 +61,7 @@ void PortalSystem::update(float dtime) {
           pB.uncollider->getWorldTransform(),
           min, max);
         // Is player within portal B uncollider ?
-        if (PhysicsHelper::pointInAABB(pos, min, max) and
+        if (PhysicsHelper::pointInAABB(pos, min, max) && 
             PhysicsHelper::pointInVolume(pos, *pB.uncollider)) {
           // Behind portal B
           const Transform
