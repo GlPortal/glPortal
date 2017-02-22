@@ -1,8 +1,7 @@
 #include <glPortal/renderer/UiRenderer.hpp>
 #include <glPortal/Game.hpp>
 
-//#include <epoxy/gl.h>
-#include <glad/glad.h>
+#include <epoxy/gl.h>
 
 #include <radix/data/model/MeshLoader.hpp>
 #include <radix/data/shader/ShaderLoader.hpp>

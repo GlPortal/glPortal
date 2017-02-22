@@ -5,7 +5,6 @@ if(NOT DEFINED PORTAL_LIBRARIES)
 endif()
 
 add_executable(${EXE_NAME}
-  glad/glad.cpp
   renderer/TerminalRenderer.cpp
   renderer/UiRenderer.cpp
   renderer/GameRenderer.cpp
