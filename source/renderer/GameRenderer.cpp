@@ -11,6 +11,8 @@
 #include <radix/data/model/MeshLoader.hpp>
 #include <radix/data/material/MaterialLoader.hpp>
 
+#include <ciso646>
+
 using namespace radix;
 
 namespace glPortal {

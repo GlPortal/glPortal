@@ -5,6 +5,8 @@
 #include <radix/physics/PhysicsHelper.hpp>
 #include <radix/World.hpp>
 
+#include <ciso646>
+
 using namespace radix;
 
 namespace glPortal {
