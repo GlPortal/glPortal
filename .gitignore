@@ -32,4 +32,3 @@ cmake-build-debug/
 getopt.h
 build/
 x64/
-external/RadixEngine/
