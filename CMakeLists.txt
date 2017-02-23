@@ -38,8 +38,18 @@ if (
   (NOT DEFINED EPOXY_SUPPORT) AND # Epoxy
   (NOT DEFINED GLAD_SUPPORT)      # GLAD
 )
-  set(EPOXY_SUPPORT TRUE)
+  if(WIN32)
+    set(GLAD_SUPPORT TRUE)
+  else()
+    set(EPOXY_SUPPORT TRUE)
+  endif()
 endif()
+
+if (EPOXY_SUPPORT)
+  add_definitions("-DEPOXY_SUPPORT")
+elseif (GLAD_SUPPORT) 
+  add_definitions("-DGLAD_SUPPORT")
+endif ()
 
 set(PORTAL_TEST_LIBRARIES ${PORTAL_LIBRARIES})
 
