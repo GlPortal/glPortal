@@ -19,6 +19,7 @@ add_executable(${EXE_NAME}
   WorldHelper.cpp
 )
 
+target_compile_definitions(${EXE_NAME} PUBLIC ${RADIX_DEFINITIONS})
 target_link_libraries(${EXE_NAME} ${PORTAL_LIBRARIES})
 install(TARGETS ${EXE_NAME} DESTINATION bin)
 add_custom_target(update_assets COMMAND git submodule update --depth 1)
