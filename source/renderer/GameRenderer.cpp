@@ -1,8 +1,7 @@
 #include <glPortal/renderer/GameRenderer.hpp>
 #include <glPortal/World.hpp>
 
-#include <epoxy/gl.h>
-
+#include <radix/OpenGL.hpp>
 #include <radix/renderer/Renderer.hpp>
 #include <radix/Viewport.hpp>
 #include <radix/component/ViewFrame.hpp>

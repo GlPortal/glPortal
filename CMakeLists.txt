@@ -9,6 +9,19 @@ project(${EXE_NAME})
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+#### PLATFORM-SPECIFIC FIXES ####
+
+if(DEFINED WIN32)
+  if(MSVC)
+    add_definitions("-DNOMINMAX")
+  endif()
+  if(MSVC)
+    add_definitions("-Dand=&&")
+    add_definitions("-Dor=||")
+    add_definitions("-Dnot=!")
+  endif()
+endif()
+
 # Sort of dirty hack, try to fix its
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/RadixEngine/cmake)
 
@@ -20,6 +33,23 @@ set(CMAKE_CXX_FLAGS "${CXX14_FLAGS} ${CMAKE_CXX_FLAGS}")
 find_package(RadixEngine REQUIRED)
 include_directories(${RADIX_INCLUDE_DIRS})
 list(APPEND PORTAL_LIBRARIES ${RADIX_LIBRARIES})
+
+if (
+  (NOT DEFINED EPOXY_SUPPORT) AND # Epoxy
+  (NOT DEFINED GLAD_SUPPORT)      # GLAD
+)
+  if(WIN32)
+    set(GLAD_SUPPORT TRUE)
+  else()
+    set(EPOXY_SUPPORT TRUE)
+  endif()
+endif()
+
+if (EPOXY_SUPPORT)
+  add_definitions("-DEPOXY_SUPPORT")
+elseif (GLAD_SUPPORT) 
+  add_definitions("-DGLAD_SUPPORT")
+endif ()
 
 set(PORTAL_TEST_LIBRARIES ${PORTAL_LIBRARIES})
 
@@ -42,7 +72,11 @@ if (CMAKE_VERSION VERSION_GREATER 2.8.5)
   feature_summary(WHAT ALL)
 endif ()
 
-if (APPLE)
+if (MSVC)
+  add_custom_target(versionInfo ALL 
+    COMMAND cd ${CMAKE_CURRENT_SOURCE_DIR} & call ./scripts/writeVer.bat ${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
+  )
+elseif(APPLE)
   add_custom_target(versionInfo ALL
     COMMAND echo \"\#define GAME_VERSION \\\"\\c\">${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
     COMMAND git describe | tr -d \"\\n\" >>${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp

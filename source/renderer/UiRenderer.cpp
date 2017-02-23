@@ -1,8 +1,7 @@
 #include <glPortal/renderer/UiRenderer.hpp>
 #include <glPortal/Game.hpp>
 
-#include <epoxy/gl.h>
-
+#include <radix/OpenGL.hpp>
 #include <radix/data/model/MeshLoader.hpp>
 #include <radix/data/shader/ShaderLoader.hpp>
 #include <radix/data/material/MaterialLoader.hpp>
@@ -50,7 +49,7 @@ void UiRenderer::render() {
   Text version;
   version.font     = "Pacaya";
   version.size     = 0.5f;
-  version.content  = std::string("Early testing build: ")  + GAME_VERSION;
+  version.content  = std::string("Early testing build: ") + GAME_VERSION;
   version.color    = Vector4f(1, 1, 1, 1);
   version.position = Vector3f(10, viewportHeight - 45, -20);
   renderer.renderText(*renderContext.get(), version);

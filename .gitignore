@@ -29,3 +29,6 @@ tests/gwenUnicodeTest
 tests/quaternionTest
 tests/xmlReadingTest/version.txt
 cmake-build-debug/
+getopt.h
+build/
+x64/
