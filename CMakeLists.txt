@@ -72,15 +72,7 @@ if (CMAKE_VERSION VERSION_GREATER 2.8.5)
   feature_summary(WHAT ALL)
 endif ()
 
-if (MSVC)
-  add_custom_target(versionInfo ALL
-    COMMAND del ${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
-    COMMAND echo -n \"\#define GAME_VERSION \\\"\">${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
-    COMMAND git describe | tr -d \"\\n\" >>${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
-    COMMAND echo -n \"\\\"\">>${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
-    COMMAND git update-index --assume-unchanged ${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
-  )
-elseif (APPLE)
+if (APPLE)
   add_custom_target(versionInfo ALL
     COMMAND echo \"\#define GAME_VERSION \\\"\\c\">${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
     COMMAND git describe | tr -d \"\\n\" >>${CMAKE_CURRENT_SOURCE_DIR}/source/Version.hpp
