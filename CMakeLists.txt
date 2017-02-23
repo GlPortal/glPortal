@@ -9,6 +9,19 @@ project(${EXE_NAME})
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+#### PLATFORM-SPECIFIC FIXES ####
+
+if(DEFINED WIN32)
+  if(MSVC)
+    add_definitions("-DNOMINMAX")
+  endif()
+  if(MSVC)
+    add_definitions("-Dand=&&")
+    add_definitions("-Dor=||")
+    add_definitions("-Dnot=!")
+  endif()
+endif()
+
 # Sort of dirty hack, try to fix its
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/RadixEngine/cmake)
 
