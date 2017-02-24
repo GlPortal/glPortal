@@ -5,7 +5,9 @@
 #include <radix/physics/PhysicsHelper.hpp>
 #include <radix/World.hpp>
 
+#ifdef _WIN32
 #include <ciso646>
+#endif
 
 using namespace radix;
 

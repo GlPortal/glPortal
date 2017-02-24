@@ -11,7 +11,9 @@
 #include <radix/data/model/MeshLoader.hpp>
 #include <radix/data/material/MaterialLoader.hpp>
 
+#ifdef _WIN32
 #include <ciso646>
+#endif
 
 using namespace radix;
 
