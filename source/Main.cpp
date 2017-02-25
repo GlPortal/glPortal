@@ -4,6 +4,8 @@
 #include <radix/env/ArgumentsParser.hpp>
 #include <radix/core/diag/Throwables.hpp>
 
+#undef main
+
 using namespace glPortal;
 
 int main(const int argc, char *argv[]) {
