@@ -2,7 +2,7 @@
 #define PORTAL_HPP
 
 #include <memory>
-#include <bullet/BulletCollision/btBulletCollisionCommon.h>
+#include <bullet/btBulletCollisionCommon.h>
 
 #include <radix/component/Component.hpp>
 #include <radix/core/math/Vector3f.hpp>
