@@ -6,10 +6,10 @@ matrix:
   include:
     - os: linux
       services: docker
-      before_install: docker pull glportal/whale-gcc
+      before_install: docker pull glportal/whale-gcc:bullet285
       script:
         - set -e
-        - docker run -it --rm -w /data -v $(pwd):/data glportal/whale-gcc bash -c "cmake ./; make; make tests;"
+        - docker run -it --rm -w /data -v $(pwd):/data glportal/whale-gcc:bullet285 bash -c "cmake ./; make; make tests;"
   exclude:
     - os: osx
       osx_image: xcode7.3
