@@ -8,6 +8,10 @@
 #include <radix/system/PhysicsSystem.hpp>
 #include <radix/component/LightSource.hpp>
 
+#ifdef _WIN32
+#include <ciso646>
+#endif
+
 using namespace radix;
 
 namespace glPortal {
