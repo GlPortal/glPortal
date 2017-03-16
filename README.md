@@ -2,6 +2,7 @@
 [![Join the chat at https://gitter.im/GlPortal/glPortal](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/GlPortal/glPortal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Join Chat](https://img.shields.io/badge/irc-join_chat-brightgreen.svg)](http://webchat.freenode.net/?channels=%23glportal&uio=d4)
 [![Contributors](https://img.shields.io/badge/contributors-stats-brightgreen.svg)](http://stats.glportal.de/)
+[![Documentation Status](https://img.shields.io/badge/specification-latest-brightgreen.svg)](http://specification.glportal.de/en/latest/?badge=latest)
 
 Donate Bitcoin to 15Nt42PptnaBFg5Zwwa5B7GNdWxBsy297m
 # GlPortal
