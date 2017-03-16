@@ -25,10 +25,11 @@ private:
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
   void initHook();
+  void customTriggerHook();
   void initFunctionStack();
-  double dtime;
   void initRenderers();
   void addRenderers();
+  double dtime;
 };
 
 } /* namespace glPortal */
