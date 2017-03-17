@@ -8,6 +8,7 @@ namespace glPortal {
 class PortalTeleport : public radix::CustomTrigger {
 public:
   PortalTeleport();
+  static void setAction(radix::Entity &trigger, std::string &destination);
 };
 
 } /* namespace glPortal */
