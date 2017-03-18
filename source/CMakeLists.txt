@@ -9,7 +9,6 @@ add_executable(${EXE_NAME}
   renderer/UiRenderer.cpp
   renderer/GameRenderer.cpp
         trigger/PortalTeleport.cpp
-  system/PortalSystem.cpp
   Editor.cpp
   Main.cpp
   Game.cpp
