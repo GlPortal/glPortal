@@ -10,7 +10,6 @@ matrix:
       script:
         - set -e
         - docker run -it --rm -w /data -v $(pwd):/data glportal/whale-gcc:bullet285 bash -c "cmake ./; make; make tests;"
-  exclude:
     - os: osx
       osx_image: xcode7.3
       compiler: gcc
