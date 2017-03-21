@@ -44,7 +44,7 @@ void Game::initRenderers() {
   World& worldReference = static_cast<glPortal::World&>(world);
   radix::Renderer& rendererReference = *renderer.get();
   gameRenderer =
-    std::make_unique<GameRenderer>(worldReference, rendererReference, camera.get(), &dtime);
+    std::make_unique<GameRenderer>(worldReference, rendererReference, world.camera.get(), &dtime);
   uiRenderer =
     std::make_unique<UiRenderer>(worldReference, rendererReference);
  }

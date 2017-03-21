@@ -13,8 +13,8 @@ using namespace radix;
 namespace glPortal {
 
 void WorldHelper::shootPortal(int button, World &world) {
-  Vector3f cameraDir = Math::toDirection(world.camera.getOrientation());
-  btVector3 btFrom = world.camera.getPosition();
+  Vector3f cameraDir = Math::toDirection(world.camera->getOrientation());
+  btVector3 btFrom = world.camera->getPosition();
   btVector3 btTo = btFrom + cameraDir*10000;
   btCollisionWorld::ClosestRayResultCallback res(btFrom, btTo);
 
@@ -35,7 +35,7 @@ void WorldHelper::shootPortal(int button, World &world) {
         Portal &portal = pEnt.getComponent<Portal>();
         portal.openSince = world.getTime();
         portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png");
-        portal.placeOnWall(world.camera.getPosition(), ipos, res.m_hitNormalWorld);
+        portal.placeOnWall(world.camera->getPosition(), ipos, res.m_hitNormalWorld);
         LightSource &pLight = pEnt.getComponent<LightSource>();
 
         if (button == 1) {
