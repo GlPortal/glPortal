@@ -12,7 +12,7 @@ namespace glPortal {
 
 Game::Game() {
   windowTitle = "GlPortal";
-  defaultMap = "/packages/test/maps/teleportTriggerTerminalVelocity.xml";
+  defaultMap = "/maps/n1.xml";
 }
 
 void Game::initHook() {
