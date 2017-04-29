@@ -1,7 +1,7 @@
-Copyright (c) 2015 GlPortal Team: Julian Thijssen, Henry Hirsch
-Original Software (c) 2012 Simon Jonas Larsen
-Contributors: gravgun, xantares, faust, fraang
-Please drop me a message if you are missing on this list.
+# zlib License
+Copyright (c) 2017 GlPortal Team: Julian Thijssen, Henry Hirsch  
+Original Software (c) 2012 Simon Jonas Larsen  
+[Complete List of Contributors](https://github.com/GlPortal/glPortal/graphs/contributors)
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
