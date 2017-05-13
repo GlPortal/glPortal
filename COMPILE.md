@@ -58,6 +58,11 @@ pacman -S cmake make gcc pkg-config assimp libepoxy sdl2 sdl2_mixer bullet mesa 
 apt-get install cmake make gcc pkg-config libassimp-dev libepoxy-dev libsdl2-dev libsdl2-mixer-dev libbullet-dev libtinyxml2-dev libgl1-mesa-dev libunittest++-dev libfreeimage-dev
 ```
 
+### Ubuntu 17.04
+```bash
+apt-get install cmake make gcc pkg-config libassimp-dev libepoxy-dev libsdl2-dev libsdl2-mixer-dev libbullet-dev libtinyxml2-dev libgl1-mesa-dev libunittest++-dev libfreeimageplus-dev
+```
+
 ### Others
 Now how will you satisfy these dependencies? No problem. You might notice that when you
 are looking for them in your package manager that you get overwhelmed by a list of possible
