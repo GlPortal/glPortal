@@ -33,13 +33,13 @@ Remember, you have to be root, so you might want to prefix `sudo`.
 #### on 32-bit
 Launch the *Mingw-w64 Win32 shell* from the start menu. In it, type:
 ```bash
-pacman -S pkg-config mingw-w64-i686-{cmake,make,gcc,pkg-config,assimp,libepoxy,SDL2,SDL2_mixer,bullet,tinyxml2,freeimage}
+pacman -S pkg-config mingw-w64-i686-{cmake,make,gcc,pkg-config,assimp,libepoxy,SDL2{,_mixer},bullet,tinyxml2,freeimage}
 ```
 
 #### on 64-bit
 Launch the *Mingw-w64 Win64 shell* from the start menu. In it, type:
 ```bash
-pacman -S pkg-config mingw-w64-x86_64-{cmake,make,gcc,pkg-config,assimp,libepoxy,SDL2,SDL2_mixer,bullet,tinyxml2,freeimage}
+pacman -S pkg-config mingw-w64-x86_64-{cmake,make,gcc,pkg-config,assimp,libepoxy,SDL2{,_mixer},bullet,tinyxml2,freeimage}
 ```
 
 If you do not already have `git` installed, please also install it with:
@@ -154,7 +154,7 @@ source/glportal --datadir ./data
 ```
 
 ## Build with Visual Studio
-Building is only possible in Visual Studio 2017.
+Building is only possible in Visual Studio 2017, as earlier versions do not support the requied C++14 language features.
 
 First follow the section: "Downloading source code". Then download the latest project files from:
 https://bintray.com/glportal/generic/GlPortal-VS2017-Solution
