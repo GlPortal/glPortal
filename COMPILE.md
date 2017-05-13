@@ -15,7 +15,7 @@ You will need very recent versions of all the dependencies. So please upgrade yo
 - sdl2-mixer
 - bullet (v 2.82+)
 - tinyxml2
-- libgl
+- libgl (binaries provided by Mesa or your proprietary driver)
 - cmake *(make)*
 - make *(make)*
 - gcc *(make)*
@@ -33,13 +33,13 @@ Remember, you have to be root, so you might want to prefix `sudo`.
 #### on 32-bit
 Launch the *Mingw-w64 Win32 shell* from the start menu. In it, type:
 ```bash
-pacman -S pkg-config mingw-w64-i686-cmake mingw-w64-i686-make mingw-w64-i686-gcc mingw-w64-i686-pkg-config mingw-w64-i686-assimp mingw-w64-i686-libepoxy mingw-w64-i686-SDL2 mingw-w64-i686-SDL2_mixer mingw-w64-i686-bullet mingw-w64-i686-tinyxml2 mingw-w64-i686-freeimage
+pacman -S pkg-config mingw-w64-i686-{cmake,make,gcc,pkg-config,assimp,libepoxy,SDL2,SDL2_mixer,bullet,tinyxml2,freeimage}
 ```
 
 #### on 64-bit
 Launch the *Mingw-w64 Win64 shell* from the start menu. In it, type:
 ```bash
-pacman -S pkg-config mingw-w64-x86_64-cmake mingw-w64-x86_64-make mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config mingw-w64-x86_64-assimp mingw-w64-x86_64-libepoxy mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_mixer mingw-w64-x86_64-bullet mingw-w64-x86_64-tinyxml2 mingw-w64-x86_64-freeimage
+pacman -S pkg-config mingw-w64-x86_64-{cmake,make,gcc,pkg-config,assimp,libepoxy,SDL2,SDL2_mixer,bullet,tinyxml2,freeimage}
 ```
 
 If you do not already have `git` installed, please also install it with:
@@ -50,17 +50,17 @@ pacman -S git
 
 ### Arch Linux
 ```bash
-pacman -S cmake make gcc pkg-config assimp libepoxy sdl2 sdl2_mixer bullet mesa tinyxml2 freeimage
+pacman -S cmake make gcc pkg-config assimp libepoxy sdl2{,_mixer} bullet mesa tinyxml2 freeimage
 ```
 
 ### Debian 8 / Ubuntu 14.04 / Linux Mint 17.x
 ```bash
-apt-get install cmake make gcc pkg-config libassimp-dev libepoxy-dev libsdl2-dev libsdl2-mixer-dev libbullet-dev libtinyxml2-dev libgl1-mesa-dev libunittest++-dev libfreeimage-dev
+apt-get install cmake make gcc pkg-config lib{assimp,epoxy,sdl2{,-mixer},bullet,tinyxml2,gl1-mesa,unittest++,freeimage}-dev
 ```
 
 ### Ubuntu 17.04
 ```bash
-apt-get install cmake make gcc pkg-config libassimp-dev libepoxy-dev libsdl2-dev libsdl2-mixer-dev libbullet-dev libtinyxml2-dev libgl1-mesa-dev libunittest++-dev libfreeimageplus-dev
+apt-get install cmake make gcc pkg-config lib{assimp,epoxy,sdl2{,-mixer},bullet,tinyxml2,gl1-mesa,unittest++,freeimageplus}-dev
 ```
 
 ### Others
@@ -127,12 +127,12 @@ Before we can start the game it is necessary to copy some dlls into our executab
 
 #### on 32-bit
 ```bash
-cp /mingw32/bin/libLinearMath.dll /mingw32/bin/SDL2.dll /mingw32/bin/SDL2_mixer.dll /mingw32/bin/libtinyxml2.dll /mingw32/bin/libgcc_s_dw2-1.dll /mingw32/bin/libstdc++-6.dll /mingw32/bin/libmodplug-1.dll /mingw32/bin/libvorbisfile-3.dll /mingw32/bin/libvorbis-0.dll /mingw32/bin/libogg-0.dll /mingw32/bin/libassimp.dll /mingw32/bin/libBulletCollision.dll /mingw32/bin/libBulletDynamics.dll /mingw32/bin/libepoxy-0.dll /mingw32/bin/libwinpthread-1.dll /mingw32/bin/libfluidsynth-1.dll /mingw32/bin/libminizip-1.dll /mingw32/bin/zlib1.dll /mingw32/bin/libFLAC-8.dll /mingw32/bin/libmad-0.dll /mingw32/bin/libbz2-1.dll /mingw32/bin/libglib-2.0-0.dll /mingw32/bin/libportaudio-2.dll /mingw32/bin/libsndfile-1.dll /mingw32/bin/libintl-8.dll /mingw32/bin/libspeex-1.dll /mingw32/bin/libvorbisenc-2.dll /mingw32/bin/libiconv-2.dll source
+cp /mingw32/bin/{libLinearMath,SDL2{,_mixer},libtinyxml2,libgcc_s_dw2-1,libstdc++-6,libmodplug-1,libvorbisfile-3,libvorbis-0,libogg-0,libassimp,libBulletCollision,libBulletDynamics,libepoxy-0,libwinpthread-1,libfluidsynth-1,libminizip-1,zlib1,libFLAC-8,libmad-0,libbz2-1,libglib-2.0-0,libportaudio-2,libsndfile-1,libintl-8,libspeex-1,libvorbisenc-2,libiconv-2}.dll source
 ```
 
 #### on 64-bit
 ```bash
-cp /mingw64/bin/libLinearMath.dll /mingw64/bin/SDL2.dll /mingw64/bin/SDL2_mixer.dll /mingw64/bin/libtinyxml2.dll /mingw64/bin/libgcc_s_seh-1.dll /mingw64/bin/libstdc++-6.dll /mingw64/bin/libmodplug-1.dll /mingw64/bin/libvorbisfile-3.dll /mingw64/bin/libvorbis-0.dll /mingw64/bin/libogg-0.dll /mingw64/bin/libassimp.dll /mingw64/bin/libBulletCollision.dll /mingw64/bin/libBulletDynamics.dll /mingw64/bin/libepoxy-0.dll /mingw64/bin/libwinpthread-1.dll /mingw64/bin/libfluidsynth-1.dll /mingw64/bin/libminizip-1.dll /mingw64/bin/zlib1.dll /mingw64/bin/libFLAC-8.dll /mingw64/bin/libmad-0.dll /mingw64/bin/libbz2-1.dll /mingw64/bin/libglib-2.0-0.dll /mingw64/bin/libportaudio-2.dll /mingw64/bin/libsndfile-1.dll /mingw64/bin/libintl-8.dll /mingw64/bin/libspeex-1.dll /mingw64/bin/libvorbisenc-2.dll /mingw64/bin/libiconv-2.dll /mingw64/bin/libpcre-1.dll source
+cp /mingw64/bin/{libLinearMath,SDL2{,_mixer},libtinyxml2,libgcc_s_seh-1,libstdc++-6,libmodplug-1,libvorbisfile-3,libvorbis-0,libogg-0,libassimp,libBulletCollision,libBulletDynamics,libepoxy-0,libwinpthread-1,libfluidsynth-1,libminizip-1,zlib1,libFLAC-8,libmad-0,libbz2-1,libglib-2.0-0,libportaudio-2,libsndfile-1,libintl-8,libspeex-1,libvorbisenc-2,libiconv-2,libpcre-1}.dll source
 ```
 
 ```bash
