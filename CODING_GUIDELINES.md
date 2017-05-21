@@ -5,9 +5,9 @@
 - Use comments to describe the why, not the how
 - Don't repeat apparent information in the comments 
 
-    ```cpp
+```cpp
 game.pause(); //pause the game
-     ```
+```
      
 ## Planning
 - One branch per feature/bugfix
@@ -15,20 +15,17 @@ game.pause(); //pause the game
 - Merge branches back as soon as possible
 
 ## Conventions
-
 ### Naming
 - No cryptic abbreviations in names (well known abb. are fine e.g. HTML).
 
-    ```cpp
+```cpp
 Observer *GmObsvrPtr; //not worth it
-     ```
+```
      
 ### File encoding and line endings
-- The source files may be restricted to ASCII encoding, or use UTF-8 *without* *BOM* 
-(this warning specifically targets developers using Windows).
+- The source files may be restricted to ASCII encoding, or use UTF-8 *without* *BOM* (this warning specifically targets developers using Windows).
 - Line endings may be LF or CRLF, although the former is preferred. CR line endings are not valid.
-- Encoding conversion macros (```L"", _T(""), T(""), …```) are considered a plague and will be rejected 
-(unless they are in platform-dependent source files which only gets compiled on those platforms).
+- Encoding conversion macros (```L"", _T(""), T(""), …```) are considered a plague and will be rejected (unless they are in platform-dependent source files which only gets compiled on those platforms).
 
 ### Preprocessor
 #### Include guards
@@ -36,14 +33,13 @@ Observer *GmObsvrPtr; //not worth it
 
 *They are not to be prefixed or suffixed by any underscore.*
 
-In fact, all global names (that includes defines) starting with one underscore and a capital letter or two underscores 
-are reserved by the C and C++ standard. 
+In fact, all global names (that includes defines) starting with one underscore and a capital letter or two underscores are reserved by the C and C++ standard. 
 As of the 2012-01-16 C++11 Working Draft, this is specified in 17.6.4.3.2/1 `[global.names]`.
 
 *(Yet, many developers keep using this bad practice)*
 
-As a side note for MSVC developers: ```#pragma once``` isn't an include guard and can't replace nor even supplement it. 
-Except for Windows-specific source files, any file containing it will be rejected.
+As a side note for MSVC developers: ```#pragma once``` isn't an include guard and can't replace nor even supplement it. Except for Windows-specific source files, any file containing it will be rejected.
+
 ### Indentation, whitespace and line length
 - An indentation level = two spaces. Tabs aren't considered a consistent identation method.
 - Empty lines are not to be idented, i.e. /really/ empty.
@@ -53,7 +49,8 @@ Except for Windows-specific source files, any file containing it will be rejecte
 more spaces can be added if their count is low; else, just increase the identation level by one.
 - Trailing whitespace isn't allowed.
 - Maximum line length is 100 UTF-8 codepoints. In layman terms, 100 characters.
-    ```cpp
+
+```cpp
 namespace glPortal {
 
 void func() {
@@ -81,11 +78,12 @@ void func() {
 }
 
 }
-     ```
+```
+
 ### Pointer and References
-Pointer/reference mark sticks to the *variable* name (*not* function name), 
-or when there is no variable name, to the type itself.
-     ```cpp
+Pointer/reference mark sticks to the *variable* name (*not* function name), or when there is no variable name, to the type itself.
+
+```cpp
 Type var1, *var2, &var3 = thing;
 Type* getPtr(Type *namedParm);
 Type& getRef(UnnamedParm*);
@@ -94,12 +92,14 @@ Type& getRef(UnnamedParm*);
 Type *badGetPtr(Type *namedParm);
 // because it doesn't return Type, it returns Type* !
 // Moreover the function name has nothing to do with that pointer mark on it.
-    ```
+```
+
 ### Blocks of code
 - *Always* open a new block of code after a control structure
 - Open them on the line of the control statement
 - Put code on the next line
-     ```cpp
+
+```cpp
 if (cond) {
   code();
 }
@@ -114,4 +114,4 @@ if (cond)
   code();
 
 if (cond) code();
- ```
+```
