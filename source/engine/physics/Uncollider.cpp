@@ -49,6 +49,7 @@ void Uncollider::nearCallback(btBroadphasePair &collisionPair,
     btCollisionObjectWrapper obj1Wrap(0, colObj1->getCollisionShape(),
       colObj1, colObj1->getWorldTransform(), -1, -1);
 
+    btManifoldResult contactPointResult(&obj0Wrap, &obj1Wrap);
     if (not collisionPair.m_algorithm) {
 #if (BT_BULLET_VERSION >=286)
       collisionPair.m_algorithm =
