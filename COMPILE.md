@@ -6,23 +6,27 @@ Make sure to check CMakeLists.txt if it is something missing.
 
 ## Upgrade your OS
 You will need very recent versions of all the dependencies. So please upgrade your OS before proceeding.
-[Upgrade Ubuntu](http://www.ubuntu.com/download/desktop/upgrade)
+
+* Debian: [DebianUpgrade](https://wiki.debian.org/DebianUpgrade)
+* Ubuntu: [Upgrade Ubuntu](http://www.ubuntu.com/download/desktop/upgrade)
+* Linux Mint: [How to upgrade to a newer release](https://community.linuxmint.com/tutorial/view/2)
+* Arch Linux: `pacman -Syu`, which you probably already do frequently
 
 ## List of dependencies
-- assimp
-- epoxy
-- sdl2
-- sdl2-mixer
-- bullet (v 2.82+)
-- tinyxml2
-- libgl (binaries provided by Mesa or your proprietary driver)
-- cmake *(make)*
-- make *(make)*
-- gcc *(make)*
-- pkg-config *(make)*
-- git *(download source code)*
-- libunittest++
-- freeimage
+- assimp: 3D model asset loading
+- epoxy: OpenGL initialization
+- sdl2: Input, OpenGL context & window
+- sdl2-mixer: Sound
+- freeimage: Texture loading
+- bullet (v 2.82+): Physics simulation
+- tinyxml2: Loading maps and data
+- libgl (binaries provided by Mesa or your proprietary driver): 3D rendering
+- cmake *(make)*: Meta-build system
+- make *(make)*: Build system
+- gcc, clang++ or MSVC *(make)*: C++14-able compiler
+- pkg-config *(make)*: Libraries' paths auto-confog
+- git: Download source code
+- libunittest++ *(tests)*: Testing framework
 
 ## Installing dependencies
 Remember, you have to be root, so you might want to prefix `sudo`.
@@ -33,19 +37,13 @@ Remember, you have to be root, so you might want to prefix `sudo`.
 #### on 32-bit
 Launch the *Mingw-w64 Win32 shell* from the start menu. In it, type:
 ```bash
-pacman -S pkg-config mingw-w64-i686-{cmake,make,gcc,pkg-config,assimp,libepoxy,SDL2{,_mixer},bullet,tinyxml2,freeimage}
+pacman -S git pkg-config mingw-w64-i686-{cmake,make,gcc,pkg-config,assimp,libepoxy,SDL2{,_mixer},bullet,tinyxml2,freeimage}
 ```
 
 #### on 64-bit
 Launch the *Mingw-w64 Win64 shell* from the start menu. In it, type:
 ```bash
-pacman -S pkg-config mingw-w64-x86_64-{cmake,make,gcc,pkg-config,assimp,libepoxy,SDL2{,_mixer},bullet,tinyxml2,freeimage}
-```
-
-If you do not already have `git` installed, please also install it with:
-
-```bash
-pacman -S git
+pacman -S git pkg-config mingw-w64-x86_64-{cmake,make,gcc,pkg-config,assimp,libepoxy,SDL2{,_mixer},bullet,tinyxml2,freeimage}
 ```
 
 ### Arch Linux
@@ -87,54 +85,59 @@ git submodule update --init --recursive
 Make sure to check the README.md and COMPILE.md from the release you downloaded in case
 there are differences in the compile workflow for it.
 
+### Setting up the build directory
 In the root directory of the downloaded source type:
-### Linux
+#### Linux
 ```bash
 mkdir build && cd build
 cmake ..
 ```
 
-### Windows
+#### Windows
 ```bash
 mkdir build && cd build
 cmake .. -G "MSYS Makefiles" -DCMAKE_MAKE_PROGRAM="mingw32-make"
 ```
 
 
-If you want to profile the source code pass *-DCMAKE_CXX_FLAGS=-pg* to cmake.
+If you want to profile the source code pass `-DCMAKE_CXX_FLAGS=-pg` to cmake.
 Now if this throws an error you have to fix something first. If you don't manage to fix the error, use the
 bugtracker https://github.com/GlPortal/glPortal/issues or http://bugs.glportal.de to report what you did, and what error you got.
 
 If the command did not produce an error, you can build the binary by typing in:
-### Linux
+
+### Building
+#### Linux
 ```bash
 make
 ```
 
-### Windows
+#### Windows
 ```bash
 mingw32-make
 ```
 
+### Running
 If this produces no error you have built the binary and should be able to start GlPortal by typing in:
-### Linux
+#### Linux
 ```bash
 make run
 ```
 
-### Windows
+#### Windows
 Before we can start the game it is necessary to copy some dlls into our executable directory.
 
-#### on 32-bit
+##### on 32-bit
 ```bash
 cp /mingw32/bin/{libLinearMath,SDL2{,_mixer},libtinyxml2,libgcc_s_dw2-1,libstdc++-6,libmodplug-1,libvorbisfile-3,libvorbis-0,libogg-0,libassimp,libBulletCollision,libBulletDynamics,libepoxy-0,libwinpthread-1,libfluidsynth-1,libminizip-1,zlib1,libFLAC-8,libmad-0,libbz2-1,libglib-2.0-0,libportaudio-2,libsndfile-1,libintl-8,libspeex-1,libvorbisenc-2,libiconv-2}.dll source
 ```
 
-#### on 64-bit
+##### on 64-bit
 ```bash
 cp /mingw64/bin/{libLinearMath,SDL2{,_mixer},libtinyxml2,libgcc_s_seh-1,libstdc++-6,libmodplug-1,libvorbisfile-3,libvorbis-0,libogg-0,libassimp,libBulletCollision,libBulletDynamics,libepoxy-0,libwinpthread-1,libfluidsynth-1,libminizip-1,zlib1,libFLAC-8,libmad-0,libbz2-1,libglib-2.0-0,libportaudio-2,libsndfile-1,libintl-8,libspeex-1,libvorbisenc-2,libiconv-2,libpcre-1}.dll source
 ```
 
+##### Run
 ```bash
 mingw32-make run
 ```
