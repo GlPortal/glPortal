@@ -6,6 +6,12 @@
 
 Donate Bitcoin to 15Nt42PptnaBFg5Zwwa5B7GNdWxBsy297m
 # GlPortal
+
+> The *master* branch is in refactoring atm. if you need a stable client please use the *stable* branch.
+> The stable branch does not have a lot of playable maps. So if you want to compile it for playing
+> you have to create your own maps. 
+> A basic *playable version* can be found on [moddb](http://www.moddb.com/games/glportal).
+   
 GlPortal is an Open Source sci-fi fps puzzle-platformer with realistic physic simulation.
 It runs on all modern operating systems including GNU/Linux, Mac and Windows.
 You can find the website at http://glportal.de .
