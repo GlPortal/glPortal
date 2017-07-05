@@ -4,7 +4,7 @@
 [![Contributors](https://img.shields.io/badge/contributors-stats-brightgreen.svg)](http://stats.glportal.de/)
 [![Documentation Status](https://img.shields.io/badge/specification-latest-brightgreen.svg)](http://specification.glportal.de/en/latest/?badge=latest)
 
-Donate Bitcoin to 15Nt42PptnaBFg5Zwwa5B7GNdWxBsy297m
+Donate Bitcoin to 1JxrwJZgV9qBeEPH7BDF9qLJPSDcp6fqxz
 # GlPortal
 
 > The *master* branch is in refactoring atm. if you need a stable client please use the *stable* branch.
