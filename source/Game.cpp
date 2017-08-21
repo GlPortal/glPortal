@@ -2,8 +2,8 @@
 #include <glPortal/GameState.hpp>
 
 #include <iostream>
-#include <radix/component/Trigger.hpp>
-#include <radix/component/Player.hpp>
+#include <radix/entities/Trigger.hpp>
+#include <radix/entities/Player.hpp>
 #include <glPortal/trigger/PortalTeleport.hpp>
 
 using namespace radix;
@@ -36,8 +36,8 @@ void Game::processInput() {
 }
 
 void Game::update() {
-  BaseGame::update();
   dtime = (currentTime-lastRender)/1000.;
+  BaseGame::update();
 }
 
 void Game::initRenderers() {

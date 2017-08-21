@@ -4,15 +4,18 @@
 #include <memory>
 #include <bullet/btBulletCollisionCommon.h>
 
-#include <radix/component/Component.hpp>
+#include <radix/Entity.hpp>
 #include <radix/core/math/Vector3f.hpp>
 #include <radix/core/math/Quaternion.hpp>
 #include <radix/data/material/Material.hpp>
 #include <radix/data/model/Mesh.hpp>
+#include <radix/entities/traits/LightSourceTrait.hpp>
 
 namespace glPortal {
 
-class Portal : public radix::Component {
+class Portal :
+    public virtual radix::Entity,
+    public radix::entities::LightSourceTrait {
 public:
   static const int PORTAL_RANGE;
   static const radix::Vector3f BLUE_COLOR;
@@ -21,7 +24,7 @@ public:
   static const double OPEN_ANIM_DURATION;
   static const float SURFACE_OFFSET;
 
-  Portal(radix::Entity &ent);
+  Portal(const CreationParams&);
   ~Portal();
   radix::Vector3f getDirection() const;
 

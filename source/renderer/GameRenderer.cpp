@@ -5,8 +5,8 @@
 
 #include <radix/renderer/Renderer.hpp>
 #include <radix/Viewport.hpp>
-#include <radix/component/ViewFrame.hpp>
-#include <radix/component/MeshDrawable.hpp>
+#include <radix/entities/ViewFrame.hpp>
+#include <radix/entities/traits/MeshDrawableTrait.hpp>
 #include <radix/data/shader/ShaderLoader.hpp>
 #include <radix/data/model/MeshLoader.hpp>
 #include <radix/data/material/MaterialLoader.hpp>
@@ -89,15 +89,14 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
   glEnable(GL_STENCIL_TEST);
   glEnable(GL_SCISSOR_TEST);
   for (Entity &entity : world.entityManager) {
-    if (entity.hasComponent<ViewFrame>()) {
-      const Transform &t = entity.getComponent<Transform>();
-      Matrix4f inMat; t.getModelMtx(inMat);
-      const ViewFrame &vf = entity.getComponent<ViewFrame>();
+    entities::ViewFrame *vf = dynamic_cast<entities::ViewFrame*>(&entity);
+    if (vf) {
+      Matrix4f inMat; entity.getModelMtx(inMat);
       Matrix4f outMat;
-      outMat.translate(vf.view.getPosition());
-      outMat.rotate(vf.view.getOrientation());
+      outMat.translate(vf->view.getPosition());
+      outMat.rotate(vf->view.getOrientation());
       Matrix4f frameView = renderer.getFrameView(rc.getView(), inMat, outMat);
-      rc.pushViewFrame(RenderContext::ViewFrameInfo(vf.mesh, t));
+      rc.pushViewFrame(RenderContext::ViewFrameInfo(vf->mesh, entity.transform()));
       rc.pushView(frameView);
       renderScene(rc);
       rc.popView();
@@ -173,16 +172,16 @@ void GameRenderer::renderViewFrameStencil(RenderContext &rc) {
 
 void GameRenderer::renderEntities(RenderContext &rc) {
   for (Entity &e : world.entityManager) {
-    if (e.hasComponent<MeshDrawable>()) {
+    if (dynamic_cast<const entities::MeshDrawableTrait*>(&e) != nullptr) {
       renderEntity(rc, e);
     }
   }
 }
 
 void GameRenderer::renderEntity(RenderContext &rc, const Entity &e) {
-  MeshDrawable &drawable = e.getComponent<MeshDrawable>();
+  const auto &drawable = dynamic_cast<const entities::MeshDrawableTrait&>(e);
   Matrix4f mtx;
-  e.getComponent<Transform>().getModelMtx(mtx);
+  e.getModelMtx(mtx);
 
   if (drawable.material.fancyname.compare("Metal tiles .5x") == 0) {
     Shader &metal = ShaderLoader::getShader("metal.frag");
@@ -196,10 +195,10 @@ void GameRenderer::renderEntity(RenderContext &rc, const Entity &e) {
 }
 
 void GameRenderer::renderPlayer(RenderContext &rc) {
-  const Transform &t = world.getPlayer().getComponent<Transform>();
+  const Entity &p = world.getPlayer();
   Matrix4f mtx;
-  mtx.translate(t.getPosition() + Vector3f(0, -.5f, 0));
-  mtx.rotate(t.getOrientation());
+  mtx.translate(p.getPosition() + Vector3f(0, -.5f, 0));
+  mtx.rotate(p.getOrientation());
   mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
   const Mesh &dummy = MeshLoader::getMesh("HumanToken.obj");
   const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
@@ -209,14 +208,12 @@ void GameRenderer::renderPlayer(RenderContext &rc) {
 
 void GameRenderer::setCameraInPortal(const Camera &cam, Camera &dest,
                                  const Entity &portal, const Entity &otherPortal) {
-  Transform &p1T = portal.getComponent<Transform>();
   Matrix4f p1mat;
-  p1mat.translate(p1T.getPosition());
-  p1mat.rotate(p1T.getOrientation());
-  Transform &p2T = otherPortal.getComponent<Transform>();
+  p1mat.translate(portal.getPosition());
+  p1mat.rotate(portal.getOrientation());
   Matrix4f p2mat;
-  p2mat.translate(p2T.getPosition());
-  p2mat.rotate(p2T.getOrientation());
+  p2mat.translate(otherPortal.getPosition());
+  p2mat.rotate(otherPortal.getOrientation());
   Matrix4f rotate180; rotate180.rotate(rad(180), 0, 1, 0);
   Matrix4f view; cam.getViewMatrix(view);
   Matrix4f destView = view * p1mat * rotate180 * inverse(p2mat);
@@ -224,7 +221,7 @@ void GameRenderer::setCameraInPortal(const Camera &cam, Camera &dest,
   dest.setPerspective();
   dest.setAspect(cam.getAspect());
   dest.setFovy(cam.getFovy());
-  dest.setZNear((p1T.getPosition() - cam.getPosition()).length());
+  dest.setZNear((portal.getPosition() - cam.getPosition()).length());
   dest.setViewMatrix(destView);
 }
 

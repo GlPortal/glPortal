@@ -1,8 +1,6 @@
 #ifndef COMPONENT_LIGHTSOURCE_HPP
 #define COMPONENT_LIGHTSOURCE_HPP
 
-#include <radix/component/Component.hpp>
-
 #include <serine/Archiver.hpp>
 
 #include <radix/core/math/Vector4f.hpp>
@@ -20,14 +18,6 @@ public:
     enabled(false),
     backgroundColor(0, 0, 0, 1),
     textColor(1, 1, 1, 1) {
-  }
-
-  const char* getName() const {
-    return "Terminal";
-  }
-
-  TypeId getTypeId() const {
-    return Component::getTypeId<std::remove_reference<decltype(*this)>::type>();
   }
 
   void serialize(serine::Archiver &ar) {
