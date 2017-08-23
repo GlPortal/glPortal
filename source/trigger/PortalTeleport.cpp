@@ -2,6 +2,7 @@
 #include <radix/data/map/XmlHelper.hpp>
 #include <radix/entities/Trigger.hpp>
 #include <radix/entities/Player.hpp>
+#include <radix/BaseGame.hpp>
 
 namespace glPortal {
 
