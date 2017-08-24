@@ -17,10 +17,10 @@ PortalTeleport::PortalTeleport() {
 
 void PortalTeleport::setAction(radix::Entity &trigger, std::string &destination) {
   dynamic_cast<radix::entities::Trigger&>(trigger).setActionOnUpdate([&trigger, destination]
-                                                             (radix::BaseGame &game) {
-    if (game.getWorld()->destinations.find(destination)
-        != game.getWorld()->destinations.end()) {
-      trigger.setPosition(game.getWorld()->destinations.at(destination).position);
+                                                             (radix::entities::Trigger &trigger) {
+    if (trigger.world.destinations.find(destination)
+        != trigger.world.destinations.end()) {
+      trigger.setPosition(trigger.world.destinations.at(destination).position);
     }
   });
 }
