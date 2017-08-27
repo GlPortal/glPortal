@@ -1,8 +1,9 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
+#include <memory>
+
 #include <radix/World.hpp>
-#include <fstream>
 
 namespace glPortal {
 

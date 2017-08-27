@@ -7,6 +7,7 @@
 #include <radix/entities/traits/MeshDrawableTrait.hpp>
 #include <radix/simulation/Physics.hpp>
 #include <radix/entities/traits/LightSourceTrait.hpp>
+#include <radix/util/BulletUserPtrInfo.hpp>
 
 using namespace radix;
 
@@ -22,7 +23,7 @@ void WorldHelper::shootPortal(int button, World &world) {
   phys.getPhysicsWorld().rayTest(btFrom, btTo, res);
 
   if (res.hasHit()) {
-    const Entity *pEnt = reinterpret_cast<Entity*>(res.m_collisionObject->getUserPointer());
+    const Entity *pEnt = util::getBtPtrInfo(res.m_collisionObject).entity;
     // All RigidBodies should have their pointer set, but check anyway
     if (pEnt) {
       const Entity &ent = *pEnt;

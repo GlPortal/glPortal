@@ -43,6 +43,7 @@ Vector3f Portal::getDirection() const {
 
 void Portal::placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vector3f &s,
     const std::unique_ptr<btCollisionShape> &shape, Wrapper::Side &side, const Vector3f &offset) {
+  side.btPtrInfo = radix::util::BulletUserPtrInfo(this);
   side.motionState.reset(new btDefaultMotionState);
   side.motionState->setWorldTransform(
     btTransform(btQuaternion(0, 0, 0, 1), p) *
@@ -55,6 +56,8 @@ void Portal::placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vec
         .getPhysicsWorld().removeRigidBody(side.body.get());
   }
   side.body.reset(new btRigidBody(ci));
+  side.body->setUserPointer(&side.btPtrInfo);
+  side.body->setUserIndex(id);
   world.simulations.findFirstOfType<simulation::Physics>()
       .getPhysicsWorld().addRigidBody(side.body.get());
 }
