@@ -2,8 +2,11 @@
 #include <glPortal/GameState.hpp>
 
 #include <iostream>
+
 #include <radix/entities/Trigger.hpp>
 #include <radix/entities/Player.hpp>
+#include <radix/simulation/Physics.hpp>
+
 #include <glPortal/trigger/PortalTeleport.hpp>
 
 using namespace radix;
@@ -20,6 +23,9 @@ void Game::initHook() {
   gameController = std::make_unique<GameController>(this);
   initRenderers();
   addRenderers();
+
+  m_physDebugDraw.reset(new radix::PhysicsDebugDraw);
+  world.simulations.findFirstOfType<radix::simulation::Physics>().setDebugDraw(m_physDebugDraw.get());
 }
 
 void Game::customTriggerHook() {

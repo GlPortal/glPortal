@@ -10,6 +10,7 @@
 #include <radix/data/material/Material.hpp>
 #include <radix/data/model/Mesh.hpp>
 #include <radix/entities/traits/LightSourceTrait.hpp>
+#include <radix/util/BulletUserPtrInfo.hpp>
 
 namespace glPortal {
 
@@ -44,6 +45,7 @@ public:
   struct Wrapper {
     std::unique_ptr<btCollisionShape> vertShape, horzShape;
     struct Side {
+      radix::util::BulletUserPtrInfo btPtrInfo;
       std::unique_ptr<btRigidBody> body;
       std::unique_ptr<btDefaultMotionState> motionState;
     } top, right, bottom, left;

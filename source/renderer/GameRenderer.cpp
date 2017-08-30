@@ -11,6 +11,9 @@
 #include <radix/data/model/MeshLoader.hpp>
 #include <radix/data/material/MaterialLoader.hpp>
 
+#include <radix/simulation/Physics.hpp>
+#include <radix/physics/PhysicsDebugDraw.hpp>
+
 using namespace radix;
 
 namespace glPortal {
@@ -78,6 +81,15 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
   }
 
   renderEntities(renderContext);
+
+  glClear(GL_DEPTH_BUFFER_BIT);
+  btIDebugDraw *iDbgDraw = world.simulations.findFirstOfType<simulation::Physics>().getDebugDraw();
+  PhysicsDebugDraw *dbgDraw = dynamic_cast<PhysicsDebugDraw*>(iDbgDraw);
+  if (dbgDraw) {
+    world.simulations.findFirstOfType<radix::simulation::Physics>()
+        .getPhysicsWorld().debugDrawWorld();
+    dbgDraw->render(renderContext);
+  }
 }
 
 void GameRenderer::renderViewFrames(RenderContext &rc) {

@@ -8,6 +8,8 @@
 #include <radix/renderer/Renderer.hpp>
 #include <radix/env/Config.hpp>
 #include <radix/BaseGame.hpp>
+#include <radix/physics/PhysicsDebugDraw.hpp>
+
 #include "glPortal/renderer/GameRenderer.hpp"
 #include "glPortal/renderer/UiRenderer.hpp"
 
@@ -21,6 +23,7 @@ public:
 
   GameController& getGameController() { return *gameController; }
 private:
+  std::unique_ptr<radix::PhysicsDebugDraw> m_physDebugDraw;
   std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
