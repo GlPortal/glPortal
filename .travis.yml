@@ -69,3 +69,9 @@ matrix:
 
 notifications:
   irc: "chat.freenode.net#glportal"
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/aef733c0903d3e0594f8
+    on_success: change
+    on_failure: always
+    on_start: never
