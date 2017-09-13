@@ -71,7 +71,7 @@ notifications:
   irc: "chat.freenode.net#glportal"
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/aef733c0903d3e0594f8
+      - https://webhooks.gitter.im/e/ea210c016747790b4fa4
     on_success: always
     on_failure: always
     on_start: never
