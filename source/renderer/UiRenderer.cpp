@@ -7,8 +7,6 @@
 #include <radix/data/shader/ShaderLoader.hpp>
 #include <radix/data/material/MaterialLoader.hpp>
 
-#include <radix/renderer/GlGwenRenderer.hpp>
-
 #include "../Version.hpp"
 
 using namespace radix;
@@ -58,8 +56,6 @@ void UiRenderer::render() {
   renderer.renderText(*renderContext.get(), version);
 
   renderContext->popCamera();
-
-  ((radix::Window*)renderer.getViewport())->gwenCanvas->RenderCanvas();
 
   glDepthMask(GL_TRUE);
 }
