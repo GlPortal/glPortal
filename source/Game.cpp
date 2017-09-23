@@ -16,16 +16,26 @@ namespace glPortal {
 Game::Game() {
   windowTitle = "GlPortal";
   defaultMap = "/maps/n1.xml";
+  showSplash = true;
 }
 
-void Game::initHook() {
+void Game::onPreStartWorld() {
   initFunctionStack();
   gameController = std::make_unique<GameController>(this);
   initRenderers();
   addRenderers();
+  world->simulations.findFirstOfType<radix::simulation::Physics>().setDebugDraw(m_physDebugDraw.get());
+}
+void Game::onPostStartWorld() {}
+void Game::onPreStopWorld() {}
+void Game::onPostStopWorld() {
+  gameController.reset();
+  gameRenderer.reset();
+  uiRenderer.reset();
+}
 
+void Game::initHook() {
   m_physDebugDraw.reset(new radix::PhysicsDebugDraw);
-  world.simulations.findFirstOfType<radix::simulation::Physics>().setDebugDraw(m_physDebugDraw.get());
 }
 
 void Game::customTriggerHook() {
@@ -33,8 +43,11 @@ void Game::customTriggerHook() {
 }
 
 void Game::initFunctionStack() {
-  world.stateFunctionStack.push(&GameState::handleRunning);
-  world.stateFunctionStack.push(&GameState::handleSplash);
+  world->stateFunctionStack.push(&GameState::handleRunning);
+  if (showSplash) {
+    world->stateFunctionStack.push(&GameState::handleSplash);
+    showSplash = false;
+  }
 }
 
 void Game::processInput() {
@@ -47,10 +60,10 @@ void Game::update() {
 }
 
 void Game::initRenderers() {
-  World& worldReference = static_cast<glPortal::World&>(world);
+  World& worldReference = static_cast<glPortal::World&>(*world);
   radix::Renderer& rendererReference = *renderer.get();
   gameRenderer =
-    std::make_unique<GameRenderer>(worldReference, rendererReference, world.camera.get(), &dtime);
+    std::make_unique<GameRenderer>(worldReference, rendererReference, world->camera.get(), &dtime);
   uiRenderer =
     std::make_unique<UiRenderer>(worldReference, rendererReference);
  }

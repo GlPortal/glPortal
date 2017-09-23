@@ -11,7 +11,7 @@ class Screen;
 
 class World : public radix::World {
 public:
-  World(radix::BaseGame &game, radix::InputSource &input);
+  World(radix::BaseGame &game);
   ~World();
 };
 

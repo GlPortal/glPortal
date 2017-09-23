@@ -18,17 +18,24 @@ namespace glPortal {
 class Game : public radix::BaseGame {
 public:
   Game();
-  void processInput();
-  void update();
+
+  void onPreStartWorld() override;
+  void onPostStartWorld() override;
+  void onPreStopWorld() override;
+  void onPostStopWorld() override;
+
+  void processInput() override;
+  void update() override;
 
   GameController& getGameController() { return *gameController; }
 private:
+  bool showSplash;
   std::unique_ptr<radix::PhysicsDebugDraw> m_physDebugDraw;
   std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
-  void initHook();
-  void customTriggerHook();
+  void initHook() override;
+  void customTriggerHook() override;
   void initFunctionStack();
   void initRenderers();
   void addRenderers();

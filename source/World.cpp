@@ -4,8 +4,8 @@ using namespace radix;
 
 namespace glPortal {
 
-World::World(radix::BaseGame &game, InputSource &input) :
-  radix::World(game, input) {
+World::World(radix::BaseGame &game) :
+  radix::World(game) {
 }
 
 World::~World() {}
