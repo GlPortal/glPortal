@@ -10,6 +10,7 @@
 #include <radix/data/shader/ShaderLoader.hpp>
 #include <radix/data/model/MeshLoader.hpp>
 #include <radix/data/material/MaterialLoader.hpp>
+#include <radix/util/Profiling.hpp>
 
 #include <radix/simulation/Physics.hpp>
 #include <radix/physics/PhysicsDebugDraw.hpp>
@@ -25,9 +26,11 @@ GameRenderer::GameRenderer(glPortal::World& w, radix::Renderer& ren, radix::Came
 }
 
 void GameRenderer::render() {
+  PROFILER_BLOCK("GameRenderer::render", profiler::colors::Green200);
   time += *dtime;
   renderer.getViewport()->getSize(&viewportWidth, &viewportHeight);
 
+  PROFILER_BLOCK("GL cleanup");
   glDepthMask(GL_TRUE);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
@@ -38,7 +41,9 @@ void GameRenderer::render() {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  PROFILER_END_BLOCK;
 
+  PROFILER_BLOCK("Rendering context setup");
   camera->setPerspective();
   camera->setAspect((float) viewportWidth / viewportHeight);
 
@@ -54,11 +59,13 @@ void GameRenderer::render() {
   renderContext->viewFramesStack.clear();
 
   renderContext->projDirty = renderContext->viewDirty = true;
+  PROFILER_END_BLOCK;
 
   renderScene(*renderContext);
 }
 
 void GameRenderer::renderScene(RenderContext &renderContext) {
+  PROFILER_BLOCK("GameRenderer::renderScene", profiler::colors::Green300);
   if (renderContext.viewFramesStack.size() > renderContext.viewStackMaxDepth) {
     return;
   }
@@ -93,6 +100,7 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
 }
 
 void GameRenderer::renderViewFrames(RenderContext &rc) {
+  PROFILER_BLOCK("GameRenderer::renderViewFrames");
   GLboolean save_stencil_test;
   glGetBooleanv(GL_STENCIL_TEST, &save_stencil_test);
   GLboolean save_scissor_test;
@@ -142,6 +150,7 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
 }
 
 void GameRenderer::renderViewFrameStencil(RenderContext &rc) {
+  PROFILER_BLOCK("GameRenderer::renderViewFrameStencil");
   GLboolean save_color_mask[4];
   GLboolean save_depth_mask;
   glGetBooleanv(GL_COLOR_WRITEMASK, save_color_mask);
@@ -191,6 +200,7 @@ void GameRenderer::renderEntities(RenderContext &rc) {
 }
 
 void GameRenderer::renderEntity(RenderContext &rc, const Entity &e) {
+  PROFILER_BLOCK("GameRenderer::renderEntity", profiler::colors::Green400);
   const auto &drawable = dynamic_cast<const entities::MeshDrawableTrait&>(e);
   Matrix4f mtx;
   e.getModelMtx(mtx);

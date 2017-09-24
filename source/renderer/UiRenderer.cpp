@@ -6,6 +6,7 @@
 #include <radix/data/model/MeshLoader.hpp>
 #include <radix/data/shader/ShaderLoader.hpp>
 #include <radix/data/material/MaterialLoader.hpp>
+#include <radix/util/Profiling.hpp>
 
 #include "../Version.hpp"
 
@@ -19,6 +20,7 @@ UiRenderer::UiRenderer(World &w, radix::Renderer &ren) :
 }
 
 void UiRenderer::render() {
+  PROFILER_BLOCK("UiRenderer::render");
   glDepthMask(GL_FALSE);
 
   renderer.getViewport()->getSize(&viewportWidth, &viewportHeight);
