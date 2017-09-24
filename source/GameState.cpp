@@ -3,7 +3,7 @@
 
 #include <radix/data/screen/XmlScreenLoader.hpp>
 #include <radix/env/Environment.hpp>
-#include <radix/component/Player.hpp>
+#include <radix/entities/Player.hpp>
 
 namespace glPortal {
 
@@ -11,24 +11,21 @@ radix::EventDispatcher::CallbackHolder GameState::splashCallbackHolder;
 radix::EventDispatcher::CallbackHolder GameState::winCallbackHolder;
 
 void GameState::init(radix::BaseGame &game) {
-  winCallbackHolder = game.getWorld()->event.addObserver
-    (
+  winCallbackHolder = game.getWorld()->event.addObserver(
       radix::GameState::WinEvent::Type, [&game](const radix::Event &event) {
         game.getWorld()->stateFunctionStack.push(&GameState::handleGameOverScreen);
-      }
-    );
+      });
 
   winCallbackHolder.setStatic();
 }
 
 void GameState::handleRunning(radix::BaseGame &game) {
-  radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
+  radix::entities::Player &player = game.getWorld()->getPlayer();
   player.frozen = false;
 
   game.getWorld()->event.removeObserver(splashCallbackHolder);
 
-  splashCallbackHolder = game.getWorld()->event.addObserver
-    (
+  splashCallbackHolder = game.getWorld()->event.addObserver(
      radix::InputSource::KeyReleasedEvent::Type, [&player, &game](const radix::Event& event) {
        const int key = ((radix::InputSource::KeyReleasedEvent &) event).key;
        if (key == SDL_SCANCODE_ESCAPE) {
@@ -46,7 +43,7 @@ void GameState::handlePaused(radix::BaseGame &game) {
   radix::Screen &screen = radix::XmlScreenLoader::getScreen(radix::Environment::getDataDir()
                                                             + "/screens/title.xml");
   game.getGameWorld()->addScreen(screen);
-  radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
+  radix::entities::Player &player = game.getWorld()->getPlayer();
 
   game.getWorld()->event.removeObserver(splashCallbackHolder);
 
@@ -62,7 +59,7 @@ void GameState::handlePaused(radix::BaseGame &game) {
 }
 
 void GameState::handleSplash(radix::BaseGame &game) {
-  radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
+  radix::entities::Player &player = game.getWorld()->getPlayer();
   player.frozen = true;
   radix::Screen &screen =
     radix::XmlScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/test.xml");
@@ -75,7 +72,7 @@ void GameState::handleSplash(radix::BaseGame &game) {
 void GameState::handleMenu(radix::BaseGame &game) { }
 
 void GameState::handleGameOverScreen(radix::BaseGame &game) {
-  radix::Player &player = game.getWorld()->getPlayer().getComponent<radix::Player>();
+  radix::entities::Player &player = game.getWorld()->getPlayer();
   player.frozen = true;
   radix::Screen &screen =
     radix::XmlScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/end.xml");

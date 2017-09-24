@@ -56,6 +56,7 @@ void UiRenderer::render() {
   renderer.renderText(*renderContext.get(), version);
 
   renderContext->popCamera();
+
   glDepthMask(GL_TRUE);
 }
 

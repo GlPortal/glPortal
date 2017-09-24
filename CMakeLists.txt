@@ -1,21 +1,16 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 set(EXE_NAME glportal)
 
 if(NOT DEFINED CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Build type")
 endif()
 
-project(${EXE_NAME})
+project(${EXE_NAME} CXX)
+set(CMAKE_CXX_STANDARD 14)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-# Sort of dirty hack, try to fix its
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/RadixEngine/cmake)
-
 set(PORTAL_LIBRARIES "")
-
-find_package(CXX14 REQUIRED)
-set(CMAKE_CXX_FLAGS "${CXX14_FLAGS} ${CMAKE_CXX_FLAGS}")
 
 find_package(RadixEngine REQUIRED)
 include_directories(${RADIX_INCLUDE_DIRS})

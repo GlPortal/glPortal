@@ -16,9 +16,11 @@ int main(const int argc, char *argv[]) {
     Game game;
     game.setup();
     while (game.isRunning()) {
+      game.preCycle();
       game.processInput();
       game.update();
       game.render();
+      game.postCycle();
     }
     game.cleanUp();
   } catch (radix::Exception::Error &err) {

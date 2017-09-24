@@ -4,15 +4,19 @@
 #include <memory>
 #include <bullet/btBulletCollisionCommon.h>
 
-#include <radix/component/Component.hpp>
+#include <radix/Entity.hpp>
 #include <radix/core/math/Vector3f.hpp>
 #include <radix/core/math/Quaternion.hpp>
 #include <radix/data/material/Material.hpp>
 #include <radix/data/model/Mesh.hpp>
+#include <radix/entities/traits/LightSourceTrait.hpp>
+#include <radix/util/BulletUserPtrInfo.hpp>
 
 namespace glPortal {
 
-class Portal : public radix::Component {
+class Portal :
+    public virtual radix::Entity,
+    public radix::entities::LightSourceTrait {
 public:
   static const int PORTAL_RANGE;
   static const radix::Vector3f BLUE_COLOR;
@@ -21,7 +25,7 @@ public:
   static const double OPEN_ANIM_DURATION;
   static const float SURFACE_OFFSET;
 
-  Portal(radix::Entity &ent);
+  Portal(const CreationParams&);
   ~Portal();
   radix::Vector3f getDirection() const;
 
@@ -41,6 +45,7 @@ public:
   struct Wrapper {
     std::unique_ptr<btCollisionShape> vertShape, horzShape;
     struct Side {
+      radix::util::BulletUserPtrInfo btPtrInfo;
       std::unique_ptr<btRigidBody> body;
       std::unique_ptr<btDefaultMotionState> motionState;
     } top, right, bottom, left;

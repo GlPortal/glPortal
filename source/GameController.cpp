@@ -2,7 +2,7 @@
 #include <glPortal/Game.hpp>
 
 #include <radix/env/Environment.hpp>
-#include <radix/component/Player.hpp>
+#include <radix/entities/Player.hpp>
 #include <glPortal/GameState.hpp>
 
 namespace glPortal {

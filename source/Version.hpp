@@ -1,1 +1,1 @@
-#define GAME_VERSION "development"
+#define GAME_VERSION ""

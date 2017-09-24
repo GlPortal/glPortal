@@ -7,9 +7,8 @@
 #include <radix/data/model/MeshLoader.hpp>
 #include <radix/core/math/Math.hpp>
 #include <radix/Entity.hpp>
-#include <radix/component/Transform.hpp>
+#include <radix/simulation/Physics.hpp>
 #include <radix/physics/Uncollider.hpp>
-#include <radix/system/PhysicsSystem.hpp>
 #include <radix/World.hpp>
 
 using namespace radix;
@@ -23,7 +22,10 @@ const double Portal::NOISE_FADE_DELAY = .300;
 const double Portal::OPEN_ANIM_DURATION = .250;
 const float Portal::SURFACE_OFFSET = 0.01f;
 
-Portal::Portal(Entity &ent) : radix::Component(ent), openSince(0), open(false) {
+Portal::Portal(const CreationParams &cp) :
+  radix::Entity(cp),
+  openSince(0),
+  open(false) {
   uncolliderMotionState.reset(new btDefaultMotionState);
   wrapper.vertShape.reset(new btBoxShape(btVector3(0.1, 1, 0.5)));
   wrapper.horzShape.reset(new btBoxShape(btVector3(.5, 0.1, 0.5)));
@@ -41,6 +43,7 @@ Vector3f Portal::getDirection() const {
 
 void Portal::placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vector3f &s,
     const std::unique_ptr<btCollisionShape> &shape, Wrapper::Side &side, const Vector3f &offset) {
+  side.btPtrInfo = radix::util::BulletUserPtrInfo(this);
   side.motionState.reset(new btDefaultMotionState);
   side.motionState->setWorldTransform(
     btTransform(btQuaternion(0, 0, 0, 1), p) *
@@ -49,10 +52,14 @@ void Portal::placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vec
   btRigidBody::btRigidBodyConstructionInfo ci(0, side.motionState.get(),
     shape.get(), btVector3(0, 0, 0));
   if (side.body) {
-    entity.manager.world.systems.get<PhysicsSystem>().getPhysicsWorld().removeRigidBody(side.body.get());
+    world.simulations.findFirstOfType<simulation::Physics>()
+        .getPhysicsWorld().removeRigidBody(side.body.get());
   }
   side.body.reset(new btRigidBody(ci));
-  entity.manager.world.systems.get<PhysicsSystem>().getPhysicsWorld().addRigidBody(side.body.get());
+  side.body->setUserPointer(&side.btPtrInfo);
+  side.body->setUserIndex(id);
+  world.simulations.findFirstOfType<simulation::Physics>()
+      .getPhysicsWorld().addRigidBody(side.body.get());
 }
 
 void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const Vector3f &normal) {
@@ -71,7 +78,6 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
     }
   }*/
 
-  Transform &t = entity.getComponent<Transform>();
   Quaternion orientation;
   Vector3f position(point);
   Vector3f scale(1, 2, 1);
@@ -128,13 +134,13 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
   overlayMesh = MeshLoader::getMesh("Plane.obj");
   stencilMesh = MeshLoader::getMesh("PortalStencil.obj");
 
-  t.setPosition(position);
-  t.setOrientation(orientation);
-  t.setScale(scale);
+  setPosition(position);
+  setOrientation(orientation);
+  setScale(scale);
 }
 
 Vector3f Portal::getScaleMult() const {
-  double delta = entity.manager.world.getTime()-openSince;
+  double delta = world.getTime() - openSince;
   if (delta > OPEN_ANIM_DURATION) {
     return Vector3f(1, 1, 1);
   }
