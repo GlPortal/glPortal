@@ -11,13 +11,13 @@ matrix:
         - set -e
         - docker run -it --rm -w /data -v $(pwd):/data glportal/whale-gcc:bullet285 bash -c "cmake -G Ninja ./; ninja -j 4; ninja tests;"
     - os: osx
-      osx_image: xcode7.3
+      osx_image: xcode8.3
       compiler: gcc
       git:
         submodules: false
       before_install:
-        - wget "https://github.com/macports/macports-base/releases/download/v2.3.5/MacPorts-2.3.5-10.11-ElCapitan.pkg"
-        - travis_wait sudo installer -pkg MacPorts-2.3.5-10.11-ElCapitan.pkg -target /
+        - wget "https://github.com/macports/macports-base/releases/download/v2.4.1/MacPorts-2.4.1-10.12-Sierra.pkg"
+        - travis_wait sudo installer -pkg MacPorts-2.4.1-10.12-Sierra.pkg -target /
         - export PATH=/opt/local/bin:/opt/local/sbin:$PATH
         - brew update
       install:
@@ -39,13 +39,13 @@ matrix:
         - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install ..
         - make -j4
     - os: osx
-      osx_image: xcode7.3
+      osx_image: xcode8.3
       compiler: clang
       git:
         submodules: false
       before_install:
-        - wget "https://github.com/macports/macports-base/releases/download/v2.3.5/MacPorts-2.3.5-10.11-ElCapitan.pkg"
-        - travis_wait sudo installer -pkg MacPorts-2.3.5-10.11-ElCapitan.pkg -target /
+        - wget "https://github.com/macports/macports-base/releases/download/v2.4.1/MacPorts-2.4.1-10.12-Sierra.pkg"      
+        - travis_wait sudo installer -pkg MacPorts-2.4.1-10.12-Sierra.pkg -target /
         - export PATH=/opt/local/bin:/opt/local/sbin:$PATH
         - brew update
       install:
