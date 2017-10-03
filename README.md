@@ -12,7 +12,7 @@ Donate Bitcoin to 1JxrwJZgV9qBeEPH7BDF9qLJPSDcp6fqxz
 > you have to create your own maps. 
 > A basic *playable version* can be found on [moddb](http://www.moddb.com/games/glportal).
    
-GlPortal is an Open Source sci-fi fps puzzle-platformer with realistic physic simulation.
+GlPortal is an Open Source sci-fi first person puzzle-platformer with realistic physic simulation.
 It runs on all modern operating systems including GNU/Linux, Mac and Windows.
 You can find the website at http://glportal.de .
 
