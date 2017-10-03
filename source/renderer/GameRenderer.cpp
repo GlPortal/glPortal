@@ -90,7 +90,7 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
   renderEntities(renderContext);
 
   glClear(GL_DEPTH_BUFFER_BIT);
-  if(world.getConfig().isDebugViewEnabled()) {
+  if (world.getConfig().isDebugViewEnabled()) {
     renderDebugView(renderContext);
   }
 }
