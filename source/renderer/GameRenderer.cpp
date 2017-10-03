@@ -1,6 +1,6 @@
 #include <glPortal/renderer/GameRenderer.hpp>
 #include <glPortal/World.hpp>
-
+#include <radix/env/Config.hpp>
 #include <radix/core/gl/OpenGL.hpp>
 
 #include <radix/renderer/Renderer.hpp>
@@ -90,11 +90,17 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
   renderEntities(renderContext);
 
   glClear(GL_DEPTH_BUFFER_BIT);
+  if (world.getConfig().isDebugViewEnabled()) {
+    renderDebugView(renderContext);
+  }
+}
+
+void GameRenderer::renderDebugView(RenderContext &renderContext) {
   btIDebugDraw *iDbgDraw = world.simulations.findFirstOfType<simulation::Physics>().getDebugDraw();
   PhysicsDebugDraw *dbgDraw = dynamic_cast<PhysicsDebugDraw*>(iDbgDraw);
   if (dbgDraw) {
     world.simulations.findFirstOfType<radix::simulation::Physics>()
-        .getPhysicsWorld().debugDrawWorld();
+      .getPhysicsWorld().debugDrawWorld();
     dbgDraw->render(renderContext);
   }
 }

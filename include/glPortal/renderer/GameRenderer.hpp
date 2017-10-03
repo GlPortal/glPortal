@@ -29,6 +29,7 @@ public:
    */
   void renderScene(radix::RenderContext &rc);
 
+  void renderDebugView(radix::RenderContext &renderContext);
   void renderViewFrames(radix::RenderContext &rc);
   void renderViewFrameStencil(radix::RenderContext &rc);
 
