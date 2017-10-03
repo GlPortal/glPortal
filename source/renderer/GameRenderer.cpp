@@ -1,6 +1,6 @@
 #include <glPortal/renderer/GameRenderer.hpp>
 #include <glPortal/World.hpp>
-
+#include <radix/env/Config.hpp>
 #include <radix/core/gl/OpenGL.hpp>
 
 #include <radix/renderer/Renderer.hpp>
@@ -90,7 +90,9 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
   renderEntities(renderContext);
 
   glClear(GL_DEPTH_BUFFER_BIT);
-  renderDebugView(renderContext);
+  if(world.getConfig().isDebugViewEnabled()) {
+    renderDebugView(renderContext);
+  }
 }
 
 void GameRenderer::renderDebugView(RenderContext &renderContext) {
