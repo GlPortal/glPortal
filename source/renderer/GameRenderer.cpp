@@ -90,11 +90,15 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
   renderEntities(renderContext);
 
   glClear(GL_DEPTH_BUFFER_BIT);
+  renderDebugView(renderContext);
+}
+
+void GameRenderer::renderDebugView(RenderContext &renderContext) {
   btIDebugDraw *iDbgDraw = world.simulations.findFirstOfType<simulation::Physics>().getDebugDraw();
   PhysicsDebugDraw *dbgDraw = dynamic_cast<PhysicsDebugDraw*>(iDbgDraw);
   if (dbgDraw) {
     world.simulations.findFirstOfType<radix::simulation::Physics>()
-        .getPhysicsWorld().debugDrawWorld();
+      .getPhysicsWorld().debugDrawWorld();
     dbgDraw->render(renderContext);
   }
 }
