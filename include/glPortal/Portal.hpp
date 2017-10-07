@@ -50,6 +50,14 @@ public:
       std::unique_ptr<btDefaultMotionState> motionState;
     } top, right, bottom, left;
   } wrapper;
+  
+  std::string fullClassName() const override {
+    return "Portal";
+  }
+  
+  std::string className() const override {
+    return "Portal";
+  }
 
 private:
   // TODO: move this to PortalSystem v

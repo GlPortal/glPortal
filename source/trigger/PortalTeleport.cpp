@@ -16,11 +16,12 @@ PortalTeleport::PortalTeleport() {
 }
 
 void PortalTeleport::setAction(radix::Entity &trigger, std::string &destination) {
-  dynamic_cast<radix::entities::Trigger&>(trigger).setActionOnUpdate([&trigger, destination]
+  dynamic_cast<radix::entities::Trigger&>(trigger).setActionOnEnter([&trigger, destination]
                                                              (radix::entities::Trigger &trigger) {
+    radix::entities::Player &player = trigger.world.getPlayer();
     if (trigger.world.destinations.find(destination)
         != trigger.world.destinations.end()) {
-      trigger.setPosition(trigger.world.destinations.at(destination).position);
+      player.setPosition(trigger.world.destinations.at(destination).position);
     }
   });
 }

@@ -1,5 +1,6 @@
 #include <glPortal/WorldHelper.hpp>
 #include <glPortal/Portal.hpp>
+#include <glPortal/trigger/PortalTeleport.hpp>
 
 #include <bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
@@ -7,6 +8,7 @@
 #include <radix/entities/traits/MeshDrawableTrait.hpp>
 #include <radix/simulation/Physics.hpp>
 #include <radix/entities/traits/LightSourceTrait.hpp>
+#include <radix/entities/Trigger.hpp>
 #include <radix/util/BulletUserPtrInfo.hpp>
 
 using namespace radix;
@@ -39,11 +41,24 @@ void WorldHelper::shootPortal(int button, World &world) {
         portal.maskTex.diffuse = TextureLoader::getTexture("portalmask.png");
         portal.placeOnWall(world.camera->getPosition(), ipos, res.m_hitNormalWorld);
         auto &pLight = static_cast<entities::LightSourceTrait&>(portal);
-
+        
+        radix::entities::Trigger &trigger = world.entityManager.create<radix::entities::Trigger>();
+        trigger.setPosition(ipos);
+        Destination destination{
+          .position = ipos
+        };
         if (button == 1) {
+          std::string source("portal1");
+          world.destinations.insert(std::make_pair(source, destination));
+          std::string dest("portal2");
+          PortalTeleport::setAction(trigger, dest);
           portal.overlayTex.diffuse = TextureLoader::getTexture("blueportal.png");
           portal.color = pLight.color = Portal::BLUE_COLOR;
         } else {
+          std::string source("portal2");
+          world.destinations.insert(std::make_pair(source, destination));
+          //std::string dest("portal1");
+          //PortalTeleport::setAction(trigger, dest);
           portal.overlayTex.diffuse = TextureLoader::getTexture("orangeportal.png");
           portal.color = pLight.color = Portal::ORANGE_COLOR;
         }
@@ -53,6 +68,12 @@ void WorldHelper::shootPortal(int button, World &world) {
 }
 
 EntityPair& WorldHelper::getPortalPair(int pair, World &world) {
+  if (pair > ((int) world.entityPairs.at("portalPairs").size()) - 1) {
+    Portal *portal1 = &world.entityManager.create<Portal>();
+    Portal *portal2 = &world.entityManager.create<Portal>();
+    EntityPair pair = std::make_pair(portal1, portal2);
+    world.entityPairs.at("portalPairs").push_back(pair);
+  }
   return world.entityPairs.at("portalPairs").at(pair);
 }
 

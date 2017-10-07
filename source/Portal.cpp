@@ -30,11 +30,11 @@ Portal::Portal(const CreationParams &cp) :
   wrapper.vertShape.reset(new btBoxShape(btVector3(0.1, 1, 0.5)));
   wrapper.horzShape.reset(new btBoxShape(btVector3(.5, 0.1, 0.5)));
   // TODO Handle collision subtraction better
-  Uncollider::volumes.emplace_back(uncollider.get());
+  //Uncollider::volumes.emplace_back(uncollider.get());
 }
 
 Portal::~Portal() {
-  Uncollider::volumes.remove(uncollider.get());
+  //Uncollider::volumes.remove(uncollider.get());
 }
 
 Vector3f Portal::getDirection() const {

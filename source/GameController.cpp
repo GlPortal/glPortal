@@ -4,6 +4,7 @@
 #include <radix/env/Environment.hpp>
 #include <radix/entities/Player.hpp>
 #include <glPortal/GameState.hpp>
+#include <glPortal/WorldHelper.hpp>
 
 namespace glPortal {
 
@@ -16,9 +17,19 @@ GameController::GameController(Game *game) {
 }
 
 void GameController::initObservers() {
-  this->closeWindowHolder = game->getWorld()->event.addObserver(
+  this->closeWindowHolder = world->event.addObserver(
       radix::InputSource::WindowCloseEvent::Type, [this](const radix::Event& event) {
         this->game->close();
+    });
+  this->mouseHolder = world->event.addObserver(
+      radix::InputSource::MouseButtonReleasedEvent::Type, [this](const radix::Event &event) {
+        auto mouseEvent = (const radix::InputSource::MouseButtonReleasedEvent&) event;
+        if (mouseEvent.button == radix::InputSource::MouseButton::Left) {
+            WorldHelper::shootPortal(1, *world);
+        }
+        if (mouseEvent.button == radix::InputSource::MouseButton::Right) {
+            WorldHelper::shootPortal(2, *world);
+        }
     });
 }
 
