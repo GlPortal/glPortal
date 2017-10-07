@@ -30,11 +30,10 @@ Portal::Portal(const CreationParams &cp) :
   wrapper.vertShape.reset(new btBoxShape(btVector3(0.1, 1, 0.5)));
   wrapper.horzShape.reset(new btBoxShape(btVector3(.5, 0.1, 0.5)));
   // TODO Handle collision subtraction better
-  //Uncollider::volumes.emplace_back(uncollider.get());
 }
 
 Portal::~Portal() {
-  //Uncollider::volumes.remove(uncollider.get());
+  Uncollider::volumes.remove(uncollider.get());
 }
 
 Vector3f Portal::getDirection() const {
@@ -127,7 +126,9 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
   uncolliderShape.reset(new btBoxShape(scale/2));
   btRigidBody::btRigidBodyConstructionInfo ci(0, uncolliderMotionState.get(),
     uncolliderShape.get(), btVector3(0, 0, 0));
+  Uncollider::volumes.remove(uncollider.get());
   uncollider.reset(new btRigidBody(ci));
+  Uncollider::volumes.emplace_back(uncollider.get());
 
   open = true;
   position += (getDirection() * SURFACE_OFFSET);
