@@ -43,22 +43,19 @@ void WorldHelper::shootPortal(int button, World &world) {
         auto &pLight = static_cast<entities::LightSourceTrait&>(portal);
         
         radix::entities::Trigger &trigger = world.entityManager.create<radix::entities::Trigger>();
+        trigger.setScale(Vector3f(1, 2, .5));
         trigger.setPosition(ipos);
         Destination destination{
           .position = ipos
         };
         if (button == 1) {
-          std::string source("portal1");
-          world.destinations.insert(std::make_pair(source, destination));
-          std::string dest("portal2");
-          PortalTeleport::setAction(trigger, dest);
+          world.destinations.insert(std::make_pair("portal1", destination));
+          PortalTeleport::setAction(trigger, "portal2");
           portal.overlayTex.diffuse = TextureLoader::getTexture("blueportal.png");
           portal.color = pLight.color = Portal::BLUE_COLOR;
         } else {
-          std::string source("portal2");
-          world.destinations.insert(std::make_pair(source, destination));
-          //std::string dest("portal1");
-          //PortalTeleport::setAction(trigger, dest);
+          world.destinations.insert(std::make_pair("portal2", destination));
+          //PortalTeleport::setAction(trigger, "portal1");
           portal.overlayTex.diffuse = TextureLoader::getTexture("orangeportal.png");
           portal.color = pLight.color = Portal::ORANGE_COLOR;
         }

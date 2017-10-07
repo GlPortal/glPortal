@@ -1,4 +1,5 @@
 #include <glPortal/trigger/PortalTeleport.hpp>
+
 #include <radix/data/map/XmlHelper.hpp>
 #include <radix/entities/Trigger.hpp>
 #include <radix/entities/Player.hpp>
@@ -15,7 +16,7 @@ PortalTeleport::PortalTeleport() {
   };
 }
 
-void PortalTeleport::setAction(radix::Entity &trigger, std::string &destination) {
+void PortalTeleport::setAction(radix::Entity &trigger, const std::string &destination) {
   dynamic_cast<radix::entities::Trigger&>(trigger).setActionOnEnter([&trigger, destination]
                                                              (radix::entities::Trigger &trigger) {
     radix::entities::Player &player = trigger.world.getPlayer();
