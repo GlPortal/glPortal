@@ -17,7 +17,7 @@ PortalTeleport::PortalTeleport() {
 }
 
 void PortalTeleport::setAction(radix::Entity &trigger, const std::string &destination) {
-  dynamic_cast<radix::entities::Trigger&>(trigger).setActionOnEnter([&trigger, destination]
+  dynamic_cast<radix::entities::Trigger&>(trigger).setActionOnMove([&trigger, destination]
                                                              (radix::entities::Trigger &trigger) {
     radix::entities::Player &player = trigger.world.getPlayer();
     if (trigger.world.destinations.find(destination)
