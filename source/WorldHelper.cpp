@@ -44,10 +44,12 @@ void WorldHelper::shootPortal(int button, World &world) {
         
         radix::entities::Trigger &trigger = world.entityManager.create<radix::entities::Trigger>();
         trigger.setScale(portal.getScale());
-        Vector3f modPos = ipos - ((portal.getScale() / 1.2) * portal.getDirection());
+        Vector3f modPos = ipos - ((portal.getScale() / 1.15) * portal.getDirection());
         trigger.setPosition(modPos);
         Destination destination{
-          .position = ipos + portal.getDirection()
+          .position = ipos + portal.getDirection(),
+          .rotation = Vector3f{},
+          .orientation = portal.getOrientation()
         };
         if (button == 1) {
           world.destinations.insert(std::make_pair("portal1", destination));

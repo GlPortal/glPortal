@@ -23,6 +23,8 @@ void PortalTeleport::setAction(radix::Entity &trigger, const std::string &destin
     if (trigger.world.destinations.find(destination)
         != trigger.world.destinations.end()) {
       player.setPosition(trigger.world.destinations.at(destination).position);
+      player.setOrientation(trigger.world.destinations.at(destination).orientation);
+      player.setHeadOrientation(trigger.world.destinations.at(destination).orientation);
     }
   });
 }
