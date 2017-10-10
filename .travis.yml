@@ -16,13 +16,9 @@ matrix:
       git:
         submodules: false
       before_install:
-        - wget "https://github.com/macports/macports-base/releases/download/v2.4.1/MacPorts-2.4.1-10.12-Sierra.pkg"
-        - travis_wait sudo installer -pkg MacPorts-2.4.1-10.12-Sierra.pkg -target /
-        - export PATH=/opt/local/bin:/opt/local/sbin:$PATH
         - brew cask uninstall oclint
         - brew update
       install:
-        - sudo port -v install bullet
         - gpg2 --keyserver hkp://pgp.mit.edu --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
         - rvm get head
         - brew install gcc
@@ -47,13 +43,9 @@ matrix:
       git:
         submodules: false
       before_install:
-        - wget "https://github.com/macports/macports-base/releases/download/v2.4.1/MacPorts-2.4.1-10.12-Sierra.pkg"      
-        - travis_wait sudo installer -pkg MacPorts-2.4.1-10.12-Sierra.pkg -target /
-        - export PATH=/opt/local/bin:/opt/local/sbin:$PATH
         - brew cask uninstall oclint
         - brew update
       install:
-        - sudo port -v install bullet
         - gpg2 --keyserver hkp://pgp.mit.edu --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
         - rvm get head
         - brew install assimp
