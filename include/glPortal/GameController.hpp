@@ -25,6 +25,7 @@ private:
   World *world;
 
   radix::EventDispatcher::CallbackHolder closeWindowHolder;
+  radix::EventDispatcher::CallbackHolder mouseHolder;
   std::unique_ptr<radix::GameState> gameState;
 };
 

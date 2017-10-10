@@ -1,4 +1,5 @@
 #include <glPortal/trigger/PortalTeleport.hpp>
+
 #include <radix/data/map/XmlHelper.hpp>
 #include <radix/entities/Trigger.hpp>
 #include <radix/entities/Player.hpp>
@@ -15,12 +16,15 @@ PortalTeleport::PortalTeleport() {
   };
 }
 
-void PortalTeleport::setAction(radix::Entity &trigger, std::string &destination) {
-  dynamic_cast<radix::entities::Trigger&>(trigger).setActionOnUpdate([&trigger, destination]
+void PortalTeleport::setAction(radix::Entity &trigger, const std::string &destination) {
+  dynamic_cast<radix::entities::Trigger&>(trigger).setActionOnMove([&trigger, destination]
                                                              (radix::entities::Trigger &trigger) {
+    radix::entities::Player &player = trigger.world.getPlayer();
     if (trigger.world.destinations.find(destination)
         != trigger.world.destinations.end()) {
-      trigger.setPosition(trigger.world.destinations.at(destination).position);
+      player.setPosition(trigger.world.destinations.at(destination).position);
+      player.setOrientation(trigger.world.destinations.at(destination).orientation);
+      player.setHeadOrientation(trigger.world.destinations.at(destination).orientation);
     }
   });
 }
