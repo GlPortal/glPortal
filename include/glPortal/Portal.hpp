@@ -39,6 +39,7 @@ public:
   radix::Vector3f direction, color;
   bool open;
   bool isUncolliderActive = false;
+  radix::Entity *trigger;
   std::unique_ptr<btDefaultMotionState> uncolliderMotionState;
   std::unique_ptr<btCollisionShape> uncolliderShape;
   std::unique_ptr<btCollisionObject> uncollider;

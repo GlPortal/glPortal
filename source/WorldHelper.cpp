@@ -42,10 +42,12 @@ void WorldHelper::shootPortal(int button, World &world) {
         portal.placeOnWall(world.camera->getPosition(), ipos, res.m_hitNormalWorld);
         auto &pLight = static_cast<entities::LightSourceTrait&>(portal);
         
-        radix::entities::Trigger &trigger = world.entityManager.create<radix::entities::Trigger>();
-        trigger.setScale(portal.getScale());
+        if (portal.trigger == nullptr) {
+          portal.trigger = &world.entityManager.create<radix::entities::Trigger>();
+        }
+        portal.trigger->setScale(portal.getScale());
         Vector3f modPos = ipos - ((portal.getScale() / 1.15) * portal.getDirection());
-        trigger.setPosition(modPos);
+        portal.trigger->setPosition(modPos);
         Destination destination{
           .position = ipos + portal.getDirection(),
           .rotation = Vector3f{},
@@ -53,12 +55,12 @@ void WorldHelper::shootPortal(int button, World &world) {
         };
         if (button == 1) {
           world.destinations.insert(std::make_pair("portal1", destination));
-          PortalTeleport::setAction(trigger, "portal2");
+          PortalTeleport::setAction(*portal.trigger, "portal2");
           portal.overlayTex.diffuse = TextureLoader::getTexture("blueportal.png");
           portal.color = pLight.color = Portal::BLUE_COLOR;
         } else {
           world.destinations.insert(std::make_pair("portal2", destination));
-          PortalTeleport::setAction(trigger, "portal1");
+          PortalTeleport::setAction(*portal.trigger, "portal1");
           portal.overlayTex.diffuse = TextureLoader::getTexture("orangeportal.png");
           portal.color = pLight.color = Portal::ORANGE_COLOR;
         }
@@ -79,9 +81,14 @@ EntityPair& WorldHelper::getPortalPair(int pair, World &world) {
 
 void WorldHelper::closePortals(World &world) {
   EntityPair &pPair = getPortalPair(0, world);
+  Portal *portal1 = dynamic_cast<Portal*>(pPair.first);
+  Portal *portal2 = dynamic_cast<Portal*>(pPair.second);
 
-  dynamic_cast<Portal*>(pPair.first)->open = false;
-  dynamic_cast<Portal*>(pPair.second)->open = false;
+  portal1->open = false;
+  portal2->open = false;
+  
+  portal1->trigger->remove();
+  portal2->trigger->remove();
 }
 
 } /* namespace glPortal */

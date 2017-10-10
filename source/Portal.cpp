@@ -25,7 +25,8 @@ const float Portal::SURFACE_OFFSET = 0.01f;
 Portal::Portal(const CreationParams &cp) :
   radix::Entity(cp),
   openSince(0),
-  open(false) {
+  open(false),
+  trigger(nullptr) {
   uncolliderMotionState.reset(new btDefaultMotionState);
   wrapper.vertShape.reset(new btBoxShape(btVector3(0.1, 1, 0.5)));
   wrapper.horzShape.reset(new btBoxShape(btVector3(.5, 0.1, 0.5)));
