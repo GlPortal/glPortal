@@ -10,8 +10,9 @@
 #include <radix/BaseGame.hpp>
 #include <radix/physics/PhysicsDebugDraw.hpp>
 
-#include "glPortal/renderer/GameRenderer.hpp"
-#include "glPortal/renderer/UiRenderer.hpp"
+#include <glPortal/renderer/GameRenderer.hpp>
+#include <glPortal/renderer/PortalRenderer.hpp>
+#include <glPortal/renderer/UiRenderer.hpp>
 
 namespace glPortal {
 
@@ -33,6 +34,7 @@ private:
   std::unique_ptr<radix::PhysicsDebugDraw> m_physDebugDraw;
   std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;
+  std::unique_ptr<PortalRenderer> portalRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
   void initHook() override;
   void customTriggerHook() override;
