@@ -54,12 +54,12 @@ void WorldHelper::shootPortal(int button, World &world) {
           .orientation = portal.getOrientation()
         };
         if (button == 1) {
-          world.destinations.insert(std::make_pair("portal1", destination));
+          world.destinations["portal1"] = destination;
           PortalTeleport::setAction(*portal.trigger, "portal2");
           portal.overlayTex.diffuse = TextureLoader::getTexture("blueportal.png");
           portal.color = pLight.color = Portal::BLUE_COLOR;
         } else {
-          world.destinations.insert(std::make_pair("portal2", destination));
+          world.destinations["portal2"] = destination;
           PortalTeleport::setAction(*portal.trigger, "portal1");
           portal.overlayTex.diffuse = TextureLoader::getTexture("orangeportal.png");
           portal.color = pLight.color = Portal::ORANGE_COLOR;
