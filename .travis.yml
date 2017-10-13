@@ -66,6 +66,7 @@ matrix:
 
 notifications:
   irc: "chat.freenode.net#glportal"
+  slack: glportal:6owD9V6VXhGmM7yyEd2hIZue
   webhooks:
     urls:
       - https://webhooks.gitter.im/e/ea210c016747790b4fa4
