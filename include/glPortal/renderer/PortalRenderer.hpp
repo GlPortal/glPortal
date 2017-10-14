@@ -24,6 +24,12 @@ public:
   void render();
   
   void renderPortalOverlay(const Portal &portal);
+  
+  void renderPortal(Portal &portal, Portal &otherPortal);
+  
+  void renderPortalStencil(const Portal &portal);
+  
+  void renderPortalNoise(const Portal &portal, float time);
 
 private:
   radix::Camera* camera;
