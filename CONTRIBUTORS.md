@@ -5,10 +5,7 @@
 - Julian Thijssen (since 2014)
 - Dorian Wouters (since 2014)
 - Juraj Oravec (since 2015)
-
-### Major Contributions
-- Xantares
-- Stephan Vedder (since 2015)
+- Geert Custers
 
 ### Graphics
 - Jason Pulkkinen - GlPortal logo
