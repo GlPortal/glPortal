@@ -34,6 +34,6 @@ For instructions on how to compile the game please read [this](COMPILE.md).
 ## Join the team
 Chat with us at irc.freenode.org in the channel [#glportal](http://webchat.freenode.net/?channels=%23glportal&uio=d4)
 for questions and discussions about the development of the game.
-Report Issues to http://bugs.glportal.de .
+Report Issues on github.
 
 Feel free to send us a pull request or issue on github if you have any changes/suggestions.
