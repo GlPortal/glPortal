@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\source\Editor.cpp" />
+    <ClCompile Include="..\..\source\Game.cpp" />
+    <ClCompile Include="..\..\source\GameController.cpp" />
+    <ClCompile Include="..\..\source\GameState.cpp" />
+    <ClCompile Include="..\..\source\Main.cpp" />
+    <ClCompile Include="..\..\source\Portal.cpp" />
+    <ClCompile Include="..\..\source\World.cpp" />
+    <ClCompile Include="..\..\source\WorldHelper.cpp" />
+    <ClCompile Include="..\..\source\renderer\GameRenderer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\renderer\TerminalRenderer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\renderer\UiRenderer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\trigger\PortalTeleport.cpp">
+      <Filter>trigger</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\Version.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="renderer">
+      <UniqueIdentifier>{d29e1165-af63-41a5-a8cd-6dcee13e2226}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="trigger">
+      <UniqueIdentifier>{d866ee7c-0ee0-445e-9416-560704182b0c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\external\RadixEngine\external\glad\glad.c" />
+    <ClCompile Include="..\..\external\RadixEngine\external\json11\json11.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\BaseGame.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\Camera.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\diag\AnsiConsoleLogger.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\diag\Logger.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\diag\LogInput.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\diag\StdoutLogger.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\event\EventDispatcher.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\file\Path.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\gl\DebugOutput.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\gl\OpenGL.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\gl\TightDataPacker.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\gl\VBO.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Math.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Matrix3f.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Matrix4f.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Vector2f.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Vector2ui.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Vector3f.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Vector4f.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\state\GameState.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\AudioTrigger.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\DeathTrigger.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\MapListLoader.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\MapLoader.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\MapTrigger.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\RadiationTrigger.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\TeleportTrigger.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\WinTrigger.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\XmlHelper.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\XmlMapLoader.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\XmlTriggerHelper.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\material\MaterialLoader.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\model\MeshLoader.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\screen\Element.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\screen\Style.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\screen\XmlScreenLoader.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\shader\Shader.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\shader\ShaderLoader.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\texture\TextureLoader.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\data\text\FontLoader.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\entities\EntitiesPlayer.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\entities\StaticModel.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\entities\traits\HealthTrait.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\entities\traits\RigidBodyTrait.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\entities\traits\SoundSourceTrait.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\entities\Trigger.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\EntityManager.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\env\ArgumentsParser.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\env\Config.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\env\Environment.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\env\GameConsole.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\env\OperatingSystem.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\env\Util.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\GameWorld.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\input\InputSource.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\physics\CollisionDispatcher.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\physics\GhostPairCallback.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\physics\KinematicCharacterController.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\physics\PhysicsDebugDraw.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\physics\PhysicsHelper.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\physics\Uncollider.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\renderer\PortalRenderer.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\renderer\Renderer.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\renderer\ScreenRenderer.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\renderer\SubRenderer.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\renderer\TextRenderer.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\SimulationManager.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\simulation\Physics.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\simulation\SimulationPlayer.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\SoundManager.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\SourceEntity.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\Transform.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\util\NullReference.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\util\sdl\Fps.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\util\XmlLoader.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\Window.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\World.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\external\RadixEngine\external\glad\glad.h" />
+    <ClInclude Include="..\..\external\RadixEngine\external\json11\json11.hpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{FBA286FB-ECEE-4791-ACA9-DF2EF59D2F88}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>RadixEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\glportal\include;C:\glportal\external\RadixEngine\include;C:\glportal\external\RadixEngine\external\stx\include;C:\glportal\external\RadixEngine\external\RadixEntity\include;C:\glportal\external\RadixEngine\external\easy_profiler\easy_profiler_core\include;C:\glportal\external\RadixEngine\external\linenoise;C:\glportal\external\RadixEngine\external\serine\include;C:\glportal\external\RadixEngine\external;C:\bullet3\src;C:\bullet3;C:\bullet3\bullet;C:\tinyxml2;C:\SDL2-2.0.7\include;C:\SDL2_mixer-2.0.2;C:\getopt;C:\assimp\include;C:\assimp\build\include;C:\FreeImage\Wrapper\FreeImagePlus;C:\FreeImage\Source;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);RADIX_GL_USE_GLAD;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
