@@ -48,11 +48,10 @@ void WorldHelper::shootPortal(int button, World &world) {
         portal.trigger->setScale(portal.getScale());
         Vector3f modPos = ipos - ((portal.getScale() / 1.15) * portal.getDirection());
         portal.trigger->setPosition(modPos);
-        Destination destination{
-          .position = ipos + portal.getDirection(),
-          .rotation = Vector3f{},
-          .orientation = portal.getOrientation()
-        };
+        Destination destination;
+		destination.position = ipos + portal.getDirection();
+        destination.rotation = Vector3f{};
+        destination.orientation = portal.getOrientation();
         if (button == 1) {
           world.destinations["portal1"] = destination;
           PortalTeleport::setAction(*portal.trigger, "portal2");

@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="core">
+      <UniqueIdentifier>{94abd0cc-6d52-4bd9-ae41-dedfb0e2e98e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{6cb4664b-91ca-4bea-a091-2c00426be3f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="entities">
+      <UniqueIdentifier>{bdd92a38-17b3-446c-9688-305d2f25a1dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="env">
+      <UniqueIdentifier>{9782295f-17b7-4fb0-9cf2-700808286962}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input">
+      <UniqueIdentifier>{360a0ccc-f75a-48ea-8ca9-3cfc2225ad0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="physics">
+      <UniqueIdentifier>{6312c386-533f-4872-9d05-c56e10cd319d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer">
+      <UniqueIdentifier>{812abc31-6321-4e45-ac26-67bd9f775dff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="simulation">
+      <UniqueIdentifier>{4a2e1445-38d9-42fa-a2e4-7c80bd98f41e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{f5f54838-bf66-43a1-831d-a0e04fc98faf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\diag">
+      <UniqueIdentifier>{867a38d4-3a7c-4883-8aba-75479036865f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\event">
+      <UniqueIdentifier>{176947c5-e768-4831-a1f3-ac49c7b5ef46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\file">
+      <UniqueIdentifier>{b3561d31-4098-4370-9717-27eb58c6ff23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\gl">
+      <UniqueIdentifier>{046ab260-141c-4451-bba0-e83f56048a96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\math">
+      <UniqueIdentifier>{a56f91a7-732a-40e1-b97e-84189d24688b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\state">
+      <UniqueIdentifier>{561c2566-fe8c-4b65-b051-30b9322a7f17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\map">
+      <UniqueIdentifier>{4c89f8bc-18ae-41af-8f7c-37d156ab7714}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\material">
+      <UniqueIdentifier>{669958f1-f0b0-4460-b09c-bf39e0cc8809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\model">
+      <UniqueIdentifier>{6212073e-97ae-48ee-b6f3-7abbe8c43fd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\screen">
+      <UniqueIdentifier>{02699d11-f7e0-427c-a41d-7e1add9d1107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\shader">
+      <UniqueIdentifier>{8934d9bb-fc34-4373-ba3e-c26e30579172}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\text">
+      <UniqueIdentifier>{61147ffb-23ff-4851-80b2-3b80604612e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\texture">
+      <UniqueIdentifier>{f976395f-da6d-4412-96a6-2aaa0428ec38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="entities\traits">
+      <UniqueIdentifier>{0529a74f-4a07-4307-8583-faea5cc3c680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util\sdl">
+      <UniqueIdentifier>{91f50c60-433e-4cfe-bbc5-6c40fb441c50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{8e8928fc-1328-48b1-9602-2273d55a2825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\json11">
+      <UniqueIdentifier>{efe7023e-984e-42b4-84a1-d42ef7383f20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\glad">
+      <UniqueIdentifier>{e14c2151-9d3a-4483-9385-a5149c398a5e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\external\RadixEngine\source\BaseGame.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\Camera.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\EntityManager.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\GameWorld.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\SimulationManager.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\SoundManager.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\SourceEntity.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\Transform.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\Window.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\World.cpp" />
+    <ClCompile Include="..\..\external\RadixEngine\source\core\diag\AnsiConsoleLogger.cpp">
+      <Filter>core\diag</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\diag\Logger.cpp">
+      <Filter>core\diag</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\diag\LogInput.cpp">
+      <Filter>core\diag</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\diag\StdoutLogger.cpp">
+      <Filter>core\diag</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\event\EventDispatcher.cpp">
+      <Filter>core\event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\file\Path.cpp">
+      <Filter>core\file</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\gl\DebugOutput.cpp">
+      <Filter>core\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\gl\OpenGL.cpp">
+      <Filter>core\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\gl\TightDataPacker.cpp">
+      <Filter>core\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\gl\VBO.cpp">
+      <Filter>core\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Math.cpp">
+      <Filter>core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Matrix3f.cpp">
+      <Filter>core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Matrix4f.cpp">
+      <Filter>core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Vector2f.cpp">
+      <Filter>core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Vector2ui.cpp">
+      <Filter>core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Vector3f.cpp">
+      <Filter>core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\math\Vector4f.cpp">
+      <Filter>core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\core\state\GameState.cpp">
+      <Filter>core\state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\AudioTrigger.cpp">
+      <Filter>data\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\DeathTrigger.cpp">
+      <Filter>data\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\MapListLoader.cpp">
+      <Filter>data\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\MapLoader.cpp">
+      <Filter>data\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\MapTrigger.cpp">
+      <Filter>data\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\RadiationTrigger.cpp">
+      <Filter>data\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\TeleportTrigger.cpp">
+      <Filter>data\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\WinTrigger.cpp">
+      <Filter>data\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\XmlHelper.cpp">
+      <Filter>data\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\XmlMapLoader.cpp">
+      <Filter>data\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\map\XmlTriggerHelper.cpp">
+      <Filter>data\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\material\MaterialLoader.cpp">
+      <Filter>data\material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\model\MeshLoader.cpp">
+      <Filter>data\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\screen\Element.cpp">
+      <Filter>data\screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\screen\Style.cpp">
+      <Filter>data\screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\screen\XmlScreenLoader.cpp">
+      <Filter>data\screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\shader\Shader.cpp">
+      <Filter>data\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\shader\ShaderLoader.cpp">
+      <Filter>data\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\text\FontLoader.cpp">
+      <Filter>data\text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\data\texture\TextureLoader.cpp">
+      <Filter>data\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\entities\EntitiesPlayer.cpp">
+      <Filter>entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\entities\StaticModel.cpp">
+      <Filter>entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\entities\Trigger.cpp">
+      <Filter>entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\entities\traits\HealthTrait.cpp">
+      <Filter>entities\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\entities\traits\RigidBodyTrait.cpp">
+      <Filter>entities\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\entities\traits\SoundSourceTrait.cpp">
+      <Filter>entities\traits</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\env\ArgumentsParser.cpp">
+      <Filter>env</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\env\Config.cpp">
+      <Filter>env</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\env\Environment.cpp">
+      <Filter>env</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\env\GameConsole.cpp">
+      <Filter>env</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\env\OperatingSystem.cpp">
+      <Filter>env</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\env\Util.cpp">
+      <Filter>env</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\input\InputSource.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\physics\CollisionDispatcher.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\physics\GhostPairCallback.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\physics\KinematicCharacterController.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\physics\PhysicsDebugDraw.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\physics\PhysicsHelper.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\physics\Uncollider.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\renderer\PortalRenderer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\renderer\Renderer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\renderer\ScreenRenderer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\renderer\SubRenderer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\renderer\TextRenderer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\simulation\Physics.cpp">
+      <Filter>simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\simulation\SimulationPlayer.cpp">
+      <Filter>simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\util\NullReference.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\util\XmlLoader.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\source\util\sdl\Fps.cpp">
+      <Filter>util\sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\external\json11\json11.cpp">
+      <Filter>external\json11</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\RadixEngine\external\glad\glad.c">
+      <Filter>external\glad</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\external\RadixEngine\external\json11\json11.hpp">
+      <Filter>external\json11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\RadixEngine\external\glad\glad.h">
+      <Filter>external\glad</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
