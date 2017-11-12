@@ -46,6 +46,7 @@ matrix:
         - brew cask uninstall oclint
         - brew update
       install:
+        - brew install gnupg gnupg2
         - gpg2 --keyserver hkp://pgp.mit.edu --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
         - rvm get head
         - brew install assimp
