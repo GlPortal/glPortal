@@ -19,6 +19,7 @@ matrix:
         - brew cask uninstall oclint
         - brew update
       install:
+        - command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
         - rvm get head
         - brew install gcc
         - brew install assimp
