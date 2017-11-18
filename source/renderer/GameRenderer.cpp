@@ -30,6 +30,8 @@ void GameRenderer::render() {
   time += *dtime;
   renderer.getViewport()->getSize(&viewportWidth, &viewportHeight);
 
+  glViewport(0, 0, viewportWidth, viewportHeight);
+
   PROFILER_BLOCK("GL cleanup");
   glDepthMask(GL_TRUE);
   glEnable(GL_DEPTH_TEST);
