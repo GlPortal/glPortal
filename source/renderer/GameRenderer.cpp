@@ -5,6 +5,7 @@
 
 #include <radix/renderer/Renderer.hpp>
 #include <radix/Viewport.hpp>
+#include <radix/entities/Player.hpp>
 #include <radix/entities/ViewFrame.hpp>
 #include <radix/entities/traits/MeshDrawableTrait.hpp>
 #include <radix/data/shader/ShaderLoader.hpp>
