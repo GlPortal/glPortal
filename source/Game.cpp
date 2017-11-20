@@ -67,11 +67,15 @@ void Game::initRenderers() {
     std::make_unique<GameRenderer>(worldReference, rendererReference, world->camera.get(), &dtime);
   uiRenderer =
     std::make_unique<UiRenderer>(worldReference, rendererReference);
+  portalRenderer =
+    std::make_unique<radix::PortalRenderer>(worldReference, rendererReference,
+        this->gameWorld);
  }
 
 void Game::addRenderers() {
   renderer->addRenderer(*gameRenderer);
   renderer->addRenderer(*uiRenderer);
+  renderer->addRenderer(*portalRenderer);
 }
 
 } /* namespace glPortal */
