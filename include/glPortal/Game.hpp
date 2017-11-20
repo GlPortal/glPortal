@@ -9,6 +9,7 @@
 #include <radix/env/Config.hpp>
 #include <radix/BaseGame.hpp>
 #include <radix/physics/PhysicsDebugDraw.hpp>
+#include <radix/renderer/PortalRenderer.hpp>
 
 #include "glPortal/renderer/GameRenderer.hpp"
 #include "glPortal/renderer/UiRenderer.hpp"
@@ -34,6 +35,7 @@ private:
   std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
+  std::unique_ptr<radix::PortalRenderer> portalRenderer;
   void initHook() override;
   void customTriggerHook() override;
   void initFunctionStack();

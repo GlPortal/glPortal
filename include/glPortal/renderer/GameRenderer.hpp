@@ -18,7 +18,7 @@ namespace glPortal {
 
 class World;
 
-class GameRenderer : public radix::SubRenderer{
+class GameRenderer : public radix::SubRenderer {
 public:
   GameRenderer(World& w, radix::Renderer& ren, radix::Camera* cam, double* ptime);
 
@@ -37,6 +37,19 @@ public:
    * Renders all the entities in the scene regardless of shading
    */
   void renderEntities(radix::RenderContext &rc);
+
+  /**
+   * @brief renderPortals render both portals color and blend
+   * @param rc
+   */
+  void renderPortals(radix::RenderContext &rc);
+
+  /**
+   * @brief renderPortal render portal color and blend
+   * @param rc
+   */
+  void renderPortal(radix::Entity* portal, radix::RenderContext& rc,
+                    radix::Renderer& renderer);
 
   /**
    * Renders a single entity regardless of shading
@@ -61,7 +74,7 @@ public:
 private:
   radix::Camera* camera;
   double* dtime;
-  double time;
+  double time = 0.0;
 };
 
 } /* namespace glPortal */
