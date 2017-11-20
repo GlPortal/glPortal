@@ -250,22 +250,8 @@ void  GameRenderer::renderPortal(Entity* portal, RenderContext& rc, Renderer& re
   auto &shader2 = ShaderLoader::getShader("color.frag");
   auto &shader  = ShaderLoader::getShader("unshaded.frag");
 
-//  glEnable(GL_STENCIL_TEST);
-//    glStencilFunc(GL_ALWAYS, 1, 0xFF);
-//    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-//    glStencilMask(0xFF);
-//    glDepthMask(GL_FALSE);
-//    glClear(GL_STENCIL_BUFFER_BIT);
-//    if(mesh2.numFaces != 0) renderer.renderMesh(rc, shader2, mtx, mesh2, mat2);
-//    // Draw cube reflection
-//    glStencilFunc(GL_EQUAL, 1, 0xFF);
-//    glStencilMask(0x00);
-//    glDepthMask(GL_TRUE);
-//  glDisable(GL_STENCIL_TEST);
-
-  glDepthMask(GL_FALSE);
+  if(mesh2.numFaces != 0) renderer.renderMesh(rc, shader2, mtx, mesh2, mat2);
   if(mesh.numFaces  != 0) renderer.renderMesh(rc, shader,  mtx, mesh,  mat);
-  glDepthMask(GL_TRUE);
 
   shader.release();
 }
