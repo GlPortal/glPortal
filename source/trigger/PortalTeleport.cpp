@@ -4,6 +4,7 @@
 #include <radix/entities/Trigger.hpp>
 #include <radix/entities/Player.hpp>
 #include <radix/BaseGame.hpp>
+#include <radix/World.hpp>
 
 namespace glPortal {
 

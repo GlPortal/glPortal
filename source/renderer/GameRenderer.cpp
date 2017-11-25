@@ -6,6 +6,7 @@
 
 #include <radix/renderer/Renderer.hpp>
 #include <radix/Viewport.hpp>
+#include <radix/entities/Player.hpp>
 #include <radix/entities/ViewFrame.hpp>
 #include <radix/entities/traits/MeshDrawableTrait.hpp>
 #include <radix/data/shader/ShaderLoader.hpp>
@@ -30,6 +31,8 @@ void GameRenderer::render() {
   PROFILER_BLOCK("GameRenderer::render", profiler::colors::Green200);
   time += *dtime;
   renderer.getViewport()->getSize(&viewportWidth, &viewportHeight);
+
+  glViewport(0, 0, viewportWidth, viewportHeight);
 
   PROFILER_BLOCK("GL cleanup");
   glDepthMask(GL_TRUE);
