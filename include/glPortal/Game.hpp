@@ -35,6 +35,7 @@ private:
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
   void initHook() override;
+  void removeHook() override;
   void customTriggerHook() override;
   void initFunctionStack();
   void initRenderers();
