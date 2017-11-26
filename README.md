@@ -27,7 +27,7 @@ GlPortal is powered by RadixEngine:
 ## History 
 GlPortal is based on a project by Simon Larsen in 2012.
 ## Team
-Henry Hirsch, Julian Thijssen, Dorian Wouters, Juraj Oravec, Geert Custers, Jason Pulkkinen
+Henry Hirsch, Julian Thijssen, Dorian Wouters, Geert Custers, Jason Pulkkinen
 [More Info](CONTRIBUTORS.md)
 ## Compile the source
 For instructions on how to compile the game please read [this](COMPILE.md).
