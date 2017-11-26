@@ -4,9 +4,9 @@
 - Henry Hirsch (since 2013)
 - Julian Thijssen (since 2014)
 - Dorian Wouters (since 2014)
-- Juraj Oravec (since 2015)
 - Geert Custers
-
+### Contributors
+See [List of Contributors](https://github.com/GlPortal/glPortal/graphs/contributors)
 ### Graphics
 - Jason Pulkkinen - GlPortal logo
 
