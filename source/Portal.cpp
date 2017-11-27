@@ -89,7 +89,7 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
     orientation = Quaternion();
   } else if (normal.fuzzyEqual(Vector3f(0, 0, 1))) {
     // Same as above, other side
-    orientation = Quaternion(0, sin(M_PI/2), 0, cos(M_PI/2));
+    orientation = Quaternion(0, sin(Math::PI / 2), 0, cos(Math::PI / 2));
   } else if (normal.fuzzyEqual(Vector3f(0, 1, 0))) {
     // Floor
     float yRot = std::atan2(point.x-launchPos.x, point.z-launchPos.z);
