@@ -7,10 +7,7 @@
 Donate Bitcoin to 1JxrwJZgV9qBeEPH7BDF9qLJPSDcp6fqxz
 # GlPortal
 
-> The *master* branch is in refactoring atm. if you need a stable client please use the *stable* branch.
-> The stable branch does not have a lot of playable maps. So if you want to compile it for playing
-> you have to create your own maps. 
-> A basic *playable version* can be found on [moddb](http://www.moddb.com/games/glportal).
+> For instructions on how to compile the game please read the [compile guide](COMPILE.md).
    
 GlPortal is an Open Source sci-fi first person puzzle-platformer with realistic physic simulation.
 It runs on all modern operating systems including GNU/Linux, Mac and Windows.
@@ -29,8 +26,7 @@ GlPortal is based on a project by Simon Larsen in 2012.
 ## Team
 Henry Hirsch, Julian Thijssen, Dorian Wouters, Geert Custers, Jason Pulkkinen
 [More Info](CONTRIBUTORS.md)
-## Compile the source
-For instructions on how to compile the game please read [this](COMPILE.md).
+
 ## Join the team
 Chat with us at irc.freenode.org in the channel [#glportal](http://kiwiirc.com/client/irc.freenode.com/#glportal)
 for questions and discussions about the development of the game.
