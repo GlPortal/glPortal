@@ -37,6 +37,7 @@ private:
   std::unique_ptr<UiRenderer> uiRenderer;
   std::unique_ptr<radix::PortalRenderer> portalRenderer;
   void initHook() override;
+  void removeHook();
   void customTriggerHook() override;
   void initFunctionStack();
   void initRenderers();
