@@ -96,6 +96,48 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
   renderEntities(renderContext);
   renderPortals(renderContext);
 
+  {// draw top view
+    // get clear color
+    GLfloat clearColorValue[4];
+    glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColorValue);
+    // clear red border
+    glClearColor(1, 0, 0, 1);
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(0, 0, viewportWidth/4, viewportHeight/4);
+    glViewport(0, 0, viewportWidth/4, viewportHeight/4);
+    glClear(GL_COLOR_BUFFER_BIT);
+    // clear viewport
+    glClearColor(0, 0, 0, 1);
+    glScissor(5, 5, viewportWidth/4 - 10, viewportHeight/4 - 10);
+    glViewport(5, 5, viewportWidth/4 - 10, viewportHeight/4 - 10);
+    glClear(GL_COLOR_BUFFER_BIT);
+    {
+      const Entity &p = dynamic_cast<Entity&>(world.getPlayer());
+
+      Matrix4f mtx;
+      mtx.translate(p.getPosition() + Vector3f(0, 5.f, 0));
+      mtx.rotate(rad(-90), 1, 0, 0);
+
+      radix::Camera topCamera;
+      topCamera.setPosition(mtx.getPosition());
+      topCamera.setOrientation(mtx.getRotation());
+      topCamera.setZFar(camera->getZFar());
+      topCamera.setZNear(camera->getZNear());
+
+      topCamera.getProjMatrix(renderContext.projStack.back());
+      topCamera.getViewMatrix(renderContext.viewStack.back());
+      topCamera.getInvViewMatrix(renderContext.invViewStack.back());
+
+      renderEntities(renderContext);
+    }
+    // reset viewport
+    glViewport(0, 0, viewportWidth, viewportHeight);
+    glDisable(GL_SCISSOR_TEST);
+    // reset clear color
+    glClearColor(clearColorValue[0], clearColorValue[1], 
+                 clearColorValue[2], clearColorValue[3]);
+  }
+
   glClear(GL_DEPTH_BUFFER_BIT);
   if (world.getConfig().isDebugViewEnabled()) {
     renderDebugView(renderContext);
