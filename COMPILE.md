@@ -1,5 +1,9 @@
 # Compile Guide for GlPortal
-If you want to compile with Visual Studio please skip ahead to [build with Visual Studio](#build-with-visual-studio).
+
+## Build with Visual Studio
+If you want to compile with Visual Studio please skip ahead to [compile instructions for VS](https://github.com/kungfooman/glportal-vs).
+Building is only possible in Visual Studio 2017, as earlier versions do not support the requied C++14 language features.
+
 ## Dependencies
 **NOTE:** Dependencies will change all the time so watch the cmake output carefuly for missing libraries.
 Make sure to check CMakeLists.txt if it is something missing.
@@ -155,11 +159,6 @@ To run the game type:
 ```bash
 source/glportal --datadir ./data
 ```
-
-## Build with Visual Studio
-Building is only possible in Visual Studio 2017, as earlier versions do not support the requied C++14 language features.
-
-Follow the [compile instructions for VS](https://github.com/kungfooman/glportal-vs)
 
 ## Keep us posted
 Not working? No worries! Help us help you figure out what we missed to make this work on
