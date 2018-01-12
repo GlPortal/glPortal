@@ -1,7 +1,7 @@
 # Compile Guide for GlPortal
 
 ## Build with Visual Studio
-If you want to compile with Visual Studio please skip ahead to [compile instructions for VS](https://github.com/kungfooman/glportal-vs).
+If you want to compile with Visual Studio please skip ahead to [compile instructions for VS](https://github.com/GlPortal/glportal-vs).
 Building is only possible in Visual Studio 2017, as earlier versions do not support the requied C++14 language features.
 
 ## Dependencies
