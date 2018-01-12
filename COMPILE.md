@@ -1,5 +1,5 @@
 # Compile Guide for GlPortal
-
+If you want to compile with Visual Studio please skip ahead to [build with Visual Studio](#build-with-visual-studio).
 ## Dependencies
 **NOTE:** Dependencies will change all the time so watch the cmake output carefuly for missing libraries.
 Make sure to check CMakeLists.txt if it is something missing.
@@ -126,7 +126,6 @@ make run
 
 #### Windows
 Before we can start the game it is necessary to copy some dlls into our executable directory.
-You don't have to use mingw32 further below in this document you'll find instructions to compile with Visual Studio.
 
 ##### on 32-bit
 ```bash
