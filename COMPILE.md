@@ -126,6 +126,7 @@ make run
 
 #### Windows
 Before we can start the game it is necessary to copy some dlls into our executable directory.
+You don't have to use mingw32 further below in this document you'll find instructions to compile with Visual Studio.
 
 ##### on 32-bit
 ```bash
@@ -159,15 +160,7 @@ source/glportal --datadir ./data
 ## Build with Visual Studio
 Building is only possible in Visual Studio 2017, as earlier versions do not support the requied C++14 language features.
 
-First follow the section: "Downloading source code". Then download the latest project files from:
-https://bintray.com/glportal/generic/GlPortal-VS2017-Solution
-
-After downloading extract the contents into your GlPortal directory. This is the same directory that contains the README.
-The GlPortal VS17 solution can be found in the new folder also called GlPortal.
-
-When first building GlPortal be sure to build the whole solution and select Release + x86 mode at the top.
-
-The game can then be run by pressing Ctrl + F5 or by going to Debug -> Start Without Debugging.
+Follow the [compile instructions for VS](https://github.com/kungfooman/glportal-vs)
 
 ## Keep us posted
 Not working? No worries! Help us help you figure out what we missed to make this work on
