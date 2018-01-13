@@ -92,11 +92,11 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
     glScissor(scissor.x, scissor.y, scissor.w, scissor.h);
     renderViewFrameStencil(renderContext);
   }
-
   renderEntities(renderContext);
   renderPortals(renderContext);
 
   {// draw top view
+    glClear(GL_DEPTH_BUFFER_BIT);
     // get clear color
     GLfloat clearColorValue[4];
     glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColorValue);
@@ -116,7 +116,9 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
 
       Matrix4f mtx;
       mtx.translate(p.getPosition() + Vector3f(0, 5.f, 0));
-      mtx.rotate(rad(-90), 1, 0, 0);
+      static float delta = 0.0;
+      delta -= 0.5;
+      mtx.rotate(rad(delta), 1, 0, 0);
 
       radix::Camera topCamera;
       topCamera.setPosition(mtx.getPosition());
