@@ -8,7 +8,7 @@ Building is only possible in Visual Studio 2017, as earlier versions do not supp
 **NOTE:** Dependencies will change all the time so watch the cmake output for missing libraries.
 Make sure to check CMakeLists.txt if something is missing.
 
-## Upgrade your OS
+## Upgrade your Operating System
 You will need very recent versions of all the dependencies. So please upgrade your OS before proceeding.
 
 * Debian: [DebianUpgrade](https://wiki.debian.org/DebianUpgrade)
