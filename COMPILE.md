@@ -5,8 +5,8 @@ If you want to compile with Visual Studio please have a look at [compile instruc
 Building is only possible in Visual Studio 2017, as earlier versions do not support the requied C++14 language features.
 
 ## Dependencies
-**NOTE:** Dependencies will change all the time so watch the cmake output carefuly for missing libraries.
-Make sure to check CMakeLists.txt if it is something missing.
+**NOTE:** Dependencies will change all the time so watch the cmake output for missing libraries.
+Make sure to check CMakeLists.txt if something is missing.
 
 ## Upgrade your OS
 You will need very recent versions of all the dependencies. So please upgrade your OS before proceeding.
