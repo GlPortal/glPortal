@@ -18,14 +18,84 @@
 #include <radix/physics/PhysicsDebugDraw.hpp>
 
 #include <radix/core/gl/OpenGL.hpp>
+#include <radix/core/gl/Framebuffer.hpp>
+
+#include <iostream>
 
 using namespace radix;
+
+struct ViewRenderer {
+  ViewRenderer(const int pixel, const radix::RectangleF& rect) :
+    borderWidth{pixel}, viewRectange{rect} {}
+
+  ViewRenderer(radix::RectangleF&& rect) :
+    viewRectange{std::move(rect)} {}
+
+  ~ViewRenderer() = default;
+
+  auto width() {
+    return viewRectange.w;
+  }
+
+  auto height() {
+    return viewRectange.h;
+  }
+
+  void setDestintation(const int pixel, radix::RectangleF rect) {
+    borderWidth = pixel;
+    viewRectange = rect;
+  }
+
+  void render(std::function<void()> renderNow) {
+    // save last setting
+    glEnable(GL_SCISSOR_TEST);
+    GLfloat bkColor[4];
+    radix::RectangleF viewPort_backup,
+                      scissor_backup;
+    glGetFloatv(GL_VIEWPORT, reinterpret_cast<float*>(&viewPort_backup));
+    glGetFloatv(GL_VIEWPORT, reinterpret_cast<float*>(&scissor_backup));
+    glGetFloatv(GL_COLOR_CLEAR_VALUE, bkColor);
+
+    glScissor(viewRectange.x, viewRectange.y,
+               viewRectange.w, viewRectange.h);
+    glViewport(viewRectange.x, viewRectange.y,
+               viewRectange.w, viewRectange.h);
+    glClearColor(1, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    // render now
+    glScissor(viewRectange.x + borderWidth, viewRectange.y,
+              viewRectange.w - (2 * borderWidth),
+              viewRectange.h - borderWidth);
+    glViewport(viewRectange.x + borderWidth, viewRectange.y,
+              viewRectange.w - (2 * borderWidth),
+              viewRectange.h - borderWidth);
+    // Render
+    renderNow();
+    // restore setting
+    glViewport(viewPort_backup.x, viewPort_backup.y,
+               viewPort_backup.w, viewPort_backup.h);
+    glScissor(scissor_backup.x, scissor_backup.y,
+               scissor_backup.w, scissor_backup.h);
+    glClearColor(bkColor[0], bkColor[1],
+                 bkColor[2], bkColor[3]);
+  }
+
+ protected:
+  radix::RectangleF viewRectange;
+  float BorderColor[4] {0, 0, 0, 0};
+  int borderWidth = 0;
+};
 
 namespace glPortal {
 
 GameRenderer::GameRenderer(glPortal::World &w, radix::Renderer &ren,
                            radix::Camera *cam, double *ptime)
-    : SubRenderer(dynamic_cast<radix::World&>(w), ren), camera(cam), dtime(ptime) {}
+    : SubRenderer(dynamic_cast<radix::World&>(w), ren), camera(cam), dtime(ptime) {
+      this->frameBuffer = std::make_unique<radix::FrameBuffer>();
+			this->frameBuffer->create(this->viewportWidth, this->viewportHeight, radix::FramebufferType::Texture);
+    }
+
+GameRenderer::~GameRenderer() = default;
 
 void GameRenderer::render() {
   PROFILER_BLOCK("GameRenderer::render", profiler::colors::Green200);
@@ -92,52 +162,58 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
     glScissor(scissor.x, scissor.y, scissor.w, scissor.h);
     renderViewFrameStencil(renderContext);
   }
+
   renderEntities(renderContext);
   renderPortals(renderContext);
+  glClear(GL_DEPTH_BUFFER_BIT);
+  if(0) { // render portal
+    ViewRenderer view1 {4, radix::RectangleF{0, 0,
+                       float(this->viewportWidth/4),
+                       float(this->viewportHeight/4)}};
+    ViewRenderer view2 {4, radix::RectangleF{view1.width(), 0,
+                       float(this->viewportWidth/4),
+                       float(this->viewportHeight/4)}};
 
-  {// draw top view
-    glClear(GL_DEPTH_BUFFER_BIT);
-    // get clear color
-    GLfloat clearColorValue[4];
-    glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColorValue);
-    // clear red border
-    glClearColor(1, 0, 0, 1);
-    glEnable(GL_SCISSOR_TEST);
-    glScissor(0, 0, viewportWidth/4, viewportHeight/4);
-    glViewport(0, 0, viewportWidth/4, viewportHeight/4);
-    glClear(GL_COLOR_BUFFER_BIT);
-    // clear viewport
-    glClearColor(0, 0, 0, 1);
-    glScissor(5, 5, viewportWidth/4 - 10, viewportHeight/4 - 10);
-    glViewport(5, 5, viewportWidth/4 - 10, viewportHeight/4 - 10);
-    glClear(GL_COLOR_BUFFER_BIT);
-    {
-      const Entity &p = dynamic_cast<Entity&>(world.getPlayer());
-
-      Matrix4f mtx;
-      mtx.translate(p.getPosition() + Vector3f(0, 5.f, 0));
-      static float delta = 0.0;
-      delta -= 0.5;
-      mtx.rotate(rad(delta), 1, 0, 0);
-
-      radix::Camera topCamera;
-      topCamera.setPosition(mtx.getPosition());
-      topCamera.setOrientation(mtx.getRotation());
-      topCamera.setZFar(camera->getZFar());
-      topCamera.setZNear(camera->getZNear());
-
-      topCamera.getProjMatrix(renderContext.projStack.back());
-      topCamera.getViewMatrix(renderContext.viewStack.back());
-      topCamera.getInvViewMatrix(renderContext.invViewStack.back());
-
-      renderEntities(renderContext);
+    auto index = world.entityPairs.find("portalPairs");
+    if(index == world.entityPairs.end() || index->second.empty()) {
+      return;
     }
-    // reset viewport
-    glViewport(0, 0, viewportWidth, viewportHeight);
-    glDisable(GL_SCISSOR_TEST);
-    // reset clear color
-    glClearColor(clearColorValue[0], clearColorValue[1], 
-                 clearColorValue[2], clearColorValue[3]);
+
+    auto& portals = world.entityPairs["portalPairs"].back();
+
+    auto renderView = [&](const auto cam1, const auto cam2){
+          auto portalCamera = radix::Camera();
+          this->setCameraInPortal(*this->camera,
+              portalCamera, *cam1, *cam2);
+
+          // Fill Stencil with Portal
+          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+          glEnable (GL_STENCIL_TEST);
+          glEnable (GL_DEPTH_TEST);
+          glColorMask( GL_FALSE , GL_FALSE , GL_FALSE , GL_FALSE );
+          glStencilFunc( GL_ALWAYS , 2 , ~0);
+          glStencilOp( GL_REPLACE , GL_REPLACE , GL_REPLACE );
+
+          Shader flatShader = ShaderLoader::getShader("whitefill.frag");
+          Matrix4f mtx;
+          cam1->getModelMtx(mtx);
+          renderer.renderMesh(renderContext, flatShader, mtx, cam1->stencilMesh, nullptr);
+
+          glColorMask ( GL_TRUE , GL_TRUE , GL_TRUE , GL_TRUE );
+          glStencilFunc ( GL_EQUAL , 2 , ~0);
+          glStencilOp ( GL_KEEP , GL_KEEP , GL_KEEP );
+          // Render Scene from Portal
+          renderContext.pushCamera(portalCamera);
+          renderEntities(renderContext);
+          renderContext.popCamera();
+          glDisable(GL_STENCIL_TEST);
+        };
+
+    auto cam1 = dynamic_cast<Portal*>(portals.first);
+    auto cam2 = dynamic_cast<Portal*>(portals.second);
+
+    view1.render([&](){renderView(cam1, cam2);});
+    view2.render([&](){renderView(cam2, cam1);});
   }
 
   glClear(GL_DEPTH_BUFFER_BIT);
@@ -273,10 +349,41 @@ void GameRenderer::renderPortals(RenderContext &rc) {
     return;
   }
 
-  auto& portals = world.entityPairs["portalPairs"];
+  auto& portals = world.entityPairs["portalPairs"].back();
+  auto cam1     = dynamic_cast<Portal*>(portals.first);
+  auto cam2     = dynamic_cast<Portal*>(portals.second);
 
-  renderPortal(portals.back().first, rc, renderer);
-  renderPortal(portals.back().second, rc, renderer);
+  auto portalCamera = radix::Camera();
+  this->setCameraInPortal(*this->camera, portalCamera, *cam1, *cam2);
+
+  { // Render Camera from portal 1
+    glEnable(GL_STENCIL_TEST);
+    glEnable(GL_DEPTH_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);  
+
+    glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF); 
+    glStencilMask(0xFF);
+
+    // draw to stecil
+    auto flatShader = ShaderLoader::getShader("whitefill.frag");
+    Matrix4f mtx;
+    cam1->getModelMtx(mtx);
+    renderer.renderMesh(rc, flatShader, mtx, cam1->stencilMesh, nullptr);
+
+    glStencilFunc(GL_EQUAL, 1, 0xFF);
+    glStencilMask(0x00); 
+
+    rc.pushCamera(portalCamera);
+    renderEntities(rc);
+    rc.popCamera();
+
+    glStencilMask(0xFF);
+    glDisable(GL_STENCIL_TEST);
+    glDisable(GL_DEPTH_TEST);
+  }
+  renderPortal(cam1, rc, renderer);
+  renderPortal(cam2, rc, renderer);
 }
 
 void  GameRenderer::renderPortal(Entity* portal, RenderContext& rc, Renderer& renderer) {
