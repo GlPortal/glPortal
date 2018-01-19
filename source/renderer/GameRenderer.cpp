@@ -183,8 +183,7 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
 
     auto renderView = [&](const auto cam1, const auto cam2){
           auto portalCamera = radix::Camera();
-          this->setCameraInPortal(*this->camera,
-              portalCamera, *cam1, *cam2);
+          setCameraInPortal(*this->camera, portalCamera, *cam1, *cam2);
 
           // Fill Stencil with Portal
           glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -196,8 +195,11 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
 
           Shader flatShader = ShaderLoader::getShader("whitefill.frag");
           Matrix4f mtx;
+          auto portal = cam1->stencilMesh;
           cam1->getModelMtx(mtx);
-          renderer.renderMesh(renderContext, flatShader, mtx, cam1->stencilMesh, nullptr);
+          renderer.renderMesh(renderContext, flatShader, mtx, portal, nullptr);
+          cam2->getModelMtx(mtx);
+          renderer.renderMesh(renderContext, flatShader, mtx, portal, nullptr);
 
           glColorMask ( GL_TRUE , GL_TRUE , GL_TRUE , GL_TRUE );
           glStencilFunc ( GL_EQUAL , 2 , ~0);
@@ -354,8 +356,9 @@ void GameRenderer::renderPortals(RenderContext &rc) {
   auto cam2     = dynamic_cast<Portal*>(portals.second);
 
   auto portalCamera = radix::Camera();
-  this->setCameraInPortal(*this->camera, portalCamera, *cam1, *cam2);
 
+  Matrix4f mtx;
+  auto flatShader = ShaderLoader::getShader("whitefill.frag");
   { // Render Camera from portal 1
     glEnable(GL_STENCIL_TEST);
     glEnable(GL_DEPTH_TEST);
@@ -366,16 +369,32 @@ void GameRenderer::renderPortals(RenderContext &rc) {
     glStencilMask(0xFF);
 
     // draw to stecil
-    auto flatShader = ShaderLoader::getShader("whitefill.frag");
-    Matrix4f mtx;
     cam1->getModelMtx(mtx);
     renderer.renderMesh(rc, flatShader, mtx, cam1->stencilMesh, nullptr);
 
     glStencilFunc(GL_EQUAL, 1, 0xFF);
     glStencilMask(0x00); 
 
+    setCameraInPortal(*camera, portalCamera, *cam1, *cam2);
     rc.pushCamera(portalCamera);
     renderEntities(rc);
+    renderPlayer(rc);
+    rc.popCamera();
+
+    glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF); 
+    glStencilMask(0xFF);
+
+    cam2->getModelMtx(mtx);
+    renderer.renderMesh(rc, flatShader, mtx, cam2->stencilMesh, nullptr);
+
+    glStencilFunc(GL_EQUAL, 1, 0xFF);
+    glStencilMask(0x00); 
+
+    setCameraInPortal(*camera, portalCamera, *cam2, *cam1);
+    rc.pushCamera(portalCamera);
+    renderEntities(rc);
+    renderPlayer(rc);
     rc.popCamera();
 
     glStencilMask(0xFF);
