@@ -18,6 +18,7 @@ namespace radix {
 namespace glPortal {
 
 class World;
+class Portal;
 
 class GameRenderer : public radix::SubRenderer {
 public:
@@ -87,7 +88,7 @@ public:
   * @param rc
   * @param renderer
   */
-  void renderPortal(radix::Entity* portal, radix::RenderContext& rc,
+  void renderPortal(Portal* portal, radix::RenderContext& rc,
                     radix::Renderer& renderer);
 
   /** 
