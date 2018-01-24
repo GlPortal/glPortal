@@ -44,7 +44,7 @@ public:
   * 
   * @param rc
   */
-  void renderScene(radix::RenderContext &rc);
+  void renderScene(radix::RenderContext &renderContext);
 
   /** 
   * @brief 
@@ -81,6 +81,15 @@ public:
    */
   void renderPortals(radix::RenderContext &rc);
 
+void testPortalStencil(const Portal& portal, unsigned int occlusionQueryIdx,
+                       radix::RenderContext& renderContext,
+                       radix::Renderer& renderer,
+                       const int stencilIndex);
+
+  void renderSceneFromPortal(const radix::Camera& src,
+      const Portal& portal1, const Portal& portal2,
+      radix::RenderContext&, const int stencilIndex);
+
   /** 
   * @brief renderPortal render portal color and blend
   * 
@@ -88,7 +97,7 @@ public:
   * @param rc
   * @param renderer
   */
-  void renderPortal(Portal* portal, radix::RenderContext& rc,
+  void renderPortal(const Portal& portal, radix::RenderContext& rc,
                     radix::Renderer& renderer);
 
   /** 
@@ -117,7 +126,6 @@ public:
                 const radix::Entity &portal, const radix::Entity &otherPortal);
 
 private:
-  std::unique_ptr<radix::FrameBuffer> frameBuffer;
   radix::Camera* camera;
   double*        dtime;
   double         time = 0.0;
