@@ -24,58 +24,6 @@
 
 using namespace radix;
 
-struct ViewRenderer {
-  ViewRenderer(const int pixel, const radix::RectangleF &rect)
-      : borderWidth{pixel}, viewRectange{rect} {}
-
-  ViewRenderer(radix::RectangleF &&rect) : viewRectange{std::move(rect)} {}
-
-  ~ViewRenderer() = default;
-
-  auto width() { return viewRectange.w; }
-
-  auto height() { return viewRectange.h; }
-
-  void setDestintation(const int pixel, radix::RectangleF rect) {
-    borderWidth = pixel;
-    viewRectange = rect;
-  }
-
-  void render(std::function<void()> renderNow) {
-    // save last setting
-    glEnable(GL_SCISSOR_TEST);
-    GLfloat bkColor[4];
-    radix::RectangleF viewPort_backup, scissor_backup;
-    glGetFloatv(GL_VIEWPORT, reinterpret_cast<float *>(&viewPort_backup));
-    glGetFloatv(GL_VIEWPORT, reinterpret_cast<float *>(&scissor_backup));
-    glGetFloatv(GL_COLOR_CLEAR_VALUE, bkColor);
-
-    glScissor(viewRectange.x, viewRectange.y, viewRectange.w, viewRectange.h);
-    glViewport(viewRectange.x, viewRectange.y, viewRectange.w, viewRectange.h);
-    glClearColor(1, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
-    // render now
-    glScissor(viewRectange.x + borderWidth, viewRectange.y,
-              viewRectange.w - (2 * borderWidth), viewRectange.h - borderWidth);
-    glViewport(viewRectange.x + borderWidth, viewRectange.y,
-               viewRectange.w - (2 * borderWidth),
-               viewRectange.h - borderWidth);
-    // Render
-    renderNow();
-    // restore setting
-    glViewport(viewPort_backup.x, viewPort_backup.y, viewPort_backup.w,
-               viewPort_backup.h);
-    glScissor(scissor_backup.x, scissor_backup.y, scissor_backup.w,
-              scissor_backup.h);
-    glClearColor(bkColor[0], bkColor[1], bkColor[2], bkColor[3]);
-  }
-
-  protected:
-  radix::RectangleF viewRectange;
-  float BorderColor[4]{0, 0, 0, 0};
-  int borderWidth = 0;
-};
-
 namespace glPortal {
 
 GameRenderer::GameRenderer(glPortal::World &w, radix::Renderer &ren,
@@ -85,6 +33,33 @@ GameRenderer::GameRenderer(glPortal::World &w, radix::Renderer &ren,
       dtime(ptime) {}
 
 GameRenderer::~GameRenderer() = default;
+
+void GameRenderer::testPortalStencil(const Portal& portal, GLuint occlusionQueryIdx,
+                       RenderContext& renderContext, Renderer& renderer,
+                       const int stencilIndex) {
+    Matrix4f mtx;
+    auto flatShader = ShaderLoader::getShader("whitefill.frag");
+    auto portalMesh = portal.stencilMesh;
+
+    glStencilFunc(GL_ALWAYS, stencilIndex, -1);
+    portal.getModelMtx(mtx);
+    glBeginQuery(GL_SAMPLES_PASSED, occlusionQueryIdx); 
+    renderer.renderMesh(renderContext, flatShader, mtx, portalMesh, nullptr);
+    glEndQuery(GL_SAMPLES_PASSED);
+}
+
+void GameRenderer::renderSceneFromPortal(const Camera& src, const Portal& portal1,
+                                         const Portal& portal2, RenderContext& renderContext,
+                                         const int stencilIndex) {
+    glStencilFunc(GL_EQUAL, stencilIndex, -1);
+    Camera portalCamera;
+    setCameraInPortal(src, portalCamera, portal1, portal2);
+    renderContext.pushCamera(portalCamera);
+      renderEntities(renderContext);
+      renderPlayer(renderContext);
+      renderPortal(portal1, renderContext, renderer);
+    renderContext.popCamera();
+}
 
 void GameRenderer::render() {
   PROFILER_BLOCK("GameRenderer::render", profiler::colors::Green200);
@@ -134,7 +109,7 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
   }
 
   RectangleI scissor{0, 0, 0, 0};
-  if (renderContext.viewFramesStack.size() > 0) {
+  if (!renderContext.viewFramesStack.empty()) {
     const RenderContext::ViewFrameInfo &vfi = renderContext.getViewFrame();
     // Don't render further if computed clip rect is zero-sized
     if (not renderer.clipViewFrame(renderContext, vfi.first, vfi.second,
@@ -147,7 +122,7 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
 
   renderViewFrames(renderContext);
 
-  if (renderContext.viewFramesStack.size() > 0) {
+  if (!renderContext.viewFramesStack.empty()) {
     glScissor(scissor.x, scissor.y, scissor.w, scissor.h);
     renderViewFrameStencil(renderContext);
   }
@@ -171,25 +146,20 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
     glStencilMask(0xFF);
     glClearStencil(0);
     glClear(GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    std::array<GLuint, 2> uiOcclusionQuery {};
+    glGenQueries(2, uiOcclusionQuery.data());
+    int iSamplesPassed[2] = {0, 0};
 
-    if (cam1) {
-      Matrix4f mtx;
-      auto portalMesh = cam1->stencilMesh;
-      auto flatShader = ShaderLoader::getShader("whitefill.frag");
+    if (cam1 != nullptr && cam2 != nullptr) {
       glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
       glStencilMask(0xFF);
-
-      // render portal 1 to stencil buffer with (s = 1)
-      glStencilFunc(GL_ALWAYS, 1, -1);
       glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-      cam1->getModelMtx(mtx);
-      renderer.renderMesh(renderContext, flatShader, mtx, portalMesh, nullptr);
+      // render portal 1 to stencil buffer with (s = 1)
+      testPortalStencil(*cam1, uiOcclusionQuery[0], renderContext, renderer, 1);
 
       // render portal 2 to stencil buffer with (s = 2)
-      glStencilFunc(GL_ALWAYS, 2, -1);
-      cam2->getModelMtx(mtx);
-      renderer.renderMesh(renderContext, flatShader, mtx, portalMesh, nullptr);
+      testPortalStencil(*cam2, uiOcclusionQuery[1], renderContext, renderer, 2);
 
       glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     }
@@ -200,31 +170,24 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
     renderEntities(renderContext);
 
-    if (cam1) {
-      radix::Camera portalCamera;
-      // render portal 1 with s == 1
-      glStencilFunc(GL_EQUAL, 1, -1);
-      setCameraInPortal(*camera, portalCamera, *cam1, *cam2);
-      renderContext.pushCamera(portalCamera);
-        renderEntities(renderContext);
-        renderPlayer(renderContext);
-        renderPortal(cam1, renderContext, renderer);
-      renderContext.popCamera();
+    if (cam1 != nullptr && cam2 != nullptr) {
+      glGetQueryObjectiv(uiOcclusionQuery[0], GL_QUERY_RESULT, &iSamplesPassed[0]); 
+      if(iSamplesPassed[0] != 0) {
+        // render portal 1 with s == 1
+        renderSceneFromPortal(*camera, *cam1, *cam2, renderContext, 1);
+      }
 
-      // render portal 2 with s == 2
-      setCameraInPortal(*camera, portalCamera, *cam2, *cam1);
-      renderContext.pushCamera(portalCamera);
-        glStencilFunc(GL_EQUAL, 2, -1);
-        renderEntities(renderContext);
-        renderPlayer(renderContext);
-        renderPortal(cam2, renderContext, renderer);
-      renderContext.popCamera();
+      glGetQueryObjectiv(uiOcclusionQuery[1], GL_QUERY_RESULT, &iSamplesPassed[1]); 
+      if(iSamplesPassed[1] != 0) {
+        // render portal 2 with s == 2
+        renderSceneFromPortal(*camera, *cam2, *cam1, renderContext, 2);
+      }
     }
 
     glStencilMask(0xFF);
     glStencilFunc(GL_ALWAYS, 0, -1);
     glClear(GL_STENCIL_BUFFER_BIT);
-    if (save_stencil_test) {
+    if (save_stencil_test != 0u) {
       glDisable(GL_STENCIL_TEST);
     }
   }
@@ -240,7 +203,7 @@ void GameRenderer::renderDebugView(RenderContext &renderContext) {
   btIDebugDraw *iDbgDraw =
       world.simulations.findFirstOfType<simulation::Physics>().getDebugDraw();
   auto dbgDraw = dynamic_cast<PhysicsDebugDraw *>(iDbgDraw);
-  if (dbgDraw) {
+  if (dbgDraw != nullptr) {
     world.simulations.findFirstOfType<radix::simulation::Physics>()
         .getPhysicsWorld()
         .debugDrawWorld();
@@ -259,7 +222,7 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
   glEnable(GL_SCISSOR_TEST);
   for (Entity &entity : world.entityManager) {
     auto vf = dynamic_cast<entities::ViewFrame *>(&entity);
-    if (vf) {
+    if (vf != nullptr) {
       Matrix4f inMat;
       entity.getModelMtx(inMat);
       Matrix4f outMat;
@@ -274,10 +237,10 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
       rc.popViewFrame();
     }
   }
-  if (not save_stencil_test) {
+  if (save_stencil_test == 0u) {
     glDisable(GL_STENCIL_TEST);
   }
-  if (not save_scissor_test) {
+  if (save_scissor_test == 0u) {
     glDisable(GL_SCISSOR_TEST);
   }
 
@@ -367,25 +330,29 @@ void GameRenderer::renderPortals(RenderContext &rc) {
   auto cam1 = dynamic_cast<Portal *>(portals.first);
   auto cam2 = dynamic_cast<Portal *>(portals.second);
 
-  renderPortal(cam1, rc, renderer);
-  renderPortal(cam2, rc, renderer);
+  if(cam1 != nullptr) {
+    renderPortal(*cam1, rc, renderer);
+  }
+  if(cam2 != nullptr) {
+    renderPortal(*cam2, rc, renderer);
+  }
 }
 
-void GameRenderer::renderPortal(Portal *portal, RenderContext &rc,
+void GameRenderer::renderPortal(const Portal& portal, RenderContext &rc,
                                 Renderer &renderer) {
-  if (portal == nullptr) return;
-
-  auto &mesh = portal->overlayMesh;
-  auto &mat = portal->overlayTex;
+  auto &mesh = portal.overlayMesh;
+  auto &mat  = portal.overlayTex;
 
   Matrix4f mtx;
-  mtx.translate(portal->getPosition());
-  mtx.rotate(portal->getOrientation());
+  mtx.translate(portal.getPosition());
+  mtx.rotate(portal.getOrientation());
   mtx.scale(Vector3f(1.f, 2.f, 1.f));
 
   auto &shader = ShaderLoader::getShader("unshaded.frag");
 
-  if (mesh.numFaces != 0) renderer.renderMesh(rc, shader, mtx, mesh, mat);
+  if (mesh.numFaces != 0) {
+    renderer.renderMesh(rc, shader, mtx, mesh, mat);
+  }
 
   shader.release();
 }
