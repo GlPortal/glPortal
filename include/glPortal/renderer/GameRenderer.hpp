@@ -1,10 +1,6 @@
 #ifndef GAME_RENDERER_HPP
 #define GAME_RENDERER_HPP
 
-#include <memory>
-#include <string>
-
-#include <radix/core/math/Vector3f.hpp>
 #include <radix/renderer/SubRenderer.hpp>
 
 namespace radix {
@@ -81,10 +77,10 @@ public:
    */
   void renderPortals(radix::RenderContext &rc);
 
-void testPortalStencil(const Portal& portal, unsigned int occlusionQueryIdx,
-                       radix::RenderContext& renderContext,
-                       radix::Renderer& renderer,
-                       const int stencilIndex);
+  void testPortalStencil(const Portal& portal, unsigned int occlusionQueryIdx,
+                         radix::RenderContext& renderContext,
+                         radix::Renderer& renderer,
+                         const int stencilIndex);
 
   void renderSceneFromPortal(const radix::Camera& src,
       const Portal& portal1, const Portal& portal2,
