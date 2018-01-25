@@ -20,8 +20,6 @@
 #include <radix/core/gl/OpenGL.hpp>
 #include <radix/core/gl/Framebuffer.hpp>
 
-#include <iostream>
-
 using namespace radix;
 
 namespace glPortal {
@@ -52,7 +50,7 @@ void GameRenderer::renderSceneFromPortal(const Camera& src, const Portal& portal
                                          const Portal& portal2, RenderContext& renderContext,
                                          const int stencilIndex) {
     glStencilFunc(GL_EQUAL, stencilIndex, -1);
-    Camera portalCamera;
+    Camera portalCamera, tempCamera = src;
     setCameraInPortal(src, portalCamera, portal1, portal2);
     renderContext.pushCamera(portalCamera);
       renderEntities(renderContext);
@@ -152,8 +150,9 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
 
     if (cam1 != nullptr && cam2 != nullptr) {
       glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-      glStencilMask(0xFF);
-      glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+      glStencilOp(GL_ZERO, GL_ZERO, GL_REPLACE);
+
+      glDepthMask(GL_FALSE);
 
       // render portal 1 to stencil buffer with (s = 1)
       testPortalStencil(*cam1, uiOcclusionQuery[0], renderContext, renderer, 1);
@@ -161,27 +160,40 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
       // render portal 2 to stencil buffer with (s = 2)
       testPortalStencil(*cam2, uiOcclusionQuery[1], renderContext, renderer, 2);
 
+      glDepthMask(GL_TRUE);
+
       glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     }
 
     // render scene with s == 0
-    glStencilMask(0x00);
-    glStencilFunc(GL_EQUAL, 0, -1);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilFunc(GL_ALWAYS, 0, -1);
+    glStencilOp(GL_ZERO, GL_ZERO, GL_KEEP);
     renderEntities(renderContext);
 
     if (cam1 != nullptr && cam2 != nullptr) {
+      glClear(GL_DEPTH_BUFFER_BIT);
+      glStencilMask(0x00);
       glGetQueryObjectiv(uiOcclusionQuery[0], GL_QUERY_RESULT, &iSamplesPassed[0]); 
+      radix::Util::Log(radix::Error, "Query") << uiOcclusionQuery[0];
+
       if(iSamplesPassed[0] != 0) {
-        // render portal 1 with s == 1
+      // render portal 1 with s == 1
         renderSceneFromPortal(*camera, *cam1, *cam2, renderContext, 1);
       }
 
       glGetQueryObjectiv(uiOcclusionQuery[1], GL_QUERY_RESULT, &iSamplesPassed[1]); 
       if(iSamplesPassed[1] != 0) {
-        // render portal 2 with s == 2
+      // render portal 2 with s == 2
         renderSceneFromPortal(*camera, *cam2, *cam1, renderContext, 2);
       }
+    }
+
+    glStencilFunc(GL_EQUAL, 0, -1);
+    if(cam1 != nullptr) {
+      renderPortal(*cam1, renderContext, renderer);
+    }
+    if(cam2 != nullptr) {
+      renderPortal(*cam2, renderContext, renderer);
     }
 
     glStencilMask(0xFF);
@@ -191,7 +203,6 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
       glDisable(GL_STENCIL_TEST);
     }
   }
-  renderPortals(renderContext);
 
   glClear(GL_DEPTH_BUFFER_BIT);
   if (world.getConfig().isDebugViewEnabled()) {
