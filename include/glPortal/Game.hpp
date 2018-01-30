@@ -31,7 +31,7 @@ public:
   GameController& getGameController() { return *gameController; }
 private:
   bool showSplash;
-  std::unique_ptr<radix::PhysicsDebugDraw> m_physDebugDraw;
+  std::unique_ptr<radix::PhysicsDebugDraw> physicsDebugDraw;
   std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
