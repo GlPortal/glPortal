@@ -130,55 +130,8 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
     renderViewFrameStencil(renderContext);
   }
 
-  { // render scene
-    renderEntities(renderContext);
-    // render portals
-    auto index = world.entityPairs.find("portalPairs");
-    if (index == world.entityPairs.end() || index->second.empty()) {
-      return;
-    }
-    //
-    auto   &portals = index->second.back();
-    Portal *cam1    = dynamic_cast<Portal *>(portals.first);
-    Portal *cam2    = dynamic_cast<Portal *>(portals.second);
-
-    // backup stencil buffer
-    GLboolean save_stencil_test;
-    glGetBooleanv(GL_STENCIL_TEST, &save_stencil_test);
-    glEnable(GL_STENCIL_TEST);
-
-    // test stencil portals
-    if(cam1 != nullptr && cam2 != nullptr) {
-      glStencilMask(0xFF);
-      glClearStencil(0);
-      glClear(GL_STENCIL_BUFFER_BIT);
-      glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-      glDepthMask(GL_FALSE);
-      testPortalStencil(*cam1, occlusionQueryIdx[0], renderContext, renderer, 1);
-      testPortalStencil(*cam2, occlusionQueryIdx[1], renderContext, renderer, 2);
-      glDepthMask(GL_TRUE);
-      glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-      glStencilMask(0x00);
-
-      glBeginConditionalRender(occlusionQueryIdx[0], GL_QUERY_WAIT);
-      glClear(GL_DEPTH_BUFFER_BIT);
-      renderSceneFromPortal(*camera, *cam1, *cam2, renderContext, 1);
-      glEndConditionalRender();
-
-      glBeginConditionalRender(occlusionQueryIdx[1], GL_QUERY_WAIT);
-      glClear(GL_DEPTH_BUFFER_BIT);
-      renderSceneFromPortal(*camera, *cam2, *cam1, renderContext, 2);
-      glEndConditionalRender();
-    }
-
-    // restore stencil buffer
-    glStencilMask(0xFF);
-    glStencilFunc(GL_ALWAYS, 0, -1);
-    glClear(GL_STENCIL_BUFFER_BIT);
-    if (save_stencil_test != 0u) {
-      glDisable(GL_STENCIL_TEST);
-    }
-  }
+  renderEntities(renderContext);
+  renderPortals(renderContext);
 
   glClear(GL_DEPTH_BUFFER_BIT);
   if (world.getConfig().isDebugViewEnabled()) {
@@ -307,21 +260,60 @@ void GameRenderer::renderEntities(RenderContext &rc) {
   }
 }
 
-void GameRenderer::renderPortals(RenderContext &rc) {
+void GameRenderer::renderPortals(RenderContext &renderContext) {
   auto index = world.entityPairs.find("portalPairs");
   if (index == world.entityPairs.end() || index->second.empty()) {
     return;
   }
-
-  auto &portals = world.entityPairs["portalPairs"].back();
-  auto cam1 = dynamic_cast<Portal *>(portals.first);
-  auto cam2 = dynamic_cast<Portal *>(portals.second);
-
+  auto   &portals = index->second.back();
+  Portal *cam1    = dynamic_cast<Portal *>(portals.first);
+  Portal *cam2    = dynamic_cast<Portal *>(portals.second);
   if(cam1 != nullptr) {
-    renderPortal(*cam1, rc, renderer);
+    glDepthMask(GL_FALSE);
+    renderPortal(*cam1, renderContext, renderer);
+    glDepthMask(GL_TRUE);
   }
   if(cam2 != nullptr) {
-    renderPortal(*cam2, rc, renderer);
+    glDepthMask(GL_FALSE);
+    renderPortal(*cam2, renderContext, renderer);
+    glDepthMask(GL_TRUE);
+  }
+
+  // backup stencil buffer
+  GLboolean save_stencil_test;
+  glGetBooleanv(GL_STENCIL_TEST, &save_stencil_test);
+  glEnable(GL_STENCIL_TEST);
+
+  // test stencil portals
+  if(cam1 != nullptr && cam2 != nullptr) {
+    glStencilMask(0xFF);
+    glClearStencil(0);
+    glClear(GL_STENCIL_BUFFER_BIT);
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glDepthMask(GL_FALSE);
+    testPortalStencil(*cam1, occlusionQueryIdx[0], renderContext, renderer, 1);
+    testPortalStencil(*cam2, occlusionQueryIdx[1], renderContext, renderer, 2);
+    glDepthMask(GL_TRUE);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glStencilMask(0x00);
+
+    glBeginConditionalRender(occlusionQueryIdx[0], GL_QUERY_WAIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    renderSceneFromPortal(*camera, *cam1, *cam2, renderContext, 1);
+    glEndConditionalRender();
+
+    glBeginConditionalRender(occlusionQueryIdx[1], GL_QUERY_WAIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    renderSceneFromPortal(*camera, *cam2, *cam1, renderContext, 2);
+    glEndConditionalRender();
+  }
+
+  // restore stencil buffer
+  glStencilMask(0xFF);
+  glStencilFunc(GL_ALWAYS, 0, -1);
+  glClear(GL_STENCIL_BUFFER_BIT);
+  if (save_stencil_test != 0u) {
+    glDisable(GL_STENCIL_TEST);
   }
 }
 
