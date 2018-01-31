@@ -28,9 +28,13 @@ GameRenderer::GameRenderer(glPortal::World &w, radix::Renderer &ren,
                            radix::Camera *cam, double *ptime)
     : SubRenderer(dynamic_cast<radix::World &>(w), ren),
       camera(cam),
-      dtime(ptime) {}
+      dtime(ptime) {
+      glGenQueries(2, occlusionQueryIdx);
+      }
 
-GameRenderer::~GameRenderer() = default;
+GameRenderer::~GameRenderer() {
+  glDeleteQueries(2, occlusionQueryIdx);
+}
 
 void GameRenderer::testPortalStencil(const Portal& portal, GLuint occlusionQueryIdx,
                        RenderContext& renderContext, Renderer& renderer,
@@ -42,9 +46,9 @@ void GameRenderer::testPortalStencil(const Portal& portal, GLuint occlusionQuery
     glStencilOp(GL_ZERO, GL_ZERO, GL_REPLACE);
     glStencilFunc(GL_ALWAYS, stencilIndex, -1);
     portal.getModelMtx(mtx);
-    //glBeginQuery(GL_SAMPLES_PASSED, occlusionQueryIdx); 
+    glBeginQuery(GL_SAMPLES_PASSED, occlusionQueryIdx);
     renderer.renderMesh(renderContext, flatShader, mtx, portalMesh, nullptr);
-    //glEndQuery(GL_SAMPLES_PASSED);
+    glEndQuery(GL_SAMPLES_PASSED);
 }
 
 void GameRenderer::renderSceneFromPortal(const Camera& src, const Portal& portal1,
@@ -150,16 +154,21 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
       glClear(GL_STENCIL_BUFFER_BIT);
       glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
       glDepthMask(GL_FALSE);
-      testPortalStencil(*cam1, 0, renderContext, renderer, 1);
-      testPortalStencil(*cam2, 0, renderContext, renderer, 2);
+      testPortalStencil(*cam1, occlusionQueryIdx[0], renderContext, renderer, 1);
+      testPortalStencil(*cam2, occlusionQueryIdx[1], renderContext, renderer, 2);
       glDepthMask(GL_TRUE);
       glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
       glStencilMask(0x00);
 
+      glBeginConditionalRender(occlusionQueryIdx[0], GL_QUERY_WAIT);
       glClear(GL_DEPTH_BUFFER_BIT);
       renderSceneFromPortal(*camera, *cam1, *cam2, renderContext, 1);
+      glEndConditionalRender();
+
+      glBeginConditionalRender(occlusionQueryIdx[1], GL_QUERY_WAIT);
       glClear(GL_DEPTH_BUFFER_BIT);
       renderSceneFromPortal(*camera, *cam2, *cam1, renderContext, 2);
+      glEndConditionalRender();
     }
 
     // restore stencil buffer

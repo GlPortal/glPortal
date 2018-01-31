@@ -125,6 +125,7 @@ private:
   radix::Camera* camera;
   double*        dtime;
   double         time = 0.0;
+  unsigned int   occlusionQueryIdx[2];
 };
 
 } /* namespace glPortal */
