@@ -76,14 +76,13 @@ void GameRenderer::renderSceneFromPortal(const Camera &src,
   setCameraInPortal(src, portalCamera, portal1, portal2);
   renderContext.pushCamera(portalCamera);
     renderEntities(renderContext);
-    //renderPlayer(renderContext);
+    renderPlayer(renderContext);
+    renderStencilPortal(portal1, renderContext, 0);
 
     testPortalStencil(portal1, renderContext, stencilIndex, GL_EQUAL, GL_INCR);
 
     renderSceneFromPortal(portalCamera, portal1, portal2,
         renderContext, stencilIndex+1, 0, count+1);
-
-    renderStencilPortal(portal1, renderContext, 0);
   renderContext.popCamera();
   //glEndConditionalRender();
 }
@@ -277,11 +276,13 @@ void GameRenderer::renderViewFrameStencil(RenderContext &rc) {
 }
 
 void GameRenderer::renderEntities(RenderContext &rc) {
+  glStencilMask(0x00);
   for (Entity &e : world.entityManager) {
     if (dynamic_cast<const entities::MeshDrawableTrait *>(&e) != nullptr) {
       renderEntity(rc, e);
     }
   }
+  glStencilMask(0xFF);
 }
 
 void GameRenderer::renderPortals(RenderContext &renderContext) {
@@ -298,6 +299,9 @@ void GameRenderer::renderPortals(RenderContext &renderContext) {
   GLboolean save_stencil_test;
   glGetBooleanv(GL_STENCIL_TEST, &save_stencil_test);
   glEnable(GL_STENCIL_TEST);
+
+  renderStencilPortal(*cam1, renderContext, occlusionQueryIdx[0]);
+  renderStencilPortal(*cam2, renderContext, occlusionQueryIdx[1]);
 
   // TODO
   //GLint portal1Query = 0, portal2Query = 0;
@@ -321,14 +325,14 @@ void GameRenderer::renderPortals(RenderContext &renderContext) {
   if (save_stencil_test != 0u) {
     glDisable(GL_STENCIL_TEST);
   }
-
-  renderStencilPortal(*cam1, renderContext, occlusionQueryIdx[0]);
-  renderStencilPortal(*cam2, renderContext, occlusionQueryIdx[1]);
-
 }
 
 void GameRenderer::renderStencilPortal(const Portal &portal, RenderContext &rc,
                                         const GLuint query) {
+  if(!portal.open) {
+    return;
+  }
+
   glStencilMask(0x00);
   glDepthMask(GL_FALSE);
 
@@ -377,11 +381,11 @@ void GameRenderer::renderPlayer(RenderContext &rc) {
   mtx.rotate(p.getOrientation());
   mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
 
-  const Mesh &dummy = MeshLoader::getMesh("HumanToken.obj");
-  const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
+  const auto &dummy = MeshLoader::getMesh("HumanToken.obj");
+  const auto &mat   = MaterialLoader::fromTexture("HumanToken.png");
+  auto &shader      = ShaderLoader::getShader("diffuse.frag");
 
-  renderer.renderMesh(rc, ShaderLoader::getShader("diffuse.frag"), mtx, dummy,
-                      mat);
+  renderer.renderMesh(rc, shader, mtx, dummy, mat);
 }
 
 void GameRenderer::setCameraInPortal(const Camera &cam, Camera &dest,
