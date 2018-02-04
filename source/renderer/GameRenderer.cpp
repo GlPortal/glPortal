@@ -22,6 +22,51 @@
 
 using namespace radix;
 
+struct backupColor {
+  backupColor(GLboolean initMask[4]) {
+    glGetBooleanv(GL_COLOR_WRITEMASK, mask.data());
+    glColorMask(initMask[0], initMask[1], initMask[2], initMask[3]);
+  }
+  ~backupColor() {
+    glColorMask(mask[0], mask[1], mask[2], mask[3]);
+  }
+  void setMask(GLboolean mask[4]) {
+    glColorMask(mask[0], mask[1], mask[2], mask[3]);
+  }
+protected:
+  std::array<GLboolean, 4> mask;
+};
+
+struct backupDepth {
+  backupDepth(GLboolean initMask) {
+    glGetBooleanv(GL_DEPTH_WRITEMASK, &mask);
+    glDepthMask(initMask);
+  }
+  ~backupDepth() {
+    glDepthMask(mask);
+  }
+  void setMask(GLboolean mask) {
+    glDepthMask(mask);
+  }
+protected:
+  GLboolean mask;
+};
+
+struct backupStencil {
+  backupStencil(GLuint initMask) {
+    glGetIntegerv(GL_STENCIL_WRITEMASK, &mask);
+    glStencilMask(initMask);
+  }
+  ~backupStencil() {
+    glStencilMask(mask);
+  }
+  void setMask(GLuint mask) {
+    glStencilMask(mask);
+  }
+protected:
+  GLint mask;
+};
+
 namespace glPortal {
 
 GameRenderer::GameRenderer(glPortal::World &w, radix::Renderer &ren,
@@ -75,11 +120,14 @@ void GameRenderer::renderSceneFromPortal(const Camera &src,
   setCameraInPortal(src, portalCamera, portal1, portal2);
   renderContext.pushCamera(portalCamera);
 
-  glBeginConditionalRender(occlusionQueryIdx[occlusionQueryIndex], GL_QUERY_WAIT);
-    renderEntities(renderContext);
-    renderPlayer(renderContext);
-    renderStencilPortal(portal1, renderContext, occlusionQueryIndex + 1);
-  glEndConditionalRender();
+  {
+    backupStencil stencil(0x00);
+    glBeginConditionalRender(occlusionQueryIdx[occlusionQueryIndex], GL_QUERY_WAIT);
+      renderEntities(renderContext);
+      renderPlayer(renderContext);
+      renderStencilPortal(portal1, renderContext, occlusionQueryIndex + 1);
+    glEndConditionalRender();
+  }
 
     testPortalStencil(portal1, renderContext, stencilIndex, GL_EQUAL, GL_INCR);
 
@@ -230,13 +278,10 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
 
 void GameRenderer::renderViewFrameStencil(RenderContext &rc) {
   PROFILER_BLOCK("GameRenderer::renderViewFrameStencil");
-  std::array<GLboolean, 4> save_color_mask{};
-  GLboolean save_depth_mask;
-  glGetBooleanv(GL_COLOR_WRITEMASK, save_color_mask.data());
-  glGetBooleanv(GL_DEPTH_WRITEMASK, &save_depth_mask);
 
-  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-  glDepthMask(GL_FALSE);
+  GLboolean color[4] = {GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE};
+  backupColor colorBackup(color);
+  backupDepth depthBackup(GL_FALSE);
   glStencilFunc(GL_NEVER, 0, 0xFF);
   glStencilOp(GL_INCR, GL_KEEP, GL_KEEP);  // draw 1s on test fail (always)
   glClear(GL_STENCIL_BUFFER_BIT);          // needs mask=0xFF
@@ -266,24 +311,17 @@ void GameRenderer::renderViewFrameStencil(RenderContext &rc) {
   }
   shader.release();
 
-  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-  glDepthMask(GL_TRUE);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
   /* Fill 1 or more */
   glStencilFunc(GL_LEQUAL, 1, 0xFF);
-  glColorMask(save_color_mask[0], save_color_mask[1], save_color_mask[2],
-              save_color_mask[3]);
-  glDepthMask(save_depth_mask);
 }
 
 void GameRenderer::renderEntities(RenderContext &rc) {
-  glStencilMask(0x00);
   for (Entity &e : world.entityManager) {
     if (dynamic_cast<const entities::MeshDrawableTrait *>(&e) != nullptr) {
       renderEntity(rc, e);
     }
   }
-  glStencilMask(0xFF);
 }
 
 void GameRenderer::renderPortals(RenderContext &renderContext) {
@@ -336,8 +374,8 @@ void GameRenderer::renderStencilPortal(const Portal &portal, RenderContext &rc,
     return;
   }
 
-  glStencilMask(0x00);
-  glDepthMask(GL_FALSE);
+  backupDepth depthBackup(0x00);
+  backupDepth depthDepth(GL_FALSE);
 
   auto &mesh = portal.overlayMesh;
   auto &mat  = portal.overlayTex;
@@ -354,9 +392,6 @@ void GameRenderer::renderStencilPortal(const Portal &portal, RenderContext &rc,
   glEndQuery(GL_SAMPLES_PASSED);
 
   shader.release();
-
-  glDepthMask(GL_TRUE);
-  glStencilMask(0xFF);
 }
 
 void GameRenderer::renderEntity(RenderContext &rc, const Entity &e) {
