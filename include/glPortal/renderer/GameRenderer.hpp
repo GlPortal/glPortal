@@ -133,7 +133,7 @@ class GameRenderer : public radix::SubRenderer {
   radix::Camera* camera;
   double* dtime;
   double time = 0.0;
-  std::array<unsigned int, 6> occlusionQueryIdx;
+  std::array<unsigned int, 10> occlusionQueryIdx;
   std::unique_ptr<radix::FrameBuffer> depthFrameBuffer;
 };
 
