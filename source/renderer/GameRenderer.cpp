@@ -69,7 +69,7 @@ void GameRenderer::renderSceneFromPortal(const Camera &src,
     return;
   }
 
-  //glBeginConditionalRender(occlusionQueryIdx[occlusionQueryIndex], GL_QUERY_WAIT);
+  glBeginConditionalRender(occlusionQueryIdx[occlusionQueryIndex], GL_QUERY_WAIT);
   glClear(GL_DEPTH_BUFFER_BIT);
   glStencilFunc(GL_EQUAL, stencilIndex, 0xFF);
   Camera portalCamera;
@@ -77,14 +77,14 @@ void GameRenderer::renderSceneFromPortal(const Camera &src,
   renderContext.pushCamera(portalCamera);
     renderEntities(renderContext);
     renderPlayer(renderContext);
-    renderStencilPortal(portal1, renderContext, 0);
+    renderStencilPortal(portal1, renderContext, occlusionQueryIndex+1);
 
     testPortalStencil(portal1, renderContext, stencilIndex, GL_EQUAL, GL_INCR);
 
     renderSceneFromPortal(portalCamera, portal1, portal2,
-        renderContext, stencilIndex+1, 0, count+1);
+        renderContext, stencilIndex+1, occlusionQueryIndex+1, count+1);
   renderContext.popCamera();
-  //glEndConditionalRender();
+  glEndConditionalRender();
 }
 
 void GameRenderer::render() {
@@ -300,8 +300,10 @@ void GameRenderer::renderPortals(RenderContext &renderContext) {
   glGetBooleanv(GL_STENCIL_TEST, &save_stencil_test);
   glEnable(GL_STENCIL_TEST);
 
-  renderStencilPortal(*cam1, renderContext, occlusionQueryIdx[0]);
-  renderStencilPortal(*cam2, renderContext, occlusionQueryIdx[1]);
+  uint portal1QueryIndex = 0;
+  uint portal2QueryIndex = 5;
+  renderStencilPortal(*cam1, renderContext, portal1QueryIndex);
+  renderStencilPortal(*cam2, renderContext, portal2QueryIndex);
 
   // TODO
   //GLint portal1Query = 0, portal2Query = 0;
@@ -315,8 +317,8 @@ void GameRenderer::renderPortals(RenderContext &renderContext) {
     testPortalStencil(*cam1, renderContext, 1);
     testPortalStencil(*cam2, renderContext, 4);
 
-    renderSceneFromPortal(*camera, *cam1, *cam2, renderContext, 1, 0, 0);
-    renderSceneFromPortal(*camera, *cam2, *cam1, renderContext, 4, 0, 0);
+    renderSceneFromPortal(*camera, *cam1, *cam2, renderContext, 1, portal1QueryIndex, 0);
+    renderSceneFromPortal(*camera, *cam2, *cam1, renderContext, 4, portal2QueryIndex, 0);
   }
   // restore stencil buffer
   glStencilMask(0xFF);
@@ -346,9 +348,9 @@ void GameRenderer::renderStencilPortal(const Portal &portal, RenderContext &rc,
 
   auto &shader = ShaderLoader::getShader("unshaded.frag");
 
-  //glBeginQuery(GL_SAMPLES_PASSED, query);
+  glBeginQuery(GL_SAMPLES_PASSED, this->occlusionQueryIdx[query]);
   renderer.renderMesh(rc, shader, mtx, mesh, mat);
-  //glEndQuery(GL_SAMPLES_PASSED);
+  glEndQuery(GL_SAMPLES_PASSED);
 
   shader.release();
 
