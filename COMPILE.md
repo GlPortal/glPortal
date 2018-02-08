@@ -5,16 +5,16 @@ If you want to compile with Visual Studio please have a look at [compile instruc
 Building is only possible in Visual Studio 2017, as earlier versions do not support the requied C++14 language features.
 
 ## Dependencies
-**NOTE:** Dependencies will change all the time so watch the cmake output carefuly for missing libraries.
-Make sure to check CMakeLists.txt if it is something missing.
+**NOTE:** Dependencies will change all the time so watch the cmake output for missing libraries.
+Make sure to check CMakeLists.txt if something is missing.
 
-## Upgrade your OS
+## Upgrade your Operating System
 You will need very recent versions of all the dependencies. So please upgrade your OS before proceeding.
 
-* Debian: [DebianUpgrade](https://wiki.debian.org/DebianUpgrade)
-* Ubuntu: [Upgrade Ubuntu](http://www.ubuntu.com/download/desktop/upgrade)
-* Linux Mint: [How to upgrade to a newer release](https://community.linuxmint.com/tutorial/view/2)
-* Arch Linux: `pacman -Syu`, which you probably already do frequently
+* [Upgrade Debian](https://wiki.debian.org/DebianUpgrade)
+* [Upgrade Ubuntu](http://www.ubuntu.com/download/desktop/upgrade)
+* [Upgrade Mint](https://community.linuxmint.com/tutorial/view/2)
+* In Arch Linux type: `pacman -Syu`
 
 ## List of dependencies
 - assimp: 3D model asset loading

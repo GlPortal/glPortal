@@ -4,7 +4,7 @@
 [![Contributors](https://img.shields.io/badge/contributors-stats-brightgreen.svg)](http://stats.glportal.de/)
 [![Documentation Status](https://img.shields.io/badge/specification-latest-brightgreen.svg)](http://specification.glportal.de/en/latest/?badge=latest)
 
-Donate Bitcoin to 1JxrwJZgV9qBeEPH7BDF9qLJPSDcp6fqxz
+Donate Bitcoin to 1JxrwJZgV9qBeEPH7BDF9qLJPSDcp6fqxz to help us pay for hosting and domain names.
 # GlPortal
 
 > For instructions on how to compile the game please read the [compile guide](COMPILE.md).

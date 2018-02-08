@@ -1,7 +1,6 @@
 # GlPortal Contribution Guide
 
-## All
-If you want to become part of the team or you need help, please say hi in [gitter](https://gitter.im/GlPortal/glPortal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) or [irc](http://webchat.freenode.net/?channels=%23glportal&uio=d4).
+If you want to become part of the team or you need help, please say hi in [gitter](https://gitter.im/GlPortal/glPortal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) or [irc](http://webchat.freenode.net/?channels=%23glportal&uio=d4). Please refer to the [contribution guide](http://contribute.glportal.de).
 
 ## Developer
 - Follow the [compile guide](https://github.com/GlPortal/glPortal/blob/master/COMPILE.md) to compile the game.
