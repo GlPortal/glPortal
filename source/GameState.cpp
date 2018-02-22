@@ -17,6 +17,7 @@ void GameState::init(radix::BaseGame &game) {
         game.getWorld()->stateFunctionStack.push(&GameState::handleGameOverScreen);
       });
 
+  splashCallbackHolder = radix::EventDispatcher::CallbackHolder{};
   winCallbackHolder.setStatic();
 }
 
