@@ -6,6 +6,7 @@
 
 #include <radix/renderer/Renderer.hpp>
 #include <radix/Viewport.hpp>
+#include <radix/BaseGame.hpp>
 #include <radix/entities/Player.hpp>
 #include <radix/entities/ViewFrame.hpp>
 #include <radix/entities/traits/MeshDrawableTrait.hpp>
@@ -18,6 +19,7 @@
 #include <radix/physics/PhysicsDebugDraw.hpp>
 
 #include <radix/core/gl/OpenGL.hpp>
+#include <imgui/imgui.h>
 
 using namespace radix;
 
@@ -224,6 +226,14 @@ void GameRenderer::renderEntities(RenderContext &rc) {
 }
 
 void GameRenderer::renderPortals(RenderContext &rc) {
+  static bool drawFirstPortal  = true;
+  static bool drawSecondPortal = true;
+
+  if(world.game.getWindow().config.getCursorVisibility()) {
+    ImGui::Checkbox("DrawFirstButton", &drawFirstPortal);
+    ImGui::Checkbox("DrawSecondButton", &drawSecondPortal);
+  }
+
   auto index = world.entityPairs.find("portalPairs");
   if(index == world.entityPairs.end() || index->second.empty()) {
     return;
@@ -231,8 +241,12 @@ void GameRenderer::renderPortals(RenderContext &rc) {
 
   auto& portals = world.entityPairs["portalPairs"];
 
-  renderPortal(portals.back().first, rc, renderer);
-  renderPortal(portals.back().second, rc, renderer);
+  if(drawFirstPortal) {
+    renderPortal(portals.back().first, rc, renderer);
+  }
+  if(drawSecondPortal) {
+    renderPortal(portals.back().second, rc, renderer);
+  }
 }
 
 void  GameRenderer::renderPortal(Entity* portal, RenderContext& rc, Renderer& renderer) {
