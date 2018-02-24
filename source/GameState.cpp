@@ -13,7 +13,7 @@ radix::EventDispatcher::CallbackHolder GameState::winCallbackHolder;
 void GameState::init(radix::BaseGame &game) {
   game.getGameWorld()->addScreen(game.getGameWorld()->splashScreen);
   winCallbackHolder = game.getWorld()->event.addObserver(
-      radix::GameState::WinEvent::Type, [&game](const radix::Event &event) {
+      radix::GameStateManager::WinEvent::Type, [&game](const radix::Event &event) {
         game.getWorld()->stateFunctionStack.push(&GameState::handleGameOverScreen);
       });
 
