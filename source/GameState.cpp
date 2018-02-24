@@ -11,6 +11,7 @@ radix::EventDispatcher::CallbackHolder GameState::splashCallbackHolder;
 radix::EventDispatcher::CallbackHolder GameState::winCallbackHolder;
 
 void GameState::init(radix::BaseGame &game) {
+  game.getGameWorld()->addScreen(game.getGameWorld()->splashScreen);
   winCallbackHolder = game.getWorld()->event.addObserver(
       radix::GameState::WinEvent::Type, [&game](const radix::Event &event) {
         game.getWorld()->stateFunctionStack.push(&GameState::handleGameOverScreen);
@@ -18,6 +19,16 @@ void GameState::init(radix::BaseGame &game) {
 
   winCallbackHolder.setStatic();
 }
+
+void GameState::handleSplash(radix::BaseGame &game) {
+  radix::entities::Player &player = game.getWorld()->getPlayer();
+  player.frozen = true;
+  if (game.getWindow().isKeyDown(SDL_SCANCODE_RETURN)) {
+      game.getGameWorld()->removeScreen(game.getGameWorld()->splashScreen);
+      game.getWorld()->stateFunctionStack.pop();
+  }
+}
+
 
 void GameState::handleRunning(radix::BaseGame &game) {
   radix::entities::Player &player = game.getWorld()->getPlayer();
@@ -29,6 +40,7 @@ void GameState::handleRunning(radix::BaseGame &game) {
      radix::InputSource::KeyReleasedEvent::Type, [&player, &game](const radix::Event& event) {
        const int key = ((radix::InputSource::KeyReleasedEvent &) event).key;
        if (key == SDL_SCANCODE_ESCAPE) {
+         game.getGameWorld()->addScreen(game.getGameWorld()->pauseScreen);
          player.frozen = true;
          game.getWorld()->stateFunctionStack.push(&GameState::handlePaused);
        }
@@ -40,9 +52,6 @@ void GameState::handleRunning(radix::BaseGame &game) {
 }
 
 void GameState::handlePaused(radix::BaseGame &game) {
-  radix::Screen &screen = radix::XmlScreenLoader::getScreen(radix::Environment::getDataDir()
-                                                            + "/screens/title.xml");
-  game.getGameWorld()->addScreen(screen);
   radix::entities::Player &player = game.getWorld()->getPlayer();
 
   game.getWorld()->event.removeObserver(splashCallbackHolder);
@@ -52,21 +61,11 @@ void GameState::handlePaused(radix::BaseGame &game) {
      radix::InputSource::KeyReleasedEvent::Type, [&player, &game] (const radix::Event& event) {
        const int key = ((radix::InputSource::KeyReleasedEvent &) event).key;
        if (key == SDL_SCANCODE_ESCAPE) {
+         game.getGameWorld()->removeScreen(game.getGameWorld()->pauseScreen);
          player.frozen = false;
          game.getWorld()->stateFunctionStack.pop();
        }
      });
-}
-
-void GameState::handleSplash(radix::BaseGame &game) {
-  radix::entities::Player &player = game.getWorld()->getPlayer();
-  player.frozen = true;
-  radix::Screen &screen =
-    radix::XmlScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/test.xml");
-  game.getGameWorld()->addScreen(screen);
-  if (game.getWindow().isKeyDown(SDL_SCANCODE_RETURN)) {
-    game.getWorld()->stateFunctionStack.pop();
-  }
 }
 
 void GameState::handleMenu(radix::BaseGame &game) { }
@@ -74,9 +73,7 @@ void GameState::handleMenu(radix::BaseGame &game) { }
 void GameState::handleGameOverScreen(radix::BaseGame &game) {
   radix::entities::Player &player = game.getWorld()->getPlayer();
   player.frozen = true;
-  radix::Screen &screen =
-    radix::XmlScreenLoader::getScreen(radix::Environment::getDataDir() + "/screens/end.xml");
-  game.getGameWorld()->addScreen(screen);
+  game.getGameWorld()->addScreen(game.getGameWorld()->gameOverScreen);
 }
 
 void GameState::handleWinScreen(radix::BaseGame &game) { }

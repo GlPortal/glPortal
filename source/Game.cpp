@@ -24,7 +24,7 @@ void Game::onPreStartWorld() {
   gameController = std::make_unique<GameController>(this);
   initRenderers();
   addRenderers();
-  world->simulations.findFirstOfType<radix::simulation::Physics>().setDebugDraw(m_physDebugDraw.get());
+  world->simulations.findFirstOfType<radix::simulation::Physics>().setDebugDraw(physicsDebugDraw.get());
   world->entityPairs.insert(std::make_pair("portalPairs", std::vector<EntityPair>()));
 }
 void Game::onPostStartWorld() {}
@@ -36,7 +36,11 @@ void Game::onPostStopWorld() {
 }
 
 void Game::initHook() {
-  m_physDebugDraw.reset(new radix::PhysicsDebugDraw);
+  physicsDebugDraw.reset(new radix::PhysicsDebugDraw);
+}
+
+void Game::removeHook() {
+  physicsDebugDraw.reset(nullptr);
 }
 
 void Game::removeHook() {

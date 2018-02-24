@@ -1,16 +1,20 @@
 # Compile Guide for GlPortal
 
-## Dependencies
-**NOTE:** Dependencies will change all the time so watch the cmake output carefuly for missing libraries.
-Make sure to check CMakeLists.txt if it is something missing.
+## Build with Visual Studio
+If you want to compile with Visual Studio please have a look at [compile instructions for VS](https://github.com/GlPortal/glportal-vs).
+Building is only possible in Visual Studio 2017, as earlier versions do not support the requied C++14 language features.
 
-## Upgrade your OS
+## Dependencies
+**NOTE:** Dependencies will change all the time so watch the cmake output for missing libraries.
+Make sure to check CMakeLists.txt if something is missing.
+
+## Upgrade your Operating System
 You will need very recent versions of all the dependencies. So please upgrade your OS before proceeding.
 
-* Debian: [DebianUpgrade](https://wiki.debian.org/DebianUpgrade)
-* Ubuntu: [Upgrade Ubuntu](http://www.ubuntu.com/download/desktop/upgrade)
-* Linux Mint: [How to upgrade to a newer release](https://community.linuxmint.com/tutorial/view/2)
-* Arch Linux: `pacman -Syu`, which you probably already do frequently
+* [Upgrade Debian](https://wiki.debian.org/DebianUpgrade)
+* [Upgrade Ubuntu](http://www.ubuntu.com/download/desktop/upgrade)
+* [Upgrade Mint](https://community.linuxmint.com/tutorial/view/2)
+* In Arch Linux type: `pacman -Syu`
 
 ## List of dependencies
 - assimp: 3D model asset loading
@@ -155,19 +159,6 @@ To run the game type:
 ```bash
 source/glportal --datadir ./data
 ```
-
-## Build with Visual Studio
-Building is only possible in Visual Studio 2017, as earlier versions do not support the requied C++14 language features.
-
-First follow the section: "Downloading source code". Then download the latest project files from:
-https://bintray.com/glportal/generic/GlPortal-VS2017-Solution
-
-After downloading extract the contents into your GlPortal directory. This is the same directory that contains the README.
-The GlPortal VS17 solution can be found in the new folder also called GlPortal.
-
-When first building GlPortal be sure to build the whole solution and select Release + x86 mode at the top.
-
-The game can then be run by pressing Ctrl + F5 or by going to Debug -> Start Without Debugging.
 
 ## Keep us posted
 Not working? No worries! Help us help you figure out what we missed to make this work on
