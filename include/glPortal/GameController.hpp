@@ -1,7 +1,7 @@
 #ifndef GLPORTAL_GAMECONTROLLER_HPP
 #define GLPORTAL_GAMECONTROLLER_HPP
 
-#include <radix/core/state/GameState.hpp>
+#include <radix/core/state/GameStateManager.hpp>
 #include <radix/core/event/EventDispatcher.hpp>
 
 namespace radix {
@@ -26,7 +26,7 @@ private:
 
   radix::EventDispatcher::CallbackHolder closeWindowHolder;
   radix::EventDispatcher::CallbackHolder mouseHolder;
-  std::unique_ptr<radix::GameState> gameState;
+  std::unique_ptr<radix::GameStateManager> gameStateManager;
 };
 
 } /* namespace glPortal */

@@ -11,7 +11,7 @@ namespace glPortal {
 GameController::GameController(Game *game) {
   this->game = game;
   this->world = static_cast<World*>(game->getWorld());
-  this->gameState = std::make_unique<radix::GameState>();
+  this->gameStateManager = std::make_unique<radix::GameStateManager>();
   GameState::init(*game);
   initObservers();
 }
@@ -39,7 +39,7 @@ void GameController::processInput() {
     game->close();
   }
 
-  gameState->handleInput(*game);
+  gameStateManager->handleInput(*game);
 }
 
 } /* namespace glPortal */
