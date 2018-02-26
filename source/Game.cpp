@@ -8,8 +8,6 @@
 
 #include <glPortal/trigger/PortalTeleport.hpp>
 
-#include <radix/env/Util.hpp>
-
 using namespace radix;
 
 namespace glPortal {
