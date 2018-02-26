@@ -38,4 +38,4 @@ private:
 
 } /* namespace glPortal */
 
-#endif //GLPORTAL_GAMECONTROLLER_HPP
+#endif //GLPORTAL_GAME_CONTROLLER_HPP
