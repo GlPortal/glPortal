@@ -15,18 +15,32 @@ class World;
 
 class GameController {
 public:
+  enum State : int8_t {
+    Splash,
+    Running,
+    Paused,
+    Menu,
+    GameOver,
+    Win
+  };
+  State state;
+
+  GameController() = delete;
   GameController(Game *game);
+
+  void initObservers();
   void processInput();
 
 private:
-  void initObservers();
+  void handleRunning();
+  void handlePaused();
+  void handleSplash();
+  void handleMenu();
+  void handleGameOver();
+  void handleWin();
 
   Game *game;
   World *world;
-
-  radix::EventDispatcher::CallbackHolder closeWindowHolder;
-  radix::EventDispatcher::CallbackHolder mouseHolder;
-  std::unique_ptr<radix::GameState> gameState;
 };
 
 } /* namespace glPortal */
