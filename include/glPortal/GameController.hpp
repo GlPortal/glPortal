@@ -1,12 +1,5 @@
-#ifndef GLPORTAL_GAMECONTROLLER_HPP
-#define GLPORTAL_GAMECONTROLLER_HPP
-
-#include <radix/core/state/GameState.hpp>
-#include <radix/core/event/EventDispatcher.hpp>
-
-namespace radix {
-  class ScreenRenderer;
-} /* namespace radix */
+#ifndef GLPORTAL_GAME_CONTROLLER_HPP
+#define GLPORTAL_GAME_CONTROLLER_HPP
 
 namespace glPortal {
 
@@ -15,7 +8,7 @@ class World;
 
 class GameController {
 public:
-  enum State : int8_t {
+  enum State : char {
     Splash,
     Running,
     Paused,
