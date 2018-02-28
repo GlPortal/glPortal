@@ -6,7 +6,6 @@
 #include <radix/core/state/GameState.hpp>
 #include <radix/env/Environment.hpp>
 #include <radix/entities/Player.hpp>
-#include <radix/World.hpp>
 
 namespace glPortal {
 
