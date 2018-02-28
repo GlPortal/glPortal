@@ -49,15 +49,14 @@ void GameController::initObservers() {
       this->game->close();
     });
 
-  World* _world = world;
   event.addObserverRaw(
-    radix::InputSource::MouseButtonReleasedEvent::Type, [_world](const radix::Event &event) mutable {
+    radix::InputSource::MouseButtonReleasedEvent::Type, [this](const radix::Event &event) mutable {
       auto mouseEvent = (const radix::InputSource::MouseButtonReleasedEvent&) event;
       if (mouseEvent.button == radix::InputSource::MouseButton::Left) {
-        WorldHelper::shootPortal(1, *_world);
+        WorldHelper::shootPortal(1, *this->world);
       }
       if (mouseEvent.button == radix::InputSource::MouseButton::Right) {
-        WorldHelper::shootPortal(2, *_world);
+        WorldHelper::shootPortal(2, *this->world);
       }
     });
 }
@@ -84,7 +83,6 @@ void GameController::handleSplash() {
   world->getPlayer().frozen = true;
   game->getGameWorld()->addScreen(this->game->getGameWorld()->splashScreen);
   state = Splash;
-  radix::Util::Log(radix::Info, "GameController") << "handledsplash";
 }
 
 void GameController::handleMenu() {}

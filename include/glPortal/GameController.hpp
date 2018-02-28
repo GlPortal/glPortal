@@ -8,7 +8,7 @@ class World;
 
 class GameController {
 public:
-  enum State : char {
+  enum State : signed char {
     Splash,
     Running,
     Paused,
