@@ -41,7 +41,7 @@ void GameController::initObservers() {
     });
 
   event.addObserverRaw(
-    radix::GameState::WinEvent::Type, [this](const radix::Event &event) {
+    radix::GameStateManager::WinEvent::Type, [this](const radix::Event &event) {
       this->handleGameOver();
     });
   event.addObserverRaw(
