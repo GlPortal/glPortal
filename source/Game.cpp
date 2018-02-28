@@ -1,5 +1,4 @@
 #include <glPortal/Game.hpp>
-#include <glPortal/GameState.hpp>
 
 #include <iostream>
 
@@ -16,12 +15,12 @@ namespace glPortal {
 Game::Game() {
   windowTitle = "GlPortal";
   defaultMap = "/maps/n1.xml";
-  showSplash = true;
+  splash = true;
 }
 
 void Game::onPreStartWorld() {
-  initFunctionStack();
   gameController = std::make_unique<GameController>(this);
+  splash = false;
   initRenderers();
   addRenderers();
   world->simulations.findFirstOfType<radix::simulation::Physics>().setDebugDraw(physicsDebugDraw.get());
@@ -45,14 +44,6 @@ void Game::removeHook() {
 
 void Game::customTriggerHook() {
   customTriggers.push_back(PortalTeleport());
-}
-
-void Game::initFunctionStack() {
-  world->stateFunctionStack.push(&GameState::handleRunning);
-  if (showSplash) {
-    world->stateFunctionStack.push(&GameState::handleSplash);
-    showSplash = false;
-  }
 }
 
 void Game::processInput() {

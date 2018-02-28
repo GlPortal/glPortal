@@ -28,9 +28,12 @@ public:
   void processInput() override;
   void update() override;
 
+  bool showSplash() { return splash; }
+
   GameController& getGameController() { return *gameController; }
+  
 private:
-  bool showSplash;
+  bool splash;
   std::unique_ptr<radix::PhysicsDebugDraw> physicsDebugDraw;
   std::unique_ptr<GameController> gameController;
   std::unique_ptr<GameRenderer> gameRenderer;
@@ -39,7 +42,6 @@ private:
   void initHook() override;
   void removeHook();
   void customTriggerHook() override;
-  void initFunctionStack();
   void initRenderers();
   void addRenderers();
   double dtime;
