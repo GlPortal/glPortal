@@ -30,6 +30,8 @@ public:
   radix::Vector3f getDirection() const;
 
   void placeOnWall(const radix::Vector3f &launchPos, const radix::Vector3f &point, const radix::Vector3f &normal);
+  void addUncollider();
+  void removeUncollider();
 
   radix::Vector3f getScaleMult() const;
 

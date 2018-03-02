@@ -63,6 +63,15 @@ void WorldHelper::shootPortal(int button, World &world) {
           portal.overlayTex.diffuse = TextureLoader::getTexture("orangeportal.png");
           portal.color = pLight.color = Portal::ORANGE_COLOR;
         }
+        // if both portals are open add the uncollider
+        Entity &pEnt1 = *pPair.first;
+        Entity &pEnt2 = *pPair.second;
+        Portal &portal1 = dynamic_cast<Portal&>(pEnt1);
+        Portal &portal2 = dynamic_cast<Portal&>(pEnt2);
+        if (portal1.open && portal2.open) {
+          portal1.addUncollider();
+          portal2.addUncollider();
+        }
       }
     }
   }
@@ -88,6 +97,9 @@ void WorldHelper::closePortals(World &world) {
   
   portal1->trigger->remove();
   portal2->trigger->remove();
+  
+  portal1->removeUncollider();
+  portal2->removeUncollider();
 }
 
 } /* namespace glPortal */
