@@ -6,6 +6,8 @@
 #include <radix/BaseGame.hpp>
 #include <radix/World.hpp>
 
+#include<cmath>
+
 namespace glPortal {
 
 PortalTeleport::PortalTeleport() {
@@ -21,11 +23,15 @@ void PortalTeleport::setAction(radix::Entity &trigger, const std::string &destin
   dynamic_cast<radix::entities::Trigger&>(trigger).setActionOnMove([&trigger, destination]
                                                              (radix::entities::Trigger &trigger) {
     radix::entities::Player &player = trigger.world.getPlayer();
-    if (trigger.world.destinations.find(destination)
-        != trigger.world.destinations.end()) {
+    if (trigger.world.destinations.find(destination) != trigger.world.destinations.end()) {
+      const radix::Quaternion &destination_orientation = trigger.world.destinations.at(destination).orientation;
+      const radix::Quaternion &old_player_orientation = player.getHeadOrientation();
+
+      radix::Quaternion new_player_orientation = destination_orientation * old_player_orientation;
+
       player.setPosition(trigger.world.destinations.at(destination).position);
-      player.setOrientation(trigger.world.destinations.at(destination).orientation);
-      player.setHeadOrientation(trigger.world.destinations.at(destination).orientation);
+      player.setOrientation(new_player_orientation);
+      player.setHeadOrientation(new_player_orientation);
     }
   });
 }
