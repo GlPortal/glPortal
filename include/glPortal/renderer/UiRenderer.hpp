@@ -1,5 +1,5 @@
-#ifndef UIRENDERER_HPP
-#define UIRENDERER_HPP
+#ifndef UI_RENDERER_HPP
+#define UI_RENDERER_HPP
 
 #include <memory>
 #include <string>
@@ -28,4 +28,4 @@ public:
 
 } /* namespace glPortal */
 
-#endif /* UIRENDERER_HPP */
+#endif /* UI_RENDERER_HPP */

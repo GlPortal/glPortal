@@ -120,6 +120,17 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
   placeWrapperPiece(position, orientation, scale,
     wrapper.vertShape, wrapper.left, Vector3f(-0.576, 0, 0.501));
 
+  open = true;
+  position += (getDirection() * SURFACE_OFFSET);
+  overlayMesh = MeshLoader::getMesh("Plane.obj");
+  stencilMesh = MeshLoader::getMesh("PortalStencil.obj");
+
+  setPosition(position);
+  setOrientation(orientation);
+  setScale(scale);
+}
+
+void Portal::addUncollider() {
   uncolliderMotionState->setWorldTransform(
     btTransform(btQuaternion(0, 0, 0, 1), position) *
     btTransform(orientation) *
@@ -130,15 +141,10 @@ void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const
   Uncollider::volumes.remove(uncollider.get());
   uncollider.reset(new btRigidBody(ci));
   Uncollider::volumes.emplace_back(uncollider.get());
+}
 
-  open = true;
-  position += (getDirection() * SURFACE_OFFSET);
-  overlayMesh = MeshLoader::getMesh("Plane.obj");
-  stencilMesh = MeshLoader::getMesh("PortalStencil.obj");
-
-  setPosition(position);
-  setOrientation(orientation);
-  setScale(scale);
+void Portal::removeUncollider() {
+  Uncollider::volumes.remove(uncollider.get());
 }
 
 Vector3f Portal::getScaleMult() const {
