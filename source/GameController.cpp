@@ -53,6 +53,14 @@ void GameController::togglePause() {
 void GameController::handleRunning() {
   if (state == Splash) {
     game->getGameWorld()->removeScreen(game->getGameWorld()->splashScreen);
+  } else if (state == Paused) {
+    game->getGameWorld()->removeScreen(game->getGameWorld()->pauseScreen);
+  }
+}
+
+void GameController::handleRunning() {
+  if (state == Splash) {
+    game->getGameWorld()->removeScreen(game->getGameWorld()->splashScreen);
     game->getWorld()->getPlayer().frozen = false;
     state = Running;
   } else if (state == Paused) {
