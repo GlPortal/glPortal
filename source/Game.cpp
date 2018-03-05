@@ -8,28 +8,25 @@
 
 #include <glPortal/trigger/PortalTeleport.hpp>
 
-using namespace radix;
-
 namespace glPortal {
 
 Game::Game() {
   windowTitle = "GlPortal";
   defaultMap = "/maps/n1.xml";
-  splash = true;
+  gameController = std::make_unique<GameController>(this);
+  inputManager = std::make_unique<InputManager>(this);
 }
 
 void Game::onPreStartWorld() {
-  gameController = std::make_unique<GameController>(this);
-  splash = false;
+  gameController->init();
   initRenderers();
   addRenderers();
   world->simulations.findFirstOfType<radix::simulation::Physics>().setDebugDraw(physicsDebugDraw.get());
-  world->entityPairs.insert(std::make_pair("portalPairs", std::vector<EntityPair>()));
+  world->entityPairs.insert(std::make_pair("portalPairs", std::vector<radix::EntityPair>()));
 }
 void Game::onPostStartWorld() {}
 void Game::onPreStopWorld() {}
 void Game::onPostStopWorld() {
-  gameController.reset();
   gameRenderer.reset();
   uiRenderer.reset();
 }
@@ -47,7 +44,6 @@ void Game::customTriggerHook() {
 }
 
 void Game::processInput() {
-  gameController->processInput();
 }
 
 void Game::update() {

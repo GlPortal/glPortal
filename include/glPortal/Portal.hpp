@@ -1,5 +1,5 @@
-#ifndef PORTAL_HPP
-#define PORTAL_HPP
+#ifndef GLPORTAL_PORTAL_HPP
+#define GLPORTAL_PORTAL_HPP
 
 #include <memory>
 #include <bullet/btBulletCollisionCommon.h>
@@ -68,4 +68,4 @@ private:
 
 } /* namespace glPortal */
 
-#endif /* PORTAL_HPP */
+#endif /* GLPORTAL_PORTAL_HPP */
