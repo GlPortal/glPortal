@@ -18,21 +18,25 @@ void InputManager::channelChanged(bool newValue, const int &id) {
 
   switch (id) {
   case PLAYER_FIRE_PRIMARY : {
-    WorldHelper::shootPortal(1, *game->getWorld());
+    if (newValue) {
+      WorldHelper::shootPortal(1, *game->getWorld());
+    }
     break;
   }
   case PLAYER_FIRE_SECONDARY : {
-    WorldHelper::shootPortal(2, *game->getWorld());
+    if (newValue) {
+      WorldHelper::shootPortal(2, *game->getWorld());
+    }
     break;
   }
   case GAME_PAUSE : {
-    if (newValue){
+    if (newValue) {
       gameController->togglePause();
     }
     break;
   }
   case GAME_START : {
-    if (newValue){
+    if (newValue) {
       gameController->handleRunning();
     }
     break;
