@@ -4,8 +4,6 @@
 #include <glPortal/GameController.hpp>
 #include <glPortal/WorldHelper.hpp>
 
-#include <radix/env/Util.hpp>
-
 namespace glPortal {
 
 InputManager::InputManager(Game *game)
@@ -16,31 +14,25 @@ void InputManager::channelChanged(bool newValue, const int &id) {
   // do default actions as well as those which are glPortal-defined
   radix::InputManager::channelChanged(newValue, id);
 
-  switch (id) {
-  case PLAYER_FIRE_PRIMARY : {
-    if (newValue) {
+  if (newValue) {
+    switch (id) {
+    case PLAYER_FIRE_PRIMARY : {
       WorldHelper::shootPortal(1, *game->getWorld());
+      break;
     }
-    break;
-  }
-  case PLAYER_FIRE_SECONDARY : {
-    if (newValue) {
+    case PLAYER_FIRE_SECONDARY : {
       WorldHelper::shootPortal(2, *game->getWorld());
+      break;
     }
-    break;
-  }
-  case GAME_PAUSE : {
-    if (newValue) {
+    case GAME_PAUSE : {
       gameController->togglePause();
+      break;
     }
-    break;
-  }
-  case GAME_START : {
-    if (newValue) {
+    case GAME_START : {
       gameController->handleRunning();
+      break;
     }
-    break;
-  }
+    }
   }
 }
 
