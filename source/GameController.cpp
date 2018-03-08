@@ -1,44 +1,36 @@
 #include <glPortal/GameController.hpp>
+
 #include <glPortal/Game.hpp>
 #include <glPortal/WorldHelper.hpp>
 
 #include <radix/core/event/EventDispatcher.hpp>
 #include <radix/core/state/GameStateManager.hpp>
-#include <radix/env/Environment.hpp>
 #include <radix/entities/Player.hpp>
+#include <radix/env/Environment.hpp>
+#include <radix/input/InputManager.hpp>
 
 namespace glPortal {
 
 GameController::GameController(Game *game)
   : game(game),
-  world(static_cast<World*>(game->getWorld())) {
-  
-  if (game->showSplash()) {
+  initialised(false) {
+}
+
+void GameController::init() {
+  if (!initialised) {
+    initialised = true;
     handleSplash();
   }
 
   initObservers();
 }
 
-void GameController::initObservers() {
-  radix::EventDispatcher &event = world->event;
+void GameController::processInput() {
+  game->getWindow().processEvents();
+}
 
-  event.addObserverRaw(
-    radix::InputSource::KeyReleasedEvent::Type, [this] (const radix::Event& event) {
-      const int key = ((radix::InputSource::KeyReleasedEvent &) event).key;
-      if (key == SDL_SCANCODE_RETURN) {
-        if (this->state == Splash) {
-          this->handleRunning();
-        }
-      }
-      if (key == SDL_SCANCODE_ESCAPE) {
-        if (this->state == Running) {
-          this->handlePaused();
-        } else if (this->state == Paused) {
-          this->handleRunning();
-        }
-      }
-    });
+void GameController::initObservers() {
+  radix::EventDispatcher &event = game->getWorld()->event;
 
   event.addObserverRaw(
     radix::GameStateManager::WinEvent::Type, [this](const radix::Event &event) {
@@ -48,39 +40,38 @@ void GameController::initObservers() {
     radix::InputSource::WindowCloseEvent::Type, [this](const radix::Event& event) {
       this->game->close();
     });
+}
 
-  event.addObserverRaw(
-    radix::InputSource::MouseButtonReleasedEvent::Type, [this](const radix::Event &event) mutable {
-      auto mouseEvent = (const radix::InputSource::MouseButtonReleasedEvent&) event;
-      if (mouseEvent.button == radix::InputSource::MouseButton::Left) {
-        WorldHelper::shootPortal(1, *this->world);
-      }
-      if (mouseEvent.button == radix::InputSource::MouseButton::Right) {
-        WorldHelper::shootPortal(2, *this->world);
-      }
-    });
+void GameController::togglePause() {
+  if (state == Running) {
+    handlePaused();
+  } else {
+    handleRunning();
+  }
 }
 
 void GameController::handleRunning() {
   if (state == Splash) {
     game->getGameWorld()->removeScreen(game->getGameWorld()->splashScreen);
+    game->getWorld()->getPlayer().frozen = false;
+    state = Running;
   } else if (state == Paused) {
     game->getGameWorld()->removeScreen(game->getGameWorld()->pauseScreen);
+    game->getWorld()->getPlayer().frozen = false;
+    state = Running;
   }
-
-  world->getPlayer().frozen = false;
-  state = Running;
 }
 
 void GameController::handlePaused() {
-  game->getGameWorld()->addScreen(game->getGameWorld()->pauseScreen);
-  world->getPlayer().frozen = true;
-
-  state = Paused;
+  if (state == Running) {
+    game->getGameWorld()->addScreen(game->getGameWorld()->pauseScreen);
+    game->getWorld()->getPlayer().frozen = true;
+    state = Paused;
+  }
 }
 
 void GameController::handleSplash() {
-  world->getPlayer().frozen = true;
+  game->getWorld()->getPlayer().frozen = true;
   game->getGameWorld()->addScreen(this->game->getGameWorld()->splashScreen);
   state = Splash;
 }
@@ -88,14 +79,10 @@ void GameController::handleSplash() {
 void GameController::handleMenu() {}
 
 void GameController::handleGameOver() {
-  world->getPlayer().frozen = true;
+  game->getWorld()->getPlayer().frozen = true;
   game->getGameWorld()->addScreen(game->getGameWorld()->gameOverScreen);
 }
 
 void GameController::handleWin() {}
-
-void GameController::processInput() {
-  game->getWindow().processEvents();
-}
 
 } /* namespace glPortal */

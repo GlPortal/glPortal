@@ -1,5 +1,5 @@
-#ifndef GAME_HPP
-#define GAME_HPP
+#ifndef GLPORTAL_GAME_HPP
+#define GLPORTAL_GAME_HPP
 
 #include "World.hpp"
 #include "GameController.hpp"
@@ -13,12 +13,16 @@
 
 #include "glPortal/renderer/GameRenderer.hpp"
 #include "glPortal/renderer/UiRenderer.hpp"
+#include <glPortal/GameController.hpp>
+#include <glPortal/input/InputManager.hpp>
 
 namespace glPortal {
 
 class Game : public radix::BaseGame {
 public:
   Game();
+
+  void postSetup() override {}
 
   void onPreStartWorld() override;
   void onPostStartWorld() override;
@@ -28,25 +32,27 @@ public:
   void processInput() override;
   void update() override;
 
-  bool showSplash() { return splash; }
+  GameController* getGameController() {
+    return gameController.get();
+  }
 
-  GameController& getGameController() { return *gameController; }
-  
 private:
-  bool splash;
-  std::unique_ptr<radix::PhysicsDebugDraw> physicsDebugDraw;
   std::unique_ptr<GameController> gameController;
+  std::unique_ptr<radix::PhysicsDebugDraw> physicsDebugDraw;
   std::unique_ptr<GameRenderer> gameRenderer;
   std::unique_ptr<UiRenderer> uiRenderer;
   std::unique_ptr<radix::PortalRenderer> portalRenderer;
+
+  double dtime;
+  
   void initHook() override;
   void removeHook();
   void customTriggerHook() override;
   void initRenderers();
   void addRenderers();
-  double dtime;
+
 };
 
 } /* namespace glPortal */
 
-#endif /* GAME_HPP */
+#endif /* GLPORTAL_GAME_HPP */

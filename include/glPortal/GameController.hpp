@@ -4,10 +4,24 @@
 namespace glPortal {
 
 class Game;
-class World;
 
 class GameController {
 public:
+  GameController() = delete;
+  GameController(Game *game);
+  void init();
+
+  void processInput();
+  void initObservers();
+
+  void togglePause();
+  void handleRunning();
+  void handlePaused();
+  void handleSplash();
+  void handleMenu();
+  void handleGameOver();
+  void handleWin();
+
   enum State : signed char {
     Splash,
     Running,
@@ -16,24 +30,13 @@ public:
     GameOver,
     Win
   };
-  State state;
-
-  GameController() = delete;
-  GameController(Game *game);
-
-  void initObservers();
-  void processInput();
+  State getState() { return state; }
 
 private:
-  void handleRunning();
-  void handlePaused();
-  void handleSplash();
-  void handleMenu();
-  void handleGameOver();
-  void handleWin();
-
   Game *game;
-  World *world;
+  State state;
+  bool initialised;
+
 };
 
 } /* namespace glPortal */
