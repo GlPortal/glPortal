@@ -22,24 +22,24 @@ void PortalTeleport::setAction(radix::Entity &trigger, const std::string &destin
                                                              (radix::entities::Trigger &trigger) {
     radix::entities::Player &player = trigger.world.getPlayer();
     if (trigger.world.destinations.find(destination) != trigger.world.destinations.end()) {
-      const radix::Quaternion &destination_orientation = trigger.world.destinations.at(destination).orientation;
-      const radix::Quaternion &old_player_orientation = player.getHeadOrientation();
+      const radix::Quaternion &destinationOrientation = trigger.world.destinations.at(destination).orientation;
+      const radix::Quaternion &oldPlayerOrientation = player.getHeadOrientation();
 
       /*
-       * destination_orientation : describes the rotation needed to tranform a vector in the
+       * destinationOrientation : describes the rotation needed to tranform a vector in the
        * world coordinates to a vector following the orientation of the destination portal.
        *
-       * old_player_orientation : describes the rotation to transform a reference vector into a vector
+       * oldPlayerOrientation : describes the rotation to transform a reference vector into a vector
        * following the player orientation
        *
        * The product of two quaternions can be seen as the composition of two rotations.
        * (all quaternions can be interpreted as a rotation)
        */
-      radix::Quaternion new_player_orientation = destination_orientation * old_player_orientation;
+      radix::Quaternion newPlayerOrientation = destinationOrientation * oldPlayerOrientation;
 
       player.setPosition(trigger.world.destinations.at(destination).position);
-      player.setOrientation(new_player_orientation);
-      player.setHeadOrientation(new_player_orientation);
+      player.setOrientation(newPlayerOrientation);
+      player.setHeadOrientation(newPlayerOrientation);
     }
   });
 }
