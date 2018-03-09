@@ -6,8 +6,6 @@
 #include <radix/BaseGame.hpp>
 #include <radix/World.hpp>
 
-#include<cmath>
-
 namespace glPortal {
 
 PortalTeleport::PortalTeleport() {
