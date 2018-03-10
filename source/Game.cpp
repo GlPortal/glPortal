@@ -39,6 +39,10 @@ void Game::removeHook() {
   physicsDebugDraw.reset(nullptr);
 }
 
+void Game::removeHook() {
+  m_physDebugDraw.reset(nullptr);
+}
+
 void Game::customTriggerHook() {
   customTriggers.push_back(PortalTeleport());
 }
