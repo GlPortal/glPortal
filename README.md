@@ -34,3 +34,6 @@ for questions and discussions about the development of the game.
 Please report any issues found on GitHub.
 
 Feel free to submit a pull request or suggest an issue on GitHub if you have any changes/suggestions for us.
+
+## Donate
+Support Henry through [patreon](https://www.patreon.com/developerHenry) or [liberapay](https://liberapay.com/Henry).

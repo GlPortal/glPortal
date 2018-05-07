@@ -8,71 +8,8 @@ Building is only possible in Visual Studio 2017, as earlier versions do not supp
 **NOTE:** Dependencies will change all the time so watch the cmake output for missing libraries.
 Make sure to check CMakeLists.txt if something is missing.
 
-## Upgrade your Operating System
-You will need very recent versions of all the dependencies. So please upgrade your OS before proceeding.
-
-* [Upgrade Debian](https://wiki.debian.org/DebianUpgrade)
-* [Upgrade Ubuntu](http://www.ubuntu.com/download/desktop/upgrade)
-* [Upgrade Mint](https://community.linuxmint.com/tutorial/view/2)
-* In Arch Linux type: `pacman -Syu`
-
-## List of dependencies
-- assimp: 3D model asset loading
-- epoxy: OpenGL initialization
-- sdl2: Input, OpenGL context & window
-- sdl2-mixer: Sound
-- freeimage: Texture loading
-- bullet (v 2.82+): Physics simulation
-- tinyxml2: Loading maps and data
-- libgl (binaries provided by Mesa or your proprietary driver): 3D rendering
-- cmake *(make)*: Meta-build system
-- make *(make)*: Build system
-- gcc, clang++ or MSVC *(make)*: C++14-able compiler
-- pkg-config *(make)*: Libraries' paths auto-confog
-- git: Download source code
-- libunittest++ *(tests)*: Testing framework
-
-## Installing dependencies
-Remember, you have to be root, so you might want to prefix `sudo`.
-
-### Windows
-[Install msys2](http://msys2.github.io/).
-
-#### on 32-bit
-Launch the *Mingw-w64 Win32 shell* from the start menu. In it, type:
-```bash
-pacman -S git pkg-config mingw-w64-i686-{cmake,make,gcc,pkg-config,assimp,libepoxy,SDL2{,_mixer},bullet,tinyxml2,freeimage}
-```
-
-#### on 64-bit
-Launch the *Mingw-w64 Win64 shell* from the start menu. In it, type:
-```bash
-pacman -S git pkg-config mingw-w64-x86_64-{cmake,make,gcc,pkg-config,assimp,libepoxy,SDL2{,_mixer},bullet,tinyxml2,freeimage}
-```
-
-### Arch Linux
-```bash
-pacman -S cmake make gcc pkg-config assimp libepoxy sdl2{,_mixer} bullet mesa tinyxml2 freeimage
-```
-
-### Debian 8 / Ubuntu 14.04 / Linux Mint 17.x
-```bash
-apt-get install cmake make gcc pkg-config lib{assimp,epoxy,sdl2{,-mixer},bullet,tinyxml2,gl1-mesa,unittest++,freeimage}-dev
-```
-
-### Ubuntu 17.04
-```bash
-apt-get install cmake make gcc pkg-config lib{assimp,epoxy,sdl2{,-mixer},bullet,tinyxml2,gl1-mesa,unittest++,freeimageplus}-dev
-```
-
-### Others
-Now how will you satisfy these dependencies? No problem. You might notice that when you
-are looking for them in your package manager that you get overwhelmed by a list of possible
-installation candidates, how do you know which one is the right one?
-
-An easy rule that applies to many libraries is that a library has the lib prefix and then,
-since you want to install the files for development there is a dev in the name.
-Pretty much like libfoo-dev for most libraries.
+Follow the RadixEngine compile instructions first. You can find them in the RadixEngine repository in a file named COMPILE.md.
+The instructions cover how to upgrade your system and how to install most of the dependencies.
 
 ## Downloading source code
 
