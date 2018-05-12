@@ -63,21 +63,6 @@ void Portal::placeWrapperPiece(const Vector3f &p, const Quaternion &o, const Vec
 }
 
 void Portal::placeOnWall(const Vector3f &launchPos, const Vector3f &point, const Vector3f &normal) {
-  //Determine on what side the portal is
-  //Side 0: -x, Side 1: x, Side 2: -z, Side 3: z, Side 4: -y, Side 5: y
-  /*float dist = 1000000;
-  int side = 0;
-
-  float *distances;
-  distances = PortalHelper::getDistancesForPoint(point, wall);
-
-  for (int i = 0; i < 6; i++) {
-    if (distances[i] < dist) {
-      side = i;
-      dist = distances[i];
-    }
-  }*/
-
   Quaternion orientation;
   Vector3f position(point);
   Vector3f scale(1, 2, 1);
