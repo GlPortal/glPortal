@@ -383,7 +383,7 @@ void GameRenderer::renderStencilPortal(const Portal &portal, RenderContext &rc,
   Matrix4f mtx;
   mtx.translate(portal.getPosition());
   mtx.rotate(portal.getOrientation());
-  mtx.scale(Vector3f(1.f, 2.f, 1.f));
+  mtx.scale(Vector3f(1.05f, 2.05f, 1.05f));
 
   auto &shader = ShaderLoader::getShader("unshaded.frag");
 
