@@ -18,14 +18,123 @@
 #include <radix/physics/PhysicsDebugDraw.hpp>
 
 #include <radix/core/gl/OpenGL.hpp>
+#include <radix/core/gl/Framebuffer.hpp>
 
 using namespace radix;
+
+struct backupColor {
+  backupColor(GLboolean initMask[4]) {
+    glGetBooleanv(GL_COLOR_WRITEMASK, mask.data());
+    glColorMask(initMask[0], initMask[1], initMask[2], initMask[3]);
+  }
+  ~backupColor() {
+    glColorMask(mask[0], mask[1], mask[2], mask[3]);
+  }
+  void setMask(GLboolean mask[4]) {
+    glColorMask(mask[0], mask[1], mask[2], mask[3]);
+  }
+protected:
+  std::array<GLboolean, 4> mask;
+};
+
+struct backupDepth {
+  backupDepth(GLboolean initMask) {
+    glGetBooleanv(GL_DEPTH_WRITEMASK, &mask);
+    glDepthMask(initMask);
+  }
+  ~backupDepth() {
+    glDepthMask(mask);
+  }
+  void setMask(GLboolean mask) {
+    glDepthMask(mask);
+  }
+protected:
+  GLboolean mask;
+};
+
+struct backupStencil {
+  backupStencil(GLuint initMask) {
+    glGetIntegerv(GL_STENCIL_WRITEMASK, &mask);
+    glStencilMask(initMask);
+  }
+  ~backupStencil() {
+    glStencilMask(mask);
+  }
+  void setMask(GLuint mask) {
+    glStencilMask(mask);
+  }
+protected:
+  GLint mask;
+};
 
 namespace glPortal {
 
 GameRenderer::GameRenderer(glPortal::World &w, radix::Renderer &ren,
                            radix::Camera *cam, double *ptime)
-    : SubRenderer(dynamic_cast<radix::World&>(w), ren), camera(cam), dtime(ptime) {}
+    : SubRenderer(dynamic_cast<radix::World &>(w), ren),
+      camera(cam),
+      dtime(ptime) {
+  glGenQueries(occlusionQueryIdx.size(), occlusionQueryIdx.data());
+}
+
+GameRenderer::~GameRenderer() { glDeleteQueries(occlusionQueryIdx.size(), occlusionQueryIdx.data()); }
+
+void GameRenderer::testPortalStencil(const Portal &portal,
+                                     RenderContext &renderContext,
+                                     const int stencilIndex,
+                                     const unsigned int stencilFuncType,
+                                     const GLenum stencilSuccess) {
+  Matrix4f mtx;
+  auto flatShader = ShaderLoader::getShader("whitefill.frag");
+  auto portalMesh = portal.stencilMesh;
+
+  glStencilMask(0xFF);
+  glDepthMask(GL_FALSE);
+  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+  glStencilOp(GL_KEEP, GL_KEEP, stencilSuccess);
+  glStencilFunc(stencilFuncType, stencilIndex, 0xFF);
+  portal.getModelMtx(mtx);
+
+  renderer.renderMesh(renderContext, flatShader, mtx, portalMesh, nullptr);
+
+  glDepthMask(GL_TRUE);
+  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+  glStencilMask(0x00);
+}
+
+void GameRenderer::renderSceneFromPortal(const Camera &src,
+                                         const Portal &portal1,
+                                         const Portal &portal2,
+                                         RenderContext &renderContext,
+                                         const int stencilIndex,
+                                         const unsigned int occlusionQueryIndex,
+                                         const unsigned int count) {
+  if (count > 3) {
+    return;
+  }
+
+  glClear(GL_DEPTH_BUFFER_BIT);
+  glStencilFunc(GL_EQUAL, stencilIndex, 0xFF);
+  Camera portalCamera;
+  setCameraInPortal(src, portalCamera, portal1, portal2);
+  renderContext.pushCamera(portalCamera);
+
+  {
+    backupStencil stencil(0x00);
+    glBeginConditionalRender(occlusionQueryIdx[occlusionQueryIndex], GL_QUERY_WAIT);
+      renderEntities(renderContext);
+      renderPlayer(renderContext);
+      renderStencilPortal(portal1, renderContext, occlusionQueryIndex + 1);
+    glEndConditionalRender();
+  }
+
+    testPortalStencil(portal1, renderContext, stencilIndex, GL_EQUAL, GL_INCR);
+
+    renderSceneFromPortal(portalCamera, portal1, portal2,
+        renderContext, stencilIndex+1, occlusionQueryIndex+1, count+1);
+  renderContext.popCamera();
+}
 
 void GameRenderer::render() {
   PROFILER_BLOCK("GameRenderer::render", profiler::colors::Green200);
@@ -75,7 +184,7 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
   }
 
   RectangleI scissor{0, 0, 0, 0};
-  if (renderContext.viewFramesStack.size() > 0) {
+  if (not renderContext.viewFramesStack.empty()) {
     const RenderContext::ViewFrameInfo &vfi = renderContext.getViewFrame();
     // Don't render further if computed clip rect is zero-sized
     if (not renderer.clipViewFrame(renderContext, vfi.first, vfi.second,
@@ -88,7 +197,7 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
 
   renderViewFrames(renderContext);
 
-  if (renderContext.viewFramesStack.size() > 0) {
+  if (not renderContext.viewFramesStack.empty()) {
     glScissor(scissor.x, scissor.y, scissor.w, scissor.h);
     renderViewFrameStencil(renderContext);
   }
@@ -106,7 +215,7 @@ void GameRenderer::renderDebugView(RenderContext &renderContext) {
   btIDebugDraw *iDbgDraw =
       world.simulations.findFirstOfType<simulation::Physics>().getDebugDraw();
   auto dbgDraw = dynamic_cast<PhysicsDebugDraw *>(iDbgDraw);
-  if (dbgDraw) {
+  if (dbgDraw != nullptr) {
     world.simulations.findFirstOfType<radix::simulation::Physics>()
         .getPhysicsWorld()
         .debugDrawWorld();
@@ -125,7 +234,7 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
   glEnable(GL_SCISSOR_TEST);
   for (Entity &entity : world.entityManager) {
     auto vf = dynamic_cast<entities::ViewFrame *>(&entity);
-    if (vf) {
+    if (vf != nullptr) {
       Matrix4f inMat;
       entity.getModelMtx(inMat);
       Matrix4f outMat;
@@ -140,17 +249,17 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
       rc.popViewFrame();
     }
   }
-  if (not save_stencil_test) {
+  if (save_stencil_test == 0u) {
     glDisable(GL_STENCIL_TEST);
   }
-  if (not save_scissor_test) {
+  if (save_scissor_test == 0u) {
     glDisable(GL_SCISSOR_TEST);
   }
 
   // Draw portal in the depth buffer so they are not overwritten
   glClear(GL_DEPTH_BUFFER_BIT);
 
-  std::array<GLboolean, 4> save_color_mask {};
+  std::array<GLboolean, 4> save_color_mask{};
   GLboolean save_depth_mask;
   glGetBooleanv(GL_COLOR_WRITEMASK, save_color_mask.data());
   glGetBooleanv(GL_DEPTH_WRITEMASK, &save_depth_mask);
@@ -158,7 +267,7 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
   glDepthMask(GL_TRUE);
   Shader shader = ShaderLoader::getShader("whitefill.frag");
   Matrix4f modelMtx;
-  for(auto& view : rc.viewFramesStack) {
+  for (auto &view : rc.viewFramesStack) {
     renderer.renderMesh(rc, shader, modelMtx, view.first, nullptr);
   }
   shader.release();
@@ -169,13 +278,10 @@ void GameRenderer::renderViewFrames(RenderContext &rc) {
 
 void GameRenderer::renderViewFrameStencil(RenderContext &rc) {
   PROFILER_BLOCK("GameRenderer::renderViewFrameStencil");
-  std::array<GLboolean, 4> save_color_mask {};
-  GLboolean save_depth_mask;
-  glGetBooleanv(GL_COLOR_WRITEMASK, save_color_mask.data());
-  glGetBooleanv(GL_DEPTH_WRITEMASK, &save_depth_mask);
 
-  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-  glDepthMask(GL_FALSE);
+  GLboolean color[4] = {GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE};
+  backupColor colorBackup(color);
+  backupDepth depthBackup(GL_FALSE);
   glStencilFunc(GL_NEVER, 0, 0xFF);
   glStencilOp(GL_INCR, GL_KEEP, GL_KEEP);  // draw 1s on test fail (always)
   glClear(GL_STENCIL_BUFFER_BIT);          // needs mask=0xFF
@@ -205,14 +311,9 @@ void GameRenderer::renderViewFrameStencil(RenderContext &rc) {
   }
   shader.release();
 
-  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-  glDepthMask(GL_TRUE);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
   /* Fill 1 or more */
   glStencilFunc(GL_LEQUAL, 1, 0xFF);
-  glColorMask(save_color_mask[0], save_color_mask[1], save_color_mask[2],
-              save_color_mask[3]);
-  glDepthMask(save_depth_mask);
 }
 
 void GameRenderer::renderEntities(RenderContext &rc) {
@@ -223,38 +324,72 @@ void GameRenderer::renderEntities(RenderContext &rc) {
   }
 }
 
-void GameRenderer::renderPortals(RenderContext &rc) {
+void GameRenderer::renderPortals(RenderContext &renderContext) {
   auto index = world.entityPairs.find("portalPairs");
-  if(index == world.entityPairs.end() || index->second.empty()) {
+  if (index == world.entityPairs.end() || index->second.empty()) {
     return;
   }
 
-  auto& portals = world.entityPairs["portalPairs"];
+  auto &portals = index->second.back();
+  Portal *cam1  = dynamic_cast<Portal *>(portals.first);
+  Portal *cam2  = dynamic_cast<Portal *>(portals.second);
 
-  renderPortal(portals.back().first, rc, renderer);
-  renderPortal(portals.back().second, rc, renderer);
+  // backup stencil buffer
+  GLboolean save_stencil_test;
+  glGetBooleanv(GL_STENCIL_TEST, &save_stencil_test);
+  glEnable(GL_STENCIL_TEST);
+
+  int portal1QueryIndex = 0;
+  int portal2QueryIndex = 5;
+  renderStencilPortal(*cam1, renderContext, portal1QueryIndex);
+  renderStencilPortal(*cam2, renderContext, portal2QueryIndex);
+
+  // TODO
+  //GLint portal1Query = 0, portal2Query = 0;
+  //glGetQueryObjectiv(GL_QUERY_RESULT_AVAILABLE, occlusionQueryIdx[0], &portal1Query);
+  //glGetQueryObjectiv(GL_QUERY_RESULT_AVAILABLE, occlusionQueryIdx[1], &portal2Query);
+
+  if (cam1->open && cam2->open) {
+    glClearStencil(0);
+    glClear(GL_STENCIL_BUFFER_BIT);
+
+    testPortalStencil(*cam1, renderContext, 1);
+    testPortalStencil(*cam2, renderContext, 4);
+
+    renderSceneFromPortal(*camera, *cam1, *cam2, renderContext, 1, portal1QueryIndex, 0);
+    renderSceneFromPortal(*camera, *cam2, *cam1, renderContext, 4, portal2QueryIndex, 0);
+  }
+  // restore stencil buffer
+  glStencilMask(0xFF);
+  glStencilFunc(GL_ALWAYS, 0, -1);
+  glClear(GL_STENCIL_BUFFER_BIT);
+  if (save_stencil_test != 0u) {
+    glDisable(GL_STENCIL_TEST);
+  }
 }
 
-void  GameRenderer::renderPortal(Entity* portal, RenderContext& rc, Renderer& renderer) {
-  auto p = dynamic_cast<Portal*>(portal);
-  if(p == nullptr) return;
+void GameRenderer::renderStencilPortal(const Portal &portal, RenderContext &rc,
+                                        const GLuint query) {
+  if(not portal.open) {
+    return;
+  }
 
-  auto &mesh   = p->overlayMesh;
-  auto &mat    = p->overlayTex;
+  backupDepth depthBackup(0x00);
+  backupDepth depthDepth(GL_FALSE);
 
-  auto &mesh2  = p->stencilMesh;
-  auto &mat2   = p->maskTex;
+  auto &mesh = portal.overlayMesh;
+  auto &mat  = portal.overlayTex;
 
   Matrix4f mtx;
-  mtx.translate(portal->getPosition());
-  mtx.rotate(portal->getOrientation());
-  mtx.scale(Vector3f(1.f, 2.f, 1.f));
+  mtx.translate(portal.getPosition());
+  mtx.rotate(portal.getOrientation());
+  mtx.scale(Vector3f(1.05f, 2.05f, 1.05f));
 
-  auto &shader2 = ShaderLoader::getShader("color.frag");
-  auto &shader  = ShaderLoader::getShader("unshaded.frag");
+  auto &shader = ShaderLoader::getShader("unshaded.frag");
 
-  if(mesh2.numFaces != 0) renderer.renderMesh(rc, shader2, mtx, mesh2, mat2);
-  if(mesh.numFaces  != 0) renderer.renderMesh(rc, shader,  mtx, mesh,  mat);
+  glBeginQuery(GL_SAMPLES_PASSED, this->occlusionQueryIdx[query]);
+  renderer.renderMesh(rc, shader, mtx, mesh, mat);
+  glEndQuery(GL_SAMPLES_PASSED);
 
   shader.release();
 }
@@ -277,18 +412,18 @@ void GameRenderer::renderEntity(RenderContext &rc, const Entity &e) {
 }
 
 void GameRenderer::renderPlayer(RenderContext &rc) {
-  const Entity &p = dynamic_cast<Entity&>(world.getPlayer());
+  const Entity &p = dynamic_cast<Entity &>(world.getPlayer());
 
   Matrix4f mtx;
   mtx.translate(p.getPosition() + Vector3f(0, -.5f, 0));
   mtx.rotate(p.getOrientation());
   mtx.scale(Vector3f(1.3f, 1.3f, 1.3f));
 
-  const Mesh &dummy   = MeshLoader::getMesh("HumanToken.obj");
-  const Material &mat = MaterialLoader::fromTexture("HumanToken.png");
+  const auto &dummy = MeshLoader::getMesh("HumanToken.obj");
+  const auto &mat   = MaterialLoader::fromTexture("HumanToken.png");
+  auto &shader      = ShaderLoader::getShader("diffuse.frag");
 
-  renderer.renderMesh(rc, ShaderLoader::getShader("diffuse.frag"), mtx, dummy,
-                      mat);
+  renderer.renderMesh(rc, shader, mtx, dummy, mat);
 }
 
 void GameRenderer::setCameraInPortal(const Camera &cam, Camera &dest,
