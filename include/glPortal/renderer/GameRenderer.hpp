@@ -134,7 +134,6 @@ class GameRenderer : public radix::SubRenderer {
   double* dtime;
   double time = 0.0;
   std::array<unsigned int, 10> occlusionQueryIdx;
-  std::unique_ptr<radix::FrameBuffer> depthFrameBuffer;
 };
 
 } /* namespace glPortal */
