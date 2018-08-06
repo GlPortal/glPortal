@@ -15,12 +15,12 @@ using namespace radix;
 
 namespace glPortal {
 
-const int Portal::PORTAL_RANGE = 1000;
-const Vector3f Portal::BLUE_COLOR = Vector3f(0.33, 0.57, 1);
-const Vector3f Portal::ORANGE_COLOR = Vector3f(1, 0.76, 0.33);
-const double Portal::NOISE_FADE_DELAY = .300;
+const int Portal::PORTAL_RANGE          = 1000;
+const Vector3f Portal::BLUE_COLOR       = Vector3f(0.33, 0.57, 1);
+const Vector3f Portal::ORANGE_COLOR     = Vector3f(1, 0.76, 0.33);
+const double Portal::NOISE_FADE_DELAY   = .300;
 const double Portal::OPEN_ANIM_DURATION = .250;
-const float Portal::SURFACE_OFFSET = 0.01f;
+const float Portal::SURFACE_OFFSET      = 0.01f;
 
 Portal::Portal(const CreationParams &cp) :
   radix::Entity(cp),
@@ -133,7 +133,7 @@ void Portal::removeUncollider() {
 }
 
 Vector3f Portal::getScaleMult() const {
-  double delta = world.getTime() - openSince;
+  const double delta = (world.getTime() - openSince) / 1000000.f;
   if (delta > OPEN_ANIM_DURATION) {
     return Vector3f(1, 1, 1);
   }

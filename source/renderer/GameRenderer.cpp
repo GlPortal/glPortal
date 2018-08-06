@@ -18,12 +18,12 @@
 #include <radix/physics/PhysicsDebugDraw.hpp>
 
 #include <radix/core/gl/OpenGL.hpp>
-#include <radix/core/gl/Framebuffer.hpp>
+
 
 using namespace radix;
 
 struct backupColor {
-  backupColor(GLboolean initMask[4]) {
+  explicit backupColor(GLboolean initMask[4]) {
     glGetBooleanv(GL_COLOR_WRITEMASK, mask.data());
     glColorMask(initMask[0], initMask[1], initMask[2], initMask[3]);
   }
@@ -38,7 +38,7 @@ protected:
 };
 
 struct backupDepth {
-  backupDepth(GLboolean initMask) {
+  explicit backupDepth(GLboolean initMask) {
     glGetBooleanv(GL_DEPTH_WRITEMASK, &mask);
     glDepthMask(initMask);
   }
@@ -53,7 +53,7 @@ protected:
 };
 
 struct backupStencil {
-  backupStencil(GLuint initMask) {
+  explicit backupStencil(GLuint initMask) {
     glGetIntegerv(GL_STENCIL_WRITEMASK, &mask);
     glStencilMask(initMask);
   }
@@ -94,7 +94,10 @@ void GameRenderer::testPortalStencil(const Portal &portal,
 
   glStencilOp(GL_KEEP, GL_KEEP, stencilSuccess);
   glStencilFunc(stencilFuncType, stencilIndex, 0xFF);
+
   portal.getModelMtx(mtx);
+  const auto scale = portal.getScaleMult();
+  mtx.scale(scale);
 
   renderer.renderMesh(renderContext, flatShader, mtx, portalMesh, nullptr);
 
@@ -383,7 +386,10 @@ void GameRenderer::renderStencilPortal(const Portal &portal, RenderContext &rc,
   Matrix4f mtx;
   mtx.translate(portal.getPosition());
   mtx.rotate(portal.getOrientation());
-  mtx.scale(Vector3f(1.05f, 2.05f, 1.05f));
+
+  // TODO Vector3f(0.05f, 1.05f, 0.05f);
+  const auto scale = portal.getScale() * portal.getScaleMult();
+  mtx.scale(scale + Vector3f(0.05f, 0.05f, 0.05f));
 
   auto &shader = ShaderLoader::getShader("unshaded.frag");
 
