@@ -41,8 +41,9 @@ cmake .. -G "MSYS Makefiles" -DCMAKE_MAKE_PROGRAM="mingw32-make"
 
 
 If you want to profile the source code pass `-DCMAKE_CXX_FLAGS=-pg` to cmake.
-Now if this throws an error you have to fix something first. If you don't manage to fix the error, use the
-bugtracker https://github.com/GlPortal/glPortal/issues or http://bugs.glportal.de to report what you did, and what error you got.
+
+If you encounter an error during this step use the
+bugtracker https://github.com/GlPortal/glPortal/issues to report an issue.
 
 If the command did not produce an error, you can build the binary by typing in:
 
