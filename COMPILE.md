@@ -30,8 +30,7 @@ there are differences in the compile workflow for it.
 In the root directory of the downloaded source type:
 #### Linux
 ```bash
-mkdir build && cd build
-cmake ..
+cmake ./;
 ```
 
 #### Windows
