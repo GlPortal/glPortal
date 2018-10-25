@@ -6,7 +6,6 @@
 #include <radix/core/event/EventDispatcher.hpp>
 #include <radix/core/state/GameStateManager.hpp>
 #include <radix/entities/Player.hpp>
-#include <radix/env/Environment.hpp>
 #include <radix/input/InputManager.hpp>
 
 namespace glPortal {

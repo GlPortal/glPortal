@@ -1,6 +1,6 @@
 #include <glPortal/Game.hpp>
 
-#include <radix/env/Environment.hpp>
+#include <radix/env/LegacyEnvironment.hpp>
 #include <radix/env/ArgumentsParser.hpp>
 #include <radix/core/diag/Throwables.hpp>
 #include <iostream>
@@ -11,7 +11,7 @@ using namespace glPortal;
 
 int main(const int argc, char *argv[]) {
   radix::Util::Init();
-  radix::Environment::init();
+  radix::LegacyEnvironment::init();
   radix::ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   try {
     Game game;
