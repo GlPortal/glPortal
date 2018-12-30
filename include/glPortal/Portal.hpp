@@ -2,7 +2,7 @@
 #define GLPORTAL_PORTAL_HPP
 
 #include <memory>
-#include <bullet/btBulletCollisionCommon.h>
+#include <btBulletCollisionCommon.h>
 
 #include <radix/Entity.hpp>
 #include <radix/core/math/Vector3f.hpp>

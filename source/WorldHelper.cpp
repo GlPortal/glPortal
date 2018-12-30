@@ -2,7 +2,7 @@
 #include <glPortal/Portal.hpp>
 #include <glPortal/trigger/PortalTeleport.hpp>
 
-#include <bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
 #include <radix/data/texture/TextureLoader.hpp>
 #include <radix/entities/traits/MeshDrawableTrait.hpp>

@@ -1,8 +1,8 @@
 #include <glPortal/Portal.hpp>
 
 #include <algorithm>
-#include <bullet/BulletDynamics/Dynamics/btRigidBody.h>
-#include <bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+#include <BulletDynamics/Dynamics/btRigidBody.h>
+#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
 #include <radix/data/model/MeshLoader.hpp>
 #include <radix/core/math/Math.hpp>
