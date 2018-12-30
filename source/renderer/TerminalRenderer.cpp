@@ -7,6 +7,7 @@
 #include <radix/data/model/MeshLoader.hpp>
 #include <radix/data/shader/ShaderLoader.hpp>
 #include <radix/Viewport.hpp>
+#include <ciso646>
 
 using namespace radix;
 

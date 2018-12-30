@@ -10,6 +10,7 @@
 #include <radix/entities/traits/LightSourceTrait.hpp>
 #include <radix/entities/Trigger.hpp>
 #include <radix/util/BulletUserPtrInfo.hpp>
+#include <ciso646>
 
 using namespace radix;
 
