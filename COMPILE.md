@@ -39,20 +39,21 @@ mkdir build && cd build
 cmake .. -G "MSYS Makefiles" -DCMAKE_MAKE_PROGRAM="mingw32-make"
 ```
 
-#### Mac OS X
-```bash
-## install CMake
-brew install Assimp SDL2 SDL2_mixer TinyXML2 Bullet freeimage
-cmake ./;
-```
-
-
 If you want to profile the source code pass `-DCMAKE_CXX_FLAGS=-pg` to cmake.
 
 If you encounter an error during this step use the
 bugtracker https://github.com/GlPortal/glPortal/issues to report an issue.
 
 If the command did not produce an error, you can build the binary by typing in:
+
+
+#### Mac OS X
+
+```bash
+brew install Assimp SDL2 SDL2_mixer TinyXML2 Bullet freeimage
+cmake ./;
+```
+
 
 ### Building
 #### Linux
