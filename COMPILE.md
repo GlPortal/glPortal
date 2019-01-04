@@ -39,6 +39,7 @@ mkdir build && cd build
 cmake .. -G "MSYS Makefiles" -DCMAKE_MAKE_PROGRAM="mingw32-make"
 ```
 
+
 If you want to profile the source code pass `-DCMAKE_CXX_FLAGS=-pg` to cmake.
 
 If you encounter an error during this step use the
