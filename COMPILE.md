@@ -42,7 +42,7 @@ cmake .. -G "MSYS Makefiles" -DCMAKE_MAKE_PROGRAM="mingw32-make"
 #### Mac OS X
 ```bash
 ## install CMake
-brew install Assimp SDL2 SDL2_mixer TinyXML2 Bullet
+brew install Assimp SDL2 SDL2_mixer TinyXML2 Bullet freeimage
 cmake ./;
 ```
 
