@@ -39,6 +39,12 @@ mkdir build && cd build
 cmake .. -G "MSYS Makefiles" -DCMAKE_MAKE_PROGRAM="mingw32-make"
 ```
 
+#### Mac OS X
+
+```bash
+brew install Assimp SDL2 SDL2_mixer TinyXML2 Bullet freeimage
+cmake ./;
+```
 
 If you want to profile the source code pass `-DCMAKE_CXX_FLAGS=-pg` to cmake.
 
@@ -46,6 +52,8 @@ If you encounter an error during this step use the
 bugtracker https://github.com/GlPortal/glPortal/issues to report an issue.
 
 If the command did not produce an error, you can build the binary by typing in:
+
+
 
 ### Building
 #### Linux
@@ -57,6 +65,12 @@ make
 ```bash
 mingw32-make
 ```
+
+#### Mac OS X
+```bash
+make
+```
+
 
 ### Running
 If this produces no error you have built the binary and should be able to start GlPortal by typing in:
@@ -83,8 +97,15 @@ cp /mingw64/bin/{libLinearMath,SDL2{,_mixer},libtinyxml2,libgcc_s_seh-1,libstdc+
 mingw32-make run
 ```
 
+
+#### Mac OS X
+```bash
+make run
+```
+
 If you get errors, try to build GlPortal again. If you don't manage to fix the error, use the
 bugtracker https://github.com/GlPortal/glPortal/issues or http://bugs.glportal.de to report what you did, and what error you got.
+
 
 ## Build with docker
 Building with docker is still in early testing and not feature complete. It will make compiling easier in the future.
