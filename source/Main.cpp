@@ -11,7 +11,7 @@ using namespace glPortal;
 
 int main(const int argc, char *argv[]) {
   radix::Util::Init();
-  radix::LegacyEnvironment::init();
+  radix::LegacyEnvironment::Init();
   radix::ArgumentsParser::setEnvironmentFromArgs(argc, argv);
   try {
     Game game;
