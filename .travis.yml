@@ -16,7 +16,6 @@ matrix:
       git:
         submodules: false
       before_install:
-        - brew cask uninstall oclint
         - brew update
       install:
         - command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
@@ -43,7 +42,6 @@ matrix:
       git:
         submodules: false
       before_install:
-        - brew cask uninstall oclint
         - brew update
       install:
         - command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
