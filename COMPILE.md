@@ -1,6 +1,6 @@
 # Compile Guide for GlPortal
 
-## Build with Visual Studio
+## Build with Visual Studio (optional)
 If you want to compile with Visual Studio please have a look at [compile instructions for VS](https://github.com/GlPortal/glportal-vs).
 Building is only possible in Visual Studio 2017, as earlier versions do not support the requied C++14 language features.
 
@@ -8,8 +8,10 @@ Building is only possible in Visual Studio 2017, as earlier versions do not supp
 **NOTE:** Dependencies will change all the time so watch the cmake output for missing libraries.
 Make sure to check CMakeLists.txt if something is missing.
 
-Follow the RadixEngine compile instructions first. You can find them in the RadixEngine repository in a file named COMPILE.md.
+Follow the [RadixEngine compile instructions](https://github.com/GlPortal/RadixEngine/blob/master/COMPILE.md) first.
 The instructions cover how to upgrade your system and how to install most of the dependencies.
+
+Follow these instructions until **Installing dependencies**.
 
 ## Downloading source code
 
