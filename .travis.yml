@@ -20,9 +20,9 @@ matrix:
       install:
         - brew install gpg2
         - brew uninstall gpg
-        - command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
-        - gpg --keyserver hkp://2a01:4f8:222:2401:1::179 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-        - gpg --recv-keys 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+        - command curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+        - gpg2 --keyserver hkp://2a01:4f8:222:2401:1::179 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+        - gpg2 --recv-keys 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
         - rvm get head
         - brew install gcc
         - brew install assimp
@@ -50,9 +50,9 @@ matrix:
       install:
         - brew install gpg2
         - brew uninstall gpg
-        - command curl -sSL https://rvm.io/mpapis.asc | gpg --import -
-        - gpg --keyserver hkp://2a01:4f8:222:2401:1::179 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-        - gpg --recv-keys 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+        - command curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+        - gpg2 --keyserver hkp://2a01:4f8:222:2401:1::179 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+        - gpg2 --recv-keys 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
         - rvm get head
         - brew install assimp
         - brew install libepoxy
