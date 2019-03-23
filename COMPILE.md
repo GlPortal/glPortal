@@ -8,7 +8,7 @@ Building is only possible in Visual Studio 2017, as earlier versions do not supp
 **NOTE:** Dependencies will change all the time so watch the cmake output for missing libraries.
 Make sure to check CMakeLists.txt if something is missing.
 
-Follow the [RadixEngine compile instructions](https://github.com/GlPortal/RadixEngine/blob/master/COMPILE.md) first.
+Satisfy the Radix dependencies from the [RadixEngine compile instructions](https://github.com/GlPortal/RadixEngine/blob/master/COMPILE.md) first.
 The instructions cover how to upgrade your system and how to install most of the dependencies.
 
 Follow these instructions until **Installing dependencies**.
