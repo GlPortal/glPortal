@@ -19,13 +19,13 @@ PortalTeleport::PortalTeleport() {
 
 void PortalTeleport::setAction(radix::Entity &trigger, const std::string &destination) {
   dynamic_cast<radix::entities::Trigger&>(trigger).setActionOnMove([&trigger, destination]
-                                                             (radix::entities::Trigger &trigger) {
-    radix::entities::Player &player = trigger.world.getPlayer();
-    if (trigger.world.destinations.find(destination) != trigger.world.destinations.end()) {
-      const radix::Quaternion &destinationOrientation = trigger.world.destinations.at(destination).orientation;
+                                                             (radix::entities::Trigger &actionTrigger) {
+    radix::entities::Player &player = actionTrigger.world.getPlayer();
+    if (trigger.world.destinations.find(destination) != actionTrigger.world.destinations.end()) {
+      const radix::Quaternion &destinationOrientation = actionTrigger.world.destinations.at(destination).orientation;
       radix::Quaternion newPlayerOrientation = destinationOrientation;
 
-      player.setPosition(trigger.world.destinations.at(destination).position);
+      player.setPosition(actionTrigger.world.destinations.at(destination).position);
       player.setOrientation(newPlayerOrientation);
       player.setHeadOrientation(newPlayerOrientation);
     }
