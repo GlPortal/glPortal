@@ -46,7 +46,7 @@ private:
   double dtime;
 
   void onInit() override;
-  void removeHook();
+  void onShutdown();
   void customTriggerHook() override;
   void initRenderers();
   void addRenderers();

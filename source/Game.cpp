@@ -35,7 +35,7 @@ void Game::onInit() {
   physicsDebugDraw.reset(new radix::PhysicsDebugDraw);
 }
 
-void Game::removeHook() {
+void Game::onShutdown() {
   physicsDebugDraw.reset(nullptr);
 }
 
