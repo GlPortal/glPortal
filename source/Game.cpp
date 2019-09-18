@@ -31,7 +31,7 @@ void Game::onPostStopWorld() {
   uiRenderer.reset();
 }
 
-void Game::initHook() {
+void Game::onInit() {
   physicsDebugDraw.reset(new radix::PhysicsDebugDraw);
 }
 

@@ -44,8 +44,8 @@ private:
   std::unique_ptr<radix::PortalRenderer> portalRenderer;
 
   double dtime;
-  
-  void initHook() override;
+
+  void onInit() override;
   void removeHook();
   void customTriggerHook() override;
   void initRenderers();
