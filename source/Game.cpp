@@ -1,14 +1,14 @@
 #include <glPortal/Game.hpp>
 
-#include <iostream>
+#include <iostream>    //header file to perform input output operations.
 
-#include <radix/entities/Trigger.hpp>
+#include <radix/entities/Trigger.hpp>  //Trigger is a template class for calling trigger functions by a key.
 #include <radix/entities/Player.hpp>
 #include <radix/simulation/Physics.hpp>
 
 #include <glPortal/trigger/PortalTeleport.hpp>
 
-namespace glPortal {
+namespace glPortal { //start of namespace glPortal
 
 Game::Game() {
   windowTitle = "GlPortal";
