@@ -3,7 +3,7 @@
 #include <radix/env/LegacyEnvironment.hpp>
 #include <radix/env/ArgumentsParser.hpp>
 #include <radix/core/diag/Throwables.hpp>
-#include <iostream>
+//#include <iostream> //iostream inclusion unnecessary
 
 #undef main
 using namespace std;
