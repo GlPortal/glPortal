@@ -1,6 +1,6 @@
 #include <glPortal/Game.hpp>
 
-#include <iostream>
+//#include <iostream>
 
 #include <radix/entities/Trigger.hpp>
 #include <radix/entities/Player.hpp>
