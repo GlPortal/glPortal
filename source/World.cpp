@@ -8,6 +8,5 @@ World::World(radix::BaseGame &game) :
   radix::World(game) {
 }
 
-World::~World() {}
 
 } /* namespace glPortal */
