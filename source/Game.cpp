@@ -1,7 +1,4 @@
 #include <glPortal/Game.hpp>
-
-#include <iostream>    //header file to perform input output operations.
-
 #include <radix/entities/Trigger.hpp>  //Trigger is a template class for calling trigger functions by a key.
 #include <radix/entities/Player.hpp>
 #include <radix/simulation/Physics.hpp>

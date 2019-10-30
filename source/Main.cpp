@@ -3,10 +3,9 @@
 #include <radix/env/LegacyEnvironment.hpp>
 #include <radix/env/ArgumentsParser.hpp>
 #include <radix/core/diag/Throwables.hpp>
-#include <iostream>
 
 #undef main
-using namespace std;
+
 using namespace glPortal;
 
 int main(const int argc, char *argv[]) {
