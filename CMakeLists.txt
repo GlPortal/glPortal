@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 set(EXE_NAME glportal)
 
+if(DEFINED WIN32)
+	add_compile_options(
+	$<$<CONFIG:>:/MT> #---------|
+	$<$<CONFIG:Debug>:/MT> #----|-- Statically link the runtime libraries
+	$<$<CONFIG:Release>:/MT> #--|
+)
+endif(DEFINED WIN32)
+
 if(NOT DEFINED CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Build type")
 endif()

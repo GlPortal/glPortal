@@ -187,10 +187,10 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
   }
 
   RectangleI scissor{0, 0, 0, 0};
-  if (not renderContext.viewFramesStack.empty()) {
+  if (!renderContext.viewFramesStack.empty()) {
     const RenderContext::ViewFrameInfo &vfi = renderContext.getViewFrame();
     // Don't render further if computed clip rect is zero-sized
-    if (not renderer.clipViewFrame(renderContext, vfi.first, vfi.second,
+    if (!renderer.clipViewFrame(renderContext, vfi.first, vfi.second,
                                    scissor)) {
       return;
     }
@@ -200,7 +200,7 @@ void GameRenderer::renderScene(RenderContext &renderContext) {
 
   renderViewFrames(renderContext);
 
-  if (not renderContext.viewFramesStack.empty()) {
+  if (!renderContext.viewFramesStack.empty()) {
     glScissor(scissor.x, scissor.y, scissor.w, scissor.h);
     renderViewFrameStencil(renderContext);
   }
@@ -373,7 +373,7 @@ void GameRenderer::renderPortals(RenderContext &renderContext) {
 
 void GameRenderer::renderStencilPortal(const Portal &portal, RenderContext &rc,
                                         const GLuint query) {
-  if(not portal.open) {
+  if(!portal.open) {
     return;
   }
 
