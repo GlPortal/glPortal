@@ -31,7 +31,7 @@ void WorldHelper::shootPortal(int button, World &world) {
       const Entity &ent = *pEnt;
       // TODO: material in separate Component, + 1 mat per face
       const auto *mdt = dynamic_cast<const entities::MeshDrawableTrait*>(&ent);
-      if (mdt and
+      if (mdt &&
           mdt->material.portalable) {
         EntityPair &pPair = getPortalPair(0, world);
         Vector3f ipos(res.m_hitPointWorld);
