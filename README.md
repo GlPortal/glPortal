@@ -1,6 +1,6 @@
 [![Build Status](https://app.travis-ci.com/GlPortal/glPortal.svg?branch=master)](https://travis-ci.org/GlPortal/glPortal)
 [![Join the chat at https://gitter.im/GlPortal/glPortal](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/GlPortal/glPortal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Join Chat](https://img.shields.io/badge/irc-join_chat-brightgreen.svg)](http://kiwiirc.com/client/irc.freenode.com/#glportal)
+[![Join Chat](https://img.shields.io/badge/discord-join_chat-brightgreen.svg)](https://discord.gg/c9VgpFqWfp)
 [![Contributors](https://img.shields.io/badge/contributors-stats-brightgreen.svg)](http://stats.glportal.de/)
 [![Documentation Status](https://img.shields.io/badge/specification-latest-brightgreen.svg)](http://specification.glportal.de/en/latest/?badge=latest)
 
