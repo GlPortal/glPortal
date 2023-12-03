@@ -32,6 +32,3 @@ Henry Hirsch, Julian Thijssen, Dorian Wouters, Geert Custers and Jason Pulkkinen
 Chat with us at irc.freenode.org in the channel [#glportal](http://kiwiirc.com/client/irc.freenode.com/#glportal)
 for questions and discussions about the development of the game.
 Please report your issues and suggestions in the github bug tracker.
-
-## Donate
-Support Henry through [patreon](https://www.patreon.com/developerHenry) or [liberapay](https://liberapay.com/Henry).
