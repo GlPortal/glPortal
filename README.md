@@ -13,8 +13,6 @@ GlPortal is an Open Source sci-fi first person puzzle-platformer with realistic 
 It runs on all modern operating systems including GNU/Linux, Mac and Windows.
 You can find the website at http://glportal.de .
 
-Chat with us at *irc.freenode.org* in the channel [#glportal](http://kiwiirc.com/client/irc.freenode.com/#glportal).
-
 <img src="http://glportal.de/glportal.gif">
 
 GlPortal is powered by RadixEngine:
