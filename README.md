@@ -25,8 +25,3 @@ GlPortal is based on a project by Simon Larsen, which was created in 2012.
 Henry Hirsch, Julian Thijssen, Céleste Wouters, Geert Custers and Jason Pulkkinen
 
 [More Info](CONTRIBUTORS.md)
-
-## Join the team
-Chat with us at irc.freenode.org in the channel [#glportal](http://kiwiirc.com/client/irc.freenode.com/#glportal)
-for questions and discussions about the development of the game.
-Please report your issues and suggestions in the github bug tracker.
