@@ -1,17 +1,21 @@
 # Compile Guide for GlPortal
 
-## Build with Visual Studio (optional)
-If you want to compile with Visual Studio please have a look at [compile instructions for VS](https://github.com/GlPortal/glportal-vs).
-Building is only possible in Visual Studio 2017, as earlier versions do not support the requied C++14 language features.
+## Prerequisites
+Make sure you have the necessary dependencies installed for your operating system.
 
-## Dependencies
-**NOTE:** Dependencies will change all the time so watch the cmake output for missing libraries.
-Make sure to check CMakeLists.txt if something is missing.
+### Windows
+- **Visual Studio 2017**: Required for building with MSVC due to C++14 language features. See the [compile instructions for VS](https://github.com/GlPortal/glportal-vs) for details.
+- **CMake**: Make sure it's installed and in your PATH.
+- **MinGW**: For using `mingw32-make`.
 
-Satisfy the Radix dependencies from the [RadixEngine compile instructions](https://github.com/GlPortal/RadixEngine/blob/master/COMPILE.md) first.
-The instructions cover how to upgrade your system and how to install most of the dependencies.
+### Linux
+- Ensure `cmake` and `make` are installed using your package manager.
+- Install dependencies listed in `CMakeLists.txt`.
 
-Follow these instructions until **Installing dependencies**.
+### Mac OS X
+- Use `brew` to install dependencies: 
+  ```bash
+  brew install Assimp SDL2 SDL2_mixer TinyXML2 Bullet freeimage
 
 ## Downloading source code
 
@@ -25,11 +29,12 @@ git submodule update --init --recursive
 
 ## Building the binary
 
-Make sure to check the README.md and COMPILE.md from the release you downloaded in case
-there are differences in the compile workflow for it.
+Check the README.md and COMPILE.md files from the release you downloaded for any differences in the compile workflow.
 
 ### Setting up the build directory
+
 In the root directory of the downloaded source type:
+
 #### Linux
 ```bash
 cmake ./;
